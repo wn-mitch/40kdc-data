@@ -109,7 +109,7 @@ describe("Semantic authoring weapon-ability-grant exclusions", () => {
 
   it("refuses an exclusion on a grant to one bound weapon", () => {
     expect(() => normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-model", keyword: "Hazardous", weapon_type: "ranged", weapon: "antecedent", exclude_weapon_keyword: "One Shot" }, currentFamilyVersion("weapon-ability-grant")))
-      .toThrow(/exclude_weapon_keyword cannot combine with weapon/u);
+      .toThrow(/weapon antecedent cannot also name exclude_weapon_keyword/u);
   });
 });
 

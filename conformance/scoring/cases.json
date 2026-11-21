@@ -178,19 +178,17 @@
       "approach": "fixed",
       "asserted": [
         {
-          "index": 0,
-          "count": 2
+          "index": 0
         },
         {
-          "index": 1,
-          "count": 2
+          "index": 1
         }
       ]
     },
     "expected": {
-      "turn": 10,
+      "turn": 5,
       "cap": null,
-      "banked": 10
+      "banked": 5
     }
   },
   {
@@ -201,17 +199,15 @@
       "approach": "tactical",
       "asserted": [
         {
-          "index": 0,
-          "count": 2
+          "index": 0
         },
         {
-          "index": 1,
-          "count": 2
+          "index": 1
         }
       ]
     },
     "expected": {
-      "turn": 10,
+      "turn": 5,
       "cap": 5,
       "banked": 5
     }

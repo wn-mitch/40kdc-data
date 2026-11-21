@@ -53,6 +53,8 @@ import {
   type AutoResolution,
 } from "./wargear.js";
 import { repoDirForFactionName, SHARED_ROSTERS } from "./faction-map.js";
+import { reprintForUnit, unitIdForDatasheet, weaponOwnerId } from "./chapter-reprints.js";
+import { datasheetTwins, twinForUnit } from "./datasheet-twins.js";
 import { nameToId } from "../converters/id-generator.js";
 import { applyWrites, type StagedWrite } from "./apply.js";
 import { currentGameVersion } from "./dataslate.js";
@@ -275,6 +277,8 @@ export function mfmRefsOf(unit: object): string[] {
  * Patrol box's renamed copy).
  */
 export function findDatasheet(dump: MfmDump, unitId: string, dir: string, mfmRefs: readonly string[] = []): DatasheetRow | null {
+  const routed = reprintForUnit(dump, unitId)?.datasheetId ?? twinForUnit(dump, unitId)?.primaryId;
+  if (routed) return dump.byId("datasheet").get(routed) ?? null;
   const byName = findDatasheetByName(dump, unitId, dir);
   if (byName || mfmRefs.length === 0) return byName;
   const cited = mfmRefs.map((id) => dump.byId("datasheet").get(id)).filter((ds): ds is DatasheetRow => !!ds && !ds.isLegends);
@@ -283,17 +287,14 @@ export function findDatasheet(dump: MfmDump, unitId: string, dir: string, mfmRef
 
 function findDatasheetByName(dump: MfmDump, unitId: string, dir: string): DatasheetRow | null {
   const matches: DatasheetRow[] = [];
+  const twins = datasheetTwins(dump);
   for (const ds of dump.table("datasheet")) {
-    if (ds.isLegends) continue;
-    const name = dump.enName(ds);
-    if (!name) continue;
-    let slug: string;
-    try {
-      slug = nameToId(name);
-    } catch {
-      continue;
-    }
-    if (slug === unitId) matches.push(ds);
+    // A chapter reprint or a distinct same-named copy maps to its own unit, never the slug's; of
+    // identical copies, the first stands for them all.
+    if (ds.isLegends || unitIdForDatasheet(dump, ds) !== unitId) continue;
+    const twin = twins.get(ds.id!);
+    if (twin && twin.primaryId !== ds.id) continue;
+    matches.push(ds);
   }
   if (matches.length === 0) return null;
   if (matches.length === 1) return matches[0];
@@ -629,8 +630,9 @@ async function main() {
     // base): the dump derivation only knows base ids, so remap each derived id back to
     // the unit's variant where one exists — on weapon_ids AND the composition loadout —
     // so a refresh can't silently downgrade the variant's stats to the base.
+    const owner = weaponOwnerId(dump, p.unitId);
     const toVariant = (id: string): string =>
-      refresh && weaponIdsPresent.has(`${id}-${p.unitId}`) ? `${id}-${p.unitId}` : id;
+      refresh && weaponIdsPresent.has(`${id}-${owner}`) ? `${id}-${owner}` : id;
     const weaponIds = p.weaponIds.map(toVariant);
     if (p.composition?.models) {
       for (const m of p.composition.models) {

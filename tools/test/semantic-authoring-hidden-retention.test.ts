@@ -291,7 +291,7 @@ describe("Semantic authoring hidden retention: compiled entries validate and ren
       ["That unit can make a Normal move of up to D6", "make-move", { subject: "antecedent", move_type: "normal", distance: "D6" }]);
     const check = checkEntry(entryWithMechanics(base(), mechanics as never));
     expect(check.errors).toEqual([]);
-    expect(check.rendered_text).toContain("Select one of the following:\n    - Those attacks do not stop the triggering unit from being hidden.");
+    expect(check.rendered_text).toContain("Choose one of the following:\n    - Those attacks do not stop that unit from being hidden.");
   });
 
   it("rejects bound attacks on any rule but the hidden suppression", () => {

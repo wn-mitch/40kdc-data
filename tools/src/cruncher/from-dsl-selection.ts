@@ -53,12 +53,10 @@ export function planSelection(
   perspective: "attacker" | "target",
   context: EngineContext,
 ): SelectionPlan {
-  const selector = isObject(node.selector) ? node.selector : undefined;
-  const filter = selector && isObject(selector.filter) ? selector.filter : undefined;
-  if (!selector || !filter || (filter.owner !== "friendly" && filter.owner !== "enemy")) return { kind: "none" };
-  if (filter.level === "model" || filter.model_names != null) return { kind: "none" };
+  if (!isSelectionCandidate(node)) return { kind: "none" };
+  const selector = node.selector as Record<string, unknown>;
+  const filter = selector.filter as Record<string, unknown>;
   const binding = typeof selector.bind_as === "string" ? selector.bind_as : undefined;
-  if (!referencesSelectedUnit(node.effect, binding)) return { kind: "none" };
   if (isObject(selector.count) && selector.count.max === 0) return { kind: "skip" };
   const { effect: _effect, ...selection } = node;
   const requires: unknown[] = [selection];
@@ -79,7 +77,7 @@ export function planSelection(
     const other = perspective === "attacker" ? "defender" : "attacker";
     const { within: _within, visible: _visible, excluding: _excluding, ...knownFilter } = filter;
     applicability = perspective === "attacker" ? { targetFilter: knownFilter } : { attackerFilter: knownFilter };
-    effect = retarget(node.effect, other, binding);
+    effect = selectionHolds(retarget(node.effect, other, binding), other, designatedTags(node.effect, binding), binding);
     label = "Selected enemy unit";
   }
 
@@ -90,6 +88,51 @@ export function planSelection(
     effect = on_success;
   }
   return { kind: "lever", effect, ...(applicability ? { applicability } : {}), requires, label };
+}
+
+/**
+ * Whether a `select-units` node is planned as a selection in any context: a friendly or enemy unit
+ * selection whose effect reaches the selected unit.
+ */
+function isSelectionCandidate(node: Record<string, unknown>): boolean {
+  const selector = isObject(node.selector) ? node.selector : undefined;
+  const filter = selector && isObject(selector.filter) ? selector.filter : undefined;
+  if (!selector || !filter || (filter.owner !== "friendly" && filter.owner !== "enemy")) return false;
+  if (filter.level === "model" || filter.model_names != null) return false;
+  return referencesSelectedUnit(node.effect, typeof selector.bind_as === "string" ? selector.bind_as : undefined);
+}
+
+/**
+ * The selections of an effect in document order (an object's keys sorted), each as its JSON text. A selection's lever id is
+ * numbered by its place here, so it does not depend on which branches the context prunes; two
+ * identical selections share a place.
+ */
+export function selectionOrder(effect: unknown): string[] {
+  const order: string[] = [];
+  const visit = (node: unknown): void => {
+    if (Array.isArray(node)) {
+      for (const child of node) visit(child);
+      return;
+    }
+    if (!isObject(node)) return;
+    if (node.type === "select-units" && isSelectionCandidate(node)) {
+      const text = JSON.stringify(node);
+      if (!order.includes(text)) order.push(text);
+    }
+    // Keys in sorted order, so every port numbers the same way.
+    for (const key of Object.keys(node).sort()) visit(node[key]);
+  };
+  visit(effect);
+  return order;
+}
+
+/**
+ * A selection lever's id: `<ability>#selected` for the effect's first selection, and
+ * `<ability>#selected-<n>` for its nth.
+ */
+export function selectionLeverId(abilityId: string, node: Record<string, unknown>, order: readonly string[] | undefined): string {
+  const place = order?.indexOf(JSON.stringify(node)) ?? -1;
+  return place > 0 ? `${abilityId}#selected-${place + 1}` : `${abilityId}#selected`;
 }
 
 /**
@@ -148,6 +191,74 @@ function retarget(node: unknown, target: string, binding?: string): unknown {
       ? key === "member_of" && target === SELECTED_UNIT ? "this-unit" : target
       : retarget(value, target, binding);
   }
+  return out;
+}
+
+/** Whether a unit-ref names the selection's unit: `selected-unit`, or the selection's own binding. */
+function namesSelection(value: unknown, binding?: string): boolean {
+  return value === SELECTED_UNIT || (binding !== undefined && isObject(value) && value.selection_var === binding);
+}
+
+/** The tags the selection's own `designate` steps put on the selected unit, outside a nested selection. */
+function designatedTags(node: unknown, binding?: string): Set<string> {
+  const tags = new Set<string>();
+  const visit = (value: unknown): void => {
+    if (Array.isArray(value)) {
+      for (const child of value) visit(child);
+      return;
+    }
+    if (!isObject(value) || value.type === "select-units") return;
+    const modifier = isObject(value.modifier) ? value.modifier : undefined;
+    if (value.type === "designate" && namesSelection(value.target, binding) && typeof modifier?.tag === "string" && modifier.clear !== true) {
+      tags.add(modifier.tag);
+    }
+    for (const child of Object.values(value)) visit(child);
+  };
+  visit(node);
+  return tags;
+}
+
+/**
+ * Whether a condition holds once the player vouches that `other` is the selected enemy unit: it is
+ * that unit (`same-unit` as the selection), or carries a tag the selection itself designates.
+ */
+function heldBySelection(condition: Record<string, unknown>, other: string, tags: ReadonlySet<string>, binding?: string): boolean {
+  const params = isObject(condition.parameters) ? condition.parameters : undefined;
+  if (!params || params.subject !== other) return false;
+  if (condition.type === "same-unit") return namesSelection(params.as, binding);
+  if (condition.type !== "matches" || !isObject(params.filter)) return false;
+  const keys = Object.keys(params.filter);
+  return keys.length === 1 && typeof params.filter.designated === "string" && tags.has(params.filter.designated);
+}
+
+/**
+ * The condition left once the selection's back-references hold: null when nothing is left. An `and`
+ * keeps its other operands; any other operator is left whole.
+ */
+function withoutHeld(condition: unknown, other: string, tags: ReadonlySet<string>, binding?: string): unknown {
+  if (!isObject(condition)) return condition;
+  if (condition.operator === "and" && Array.isArray(condition.operands)) {
+    const rest = condition.operands.filter((operand) => !(isObject(operand) && heldBySelection(operand, other, tags, binding)));
+    if (rest.length === condition.operands.length) return condition;
+    return rest.length === 0 ? null : rest.length === 1 ? rest[0] : { ...condition, operands: rest };
+  }
+  return heldBySelection(condition, other, tags, binding) ? null : condition;
+}
+
+/**
+ * The lever's effect with every condition that only restates the selection settled: a conditional
+ * whose condition holds becomes its effect. Nested selections keep their own scope.
+ */
+function selectionHolds(node: unknown, other: string, tags: ReadonlySet<string>, binding?: string): unknown {
+  if (Array.isArray(node)) return node.map((child) => selectionHolds(child, other, tags, binding));
+  if (!isObject(node) || node.type === "select-units") return node;
+  if (node.type === "conditional" && node.effect !== undefined) {
+    const condition = withoutHeld(node.condition, other, tags, binding);
+    if (condition === null) return selectionHolds(node.effect, other, tags, binding);
+    if (condition !== node.condition) return selectionHolds({ ...node, condition }, other, tags, binding);
+  }
+  const out: Record<string, unknown> = {};
+  for (const key in node) out[key] = selectionHolds(node[key], other, tags, binding);
   return out;
 }
 

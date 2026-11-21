@@ -11,7 +11,7 @@
   "phase": "shooting",
   "modelsFiring": 1,
   "expected": {
-    "expectedKills": 2.6736,
+    "expectedKills": 0.9722,
     "reaches": true,
     "withinHalfRange": false,
     "modelCount": 5

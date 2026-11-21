@@ -1,0 +1,566 @@
+{
+  "catalogue": {
+    "name": "Chaos - Titanicus Traitoris",
+    "id": "880c-c7e-4a43-a0c1",
+    "battleScribeVersion": 2.03,
+    "gameSystemId": "sys-352e-adc2-7639-d610",
+    "gameSystemRevision": 10502,
+    "library": false,
+    "revision": 10502,
+    "type": "catalogue",
+    "xmlns": "http://www.battlescribe.net/schema/catalogueSchema",
+    "catalogueLinks": [
+      {
+        "name": "Library - Titans",
+        "id": "53de-3908-b5cd-01ce",
+        "importRootEntries": false,
+        "targetId": "7481-280e-b55e-7867",
+        "type": "catalogue"
+      },
+      {
+        "name": "Chaos - Chaos Knights Library",
+        "id": "e910-5974-e11c-12e3",
+        "importRootEntries": false,
+        "targetId": "4d13-39bb-3d9b-fd5e",
+        "type": "catalogue"
+      }
+    ],
+    "entryLinks": [
+      {
+        "name": "Chaos Reaver Titan",
+        "id": "cf38-d64c-60dd-e17f",
+        "hidden": false,
+        "import": true,
+        "targetId": "0141-e2cd-472c-1a1d",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Warbringer Nemesis Titan",
+        "id": "8b2c-0949-b021-0120",
+        "hidden": false,
+        "import": true,
+        "targetId": "c93d-98d6-9a89-8900",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Warhound Titan",
+        "id": "dfef-6ff8-11fd-d6fc",
+        "hidden": false,
+        "import": true,
+        "targetId": "bc5d-9d13-6c87-5f9f",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Warlord Titan",
+        "id": "4b64-9ed2-d394-1cb0",
+        "hidden": false,
+        "import": true,
+        "targetId": "9210-30cc-eecc-2958",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Acastus Knight Asterius",
+        "id": "374b-5731-0110-cb08",
+        "hidden": false,
+        "import": true,
+        "targetId": "e289-ad32-c78a-e055",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "52b2-6ef1-b19b-615a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "b048-493e-a551-f566",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Acastus Knight Porphyrion",
+        "id": "6d8e-2f6a-f5e8-2d7b",
+        "hidden": false,
+        "import": true,
+        "targetId": "fe77-6f85-5ddb-65bf",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "aec5-67aa-5376-ece7",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "f792-5d7c-96c7-a1c5",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Cerastus Knight Acheron",
+        "id": "090a-9011-a76d-d4c6",
+        "hidden": false,
+        "import": true,
+        "targetId": "ec6e-d1d6-f7c6-d008",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "1cc0-20a0-4875-a122",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "f8d4-20b4-db6f-6083",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Cerastus Knight Atrapos",
+        "id": "aa0c-ae23-9d6f-da33",
+        "hidden": false,
+        "import": true,
+        "targetId": "8b1d-9029-f9e1-42d9",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "e2a0-add7-55a0-76cd",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "d217-4371-4ca6-49b0",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Cerastus Knight Castigator",
+        "id": "607a-244d-6e76-ce17",
+        "hidden": false,
+        "import": true,
+        "targetId": "b6e5-911b-93f-476",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "57f1-6010-cd6e-876d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "3dab-06bd-eaed-a48a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Cerastus Knight Lancer",
+        "id": "3f20-6263-56a0-6e99",
+        "hidden": false,
+        "import": true,
+        "targetId": "4175-82c6-8e96-bef8",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "c820-fdc0-9c4c-1214",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "bf76-8d73-06c8-3c02",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Questoris Knight Magaera",
+        "id": "40ab-0763-a192-f473",
+        "hidden": false,
+        "import": true,
+        "targetId": "2d0e-5b83-b678-56dc",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "6202-18df-5501-66ba",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "7f73-5780-4ea0-9ecd",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Questoris Knight Styrix",
+        "id": "7630-1106-20dd-9167",
+        "hidden": false,
+        "import": true,
+        "targetId": "106c-4bdf-79a4-1c70",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "1202-925c-4dcf-c386",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "cd33-b960-6d50-aa8f",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Knight Abominant",
+        "id": "a17a-51ea-ec27-1d8b",
+        "hidden": false,
+        "import": true,
+        "targetId": "a78d-828b-302b-1bec",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "643f-88a3-ffd2-85f6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "b584-feb8-1ca3-fe07",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Knight Desecrator",
+        "id": "6c82-790d-4427-c95e",
+        "hidden": false,
+        "import": true,
+        "targetId": "7a51-8f1f-7290-d9d2",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "a413-945c-74de-902d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "d95a-fd0d-79ae-3a63",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Knight Despoiler",
+        "id": "e84c-9060-a6d1-b766",
+        "hidden": false,
+        "import": true,
+        "targetId": "0119-8c04-435e-c782",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "b869-b195-b85e-d936",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "05ee-e87e-21ca-a4b4",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Knight Rampager",
+        "id": "bd48-326c-c585-20c1",
+        "hidden": false,
+        "import": true,
+        "targetId": "61e0-e55b-1926-44df",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "cda7-1515-d088-fa2f",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "70d7-72a7-8318-3a25",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Knight Ruinator",
+        "id": "2187-9f90-283e-7185",
+        "hidden": false,
+        "import": true,
+        "targetId": "c0a2-eb65-6d34-5bc6",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "c304-fc02-4e26-2d5f",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "ffb0-b43d-7e0b-93b9",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "Knight Tyrant",
+        "id": "9218-be45-2aba-5c09",
+        "hidden": false,
+        "import": true,
+        "targetId": "87ea-c7bd-6df0-f056",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "fcda-fe33-e810-e2e8",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "20b3-3a32-3338-56e2",
+            "hidden": false,
+            "primary": false,
+            "targetId": "aadb-b254-1ef3-c4f0"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Brigand",
+        "id": "d3e4-8a64-ffa8-2dc3",
+        "hidden": false,
+        "import": true,
+        "targetId": "753d-4e02-eda3-4809",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "5615-f0e9-663b-82cc",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "af21-6f66-8ca0-0cf5",
+            "hidden": false,
+            "primary": false,
+            "targetId": "5573-eb76-63ce-85bb"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Executioner",
+        "id": "ab48-2183-5721-3a15",
+        "hidden": false,
+        "import": true,
+        "targetId": "8df0-fc3c-8ced-ffce",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "4331-f8bd-5d77-e5ff",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "85c4-9fc0-a02d-913e",
+            "hidden": false,
+            "primary": false,
+            "targetId": "5573-eb76-63ce-85bb"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Huntsman",
+        "id": "26d4-e311-ea5e-8518",
+        "hidden": false,
+        "import": true,
+        "targetId": "6e6d-7950-ce6d-4cd4",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "ca2c-16ed-fad3-2334",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "10c8-c26c-7fc2-2c8d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "5573-eb76-63ce-85bb"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Karnivore",
+        "id": "2d99-ed99-0fbd-5f56",
+        "hidden": false,
+        "import": true,
+        "targetId": "e96b-ac98-7fd2-a155",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "23a2-44b5-e55d-035d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "c7b4-9c41-20f0-3ee8",
+            "hidden": false,
+            "primary": false,
+            "targetId": "5573-eb76-63ce-85bb"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Moirax",
+        "id": "9806-8ac9-4aa8-b741",
+        "hidden": false,
+        "import": true,
+        "targetId": "ae7c-3679-a88-6895",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "831e-9172-b5fa-baa6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "33aa-d9b5-6bce-4a06",
+            "hidden": false,
+            "primary": false,
+            "targetId": "5573-eb76-63ce-85bb"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Stalker",
+        "id": "76db-2cfc-1a2d-b23b",
+        "hidden": false,
+        "import": true,
+        "targetId": "bbc6-c0ed-24e8-86b7",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "975e-bdfd-4e2a-ab6c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "fe88-d9ac-2106-8102"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "d37b-5a0d-5021-ca9a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "5573-eb76-63ce-85bb"
+          }
+        ]
+      }
+    ],
+    "infoLinks": [
+      {
+        "name": "Towering Example",
+        "id": "d70c-ae6e-235c-e66d",
+        "hidden": false,
+        "targetId": "566d-eb47-67f9-4854",
+        "type": "rule"
+      },
+      {
+        "name": "Titanic Support",
+        "id": "f89d-f0e8-5b7e-7a89",
+        "hidden": false,
+        "targetId": "b79e-850e-3289-356d",
+        "type": "rule"
+      },
+      {
+        "name": "Titanicus Traitoris",
+        "id": "2191-4c9b-2ed8-ca6c",
+        "hidden": false,
+        "targetId": "1adf-ed78-05e6-3d37",
+        "type": "rule"
+      }
+    ]
+  }
+}

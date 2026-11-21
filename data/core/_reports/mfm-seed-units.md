@@ -5,15 +5,21 @@ Points/wargear/composition/abilities are left empty for the enrichment passes.
 Shared-roster children (SM chapters) file into their parent dir, shown as `→`.
 Combat-Patrol-only units (from `Combat Patrol: X` publications) are held back by default; pass `--include-combat-patrol` to seed them too.
 
-**Created: 1** | **CP-only excluded: 0** | **Skipped: 0**
+**Created: 2** | **CP-only excluded: 0** | **Skipped: 0**
 
 | Source dir | → Filed in | Created | CP-only excluded | Skipped |
 |---|---|--:|--:|--:|
-| emperors-children | emperors-children | 1 | 0 | 0 |
-| **TOTAL** | | **1** | **0** | **0** |
+| drukhari | drukhari | 1 | 0 | 0 |
+| orks | orks | 1 | 0 | 0 |
+| **TOTAL** | | **2** | **0** | **0** |
 
-## emperors-children
+## drukhari
 
 **Created:**
-- defiler (Defiler)
+- coven-of-agonies-wracks-2 (Coven of Agonies Wracks)
+
+## orks
+
+**Created:**
+- ardmob-boyz-2 (’Ardmob Boyz)
 

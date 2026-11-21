@@ -1,6 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { matchedPoolOf } from "./compile-matched-set.js";
-import { MATCHED_UNITS } from "./families/shared.js";
+import { MATCHED_UNITS } from "./families/vocabulary.js";
 import { collapsedAlternatives, dslAlternatives } from "./compile-filter-alternatives.js";
 import type { FilterAlternative } from "./unit-filter-alternatives.js";
 
@@ -93,16 +93,16 @@ export function dslUnitFilter(filter: CompileLeaf, options: { warlordTest?: bool
     ...(filter.parameters.attachment_role !== undefined ? { attachment_role: filter.parameters.attachment_role } : {}),
     // Attached Leader membership is not possession of the Leader ability.
     ...(filter.parameters.attached_to !== undefined ? attachedLeaders(filter) : {}),
-    // "units embarked within this unit" (unit-filter@13): the Transport the units are embarked within.
+    // "units embarked within this unit": the Transport the units are embarked within.
     ...(filter.parameters.embarked_in !== undefined ? { embarked_in: filter.parameters.embarked_in } : {}),
-    // "Bondsman-affected units" (unit-filter@8): the designation, and the unit that applied it.
+    // "Bondsman-affected units": the designation, and the unit that applied it.
     ...(p.designated !== undefined ? { designated: p.designated } : {}),
     ...(p.not_designated !== undefined ? { not_designated: p.not_designated } : {}),
     ...(p.designated_by !== undefined ? { designated_by: p.designated_by } : {}),
     // "units with this ability" (compile-holder-abilities.ts) and "(excluding units with X)".
     ...(Array.isArray(filter.parameters.abilities) ? { has_ability: filter.parameters.abilities } : {}),
     ...(Array.isArray(filter.parameters.excluded_abilities) ? { lacks_ability: filter.parameters.excluded_abilities } : {}),
-    // A list-building group's datasheets (unit-filter@6): only army construction takes them (compile-army.ts).
+    // A list-building group's datasheets: only army construction takes them (compile-army.ts).
     ...(Array.isArray(filter.parameters.datasheets) ? { datasheets: filter.parameters.datasheets } : {}),
   };
 }

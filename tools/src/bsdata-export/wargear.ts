@@ -21,6 +21,8 @@ interface Row {
   readonly name: string;
   readonly min: number;
   readonly max: number;
+  /** The unit profile whose statline the row's models print, when it isn't the one named like the row. */
+  readonly profileName?: string;
 }
 
 export interface WargearContext {
@@ -32,6 +34,11 @@ export interface WargearContext {
   readonly itemEntry: (itemId: string) => { readonly id: string; readonly name: string } | undefined;
   /** A hidden category, defined in the unit's catalogue, that the members of the shared cap `key` link to. */
   readonly capCategory: (key: string) => { readonly id: string; readonly name: string };
+  /**
+   * The Unit profile a model row's entry prints, keyed for its entry and named `name` (default: the
+   * row's name); none when no statline is known for it.
+   */
+  readonly rowProfile?: (row: { readonly name: string; readonly profileName?: string }, key: string, name?: string) => BsNode | undefined;
 }
 
 /** Every model count the unit can be fielded at. */
@@ -43,7 +50,7 @@ export function modelCounts(unit: Unit): number[] {
 
 export function compositionRows(dataset: Dataset, unit: Unit): Row[] {
   const rows = dataset.unitCompositionOf(unit)?.models ?? [];
-  if (rows.length > 0) return rows.map((r) => ({ name: r.name, min: r.min, max: r.max }));
+  if (rows.length > 0) return rows.map((r) => ({ name: r.name, min: r.min, max: r.max, ...(r.profile_name ? { profileName: r.profile_name } : {}) }));
   const counts = modelCounts(unit);
   return [{ name: unit.name, min: counts[0], max: counts[counts.length - 1] }];
 }
@@ -112,6 +119,11 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
       const ordinal = rows.slice(0, index + 1).filter((r) => r.name === name).length;
       return starting?.get(rows.filter((r) => r.name === name).length > 1 ? `${name}#${ordinal}` : name);
     };
+    // Each model entry prints its own statline, as BSData's do.
+    const statline = (row: Row, entryKey: string): BsNode[] | undefined => {
+      const node = ctx.rowProfile?.(row, entryKey);
+      return node ? [node] : undefined;
+    };
     const rowEntry = (row: Row, index: number, bounds: { min: number; max: number }, start = startOf(index)): BsNode => {
       return compact({
         name: row.name,
@@ -119,6 +131,7 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
         hidden: false,
         import: true,
         type: "model",
+        profiles: statline(row, `${key}:model:${index}`),
         constraints: [
           constraint({ id: ctx.ids.id(`${key}:model:${index}:min`), type: "min", value: bounds.min, field: "selections", scope: "parent" }),
           constraint({ id: ctx.ids.id(`${key}:model:${index}:max`), type: "max", value: bounds.max, field: "selections", scope: "parent" }),
@@ -176,6 +189,7 @@ export function unitSelections(unit: Unit, ctx: WargearContext, multiModel: bool
             hidden: false,
             import: true,
             type: "model",
+            profiles: statline(row, `${key}:model:${index}:bare`),
             constraints: [constraint({ id: ctx.ids.id(`${key}:model:${index}:bare:max`), type: "max", value: bare, field: "selections", scope: "parent" })],
             costs: [cost("pts", ctx.ptsTypeId, 0)],
             defaultAmount: bareStart > 0 ? bareStart : undefined,

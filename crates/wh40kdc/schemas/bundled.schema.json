@@ -1909,6 +1909,14 @@
           "type": "integer",
           "minimum": 0,
           "description": "Maximum number of units carrying `keyword` includable via the rule at this battle size."
+        },
+        "exemptions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/allied-keyword-limit-exemption"
+          },
+          "description": "Units that do not count towards this cap: for each included unit carrying every `donor_keywords`, one included unit carrying every `receiver_keywords` is not counted (e.g. one INQUISITORIAL AGENTS unit per INQUISITOR unit does not count towards RETINUE)."
         }
       },
       "required": [
@@ -1918,9 +1926,30 @@
       ],
       "additionalProperties": false
     },
+    "allied-keyword-limit-exemption": {
+      "type": "object",
+      "description": "A donor/receiver pair exempting receiver units from an allied keyword cap, one receiver per donor unit.",
+      "properties": {
+        "donor_keywords": {
+          "$ref": "#/$defs/keyword-list",
+          "minItems": 1,
+          "description": "A donor unit carries all of these keywords."
+        },
+        "receiver_keywords": {
+          "$ref": "#/$defs/keyword-list",
+          "minItems": 1,
+          "description": "A receiver unit carries all of these keywords."
+        }
+      },
+      "required": [
+        "donor_keywords",
+        "receiver_keywords"
+      ],
+      "additionalProperties": false
+    },
     "allied-rule": {
       "title": "AlliedRule",
-      "description": "A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_ids`).",
+      "description": "A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by three optional, AND-combined conditions: the army's faction (`host_faction_ids`), an army-wide keyword condition (`army_keywords_any`) and a selected detachment (`detachment_ids`).",
       "type": "object",
       "properties": {
         "id": {
@@ -1938,6 +1967,14 @@
         "army_keywords_any": {
           "$ref": "#/$defs/keyword-list",
           "description": "Army gate: every model in the army must carry at least one of these keywords for the rule to apply (e.g. ['Chaos Knights', 'Heretic Astartes'] for Daemonic Pact). Empty = no army-level gate (the rule is then gated only by `detachment_ids`, whose detachments are themselves faction-locked)."
+        },
+        "host_faction_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "uniqueItems": true,
+          "description": "Host gate: the factions whose armies may take this pool (the MFM dump's host faction keywords, mapped to faction ids). When non-empty, only an army of a listed faction is offered the rule, even if another of its faction keywords appears in `army_keywords_any` (a Deathwatch army carries ADEPTUS ASTARTES but is not a host of the generic Agents of the Imperium pool). Empty/absent = no host gate."
         },
         "detachment_ids": {
           "type": "array",
@@ -2001,6 +2038,16 @@
             "$ref": "#/$defs/allied-keyword-limit"
           },
           "description": "Per-keyword, per-battle-size cap on how many units carrying `keyword` may be included via this rule (e.g. Imperial Knights' Titanic 1 / Armiger 3; Agents of the Imperium's Character/Retinue/Requisitioned counts). Advisory construction cap."
+        },
+        "keyword_limits_exclusive": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the rule's `keyword_limits` are alternatives: the units included via the rule may carry only one of the limited keywords, whose cap then applies (e.g. Imperial Knights allies: one TITANIC model or up to three ARMIGER models, never both; Titan pools: one Titan of any class)."
+        },
+        "replaces_faction_keywords": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when units included via this rule have their Faction keywords replaced with the army's (e.g. Renegades: legion units taken by a Heretic Astartes army become HERETIC ASTARTES)."
         },
         "max_units": {
           "oneOf": [
@@ -2492,6 +2539,35 @@
           "default": 1,
           "description": "Number of units this enhancement may be applied to. Only meaningful when `upgrade_tag` is true; defaults to 1."
         },
+        "counts_toward_enhancement_limit": {
+          "type": "boolean",
+          "default": true,
+          "description": "False when taking this enhancement does not count toward the battle size's Enhancement limit."
+        },
+        "equipable_by_non_character": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when a unit that is not a CHARACTER may be given this enhancement. An `upgrade_tag` enhancement is always equipable by a non-CHARACTER unit."
+        },
+        "equipable_by_epic_hero": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when an EPIC HERO may be given this enhancement. Without it, no EPIC HERO may take it."
+        },
+        "bearer_cannot_be_warlord": {
+          "type": "boolean",
+          "default": false,
+          "description": "True when the unit given this enhancement cannot be the army's Warlord."
+        },
+        "required_wargear_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entity-id"
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Weapon ids the bearer's unit must carry in its chosen loadout to be given this enhancement. Every listed id is required."
+        },
         "keyword_restrictions": {
           "$ref": "#/$defs/keyword-list"
         },
@@ -2864,6 +2940,73 @@
       ],
       "additionalProperties": false
     },
+    "keyword-choice-group": {
+      "title": "Keyword Choice Group",
+      "description": "A keyword a unit takes from a set of alternatives when its army is mustered (a Mark of Chaos, a Daemonic Allegiance, a detachment's CHARACTER pick). Each option is a unit's conditional_keywords entry whose choice_group is this group's id; a unit takes at most one option of a group.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entity-id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "detachment_id": {
+          "description": "The detachment whose army makes the choice; null when any army that includes the unit makes it.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/entity-id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mandatory": {
+          "type": "boolean",
+          "description": "Whether every unit with options in this group must take one."
+        },
+        "min_units": {
+          "description": "The fewest units in the army that must take an option of this group; null for no minimum.",
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "max_units": {
+          "description": "The most units in the army that can take an option of this group; null for no maximum.",
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "game_version": {
+          "$ref": "#/$defs/game-version-ref"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "detachment_id",
+        "mandatory",
+        "min_units",
+        "max_units",
+        "game_version"
+      ],
+      "additionalProperties": false
+    },
     "leader-attachment": {
       "title": "Leader Attachment",
       "description": "Defines which character units can attach to which bodyguard units.",
@@ -2890,7 +3033,7 @@
         "conditional_groups": {
           "type": "array",
           "minItems": 1,
-          "description": "Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.",
+          "description": "Attachment eligibility and role that apply only when their conditions hold: every required roster unit and no excluded roster unit is present, the required detachment is selected and the excluded one is not, and the leader and bodyguard share the required keyword.",
           "items": {
             "type": "object",
             "minProperties": 3,
@@ -2922,6 +3065,18 @@
                   "$ref": "#/$defs/entity-id"
                 },
                 "minItems": 1
+              },
+              "required_detachment_id": {
+                "$ref": "#/$defs/entity-id",
+                "description": "The group applies only when the army has selected this detachment."
+              },
+              "excluded_detachment_id": {
+                "$ref": "#/$defs/entity-id",
+                "description": "The group applies only when the army has not selected this detachment."
+              },
+              "required_shared_keyword": {
+                "$ref": "#/$defs/keyword",
+                "description": "The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos)."
               }
             },
             "required": [
@@ -3080,6 +3235,13 @@
           },
           "minProperties": 1,
           "additionalProperties": false
+        },
+        "final_round_timing": {
+          "type": "string",
+          "enum": [
+            "end-of-turn"
+          ],
+          "description": "The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`."
         }
       },
       "minProperties": 1,
@@ -3532,6 +3694,12 @@
           "type": "integer",
           "minimum": 0,
           "maximum": 4
+        },
+        "secondary_effect_extra_cp": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "CP spent on top of cp_cost to use the Stratagem's secondary (alternate) effect instead of its main one. Absent when the Stratagem has no paid secondary effect."
         },
         "phases": {
           "$ref": "#/$defs/phase-list"
@@ -4715,7 +4883,15 @@
                 "description": "Profile name (e.g., 'Wounded' for degrading)"
               },
               "M": {
-                "$ref": "#/$defs/stat-value"
+                "description": "Move in inches. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/stat-value"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               },
               "T": {
                 "type": "integer",
@@ -4774,8 +4950,16 @@
                 "maximum": 10
               },
               "OC": {
-                "type": "integer",
-                "minimum": 0
+                "description": "Objective Control. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+                "oneOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [
@@ -4986,6 +5170,10 @@
                     "type": "null"
                   }
                 ]
+              },
+              "choice_group": {
+                "$ref": "#/$defs/entity-id",
+                "description": "The keyword-choice group (keyword-choice-groups.json) this keyword is one option of: the unit has it only when it takes this option at muster, and takes at most one option per group."
               }
             },
             "required": [
@@ -5032,6 +5220,11 @@
             "min",
             "max"
           ]
+        },
+        "max_model_count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The most models the unit may contain, across all of its composition rows. It caps a composition whose row maxima sum higher (Corsair Voidscarred: 10 models although its rows allow 13)."
         },
         "weapon_ids": {
           "type": "array",
@@ -5720,6 +5913,15 @@
         },
         "name": {
           "type": "string"
+        },
+        "option_names": {
+          "type": "array",
+          "description": "The printed name of each option of the record's one choice effect, in option order (\"Paragon of Hatred\"). Present only on a record whose effect holds exactly one choice, with one name per option.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 2
         },
         "authored_by": {
           "$ref": "#/$defs/contributor-ref"
@@ -10499,6 +10701,10 @@
                 "ends_nearest": {
                   "$ref": "#/$defs/ends-nearest",
                   "description": "Where the move must end: as close as possible to the closest unit matching `of` (the move's own end rule)."
+                },
+                "mandatory": {
+                  "const": true,
+                  "description": "The target must make the move (\"must make an ingress move\"); absent, the move is optional."
                 }
               },
               "required": [
@@ -12121,6 +12327,11 @@
             "opponent"
           ],
           "description": "Who picks the option: the opponent (\"your opponent must decide whether that unit will take cover or stand firm\"). Absent, the player using the ability picks."
+        },
+        "secondary_option": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index into `options` of the Stratagem's secondary effect: picking that option costs the Stratagem's `secondary_effect_extra_cp` on top of its CP cost. Absent, every option costs the Stratagem's CP cost alone."
         }
       },
       "required": [

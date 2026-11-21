@@ -432,16 +432,16 @@ describe("additive option with a unit-filter between activation and qualifier", 
  * menu splits into. Every text here is fabricated wording, not rules text.
  */
 
-type Item = [string, string, Record<string, unknown>, number?];
+type Item = [string, string, Record<string, unknown>];
 
 function placed(text: string, ...items: Item[]): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
-  return items.map(([wording, family, parameters, pinned]) => {
+  return items.map(([wording, family, parameters]) => {
     const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
-    const version = pinned ?? currentFamilyVersion(family);
+    const version = currentFamilyVersion(family);
     return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
@@ -544,11 +544,9 @@ describe("a record with an aura and a deployment-time menu", () => {
   });
 });
 
-describe("core-ability-grant@5", () => {
-  it("names the attack's target as the recipient and keeps earlier subjects", () => {
-    expect(normalizeFingerprintParameters("core-ability-grant", { subject: "target", ability: "benefit-of-cover" }, 5)).toEqual({ subject: "target", ability: "benefit-of-cover" });
-    expect(() => normalizeFingerprintParameters("core-ability-grant", { subject: "target", ability: "benefit-of-cover" }, 4)).toThrow();
-    expect(normalizeFingerprintParameters("core-ability-grant", { subject: "this-unit", ability: "stealth" }, 5))
-      .toEqual(normalizeFingerprintParameters("core-ability-grant", { subject: "this-unit", ability: "stealth" }, 4));
+describe("core-ability-grant subjects", () => {
+  it("names the attack's target as the recipient and keeps this unit", () => {
+    expect(normalizeFingerprintParameters("core-ability-grant", { subject: "target", ability: "benefit-of-cover" })).toEqual({ subject: "target", ability: "benefit-of-cover" });
+    expect(normalizeFingerprintParameters("core-ability-grant", { subject: "this-unit", ability: "stealth" })).toEqual({ subject: "this-unit", ability: "stealth" });
   });
 });

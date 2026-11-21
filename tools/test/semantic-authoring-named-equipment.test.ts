@@ -79,6 +79,17 @@ describe("named-weapon and unit-wargear: family parameters", () => {
     expect(() => normalizeFingerprintParameters("named-weapon", { subject: "this-model", name: "Fizz blade", count: 1, extra: true }, currentFamilyVersion("named-weapon"))).toThrow();
   });
 
+  it("refuses a negated that is not a boolean", () => {
+    const weapon = { subject: "this-model", name: "Fizz blade", count: 1 };
+    const wargear = { subject: "this-unit", wargear: "relay-kit" };
+    expect(normalizeFingerprintParameters("named-weapon", { ...weapon, negated: false })).toEqual({ ...weapon, negated: false });
+    expect(normalizeFingerprintParameters("unit-wargear", { ...wargear, negated: false })).toEqual({ ...wargear, negated: false });
+    for (const negated of ["yes", 1, null]) {
+      expect(() => normalizeFingerprintParameters("named-weapon", { ...weapon, negated })).toThrow(/named-weapon.negated/u);
+      expect(() => normalizeFingerprintParameters("unit-wargear", { ...wargear, negated })).toThrow(/unit-wargear.negated/u);
+    }
+  });
+
   it("refuses unit-wargear for any subject but this unit", () => {
     expect(() => normalizeFingerprintParameters("unit-wargear", { subject: "this-model", wargear: "relay-kit" }, 1)).toThrow();
   });
@@ -104,7 +115,7 @@ describe("named-weapon and unit-wargear: describer", () => {
     expect(describePredicate(weapon(1, "lack", 1) as never, false)).toBe('one or more models in this unit have no weapon named "Fizz blade"');
     expect(describePredicate(weapon(2, "lack", 2) as never, false)).toBe('at least 2 models in this unit have fewer than 2 weapons named "Fizz blade"');
     expect(describePredicate(weapon(2, "carry", 2) as never, false)).toBe('at least 2 models in this unit are each equipped with exactly 2 weapons named "Fizz blade"');
-    expect(describePredicate(weapon(1, "carry", 2) as never, true)).toBe('it is not the case that at least 2 models in this unit are each equipped with one weapon named "Fizz blade"');
+    expect(describePredicate(weapon(1, "carry", 2) as never, true)).toBe('fewer than 2 models in this unit are each equipped with one weapon named "Fizz blade"');
   });
 
   it("reads wargear presence, and the models forms, with the wargear id as a title", () => {

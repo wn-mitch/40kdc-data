@@ -51,3 +51,48 @@ export function applyModelFlags(
   }
   return changed;
 }
+
+const STATLINE_KEYS = ["movement", "toughness", "save", "wounds", "leadership", "objectiveControl"] as const;
+
+/**
+ * For each of the datasheet's miniature names, the name of the visible miniature whose statline it
+ * prints: its own when it is visible, else the one visible miniature with its identical statline
+ * (the app hides a statline that repeats another). Absent when a hidden statline repeats none or
+ * several.
+ */
+export function statlineSources(dump: MfmDump, datasheetId: string): Map<string, string> {
+  const minis = (dump.groupBy("miniature", "datasheetId").get(datasheetId) ?? []).slice().sort((a, b) => a.displayOrder - b.displayOrder);
+  const line = (mini: (typeof minis)[number]): string => JSON.stringify(STATLINE_KEYS.map((key) => (mini as unknown as Record<string, unknown>)[key]));
+  const visible = minis.filter((mini) => !mini.statlineHidden);
+  const out = new Map<string, string>();
+  for (const mini of minis) {
+    const name = dump.enName(mini);
+    if (!name) continue;
+    if (!mini.statlineHidden) {
+      out.set(name, name);
+      continue;
+    }
+    const sources = [...new Set(visible.filter((shown) => line(shown) === line(mini)).map((shown) => dump.enName(shown)).filter((n): n is string => !!n))];
+    if (sources.length === 1) out.set(name, sources[0]!);
+  }
+  return out;
+}
+
+/**
+ * Point `row.profile_name` at the unit profile its model prints: removed when it names another model
+ * while the model prints its own statline, set when the model repeats another's. Left alone when
+ * the dump does not say. Returns true when the row changed.
+ */
+export function applyStatlineSource(row: { name: string; profile_name?: string | null; [k: string]: unknown }, sources: Map<string, string>, profileNames: ReadonlySet<string>): boolean {
+  const source = sources.get(row.name);
+  if (source === undefined || !profileNames.has(source)) return false;
+  if (source === row.name) {
+    // The row prints its own statline: a profile_name naming another model is stale.
+    if (row.profile_name === undefined || row.profile_name === null || row.profile_name === row.name) return false;
+    delete row.profile_name;
+    return true;
+  }
+  if (row.profile_name === source) return false;
+  row.profile_name = source;
+  return true;
+}

@@ -75,7 +75,7 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
       // A bound duration would sit inside the choice's options, which the choice does not carry (no split form yet).
       if (planned.some((item) => item.index > lower && item.index < end && boundDuration.has(item.index))) errors.push(CONFLICTING_DURATIONS);
       else {
-        const problem = chooseBetweenGroups(planned, markers, limits);
+        const problem = chooseBetweenGroups(planned, markers, limits, markers.filter((index) => list[index]!.parameters.secondary === true));
         if (problem) errors.push(problem);
       }
       continue;

@@ -1,9 +1,10 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
+import { WEAPON_CHARACTERISTICS } from "./families/vocabulary.js";
 import { momentNamesUnit } from "./compile-antecedent.js";
 import { sameRun } from "./compile-attack-properties.js";
 import { namesSelection } from "./compile-targeting-history.js";
-import { WEAPON_KEYWORDS } from "./families/shared.js";
+import { WEAPON_KEYWORDS } from "./families/vocabulary.js";
+import { currentFamilyVersion } from "./contracts.js";
 
 const SCOPE = "weapon-property-scope";
 /**
@@ -13,8 +14,7 @@ const SCOPE = "weapon-property-scope";
 const WEAPON_STAT_SCOPE: readonly string[] = [...WEAPON_CHARACTERISTICS, "Range"];
 const KEYWORD = "weapon-ability-keyword";
 const REMOVAL = "weapon-ability-removal";
-const isStat = (leaf: CompileLeaf) => (leaf.family_id === "characteristic-modifier" && leaf.family_version >= 5)
-  || (leaf.family_id === "characteristic-set" && leaf.family_version >= 3);
+const isStat = (leaf: CompileLeaf) => leaf.family_id === "characteristic-modifier" || leaf.family_id === "characteristic-set";
 /** A roll the scope's recipient makes with its weapons: the Hit, Wound or Damage roll of a roll-modifier. */
 const isWeaponRoll = (leaf: CompileLeaf) => leaf.family_id === "roll-modifier" && leaf.parameters.rolls === undefined
   && ["hit", "wound", "damage"].includes(String(leaf.parameters.roll));
@@ -36,7 +36,7 @@ function between(source: Buffer | undefined, left: CompileLeaf, right: CompileLe
 
 function grantFrame(scope: CompileLeaf, firstKeyword?: CompileLeaf): CompileLeaf {
   return {
-    ...scope, role: "EFFECT", family_id: "weapon-ability-grant", family_version: 5,
+    ...scope, role: "EFFECT", family_id: "weapon-ability-grant", family_version: currentFamilyVersion("weapon-ability-grant"),
     ...(firstKeyword ? { start_byte: firstKeyword.start_byte, end_byte: firstKeyword.start_byte } : {}),
   };
 }

@@ -10,6 +10,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
 import type { MfmDump, DatasheetRow } from "./loader.js";
+import { unitIdForDatasheet, weaponOwnerId } from "./chapter-reprints.js";
 import { CORE_DIR, readJsonArray } from "./repo-files.js";
 import { repoDirs } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
@@ -324,18 +325,14 @@ export function runLoadoutLift(dump: MfmDump, onlyDir?: string): LoadoutLiftRepo
     for (const ds of datasheets) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let unitId: string;
-      try {
-        unitId = nameToId(name);
-      } catch {
-        continue;
-      }
+      const unitId = unitIdForDatasheet(dump, ds);
+      if (!unitId) continue;
       const record = byUnit.get(unitId);
       if (!record || matchedUnits.has(unitId)) continue;
       matchedUnits.add(unitId);
       dirReport.matched++;
       const before = byKey([record.loadout ?? null, record.added_models ?? null]);
-      const unitResolve = unitScopedResolver(validIds, audit, dir, unitId, resolve);
+      const unitResolve = unitScopedResolver(validIds, audit, dir, unitId, resolve, weaponOwnerId(dump, unitId));
       const added = addedModels(dump, ds.id!, unitResolve, profileNames.get(unitId) ?? new Set());
       if ("models" in added && added.models.length > 0) record.added_models = added.models;
       else delete record.added_models;

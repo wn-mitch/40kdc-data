@@ -307,7 +307,7 @@ describe("destroyed by the triggering attacks: leaf checks", () => {
   it("refuses a subject on a destruction activity", () => {
     expect(() => placed("After this unit has resolved its attacks, if those attacks destroyed an enemy unit.", [
       ["those attacks destroyed", "unit-activity", { activities: [UNITS], subject: "this-unit", named: "after", container: "none", destroyer: "this-unit", negated: false }],
-    ])).toThrow(/take no subject/);
+    ])).toThrow(/destruction activity takes no subject/);
   });
 
   it("refuses a destruction activity without a destroyer", () => {
@@ -317,7 +317,7 @@ describe("destroyed by the triggering attacks: leaf checks", () => {
   });
 
   it("refuses a destruction activity beside an older activity; a leaf may name a destroyed unit or a destroyed model (T7)", () => {
-    // Both destruction activities on one leaf are the destroyed unit or model of one verb (unit-activity@19).
+    // Both destruction activities on one leaf are the destroyed unit or model of one verb.
     expect(() => placed("if those attacks destroyed an enemy unit.", [
       ["those attacks destroyed", "unit-activity", { activities: [UNITS, MODELS], named: "after", container: "none", destroyer: "this-unit", negated: false }],
     ])).not.toThrow();

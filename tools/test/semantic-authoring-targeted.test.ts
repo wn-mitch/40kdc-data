@@ -168,8 +168,8 @@ describe("Semantic authoring past targeting", () => {
     const base = { event: "targets-selected", subject: "event-subject", object: "this-unit", filter: { kind: "attack" }, window: "event" };
     const all = describeCondition({ type: "happened", parameters: base } as never);
     const ranged = describeCondition({ type: "happened", parameters: { ...base, filter: { kind: "attack", attack_type: "ranged" } } } as never);
-    expect(all).toBe("the triggering unit has selected the unit as a target");
-    expect(ranged).toBe("the triggering unit has selected the unit as a target of its ranged attacks");
+    expect(all).toBe("the triggering unit has selected this unit as a target");
+    expect(ranged).toBe("the triggering unit has selected this unit as a target of its ranged attacks");
   });
 });
 

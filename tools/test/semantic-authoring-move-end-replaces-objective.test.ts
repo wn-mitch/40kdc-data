@@ -8,8 +8,8 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 /**
- * Move-end destinations (move-end-nearest version 2: objective markers, selected objectives,
- * instead_of), the replacing cannot-end threshold (move-must-end version 4: replaces), the selected
+ * Move-end destinations (move-end-nearest: objective markers, selected objectives,
+ * instead_of), the replacing cannot-end threshold (move-must-end: replaces), the selected
  * trigger that a move end can attach to, and engaged end restrictions on a this-model subject.
  * Every wording is fabricated; each case pins one binding, one refusal, or one output shape.
  */
@@ -46,17 +46,16 @@ function errorsOf(list: CompileLeaf[], text: string): string {
   return result.errors.join("; ");
 }
 
-describe("move-end-nearest version 2 parameters", () => {
-  it("keeps version 1 as it was, and version 2 accepts and refuses exactly what it always did", () => {
-    // Pinned at version 2 explicitly; the current version (3) widens version 2 and must not change these results.
-    expect(normalizeFingerprintParameters("move-end-nearest", { to: "following-filter" }, 1)).toEqual({ to: "following-filter" });
-    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "closest-objective-marker" }, 1)).toThrow();
-    expect(normalizeFingerprintParameters("move-end-nearest", { to: "closest-objective-marker", per: "model", instead_of: "closest-enemy-unit" }, 2))
+describe("move-end-nearest parameters", () => {
+  it("accepts a unit or objective destination, and refuses per, instead_of and waives where they do not apply", () => {
+    expect(normalizeFingerprintParameters("move-end-nearest", { to: "following-filter" })).toEqual({ to: "following-filter" });
+    expect(normalizeFingerprintParameters("move-end-nearest", { to: "closest-objective-marker" })).toEqual({ to: "closest-objective-marker" });
+    expect(normalizeFingerprintParameters("move-end-nearest", { to: "closest-objective-marker", per: "model", instead_of: "closest-enemy-unit" }))
       .toEqual({ to: "closest-objective-marker", per: "model", instead_of: "closest-enemy-unit" });
-    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "following-filter", per: "unit" }, 2)).toThrow(/applies only to an objective/u);
-    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "closest-objective" }, 2)).toThrow();
-    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "selected-objective", instead_of: "closest-friendly-unit" }, 2)).toThrow();
-    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "selected-objective", waives: "closest-enemy-model" }, 2)).toThrow();
+    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "following-filter", per: "unit" })).toThrow(/applies only to an objective/u);
+    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "closest-objective" })).toThrow();
+    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "selected-objective", instead_of: "closest-friendly-unit" })).toThrow();
+    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "selected-objective", waives: "closest-enemy-model" })).toThrow();
   });
 });
 
@@ -81,7 +80,7 @@ describe("move-end nearest to an objective (make-move, must)", () => {
     expect(text2).toContain('"ends_nearest":{"of":{"objective":{}},"per":"model","instead_of":"closest-enemy-unit"}');
   });
 
-  it("does not change the unit destination of a following-filter end (version 1 golden)", () => {
+  it("keeps the unit destination of a following-filter end", () => {
     const unitText = "Your unit can make a Normal move. When doing so, it must end that move as close as possible to the closest enemy unit.";
     const unit = placed(unitText,
       ["can make a Normal move", "make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
@@ -197,15 +196,13 @@ describe("move-end nearest on a selected move (no make-move in the sentence)", (
   });
 });
 
-describe("replacing cannot-end threshold (move-must-end version 4)", () => {
-  it("is version 4, takes replaces only with cannot, and keeps move_types out of the replacement", () => {
-    expect(currentFamilyVersion("move-must-end")).toBe(4);
-    expect(normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot", replaces: true }, 4)).toEqual({ match: "all", polarity: "cannot", replaces: true });
-    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "must", replaces: true }, 4)).toThrow(/applies only to polarity cannot/u);
-    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", replaces: true }, 4)).toThrow(/applies only to polarity cannot/u);
-    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot", replaces: false }, 4)).toThrow(/must be true/u);
-    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot", move_types: ["ingress"] }, 4)).toThrow();
-    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot", move_types: ["ingress"] }, 3)).toThrow();
+describe("replacing cannot-end threshold (move-must-end replaces)", () => {
+  it("takes replaces only with cannot, and keeps move_types out of the replacement", () => {
+    expect(normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot", replaces: true })).toEqual({ match: "all", polarity: "cannot", replaces: true });
+    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "must", replaces: true })).toThrow(/applies only to polarity cannot/u);
+    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", replaces: true })).toThrow(/applies only to polarity cannot/u);
+    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot", replaces: false })).toThrow(/must be true/u);
+    expect(() => normalizeFingerprintParameters("move-must-end", { match: "all", polarity: "cannot", move_types: ["ingress"] })).toThrow();
   });
 });
 

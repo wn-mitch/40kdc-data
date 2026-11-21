@@ -21,6 +21,7 @@
  * `input.json` (ListForge) or `input.newrecruit-json.json` (NewRecruit). Other
  * inputs are derived.
  */
+import { ATTACKERS_OF_TARGET_CASES, EVENT_SUBJECT_MODEL_CASES } from "./gen-conformance-model-refs-cases.js";
 import {
   readdirSync,
   readFileSync,
@@ -80,6 +81,7 @@ import { canonicalDefensiveLeverCases } from "./gen-conformance-defensive-levers
 import { canonicalMfmLoadoutCases } from "./gen-conformance-mfm-loadout.js";
 import { canonicalMfmUnitCases } from "./gen-conformance-mfm-unit.js";
 import { canonicalDslCases, refreshResolverDslCases, withCanonicalDslCases, type ResolverDslCase } from "./gen-conformance-resolver-dsl.js";
+import { canonicalSelectedEnemyCruncherCases } from "./gen-conformance-selection-cases.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "../..");
@@ -751,6 +753,20 @@ const LINKED_API_QUERIES: LinkedApiQuery[] = [
     name: "allies_for chaos-daemons with shadow-legion",
     query: "allies_for",
     args: { factionId: "chaos-daemons", detachmentIds: ["shadow-legion"] },
+    comparison: "ordered",
+  },
+  // Host gate: Deathwatch and Grey Knights carry ADEPTUS ASTARTES, but neither hosts the
+  // Space Marine armies' Deathwatch pool; Deathwatch takes its own Agents pool, not the generic one.
+  {
+    name: "allies_for deathwatch (host gate → own agents pool, not the generic one)",
+    query: "allies_for",
+    args: { factionId: "deathwatch" },
+    comparison: "ordered",
+  },
+  {
+    name: "allies_for grey-knights (host gate → no Deathwatch pool)",
+    query: "allies_for",
+    args: { factionId: "grey-knights" },
     comparison: "ordered",
   },
   // ally_units_for: resolved pool; compared as set (accessor sorts by name, locale-dependent).
@@ -4486,6 +4502,14 @@ function genEffectTranslation(): void {
     ...(["and", "or"] as const).map((operator) => ({ caseId: `fidelity/not-${operator}-of-negations-reads-positive`, effect: { type: "conditional",
       condition: { operator: "not", operands: [{ operator, operands: ["CHAOS", "IMPERIUM"].map((keyword) => ({ operator: "not", operands: [{ type: "matches", parameters: { filter: { all_of: [keyword] } } }] })) }] },
       effect: { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "add", value: 1 } } } })),
+    // The option a choice marks as a Stratagem's secondary effect reads as the extra-CP pick, in block and inline form.
+    { caseId: "fidelity/choice-secondary-option-block", effect: { type: "choice", secondary_option: 1, options: [
+      { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } },
+      { type: "roll-modifier", target: "this-unit", modifier: { roll: "wound", operation: "add", value: 1 } }] } },
+    { caseId: "fidelity/choice-secondary-option-inline", effect: { type: "aura", target: "friendly-within-aura", modifier: { range: { inches: 6 }, of: "this-unit",
+      effect: { type: "choice", secondary_option: 0, options: [
+        { type: "roll-modifier", target: "recipient", modifier: { roll: "hit", operation: "add", value: 1 } },
+        { type: "roll-modifier", target: "recipient", modifier: { roll: "wound", operation: "add", value: 1 } }] } } } },
     { caseId: "fidelity/move-modifier-mode-choice-named-beside-clause", effect: { type: "move-modifier", target: "this-unit", modifier: { applies_to_moves: ["consolidation"], no_end_in_engagement: true, mode_choice: { modes: ["objective"], ignore_before_moving: true } } } },
   ];
   for (const example of fidelityBoundaryCases) {
@@ -4512,6 +4536,12 @@ function genEffectTranslation(): void {
   const appended = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "gen-conformance-appended-cases.json"), "utf8")) as Record<string, unknown>[];
   for (const example of appended) {
     cases.push({ ...example, expected: { text: describeAbility(example as Parameters<typeof describeAbility>[0]) } });
+  }
+  // A model event subject and per-attack characteristic changes (gen-conformance-model-refs-cases.ts).
+  for (const fc of [...EVENT_SUBJECT_MODEL_CASES, ...ATTACKERS_OF_TARGET_CASES]) {
+    const scope = { duration: "permanent" };
+    const example = { effect: fc.effect, scope, ...(fc.trigger != null ? { trigger: fc.trigger } : {}) };
+    cases.push({ caseId: `model-refs/${fc.id}`, ...example, expected: { text: describeAbility(example as Parameters<typeof describeAbility>[0]) } });
   }
   writeJson(join(CONFORMANCE, "effect-translation", "cases.json"), cases);
   console.log(
@@ -4754,7 +4784,7 @@ function genCanonicalCruncherCases(): void {
     writeJson(path, corpus);
     console.log(`abilities-resolver/${filename}: ${corpus.cases.length} cases`);
   }
-  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded()), ...canonicalCriticalWoundCases(Dataset.embedded()), ...canonicalRerollSubsetCases(Dataset.embedded()), ...canonicalRemovedKeywordCruncherCases(Dataset.embedded())]) {
+  for (const { filename, value } of [...canonicalWeaponScopeCases(Dataset.embedded()), ...canonicalAttackCompareCases(Dataset.embedded()), ...canonicalCriticalWoundCases(Dataset.embedded()), ...canonicalRerollSubsetCases(Dataset.embedded()), ...canonicalRemovedKeywordCruncherCases(Dataset.embedded()), ...canonicalSelectedEnemyCruncherCases(Dataset.embedded())]) {
     writeJson(join(CONFORMANCE, "cruncher", filename), value);
   }
 }

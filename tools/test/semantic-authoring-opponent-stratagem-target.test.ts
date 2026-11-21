@@ -274,8 +274,8 @@ describe("Describer for Stratagem targeting", () => {
   it("says the unit has been targeted with the named Stratagem this phase, not that it selected a unit", () => {
     const happened = { type: "happened", parameters: { event: "targets-selected", subject: { owner: "any" }, object: "this-unit", filter: { kind: "stratagem", id: "alpha-strike-fabricated" }, window: "phase" } };
     const text = describeCondition(happened as any);
-    expect(text).toBe("the unit has been targeted with the Alpha Strike Fabricated Stratagem this phase");
-    expect(describeCondition({ operator: "not", operands: [happened] } as any)).toBe("the unit has not been targeted with the Alpha Strike Fabricated Stratagem this phase");
+    expect(text).toBe("this unit has been targeted with the Alpha Strike Fabricated Stratagem this phase");
+    expect(describeCondition({ operator: "not", operands: [happened] } as any)).toBe("this unit has not been targeted with the Alpha Strike Fabricated Stratagem this phase");
   });
 
   it("describes an aura recipient's Stratagem trigger with its range", () => {
@@ -285,7 +285,7 @@ describe("Describer for Stratagem targeting", () => {
       trigger: { event: "targets-selected", subject: { owner: "any" }, filter: { kind: "stratagem" }, object: { owner: "friendly", all_of: ["GIZMO"], within: { of: "this-model", range: { inches: 6 } } } },
       behavior: "triggered",
     } as any);
-    expect(text).toBe('When a friendly GIZMO unit within 6" of this model is targeted with a Stratagem, you gain 1CP.');
+    expect(text).toBe('When a friendly GIZMO unit within 6" of this model is targeted with a Stratagem, you gain 1 CP.');
   });
 });
 

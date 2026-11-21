@@ -20,36 +20,43 @@ use crate::translate::condition::{
 pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
     let e = obj(Some(e));
     let indent = "  ".repeat(depth);
-    let arrow = if depth > 0 { "-> " } else { "" };
+    let arrow = if depth > 0 { "- " } else { "" };
     match ty(e) {
         "conditional" => {
-            let inner = child(e, "effect");
-            let lead = capitalize(&condition_lead_in_for(
-                child(e, "condition"),
-                is_defensive_effect(inner),
-            ));
-            let gate = super::recipient_gate::recipient_gate(e, ctx);
-            if let Some(g) = gate
-                .as_ref()
-                .filter(|g| ty(obj(Some(&g.inner))) == "sequence")
-            {
-                return format!(
-                    "{indent}{}:\n{}",
-                    capitalize(&g.lead),
-                    block(&g.inner, depth + 1, &g.ctx)
-                );
-            }
-            if is_container(obj(Some(inner))) {
-                return format!("{indent}{lead}:\n{}", block(inner, depth + 1, ctx));
-            }
-            if let Some(g) = gate {
+            if let Some(g) = super::recipient_gate::recipient_gate(e, ctx) {
+                if ty(obj(Some(&g.inner))) == "sequence" {
+                    return format!(
+                        "{indent}{arrow}{}:\n{}",
+                        capitalize(&g.lead),
+                        block(&g.inner, depth + 1, &g.ctx)
+                    );
+                }
                 return format!(
                     "{indent}{arrow}{}, {}.",
                     capitalize(&g.lead),
                     inline(&g.inner, &g.ctx)
                 );
             }
-            format!("{indent}{arrow}{lead}, {}.", inline(inner, ctx))
+            let (cond, inner) = super::flatten_conditional(e, ctx);
+            let child_ctx = match super::attack_type_from_condition(&cond) {
+                Some(t) => Ctx {
+                    suppress_weapon_type: Some(t.to_string()),
+                    ..ctx.clone()
+                },
+                None => ctx.clone(),
+            };
+            if is_container(obj(Some(&inner))) {
+                return format!(
+                    "{indent}{arrow}{}:\n{}",
+                    capitalize(&condition_lead_in_for(&cond, false)),
+                    block(&inner, depth + 1, &child_ctx)
+                );
+            }
+            format!(
+                "{indent}{arrow}{}, {}.",
+                capitalize(&condition_lead_in_for(&cond, is_defensive_effect(&inner))),
+                inline(&inner, &child_ctx)
+            )
         }
         "rules-bundle" | "sequence" => {
             let steps = items(e, "steps");
@@ -63,21 +70,25 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 .join("\n")
         }
         "ability-part" => {
-            // A part is always a bullet of its ability, even at the top level.
+            let e = &super::part_with_model_refs(e);
             let inner = child(e, "effect");
+            let child_ctx = super::part_trigger_ctx(e, ctx);
             // A part with nothing to head it (a printed grant's body) lists its container's steps in its place.
             if is_container(obj(Some(inner))) {
                 let head = part_head(e);
                 if head.is_empty() {
-                    return block(inner, depth, ctx);
+                    return block(inner, depth, &child_ctx);
                 }
                 return format!(
-                    "{indent}-> {}:\n{}",
+                    "{indent}{arrow}{}:\n{}",
                     capitalize(&head),
-                    block(inner, depth + 1, ctx)
+                    block(inner, depth + 1, &child_ctx)
                 );
             }
-            format!("{indent}-> {}.", capitalize(&part_inline(e, ctx)))
+            format!(
+                "{indent}{arrow}{}.",
+                capitalize(&part_inline(e, &child_ctx))
+            )
         }
         // A grant printed with its ability: the holder and name, then the ability one level deeper.
         "ability-grant" if super::leaf_ability::is_defined_grant(e) => format!(
@@ -90,7 +101,11 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             out.push_str(
                 &items(e, "options")
                     .iter()
-                    .map(|o| format!("{indent}  - {}.", capitalize(&inline(o, ctx))))
+                    .enumerate()
+                    .map(|(i, o)| {
+                        let text = format!("{}{}", super::secondary_lead(e, i), inline(o, ctx));
+                        format!("{indent}  - {}.", capitalize(&text))
+                    })
                     .collect::<Vec<_>>()
                     .join("\n"),
             );
@@ -144,7 +159,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
         "select-units" => {
             let sel = obj(nn(e, "selector"));
             let inner = child(e, "effect");
-            let selected = selected_context(ctx, sel);
+            let plural = select_units_plural(sel);
             let lead = format!(
                 "Select {}{}",
                 select_units_subject_in(sel, ctx.each_model),
@@ -153,21 +168,22 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
             let header = format!("{indent}{arrow}{lead}");
             if is_container(obj(Some(inner))) {
                 let header = header.strip_suffix('.').unwrap_or(&header);
-                if select_units_plural(sel) {
+                let sel_ctx = selected_context_with_plural(ctx, sel, false);
+                if plural {
                     let noun = if sv(obj(sel.get("filter")), "level") == Some("model") {
                         "model"
                     } else {
                         "unit"
                     };
                     return format!(
-                        "{header}:\n{indent}  -> For each selected {noun}:\n{}",
-                        block(inner, depth + 2, &selected)
+                        "{header}:\n{indent}  - For each selected {noun}:\n{}",
+                        block(inner, depth + 2, &sel_ctx)
                     );
                 }
-                return format!("{header}:\n{}", block(inner, depth + 1, &selected));
+                return format!("{header}:\n{}", block(inner, depth + 1, &sel_ctx));
             }
-            let nested = inline(inner, &selected);
-            format!("{header}: {nested}.")
+            let nested = inline(inner, &selected_context_with_plural(ctx, sel, plural));
+            format!("{header}. {}.", capitalize(&nested))
         }
         "persistent-designation" => {
             if sv(e, "operation") == Some("replace") {
@@ -216,10 +232,8 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                     .map(|applies| {
                         let recipient = designated_recipient_context(applies, ctx);
                         let entry = child(applies, "effect");
-                        let lead = format!(
-                            "{indent}  -> {}",
-                            capitalize(&designate_when(applies, true))
-                        );
+                        let lead =
+                            format!("{indent}  - {}", capitalize(&designate_when(applies, true)));
                         if is_container(obj(Some(entry))) {
                             format!("{lead}:\n{}", block(entry, depth + 2, &recipient))
                         } else {
@@ -260,7 +274,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
         }
         "stance-select" => {
             let consumable = if sv(e, "mode") == Some("consumable") {
-                " (each may be chosen once per battle)"
+                " (each can be chosen once per battle)"
             } else {
                 ""
             };
@@ -278,7 +292,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 lines.push(format!(
                     "{indent}  - {}: {}.",
                     jstr(o.get("name")),
-                    inline(child(o, "effect"), ctx)
+                    capitalize(&inline(child(o, "effect"), ctx))
                 ));
             }
             let random = stance_random(e);
@@ -294,8 +308,11 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 None => "there is a consequence".to_string(),
             };
             format!(
-                "{indent}{arrow}First take a {} test \u{2014} on a failure, {on_fail}; then {}.",
-                test_name(risk.get("test")),
+                "{indent}{arrow}Take {}. On a failure, {on_fail}; then {}.",
+                crate::translate::condition::with_article(&format!(
+                    "{} test",
+                    test_name(risk.get("test"))
+                )),
                 inline(child(e, "reward"), ctx)
             )
         }
@@ -350,7 +367,7 @@ pub(super) fn block(e: &Value, depth: usize, ctx: &Ctx) -> String {
                 lines.push(format!(
                     "{indent}  - {}: {}.",
                     jstr(o.get("name")),
-                    inline(child(o, "effect"), ctx)
+                    capitalize(&inline(child(o, "effect"), ctx))
                 ));
             }
             lines.extend(

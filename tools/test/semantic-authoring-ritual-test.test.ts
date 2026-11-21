@@ -66,7 +66,7 @@ describe("a roll's bonus of \"that many\" mortal wounds (compile-that-many.ts)",
       { type: "conditional", condition: { type: "matches", parameters: { subject: "this-model", filter: { state: "on-battlefield" } } },
         effect: { type: "roll-modifier", target: "this-unit", modifier: { roll: "psychic", operation: "add", value: { roll_var: "that-many" } } } },
     ] } });
-    expect(describeAbility({ id: "sample", name: "Sample", ...mechanics })).toContain("add the result of that roll to the unit's Psychic rolls");
+    expect(describeAbility({ id: "sample", name: "Sample", ...mechanics })).toContain("add the result of that roll to this unit's Psychic rolls");
   });
 
   it("takes a fixed count as that number", () => {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { currentFamilyVersion, familyRole } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { createValidator } from "../src/schema-loader.js";
 import { expectCompiled } from "./semantic-authoring-connective-fixture.js";
 
@@ -195,6 +195,43 @@ describe("Semantic authoring Stratagems with several targets: every and any (C),
     expect(JSON.stringify(mechanics.effect)).toContain(JSON.stringify(first));
     expect(JSON.stringify(mechanics.effect)).toContain(JSON.stringify(second));
     expect(effectOk(mechanics.effect)).toBe(true);
+  });
+
+  it("gates an attack that targets any one of the targets on the defender being one of them", () => {
+    const text = "Movement phase. Two friendly GAMMA units. Until the end of the phase, each time an attack targets one of those units, subtract 1 from the Wound roll.";
+    const leaves = placed(text, ...twoGroups,
+      ["attack targets one of those units", "attack", { direction: "targeted", unit: "antecedent", attack_type: "any" }, "EFFECT"],
+      ["subtract 1 from the Wound roll", "roll-modifier", { roll: "wound", operation: "subtract", value: 1 }, "EFFECT"]);
+    // The among-filter sits inside the attack's own span, so it is placed by its own offset.
+    const start = Buffer.from(text).indexOf("one of those units");
+    const version = currentFamilyVersion("unit-filter");
+    const among: CompileLeaf = { role: familyRole("unit-filter", version), family_id: "unit-filter", family_version: version,
+      parameters: { side: "any", among: "stratagem-targets", targets: "any" }, start_byte: start, end_byte: start + "one of those units".length, fragment: "EFFECT" };
+    const result = compileLeaves([...leaves.slice(0, -1), among, leaves.at(-1)!].sort((a, b) => a.start_byte - b.start_byte || (b.end_byte ?? b.start_byte) - (a.end_byte ?? a.start_byte)), text);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    const effect = JSON.stringify(result.mechanics.effect);
+    expect(effect).toContain(JSON.stringify({ operator: "or", operands: [
+      { type: "same-unit", parameters: { subject: "defender", as: first } },
+      { type: "same-unit", parameters: { subject: "defender", as: second } },
+    ] }));
+    expect(effectOk(result.mechanics.effect)).toBe(true);
+  });
+
+  it("refuses a back-referenced attack unit on an attack the unit makes", () => {
+    expect(() => normalizeFingerprintParameters("attack", { direction: "makes", unit: "antecedent", attack_type: "any" }, currentFamilyVersion("attack")))
+      .toThrow(/direction must be targeted/u);
+  });
+
+  it("reads 'up to one' as an optional target with count_max 1", () => {
+    const text = "Movement phase. Up to one friendly GAMMA unit. Until the end of the phase, your unit has the Feel No Pain 5+ ability.";
+    const { target } = compiled(text, WINDOW,
+      ["Up to one", "stratagem-target", { count: "up-to", count_max: 1 }, "TARGET"],
+      ["friendly GAMMA unit", "unit-filter", { side: "friendly", keywords: ["GAMMA"] }, "TARGET"],
+      ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }, "EFFECT"],
+      ["your unit has the Feel No Pain 5+ ability", "feel-no-pain", { subject: "this-unit", threshold: 5, against: "all" }, "EFFECT"]);
+    expect(target).toMatchObject({ count: "up-to", count_max: 1 });
+    expect(targetValid(target)).toBe(true);
+    expect(() => normalizeFingerprintParameters("stratagem-target", { count: "up-to", count_max: 0 }, currentFamilyVersion("stratagem-target"))).toThrow();
   });
 
   it("reads a condition on every target as all of them", () => {

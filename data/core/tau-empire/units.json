@@ -104,13 +104,13 @@
     "profiles": [
       {
         "name": "Manta",
-        "M": 20,
+        "M": 40,
         "T": 14,
         "W": 60,
         "Sv": 2,
         "invuln_sv": 5,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -538,13 +538,13 @@
     "profiles": [
       {
         "name": "Sun Shark Bomber",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -1279,13 +1279,13 @@
     "profiles": [
       {
         "name": "Tiger Shark",
-        "M": 20,
+        "M": null,
         "T": 11,
         "W": 18,
         "Sv": 3,
         "invuln_sv": 5,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -2276,13 +2276,13 @@
     "profiles": [
       {
         "name": "AX-1-0 Tiger Shark",
-        "M": 20,
+        "M": null,
         "T": 11,
         "W": 18,
         "Sv": 3,
         "invuln_sv": 5,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -3187,13 +3187,13 @@
     "profiles": [
       {
         "name": "Razorshark Strike Fighter",
-        "M": 20,
+        "M": null,
         "T": 10,
         "W": 12,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [

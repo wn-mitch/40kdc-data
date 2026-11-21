@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { factionKeywordId } from "./compile-army-faction.js";
-import { expectedWindow } from "./restriction-families.js";
+import { expectedWindow } from "./families/vocabulary.js";
 import { namedAbilityProblem } from "./named-ability-checks.js";
 
 /**

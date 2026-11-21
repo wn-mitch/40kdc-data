@@ -69,6 +69,9 @@ func negatePhrase(phrase string) string {
 	if rest, ok := strings.CutPrefix(phrase, "1+ "); ok {
 		return "no " + rest
 	}
+	if rest, ok := strings.CutPrefix(phrase, "one or more "); ok {
+		return "no " + rest
+	}
 	if m := negateVerbRe.FindStringSubmatch(phrase); m != nil {
 		who, verb, rest := m[1], m[2], m[3]
 		switch verb {
@@ -89,7 +92,7 @@ func negatePhrase(phrase string) string {
 // applied to the complete filter, not to each filter field independently.
 func describeMatches(p map[string]any, negated bool) string {
 	f := mapOr(p["filter"])
-	who := subjectOf(p, "the unit")
+	who := subjectOf(p, "this unit")
 	if p["subject"] == "defender" {
 		who = "the target"
 	}
@@ -139,7 +142,7 @@ func describeMatches(p map[string]any, negated bool) string {
 			} else if f["owner"] == "friendly" {
 				owner = "friendly"
 			}
-			return subjectOf(p, "the unit") + " is " + no + owner
+			return subjectOf(p, "this unit") + " is " + no + owner
 		}
 		if f["state"] != nil {
 			if f["state"] == "fights-first" {
@@ -201,7 +204,7 @@ func describeMatches(p map[string]any, negated bool) string {
 			return who + " is " + no + designationPhrase(cstr(tag), false)
 		}
 		if visible, ok := asMap(f["visible"]); ok && visible != nil {
-			to := unitRefPhrase(visible["to"], "the unit")
+			to := unitRefPhrase(visible["to"], "this unit")
 			if visible["to"] == "attacker" {
 				to = "the attacking model"
 			}
@@ -210,25 +213,30 @@ func describeMatches(p map[string]any, negated bool) string {
 		if within, ok := asMap(f["within"]); ok && within != nil {
 			to := ""
 			if within["range"] != "weapon" && within["range"] != "half-weapon" {
-				to = " of " + placeRefPhrase(within["of"])
+				to = placeRefPhrase(within["of"])
 			}
-			whole := ""
-			if within["wholly"] == true {
-				whole = "wholly "
-			}
-			return who + " is " + no + whole + "within " + rangePhrase(within["range"]) + to
+			return who + " is " + no + strings.TrimLeft(withinClause(within, &to), " ")
 		}
 	}
-	return who + " is " + no + unitFilterPhrase(f)
+	// A trigger's model reads as a model ("the triggering model is within Engagement Range of ...").
+	if s, _ := p["subject"].(string); s == eventSubjectModel || s == eventObjectModel {
+		model := make(map[string]any, len(f)+1)
+		for k, v := range f {
+			model[k] = v
+		}
+		model["level"] = "model"
+		return who + " is " + no + filterPredicate(model, "model", negated)
+	}
+	return who + " is " + no + filterPredicate(f, "unit", negated)
 }
 
-// controlCountPhrase renders a `{min, max}` count bound ("3+", "exactly 2",
-// "at most 1"); an absent bound reads "1+". Mirror of countPhrase in
+// controlCountPhrase renders a `{min, max}` count bound ("3 or more", "exactly 2",
+// "at most 1"); an absent bound reads "one or more". Mirror of countPhrase in
 // tools/src/translate/condition-refs.ts.
 func controlCountPhrase(value any) string {
 	bounds, _ := asMap(value)
 	if bounds == nil {
-		return "1+"
+		return "one or more"
 	}
 	min, max := bounds["min"], bounds["max"]
 	if min != nil && max != nil {
@@ -246,12 +254,15 @@ func controlCountPhrase(value any) string {
 		return "at most " + diceCase(max)
 	}
 	if min != nil {
-		if _, number := parseNumber(min); number {
-			return cstr(min) + "+"
+		if n, number := min.(float64); number {
+			if n == 1 {
+				return "one or more"
+			}
+			return numStr(n) + " or more"
 		}
 		return "at least " + diceCase(min)
 	}
-	return "1+"
+	return "one or more"
 }
 
 func controlComparisonPhrase(comparison string) string {
@@ -333,7 +344,7 @@ func describePredicate(c map[string]any, negated bool) string {
 		case "your-turn":
 			whose = "your"
 		case "opponent-turn":
-			whose = "the opponent's"
+			whose = "your opponent's"
 		}
 		return neg + "in " + whose + " turn"
 	case "battle-round":
@@ -365,7 +376,7 @@ func describePredicate(c map[string]any, negated bool) string {
 	case "rule-active":
 		return "the " + ruleRefPhrase(p["rule"]) + " is " + neg + "active"
 	case "has-keyword":
-		who := subjectOf(p, "the unit")
+		who := subjectOf(p, "this unit")
 		if p["subject"] == "defender" {
 			who = "the target"
 		}
@@ -379,7 +390,7 @@ func describePredicate(c map[string]any, negated bool) string {
 		if p["owner"] == "enemy" {
 			side = "an enemy unit"
 		}
-		return subjectOf(p, "the unit") + " is " + neg + side
+		return subjectOf(p, "this unit") + " is " + neg + side
 	case "same-unit":
 		// The attack's target is the unit an aura reaches ("an attack that targets that enemy unit").
 		if p["subject"] == "defender" && p["as"] == "recipient" {
@@ -395,15 +406,15 @@ func describePredicate(c map[string]any, negated bool) string {
 			}
 			return "the attack targets the unit that unit targeted"
 		}
-		as := unitRefPhrase(p["as"], "the unit")
+		as := unitRefPhrase(p["as"], "this unit")
 		if p["as"] == "this-unit" {
 			as = "this unit"
 		}
-		return subjectOf(p, "the unit") + " is " + neg + "the same unit as " + as
+		return subjectOf(p, "this unit") + " is " + neg + "the same unit as " + as
 	case "model-profile":
 		return subjectOf(p, "the model") + " is " + neg + "the " + titleCase(cstr(p["profile"])) + " model"
 	case "has-ability":
-		return neg + subjectOf(p, "the unit") + " has the " + idLabel(p["ability"]) + " ability"
+		return neg + subjectOf(p, "this unit") + " has the " + idLabel(p["ability"]) + " ability"
 	case "attachment":
 		w := mapOr(p["with"])
 		hasNonKeyword := false
@@ -414,7 +425,7 @@ func describePredicate(c map[string]any, negated bool) string {
 			}
 		}
 		if hasNonKeyword {
-			who := subjectOf(p, "the unit")
+			who := subjectOf(p, "this unit")
 			if p["subject"] == "this-model" || p["subject"] == nil {
 				who = "the model"
 			}
@@ -426,53 +437,45 @@ func describePredicate(c map[string]any, negated bool) string {
 				w2["level"] = "model"
 				return neg + subjectOf(p, "this unit") + " is being led by " + unitFilterPhrase(w2)
 			}
-			return neg + subjectOf(p, "the unit") + " is attached to " + unitFilterPhrase(w)
+			return neg + subjectOf(p, "this unit") + " is attached to " + unitFilterPhrase(w)
 		}
 		kw := ""
 		if isList(w["all_of"]) {
 			kw = strings.Join(cstrList(w["all_of"]), " ") + " "
 		}
-		who := subjectOf(p, "the unit")
+		who := subjectOf(p, "this unit")
 		if p["subject"] == "this-model" || p["subject"] == nil {
-			who = "the model"
+			who = "this model"
 		}
 		switch p["role"] {
 		case "leading":
-			return neg + who + " is leading a " + kw + "unit"
+			return neg + who + " is leading " + withArticle(kw+"unit")
 		case "led":
-			return neg + subjectOf(p, "this unit") + " is being led by " + article(kw) + " " + kw + "model"
+			return neg + subjectOf(p, "this unit") + " is being led by " + withArticle(kw+"model")
 		}
 		if kw != "" {
-			return neg + subjectOf(p, "the unit") + " is attached to " + article(kw) + " " + kw + "unit"
+			return neg + subjectOf(p, "this unit") + " is attached to " + withArticle(kw+"unit")
 		}
-		return neg + subjectOf(p, "the unit") + " is an attached unit"
+		return neg + subjectOf(p, "this unit") + " is an attached unit"
 	case "strength":
-		below := "starting strength"
+		below := "Starting Strength"
 		if p["below"] == "half" {
-			below = "half strength"
+			below = "Half-strength"
 		}
 		rel := "below"
 		if p["at_or_below"] == true {
 			rel = "at or below"
 		}
-		return neg + subjectOf(p, "the unit") + " is " + rel + " " + below
+		return neg + subjectOf(p, "this unit") + " is " + rel + " " + below
 	case "model-count":
 		kw := ""
 		if p["keyword"] != nil {
 			kw = cstr(p["keyword"]) + " "
 		}
-		var rng string
-		switch {
-		case p["min"] != nil && p["max"] != nil:
-			rng = cstr(p["min"]) + "-" + cstr(p["max"])
-		case p["min"] != nil:
-			rng = cstr(p["min"]) + "+"
-		default:
-			rng = "at most " + cstr(p["max"])
-		}
-		return neg + subjectOf(p, "the unit") + " contains " + rng + " " + kw + "models"
+		rng := controlCountPhrase(map[string]any{"min": p["min"], "max": p["max"]})
+		return neg + subjectOf(p, "this unit") + " contains " + rng + " " + kw + "models"
 	case "wounds":
-		who := subjectOf(p, "the unit")
+		who := subjectOf(p, "this unit")
 		if p["subject"] == "this-model" || p["subject"] == nil {
 			who = "the model"
 		}
@@ -506,10 +509,10 @@ func describePredicate(c map[string]any, negated bool) string {
 		}
 		return neg + "all " + cstr(p["uniform"]) + " weapons equipped by each " + kw + "model in the unit are the same"
 	case "unit-state":
-		who := subjectOf(p, "the unit")
+		who := subjectOf(p, "this unit")
 		withRef := ""
 		if p["with"] != nil {
-			withRef = " with " + unitRefPhrase(p["with"], "the unit")
+			withRef = " with " + unitRefPhrase(p["with"], "this unit")
 		}
 		if p["at"] == "phase-start" || p["at"] == "turn-start" {
 			was := "was"
@@ -533,17 +536,17 @@ func describePredicate(c map[string]any, negated bool) string {
 			if p["transport"] != "this-unit" {
 				transport = unitRefPhrase(p["transport"], "that Transport")
 			}
-			return subjectOf(p, "the unit") + " is " + neg + "able to embark within " + transport
+			return subjectOf(p, "this unit") + " is " + neg + "able to embark within " + transport
 		}
 		if p["to"] == "be-selected" {
 			source := mapOr(p["source_ability"])["ability_id"]
-			return neg + "the candidate was eligible for the " + dekebab(cstr(source)) + " ability at the end of the opponent's previous turn"
+			return neg + "the candidate was eligible for the " + dekebab(cstr(source)) + " ability at the end of your opponent's previous turn"
 		}
 		to, ok := eligibleToPhrases[cstr(p["to"])]
 		if !ok {
 			to = dekebab(cstr(p["to"]))
 		}
-		return subjectOf(p, "the unit") + " is " + neg + "eligible to " + to
+		return subjectOf(p, "this unit") + " is " + neg + "eligible to " + to
 	case "happened":
 		return describeHappened(p, negated)
 	case "happened-compare":
@@ -576,7 +579,7 @@ func describePredicate(c map[string]any, negated bool) string {
 		if p["wholly"] == true {
 			wholly = "wholly "
 		}
-		who := subjectOf(p, "the unit")
+		who := subjectOf(p, "this unit")
 		if p["models"] == "every" {
 			who = "every model in " + who
 		}
@@ -598,7 +601,7 @@ func describePredicate(c map[string]any, negated bool) string {
 		}
 		return who + " is " + neg + wholly + "within " + where
 	case "closest":
-		who := subjectOf(p, "the unit")
+		who := subjectOf(p, "this unit")
 		if p["subject"] == "defender" {
 			who = "the target"
 		}
@@ -616,7 +619,7 @@ func describePredicate(c map[string]any, negated bool) string {
 		if p["to"] != nil && p["to"] != "attacker" {
 			ref := "the target"
 			if p["to"] != "defender" {
-				ref = unitRefPhrase(p["to"], "the unit")
+				ref = unitRefPhrase(p["to"], "this unit")
 			}
 			to = " to " + ref
 		}
@@ -634,7 +637,7 @@ func describePredicate(c map[string]any, negated bool) string {
 			clauses = append(clauses, who+" "+controlCountPhrase(p["count"])+" "+objective)
 		}
 		if compare, ok := asMap(p["compare"]); ok && compare != nil {
-			other := "the opponent"
+			other := "your opponent"
 			if compare["owner"] == "friendly" {
 				other = "you"
 			}
@@ -642,7 +645,7 @@ func describePredicate(c map[string]any, negated bool) string {
 				clauses = append(clauses, holder+" more "+objective+" than "+other)
 			} else {
 				left := "the number of " + objective + " " + who
-				right := "the number " + map[bool]string{true: "you control", false: "the opponent controls"}[compare["owner"] == "friendly"]
+				right := "the number " + map[bool]string{true: "you control", false: "your opponent controls"}[compare["owner"] == "friendly"]
 				clauses = append(clauses, left+" is "+controlComparisonPhrase(cstr(compare["comparison"]))+" "+right)
 			}
 		}
@@ -738,13 +741,13 @@ func describePredicate(c map[string]any, negated bool) string {
 		}
 		return "the " + diceCase(p["dice"]) + " roll is " + neg + label
 	case "visible":
-		who := subjectOf(p, "the unit")
+		who := subjectOf(p, "this unit")
 		if p["subject"] == "defender" {
 			who = "the target"
 		}
 		to := "the attacking model"
 		if p["to"] != nil && p["to"] != "attacker" {
-			to = unitRefPhrase(p["to"], "the unit")
+			to = unitRefPhrase(p["to"], "this unit")
 		}
 		fully := ""
 		if p["fully"] == true {
@@ -767,13 +770,13 @@ func describePredicate(c map[string]any, negated bool) string {
 			return neg + controlCountPhrase(p["count"]) + " " + objectivePhrase(mapOr(s["objective"]), true, "objective") + " tagged " + dekebab(cstr(p["tag"]))
 		}
 		if p["count"] != nil {
-			ref := unitRefPhrase(p["subject"], "the unit")
+			ref := unitRefPhrase(p["subject"], "this unit")
 			ref = leadingArticleRe.ReplaceAllString(ref, "")
 			ref = strings.Replace(ref, "unit", "units", 1)
 			ref = strings.Replace(ref, "model", "models", 1)
 			by := ""
 			if p["by"] != nil {
-				by = " by " + unitRefPhrase(p["by"], "the unit")
+				by = " by " + unitRefPhrase(p["by"], "this unit")
 			}
 			return neg + controlCountPhrase(p["count"]) + " " + ref + " " + designationPhrase(cstr(p["tag"]), false) + by
 		}
@@ -785,7 +788,7 @@ func describePredicate(c map[string]any, negated bool) string {
 			}
 			by = " by " + by
 		}
-		return subjectOf(p, "the unit") + " is " + neg + designationPhrase(cstr(p["tag"]), false) + by
+		return subjectOf(p, "this unit") + " is " + neg + designationPhrase(cstr(p["tag"]), false) + by
 	case "roll-total":
 		// "the Psychic test result is 10+": the total of a roll an enclosing step bound.
 		roll := cstr(p["roll_var"])
@@ -797,7 +800,7 @@ func describePredicate(c map[string]any, negated bool) string {
 	case "resource":
 		if p["below_max"] == true {
 			source := mapOr(p["source_ability"])["ability_id"]
-			return neg + "the " + dekebab(cstr(source)) + " ability had unused selection capacity at the end of the opponent's previous turn"
+			return neg + "the " + dekebab(cstr(source)) + " ability had unused selection capacity at the end of your opponent's previous turn"
 		}
 		// A pool is the player's ("If you have 3 or more Pact points").
 		return "you have " + controlCountPhrase(p["count"]) + " " + dekebab(cstr(p["pool"]))
@@ -876,9 +879,9 @@ func describePredicate(c map[string]any, negated bool) string {
 		if negated {
 			was = "was not"
 		}
-		return subjectOf(p, "the unit") + " " + was + " moved over by " + unitRefPhrase(p["by"], "this model") + " " + window
+		return subjectOf(p, "this unit") + " " + was + " moved over by " + unitRefPhrase(p["by"], "this model") + " " + window
 	case "guided":
-		return subjectOf(p, "the unit") + " is " + neg + designationPhrase("guided", false)
+		return subjectOf(p, "this unit") + " is " + neg + designationPhrase("guided", false)
 	}
 	t := "unknown"
 	if c["type"] != nil {
@@ -904,7 +907,7 @@ func describeWithin(p map[string]any, neg string) string {
 		wholly = "wholly "
 	}
 	every := p["models"] == "every"
-	who := subjectOf(p, "the unit")
+	who := subjectOf(p, "this unit")
 	if every {
 		who = "every model in " + who
 		if p["count"] != nil {
@@ -917,6 +920,17 @@ func describeWithin(p map[string]any, neg string) string {
 	target := ""
 	if rng != "half-weapon" && rng != "weapon" {
 		target = " of " + placeRefPhrase(p["of"])
+	}
+	rMap, _ := asMap(rng)
+	zero := false
+	if rMap != nil && p["of"] != nil {
+		if v, ok := rMap["inches"].(float64); ok && v == 0 {
+			zero = true
+		}
+	}
+	dist := wholly + "within " + rangePhrase(rng) + target
+	if zero {
+		dist = "in contact with " + placeRefPhrase(p["of"])
 	}
 	is, at := "is", ""
 	if plural {
@@ -931,7 +945,7 @@ func describeWithin(p map[string]any, neg string) string {
 			is = "were"
 		}
 	}
-	return who + " " + is + " " + neg + wholly + "within " + rangePhrase(rng) + target + at
+	return who + " " + is + " " + neg + dist + at
 }
 
 // conditionOperands returns (operands, true) when c carries an operator and an

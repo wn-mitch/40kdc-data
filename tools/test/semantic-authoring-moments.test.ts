@@ -9,7 +9,7 @@ import { expectRefused } from "./semantic-authoring-connective-fixture.js";
 {
 // Fabricated wording only; no rules text.
 
-const normalize = (parameters: Record<string, unknown>, version: number) => normalizeFingerprintParameters("event", parameters, version);
+const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("event", parameters);
 
 function leaf(text: string, wording: string, family: string, version: number, parameters: Record<string, unknown>): CompileLeaf {
   const start = Buffer.from(text).indexOf(Buffer.from(wording));
@@ -20,17 +20,16 @@ function leaf(text: string, wording: string, family: string, version: number, pa
 describe("event object on a used rule (the unit an Order is issued to)", () => {
   const order = { kind: "used", activity: "order" };
 
-  it("accepts object on a used event at version 35 and not before", () => {
-    expect(normalize({ ...order, object: "this-unit" }, 35)).toEqual({ ...order, object: "this-unit" });
-    expect(() => normalize({ ...order, object: "this-unit" }, 34)).toThrow();
-    expect(() => normalize({ ...order, object: "antecedent" }, 35)).toThrow(/event.object/);
-    expect(normalize(order, 35)).toEqual(order);
+  it("accepts object this-unit on a used event, and refuses another object", () => {
+    expect(normalize({ ...order, object: "this-unit" })).toEqual({ ...order, object: "this-unit" });
+    expect(() => normalize({ ...order, object: "antecedent" })).toThrow(/event.object/);
+    expect(normalize(order)).toEqual(order);
   });
 
   it("lowers to a used trigger aimed at the unit, not one the unit makes", () => {
     const text = "Each time this squad is given an Order, it can move 1\".";
     const result = compileLeaves([
-      leaf(text, "Each time this squad is given an Order", "event", 35, normalize({ ...order, object: "this-unit" }, 35)),
+      leaf(text, "Each time this squad is given an Order", "event", currentFamilyVersion("event"), normalize({ ...order, object: "this-unit" })),
       leaf(text, "it can move 1\"", "make-move", currentFamilyVersion("make-move"), normalizeFingerprintParameters("make-move", { subject: "this-unit", move_type: "normal", distance: 1 }, currentFamilyVersion("make-move"))),
     ], text);
     if (!result.ok) throw new Error(result.errors.join("; "));
@@ -42,8 +41,8 @@ describe("event object on a used rule (the unit an Order is issued to)", () => {
 describe("event object on a used Stratagem (the unit the Stratagem targets)", () => {
   const text = "Once per turn, when its squad is picked by a Stratagem, lower the CP cost of that use of that Stratagem by 1CP.";
   const leaves = (event: Record<string, unknown>) => [
-    leaf(text, "its squad is picked by a Stratagem", "event", 35, normalize(event, 35)),
-    leaf(text, "lower the CP cost of that use of that Stratagem by 1CP", "stratagem-cost", 1, { of: "stratagem", operation: "decrease", amount: 1, applies_to: "the-triggering-use" }),
+    leaf(text, "its squad is picked by a Stratagem", "event", currentFamilyVersion("event"), normalize(event)),
+    leaf(text, "lower the CP cost of that use of that Stratagem by 1CP", "stratagem-cost", currentFamilyVersion("stratagem-cost"), { of: "stratagem", operation: "decrease", amount: 1, applies_to: "the-triggering-use" }),
   ];
 
   it("keeps the targeted unit on the trigger and says so", () => {
@@ -52,7 +51,7 @@ describe("event object on a used Stratagem (the unit the Stratagem targets)", ()
     const mechanics = result.mechanics as Record<string, any>;
     expect(mechanics.trigger).toMatchObject({ event: "used", filter: { kind: "stratagem" }, object: "this-unit" });
     const prose = describeAbility({ ability_id: "fabricated", name: "Fabricated", ...mechanics } as never);
-    expect(prose).toMatch(/^Each time you target the unit with a Stratagem, /);
+    expect(prose).toMatch(/^Each time you target this unit with a Stratagem, /);
     expect(prose).not.toMatch(/use a Stratagem/i);
   });
 
@@ -61,7 +60,7 @@ describe("event object on a used Stratagem (the unit the Stratagem targets)", ()
     if (!result.ok) throw new Error(result.errors.join("; "));
     const mechanics = result.mechanics as Record<string, any>;
     expect(mechanics.trigger).toMatchObject({ filter: { kind: "stratagem", id: "heroic-intervention" }, object: "this-unit" });
-    expect(describeAbility({ ability_id: "fabricated", name: "Fabricated", ...mechanics } as never)).toMatch(/^When you target the unit with the Heroic Intervention Stratagem, /);
+    expect(describeAbility({ ability_id: "fabricated", name: "Fabricated", ...mechanics } as never)).toMatch(/^When you target this unit with the Heroic Intervention Stratagem, /);
   });
 
   it("still reads any Stratagem use when no object is named", () => {

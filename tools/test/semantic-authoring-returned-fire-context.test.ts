@@ -48,7 +48,7 @@ describe("returned attacks bind their permission", () => {
   });
 
   it("does not reinterpret previously trusted attack references", () => {
-    expect(normalizeFingerprintParameters("attack", { refers: "earlier-attack" }, 8)).toEqual({ refers: "earlier-attack" });
+    expect(normalizeFingerprintParameters("attack", { refers: "earlier-attack" })).toEqual({ refers: "earlier-attack" });
   });
 
   it("binds battle-start Bodyguard membership to the attached unit", () => {

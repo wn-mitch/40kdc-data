@@ -376,19 +376,19 @@ describe("a unit-filter naming the unit a Leader is leading", () => {
     const grant = (target: Record<string, unknown>) => describeAbility({ effect: { type: "keyword-grant", target, modifier: { keywords: ["DELTA"] } }, scope } as never);
 
     it("reads keyword-only alternatives as \"A or B C units\", distinct from an any-of", () => {
-      expect(grant({ owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] })).toContain("all friendly ALPHA or BETA GAMMA units gain the DELTA keyword");
-      expect(grant({ owner: "friendly", any_of: ["ALPHA", "BETA"] })).toContain("all friendly units with the ALPHA or BETA keyword");
+      expect(grant({ owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] })).toContain("friendly ALPHA or BETA GAMMA units gain the DELTA keyword");
+      expect(grant({ owner: "friendly", any_of: ["ALPHA", "BETA"] })).toContain("friendly units with the ALPHA or BETA keyword");
     });
 
     it("names each alternative in full when one has more than keywords or the filter has keywords of its own", () => {
-      expect(grant({ owner: "enemy", any_of_filters: [{ all_of: ["ALPHA"] }, { state: "battle-shocked" }] })).toContain("all enemy units that are ALPHA units or units that are Battle-shocked");
+      expect(grant({ owner: "enemy", any_of_filters: [{ all_of: ["ALPHA"] }, { state: "battle-shocked" }] })).toContain("enemy units that are ALPHA units or units that are Battle-shocked");
       expect(grant({ owner: "friendly", all_of: ["ALPHA"], any_of_filters: [{ all_of: ["BETA"], none_of: ["DELTA"] }, { all_of: ["GAMMA", "EPSILON"] }] }))
-        .toContain("all friendly ALPHA units that are BETA units (excluding DELTA units) or GAMMA EPSILON units");
+        .toContain("friendly ALPHA units that are BETA units (excluding DELTA units) or GAMMA EPSILON units");
     });
 
     it("names the alternatives a trigger's unit must be", () => {
       const text = describeAbility({ trigger: { event: "destroyed", subject: { owner: "friendly", level: "model", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } }, scope } as never);
-      expect(text).toContain("(the triggering model must be an ALPHA model or a BETA GAMMA model)");
+      expect(text).toContain("Each time a friendly ALPHA or BETA GAMMA model destroys a unit");
     });
 
     const reroll = { type: "re-roll", target: { owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] }, modifier: { roll: "hit", result_scope: "any-result" } };
@@ -418,3 +418,33 @@ describe("a unit-filter naming the unit a Leader is leading", () => {
     });
   });
 }
+
+describe("unit-filter input checks", () => {
+  const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("unit-filter", parameters, currentFamilyVersion("unit-filter"));
+
+  it("checks states beside excluded_all_keywords instead of dropping them", () => {
+    const excludedAll = { side: "friendly", excluded_all_keywords: ["ALPHA", "BETA"] };
+    expect(() => normalize({ ...excludedAll, states: "unengaged" })).toThrow(/unit-filter\.states must list/u);
+    expect(() => normalize({ ...excludedAll, states: [] })).toThrow(/unit-filter\.states must list/u);
+    expect(normalize({ ...excludedAll, states: ["unengaged"] })).toEqual({ ...excludedAll, states: ["unengaged"] });
+  });
+
+  it("refuses a repeated not-battle-shocked or excluded ability instead of folding it", () => {
+    expect(() => normalize({ side: "friendly", states: ["not-battle-shocked", "not-battle-shocked"] })).toThrow(/lists a state twice/u);
+    expect(() => normalize({ side: "friendly", states: ["unengaged", "not-battle-shocked", "not-battle-shocked"] })).toThrow(/lists a state twice/u);
+    expect(normalize({ side: "friendly", states: ["not-battle-shocked", "unengaged"] }).states).toEqual(["not-battle-shocked", "unengaged"]);
+    expect(() => normalize({ side: "friendly", excluded_abilities: ["alpha-ability", "alpha-ability"] })).toThrow(/lists an ability twice/u);
+    expect(normalize({ side: "friendly", excluded_abilities: ["beta-ability", "alpha-ability"] }).excluded_abilities).toEqual(["alpha-ability", "beta-ability"]);
+  });
+
+  it("takes excluded_keywords alone with excluded_from, engaged and hidden states included", () => {
+    const base = { side: "friendly", level: "model", excluded_keywords: ["ALPHA"], excluded_from: "attacks" };
+    expect(normalize(base)).toEqual(base);
+    for (const state of ["engaged", "hidden"]) expect(() => normalize({ ...base, states: [state] })).toThrow(/states is not allowed with it/u);
+  });
+
+  it("names a friendly or enemy side with subject target, as the compiler requires", () => {
+    expect(normalize({ side: "enemy", subject: "target" })).toEqual({ side: "enemy", subject: "target" });
+    expect(() => normalize({ side: "any", subject: "target" })).toThrow(/side must be friendly or enemy/u);
+  });
+});

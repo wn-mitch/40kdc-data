@@ -427,7 +427,7 @@ func (ds *Dataset) collectBuffs(input, context map[string]any, perspective strin
 		ability := entry["ability"].(*AbilityView)
 		rating, hasRating := entry["rating"]
 		translated := ability.describeRatedBuffs(source, ctx, perspective, rating, hasRating)
-		levers.push(ability, source, translated.activatable)
+		levers.push(ability, source, translated.activatable, nil)
 		out = append(out, translated.applied...)
 	}
 	for _, entry := range eligible {
@@ -441,11 +441,13 @@ func (ds *Dataset) collectBuffs(input, context map[string]any, perspective strin
 		bs := buffSourceFromEligible(entry)
 		rating, hasRating := entry["rating"]
 		at := ctx
+		var secondaryCost map[string]any
 		if getStr(source, "kind") == "detachment-stratagem" {
 			at = ds.stratagemContext(input, entry, ctx)
+			secondaryCost = ds.secondaryCost(getStr(source, "stratagemId"))
 		}
 		translated := ability.describeRatedBuffs(bs, at, perspective, rating, hasRating)
-		levers.push(ability, bs, translated.activatable)
+		levers.push(ability, bs, translated.activatable, secondaryCost)
 		out = append(out, translated.applied...)
 	}
 	return out

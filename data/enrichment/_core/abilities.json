@@ -369,7 +369,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "community_notes": "At the end of the opponent's Movement phase, one friendly unengaged unit (excluding Titanic) shoots using snap shooting"
   },
@@ -379,42 +379,150 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "4abf0026a4bab58d74339a618b9a322cdc43442a4da2121dc16283d05071e88b",
+    "source_digest": "57969b3f86b0abb05e3204c092bfa400138947b8c81eb4bc9a6740d96535ad3c",
     "ability_type": "stratagem",
     "behavior": "reactive",
-    "trigger": {
-      "event": "phase-ended",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "charge"
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "charge"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "opponent-turn"
+                  }
+                }
+              ]
             }
           },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "opponent-turn"
+          "effect": {
+            "type": "move",
+            "target": "this-unit",
+            "modifier": {
+              "move_type": "charge"
             }
           }
-        ]
-      }
-    },
-    "effect": {
-      "type": "move",
-      "target": "this-unit",
-      "modifier": {
-        "move_type": "charge"
-      }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "before-roll",
+            "filter": {
+              "roll": "charge"
+            }
+          },
+          "effect": {
+            "type": "choice",
+            "options": [
+              {
+                "type": "ability-part",
+                "effect": {
+                  "type": "targeting",
+                  "target": "this-unit",
+                  "modifier": {
+                    "by": "this-unit",
+                    "may": "must-target",
+                    "kind": "charge",
+                    "target": {
+                      "owner": "enemy"
+                    },
+                    "target_condition": {
+                      "type": "happened",
+                      "parameters": {
+                        "event": "move-ended",
+                        "subject": "this-unit",
+                        "filter": {
+                          "move_types": [
+                            "charge"
+                          ]
+                        },
+                        "window": "phase"
+                      }
+                    }
+                  }
+                },
+                "trigger": {
+                  "event": "targets-selected",
+                  "filter": {
+                    "kind": "charge"
+                  }
+                }
+              },
+              {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "ability-part",
+                    "trigger": {
+                      "event": "before-roll",
+                      "filter": {
+                        "roll": "charge"
+                      }
+                    },
+                    "effect": {
+                      "type": "roll-result",
+                      "target": "this-unit",
+                      "modifier": {
+                        "roll": "charge",
+                        "at_most": 6
+                      }
+                    }
+                  },
+                  {
+                    "type": "ability-part",
+                    "trigger": {
+                      "event": "targets-selected",
+                      "filter": {
+                        "kind": "charge"
+                      },
+                      "optional": true
+                    },
+                    "effect": {
+                      "type": "targeting",
+                      "target": "this-unit",
+                      "modifier": {
+                        "by": "this-unit",
+                        "may": "target",
+                        "kind": "charge",
+                        "range": {
+                          "inches": 6
+                        },
+                        "target": {
+                          "owner": "enemy"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "secondary_option": 1
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "phase"
     },
-    "community_notes": "At the end of the opponent's Charge phase, one friendly unengaged unit within 12\" of enemy units resolves a charge (Vehicles only if Character/Walker); a mode is selected before the charge roll, e.g. Leap to Defend restricts targets to units that charged this phase within maximum distance"
+    "community_notes": "At the end of the opponent's Charge phase, one friendly unengaged unit within 12\" of enemy units resolves a charge (Vehicles only if Character/Walker); a mode is selected before the charge roll, e.g. Leap to Defend restricts targets to units that charged this phase within maximum distance",
+    "option_names": [
+      "Leap to Defend",
+      "Into the Fray"
+    ]
   },
   {
     "ability_id": "insane-bravery",

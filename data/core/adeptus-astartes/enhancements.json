@@ -88,7 +88,8 @@
           "Adeptus Astartes"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "blade-masters-assault-force-adeptus-astartes",
@@ -118,7 +119,8 @@
           "Adeptus Astartes"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "venator-omni-auspex-phobos-shadow-force-adeptus-astartes",
@@ -166,7 +168,8 @@
     "max_targets": 3,
     "keyword_restrictions": [
       "Gravis"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "master-forged-firearms-devastator-brethren-adeptus-astartes",
@@ -299,7 +302,8 @@
     "keyword_restrictions": [
       "Adeptus Astartes",
       "Speeder"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "venerable-champion-aura-upgrade-ironclad-champions-adeptus-astartes",
@@ -323,7 +327,8 @@
     "max_targets": 3,
     "keyword_restrictions": [
       "Dreadnought"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "execute-and-redeploy-phobos-shadow-force-adeptus-astartes",
@@ -573,7 +578,8 @@
     "keyword_restrictions": [
       "Adeptus Astartes",
       "Infantry"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "relentless-advance-gravis-linebreaker-force-adeptus-astartes",
@@ -699,7 +705,8 @@
       "Dedicated Transport",
       "Fly",
       "Walker"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "supercharged-engines-upgrade-stormlance-task-force-adeptus-astartes",
@@ -724,7 +731,8 @@
     "keyword_restrictions": [
       "Adeptus Astartes",
       "Mounted"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "champion-of-the-first-company-terminator-storm-force-adeptus-astartes",
@@ -779,7 +787,8 @@
       "Dedicated Transport",
       "Fly",
       "Walker"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "indefatigable-fortitude-gravis-linebreaker-force-adeptus-astartes",
@@ -880,6 +889,7 @@
     "max_targets": 3,
     "keyword_restrictions": [
       "Dreadnought"
-    ]
+    ],
+    "equipable_by_non_character": true
   }
 ]

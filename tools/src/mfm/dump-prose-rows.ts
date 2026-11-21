@@ -22,9 +22,6 @@ import { wargearItemsForDatasheet } from "./wargear.js";
 /** The faction every Core Rules row belongs to. */
 export const CORE_FACTION = "_core";
 
-/** Faction keywords the repo does not model (titan legions): their rows map to no faction. */
-const UNMODELLED_KEYWORDS = new Set(["Adeptus Titanicus", "Titanicus Traitoris"]);
-
 export type AbilityRowKind =
   | "datasheet-ability"
   | "core-ability"
@@ -116,7 +113,7 @@ export interface AbilityRowSet {
 
 /** A faction keyword's repo dir: aliases first, unmodelled keywords none, else its slug. */
 export function factionForKeyword(name: string | undefined): string | null {
-  if (!name || UNMODELLED_KEYWORDS.has(name)) return null;
+  if (!name) return null;
   return FACTION_ALIASES[name] ?? safeSlug(name);
 }
 

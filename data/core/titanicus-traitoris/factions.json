@@ -1,0 +1,30 @@
+[
+  {
+    "id": "titanicus-traitoris",
+    "name": "Titanicus Traitoris",
+    "parent_faction_id": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "keywords": [
+      "Chaos",
+      "Titanicus Traitoris"
+    ],
+    "aliases": [
+      "Chaos Titan Legions"
+    ],
+    "logo_url": "https://cdn.jsdelivr.net/gh/Certseeds/wh40k-icon@be230023ff0755d19ffb1a1762658c711c2887f9/src/svgs/chaos/titanicus-traitoris.svg",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "46cec02c-a75a-4e1e-b53a-afab701e94c6"
+      }
+    ],
+    "faction_rule_ids": [
+      "towering-example-titanicus-traitoris",
+      "titanic-support-titanicus-traitoris",
+      "titanicus-traitoris"
+    ]
+  }
+]

@@ -47,17 +47,27 @@ export type CompactShareLinkResult =
 	| { ok: true; link: string }
 	| { ok: false; error: string };
 
-/** Encodes a builder draft into a compact share URL without leaking codec errors into the UI. */
-export function tryEncodeCompactShareLink(
-	state: BuilderState,
-	baseUrl: string,
-): CompactShareLinkResult {
+export type ShareTokenResult =
+	| { ok: true; token: string }
+	| { ok: false; error: string };
+
+/** Encodes a builder draft as a share-v1 token without leaking codec errors into the UI. */
+export function tryEncodeShareToken(state: BuilderState): ShareTokenResult {
 	try {
-		return { ok: true, link: `${baseUrl}#l=${encodeShareToken(builderStateToShareList(state))}` };
+		return { ok: true, token: encodeShareToken(builderStateToShareList(state)) };
 	} catch (error) {
 		return {
 			ok: false,
 			error: error instanceof Error ? error.message : "Couldn’t create a share link.",
 		};
 	}
+}
+
+/** Encodes a builder draft into a compact share URL without leaking codec errors into the UI. */
+export function tryEncodeCompactShareLink(
+	state: BuilderState,
+	baseUrl: string,
+): CompactShareLinkResult {
+	const encoded = tryEncodeShareToken(state);
+	return encoded.ok ? { ok: true, link: `${baseUrl}#l=${encoded.token}` } : encoded;
 }

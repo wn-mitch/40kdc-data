@@ -116,7 +116,8 @@
         "Adeptus Astartes",
         "Speeder"
       ]
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",

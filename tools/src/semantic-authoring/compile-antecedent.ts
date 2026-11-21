@@ -1,11 +1,11 @@
-import { DESTRUCTION_ACTIVITIES } from "./families/unit-activity.js";
+import { DESTRUCTION_ACTIVITIES } from "./families/vocabulary.js";
 import { ANTECEDENT, antecedentKeys, keyEnum } from "./antecedent-families.js";
 import { exactSpan, reviewedFamily } from "./contracts.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { awaitsFollowingFilter } from "./families/shared.js";
+import { awaitsFollowingFilter } from "./families/vocabulary.js";
 import { exclusionOnly } from "./compile-select-exclusions.js";
 import { allocatedObject, destroyedObject, rollOwnerEvent } from "./compile-model-level.js";
-import { refuseDestroyedUnitAntecedent, trailingDestroyerFilter } from "./compile-destroying-attack.js";
+import { destroyerSideOf, refuseDestroyedUnitAntecedent, trailingDestroyerFilter } from "./compile-destroying-attack.js";
 import { claimedByEmbarkedState } from "./compile-embarked-exclusion.js";
 import { isTargetRef, TARGET_REF_KEYS } from "./compile-target-refs.js";
 import { placements } from "./compile-placement.js";
@@ -348,7 +348,7 @@ function linkedToFilter(leaves: readonly CompileLeaf[], at: number, sourceText: 
   return gap === undefined || LINKING_VERB.test(gap);
 }
 
-/** A destruction by the triggering attacks (unit-activity@15, families/unit-activity.ts). */
+/** A destruction by the triggering attacks (unit-activity). */
 function isDestructionActivity(leaf: CompileLeaf): boolean {
   return leaf.family_id === "unit-activity" && ((leaf.parameters.activities as unknown[] | undefined) ?? []).some((activity) => (DESTRUCTION_ACTIVITIES as readonly unknown[]).includes(activity));
 }
@@ -439,6 +439,23 @@ function verbFirstSelection(leaves: readonly CompileLeaf[], index: number): stri
 /** Whether a unit-filter sits at an index in [from, to). */
 function unitFilterBetween(leaves: readonly CompileLeaf[], from: number, to: number): boolean {
   for (let at = from; at < to; at += 1) if (leaves[at]?.family_id === "unit-filter") return true;
+  return false;
+}
+
+/**
+ * Whether a unit-filter between a destroyer filter and an anaphor is a nearer unit for it. A Stratagem's
+ * TARGET filter on the other side from the destroyer is not: "destroyed by an enemy unit. TARGET: One
+ * friendly X unit. EFFECT: That enemy unit …" still names the destroyer (refuseDestroyedUnitAntecedent
+ * checks the anaphor's wording).
+ */
+function unitNearerThanDestroyer(leaves: readonly CompileLeaf[], from: number, to: number, destroyerSide: "friendly" | "enemy" | undefined): boolean {
+  for (let at = from; at < to; at += 1) {
+    const leaf = leaves[at];
+    if (leaf?.family_id !== "unit-filter") continue;
+    const side = leaf.parameters.side;
+    if (leaf.fragment === "TARGET" && destroyerSide !== undefined && (side === "friendly" || side === "enemy") && side !== destroyerSide) continue;
+    return true;
+  }
   return false;
 }
 
@@ -545,7 +562,8 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   if (destroyedAt >= 0 && namedDestroyerFilterAfter(leaves[destroyedAt], leaves[destroyedAt + 1])
     && !unitFilterBetween(leaves, destroyedAt + 2, index)) return "event-subject";
   // A unit-filter between the destroyer filter and the antecedent is the nearer unit, so the later rules take it.
-  if (destroyedAt >= 0 && trailingDestroyerFilter(leaves, destroyedAt, sourceText) !== null && !unitFilterBetween(leaves, destroyedAt + 2, index)) {
+  if (destroyedAt >= 0 && trailingDestroyerFilter(leaves, destroyedAt, sourceText) !== null
+    && !unitNearerThanDestroyer(leaves, destroyedAt + 2, index, destroyerSideOf(leaves, destroyedAt + 1))) {
     refuseDestroyedUnitAntecedent(leaves, destroyedAt, leaves[index]!, sourceText);
     return "event-subject";
   }
@@ -635,6 +653,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "named-ability-grant": ["subject"], "named-ability-suppression": ["subject"], "named-ability-exchange": ["subject"],
   // "That Vow is active for" + "friendly K units": the menu's holders are every unit the filter names.
   "chosen-option-grant": ["holder"],
+  "menu-options-grant": ["holder"],
   "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "weapon-ability-range": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
   "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject", "into"], "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
@@ -699,7 +718,7 @@ function boundValue(leaf: CompileLeaf, key: string, role: string): string | null
   if (role === "defender" && leaf.family_id === "visible" && key === "subject") return role;
   if (isTargetRef(role)) return TARGET_REF_KEYS[leaf.family_id]?.includes(key) ? role : null;
   // "that unit has that ability": the unit whose options the menu before it applies (compile.ts retargets them).
-  if (leaf.family_id === "chosen-option-grant") return MENU_HOLDERS.has(role) ? role : null;
+  if (leaf.family_id === "chosen-option-grant" || leaf.family_id === "menu-options-grant") return MENU_HOLDERS.has(role) ? role : null;
   // "your **WARLORD** model" + "suffers D3 mortal wounds": the units the filter names (compile-fragments.ts unitOf).
   if (role === FILTERED_UNITS) return anyUnitKey(leaf, key) || (leaf.family_id === "mortal-wounds" && key === "recipient") ? role : null;
   if (role === AURA_RECIPIENT) {

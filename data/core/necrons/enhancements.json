@@ -914,7 +914,8 @@
           "Necrons"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "tools-of-dominion-upgrade-hand-of-the-dynasty-necrons",
@@ -947,7 +948,8 @@
           "Necrons"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "recursive-reanimation-upgrade-skyshroud-spearhead-necrons",
@@ -980,7 +982,8 @@
           "Necrons"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "deepening-madness-upgrade-skyshroud-spearhead-necrons",
@@ -1009,7 +1012,8 @@
         "namespace": "mfm",
         "id": "c173a0bd-085d-42db-ac95-5c7ab17a267f"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "prelocational-optimiser-the-phaerons-armoury-necrons",
@@ -1090,7 +1094,8 @@
       {
         "unit_id": "amonhotekhs-guard-necron-warriors"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "singularity-matrix-pantheon-of-woe-necrons",
@@ -1119,7 +1124,8 @@
         "namespace": "mfm",
         "id": "5891f379-74fa-4612-a40e-9d7bc454efbf"
       }
-    ]
+    ],
+    "counts_toward_enhancement_limit": false
   },
   {
     "id": "quantum-goad-pantheon-of-woe-necrons",
@@ -1148,7 +1154,8 @@
         "namespace": "mfm",
         "id": "a9283134-4bcb-4f19-9511-362685ef5be4"
       }
-    ]
+    ],
+    "counts_toward_enhancement_limit": false
   },
   {
     "id": "animus-damper-pantheon-of-woe-necrons",
@@ -1206,7 +1213,8 @@
         "namespace": "mfm",
         "id": "bfe156a7-f7d9-40f9-9bb7-07ba81009036"
       }
-    ]
+    ],
+    "counts_toward_enhancement_limit": false
   },
   {
     "id": "mark-of-the-nekrosor-cursed-legion-necrons",
@@ -1267,6 +1275,7 @@
           "Necrons"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   }
 ]

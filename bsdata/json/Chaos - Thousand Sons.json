@@ -1,0 +1,1146 @@
+{
+  "catalogue": {
+    "name": "Chaos - Thousand Sons",
+    "id": "1069-10ff-3ba9-873b",
+    "battleScribeVersion": 2.03,
+    "gameSystemId": "sys-352e-adc2-7639-d610",
+    "gameSystemRevision": 10502,
+    "library": false,
+    "revision": 10502,
+    "type": "catalogue",
+    "xmlns": "http://www.battlescribe.net/schema/catalogueSchema",
+    "catalogueLinks": [
+      {
+        "name": "Chaos - Thousand Sons Library",
+        "id": "20cf-483b-cfd2-b1fa",
+        "importRootEntries": false,
+        "targetId": "de7c-a30b-44f3-5d5c",
+        "type": "catalogue"
+      },
+      {
+        "name": "Chaos - Chaos Knights Library",
+        "id": "5c49-ce27-2a82-2fcc",
+        "importRootEntries": false,
+        "targetId": "4d13-39bb-3d9b-fd5e",
+        "type": "catalogue"
+      },
+      {
+        "name": "Library - Titans",
+        "id": "1a40-7d39-e9fc-9102",
+        "importRootEntries": false,
+        "targetId": "7481-280e-b55e-7867",
+        "type": "catalogue"
+      },
+      {
+        "name": "Library - Astartes Heresy Legends",
+        "id": "38a2-d1e7-4356-f7c7",
+        "importRootEntries": false,
+        "targetId": "ac3b-689c-4ad4-70cb",
+        "type": "catalogue"
+      },
+      {
+        "name": "Unaligned Forces",
+        "id": "4300-b6a7-5a9a-2074",
+        "importRootEntries": false,
+        "targetId": "581a-46b9-5b86-44b7",
+        "type": "catalogue"
+      }
+    ],
+    "entryLinks": [
+      {
+        "name": "Helbrute",
+        "id": "9d3a-aff1-d98b-0003",
+        "hidden": false,
+        "import": true,
+        "targetId": "5b9d-e3c1-3d55-8276",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Mutalith Vortex Beast",
+        "id": "2c0a-da47-0136-a766",
+        "hidden": false,
+        "import": true,
+        "targetId": "094c-c618-92c1-b394",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Land Raider",
+        "id": "defd-2def-2f5b-95c7",
+        "hidden": false,
+        "import": true,
+        "targetId": "dfde-eaff-e63e-3aae",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Tzaangor Shaman",
+        "id": "06c6-ecf7-c084-2a78",
+        "hidden": false,
+        "import": true,
+        "targetId": "c251-bd54-441-4799",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Spawn",
+        "id": "71b9-a7db-af63-5e01",
+        "hidden": false,
+        "import": true,
+        "targetId": "60de-4c77-95e1-1337",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Sorcerer",
+        "id": "a29c-bfba-f84e-96b3",
+        "hidden": false,
+        "import": true,
+        "targetId": "af1e-9a3d-785c-47f8",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Vindicator",
+        "id": "7cd7-990e-340c-f3f8",
+        "hidden": false,
+        "import": true,
+        "targetId": "3413-b8fd-e22c-da4f",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Rhino",
+        "id": "dbdd-bd37-81b1-8d07",
+        "hidden": false,
+        "import": true,
+        "targetId": "8d9b-b949-2557-dcc4",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Ahriman",
+        "id": "a51d-4be4-8e13-63fd",
+        "hidden": false,
+        "import": true,
+        "targetId": "3bfa-bf00-b5ed-cc81",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Rubric Marines",
+        "id": "9886-5e76-5701-4fc6",
+        "hidden": false,
+        "import": true,
+        "targetId": "5d3d-e13b-8b76-dad3",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Infernal Master",
+        "id": "422d-5f16-d7be-2ddf",
+        "hidden": false,
+        "import": true,
+        "targetId": "1693-5e00-da69-57bb",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Tzaangor Enlightened",
+        "id": "ecbf-80cf-9a92-c92e",
+        "hidden": false,
+        "import": true,
+        "targetId": "1703-3edd-5eb3-fcef",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Tzaangor Enlightened with Fatecaster Greatbows",
+        "id": "a09d-7ee0-fabc-ba15",
+        "hidden": false,
+        "import": true,
+        "targetId": "8b9f-917f-37c1-99c3",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Scarab Occult Terminators",
+        "id": "8827-405b-0519-1358",
+        "hidden": false,
+        "import": true,
+        "targetId": "b1cf-c5-5121-92a4",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Magnus the Red",
+        "id": "e5e9-373d-a34b-46a3",
+        "hidden": false,
+        "import": true,
+        "targetId": "91dc-9aad-0505-52a8",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Predator Destructor",
+        "id": "e560-07cb-1685-3ad7",
+        "hidden": false,
+        "import": true,
+        "targetId": "4819-dbbe-8547-4e23",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Defiler",
+        "id": "6711-090d-5e2c-4c1f",
+        "hidden": false,
+        "import": true,
+        "targetId": "f158-2979-c38b-65b5",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Daemon Prince of Tzeentch with Wings",
+        "id": "1d6b-59d1-4c62-9045",
+        "hidden": false,
+        "import": true,
+        "targetId": "66f4-929e-1769-f277",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Tzaangors",
+        "id": "71b3-0e83-ae45-c2e5",
+        "hidden": false,
+        "import": true,
+        "targetId": "f5b9-50c8-5c60-d8ea",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Sekhetar Robots",
+        "id": "dedd-9e8c-0381-6533",
+        "hidden": false,
+        "import": true,
+        "targetId": "fe4b-b3a4-69b7-3088",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Exalted Sorcerer on Disc of Tzeentch",
+        "id": "e6aa-0608-e8a3-a64a",
+        "hidden": false,
+        "import": true,
+        "targetId": "1724-8c9c-c385-16c6",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Maulerfiend",
+        "id": "519f-9672-d955-5011",
+        "hidden": false,
+        "import": true,
+        "targetId": "f2aa-19fd-335a-09b3",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Exalted Sorcerer",
+        "id": "7b9a-cd5e-bd80-a9b2",
+        "hidden": false,
+        "import": true,
+        "targetId": "c3a6-8fab-45f0-2d45",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Sorcerer in Terminator Armour",
+        "id": "1f27-b5f4-1199-9031",
+        "hidden": false,
+        "import": true,
+        "targetId": "c6d1-e73b-9d26-5d8b",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Chaos Predator Annihilator",
+        "id": "2347-c2bd-8465-286c",
+        "hidden": false,
+        "import": true,
+        "targetId": "a619-beee-4bde-d049",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Forgefiend",
+        "id": "39de-756f-4003-3e7d",
+        "hidden": false,
+        "import": true,
+        "targetId": "d2f1-7a0b-f7cd-9b46",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Heldrake",
+        "id": "f8da-e1ab-b3a7-3560",
+        "hidden": false,
+        "import": true,
+        "targetId": "637a-d542-35aa-e95c",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Daemon Prince of Tzeentch",
+        "id": "8c30-9041-b2c0-a9ef",
+        "hidden": false,
+        "import": true,
+        "targetId": "eccd-e442-607b-3fd0",
+        "type": "selectionEntry"
+      },
+      {
+        "name": "Blue Horrors",
+        "id": "3554-9efd-0a9c-a2af",
+        "hidden": false,
+        "import": true,
+        "targetId": "aec5-4419-39e7-3e63",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons of Tzeentch",
+            "id": "a14b-e497-df49-8e36",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0774-9bb2-a882-e32e"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "6acc-9928-2b67-73c3",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Flamers",
+        "id": "4cb2-4946-e79c-e5d7",
+        "hidden": false,
+        "import": true,
+        "targetId": "694f-a205-b260-783c",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons of Tzeentch",
+            "id": "69d0-1e54-60a1-1e96",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0774-9bb2-a882-e32e"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "6acc-9928-2b67-73c3",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Kairos Fateweaver",
+        "id": "bdaa-54ba-236a-0afb",
+        "hidden": false,
+        "import": true,
+        "targetId": "8f70-9bec-9b83-216b",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons of Tzeentch",
+            "id": "f80e-3ebc-5fbc-cb06",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0774-9bb2-a882-e32e"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "6acc-9928-2b67-73c3",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Lord of Change",
+        "id": "4741-919a-d896-0d32",
+        "hidden": false,
+        "import": true,
+        "targetId": "c964-c75a-2a9d-e451",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons of Tzeentch",
+            "id": "c923-4f6f-f0c7-393c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0774-9bb2-a882-e32e"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "6acc-9928-2b67-73c3",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Pink Horrors",
+        "id": "a75b-2dbc-aa71-1b52",
+        "hidden": false,
+        "import": true,
+        "targetId": "4c73-cbd1-f052-80c3",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons of Tzeentch",
+            "id": "05ee-c98a-afa4-6286",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0774-9bb2-a882-e32e"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "6acc-9928-2b67-73c3",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Screamers",
+        "id": "ee19-2dcb-e60e-55c1",
+        "hidden": false,
+        "import": true,
+        "targetId": "7cbe-2406-8e67-aff5",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Daemons of Tzeentch",
+            "id": "07c8-ebd7-a0bc-5494",
+            "hidden": false,
+            "primary": false,
+            "targetId": "0774-9bb2-a882-e32e"
+          }
+        ],
+        "modifiers": [
+          {
+            "field": "hidden",
+            "type": "set",
+            "value": true,
+            "conditionGroups": [
+              {
+                "type": "and",
+                "conditionGroups": [
+                  {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "childId": "6acc-9928-2b67-73c3",
+                        "field": "selections",
+                        "includeChildSelections": true,
+                        "scope": "force",
+                        "shared": true,
+                        "type": "lessThan",
+                        "value": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Chaos Acastus Knight Asterius",
+        "id": "885f-2f89-a611-d7a7",
+        "hidden": false,
+        "import": true,
+        "targetId": "e289-ad32-c78a-e055",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "efe6-dd0c-8226-c47a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "f6c2-791d-8b4b-efb1",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Acastus Knight Porphyrion",
+        "id": "f8ed-90cf-09e7-53ce",
+        "hidden": false,
+        "import": true,
+        "targetId": "fe77-6f85-5ddb-65bf",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "6c33-b56e-dac5-386d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "f108-7d43-d8ca-603e",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Cerastus Knight Acheron",
+        "id": "02c5-4da3-ce49-a383",
+        "hidden": false,
+        "import": true,
+        "targetId": "ec6e-d1d6-f7c6-d008",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "f787-a096-ad99-3f94",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "9153-7875-f859-a618",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Cerastus Knight Atrapos",
+        "id": "d4c9-0a81-7ef6-6ed1",
+        "hidden": false,
+        "import": true,
+        "targetId": "8b1d-9029-f9e1-42d9",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "ee63-b395-47c5-346b",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "9d20-12ce-f410-2ebc",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Cerastus Knight Castigator",
+        "id": "e771-852e-70d9-4f21",
+        "hidden": false,
+        "import": true,
+        "targetId": "b6e5-911b-93f-476",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "32f5-c999-21bb-5f09",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "b4bd-e730-67ec-4d1d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Cerastus Knight Lancer",
+        "id": "87cb-a0c0-8050-08b9",
+        "hidden": false,
+        "import": true,
+        "targetId": "4175-82c6-8e96-bef8",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "7f69-0880-4b8e-8b01",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "4b2e-8b41-0017-c511",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Questoris Knight Magaera",
+        "id": "d551-ad94-bede-7a42",
+        "hidden": false,
+        "import": true,
+        "targetId": "2d0e-5b83-b678-56dc",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "2cf3-fb3d-dca3-b060",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "06a2-7cb2-7cb0-c255",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Questoris Knight Styrix",
+        "id": "d512-8643-97e4-4cbe",
+        "hidden": false,
+        "import": true,
+        "targetId": "106c-4bdf-79a4-1c70",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "a351-664e-c4df-2e18",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "ff2c-4ecd-3bf1-010a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Knight Abominant",
+        "id": "db2b-1849-829e-f5d5",
+        "hidden": false,
+        "import": true,
+        "targetId": "a78d-828b-302b-1bec",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "5964-0f68-883a-b30c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "615f-4db3-1a41-f6d6",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Knight Desecrator",
+        "id": "015d-3c74-3f50-6e82",
+        "hidden": false,
+        "import": true,
+        "targetId": "7a51-8f1f-7290-d9d2",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "a1a4-2a84-ca36-2428",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "b880-87a9-3998-5c9f",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Knight Despoiler",
+        "id": "4443-1877-0fb0-8d25",
+        "hidden": false,
+        "import": true,
+        "targetId": "0119-8c04-435e-c782",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "b173-1664-0c74-e7bd",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "69e2-285a-a815-9ec9",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Knight Rampager",
+        "id": "9bf3-96f9-9389-b9c8",
+        "hidden": false,
+        "import": true,
+        "targetId": "61e0-e55b-1926-44df",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "c490-53c9-455f-0b6a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "9e3e-7b7b-4839-ce8d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Knight Ruinator",
+        "id": "b81d-08a4-acc7-3908",
+        "hidden": false,
+        "import": true,
+        "targetId": "c0a2-eb65-6d34-5bc6",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "09c4-3c1d-9213-52e9",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "8980-d750-5639-377a",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "Knight Tyrant",
+        "id": "f71b-1e88-64fc-fdce",
+        "hidden": false,
+        "import": true,
+        "targetId": "87ea-c7bd-6df0-f056",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "3008-4356-3d56-b332",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: Titanic",
+            "id": "e58a-13e4-39fd-3091",
+            "hidden": false,
+            "primary": false,
+            "targetId": "daf3-157f-21cd-0c94"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Brigand",
+        "id": "041a-3015-3e96-f8bc",
+        "hidden": false,
+        "import": true,
+        "targetId": "753d-4e02-eda3-4809",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "1cbf-dfec-3e15-f912",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "c3ff-a1fb-b43f-263c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1026-5c62-4ed4-9ff6"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Executioner",
+        "id": "b025-2c40-9892-2a75",
+        "hidden": false,
+        "import": true,
+        "targetId": "8df0-fc3c-8ced-ffce",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "79ca-9f9c-bf63-61ca",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "f851-a1f9-e5fe-d9b7",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1026-5c62-4ed4-9ff6"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Huntsman",
+        "id": "0fd5-07a5-0e7d-6ef4",
+        "hidden": false,
+        "import": true,
+        "targetId": "6e6d-7950-ce6d-4cd4",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "277a-05f8-ed69-db44",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "5b77-eb49-9cce-d6c8",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1026-5c62-4ed4-9ff6"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Karnivore",
+        "id": "75a8-1264-7e23-1899",
+        "hidden": false,
+        "import": true,
+        "targetId": "e96b-ac98-7fd2-a155",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "69f2-0473-55be-5a8c",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "a50c-52f1-402e-9b38",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1026-5c62-4ed4-9ff6"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Moirax",
+        "id": "041f-9966-0bd2-8b1f",
+        "hidden": false,
+        "import": true,
+        "targetId": "ae7c-3679-a88-6895",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "df57-3646-2863-28e8",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "4632-874b-9bd9-f386",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1026-5c62-4ed4-9ff6"
+          }
+        ]
+      },
+      {
+        "name": "War Dog Stalker",
+        "id": "f11c-dd0c-6718-c9ae",
+        "hidden": false,
+        "import": true,
+        "targetId": "bbc6-c0ed-24e8-86b7",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Chaos Knights",
+            "id": "074e-af76-dd42-4930",
+            "hidden": false,
+            "primary": false,
+            "targetId": "77a9-ea9a-f23b-d55f"
+          },
+          {
+            "name": "Allies: Chaos Knights: War Dog",
+            "id": "dee2-8190-64e2-5e34",
+            "hidden": false,
+            "primary": false,
+            "targetId": "1026-5c62-4ed4-9ff6"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Reaver Titan",
+        "id": "2ba3-a546-4071-e405",
+        "hidden": false,
+        "import": true,
+        "targetId": "0141-e2cd-472c-1a1d",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Titanicus Traitoris",
+            "id": "d319-b557-52ce-9893",
+            "hidden": false,
+            "primary": false,
+            "targetId": "558d-e93a-1d84-1451"
+          },
+          {
+            "name": "Allies: Titanicus Traitoris: Reaver Titan",
+            "id": "3b04-3a9d-bb9e-3a90",
+            "hidden": false,
+            "primary": false,
+            "targetId": "dd60-bf2b-cb6a-9fd6"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Warbringer Nemesis Titan",
+        "id": "f773-9197-45f3-0a92",
+        "hidden": false,
+        "import": true,
+        "targetId": "c93d-98d6-9a89-8900",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Titanicus Traitoris",
+            "id": "998f-ebbc-df9c-b571",
+            "hidden": false,
+            "primary": false,
+            "targetId": "558d-e93a-1d84-1451"
+          },
+          {
+            "name": "Allies: Titanicus Traitoris: Warbringer Nemesis Titan",
+            "id": "6acc-2703-6504-1216",
+            "hidden": false,
+            "primary": false,
+            "targetId": "bc8f-6d59-4e6a-3641"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Warhound Titan",
+        "id": "d01c-e1b6-aaae-5e2a",
+        "hidden": false,
+        "import": true,
+        "targetId": "bc5d-9d13-6c87-5f9f",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Titanicus Traitoris",
+            "id": "5440-d5bf-27c5-123d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "558d-e93a-1d84-1451"
+          },
+          {
+            "name": "Allies: Titanicus Traitoris: Warhound Titan",
+            "id": "2c3c-18f2-eb21-ea8d",
+            "hidden": false,
+            "primary": false,
+            "targetId": "7768-97e9-74de-2582"
+          }
+        ]
+      },
+      {
+        "name": "Chaos Warlord Titan",
+        "id": "efb4-728e-6ece-0466",
+        "hidden": false,
+        "import": true,
+        "targetId": "9210-30cc-eecc-2958",
+        "type": "selectionEntry",
+        "categoryLinks": [
+          {
+            "name": "Allies: Titanicus Traitoris",
+            "id": "94c4-a11a-3c3c-9775",
+            "hidden": false,
+            "primary": false,
+            "targetId": "558d-e93a-1d84-1451"
+          },
+          {
+            "name": "Allies: Titanicus Traitoris: Warlord Titan",
+            "id": "428b-f894-ccb0-79e8",
+            "hidden": false,
+            "primary": false,
+            "targetId": "adb4-c53d-3999-8b56"
+          }
+        ]
+      },
+      {
+        "name": "Detachment",
+        "id": "5c8f-f9d2-4ca8-26e0",
+        "hidden": false,
+        "import": true,
+        "targetId": "3b0d-dccf-8661-be1c",
+        "type": "selectionEntry"
+      }
+    ],
+    "infoLinks": [
+      {
+        "name": "Cabal of Sorcerers",
+        "id": "53d1-4629-f679-355d",
+        "hidden": false,
+        "targetId": "da67-e345-a357-4020",
+        "type": "rule"
+      },
+      {
+        "name": "Pact of Sorcery",
+        "id": "ffdd-cd7c-879c-f54d",
+        "hidden": false,
+        "targetId": "cb84-1d12-885e-45f9",
+        "type": "rule"
+      }
+    ]
+  }
+}

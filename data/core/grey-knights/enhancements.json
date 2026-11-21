@@ -738,7 +738,8 @@
           "Grey Knights"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "boons-of-deimos-upgrade-fires-of-purgation-grey-knights",
@@ -771,7 +772,8 @@
           "Grey Knights"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "predestined-coordinates-upgrade-immaterial-interdiction-grey-knights",
@@ -804,7 +806,8 @@
           "Grey Knights"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "astral-overlap-upgrade-immaterial-interdiction-grey-knights",
@@ -837,7 +840,8 @@
           "Grey Knights"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "purifying-force-crowes-sanctifiers-grey-knights",
@@ -863,7 +867,8 @@
         "namespace": "mfm",
         "id": "057f85bb-3dff-4710-9cad-85ebb9cd2e9a"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "sanctified-auspexes-crowes-sanctifiers-grey-knights",
@@ -889,7 +894,8 @@
         "namespace": "mfm",
         "id": "4ad405a7-f02c-4e89-8e45-9031467ff71c"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "eye-of-the-augurium-hallowed-conclave-grey-knights",

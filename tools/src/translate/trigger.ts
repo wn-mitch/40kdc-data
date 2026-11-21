@@ -4,7 +4,7 @@
  * the ports by the conformance corpus like the condition describer.
  */
 import { dekebab, describeCondition, moveKinds, rangePhrase, stepWindow, titleCase, unitFilterPhrase, type Condition } from "./condition.js";
-import { alternativeFilters, eventRelationPhrase, namedUsePhrase, placeRefPhrase, rollWord, statePhrase, unitRefPhrase, usedAbilityPhrase } from "./condition-refs.js";
+import { alternativeFilters, eventRelationPhrase, keywordAlternatives, namedUsePhrase, ord, placeRefPhrase, rollWord, statePhrase, unitRefPhrase, usedAbilityPhrase, withArticle } from "./condition-refs.js";
 import { bracketKeyword, weaponNoun } from "./effect-words.js";
 
 type P = Record<string, unknown>;
@@ -60,9 +60,9 @@ function orList(items: string[]): string {
 /** Whose turn, as a trigger window names it. */
 const TURN_OWNERS: Record<string, string> = { "your-turn": "your", "opponent-turn": "your opponent's" };
 
-/** The actor of a trigger: "the unit", "an enemy unit", "this model". */
+/** The actor of a trigger: "this unit", "an enemy unit", "a friendly EXORCIST unit", "this model". */
 function actor(ref: unknown): string {
-  if (ref == null || ref === "this-unit") return "the unit";
+  if (ref == null || ref === "this-unit") return "this unit";
   if (ref === "this-model") return "this model";
   if (ref === "model-in-this-unit") return "a model in this unit";
   // A moment nested in an attack's: the unit making that attack.
@@ -70,6 +70,7 @@ function actor(ref: unknown): string {
   if (ref === "selected-unit") return "the selected unit";
   // A moment nested in a triggered effect: the unit that triggered it.
   if (ref === "event-subject") return "the triggering unit";
+  if (ref === "event-subject-model") return "the triggering model";
   if (typeof ref === "object") {
     const f = ref as P;
     // The unit an aura reaches, as the effect's aura names it (effect.ts withAuraRecipient).
@@ -77,32 +78,29 @@ function actor(ref: unknown): string {
     if (typeof f.event_var === "string") return "that unit";
     if (f.selection_var != null || f.stratagem_target != null) return unitRefPhrase(f);
     if (Object.keys(f).some((key) => !["owner", "level", "state", "not_states", "all_of", "any_of", "none_of", "not_all_of", "any_of_filters"].includes(key))) return unitFilterPhrase(f);
-    // Keywords on the actor read as a trailing requirement, as the event names them; states read
-    // as a relative clause ("an enemy unit that is unengaged").
-    const owner = f.owner === "friendly" ? "a friendly" : f.owner === "enemy" ? "an enemy" : "a";
+    const owner = f.owner === "friendly" ? "friendly " : f.owner === "enemy" ? "enemy " : "";
+    const noun = f.level === "model" ? "model" : "unit";
+    const all = Array.isArray(f.all_of) ? `${(f.all_of as unknown[]).map(str).join(" ")} ` : "";
+    const compact = keywordAlternatives(f);
+    const anyMulti = !all && !compact && Array.isArray(f.any_of) && f.any_of.length > 1 ? `${orList((f.any_of as unknown[]).map(str))} ` : "";
+    let s = withArticle(compact ? `${owner}${orList(compact)} ${noun}` : `${owner}${all}${anyMulti}${noun}`);
+    if (Array.isArray(f.any_of_filters) && !compact) s += ` that is ${orList(alternativeFilters(f).map(unitFilterPhrase))}`;
+    if (Array.isArray(f.any_of) && !anyMulti) s += ` with the ${orList((f.any_of as unknown[]).map(str))} keyword`;
+    if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(str))} ${noun}s)`;
+    if (Array.isArray(f.not_all_of)) s += ` (excluding ${(f.not_all_of as unknown[]).map(str).join(" ")} ${noun}s)`;
     const states = [
       ...(f.state != null ? [statePhrase(str(f.state))] : []),
       ...(Array.isArray(f.not_states) ? (f.not_states as unknown[]).map((x) => statePhrase(str(x), true)) : []),
     ];
-    return `${owner} ${f.level === "model" ? "model" : "unit"}${states.length ? ` that is ${andList(states)}` : ""}`;
+    if (states.length) s += ` that is ${andList(states)}`;
+    return s;
   }
   return dekebab(str(ref));
 }
 
-/** Keyword requirements on a filter actor: " (the triggering unit must have A and B)". */
-function actorKeywords(ref: unknown): string {
-  if (typeof ref !== "object" || ref == null) return "";
-  const f = ref as P;
-  if (Object.keys(f).some((key) => !["owner", "level", "state", "not_states", "all_of", "any_of", "none_of", "not_all_of", "any_of_filters"].includes(key))) return "";
-  const noun = f.level === "model" ? "model" : "unit";
-  let s = "";
-  if (Array.isArray(f.all_of)) s += ` (the triggering ${noun} must have ${andList((f.all_of as unknown[]).map(str))})`;
-  if (Array.isArray(f.any_of)) s += ` (the triggering ${noun} must have ${orList(f.any_of.map(str))})`;
-  // Alternatives: "(the triggering model must be a LEGIO CYBERNETICA model or an ADEPTUS MECHANICUS VEHICLE model)".
-  if (Array.isArray(f.any_of_filters)) s += ` (the triggering ${noun} must be ${orList(alternativeFilters(f).map(unitFilterPhrase))})`;
-  if (Array.isArray(f.none_of)) s += ` (the triggering ${noun} must not have ${orList((f.none_of as unknown[]).map(str))})`;
-  if (Array.isArray(f.not_all_of)) s += ` (the triggering ${noun} must not have all of ${andList((f.not_all_of as unknown[]).map(str))})`;
-  return s;
+/** Kept as a no-op helper for clarity; keyword requirements are now folded directly into `actor()`. */
+function actorKeywords(_ref: unknown): string {
+  return "";
 }
 
 /** "a Transport within 6" of this model": the Transports a disembarked moment's filter allows. */
@@ -121,9 +119,9 @@ function objectPhrase(ref: unknown): string {
   return dekebab(str(ref));
 }
 
-/** The unit a used Stratagem targets: "the unit" for the holder's own role, else the object filter. */
+/** The unit a used Stratagem targets: "this unit" for the holder's own role, else the object filter. */
 function stratagemTarget(ref: unknown): string {
-  return typeof ref === "object" && ref !== null && !Array.isArray(ref) ? objectPhrase(ref) : "the unit";
+  return typeof ref === "object" && ref !== null && !Array.isArray(ref) ? objectPhrase(ref) : "this unit";
 }
 
 const ROLL_NOUN: Record<string, string> = {
@@ -278,7 +276,7 @@ function eventPhrase(t: AbilityTrigger): string {
       const melee = f.attack_type === "melee" ? " in melee" : "";
       // A subject names who destroyed the object: "each time the unit destroys an enemy unit".
       if (t.subject != null) return `each time ${who} destroys ${obj == null ? "a unit" : objectPhrase(obj)}${melee}`;
-      if (obj == null || obj === "this-unit") return `when the unit is destroyed${melee}`;
+      if (obj == null || obj === "this-unit") return `when this unit is destroyed${melee}`;
       if (typeof obj === "object" && (obj as P).designated != null && Object.keys(obj as P).length === 1) return "each time your quarry is destroyed";
       return `${melee ? "when" : "each time"} ${objectPhrase(obj)} is destroyed${melee}`;
     }
@@ -289,17 +287,17 @@ function eventPhrase(t: AbilityTrigger): string {
         const { timing: _timing, ...rest } = f;
         return `${eventPhrase({ ...t, filter: rest } as AbilityTrigger)}, after the units embarked within it have made their emergency disembark moves`;
       }
-      if (f.first === true) return "the first time a model in the unit is destroyed";
+      if (f.first === true) return "the first time a model in this unit is destroyed";
       const obj = t.object;
-      // A subject names who destroyed the model: "each time the unit destroys an enemy CHARACTER model".
+      // A subject names who destroyed the model: "each time this unit destroys an enemy CHARACTER model".
       if (t.subject != null) {
         if (obj === "this-model") return `when this model is destroyed by ${who}`;
-        if (obj === "model-in-this-unit" || obj === "this-unit" || obj == null) return `when a model in the unit is destroyed by ${who}`;
+        if (obj === "model-in-this-unit" || obj === "this-unit" || obj == null) return `when a model in this unit is destroyed by ${who}`;
         return `each time ${who} destroys ${objectPhrase(obj)}`;
       }
       if (obj === "this-model") return "when this model is destroyed";
       // A model of this unit dying: the object names the model's unit, never the whole unit's destruction.
-      if (obj === "model-in-this-unit" || obj === "this-unit" || obj == null) return "when a model in the unit is destroyed";
+      if (obj === "model-in-this-unit" || obj === "this-unit" || obj == null) return "when a model in this unit is destroyed";
       return `when ${objectPhrase(obj)} is destroyed`;
     }
     case "used": {
@@ -435,12 +433,24 @@ function destroyAttackPhrase(t: AbilityTrigger, f: P): string {
   return "";
 }
 
+/** "At the start of the first battle round": a round boundary narrowed to one battle round. */
+function roundBoundary(t: AbilityTrigger): string | null {
+  if (t.event !== "round-started" && t.event !== "round-ended") return null;
+  const c = t.condition;
+  if (!c || c.operator || c.type !== "battle-round") return null;
+  const p = (c.parameters ?? {}) as P;
+  if (p.min != null && p.max != null && Number(p.min) === Number(p.max)) {
+    return `at the ${t.event === "round-started" ? "start" : "end"} of the ${ord(Number(p.min))} battle round`;
+  }
+  return null;
+}
+
 /** Reactive trigger → front-of-sentence lead clause ("an enemy unit ends a move within 9\" of this model"). */
 export function describeTrigger(t: AbilityTrigger): string {
   const clock = t.event === "phase-started" || t.event === "phase-ended";
   const plain = !t.proximity && !t.binds_die_variable && !t.binds_selected_die_variable && (t.subject == null || t.subject === "this-unit");
-  const boundary = plain ? phaseBoundary(t) ?? turnBoundary(t) : null;
-  if (boundary) return t.optional ? `${boundary}, you may use this ability` : boundary;
+  const boundary = plain ? phaseBoundary(t) ?? turnBoundary(t) ?? roundBoundary(t) : null;
+  if (boundary) return t.optional ? `${boundary}, you can use this ability` : boundary;
   const edge = t.event === "phase-started" ? "start" : t.event === "phase-ended" ? "end" : null;
   const disembarkShock = t.event === "phase-ended" && disembarkBattleShock(t.condition);
   const split = t.condition && !disembarkShock && allocatedAttackType(t) === undefined ? phaseWindow(t.condition) : null;
@@ -465,15 +475,13 @@ export function describeTrigger(t: AbilityTrigger): string {
     const of = t.proximity.of == null || t.proximity.of === "this-unit" ? "this unit" : placeRefPhrase(t.proximity.of);
     s += ` within ${rangePhrase(t.proximity.range)} of ${of}`;
   }
-  if (disembarkShock) s += ", if the unit disembarked from a Transport this turn and is Battle-shocked";
+  if (disembarkShock) s += ", if this unit disembarked from a Transport this turn and is Battle-shocked";
   else if (split) {
     if (edge && !split.phase && split.owner) s += ` in ${split.owner} turn`;
     else if (!edge && split.window) s += ` ${split.window}`;
     if (split.rest) s += `, if ${describeCondition(split.rest)}`;
   }
-  if (t.binds_die_variable) s += ` (binding the generated die as ${dekebab(t.binds_die_variable.replace(/_/g, "-"))})`;
-  if (t.binds_selected_die_variable) s += ` (binding one chosen die used in that Act of Faith as ${dekebab(t.binds_selected_die_variable.replace(/_/g, "-"))})`;
-  if (t.optional) s += ", you may use this ability";
+  if (t.optional) s += ", you can use this ability";
   return s;
 }
 

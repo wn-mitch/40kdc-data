@@ -179,9 +179,13 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   // selection while the attacks stay unrestricted. An attack by the selected unit itself is the
   // selection's own attacks, and a persistent designation's attacks name its mark, so only an attack
   // by another unit with no target that unit leaves it.
+  // An attack in a later part, with its own moment, is not the selection's (partOfLeaf below).
+  const partBefore = (leaf: CompileLeaf) => partStarts.filter((part) => part.index < list.indexOf(leaf)).length;
   if (selections.length === 1 && selected.length === 0 && selectionHasFilter(selections[0]!)
     && !list.some((leaf) => leaf.family_id === "persistent-designation-open")
-    && list.some((leaf) => leaf.family_id === "attack" && leaf.parameters.direction === "makes" && leaf.parameters.unit !== "that-unit")) {
+    && list.some((leaf) => leaf.family_id === "attack" && leaf.parameters.direction === "makes" && leaf.parameters.unit !== "that-unit"
+      && partBefore(leaf) === partBefore(selections[0]!))
+    && !attacksTargetSelectionMark(list)) {
     errors.push("A selected unit's unit-filter narrows only the selection; the bearer's attacks must target that unit, or the filter has no effect on them.");
   }
   // "Each time that VEHICLE model makes an attack": an attack gate on a model selection has no decided
@@ -199,7 +203,7 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
     errors.push("An other-model selection excludes only the bearer's unit; it selects only other models when the bearer has one model.");
   }
   // A selection and a loop in different parts ("… select one enemy unit … At the start of each Command phase, roll one D6 for each …") each wrap their own part.
-  const partOfLeaf = (leaf: CompileLeaf) => partStarts.filter((part) => part.index < list.indexOf(leaf)).length;
+  const partOfLeaf = partBefore;
   const perPass = forEachLeaf !== null && selectionPerPass(list, forEachLeaf, selections, planned, partOfLeaf);
   const inSelection = forEachLeaf !== null && loopInSelection(list, forEachLeaf, selections, planned, partOfLeaf);
   // A loop that runs a named chain of selections once per pass (compile-named-selections.ts).
@@ -210,7 +214,9 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
     const selectsAttacks = selections.length === 1 && planned.some((item) => item.selected);
     // A roll only a later part makes ("In addition, until …, roll one D6 each time that unit ends a move") is that part's own.
     const firstPartRoll = rolls.some((roll) => partOfLeaf(roll) === 0);
-    if (firstPartRoll || auraLeaf || forEachLeaf || leaderLeaf || rulesBundle || optionalSpend || selectsAttacks) errors.push(CONFLICTING_DURATIONS);
+    // A loop in a later part repeats only that part (compile-part-assemble.ts), so its own duration is that part's.
+    const recordPartLoop = forEachLeaf !== null && partOfLeaf(forEachLeaf) === 0;
+    if (firstPartRoll || auraLeaf || recordPartLoop || leaderLeaf || rulesBundle || optionalSpend || selectsAttacks) errors.push(CONFLICTING_DURATIONS);
     if (usages.length) errors.push("A usage limit in an ability with several durations has no reading yet.");
     const testAfterMark = refuseTestAfterMark(planned.map((item) => ({ index: item.index, node: item.node, gate: item.gate })), (index) => partStarts.filter((part) => part.index < index).length);
     if (testAfterMark) errors.push(testAfterMark);
@@ -225,6 +231,15 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   return { firstEffectIndex, partStarts, afterDestruction, afterThisUse, named, namedPass, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct };
 }
 
+/**
+ * "select one enemy unit … to be marked as their Spotted unit. … each time a model … makes an attack that targets a
+ * Spotted unit": the attacks target the mark the selection applies, so the selection's filter does reach them.
+ */
+function attacksTargetSelectionMark(list: readonly CompileLeaf[]): boolean {
+  const tags = new Set(list.filter((leaf) => leaf.family_id === "apply-mark" && leaf.parameters.subject === "selected-unit").map((leaf) => leaf.parameters.tag));
+  return list.some((leaf) => leaf.family_id === "unit-mark" && leaf.parameters.subject === "target" && leaf.parameters.negated !== true && tags.has(leaf.parameters.mark));
+}
+
 /** Whether an effect (or one nested in it) applies to the selected unit. */
 function namesSelected(node: unknown): boolean {
   if (Array.isArray(node)) return node.some(namesSelected);
@@ -237,16 +252,23 @@ function namesSelected(node: unknown): boolean {
 
 /**
  * "for each model in this unit that is within 3\" of one or more enemy units, select one of those enemy units. That
- * model … is destroyed, then …": one selection made in each pass of a loop over models, so the loop wraps the selection.
+ * model … is destroyed, then …", "for each Observer unit …, select one enemy unit": one selection made in each pass of a
+ * loop over models or units, so the loop wraps the selection.
  * The selection follows the loop's quantifier in its part, and every effect of that part follows the selection.
  */
 export function selectionPerPass(list: readonly CompileLeaf[], loop: CompileLeaf, selections: readonly CompileLeaf[], planned: readonly PlannedEffect[],
   partOfLeaf: (leaf: CompileLeaf) => number): boolean {
-  if (selections.length !== 1 || (loop.parameters.filter as { membership?: unknown } | undefined)?.membership === undefined) return false;
+  if (selections.length !== 1) return false;
   const selection = selections[0]!;
   const at = list.indexOf(selection);
   if (list.indexOf(loop) > at || partOfLeaf(selection) !== partOfLeaf(loop)) return false;
-  return planned.every((item) => partOfLeaf(list[item.index]!) !== partOfLeaf(loop) || item.index > at);
+  if (!planned.every((item) => partOfLeaf(list[item.index]!) !== partOfLeaf(loop) || item.index > at)) return false;
+  // A loop over models is the selection's own pass; a loop over units is only when the selection reads the pass's unit
+  // ("visible to it"), else "for each enemy unit, select one enemy unit" would have two readings.
+  if ((loop.parameters.filter as { membership?: unknown } | undefined)?.membership !== undefined) return true;
+  const own = planned.filter((item) => partOfLeaf(list[item.index]!) === partOfLeaf(loop));
+  const firstEffect = Math.min(...own.map((item) => item.index));
+  return list.slice(at + 1, firstEffect).some((leaf) => leaf.role === "CONDITION" && Object.values(leaf.parameters).includes("recipient"));
 }
 
 /**

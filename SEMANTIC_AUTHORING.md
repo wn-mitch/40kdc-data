@@ -68,10 +68,10 @@ change tracked data; `prepare-publication` and `publish` write them. Both rechec
 entry's source is still current, byte-identical and fully described, and that its leaves are
 unchanged since approval; `buildProjection` (`publish.ts`) re-runs `recordGateErrors` on every
 entry it writes, so an approval recorded under older gates cannot publish a record that fails
-them. A family-version migration re-issues leaves and stales the approvals they fed; the
-`carry-approvals` review action (`carryApprovals`) re-records an approval under the current leaves
-when its approval-time leaves differ only by later migrations and the recompiled mechanics and
-core are byte-identical. Any reviewed leaf change keeps the record stale for review.
+them. A family-version bump moves leaves to their new fingerprints, which changes the inputs the
+approvals they fed were recorded under; the bump itself re-records each such approval under the
+new inputs when the recompiled mechanics and core are byte-identical (`carryApprovals`). Any other
+change keeps the record stale for review.
 
 The `_private/round5c/` directory is intentionally retained as the persisted workbench and
 artifact location so existing local databases and run history remain reachable. Stored algorithm
@@ -128,18 +128,15 @@ unless it is needed to operate.
   cannot name the unit it binds to. A roll-modifier's `preceding` roll ("adding 1 to the result")
   binds the same way to the nearest roll or test before it (`compile-preceding-roll.ts`). Because the leaf
   stays the same wherever the wording occurs, "that enemy unit is **X**" is one operator.
-- **A family version widens; it never reinterprets.** A later version (`tools/src/semantic-authoring/families/`)
-  adds values or optional parameters and hands the rest of a leaf to the previous version, so
-  earlier leaves move across by identity.
-- **Named-region authoring uses version 3.** Versions 1 and 2 remain byte-stable historical
-  contracts so existing reviewed registry fingerprints keep their identity. Version 3 is the
-  current contract: `baseline_region` and `phase_extensions` are validated against the closed
-  canonical DSL recipe fragments, `region_id`, `owner_faction`, and `beneficiary_faction` use
-  canonical entity IDs, and `qualifies_by_keyword` must be nonblank. The v2-to-v3 family mapping
-  preserves already-canonical parameters unchanged. A v2 fingerprint that only satisfies the
-  historical loose recipe boundary remains active and is reported for review rather than being
-  forced through v3 or crashing workbench initialization. Compilation consumes the canonical v3
-  recipe without reinterpreting historical leaves.
+- **Leaves are current truth, not a ledger.** Each family has one literal current definition
+  (`tools/src/semantic-authoring/families/`): its schema and one normalizer. A bump edits that
+  definition in place, raises its version, and adds a mapping in `family-versions.ts`; the next
+  workbench open moves every leaf to its successor fingerprint in place and deletes the retired
+  fingerprints and family version. Delete the mapping once it has run. A bump widens; it never
+  reinterprets a leaf it moves by identity.
+- **Named-region authoring.** `baseline_region` and `phase_extensions` are validated against the
+  closed canonical DSL recipe fragments, `region_id`, `owner_faction`, and `beneficiary_faction`
+  use canonical entity IDs, and `qualifies_by_keyword` must be nonblank.
 - **Leaves stay compositional.** "Select one enemy unit", "within 24″ of this unit", "visible to
   …" and "excluding …" are separate leaves. Lowering may fold them into one canonical selector;
   authoring does not absorb qualifiers into a broader leaf to raise completion counts. A selector

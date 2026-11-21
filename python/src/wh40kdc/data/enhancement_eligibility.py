@@ -40,3 +40,21 @@ def missing_required_abilities(
     in the record's order (mirror of TS ``missingRequiredAbilities``)."""
     held = set(unit_ability_ids(bearer_ability_ids))
     return [i for i in enhancement.get("required_ability_ids") or [] if i not in held]
+
+
+def missing_required_wargear(
+    enhancement: Mapping[str, Any], counts: Mapping[str, int]
+) -> list[str]:
+    """The weapons ``enhancement`` requires (``required_wargear_ids``) that the bearer's chosen
+    loadout ``counts`` does not carry, in the record's order (mirror of TS
+    ``missingRequiredWargear``)."""
+    return [i for i in enhancement.get("required_wargear_ids") or [] if (counts.get(i) or 0) <= 0]
+
+
+def equipable_by_non_character(enhancement: Mapping[str, Any]) -> bool:
+    """Whether a unit that is not a CHARACTER may be given ``enhancement``: an Upgrade, or one
+    the record marks equipable (mirror of TS ``equipableByNonCharacter``)."""
+    return (
+        enhancement.get("upgrade_tag") is True
+        or enhancement.get("equipable_by_non_character") is True
+    )

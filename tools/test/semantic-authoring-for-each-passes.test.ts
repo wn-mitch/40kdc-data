@@ -128,7 +128,7 @@ describe("Semantic authoring a selection made in each pass of a loop over models
         ] },
       },
     });
-    expect(describeAbility(result.mechanics as never)).toContain("For each friendly model in the unit within 3\" of an enemy unit:\n    -> Select one enemy unit within 3\" of that model:\n      -> Destroy that model.");
+    expect(describeAbility(result.mechanics as never)).toContain("For each friendly model in this unit within 3\" of an enemy unit:\n    - Select one enemy unit within 3\" of that model:\n      - Destroy that model.");
   });
 
   it("refuses a loop over models with no unit they are in", () => {

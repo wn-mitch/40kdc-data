@@ -204,18 +204,28 @@ export function extractIds(documents: readonly BsDocument[], dataset: Dataset): 
 
     // Child factions (Space Marine chapters) file their units and weapons under
     // the parent, so the parent's matches search every child catalogue too.
-    const childClosures = Object.entries(FACTION_CATALOGUE_FILES)
+    const chapterCatalogues = Object.entries(FACTION_CATALOGUE_FILES)
       .filter(([childId]) => dataset.factions.get(childId)?.raw.parent_faction_id === factionId)
-      .flatMap(([, childFile]) => catalogueClosure(documents, childFile));
+      .map(([childId, childFile]) => ({ name: dataset.factions.get(childId)?.raw.name, closure: catalogueClosure(documents, childFile) }));
+    const childClosures = chapterCatalogues.flatMap((child) => child.closure);
     const candidates = entryCandidates([...new Set([...closure, ...childClosures])]);
+    // A chapter's reprint of a generic datasheet shares the generic unit's name; of two units with
+    // one name, the chapter-locked one is the entry in its chapter's catalogue. A name only one unit
+    // has keeps its first match, so saved rosters keep resolving.
+    const chapterCandidates = new Map(chapterCatalogues.map((child) => [child.name, entryCandidates(child.closure)]));
     const isUnit = (c: Candidate): boolean => {
       const type = str(c.node, "type");
       return c.shared && (type === "unit" || type === "model");
     };
+    const factionUnits = dataset.units.byFaction(factionId);
+    const nameCounts = new Map<string, number>();
+    for (const unit of factionUnits) nameCounts.set(unit.name, (nameCounts.get(unit.name) ?? 0) + 1);
     const unitMap: Record<string, string> = {};
-    for (const unit of dataset.units.byFaction(factionId)) {
+    for (const unit of factionUnits) {
       const key = matchKey(unit.name);
-      const hit = key ? pick(candidates, key, isUnit) : undefined;
+      const shared = (nameCounts.get(unit.name) ?? 0) > 1;
+      const chapter = shared ? (unit.raw.faction_keywords ?? []).map((k) => chapterCandidates.get(k)).find((c) => c) : undefined;
+      const hit = key ? ((chapter && pick(chapter, key, isUnit)) ?? pick(candidates, key, isUnit)) : undefined;
       if (hit) unitMap[unit.id] = hit.id;
     }
     units[factionId] = unitMap;

@@ -22,8 +22,7 @@
             </profile>
             <profile name="Laud Hailer" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of each phase, you may use this ability, once per battle per unit:
-  -&gt; Select one friendly ADEPTA SORORITAS unit if the selected unit is Battle-shocked and the selected unit is within 12" of this model: that unit is no longer Battle-shocked.</characteristic>
+                <characteristic name="Description">At the start of each phase, you can use this ability, once per battle per unit, select one friendly ADEPTA SORORITAS unit that is Battle-shocked and within 12" of this model. That unit is no longer Battle-shocked.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stirring Rhetoric" typeName="Abilities">
@@ -38,7 +37,7 @@
             </profile>
             <profile name="Acts of Faith" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit, Wound, saving throw, Advance, Charge, Desperate Escape, Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -105,14 +104,14 @@
             </profile>
             <profile name="Litany of Deeds" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When a Miracle die is generated, if 1+ friendly ADEPTA SORORITAS units destroyed and causing the exact bound event within 12" of this model or 1+ friendly ADEPTA SORORITAS models destroyed and causing the exact bound event within 12" of this model, you may use this ability, if 1+ friendly units destroyed within 12" of this model, if the unit has the ADEPTA SORORITAS keyword, until the end of the turn, you can re-roll the pool die roll for this model by spending a die from your Miracle Dice.</characteristic>
+                <characteristic name="Description">When a Miracle die is generated, if one or more friendly ADEPTA SORORITAS units destroyed triggering this ability within 12" of this model or one or more friendly ADEPTA SORORITAS models destroyed triggering this ability within 12" of this model, you can use this ability and one or more friendly units destroyed within 12" of this model and this unit has the ADEPTA SORORITAS keyword, until the end of the turn, you can re-roll the pool die roll for this model by spending a die from your Miracle Dice.</characteristic>
               </characteristics>
             </profile>
             <profile name="Stanchion of Holy Martyrs" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While this model is leading a unit:
-  -&gt; Set the unit's Save characteristic to 2.
-  -&gt; The unit has a 4+ invulnerable save.</characteristic>
+  - Set this unit's Save characteristic to 2+.
+  - This unit has a 4+ invulnerable save.</characteristic>
               </characteristics>
             </profile>
             <profile name="Support" typeName="Abilities">
@@ -122,7 +121,7 @@
             </profile>
             <profile name="Acts of Faith" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit, Wound, saving throw, Advance, Charge, Desperate Escape, Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -206,38 +205,37 @@
             <profile name="Abbess Sanctorum" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While this model is leading a unit:
-  -&gt; You can re-roll the Hit roll.
-  -&gt; You can re-roll the Wound roll.</characteristic>
+  - You can re-roll Hit rolls.
+  - You can re-roll Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Leader ability.</characteristic>
+                <characteristic name="Description">This unit gains the Leader ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Righteous Repugnance" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">-&gt; When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, until the end of the phase:
-  -&gt; Spend 1 Miracle die.
-  -&gt; Add 3 to the Attacks characteristic of Fidelis weapons equipped by models in this unit.
-  -&gt; Add 3 to the Attacks characteristic of Lance of Illumination weapons equipped by models in this unit.
--&gt; Each time this model destroys an enemy unit: you gain 1 Miracle die.</characteristic>
+                <characteristic name="Description">When this unit is selected to shoot, you can use this ability or when this unit is selected to fight, you can use this ability, until the end of the phase:
+  - Spend 1 Miracle die.
+  - Add 3 to the Attacks characteristic of Fidelis weapons equipped by models in this unit.
+  - Add 3 to the Attacks characteristic of Lance of Illumination weapons equipped by models in this unit.
+Each time this model destroys an enemy unit, you gain 1 Miracle die.</characteristic>
               </characteristics>
             </profile>
             <profile name="Supreme Commander" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While this model is friendly, the unit must be your Warlord.</characteristic>
+                <characteristic name="Description">While this model is friendly, this unit must be your Warlord.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Acts of Faith" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit, Wound, saving throw, Advance, Charge, Desperate Escape, Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -343,24 +341,24 @@
             </profile>
             <profile name="Fury of the Righteous" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While this model is leading a unit, the unit's weapons gain [LETHAL HITS].</characteristic>
+                <characteristic name="Description">While this model is leading a unit, this unit's weapons gain [LETHAL HITS].</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Leader ability.</characteristic>
+                <characteristic name="Description">This unit gains the Leader ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Rapturous Blows" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Until the end of the phase:
-  -&gt; When the unit is selected to fight, you may use this ability: spend 1 Miracle die.
-  -&gt; Each time an attack made by this model scores a wound: while making melee attacks, the target suffers 1 mortal wound.</characteristic>
+  - When this unit is selected to fight, you can use this ability: spend 1 Miracle die.
+  - Each time an attack made by this model scores a wound, while making melee attacks, the target suffers 1 mortal wound.</characteristic>
               </characteristics>
             </profile>
             <profile name="Acts of Faith" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit, Wound, saving throw, Advance, Charge, Desperate Escape, Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -439,7 +437,7 @@
             </profile>
             <profile name="Defenders of the Faith" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+                <characteristic name="Description">At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
               </characteristics>
             </profile>
             <profile name="Cherub" typeName="Abilities">
@@ -449,13 +447,13 @@
             </profile>
             <profile name="Simulacrum Imperialis" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the end of the Command phase, if you control 1+ objectives, while the unit is within range of an objective marker, until the end of the phase:
-  -&gt; Roll one D6: on a 4+, you gain 1 Miracle die.</characteristic>
+                <characteristic name="Description">At the end of the Command phase, if you control one or more objectives, while this unit is within range of an objective marker, until the end of the phase:
+  - Roll one D6: on a 4+, you gain 1 Miracle die.</characteristic>
               </characteristics>
             </profile>
             <profile name="Acts of Faith" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit, Wound, saving throw, Advance, Charge, Desperate Escape, Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -749,12 +747,12 @@
             </profile>
             <profile name="Sworn Protectors" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While this unit is being led by an ADEPTA SORORITAS CHARACTER model, the attacking unit gets -1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While this unit is being led by an ADEPTA SORORITAS CHARACTER model, subtract 1 from the attacking unit's Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Acts of Faith" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit, Wound, saving throw, Advance, Charge, Desperate Escape, Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -857,13 +855,13 @@
             <profile name="Righteous Paragons" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Against MONSTER or VEHICLE targets:
-  -&gt; The unit gets +1 to Hit rolls.
-  -&gt; The unit gets +1 to Wound rolls.</characteristic>
+  - Add 1 to this unit's Hit rolls.
+  - Add 1 to this unit's Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Acts of Faith" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit, Wound, saving throw, Advance, Charge, Desperate Escape, Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -1026,13 +1024,13 @@
             <profile name="Righteous Paragons" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">Against MONSTER or VEHICLE targets:
-  -&gt; The unit gets +1 to Hit rolls.
-  -&gt; The unit gets +1 to Wound rolls.</characteristic>
+  - Add 1 to this unit's Hit rolls.
+  - Add 1 to this unit's Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Acts of Faith" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</characteristic>
+                <characteristic name="Description">Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit, Wound, saving throw, Advance, Charge, Desperate Escape, Hazard or Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>

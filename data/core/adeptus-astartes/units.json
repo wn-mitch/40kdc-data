@@ -8,7 +8,7 @@
       {
         "name": "High Marshal Helbrecht",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -136,7 +136,6 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      "aquilon-optics-black-templars",
       {
         "id": "damaged",
         "value": 4
@@ -155,36 +154,105 @@
         "id": "7814-107b-a498-96f6"
       },
       {
-        "namespace": "bsdata",
-        "id": "7dec-dc3d-c40a-8ce"
-      },
-      {
         "namespace": "game-datacards",
         "id": "b22e3ef7-6afa-5dda-8637-067fc98a4e31"
-      },
-      {
-        "namespace": "mfm",
-        "id": "28efe884-f718-4745-8b0c-6ed221f65504"
       },
       {
         "namespace": "mfm",
         "id": "5f3b31db-62e7-4b4e-9699-ad0d4bdd33fc"
       }
     ],
-    "allied_points": [
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "gladiator-lancer-black-templars",
+    "name": "Gladiator Lancer",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Gladiator Lancer",
+        "M": 10,
+        "T": 10,
+        "W": 12,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 3
+      }
+    ],
+    "points": [
       {
         "models": 1,
         "cost": 165,
         "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "black-templars"
+        "unit_count_max": 2
       },
       {
         "models": 1,
         "cost": 185,
         "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "black-templars"
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Frame",
+      "Imperium",
+      "Smoke",
+      "Gladiator Lancer"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "laser-destroyer",
+      "multi-melta",
+      "armoured-hull-gladiator-lancer",
+      "defensive-array-gladiator-lancer"
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      "aquilon-optics-black-templars",
+      {
+        "id": "damaged",
+        "value": 4
+      },
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "7dec-dc3d-c40a-8ce"
+      },
+      {
+        "namespace": "mfm",
+        "id": "28efe884-f718-4745-8b0c-6ed221f65504"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "multi-melta",
+        "cost": 10
       }
     ]
   },
@@ -303,10 +371,6 @@
       },
       {
         "namespace": "mfm",
-        "id": "38903c97-fd84-45ee-ad2a-e60bfb01f157"
-      },
-      {
-        "namespace": "mfm",
         "id": "6ad781cd-6ee5-493b-8114-44363a3ae071"
       }
     ],
@@ -326,7 +390,7 @@
       {
         "name": "Marshal",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -403,7 +467,7 @@
       {
         "name": "Sword Brethren Squad",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 3,
         "Sv": 3,
         "invuln_sv": null,
@@ -523,7 +587,7 @@
       {
         "name": "Initiate",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -565,7 +629,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 40
+      "diameter": 32
     },
     "model_count": {
       "min": 10,
@@ -629,7 +693,7 @@
       {
         "name": "Execrator",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -822,10 +886,6 @@
       },
       {
         "namespace": "mfm",
-        "id": "cec275e8-0bf3-499c-9646-3b84443eb02c"
-      },
-      {
-        "namespace": "mfm",
         "id": "f7aff398-85bb-4f56-bd37-bfc91532214c"
       }
     ]
@@ -931,10 +991,6 @@
       },
       {
         "namespace": "mfm",
-        "id": "8d33dc91-fc83-460f-afc5-b8c8e85b934c"
-      },
-      {
-        "namespace": "mfm",
         "id": "fff20f1b-855e-45e3-9a7c-81254a215fc4"
       }
     ]
@@ -948,8 +1004,8 @@
       {
         "name": "Chaplain Grimaldus",
         "M": 6,
-        "T": 4,
-        "W": 4,
+        "T": 5,
+        "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
         "Ld": 5,
@@ -987,7 +1043,7 @@
     ],
     "base_size_mm": {
       "shape": "round",
-      "diameter": 40
+      "diameter": 28.5
     },
     "model_count": {
       "min": 4,
@@ -1044,7 +1100,7 @@
       {
         "name": "Castellan",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
@@ -1121,7 +1177,7 @@
       {
         "name": "Emperor’s Champion",
         "M": 8,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -1264,16 +1320,7 @@
         "id": "deadly-demise",
         "value": "D3"
       },
-      {
-        "id": "orbital-comms-array-black-templars",
-        "wargear": "orbital-comms-array"
-      },
-      {
-        "id": "shield-dome-black-templars",
-        "wargear": "shield-dome"
-      },
       "rapid-disembarkation-adeptus-astartes",
-      "rapid-disembarkation-black-templars",
       "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
@@ -1294,16 +1341,8 @@
         "id": "bfb1-7512-e1a3-9fa2"
       },
       {
-        "namespace": "bsdata",
-        "id": "fa27-4bc1-72c9-894f"
-      },
-      {
         "namespace": "game-datacards",
         "id": "5fe8f17a-a8fb-5a0a-9b91-d61114df7d56"
-      },
-      {
-        "namespace": "mfm",
-        "id": "9aeb551d-6c87-42ca-b13c-97c31e62de93"
       },
       {
         "namespace": "mfm",
@@ -1311,6 +1350,121 @@
       }
     ],
     "wargear_costs": [
+      {
+        "item_id": "orbital-comms-array",
+        "cost": 10
+      }
+    ],
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "impulsor-black-templars",
+    "name": "Impulsor",
+    "faction_id": "adeptus-astartes",
+    "role": "dedicated-transport",
+    "profiles": [
+      {
+        "name": "Impulsor",
+        "M": 12,
+        "T": 9,
+        "W": 11,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 70,
+        "unit_count_min": 1,
+        "unit_count_max": 3
+      },
+      {
+        "models": 1,
+        "cost": 80,
+        "unit_count_min": 4,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Dedicated Transport",
+      "Frame",
+      "Imperium",
+      "Transport",
+      "Impulsor"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "bellicatus-missile-array",
+      "multi-melta",
+      "armoured-hull-impulsor",
+      "storm-bolter-impulsor",
+      "ironhail-heavy-stubber-impulsor",
+      "fragstorm-grenade-launcher-impulsor"
+    ],
+    "ability_ids": [
+      {
+        "id": "firing-deck",
+        "value": 7
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "orbital-comms-array-black-templars",
+        "wargear": "orbital-comms-array"
+      },
+      {
+        "id": "shield-dome-black-templars",
+        "wargear": "shield-dome"
+      },
+      "rapid-disembarkation-black-templars",
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "transport_capacity": {
+      "capacity": 7,
+      "exclusion_keywords": [
+        "Jump Pack"
+      ]
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "fa27-4bc1-72c9-894f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9aeb551d-6c87-42ca-b13c-97c31e62de93"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "multi-melta",
+        "cost": 10
+      },
       {
         "item_id": "orbital-comms-array",
         "cost": 10
@@ -1384,7 +1538,6 @@
         "id": "damaged",
         "value": 6
       },
-      "executioner-black-templars",
       "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
@@ -1458,20 +1611,6 @@
         "unit_count_min": 3,
         "unit_count_max": null,
         "host_faction": "space-wolves"
-      },
-      {
-        "models": 1,
-        "cost": 265,
-        "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "black-templars"
-      },
-      {
-        "models": 1,
-        "cost": 285,
-        "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "black-templars"
       }
     ],
     "conditional_keywords": [
@@ -1486,20 +1625,112 @@
         "id": "9259-f166-15f2-7f79"
       },
       {
-        "namespace": "bsdata",
-        "id": "a344-192f-aae2-16e5"
-      },
-      {
         "namespace": "game-datacards",
         "id": "40ee135b-a29f-5683-a9be-d618abe9dbd5"
       },
       {
         "namespace": "mfm",
-        "id": "33573b80-b342-4624-a282-ba3ed7c04068"
+        "id": "6843a410-d0fa-4b3e-8cd5-a000eb3cf015"
+      }
+    ],
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "repulsor-executioner-black-templars",
+    "name": "Repulsor Executioner",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Repulsor Executioner",
+        "M": 10,
+        "T": 12,
+        "W": 16,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 265,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 285,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Smoke",
+      "Transport",
+      "Imperium",
+      "Repulsor Executioner",
+      "Frame"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "heavy-laser-destroyer",
+      "heavy-onslaught-gatling-cannon",
+      "macro-plasma-incinerator",
+      "defensive-array",
+      "multi-melta",
+      "armoured-hull-repulsor-executioner",
+      "twin-heavy-bolter-repulsor-executioner"
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      "executioner-black-templars",
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "transport_capacity": {
+      "capacity": 7
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "wargear_costs": [
+      {
+        "item_id": "multi-melta",
+        "cost": 10
+      }
+    ],
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "a344-192f-aae2-16e5"
       },
       {
         "namespace": "mfm",
-        "id": "6843a410-d0fa-4b3e-8cd5-a000eb3cf015"
+        "id": "33573b80-b342-4624-a282-ba3ed7c04068"
       }
     ]
   },
@@ -1567,6 +1798,96 @@
         "id": "damaged",
         "value": 4
       },
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "6b89-8147-9b6b-6db1"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "6bbb474f-faae-5610-8e6c-941d01509be8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "c75a736d-2aac-40ad-bab0-78e768d49831"
+      }
+    ],
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "gladiator-valiant-black-templars",
+    "name": "Gladiator Valiant",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Gladiator Valiant",
+        "M": 10,
+        "T": 10,
+        "W": 12,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 145,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 165,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Frame",
+      "Imperium",
+      "Smoke",
+      "Gladiator Valiant"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "twin-las-talon",
+      "armoured-hull-gladiator-valiant",
+      "defensive-array-gladiator-valiant",
+      "multi-melta-gladiator-valiant"
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
       "priority-target-acquisition-black-templars",
       "combat-doctrines-adeptus-astartes"
     ],
@@ -1582,36 +1903,14 @@
         "id": "5704-ffe4-4a53-8789"
       },
       {
-        "namespace": "bsdata",
-        "id": "6b89-8147-9b6b-6db1"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "6bbb474f-faae-5610-8e6c-941d01509be8"
-      },
-      {
         "namespace": "mfm",
         "id": "85b09425-65d4-4ecf-8974-689ff36853aa"
-      },
-      {
-        "namespace": "mfm",
-        "id": "c75a736d-2aac-40ad-bab0-78e768d49831"
       }
     ],
-    "allied_points": [
+    "wargear_costs": [
       {
-        "models": 1,
-        "cost": 145,
-        "unit_count_min": 1,
-        "unit_count_max": 2,
-        "host_faction": "black-templars"
-      },
-      {
-        "models": 1,
-        "cost": 165,
-        "unit_count_min": 3,
-        "unit_count_max": null,
-        "host_faction": "black-templars"
+        "item_id": "multi-melta-gladiator-valiant",
+        "cost": 10
       }
     ]
   },
@@ -1624,7 +1923,7 @@
       {
         "name": "Crusade Ancient",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
@@ -1758,7 +2057,6 @@
         "value": 6
       },
       "combat-embarkation-adeptus-astartes",
-      "combat-embarkation-black-templars",
       "combat-doctrines-adeptus-astartes"
     ],
     "transport_capacity": {
@@ -1779,10 +2077,6 @@
     "external_refs": [
       {
         "namespace": "bsdata",
-        "id": "c3e8-3cde-8b39-4b19"
-      },
-      {
-        "namespace": "bsdata",
         "id": "e8e-fc5c-c689-99ca"
       },
       {
@@ -1791,11 +2085,108 @@
       },
       {
         "namespace": "mfm",
-        "id": "46a89128-fa0a-4013-847a-ee4b5b490b53"
+        "id": "7102909d-95e0-42d3-99e3-e21364ba2365"
+      }
+    ],
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "repulsor-black-templars",
+    "name": "Repulsor",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Repulsor",
+        "M": 10,
+        "T": 12,
+        "W": 16,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 5
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 190,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 210,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Frame",
+      "Imperium",
+      "Smoke",
+      "Transport",
+      "Repulsor"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "hunter-slayer-missile",
+      "defensive-array",
+      "multi-melta",
+      "armoured-hull-repulsor",
+      "heavy-onslaught-gatling-cannon-repulsor",
+      "twin-heavy-bolter-repulsor",
+      "twin-lascannon-repulsor",
+      "las-talon-repulsor"
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D6"
+      },
+      {
+        "id": "damaged",
+        "value": 6
+      },
+      "combat-embarkation-black-templars",
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "transport_capacity": {
+      "capacity": 14
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "c3e8-3cde-8b39-4b19"
       },
       {
         "namespace": "mfm",
-        "id": "7102909d-95e0-42d3-99e3-e21364ba2365"
+        "id": "46a89128-fa0a-4013-847a-ee4b5b490b53"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "multi-melta",
+        "cost": 10
       }
     ]
   },
@@ -1862,6 +2253,96 @@
         "id": "damaged",
         "value": 4
       },
+      "combat-doctrines-adeptus-astartes"
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "ed20-824b-7419-aebc"
+      },
+      {
+        "namespace": "game-datacards",
+        "id": "0fae5944-73f5-5791-b835-ba2938f5d76f"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5396e3da-e344-4478-b9f9-6466c96a9dbb"
+      }
+    ],
+    "excluded_faction_keywords": [
+      "Black Templars"
+    ]
+  },
+  {
+    "id": "gladiator-reaper-black-templars",
+    "name": "Gladiator Reaper",
+    "faction_id": "adeptus-astartes",
+    "profiles": [
+      {
+        "name": "Gladiator Reaper",
+        "M": 10,
+        "T": 10,
+        "W": 12,
+        "Sv": 3,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 3
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 165,
+        "unit_count_min": 1,
+        "unit_count_max": 2
+      },
+      {
+        "models": 1,
+        "cost": 185,
+        "unit_count_min": 3,
+        "unit_count_max": null
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Frame",
+      "Imperium",
+      "Smoke",
+      "Gladiator Reaper"
+    ],
+    "faction_keywords": [
+      "Adeptus Astartes",
+      "Black Templars"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 100
+    },
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "weapon_ids": [
+      "twin-heavy-onslaught-gatling-cannon",
+      "multi-melta",
+      "armoured-hull-gladiator-reaper",
+      "defensive-array-gladiator-reaper"
+    ],
+    "ability_ids": [
+      {
+        "id": "deadly-demise",
+        "value": "D3"
+      },
+      {
+        "id": "damaged",
+        "value": 4
+      },
       "reaping-tally-black-templars",
       "combat-doctrines-adeptus-astartes"
     ],
@@ -1877,20 +2358,14 @@
         "id": "bfb6-4320-74cf-bbda"
       },
       {
-        "namespace": "bsdata",
-        "id": "ed20-824b-7419-aebc"
-      },
-      {
-        "namespace": "game-datacards",
-        "id": "0fae5944-73f5-5791-b835-ba2938f5d76f"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5396e3da-e344-4478-b9f9-6466c96a9dbb"
-      },
-      {
         "namespace": "mfm",
         "id": "55fb581c-0805-4e4a-a6f4-9aea8aadf019"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "multi-melta",
+        "cost": 10
       }
     ]
   },
@@ -1901,7 +2376,7 @@
     "profiles": [
       {
         "name": "Death Company Dreadnought",
-        "M": 8,
+        "M": 10,
         "T": 10,
         "W": 12,
         "Sv": 2,
@@ -2005,7 +2480,7 @@
       {
         "name": "Sanguinary Priest",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
@@ -2080,7 +2555,7 @@
       {
         "name": "Death Company Captain with Jump Pack",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -2171,7 +2646,7 @@
       {
         "name": "Death Company Marines",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -2274,12 +2749,6 @@
         "per_models": 0
       }
     ],
-    "conditional_keywords": [
-      {
-        "keyword": "Battleline",
-        "required_detachment_id": "the-lost-brethren"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -2304,7 +2773,7 @@
       {
         "name": "Astorath",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -2382,7 +2851,7 @@
       {
         "name": "Blood Angels Captain",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -2461,8 +2930,8 @@
     "profiles": [
       {
         "name": "Chief Librarian Mephiston",
-        "M": 7,
-        "T": 5,
+        "M": 8,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 5,
@@ -2545,8 +3014,8 @@
       {
         "name": "Lemartes",
         "M": 12,
-        "T": 4,
-        "W": 4,
+        "T": 5,
+        "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
         "Ld": 5,
@@ -2630,7 +3099,7 @@
       {
         "name": "Commander Dante",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -2711,7 +3180,7 @@
       {
         "name": "The Sanguinor",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 7,
         "Sv": 2,
         "invuln_sv": 4,
@@ -2787,12 +3256,12 @@
       {
         "name": "Sanguinary Guard",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
         "Ld": 6,
-        "OC": 1
+        "OC": 2
       }
     ],
     "points": [
@@ -2977,7 +3446,7 @@
       {
         "name": "Death Company Marines with Jump Packs",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -3099,7 +3568,7 @@
       {
         "name": "Death Company Captain",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -3265,7 +3734,7 @@
       {
         "name": "Ravenwing Black Knight",
         "M": 12,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 3,
         "invuln_sv": 5,
@@ -3368,8 +3837,8 @@
       {
         "name": "Ezekiel",
         "M": 6,
-        "T": 4,
-        "W": 4,
+        "T": 5,
+        "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
         "Ld": 6,
@@ -3449,7 +3918,7 @@
       {
         "name": "Deathwing Terminator",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -3568,7 +4037,7 @@
       {
         "name": "Inner Circle Companions",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 3,
         "Sv": 3,
         "invuln_sv": null,
@@ -3660,7 +4129,7 @@
       {
         "name": "Azrael",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -3743,8 +4212,8 @@
       {
         "name": "Land Speeder Vengeance",
         "M": 14,
-        "T": 8,
-        "W": 10,
+        "T": 9,
+        "W": 11,
         "Sv": 3,
         "invuln_sv": 5,
         "Ld": 6,
@@ -3832,13 +4301,13 @@
     "profiles": [
       {
         "name": "Nephilim Jetfighter",
-        "M": 20,
+        "M": null,
         "T": 8,
         "W": 11,
         "Sv": 3,
         "invuln_sv": 5,
         "Ld": 6,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -3917,7 +4386,7 @@
       {
         "name": "Asmodai",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -3995,7 +4464,7 @@
       {
         "name": "Deathwing Knight",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 4,
         "Sv": 2,
         "invuln_sv": 4,
@@ -4082,7 +4551,7 @@
       {
         "name": "Belial",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -4161,8 +4630,8 @@
       {
         "name": "Lion El’Jonson",
         "M": 8,
-        "T": 9,
-        "W": 10,
+        "T": 10,
+        "W": 16,
         "Sv": 2,
         "invuln_sv": 3,
         "Ld": 5,
@@ -4242,7 +4711,7 @@
       {
         "name": "Ravenwing Champion",
         "M": 12,
-        "T": 5,
+        "T": 6,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 5,
@@ -4339,7 +4808,7 @@
       {
         "name": "Lazarus",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -4416,13 +4885,13 @@
     "profiles": [
       {
         "name": "Ravenwing Dark Talon",
-        "M": 20,
+        "M": null,
         "T": 8,
         "W": 11,
         "Sv": 3,
         "invuln_sv": 5,
         "Ld": 6,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -4499,7 +4968,7 @@
       {
         "name": "Sammael",
         "M": 12,
-        "T": 5,
+        "T": 6,
         "W": 7,
         "Sv": 3,
         "invuln_sv": 4,
@@ -4584,7 +5053,7 @@
       {
         "name": "Watch Captain Artemis",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -4742,7 +5211,8 @@
         "namespace": "mfm",
         "id": "702b93e4-6cd8-4bf1-9507-374dc1a7f397"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "deathwatch-veterans",
@@ -4753,7 +5223,7 @@
       {
         "name": "Watch Sergeant",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -4761,9 +5231,9 @@
         "OC": 2
       },
       {
-        "name": "Deathwatch Veterans",
+        "name": "Deathwatch Veteran",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -4873,9 +5343,9 @@
     "role": "battleline",
     "profiles": [
       {
-        "name": "Deathwatch Veteran",
+        "name": "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -4978,7 +5448,7 @@
       {
         "name": "Kill Team Intercessor with Jump Pack",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -5068,7 +5538,8 @@
         "namespace": "mfm",
         "id": "e162e0db-3a17-43c7-9f42-a0c0999e4fad"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "watch-master",
@@ -5079,7 +5550,7 @@
       {
         "name": "Watch Master",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -5154,7 +5625,7 @@
     "profiles": [
       {
         "name": "Corvus Blackstar",
-        "M": 20,
+        "M": 14,
         "T": 10,
         "W": 14,
         "Sv": 3,
@@ -5248,7 +5719,7 @@
       {
         "name": "Deathwatch Terminator",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -5374,7 +5845,7 @@
       {
         "name": "Kill Team Intercessor",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -5467,7 +5938,8 @@
         "namespace": "mfm",
         "id": "1ccb48ec-c82d-4d27-a4ef-f199e79e8043"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "spectrus-kill-team",
@@ -5476,7 +5948,7 @@
     "profiles": [
       {
         "name": "Kill Team Infiltrator",
-        "M": 6,
+        "M": 8,
         "T": 4,
         "W": 2,
         "Sv": 3,
@@ -5565,7 +6037,8 @@
         "namespace": "mfm",
         "id": "87f83fe4-3976-49cf-b6a7-fd09bfb8675d"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "captain-in-gravis-armour",
@@ -5656,7 +6129,7 @@
       {
         "name": "Adrax Agatone",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -6065,10 +6538,6 @@
       {
         "keyword": "Ravenwing",
         "required_faction_keyword": "Dark Angels"
-      },
-      {
-        "keyword": "Speeder",
-        "required_detachment_id": "fulguris-task-force"
       }
     ],
     "external_refs": [
@@ -6170,7 +6639,7 @@
       {
         "name": "Kor’sarro Khan",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -6249,7 +6718,7 @@
       {
         "name": "Suboden Khan",
         "M": 12,
-        "T": 5,
+        "T": 6,
         "W": 8,
         "Sv": 3,
         "invuln_sv": 4,
@@ -6329,7 +6798,7 @@
       {
         "name": "Aethon Shaan",
         "M": 14,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -6942,10 +7411,6 @@
       {
         "keyword": "Ravenwing",
         "required_faction_keyword": "Dark Angels"
-      },
-      {
-        "keyword": "Speeder",
-        "required_detachment_id": "fulguris-task-force"
       }
     ],
     "external_refs": [
@@ -7226,7 +7691,8 @@
         "namespace": "mfm",
         "id": "5ab7a6a5-3db3-4595-b8a4-c031bdc3ef31"
       }
-    ]
+    ],
+    "max_model_count": 6
   },
   {
     "id": "captain-in-terminator-armour",
@@ -7402,13 +7868,13 @@
     "profiles": [
       {
         "name": "Drop Pod",
-        "M": 0,
+        "M": null,
         "T": 7,
         "W": 8,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -7652,10 +8118,6 @@
       {
         "keyword": "Ravenwing",
         "required_faction_keyword": "Dark Angels"
-      },
-      {
-        "keyword": "Speeder",
-        "required_detachment_id": "fulguris-task-force"
       }
     ],
     "external_refs": [
@@ -7768,7 +8230,7 @@
       {
         "name": "Vulkan He’stan",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -9028,10 +9490,6 @@
     "conditional_keywords": [
       {
         "keyword": "Battleline",
-        "required_detachment_id": "company-of-hunters"
-      },
-      {
-        "keyword": "Battleline",
         "required_detachment_id": "darkflight-pursuit"
       },
       {
@@ -9314,6 +9772,10 @@
       "Adeptus Astartes",
       "Ultramarines"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 28.5
+    },
     "model_count": {
       "min": 6,
       "max": 6
@@ -9936,7 +10398,7 @@
       {
         "name": "Caanok Var",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -10082,7 +10544,10 @@
     "ability_ids": [
       "vanguard-assault-adeptus-astartes",
       "deep-strike",
-      "combat-shield-adeptus-astartes",
+      {
+        "id": "combat-shield-adeptus-astartes",
+        "wargear": "combat-shield"
+      },
       "combat-doctrines-adeptus-astartes"
     ],
     "game_version": {
@@ -10916,7 +11381,7 @@
     "profiles": [
       {
         "name": "Thunderhawk Gunship",
-        "M": 20,
+        "M": 14,
         "T": 12,
         "W": 30,
         "Sv": 2,
@@ -11987,7 +12452,7 @@
       {
         "name": "Ragnar Blackmane",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -12176,7 +12641,7 @@
       {
         "name": "Grey Hunter",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -12341,7 +12806,7 @@
       {
         "name": "Wolf Priest",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -12414,7 +12879,7 @@
       {
         "name": "Wolf Guard Headtaker",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 3,
         "Sv": 3,
         "invuln_sv": null,
@@ -12422,7 +12887,7 @@
         "OC": 1
       },
       {
-        "name": "Hunting Wolves",
+        "name": "Hunting Wolf",
         "M": 10,
         "T": 4,
         "W": 1,
@@ -12547,7 +13012,7 @@
       {
         "name": "Iron Priest",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 2,
         "invuln_sv": null,
@@ -12622,7 +13087,7 @@
       {
         "name": "Njal Stormcaller",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -12700,7 +13165,7 @@
       {
         "name": "Blood Claw",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -12778,7 +13243,7 @@
       {
         "name": "Ulrik the Slayer",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": 4,
@@ -12858,7 +13323,7 @@
       {
         "name": "Logan Grimnar",
         "M": 6,
-        "T": 5,
+        "T": 6,
         "W": 8,
         "Sv": 2,
         "invuln_sv": 4,
@@ -12936,7 +13401,7 @@
       {
         "name": "Wolf Guard Terminator",
         "M": 6,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -13230,7 +13695,7 @@
       {
         "name": "Bjorn the Fell-Handed",
         "M": 9,
-        "T": 9,
+        "T": 10,
         "W": 8,
         "Sv": 2,
         "invuln_sv": 5,
@@ -13316,7 +13781,7 @@
       {
         "name": "Arjac Rockfist",
         "M": 6,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -13391,7 +13856,7 @@
       {
         "name": "Wolf Guard Battle Leader",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -13468,7 +13933,7 @@
     "profiles": [
       {
         "name": "Wolf Scout",
-        "M": 7,
+        "M": 8,
         "T": 4,
         "W": 2,
         "Sv": 3,
@@ -13526,9 +13991,8 @@
       "Space Wolves"
     ],
     "base_size_mm": {
-      "shape": "oval",
-      "width": 60,
-      "length": 35.5
+      "shape": "round",
+      "diameter": 32
     },
     "model_count": {
       "min": 6,
@@ -13923,10 +14387,6 @@
       {
         "keyword": "Ravenwing",
         "required_faction_keyword": "Dark Angels"
-      },
-      {
-        "keyword": "Speeder",
-        "required_detachment_id": "fulguris-task-force"
       }
     ],
     "ability_ids": [
@@ -14472,6 +14932,10 @@
       "Black Templars",
       "Adeptus Astartes"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -14759,7 +15223,7 @@
     },
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -14771,12 +15235,19 @@
       "diameter": 40
     },
     "ability_ids": [
-      "born-to-fight-blood-angels"
+      "born-to-fight-blood-angels",
+      "the-sons-of-sanguinius-blood-angels"
     ],
     "weapon_ids": [
-      "angelus-boltgun",
+      "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
       "encarmine-blade",
       "encarmine-spear"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0d3ae940-93a0-488d-aed4-4b94e1cf8a19"
+      }
     ]
   },
   {

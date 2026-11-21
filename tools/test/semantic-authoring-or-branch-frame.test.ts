@@ -242,7 +242,7 @@ describe("Semantic authoring antecedent frames on an Or: branch", () => {
       }
       // weapon_var is the compiler's own bound form of a "that weapon" grant (bindWeaponAntecedents); no stored leaf carries it.
       const unbound = { subject: "this-unit", weapon_type: "melee" };
-      expect(() => normalizeFingerprintParameters("weapon-ability-grant", { ...unbound, weapon_var: "sword" }, currentFamilyVersion("weapon-ability-grant"))).toThrow(/optional weapon_name/u);
+      expect(() => normalizeFingerprintParameters("weapon-ability-grant", { ...unbound, weapon_var: "sword" })).toThrow(/parameters must be one of: (?:(?!weapon_var)[a-z_, ])+\./u);
       const [source, ...rest] = placed(branch, ["Your unit's melee attacks", "weapon-ability-grant", unbound], keyword("LANCE", "Lance"), antecedentFrame("LANCE"), keyword("LANCE", "Lance"));
       const bound = outsideContract([{ ...source!, parameters: { ...unbound, weapon_var: "sword" } }, ...rest]);
       refused(branch, bound, "would widen its weapons");
@@ -265,24 +265,14 @@ describe("Semantic authoring antecedent frames on an Or: branch", () => {
     });
   });
 
-  describe("family versions", () => {
-    it("grant v10 and scope v5 take frame antecedent and nothing that names a recipient or keyword", () => {
-      // Version 10 is the frame-antecedent widening; later widenings (exclude_weapon_keyword) stack on it.
-      expect(currentFamilyVersion("weapon-ability-grant")).toBeGreaterThanOrEqual(10);
-      expect(normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent" }, currentFamilyVersion("weapon-ability-grant"))).toEqual({ frame: "antecedent" });
-      // Version 5 is the frame-antecedent widening; later widenings (weapon_names) stack on it.
-      expect(currentFamilyVersion("weapon-property-scope")).toBeGreaterThanOrEqual(5);
-      expect(normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent" }, 10)).toEqual({ frame: "antecedent" });
-      expect(normalizeFingerprintParameters("weapon-property-scope", { frame: "antecedent" }, 5)).toEqual({ frame: "antecedent" });
-      expect(() => normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent", keyword: "Lance" }, 10)).toThrow(TypeError);
-      expect(() => normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent", subject: "this-unit" }, 10)).toThrow(TypeError);
-      expect(() => normalizeFingerprintParameters("weapon-property-scope", { frame: "antecedent", subject: "this-unit" }, 5)).toThrow(TypeError);
-      expect(() => normalizeFingerprintParameters("weapon-property-scope", { frame: "antecedent", weapon_name: "lance" }, 5)).toThrow(TypeError);
-    });
-
-    it("earlier versions take no frame key", () => {
-      expect(() => normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent" }, 9)).toThrow();
-      expect(() => normalizeFingerprintParameters("weapon-property-scope", { frame: "antecedent" }, 4)).toThrow();
+  describe("family parameters", () => {
+    it("grant and scope take frame antecedent and nothing that names a recipient or keyword", () => {
+      expect(normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent" })).toEqual({ frame: "antecedent" });
+      expect(normalizeFingerprintParameters("weapon-property-scope", { frame: "antecedent" })).toEqual({ frame: "antecedent" });
+      expect(() => normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent", keyword: "Lance" })).toThrow(TypeError);
+      expect(() => normalizeFingerprintParameters("weapon-ability-grant", { frame: "antecedent", subject: "this-unit" })).toThrow(TypeError);
+      expect(() => normalizeFingerprintParameters("weapon-property-scope", { frame: "antecedent", subject: "this-unit" })).toThrow(TypeError);
+      expect(() => normalizeFingerprintParameters("weapon-property-scope", { frame: "antecedent", weapon_name: "lance" })).toThrow(TypeError);
     });
   });
 });

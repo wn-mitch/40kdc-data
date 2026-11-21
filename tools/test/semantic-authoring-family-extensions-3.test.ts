@@ -134,7 +134,7 @@ describe("Semantic authoring family extensions, third round", () => {
       leaf("regain-wounds", { subject: "this-unit", amount: "1" }),
     ]);
     expect(JSON.stringify(mechanics)).toContain('"event":"destroyed","subject":"this-unit","object":{"owner":"enemy"}');
-    expect(() => normalize("event", { kind: "phase-start", phase: "fight", turn: "your", by: "this-unit" })).toThrow(/unit-destroyed only/u);
+    expect(() => normalize("event", { kind: "phase-start", phase: "fight", turn: "your", by: "this-unit" })).toThrow(/event\.by does not apply to kind phase-start/u);
     const attack = compiled([leaf("event", { kind: "selected", to: "attack" }), leaf("regain-wounds", { subject: "this-unit", amount: "1" })]);
     expect(JSON.stringify(attack)).toContain('"filter":{"to":"attack"}');
   });
@@ -262,12 +262,9 @@ describe("targeting-restriction by and target", () => {
     expect(() => normalize("targeting-restriction", { may: "cannot-target", kind: "stratagem", weapon_type: "all", target: "this-unit", stratagem: "Fire Overwatch" })).toThrow(/kebab-case/u);
   });
 
-  it("keeps a subject leaf exactly as the previous version read it", () => {
+  it("lowers a subject leaf to a restriction on that unit, with no by or target", () => {
     const tree = compiled([leaf("targeting-restriction", { ...restriction, subject: "this-unit" })]);
     expect(first(tree, "targeting")).toEqual({ type: "targeting", target: "this-unit", modifier: { may: "must-target", kind: "attack" } });
-    expect(currentFamilyVersion("targeting-restriction")).toBeGreaterThan(2);
-    expect(normalizeFingerprintParameters("targeting-restriction", { ...restriction, subject: "this-unit" }, currentFamilyVersion("targeting-restriction") - 1))
-      .toEqual(normalize("targeting-restriction", { ...restriction, subject: "this-unit" }));
   });
 
   it("refuses a leaf that mixes the readings, an attacker with no target, or one unit on both sides", () => {

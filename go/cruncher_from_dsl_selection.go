@@ -1,6 +1,12 @@
 package wh40kdc
 
-import "strings"
+import (
+	"encoding/json"
+	"slices"
+	"sort"
+	"strconv"
+	"strings"
+)
 
 // Unit selections and other player-vouched choices as levers. A select-units
 // effect whose nested effect reaches the selected-unit is a choice the player
@@ -31,36 +37,27 @@ type selectionPlan struct {
 }
 
 // planSelection plans a select-units node for the crunched unit under
-// perspective. A friendly selection reaches the crunched unit when its keywords
-// match the selector; when the eligibility excludes the ability's own unit, the
-// lever exists only when another unit provides the ability (abilityKind
-// "support"). An enemy selection reaches the other side of the attack. A
-// top-level dice gate with no failure branch becomes the lever's content; its
+// perspective. A selection whose count.max is 0 picks nothing, so nothing reaches
+// the crunched unit. A friendly selection reaches the crunched unit when the
+// selector's unit filter holds for it (range and visibility are the player's to
+// vouch for); a predicate the context cannot decide leaves it unsupported. When
+// the eligibility or filter.excluding excludes the ability's own unit, the lever
+// exists only when another unit provides the ability (abilityKind "support").
+// An enemy selection reaches the other side of the attack, gated by the
+// selector's unit filter less range and visibility; the gate is decided when the
+// attack resolves. A top-level dice gate with no failure branch becomes the lever's content; its
 // roll joins requires.
 func planSelection(node, source map[string]any, perspective string, context map[string]any) selectionPlan {
-	selector, ok := node["selector"].(map[string]any)
-	if !ok {
+	if !isSelectionCandidate(node) {
 		return selectionPlan{kind: "none"}
 	}
-	filter, ok := selector["filter"].(map[string]any)
-	if !ok || (filter["owner"] != "friendly" && filter["owner"] != "enemy") {
-		return selectionPlan{kind: "none"}
-	}
-	if filter["level"] == "model" || filter["model_names"] != nil || selector["bind_as"] != nil {
-		return selectionPlan{kind: "none"}
-	}
-	keywords, keywordsOK := selectorKeywordList(filter["all_of"])
-	anyKeywords, anyOK := selectorKeywordList(filter["any_of"])
-	excluded, excludedOK := selectorKeywordList(filter["none_of"])
-	if (filter["all_of"] != nil && !keywordsOK) || (filter["any_of"] != nil && !anyOK) || (filter["none_of"] != nil && !excludedOK) {
-		return selectionPlan{kind: "unsupported", reason: "select-units: the selector's keyword lists are malformed"}
-	}
-	if len(anyKeywords) > 0 {
-		// The buff gate can represent one required keyword, not an arbitrary
-		// OR predicate on an enemy selector.
-		if filter["owner"] == "enemy" {
-			return selectionPlan{kind: "unsupported", reason: "select-units: any_of keyword selectors are not gated by the buff layer"}
-		}
+	selector, _ := node["selector"].(map[string]any)
+	filter, _ := selector["filter"].(map[string]any)
+	// binding is the selector's bind_as name: a {selection_var: binding} ref names the selected
+	// unit as "selected-unit" does.
+	binding, _ := selector["bind_as"].(string)
+	if count, ok := selector["count"].(map[string]any); ok && isZeroNumber(count["max"]) {
+		return selectionPlan{kind: "skip"}
 	}
 	selection := make(map[string]any, len(node))
 	for k, v := range node {
@@ -75,62 +72,44 @@ func planSelection(node, source map[string]any, perspective string, context map[
 	var label string
 	if filter["owner"] == "friendly" {
 		provided := getStr(source, "kind") == "ability" && getStr(source, "abilityKind") == "support"
-		if excludesAbilityUnit(selector["eligibility"]) && !provided {
+		excludesSelf := filter["excluding"] == "ability-unit" || filter["excluding"] == "this-unit" || excludesAbilityUnit(selector["eligibility"])
+		if excludesSelf && !provided {
 			return selectionPlan{kind: "skip"}
 		}
-		hasKeywords := len(keywords) > 0 || len(anyKeywords) > 0 || len(excluded) > 0
-		if hasKeywords {
-			key := "targetKeywords"
-			if perspective == "attacker" {
-				key = "attackerKeywords"
-			}
-			ownRaw, present := context[key]
-			if !present || ownRaw == nil {
-				return selectionPlan{kind: "unsupported", reason: "select-units: the crunched unit's keywords are unavailable for the selector"}
-			}
-			own := getList(context, key)
-			for _, k := range keywords {
-				if !includesKeyword(own, k) {
-					return selectionPlan{kind: "skip"}
-				}
-			}
-			if len(anyKeywords) > 0 {
-				found := false
-				for _, k := range anyKeywords {
-					if includesKeyword(own, k) {
-						found = true
-						break
-					}
-				}
-				if !found {
-					return selectionPlan{kind: "skip"}
-				}
-			}
-			for _, k := range excluded {
-				if includesKeyword(own, k) {
-					return selectionPlan{kind: "skip"}
-				}
+		known := make(map[string]any, len(filter))
+		for k, v := range filter {
+			if k != "within" && k != "visible" && k != "excluding" {
+				known[k] = v
 			}
 		}
-		if filter["not_all_of"] != nil {
-			return selectionPlan{kind: "unsupported", reason: "select-units: not_all_of keyword selectors are not gated by the buff layer"}
+		side := "target"
+		if perspective == "attacker" {
+			side = "attacker"
 		}
-		effect = node["effect"]
+		switch matchesUnitFilter(known, context, side, "friendly") {
+		case false:
+			return selectionPlan{kind: "skip"}
+		case true:
+		default:
+			return selectionPlan{kind: "unsupported", reason: "select-units: candidate identity or state is unavailable"}
+		}
+		effect = retargetSelected(node["effect"], selectedUnit, binding)
 		label = "Selected unit"
 	} else {
 		other := "attacker"
+		gateKey := "attackerFilter"
 		if perspective == "attacker" {
 			other = "defender"
+			gateKey = "targetFilter"
 		}
-		if filter["not_all_of"] != nil {
-			return selectionPlan{kind: "unsupported", reason: "select-units: not_all_of keyword selectors are not gated by the buff layer"}
+		known := make(map[string]any, len(filter))
+		for k, v := range filter {
+			if k != "within" && k != "visible" && k != "excluding" {
+				known[k] = v
+			}
 		}
-		gate, reason := selectedEnemyGate(keywords, excluded, perspective)
-		if reason != "" {
-			return selectionPlan{kind: "unsupported", reason: reason}
-		}
-		applicability = gate
-		effect = retargetSelected(node["effect"], other)
+		applicability = map[string]any{gateKey: known}
+		effect = selectionHolds(retargetSelected(node["effect"], other, binding), other, selectionDesignatedTags(node["effect"], binding), binding)
 		label = "Selected enemy unit"
 	}
 
@@ -149,32 +128,61 @@ func planSelection(node, source map[string]any, perspective string, context map[
 	}
 	return selectionPlan{kind: "lever", effect: effect, applicability: applicability, requires: requires, label: label}
 }
-func bindEachRecipient(effect any, filter map[string]any) any {
-	switch value := effect.(type) {
-	case []any:
-		out := make([]any, len(value))
-		for i, item := range value {
-			out[i] = bindEachRecipient(item, filter)
+
+// bindEachRecipient binds a for-each-unit loop's recipient to its selector filter. Every
+// matching unit receives the effect; no count or player choice is invented. It binds only
+// when every target in the body is the recipient and the selector carries no eligibility;
+// otherwise the loop falls through to the generic walk. Nested selections and loops keep
+// their own recipients. Mirror of TS bindEachRecipient (cruncher/from-dsl-selection.ts).
+func bindEachRecipient(node map[string]any) (any, bool) {
+	selector, _ := getMap(node, "selector")
+	filter, ok := asMap(selector["filter"])
+	if !ok || filter == nil {
+		return nil, false
+	}
+	if _, has := selector["eligibility"]; has {
+		return nil, false
+	}
+	bindAs := getStr(selector, "bind_as")
+	bound, other := false, false
+	var bind func(any) any
+	bind = func(value any) any {
+		if list, ok := value.([]any); ok {
+			out := make([]any, len(list))
+			for i, child := range list {
+				out[i] = bind(child)
+			}
+			return out
 		}
-		return out
-	case map[string]any:
-		out := make(map[string]any, len(value))
-		for key, child := range value {
-			if key == "target" && child == "recipient" {
-				level := getStr(filter, "level")
-				if level == "model" {
-					out[key] = "this-model"
-				} else {
-					out[key] = "this-unit"
+		m, ok := value.(map[string]any)
+		if !ok || m == nil || m["type"] == "select-units" || m["type"] == "for-each-unit" {
+			return value
+		}
+		out := make(map[string]any, len(m))
+		for key, child := range m {
+			recipient := child == "recipient"
+			if bindAs != "" {
+				if ref, ok := child.(map[string]any); ok && getStr(ref, "selection_var") == bindAs {
+					recipient = true
 				}
+			}
+			if key == "target" && recipient {
+				out[key] = filter
 			} else {
-				out[key] = bindEachRecipient(child, filter)
+				out[key] = bind(child)
+			}
+			if key == "target" {
+				bound = bound || recipient
+				other = other || !recipient
 			}
 		}
 		return out
-	default:
-		return effect
 	}
+	effect := bind(node["effect"])
+	if !bound || other {
+		return nil, false
+	}
+	return effect, true
 }
 
 func matchesEachRecipient(filter map[string]any, context map[string]any, perspective string) (bool, string) {
@@ -233,43 +241,29 @@ func matchesEachRecipient(filter map[string]any, context map[string]any, perspec
 	return true, ""
 }
 
-// selectedEnemyGate is the keyword gate an enemy selector puts on the selected
-// unit, or a reason the buff layer cannot express it.
-func selectedEnemyGate(keywords, excluded []string, perspective string) (map[string]any, string) {
-	out := map[string]any{}
-	if len(keywords) > 0 {
-		if len(keywords) > 1 {
-			return nil, "select-units: more than one required keyword on the selected enemy unit is not gated by the buff layer"
-		}
-		if perspective == "attacker" {
-			out["requiresTargetKeyword"] = keywords[0]
-		} else {
-			out["requiresAttackerKeyword"] = keywords[0]
-		}
+// namesSelection reports whether a unit-ref names the selection's unit:
+// "selected-unit", or {selection_var: binding} when the selector binds a name
+// (binding is "" when it does not).
+func namesSelection(value any, binding string) bool {
+	if value == selectedUnit {
+		return true
 	}
-	if len(excluded) > 0 {
-		if perspective != "attacker" {
-			return nil, "select-units: excluded keywords on the attacking unit are not gated by the buff layer"
-		}
-		list := make([]any, len(excluded))
-		for i, k := range excluded {
-			list[i] = k
-		}
-		out["excludedTargetKeywords"] = list
+	ref, ok := value.(map[string]any)
+	if !ok || binding == "" {
+		return false
 	}
-	if len(out) == 0 {
-		return nil, ""
-	}
-	return out, ""
+	name, ok := ref["selection_var"].(string)
+	return ok && name == binding
 }
 
 // referencesSelectedUnit reports whether the effect names the selected unit as a
-// target anywhere, outside a nested selection.
-func referencesSelectedUnit(node any) bool {
+// target, or as the unit a target is a member of, anywhere outside a nested
+// selection.
+func referencesSelectedUnit(node any, binding string) bool {
 	switch n := node.(type) {
 	case []any:
 		for _, child := range n {
-			if referencesSelectedUnit(child) {
+			if referencesSelectedUnit(child, binding) {
 				return true
 			}
 		}
@@ -278,11 +272,14 @@ func referencesSelectedUnit(node any) bool {
 		if n["type"] == "select-units" {
 			return false
 		}
-		if n["target"] == selectedUnit {
+		if namesSelection(n["target"], binding) {
+			return true
+		}
+		if target, ok := n["target"].(map[string]any); ok && namesSelection(target["member_of"], binding) {
 			return true
 		}
 		for k, v := range n {
-			if k != "target" && referencesSelectedUnit(v) {
+			if k != "target" && referencesSelectedUnit(v, binding) {
 				return true
 			}
 		}
@@ -290,14 +287,15 @@ func referencesSelectedUnit(node any) bool {
 	return false
 }
 
-// retargetSelected copies the effect with each selected-unit target replaced,
-// leaving nested selections alone.
-func retargetSelected(node any, target string) any {
+// retargetSelected copies the effect with each target (or member_of) naming the
+// selected unit replaced, leaving nested selections alone. A member_of read from
+// the selected unit's own side names "this-unit".
+func retargetSelected(node any, target, binding string) any {
 	switch n := node.(type) {
 	case []any:
 		out := make([]any, len(n))
 		for i, child := range n {
-			out[i] = retargetSelected(child, target)
+			out[i] = retargetSelected(child, target, binding)
 		}
 		return out
 	case map[string]any:
@@ -306,10 +304,13 @@ func retargetSelected(node any, target string) any {
 		}
 		out := make(map[string]any, len(n))
 		for k, v := range n {
-			if k == "target" && v == selectedUnit {
+			switch {
+			case k == "member_of" && namesSelection(v, binding) && target == selectedUnit:
+				out[k] = "this-unit"
+			case (k == "target" || k == "member_of") && namesSelection(v, binding):
 				out[k] = target
-			} else {
-				out[k] = retargetSelected(v, target)
+			default:
+				out[k] = retargetSelected(v, target, binding)
 			}
 		}
 		return out
@@ -347,6 +348,22 @@ func excludesAbilityUnit(raw any) bool {
 	return false
 }
 
+// isZeroNumber reports whether a decoded JSON value is the number 0.
+func isZeroNumber(value any) bool {
+	switch n := value.(type) {
+	case float64:
+		return n == 0
+	case int:
+		return n == 0
+	case int64:
+		return n == 0
+	case json.Number:
+		f, err := n.Float64()
+		return err == nil && f == 0
+	}
+	return false
+}
+
 // selectorKeywordList returns raw as a list of non-empty strings; ok is false otherwise.
 func selectorKeywordList(raw any) ([]string, bool) {
 	list, ok := raw.([]any)
@@ -374,6 +391,79 @@ func includesKeyword(keywords []any, keyword string) bool {
 	return false
 }
 
+// isSelectionCandidate reports whether a select-units node is planned as a
+// selection in any context: a friendly or enemy unit selection whose effect
+// reaches the selected unit.
+func isSelectionCandidate(node map[string]any) bool {
+	selector, ok := node["selector"].(map[string]any)
+	if !ok {
+		return false
+	}
+	filter, ok := selector["filter"].(map[string]any)
+	if !ok || (filter["owner"] != "friendly" && filter["owner"] != "enemy") {
+		return false
+	}
+	if filter["level"] == "model" || filter["model_names"] != nil {
+		return false
+	}
+	binding, _ := selector["bind_as"].(string)
+	return referencesSelectedUnit(node["effect"], binding)
+}
+
+// selectionText is a node's JSON text (object keys sorted), which identifies
+// a selection.
+func selectionText(node any) string {
+	b, err := json.Marshal(node)
+	if err != nil {
+		return ""
+	}
+	return string(b)
+}
+
+// selectionOrder lists the selections of an effect in document order (an
+// object's keys sorted), each as its JSON text. A selection's lever id is
+// numbered by its place here, so it does not depend on which branches the
+// context prunes; two identical selections share a place.
+func selectionOrder(effect any) []string {
+	var order []string
+	var visit func(node any)
+	visit = func(node any) {
+		switch v := node.(type) {
+		case []any:
+			for _, child := range v {
+				visit(child)
+			}
+		case map[string]any:
+			if v["type"] == "select-units" && isSelectionCandidate(v) {
+				text := selectionText(v)
+				if !slices.Contains(order, text) {
+					order = append(order, text)
+				}
+			}
+			// Keys in sorted order, so every port numbers the same way.
+			keys := make([]string, 0, len(v))
+			for key := range v {
+				keys = append(keys, key)
+			}
+			sort.Strings(keys)
+			for _, key := range keys {
+				visit(v[key])
+			}
+		}
+	}
+	visit(effect)
+	return order
+}
+
+// selectionLeverID is a selection lever's id: <ability>#selected for the
+// effect's first selection, and <ability>#selected-<n> for its nth.
+func selectionLeverID(abilityID string, node map[string]any, order []string) string {
+	if place := slices.Index(order, selectionText(node)); place > 0 {
+		return abilityID + "#selected-" + strconv.Itoa(place+1)
+	}
+	return abilityID + "#selected"
+}
+
 // translateSelection offers a planned unit selection as one lever, gated on the
 // selected unit's keywords, with the selection (and any roll) in requires.
 func translateSelection(plan selectionPlan, node, source map[string]any, opts dslOpts, out *effectTranslation) {
@@ -384,7 +474,7 @@ func translateSelection(plan selectionPlan, node, source map[string]any, opts ds
 		out.unsupported = append(out.unsupported, unsup(plan.reason, node))
 		return
 	}
-	offerLever(plan.effect, source, opts, out, leverSpec{id: opts.abilityID + "#selected", label: plan.label, requires: plan.requires, applicability: plan.applicability})
+	offerLever(plan.effect, source, opts, out, leverSpec{id: selectionLeverID(opts.abilityID, node, opts.selections), label: plan.label, requires: plan.requires, applicability: plan.applicability})
 }
 
 // leverSpec names the lever offerLever builds.
@@ -406,7 +496,17 @@ func offerLever(effect any, source map[string]any, opts dslOpts, out *effectTran
 		if lever.applicability == nil {
 			return b
 		}
-		return applyApplicability(b, lever.applicability)
+		// A nested enemy selection names its own unit on that side of the
+		// attack, so its filter, not this lever's, gates its buffs; this
+		// lever's selection stays in requires.
+		outer := cloneMap(lever.applicability)
+		own, _ := asMap(b["applicableWhen"])
+		for _, key := range []string{"targetFilter", "attackerFilter"} {
+			if own != nil && own[key] != nil {
+				delete(outer, key)
+			}
+		}
+		return applyApplicability(b, outer)
 	}
 	out.unsupported = append(out.unsupported, sub.unsupported...)
 	for _, nestedAny := range sub.activatable {

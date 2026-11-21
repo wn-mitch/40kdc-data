@@ -41,6 +41,10 @@ pub struct EngineContext {
     /// ability it is: "your turn" for a defensive ability is the opponent of the attacker.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_turn: Option<bool>,
+    /// The attack's target is visible to the attacking model. Drives a unit-filter's
+    /// `visible: {to: "attacker"}` on the attack's target; `None` leaves it unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub target_visible: Option<bool>,
     /// Each unit against its Starting Strength. Drives `strength`; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_strength: Option<UnitStrength>,
@@ -300,6 +304,7 @@ impl EngineContext {
             recipient_snapshots: Vec::new(),
             battle_round: None,
             attacker_turn: None,
+            target_visible: None,
             attacker_strength: None,
             target_strength: None,
             attacker_wounds: None,

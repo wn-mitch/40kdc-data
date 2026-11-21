@@ -1,4 +1,5 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
+import { foldName } from "./families/vocabulary.js";
 import { loadWeaponCatalog, type WeaponCatalog, type WeaponRecord } from "./weapon-catalog.js";
 
 /**
@@ -18,11 +19,6 @@ const SINGLE_NAME_LEAVES = new Set(["weapon-property-scope", "roll-modifier"]);
 const SET_LEAVES = new Set(["characteristic-set", "characteristic-modifier"]);
 /** Words a named-weapon span may hold besides the names and their weapon noun. */
 const CONNECTIVES = new Set(["and", "or", "the", "a", "an"]);
-
-/** Fold for name comparison: NFKC, lowercase, every dash to "-", curly apostrophes straight, spaces collapsed. */
-export function foldName(text: string): string {
-  return text.normalize("NFKC").toLowerCase().replace(/[‐‑‒–—―]/gu, "-").replace(/[‘’]/gu, "'").replace(/\s+/gu, " ").trim();
-}
 
 const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
 

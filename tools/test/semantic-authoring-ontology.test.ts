@@ -6,7 +6,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { hashJson } from "../src/canonical-hash.js";
-import { REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, REVIEWED_FAMILY_REGISTRY } from "../src/semantic-authoring/contracts.js";
 import { getWorkbenchRevision, initializeWorkbench } from "../src/semantic-authoring/db.js";
 import { getFamilyCandidate, getOntology, judgeCandidate, mapCandidate, setCandidateState } from "../src/semantic-authoring/ontology.js";
 import { backfillFamilyCandidates } from "../src/semantic-authoring/ontology-store.js";
@@ -113,8 +113,10 @@ describe("Semantic authoring provisional family ontology", () => {
       const counter = judgeCandidate(db, id, { evidence_id: b!.effective.evidence_id, verdict: "counterexample", explanation: "Different lifetime.", reviewer: REVIEWER, expected_revision: getWorkbenchRevision(db) });
       expect(getFamilyCandidate(db, id).current).toMatchObject({ supports: 1, counterexample: 1, suggested: 0 });
 
+      // A family the registry does not list ("token-gain") has no current version; 1 stands in for it.
+      const version = (familyId: string) => (REVIEWED_FAMILY_REGISTRY.some((family) => family.id === familyId) ? currentFamilyVersion(familyId) : 1);
       const body = (proposalId: number, familyId = "resource-action") => ({
-        family_id: familyId, family_version: 1, reviewer: REVIEWER, expected_revision: getWorkbenchRevision(db),
+        family_id: familyId, family_version: version(familyId), reviewer: REVIEWER, expected_revision: getWorkbenchRevision(db),
         occurrences: [{ proposal_id: proposalId, parameters: { resource: { source: "glimmer token" }, operation: "gain", amount: 1 } }],
       });
       expect(() => mapCandidate(db, id, body(b!.proposal_id!))).toThrow(/no current human "supports"/u);
@@ -131,7 +133,7 @@ describe("Semantic authoring provisional family ontology", () => {
       expect(db.prepare("SELECT status FROM proposals WHERE id = ?").get(a!.proposal_id)).toEqual({ status: "pending" });
       expect(db.prepare("SELECT count(*) AS total FROM gaps WHERE status = 'open'").get()).toEqual({ total: openGaps });
       expect(db.prepare("SELECT count(*) AS total FROM annotations").get()).toEqual({ total: 0 });
-      expect(getFamilyCandidate(db, id)).toMatchObject({ state: "mapped", mapped_family: { id: "resource-action", version: 1 } });
+      expect(getFamilyCandidate(db, id)).toMatchObject({ state: "mapped", mapped_family: { id: "resource-action", version: currentFamilyVersion("resource-action") } });
       expect(() => judgeCandidate(db, id, { evidence_id: a!.effective.evidence_id, verdict: "insufficient", explanation: "x", reviewer: REVIEWER, expected_revision: getWorkbenchRevision(db) })).not.toThrow();
       expect(() => undoBatch(db, mapped.batch_id, { reviewer: REVIEWER })).not.toThrow();
       expect(db.prepare("SELECT status FROM proposals WHERE id = ?").get(mapped.proposals[0])).toEqual({ status: "rejected" });

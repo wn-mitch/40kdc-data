@@ -40,11 +40,11 @@ describe("rule and turn-start vocabulary", () => {
   it("renders at-or-below half strength apart from strictly below half", () => {
     const below = { type: "strength", parameters: { subject: "this-unit", below: "half" } };
     const atOrBelow = { type: "strength", parameters: { subject: "this-unit", below: "half", at_or_below: true } };
-    expect(describeCondition(below)).toBe("the unit is below half strength");
-    expect(describeCondition(atOrBelow)).toBe("the unit is at or below half strength");
-    expect(describeCondition({ operator: "not", operands: [atOrBelow] })).toBe("the unit is not at or below half strength");
+    expect(describeCondition(below)).toBe("this unit is below Half-strength");
+    expect(describeCondition(atOrBelow)).toBe("this unit is at or below Half-strength");
+    expect(describeCondition({ operator: "not", operands: [atOrBelow] })).toBe("this unit is not at or below Half-strength");
     expect(render({ type: "conditional", condition: atOrBelow, effect: { type: "no-effect" } })).toContain(
-      "While the unit is at or below half strength",
+      "While this unit is at or below Half-strength",
     );
   });
 });
@@ -52,7 +52,7 @@ describe("rule and turn-start vocabulary", () => {
 describe("ignore-modifiers", () => {
   it("ignores modifiers to characteristics", () => {
     expect(render({ type: "ignore-modifiers", target: "this-unit", modifier: { what: "characteristics" } })).toBe(
-      "The unit ignores any modifiers to its characteristics.",
+      "This unit ignores any modifiers to its characteristics.",
     );
   });
 
@@ -65,7 +65,7 @@ describe("ignore-modifiers", () => {
   it("keeps the worsening-only restriction on rolls", () => {
     expect(
       render({ type: "ignore-modifiers", target: "this-unit", modifier: { what: "rolls", rolls: ["hit", "wound"], only: "worsening" } }),
-    ).toBe("The unit ignores any negative modifiers to its Hit and Wound rolls.");
+    ).toBe("This unit ignores any negative modifiers to its Hit and Wound rolls.");
   });
 });
 
@@ -77,7 +77,7 @@ describe("cost-modifier (Stratagems)", () => {
         target: { owner: "enemy", within: { range: { inches: 12 } } },
         modifier: { of: "stratagem", operation: "increase", amount: 1, applies_to: "targeting-this-unit" },
       }),
-    ).toBe('Stratagems that target enemy units within 12" cost 1CP more.');
+    ).toBe('Stratagems that target enemy units within 12" cost 1 CP more.');
   });
 
   it("sets a named Stratagem used by the unit to a fixed cost (set)", () => {
@@ -87,7 +87,7 @@ describe("cost-modifier (Stratagems)", () => {
         target: "this-unit",
         modifier: { of: "stratagem", id: "command-re-roll", operation: "set", amount: 0, applies_to: "used-by-this-unit" },
       }),
-    ).toBe("The Command Re Roll Stratagem used by the unit costs 0CP.");
+    ).toBe("The Command Re Roll Stratagem used by this unit costs 0 CP.");
   });
 });
 
@@ -105,7 +105,7 @@ describe("targeting", () => {
   it("any attack, attacker within range", () => {
     expect(
       render({ type: "targeting", target: { owner: "enemy" }, modifier: { may: "cannot-target", target: "this-unit", range: { inches: 18 } } }),
-    ).toBe('Enemy units cannot target the unit unless the attacking unit is within 18".');
+    ).toBe('Enemy units cannot target this unit unless the attacking unit is within 18".');
   });
 
   it("a model-level attacker filter reads 'the attacking model', with plural agreement", () => {
@@ -116,7 +116,7 @@ describe("targeting", () => {
         target: { owner: "enemy", level: "model" },
         modifier: { may: "cannot-target", target: "this-unit", kind: "shoot", range: { inches: 18 } },
       }),
-    ).toBe('Enemy models cannot target the unit with ranged attacks unless the attacking model is within 18".');
+    ).toBe('Enemy models cannot target this unit with ranged attacks unless the attacking model is within 18".');
   });
 
   it("forbids enemy Stratagems targeting the unit", () => {
@@ -143,7 +143,7 @@ describe("leaf English defects found by the corpus sweep", () => {
         target: { owner: "friendly", all_of: ["OFFICER"] },
         modifier: { ability: "voice-of-command-astra-militarum", aspect: "recipients", operation: "add", recipients: { all_of: ["SQUADRON"] } },
       }),
-    ).toBe("All friendly OFFICER units' Voice of Command ability can also affect all SQUADRON units.");
+    ).toBe("Friendly OFFICER units' Voice of Command ability can also affect SQUADRON units.");
   });
 
   it("does not repeat a range the target filter already states", () => {
@@ -155,8 +155,8 @@ describe("leaf English defects found by the corpus sweep", () => {
   it("names whose roll a re-roll is when it is not the ability's own unit", () => {
     expect(
       render({ type: "re-roll", target: { owner: "friendly", within: { range: { inches: 6 } } }, modifier: { roll: "hit", subset: "ones" } }),
-    ).toBe('You can re-roll a Hit roll of 1 for attacks made by friendly units within 6".');
-    expect(render({ type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } })).toBe("You can re-roll a Hit roll of 1.");
+    ).toBe('You can re-roll Hit rolls of 1 for attacks made by friendly units within 6".');
+    expect(render({ type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } })).toBe("You can re-roll Hit rolls of 1.");
   });
 
   it("'cannot' clauses drop the universal 'all'", () => {
@@ -168,9 +168,9 @@ describe("leaf English defects found by the corpus sweep", () => {
   it("not(not(X)) reads as X, and same-unit against this unit reads 'this unit'", () => {
     const same = { type: "same-unit", parameters: { as: "this-unit" } };
     expect(describeCondition({ operator: "not", operands: [{ operator: "not", operands: [same] }] })).toBe(
-      "the unit is the same unit as this unit",
+      "this unit is the same unit as this unit",
     );
-    expect(describeCondition({ operator: "not", operands: [same] })).toBe("the unit is not the same unit as this unit");
+    expect(describeCondition({ operator: "not", operands: [same] })).toBe("this unit is not the same unit as this unit");
   });
 
   it("an enemy unit's move is a reaction window with a lead word and article", () => {
@@ -186,9 +186,9 @@ describe("leaf English defects found by the corpus sweep", () => {
       modifier: { act: "fight", gate: { dice: "D6", threshold: 4, comparison: "gte" }, eligibility: { type: "happened", parameters: { event: "selected", filter: { to: "fight" }, window: "phase" } } },
     };
     const text = describeAbility({ effect, scope: { duration: "phase" }, trigger: { event: "model-destroyed", object: "this-unit" } } as never);
-    expect(text).toMatch(/^When a model in the unit is destroyed, until the end of the phase, if the unit has fought this phase, roll one D6\./);
+    expect(text).toMatch(/^When a model in this unit is destroyed, until the end of the phase, if this unit has fought this phase, roll one D6\./);
     expect(text.match(/is destroyed/g)).toHaveLength(1);
-    expect(render(effect as never)).toMatch(/^Each time a model in this unit is destroyed, if the unit has fought this phase, roll one D6\./);
+    expect(render(effect as never)).toMatch(/^Each time a model in this unit is destroyed, if this unit has fought this phase, roll one D6\./);
   });
 
   it("a pool gain names the resource, singular or plural by amount, not the pool", () => {
@@ -206,15 +206,15 @@ describe("selected-to-move triggers", () => {
     describeTrigger({ event: "selected", filter: { to: "move", move_types, ...extra } } as Parameters<typeof describeTrigger>[0]);
 
   it("names the move the unit is selected to make", () => {
-    expect(selected(["normal"])).toBe("when the unit is selected to make a Normal move");
-    expect(selected(["advance", "fall-back"])).toBe("when the unit is selected to make an Advance or Fall Back move");
-    expect(selected(["normal", "advance", "fall-back"])).toBe("when the unit is selected to make a Normal, Advance or Fall Back move");
-    expect(selected([])).toBe("when the unit is selected to make a move");
+    expect(selected(["normal"])).toBe("when this unit is selected to make a Normal move");
+    expect(selected(["advance", "fall-back"])).toBe("when this unit is selected to make an Advance or Fall Back move");
+    expect(selected(["normal", "advance", "fall-back"])).toBe("when this unit is selected to make a Normal, Advance or Fall Back move");
+    expect(selected([])).toBe("when this unit is selected to make a move");
   });
 
   it("keeps the named mode after the move", () => {
     expect(selected(["disembark"], { mode: "tactical" })).toBe(
-      "when the unit is selected to make a Disembark move using the Tactical Disembarkation rules",
+      "when this unit is selected to make a Disembark move using the Tactical Disembarkation rules",
     );
   });
 });
@@ -249,7 +249,7 @@ describe("triggers on an aura's recipient", () => {
     expect(describeAbility({ effect: conditional as Effect, scope: { duration: "permanent" }, trigger: failsTest } as Parameters<typeof describeAbility>[0]))
       .toMatch(/^When an enemy unit wholly within 6" of this unit fails a Battle-shock test/);
     expect(render({ type: "ability-part", trigger: failsTest, effect: aura() } as Effect)).toContain(
-      "When an enemy unit within 6\" of this unit fails a Battle-shock test:",
+      "When an enemy unit within 6\" of this unit fails a Battle-shock test,",
     );
   });
 });
@@ -263,14 +263,14 @@ describe("negated alternatives of an or", () => {
   it("does not lift one alternative's not over the whole or", () => {
     const first = gate({ operator: "or", operands: [{ operator: "not", operands: [glory] }, fight] });
     expect(first).not.toMatch(/^Unless/);
-    expect(first).toMatch(/^If you do not have 2\+ glory points or during the Fight phase, /);
+    expect(first).toMatch(/^If you do not have 2 or more glory points or during the Fight phase, /);
     expect(gate({ operator: "or", operands: [fight, { operator: "not", operands: [glory] }] })).toMatch(
-      /^During the Fight phase or if you do not have 2\+ glory points, /,
+      /^During the Fight phase or if you do not have 2 or more glory points, /,
     );
   });
 
   it("keeps Unless for a not that covers the whole condition", () => {
-    expect(gate({ operator: "not", operands: [glory] })).toMatch(/^Unless you have 2\+ glory points, /);
+    expect(gate({ operator: "not", operands: [glory] })).toMatch(/^Unless you have 2 or more glory points, /);
   });
 });
 
@@ -282,18 +282,18 @@ describe("Unless over a compound condition", () => {
 
   it("reads the negated alternatives as one predicate with no lead word of their own", () => {
     expect(gate({ operator: "not", operands: [{ operator: "or", operands: [has("WRAITHLORD"), has("WRAITHKNIGHT")] }] })).toMatch(
-      /^Unless the unit has the WRAITHLORD keyword or the unit has the WRAITHKNIGHT keyword, /,
+      /^Unless this unit has the WRAITHLORD keyword or this unit has the WRAITHKNIGHT keyword, /,
     );
   });
 
   it("keeps a negated conjunction under the one Unless", () => {
     const text = gate({ operator: "not", operands: [{ operator: "and", operands: [has("INFANTRY"), fight] }] });
-    expect(text).toMatch(/^Unless the unit has the INFANTRY keyword and during the Fight phase, /);
+    expect(text).toMatch(/^Unless this unit has the INFANTRY keyword and during the Fight phase, /);
   });
 
   it("reads a negation of negations in its positive form", () => {
     const notAll = { operator: "not", operands: [{ operator: "and", operands: [{ operator: "not", operands: [has("CHAOS")] }, { operator: "not", operands: [has("IMPERIUM")] }] }] };
-    expect(gate(notAll)).toMatch(/^If the unit has the CHAOS keyword or if the unit has the IMPERIUM keyword, /);
+    expect(gate(notAll)).toMatch(/^If this unit has the CHAOS keyword or if this unit has the IMPERIUM keyword, /);
   });
 });
 
@@ -305,24 +305,24 @@ describe("a condition on each unit an effect reaches", () => {
 
   it("names the unit with the effect's filter and refers back to it as that unit", () => {
     expect(render({ type: "conditional", condition: within("this-unit"), effect: oc({ owner: "enemy" }) } as Effect))
-      .toBe("While an enemy unit is within 3\" of the unit, worsen that unit's Objective Control characteristic by 1.");
+      .toBe("While an enemy unit is within 3\" of this unit, worsen that unit's Objective Control characteristic by 1.");
   });
 
   it("says model for a model-level filter, and keeps later mentions as that model", () => {
     const both = { operator: "and", operands: [within("this-unit"), { type: "matches", parameters: { subject: "recipient", filter: { state: "battle-shocked" } } }] };
     expect(render({ type: "conditional", condition: both, effect: oc({ owner: "enemy", level: "model" }) } as Effect))
-      .toBe("While an enemy model is within 3\" of the unit, while that model is Battle-shocked, worsen that model's Objective Control characteristic by 1.");
+      .toBe("While an enemy model is within 3\" of this unit and that model is Battle-shocked, worsen that model's Objective Control characteristic by 1.");
   });
 
   it("reads the same inside a sequence", () => {
     const gated = { type: "conditional", condition: within("this-unit"), effect: oc({ owner: "enemy", all_of: ["VEHICLE"] }) };
     expect(render({ type: "sequence", steps: [gated, { type: "stat-modifier", target: "this-unit", modifier: { stat: "OC", operation: "improve", value: 1 } }] } as Effect))
-      .toContain("While an enemy VEHICLE unit is within 3\" of the unit, worsen that unit's Objective Control characteristic by 1.");
+      .toContain("While an enemy VEHICLE unit is within 3\" of this unit, worsen that unit's Objective Control characteristic by 1.");
   });
 
   it("leaves a condition on the ability's own unit as it was", () => {
     const own = { type: "matches", parameters: { subject: "this-unit", filter: { within: { of: "this-model", range: { inches: 3 } } } } };
     expect(render({ type: "conditional", condition: own, effect: oc({ owner: "enemy" }) } as Effect))
-      .toBe("While the unit is within 3\" of this model, worsen all enemy units' Objective Control characteristic by 1.");
+      .toBe("While this unit is within 3\" of this model, worsen enemy units' Objective Control characteristic by 1.");
   });
 });

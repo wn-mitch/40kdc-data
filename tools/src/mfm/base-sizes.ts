@@ -10,9 +10,11 @@
  *   - a labelled per-model list (`Sword Brother: 40mm\nInitiates: 32mm`) — each
  *     label is resolved onto a composition model by name (see
  *     {@link baseSizeLabelMatches}) and only that model's base is reconciled;
- *   - everything else (`32mm, 40mm`, `Hull`, `Large Flying Base`, `Unique`,
- *     `None`, null) — no dimensions to attribute: a bare list's order does not
- *     correspond to repo model order, so it is reported, never guessed.
+ *   - a bare list (`28.5mm, 32mm, 40mm`) — sorted by size, so it attributes
+ *     nothing, but it rules out unlisted sizes: authored bases that contradict
+ *     it (an unlisted size, or a listed size no model has) are marked draft;
+ *   - everything else (`Hull`, `Large Flying Base`, `Unique`, `None`, null) —
+ *     no dimensions to attribute, so it is reported, never guessed.
  *
  * Reconcile precedence per value:
  *   - no authored value                                   → FILL
@@ -32,6 +34,7 @@
  */
 import * as fs from "fs";
 import * as path from "path";
+import { fileURLToPath } from "node:url";
 import { MfmDump } from "./loader.js";
 import { CORE_DIR, readJsonArray } from "./repo-files.js";
 import { forEachDirDatasheet, withinEditDistance1 } from "./wargear.js";
@@ -91,9 +94,94 @@ export function parseNominalOval(raw: string | null | undefined): BaseSize | nul
   return dims ? { shape: "oval", width: dims[0], length: dims[1] } : null;
 }
 
-/** Every base the dump can express as millimetres: a clean round/oval, else a nominal oval. */
+/**
+ * Bare single-number labels that name an oval, not a round base. GW makes no 75mm or 120mm round
+ * base; the dump prints these only on Deffkoptas (75x42 oval) and the Ork flyers (120x92, the size
+ * the same-chassis Wazbom Blastajet prints in full).
+ */
+const GW_BARE_OVALS: Record<string, readonly [number, number]> = {
+  "75": [75, 42],
+  "120": [120, 92],
+};
+
+/** Resolve a bare oval shorthand ("75mm", "120mm"); null for any other label. */
+export function parseBareOval(raw: string | null | undefined): BaseSize | null {
+  if (raw == null) return null;
+  const m = String(raw).trim().match(/^(\d+)\s*mm$/i);
+  const dims = m ? GW_BARE_OVALS[m[1]] : undefined;
+  return dims ? { shape: "oval", width: dims[0], length: dims[1] } : null;
+}
+
+/** Every base the dump can express as millimetres: a bare oval shorthand, a clean round/oval, else a nominal oval. */
 export function parseDumpBaseSize(raw: string | null | undefined): BaseSize | null {
-  return parseBaseSize(raw) ?? parseNominalOval(raw);
+  return parseBareOval(raw) ?? parseBaseSize(raw) ?? parseNominalOval(raw);
+}
+
+/**
+ * A bare list's sizes ("28.5mm, 32mm, 40mm"): one line, comma-separated, every item a size. The
+ * dump sorts the list by size, not by model, so it says which sizes the unit's models use but not
+ * which model uses which. Null for anything else.
+ */
+export function parseBareBaseSizeList(raw: string | null | undefined): BaseSize[] | null {
+  if (raw == null) return null;
+  const text = String(raw).trim();
+  if (/[:\n]/.test(text) || !text.includes(",")) return null;
+  const sizes = text.split(",").map((item) => parseDumpBaseSize(item.trim()));
+  return sizes.every((size): size is BaseSize => size !== null) ? sizes : null;
+}
+
+/** A reviewed attribution of a bare list's sizes to a unit's models (bare-list-bases.json). */
+export interface BareListAttribution {
+  /** The dump label the attribution was reviewed against, verbatim. */
+  list: string;
+  /** The unit's representative (bulk model) base. */
+  unit: string;
+  /** Every composition model's base, by model name. */
+  models: Record<string, string>;
+}
+
+/** Reviewed attributions by `<dir>/<unit>`. */
+export const BARE_LIST_ATTRIBUTIONS: Readonly<Record<string, BareListAttribution>> = (() => {
+  const file = path.join(path.dirname(fileURLToPath(import.meta.url)), "bare-list-bases.json");
+  const { $comment: _comment, ...entries } = JSON.parse(fs.readFileSync(file, "utf8")) as Record<string, unknown>;
+  return entries as Record<string, BareListAttribution>;
+})();
+
+/**
+ * Why a reviewed attribution does not hold for the dump label and the unit's models, or null when it
+ * does: the label must be the one reviewed, every model must be attributed (and nothing else), and
+ * the attributed sizes must be exactly the label's sizes.
+ */
+export function bareListAttributionProblem(attribution: BareListAttribution, raw: string, modelNames: readonly string[]): string | null {
+  if (raw.trim() !== attribution.list) return `dump now prints ${JSON.stringify(raw.trim())}, reviewed against ${JSON.stringify(attribution.list)}`;
+  const sizes = parseBareBaseSizeList(raw);
+  if (!sizes) return "dump label is not a bare list";
+  const missing = modelNames.filter((name) => !(name in attribution.models));
+  if (missing.length) return `no base for ${missing.join(", ")}`;
+  const extra = Object.keys(attribution.models).filter((name) => !modelNames.includes(name));
+  if (extra.length) return `no composition model named ${extra.join(", ")}`;
+  const bases = [...Object.values(attribution.models), attribution.unit].map((text) => parseDumpBaseSize(text));
+  if (bases.some((base) => base === null)) return "an attributed base does not parse";
+  const modelBases = bases.slice(0, -1) as BaseSize[];
+  if (!bareListConsistent(modelBases, sizes)) return "attributed sizes are not exactly the listed sizes";
+  if (!listed(bases.at(-1)!, sizes)) return "the unit base is not a listed size";
+  return null;
+}
+
+/** Whether an authored base is one of a bare list's sizes (within the app's rounding slack). */
+const listed = (base: BaseSize, sizes: readonly BaseSize[]): boolean =>
+  sizes.some((size) => baseSizeEqual(base, size) || baseSizesWithinRounding(base, size));
+
+/**
+ * Whether a unit's authored model bases agree with a bare list: every authored base is a listed
+ * size, and, once every model has a base, every listed size is on some model. Models without a base
+ * are not evidence either way.
+ */
+export function bareListConsistent(bases: readonly (BaseSize | null | undefined)[], sizes: readonly BaseSize[]): boolean {
+  const authored = bases.filter((base): base is BaseSize => base != null);
+  if (!authored.every((base) => listed(base, sizes))) return false;
+  if (authored.length < bases.length) return true;
+  return sizes.every((size) => authored.some((base) => listed(base, [size])));
 }
 
 export interface LabelledBase {
@@ -281,6 +369,14 @@ export interface BaseSizeReport {
   labelConflicts: { dir: string; unit: string; model: string; candidates: string[] }[];
   representativeUnresolved: { dir: string; unit: string; authored: string; labelled: string[] }[];
   unresolved: { dir: string; unit: string; form: BaseSizeForm; raw: string | null }[];
+  /** Authored bases a bare list contradicts, marked draft (the list cannot say which model is which). */
+  listDrafted: BaseSizeChange[];
+  /** Bare-list units whose bases a reviewed attribution supplied. */
+  listAttributed: string[];
+  /** Reviewed attributions that no longer hold, and why (the unit falls back to the draft check). */
+  attributionRefused: { dir: string; unit: string; reason: string }[];
+  /** Reviewed attributions for a unit no bare-list datasheet reaches. */
+  attributionUnused: string[];
   staged: StagedWrite[];
 }
 
@@ -304,6 +400,10 @@ export function runBaseSizes(dump: MfmDump): BaseSizeReport {
     labelConflicts: [],
     representativeUnresolved: [],
     unresolved: [],
+    listDrafted: [],
+    listAttributed: [],
+    attributionRefused: [],
+    attributionUnused: [],
     staged: [],
   };
 
@@ -315,6 +415,7 @@ export function runBaseSizes(dump: MfmDump): BaseSizeReport {
       m.set(unitId, (ds.localisations?.en as { baseSize?: string } | undefined)?.baseSize ?? null);
   });
 
+  const attributionsReached = new Set<string>();
   for (const [dir, rawByUnit] of rawByDir) {
     const upath = path.join(CORE_DIR, dir, "units.json");
     if (!fs.existsSync(upath)) continue;
@@ -386,6 +487,40 @@ export function runBaseSizes(dump: MfmDump): BaseSizeReport {
         continue;
       }
 
+      // A bare list cannot attribute a size to a model, but it rules out bases it does not list. When the
+      // authored bases contradict it, no value can be trusted to be the right model's: mark them draft.
+      const sizes = parseBareBaseSizeList(raw);
+      if (sizes) {
+        const key = `${dir}/${unit}`;
+        const attribution = BARE_LIST_ATTRIBUTIONS[key];
+        if (attribution) {
+          attributionsReached.add(key);
+          const problem = bareListAttributionProblem(attribution, String(raw), models.map((m) => m.name));
+          if (problem === null) {
+            for (const m of models) {
+              if (applySlot(m, parseDumpBaseSize(attribution.models[m.name])!, MODEL_BASE_ANCHORS, unit, m.name)) compsDirty = true;
+            }
+            if (applySlot(u, parseDumpBaseSize(attribution.unit)!, UNIT_BASE_ANCHORS, unit, undefined)) unitsDirty = true;
+            report.listAttributed.push(key);
+            continue;
+          }
+          report.attributionRefused.push({ dir, unit, reason: problem });
+        }
+        const consistent = bareListConsistent(models.map((m) => m.base_size_mm), sizes);
+        const draftSlot = (obj: { base_size_mm?: BaseSize | null }, model: string | undefined): void => {
+          const cur = obj.base_size_mm;
+          if (!cur || cur.draft) return;
+          cur.draft = true;
+          report.listDrafted.push(model === undefined ? { dir, unit, from: fmt(cur), to: "draft" } : { dir, unit, model, from: fmt(cur), to: "draft" });
+          if (model === undefined) unitsDirty = true;
+          else compsDirty = true;
+        };
+        if (!consistent) for (const m of models) draftSlot(m, m.name);
+        if (!consistent || (u.base_size_mm != null && !listed(u.base_size_mm, sizes))) draftSlot(u, undefined);
+        report.unresolved.push({ dir, unit, form: "list", raw: String(raw).trim() });
+        continue;
+      }
+
       const labelled = parseLabelledBaseSizes(raw);
       if (!labelled) {
         const text = (raw ?? "").trim();
@@ -450,6 +585,7 @@ export function runBaseSizes(dump: MfmDump): BaseSizeReport {
     if (unitsDirty) report.staged.push({ path: upath, value: units });
     if (compsDirty && fs.existsSync(cpath)) report.staged.push({ path: cpath, value: comps });
   }
+  report.attributionUnused = Object.keys(BARE_LIST_ATTRIBUTIONS).filter((key) => !attributionsReached.has(key)).sort();
   return report;
 }
 
@@ -460,8 +596,9 @@ export function buildBaseSizeReport(report: BaseSizeReport, write: boolean): str
   L.push("Reconciles `base_size_mm` on units and unit-composition models from the dump's datasheet");
   L.push("baseSize label. A single clean round/oval is authoritative at both levels (a value within");
   L.push("1 mm on the same shape is kept — the GW app rounds oval dimensions). Labelled per-model");
-  L.push("strings are mapped onto composition models by name; bare lists, categories, and null");
-  L.push("strings are reported, never guessed. A parsed dump value carries no `draft` flag.");
+  L.push("strings are mapped onto composition models by name. A bare list attributes nothing, but");
+  L.push("authored bases it contradicts are marked draft. Categories and null strings are reported,");
+  L.push("never guessed. A parsed dump value carries no `draft` flag.");
   L.push("");
   L.push("| Metric | Count |");
   L.push("|---|--:|");
@@ -475,6 +612,9 @@ export function buildBaseSizeReport(report: BaseSizeReport, write: boolean): str
   L.push(`| Conflicting labels | ${report.labelConflicts.length} |`);
   L.push(`| Representative unresolved | ${report.representativeUnresolved.length} |`);
   L.push(`| Unresolved (list/category/null) | ${report.unresolved.length} |`);
+  L.push(`| Drafted (contradicts a bare list) | ${report.listDrafted.length} |`);
+  L.push(`| Attributed bare lists (reviewed) | ${report.listAttributed.length} |`);
+  L.push(`| Attributions refused / unused | ${report.attributionRefused.length} / ${report.attributionUnused.length} |`);
   L.push("");
 
   const section = (title: string, lines: string[]): void => {
@@ -506,6 +646,18 @@ export function buildBaseSizeReport(report: BaseSizeReport, write: boolean): str
     report.representativeUnresolved.map(
       (r) => `- ${r.dir}/${r.unit}: authored ${r.authored}, labelled ${r.labelled.join(", ") || "none"}`,
     ),
+  );
+  section(
+    "Attributions refused (reviewed attribution no longer holds — re-review bare-list-bases.json)",
+    report.attributionRefused.map((r) => `- ${r.dir}/${r.unit}: ${r.reason}`),
+  );
+  section(
+    "Attributions unused (no bare-list datasheet reaches the unit)",
+    report.attributionUnused.map((key) => `- ${key}`),
+  );
+  section(
+    "Drafted (authored bases a bare list contradicts — which model is which is unknown)",
+    report.listDrafted.map((c) => `- ${c.dir}/${at(c)}: ${c.from}`),
   );
   section(
     "Unresolved datasheets (not attributed)",

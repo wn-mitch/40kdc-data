@@ -374,6 +374,31 @@
       "consumers": [],
       "reason": "REJECTED source: see /phases — stratagem_phase disagrees with the card whenRules too often to write; authored phases win, prose parse is review-only."
     },
+    "/secondary_effect_extra_cp": {
+      "provenance": "direct",
+      "coverage": "implemented",
+      "sources": [
+        "data.stratagem.secondaryEffectAdditionalCPCost"
+      ],
+      "joins": [],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/stratagems.ts#buildStratCanon",
+          "operation": "Carry a positive integer secondaryEffectAdditionalCPCost; null or zero means the Stratagem has no paid secondary effect."
+        }
+      ],
+      "filters": [
+        "Only rows whose derived repository id matches an existing stratagem record are applied."
+      ],
+      "precedence": [
+        "The dump value replaces the authored one; a dump row without a surcharge removes the field."
+      ],
+      "consumers": [
+        "tools/src/mfm/stratagems.ts#buildStratCanon",
+        "tools/src/mfm/stratagems.ts#runStratagems"
+      ],
+      "reason": "cp_cost is the main effect's cost; the secondary effect's extra CP is its own first-class dump column."
+    },
     "/player_turn": {
       "provenance": "direct",
       "coverage": "implemented",
@@ -1016,13 +1041,6 @@
       "reason": "Alternate-effect text on 24 localized rows (2 stratagems); record-prose.ts can read it from the dump.",
       "classification": "prose",
       "spread": "1292 rows, 4659 values (4635 null/absent): string, 24 distinct"
-    },
-    {
-      "source": "data.stratagem.secondaryEffectAdditionalCPCost",
-      "candidate_pointer": "/cp_cost",
-      "reason": "1 extra CP on the 2 stratagems with an alternate effect; cp_cost holds one cost; stratagems.ts should lift it into its own field.",
-      "classification": "needs-consumer",
-      "spread": "1292 rows, 1292 values (1290 null/absent): number 1×2"
     },
     {
       "source": "data.stratagem.secondaryEffectIsMutuallyExclusive",

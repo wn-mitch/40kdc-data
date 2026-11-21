@@ -533,28 +533,15 @@
         "operator": "and",
         "operands": [
           {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "phase-is",
-                "parameters": {
-                  "phase": "shooting"
-                }
-              },
-              {
-                "type": "player-turn-is",
-                "parameters": {
-                  "turn": "your-turn"
-                }
-              }
-            ]
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
           },
           {
-            "type": "matches",
+            "type": "player-turn-is",
             "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
+              "turn": "your-turn"
             }
           }
         ]
@@ -1772,24 +1759,13 @@
     "source_digest": "09136a2ba1d01fd21bd6e339bd1d32f13fccfab2235cf0d0627601420c8e4f9d",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -2865,28 +2841,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-model",
-              "filter": {
-                "all_of": [
-                  "PSYKER"
-                ]
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-model",
+          "filter": {
+            "all_of": [
+              "PSYKER"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "select-units",
@@ -2986,7 +2949,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "genestealer-cults",
     "trigger": {
       "event": "phase-started",
@@ -6038,6 +6000,7 @@
     "unit_ids": [
       "claw-of-ascension-achilles-ridgerunner",
       "claw-of-ascension-atalan-jackals",
+      "claw-of-ascension-hybrid-metamorphs",
       "shanus-daskovian"
     ],
     "faction_id": "genestealer-cults",
@@ -8901,5 +8864,27 @@
     },
     "behavior": "passive",
     "source_digest": "14eb94a96f3190530bcde8e7838e661e7c34041697553d87d72d6ef6f8f2eea2"
+  },
+  {
+    "ability_id": "brood-claim-genestealer-cults",
+    "name": "Brood Claim",
+    "authored_by": "40kdc-community",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "stub": true,
+    "unit_ids": [
+      "claw-of-ascension-hybrid-metamorphs"
+    ],
+    "faction_id": "genestealer-cults",
+    "detachment_id": null,
+    "ability_type": "unit",
+    "effect": {
+      "type": "no-effect"
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

@@ -80,7 +80,7 @@ describe("a destruction resolved after emergency disembarks (compile-emergency-d
   it("folds the disembark into the destruction's timing", () => {
     const mechanics = mechanicsOf([WRECKED, DISEMBARK, ROLL, SIX, ...EACH, WOUNDS]);
     expect(mechanics.trigger).toEqual({ event: "model-destroyed", object: "this-model", filter: { timing: "after-emergency-disembark" } });
-    expect(describeAbility({ id: "sample", name: "Sample", ...mechanics })).toContain("When this model is destroyed, after the units embarked within it have made their emergency disembark moves:");
+    expect(describeAbility({ id: "sample", name: "Sample", ...mechanics })).toContain("When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6:");
   });
 
   it("leaves a disembark moment joined by more than a comma", () => {

@@ -6,8 +6,8 @@
 import { CompileError } from "./compile-error.js";
 import { attackOwner, closed, type CompileLeaf, effect, type EffectContext, models, type TargetOf } from "./compile-fragments.js";
 import { weaponScope } from "./compile-weapon-effects.js";
-import { WEAPON_CHARACTERISTICS } from "./effect-families.js";
-import { ARMY_MODELS } from "./families/characteristics.js";
+import { WEAPON_CHARACTERISTICS } from "./families/vocabulary.js";
+import { ARMY_MODELS } from "./families/vocabulary.js";
 
 /** The models from your army a change reaches (subject army-models), narrowed by its model keywords. */
 function armyModels(leaf: CompileLeaf): Record<string, unknown> {
@@ -24,6 +24,17 @@ function floorOf(leaf: CompileLeaf, stat: string): unknown {
   return own ?? (leaf.parameters.minimum !== undefined ? closed(leaf, "minimum") : undefined);
 }
 
+/**
+ * The DSL operation for a change to AP. The rules count a bonus to AP ("+1 AP", "add 1 to the
+ * Armour Penetration characteristic") as an improvement, and a leaf's amount is always positive.
+ * The DSL stores AP negative and reads `add`/`subtract` as a signed delta on that number, so an
+ * additive leaf lowers to the directional `improve`/`worsen` the cruncher reads as more or less
+ * piercing.
+ */
+function apOperation(operation: unknown): unknown {
+  return operation === "add" ? "improve" : operation === "subtract" ? "worsen" : operation;
+}
+
 /** The effect for a characteristic family, or undefined when the family is not one of them. */
 export function characteristicEffect(leaf: CompileLeaf, context: EffectContext, target: TargetOf): Node | undefined {
   switch (leaf.family_id) {
@@ -36,12 +47,12 @@ export function characteristicEffect(leaf: CompileLeaf, context: EffectContext, 
       const subject = leaf.parameters.subject;
       const characteristic = closed(leaf, "characteristic");
       const weaponType = leaf.parameters.weapon_type;
-      if (leaf.family_version >= 3 && subject === undefined) throw new CompileError("Characteristic setter needs a reviewed recipient.");
-      if (leaf.family_version >= 3 && (WEAPON_CHARACTERISTICS as readonly string[]).includes(String(characteristic)) && weaponType === undefined) {
+      if (subject === undefined) throw new CompileError("Characteristic setter needs a reviewed recipient.");
+      if ((WEAPON_CHARACTERISTICS as readonly string[]).includes(String(characteristic)) && weaponType === undefined) {
         throw new CompileError("A weapon characteristic setter needs a reviewed weapon scope.");
       }
       // The attack being made belongs to whoever attacks, as for characteristic-modifier below.
-      const owner = subject === "attack" && leaf.family_version >= 7 ? attackOwner(context) : models(leaf, target(subject));
+      const owner = subject === "attack" ? attackOwner(context) : models(leaf, target(subject));
       // AP is printed negative ("an Armour Penetration characteristic of -2"); the DSL stores its magnitude.
       const value = closed(leaf, "value");
       return {
@@ -55,9 +66,6 @@ export function characteristicEffect(leaf: CompileLeaf, context: EffectContext, 
       // An additive change needs its amount: a change left without one is not lowered as a change of nothing.
       if (leaf.parameters.value === undefined && leaf.parameters.operation !== "halve") {
         throw new CompileError("Stat adjustment needs an amount; a change with no amount needs a characteristic amount leaf after its recipient.");
-      }
-      if (leaf.family_version < 2) {
-        return { type: "stat-modifier", target: target(leaf.parameters.subject), modifier: { stat: closed(leaf, "characteristic"), operation: closed(leaf, "operation"), value: closed(leaf, "value") } };
       }
       if (leaf.parameters.subject === undefined) throw new CompileError("Stat adjustment needs a reviewed recipient.");
       if (leaf.parameters.weapon_type === undefined && leaf.parameters.weapon_var === undefined && (leaf.parameters.characteristics as string[]).some((stat) => stat === "Range" || (WEAPON_CHARACTERISTICS as readonly string[]).includes(stat))) {
@@ -96,7 +104,7 @@ export function characteristicEffect(leaf: CompileLeaf, context: EffectContext, 
         return {
           type: "stat-modifier", target: owner,
           modifier: {
-            stat, operation: closed(leaf, "operation"),
+            stat, operation: stat === "AP" ? apOperation(closed(leaf, "operation")) : closed(leaf, "operation"),
             ...(leaf.parameters.value !== undefined ? { value: closed(leaf, "value") } : {}),
             ...weaponScope(scopedLeaf),
             // A floor on this characteristic alone (compile-characteristic-amount.ts bindCharacteristicFloors), else the change's own.

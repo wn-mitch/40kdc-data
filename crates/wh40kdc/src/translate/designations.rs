@@ -16,6 +16,7 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "auspex-scanned",
     "bastion-shield-yp-spent",
     "battle-shock-auto-succeed",
+    "beacon",
     "bio-stimulus-target",
     "blessed",
     "blight-bombardment-target",
@@ -196,6 +197,7 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "the-eternal-dance-target",
     "throne-tyrannicus",
     "titanic-duel-target",
+    "titanic-fire-support-target",
     "transport-support-target",
     "trap",
     "trapped",
@@ -290,6 +292,36 @@ pub fn designation_label(id: &str, plural: bool) -> Option<String> {
         "sabotaged" => (Some("Sabotaged"), None),
         "warded" => (Some("Warded"), None),
         "corrupted" => (Some("Corrupted"), None),
+        "condemned" => (Some("Condemned"), None),
+        "quarry" => (None, Some("Quarry")),
+        "hunted" => (Some("Hunted"), None),
+        "pinned" => (Some("Pinned"), None),
+        "suppressed" => (Some("Suppressed"), None),
+        "secured" => (Some("Secured"), None),
+        "illuminated" => (Some("Illuminated"), None),
+        "identified" => (Some("Identified"), None),
+        "assailed" => (Some("Assailed"), None),
+        "cleansed" => (Some("Cleansed"), None),
+        "consecrated" => (Some("Consecrated"), None),
+        "trapped" => (Some("Trapped"), None),
+        "marked" => (Some("Marked"), None),
+        "trap" => (Some("marked as a Trap"), None),
+        "beacon" => (None, Some("Beacon")),
+        "unmasked" => (Some("Unmasked"), None),
+        "surveilled" => (Some("Surveilled"), None),
+        "triangulated" => (Some("Triangulated"), None),
+        "decoyed" => (Some("Decoyed"), None),
+        "tethered" => (Some("Tethered"), None),
+        "aflame" => (Some("Aflame"), None),
+        "busted" => (Some("Busted"), None),
+        "staggered" => (Some("Staggered"), None),
+        "shocked" => (Some("Shocked"), None),
+        "plundered" => (Some("Plundered"), None),
+        "prosecuted" => (Some("Prosecuted"), None),
+        "analysed" => (Some("Analysed"), None),
+        "entrenched" => (Some("Entrenched"), None),
+        "flame-wreathed" => (Some("Flame-wreathed"), None),
+        "unhideable" => (Some("Unhideable"), None),
         "warlord" => (Some("the Warlord"), None),
         _ => return None,
     };
@@ -349,7 +381,11 @@ mod tests {
             designation_label("riled-up", true).as_deref(),
             Some("riled up")
         );
-        assert_eq!(designation_label("hunted", false), None);
+        assert_eq!(
+            designation_label("hunted", false).as_deref(),
+            Some("Hunted")
+        );
+        assert_eq!(designation_label("marked-prey", false), None);
         // The Warlord is the list-building designation: a definite noun, singular in every form.
         assert!(is_designation_id("warlord") && is_list_building_designation("warlord"));
         assert_eq!(

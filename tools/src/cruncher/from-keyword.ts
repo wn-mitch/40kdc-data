@@ -12,7 +12,7 @@
  *
  * 2. **Id dispatch**, for rules whose catalog `effect` is null because the DSL
  *    has no primitive for them yet — `lethal-hits`, `sustained-hits`,
- *    `devastating-wounds`, `anti`, `melta`, `rapid-fire`, `torrent`, `blast`,
+ *    `devastating-wounds`, `anti`, `melta`, `rapid-fire`, `torrent`, `blast`, `cleave`,
  *    and `ignores-cover`. These are surfaced as `extra-keyword` buffs
  *    so the engine can read them out of `ResolvedModifiers.extraKeywords`
  *    and dispatch its math directly.
@@ -33,6 +33,7 @@ const ENGINE_DISPATCH_KEYWORDS = new Set([
   "rapid-fire",
   "torrent",
   "blast",
+  "cleave",
   "ignores-cover",
 ]);
 
@@ -69,7 +70,6 @@ export function buffsFromKeyword(args: {
     keywordId: args.keywordId,
   };
   if (!keywordAppliesToTarget(args.parameters, args.context)) return [];
-  if (args.keywordId === "blast" && args.parameters?.value === undefined) return [];
 
   if (ENGINE_DISPATCH_KEYWORDS.has(args.keywordId)) {
     const ref: WeaponKeywordRef = {
@@ -201,8 +201,10 @@ function evaluateCondition(
     case "happened": {
       const filter = isObject(parameters.filter) ? parameters.filter : {};
       const types = Array.isArray(filter.move_types) ? filter.move_types : [];
-      if (parameters.event === "move-ended" && types.length === 1 && types[0] === "remain-stationary" && parameters.subject == null)
-        return ctx.attackerStationary === true;
+      if (parameters.event !== "move-ended" || types.length !== 1 || parameters.subject != null) return "unknown";
+      if (types[0] === "remain-stationary") return ctx.attackerStationary === true;
+      // An unset charge flag means the caller could not say whether the unit charged.
+      if (types[0] === "charge") return ctx.attackerCharged === undefined ? "unknown" : ctx.attackerCharged;
       return "unknown";
     }
     case "matches":

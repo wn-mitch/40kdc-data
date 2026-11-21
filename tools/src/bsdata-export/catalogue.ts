@@ -10,7 +10,7 @@ import type { Dataset } from "../data/dataset.js";
 import type { UnitView } from "../data/entities.js";
 import type { Detachment, Enhancement, Unit } from "../generated.js";
 import { BSDATA_IDS, type IdAllocator } from "./ids.js";
-import { itemEntry } from "./items.js";
+import { itemEntry, itemName } from "./items.js";
 import {
   BATTLESCRIBE_VERSION,
   categoryLink,
@@ -26,8 +26,8 @@ import { allyLocks, allyPieces, allyPlans, hiddenInCatalogues, unitKey, type All
 import { minimumConstraints, tagCategories, barModifiers, baseLimits, doublesLimit, keywordGrantModifiers, type RestrictionContext } from "./restrictions.js";
 import { keywordLimitPieces, type KeywordLimitContext, type KeywordLimitPieces } from "./keyword-limits.js";
 import { mandateCategories, supremeCommanderLink, warlordLink, type WarlordContext } from "./warlord.js";
-import { canTake, detachmentContainer, detachmentEntry, enhancementEntry } from "./detachments.js";
-import { buildUnitEntry, homeFactionOf, isEpicHero, keywordCategoryId, type UnitBuildContext } from "./unit.js";
+import { abilityText, canTake, detachmentContainer, detachmentEntry, enhancementEntry, enhancementGroup } from "./detachments.js";
+import { abilityProfiles, buildUnitEntry, homeFactionOf, isEpicHero, itemAbilityIds, keywordCategoryId, offeredItems, type UnitBuildContext } from "./unit.js";
 
 export interface CatalogueContext {
   readonly ids: IdAllocator;
@@ -231,6 +231,50 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       const extra = view ? limits.linksFor(view.raw, String(link.id)) : [];
       return extra.length === 0 ? link : { ...link, categoryLinks: [...((link.categoryLinks as BsNode[] | undefined) ?? []), ...extra] };
     });
+  /**
+   * The wargear entries of a family's items. An item a unit links abilities to (`itemAbilityIds`)
+   * prints them, so each distinct set of abilities (and the armies that remove them) gets an entry
+   * of its own, as BSData has several Storm Shields. The item's plain key, and so its id, stays
+   * with the entry carried without abilities when any unit offers that, else with the set most
+   * units offer (ties to the first set in order).
+   */
+  const itemVariants = (units: readonly UnitView[], isArmyRule: (unit: Unit, abilityId: string) => boolean) => {
+    const abilitiesOf = (unit: Unit, itemId: string) =>
+      itemAbilityIds(unit, itemId)
+        .filter((id) => !isArmyRule(unit, id))
+        .flatMap((id) => {
+          const ability = ctx.dataset.abilities.get(id);
+          if (!ability) return [];
+          const removedIn = [...(locks.abilities.get(`${unitKey(unit)}|${id}`) ?? [])].map((f) => set.catalogueId(f)!).sort();
+          return [{ ability, removedIn }];
+        });
+    const signature = (abilities: ReturnType<typeof abilitiesOf>): string =>
+      abilities.map(({ ability, removedIn }) => (removedIn.length > 0 ? `${ability.id}@${removedIn.join(",")}` : ability.id)).join("+");
+    const counts = new Map<string, Map<string, number>>();
+    for (const view of units) {
+      for (const itemId of offeredItems(view.raw, ctx.dataset, ctx.refs.cost.pts, (id) => itemName(ctx.dataset, view.raw.faction_id, id))) {
+        const item = `${view.raw.faction_id}/${itemId}`;
+        const sig = signature(abilitiesOf(view.raw, itemId));
+        const bySig = counts.get(item) ?? new Map<string, number>();
+        bySig.set(sig, (bySig.get(sig) ?? 0) + 1);
+        counts.set(item, bySig);
+      }
+    }
+    const plainSig = new Map<string, string>();
+    for (const [item, bySig] of counts) {
+      const ranked = [...bySig].sort(([a, n], [b, m]) => (a === "" ? -1 : b === "" ? 1 : m - n || (a < b ? -1 : a > b ? 1 : 0)));
+      plainSig.set(item, ranked[0][0]);
+    }
+    return {
+      of: (unit: Unit, itemId: string) => {
+        const item = `${unit.faction_id}/${itemId}`;
+        const abilities = abilitiesOf(unit, itemId);
+        const sig = signature(abilities);
+        const plain = sig === (plainSig.get(item) ?? "");
+        return { key: plain ? `item:${item}` : `item:${item}|${sig === "" ? "plain" : sig}`, plain, abilities };
+      },
+    };
+  };
   const out: BuiltCatalogue[] = [];
   for (const root of roots) {
     const familyDetachments = set.familyDetachments(root);
@@ -240,6 +284,25 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
     }
     const items = new Map<string, BsNode>();
     const enhancements = set.familyEnhancements(root);
+    const enhancementGroupId = ctx.ids.id(`enhancements:${root}`);
+    // Army rules, defined once in the family root's catalogue and linked from each army's, as BSData does.
+    const armyRuleIds = (factionId: string): string[] => ctx.dataset.factions.get(factionId)?.raw.faction_rule_ids ?? [];
+    const armyRules = new Map<string, BsNode>();
+    for (const factionId of set.familyOf(root)) {
+      for (const ruleId of armyRuleIds(factionId)) {
+        if (armyRules.has(ruleId)) continue;
+        const rule = abilityText(ctx.dataset, factionId, ruleId);
+        if (rule) armyRules.set(ruleId, { name: rule.name, id: ctx.ids.id(`army-rule:${root}/${ruleId}`), description: rule.text, hidden: false });
+      }
+    }
+    const armyRuleLinks = (factionId: string): BsNode[] =>
+      armyRuleIds(factionId).flatMap((ruleId) => {
+        const rule = armyRules.get(ruleId);
+        return rule ? [{ name: rule.name, id: ctx.ids.id(`army-rule-link:${factionId}/${ruleId}`), hidden: false, targetId: rule.id, type: "rule" }] : [];
+      });
+    const units = ctx.dataset.units.byFaction(root);
+    // The same test as `unitCtx.armyRule`: an army rule links from the unit and prints on no entry.
+    const variants = itemVariants(units, (unit, abilityId) => armyRules.has(abilityId) && set.rootOf(unit.faction_id) === root);
     const warlordId = ctx.ids.id(`warlord:${root}`, BSDATA_IDS.factionEntries[root]?.Warlord);
     const warlordCtx: WarlordContext = {
       ids: ctx.ids,
@@ -259,13 +322,15 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       hostCatalogues,
       detachmentEntryId: (d) => set.detachmentEntryId(d, root),
       itemEntry: (unit, itemId) => {
-        const preferred = BSDATA_IDS.weapons[unit.faction_id]?.[itemId];
-        const itemKey = `${unit.faction_id}/${itemId}`;
-        let entry = items.get(itemKey);
+        const variant = variants.of(unit, itemId);
+        let entry = items.get(variant.key);
         if (!entry) {
-          entry = itemEntry(ctx.dataset, ctx.refs, ctx.ids, unit.faction_id, itemId, preferred);
+          // Only the variant that keeps the item's plain key keeps its BSData id.
+          const preferred = variant.plain ? BSDATA_IDS.weapons[unit.faction_id]?.[itemId] : undefined;
+          const profiles = variant.abilities.flatMap(({ ability, removedIn }) => abilityProfiles(ability, ctx.refs, ctx.ids, variant.key, removedIn));
+          entry = itemEntry(ctx.dataset, ctx.refs, ctx.ids, unit.faction_id, itemId, variant.key, preferred, profiles);
           if (!entry) return undefined;
-          items.set(itemKey, entry);
+          items.set(variant.key, entry);
         }
         return { id: entry.id as string, name: entry.name as string };
       },
@@ -282,32 +347,31 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
         }),
         ...barModifiers(restrictionCtx, unit, limitId, (d) => set.rootOf(d.faction_id) === set.rootOf(unit.faction_id)),
       ],
+      armyRule: (unit, abilityId) => {
+        const rule = armyRules.get(abilityId);
+        return rule && set.rootOf(unit.faction_id) === root ? { id: rule.id as string, name: rule.name as string } : undefined;
+      },
       abilityRemovedIn: (unit, abilityId) =>
         [...(locks.abilities.get(`${unitKey(unit)}|${abilityId}`) ?? [])].map((f) => set.catalogueId(f)!).sort(),
       characterOptions: (view: UnitView, entryKey: string) => {
         const warlord = warlordLink(warlordCtx, root, view.raw, entryKey, lockedIn(locks.warlord, view));
         const entryLinks = warlord ? [warlord] : [];
-        const eligible = enhancements.filter(({ enhancement }) => canTake(ctx, view.raw, enhancement));
-        const enhancementLock = hiddenInCatalogues(lockedIn(locks.enhancements, view));
-        const groups =
-          eligible.length === 0
-            ? []
-            : [
-                compact({
-                  name: "Enhancements",
-                  id: ctx.ids.id(`${entryKey}:enhancements`),
-                  hidden: false,
-                  constraints: [constraint({ id: ctx.ids.id(`${entryKey}:enhancements:max`), type: "max", value: 1, field: "selections", scope: "parent" })],
-                  entryLinks: eligible.map(({ enhancement }) =>
-                    entryLink({ name: enhancement.name, id: ctx.ids.id(`${entryKey}:enhancement:${enhancement.id}`), targetId: set.enhancementEntryId(root, enhancement), type: "selectionEntry" }),
-                  ),
-                  modifiers: enhancementLock ? [enhancementLock] : undefined,
-                }),
-              ];
-        return { entryLinks, groups, categoryLinks: supremeCommanderLink(warlordCtx, view.raw, entryKey) };
+        // One link to the family's shared Enhancements group, as BSData's characters have.
+        if (enhancements.some(({ enhancement, detachment }) => canTake(ctx, view.raw, enhancement, detachment))) {
+          const enhancementLock = hiddenInCatalogues(lockedIn(locks.enhancements, view));
+          entryLinks.push(
+            entryLink({
+              name: "Enhancements",
+              id: ctx.ids.id(`${entryKey}:enhancements`),
+              targetId: enhancementGroupId,
+              type: "selectionEntryGroup",
+              modifiers: enhancementLock ? [enhancementLock] : undefined,
+            }),
+          );
+        }
+        return { entryLinks, groups: [], categoryLinks: supremeCommanderLink(warlordCtx, view.raw, entryKey) };
       },
     };
-    const units = ctx.dataset.units.byFaction(root);
     const unitEntries = units.map((view) => {
       const entry = buildUnitEntry(view, unitCtx, BSDATA_IDS.units[root]?.[view.id]);
       if (entry.id !== unitEntryId(view)) throw new Error(`bsdata export: ${view.id} entry id is not its allocated id`);
@@ -318,6 +382,8 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       return units
         .map((view, index) => ({ view, entry: unitEntries[index] }))
         .filter(({ view }) => homeFactionOf(ctx.dataset, view.raw) === factionId)
+        // A unit with no points (Sir Hekhtur, who comes with Canis Rex) isn't taken on its own.
+        .filter(({ view }) => (view.raw.points ?? []).length > 0)
         .map(({ view, entry }) => {
           const ally = existing.get(unitKey(view.raw));
           return entryLink({
@@ -351,15 +417,20 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       constraints: [constraint({ id: ctx.ids.id(`warlord:${root}:max`), type: "max", value: 1, field: "selections", scope: "parent" })],
       costs: [cost("pts", ctx.refs.cost.pts, 0)],
     };
-    const container = detachmentContainer(set, ctx, root, root);
-    const shared = [
-      ...unitEntries,
-      ...[...items.values()],
-      ...familyDetachments.map((d) => detachmentEntry(set, ctx, root, d, tags.links.get(d.id) ?? [])),
-      ...enhancements.map(({ enhancement, detachment }) => enhancementEntry(set, ctx, root, enhancement, detachment)),
-      warlord,
-      container,
-    ];
+    const container = detachmentContainer(
+      ctx,
+      root,
+      familyDetachments.map((d) => detachmentEntry(set, ctx, root, d, tags.links.get(d.id) ?? [])),
+    );
+    const enhancementsGroup = enhancementGroup(
+      ctx,
+      root,
+      enhancements.map(({ enhancement, detachment }) =>
+        enhancementEntry(set, ctx, root, enhancement, detachment, units.filter((view) => canTake(ctx, view.raw, enhancement, detachment)).map(unitEntryId)),
+      ),
+    );
+    if (enhancementsGroup && enhancementsGroup.id !== enhancementGroupId) throw new Error(`bsdata export: ${root} Enhancements group id is not its allocated id`);
+    const shared = [...unitEntries, ...[...items.values()], warlord, ...(container ? [container] : [])];
     const rootAllies = pieces.get(root)!;
     const rootLimits = keywordLimitPieces(limitCtx, root);
     const rootUnitLinks = withLimits(root, rootLimits, [...rootLinksFor(root), ...rootAllies.rootLinks]);
@@ -368,16 +439,18 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
       file: BSDATA_IDS.catalogues[root].file,
       document: catalogueRoot(ctx, root, set, {
         catalogueLinks: sourceLinks(root, []),
+        infoLinks: armyRuleLinks(root),
         categoryEntries: [...set.categoryEntries(root), ...tags.entries, ...mandateCategories(warlordCtx, root), ...rootAllies.categoryEntries, ...rootLimits.categoryEntries],
         entryLinks: [
           ...rootUnitLinks,
-          entryLink({ name: "Detachment", id: ctx.ids.id(`root-link:${root}/detachment`), targetId: container.id as string, type: "selectionEntry" }),
+          ...(container ? [entryLink({ name: "Detachment", id: ctx.ids.id(`root-link:${root}/detachment`), targetId: container.id as string, type: "selectionEntry" })] : []),
         ],
+        sharedRules: [...armyRules.values()],
         sharedSelectionEntries: shared,
+        sharedSelectionEntryGroups: enhancementsGroup ? [enhancementsGroup] : undefined,
       }),
     });
     for (const child of set.familyOf(root).filter((f) => f !== root)) {
-      const childContainer = detachmentContainer(set, ctx, child, root);
       const childAllies = pieces.get(child)!;
       const childLimits = keywordLimitPieces(limitCtx, child);
       // The parent's links are shared by every child army, so they cannot carry a child's caps.
@@ -392,11 +465,10 @@ export function buildCatalogues(ctx: CatalogueContext): BuiltCatalogue[] {
             ...sourceLinks(child, [root]),
           ],
           categoryEntries: [...childAllies.categoryEntries, ...childLimits.categoryEntries],
-          entryLinks: [
-            ...withLimits(child, childLimits, [...rootLinksFor(child), ...childAllies.rootLinks]),
-            entryLink({ name: "Detachment", id: ctx.ids.id(`root-link:${child}/detachment`), targetId: childContainer.id as string, type: "selectionEntry" }),
-          ],
-          sharedSelectionEntries: [childContainer],
+          infoLinks: armyRuleLinks(child),
+          // The Detachment selection comes through the root, whose link imports its root entries.
+          entryLinks: withLimits(child, childLimits, [...rootLinksFor(child), ...childAllies.rootLinks]),
+          sharedSelectionEntries: [],
         }),
       });
     }

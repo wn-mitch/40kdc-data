@@ -1,0 +1,313 @@
+[
+  {
+    "id": "reaver-titan",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "d6c72a3c-73c9-4d94-9542-d4dd5d44502f"
+      }
+    ],
+    "name": "Reaver Titan",
+    "faction_id": "adeptus-titanicus",
+    "profiles": [
+      {
+        "name": "Reaver Titan",
+        "M": 12,
+        "T": 14,
+        "W": 60,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 20
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 2200
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Walker",
+      "Titanic",
+      "Towering",
+      "Imperium",
+      "Reaver Titan",
+      "Frame"
+    ],
+    "faction_keywords": [
+      "Adeptus Titanicus"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "reaver-laser-blaster",
+      "reaver-gatling-blaster",
+      "reaver-power-fist",
+      "reaver-volcano-cannon",
+      "reaver-melta-cannon",
+      "reaver-apocalypse-launcher",
+      "reaver-feet"
+    ],
+    "ability_ids": [
+      "god-machine-adeptus-titanicus",
+      "striding-colossus-adeptus-titanicus",
+      "super-heavy-walker-imperial-knights",
+      {
+        "id": "damaged",
+        "value": 20
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 10
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6+6"
+      }
+    ]
+  },
+  {
+    "id": "warbringer-nemesis-titan",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "f08b3f77-12ad-41a1-b971-eb71181db9f0"
+      }
+    ],
+    "name": "Warbringer Nemesis Titan",
+    "faction_id": "adeptus-titanicus",
+    "profiles": [
+      {
+        "name": "Warbringer Nemesis Titan",
+        "M": 12,
+        "T": 14,
+        "W": 80,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 20
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 2600
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Walker",
+      "Titanic",
+      "Towering",
+      "Imperium",
+      "Warbringer Nemesis Titan",
+      "Frame"
+    ],
+    "faction_keywords": [
+      "Adeptus Titanicus"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "nemesis-quake-cannon",
+      "nemesis-volcano-cannon",
+      "reaver-laser-blaster",
+      "reaver-volcano-cannon",
+      "reaver-gatling-blaster",
+      "reaver-melta-cannon",
+      "anvillus-defence-battery",
+      "ardex-defensor-mauler",
+      "nemesis-feet"
+    ],
+    "ability_ids": [
+      "striding-colossus-adeptus-titanicus",
+      "super-heavy-walker-imperial-knights",
+      "titanic-fire-support-adeptus-titanicus",
+      {
+        "id": "damaged",
+        "value": 26
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 10
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6+6"
+      }
+    ]
+  },
+  {
+    "id": "warhound-titan",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "67366c41-bb5e-4b3a-9a32-b574957924c9"
+      }
+    ],
+    "name": "Warhound Titan",
+    "faction_id": "adeptus-titanicus",
+    "profiles": [
+      {
+        "name": "Warhound Titan",
+        "M": 14,
+        "T": 13,
+        "W": 40,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 16
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 1100
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Walker",
+      "Titanic",
+      "Towering",
+      "Imperium",
+      "Warhound Titan",
+      "Frame"
+    ],
+    "faction_keywords": [
+      "Adeptus Titanicus"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "warhound-vulcan-mega-bolter",
+      "warhound-plasma-blastgun",
+      "warhound-inferno-gun",
+      "warhound-turbo-laser-destructor",
+      "warhound-feet"
+    ],
+    "ability_ids": [
+      "flank-speed-adeptus-titanicus",
+      "super-heavy-walker-imperial-knights",
+      {
+        "id": "damaged",
+        "value": 13
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 8
+      },
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      "striding-colossus-warhound-titan-adeptus-titanicus"
+    ]
+  },
+  {
+    "id": "warlord-titan",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c5472c69-e058-4757-b0a1-2963c05caa3a"
+      }
+    ],
+    "name": "Warlord Titan",
+    "faction_id": "adeptus-titanicus",
+    "profiles": [
+      {
+        "name": "Warlord Titan",
+        "M": 10,
+        "T": 16,
+        "W": 100,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 30
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 3500
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Walker",
+      "Titanic",
+      "Towering",
+      "Imperium",
+      "Warlord Titan",
+      "Frame"
+    ],
+    "faction_keywords": [
+      "Adeptus Titanicus"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "apocalypse-launcher",
+      "laser-blaster",
+      "sunfury-plasma-annihilator",
+      "mori-quake-cannon",
+      "macro-gatling-blaster",
+      "arioch-power-claw",
+      "belicosa-volcano-cannon",
+      "ardex-defensor-lascannon",
+      "ardex-defensor-mauler",
+      "warlord-feet"
+    ],
+    "ability_ids": [
+      "super-heavy-walker-imperial-knights",
+      "wrath-of-the-omnissiah-adeptus-titanicus",
+      {
+        "id": "damaged",
+        "value": 33
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 15
+      },
+      {
+        "id": "deadly-demise",
+        "value": "2D6+6"
+      },
+      "striding-colossus-warlord-titan-adeptus-titanicus"
+    ]
+  }
+]

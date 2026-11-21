@@ -9,11 +9,11 @@ func atOrBelowHalfCondition() map[string]any {
 }
 
 func TestAtOrBelowHalfStrengthRender(t *testing.T) {
-	if got := describeCondition(atOrBelowHalfCondition()); got != "the unit is at or below half strength" {
+	if got := describeCondition(atOrBelowHalfCondition()); got != "this unit is at or below Half-strength" {
 		t.Fatalf("at or below = %q", got)
 	}
 	below := map[string]any{"type": "strength", "parameters": map[string]any{"subject": "this-unit", "below": "half"}}
-	if got := describeCondition(below); got != "the unit is below half strength" {
+	if got := describeCondition(below); got != "this unit is below Half-strength" {
 		t.Fatalf("below = %q", got)
 	}
 }

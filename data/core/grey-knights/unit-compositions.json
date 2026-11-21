@@ -3052,7 +3052,8 @@
         "default_weapon_ids": [
           "storm-bolter-purgation-squad",
           "nemesis-force-weapon-purgation-squad"
-        ]
+        ],
+        "profile_name": "Purgator"
       },
       {
         "name": "Purgator",
@@ -3558,7 +3559,8 @@
         "default_weapon_ids": [
           "storm-bolter-interceptor-squad",
           "nemesis-force-weapon-interceptor-squad"
-        ]
+        ],
+        "profile_name": "Interceptor"
       },
       {
         "name": "Interceptor",
@@ -5045,7 +5047,8 @@
         "default_weapon_ids": [
           "nemesis-force-weapon-brotherhood-terminator-squad",
           "storm-bolter-brotherhood-terminator-squad"
-        ]
+        ],
+        "profile_name": "Terminator"
       }
     ],
     "game_version": {

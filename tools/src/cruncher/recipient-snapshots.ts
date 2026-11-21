@@ -25,6 +25,23 @@ export interface RecipientSnapshot {
 export const RECIPIENT_SNAPSHOT_UNAVAILABLE = "trigger-time recipient snapshot is unavailable; current membership cannot establish historical recipients";
 
 /**
+ * Whether an effect only marks units ("for each Observer unit, select one enemy unit … to be marked as their Spotted
+ * unit"): designations, possibly under selections, loops, gates and sequences. It grants no buff, so a loop over it
+ * needs no trigger-time recipients; the marks it leaves are scenario facts.
+ */
+export function marksOnly(node: unknown): boolean {
+  if (!record(node)) return false;
+  switch (node.type) {
+    case "designate": return true;
+    case "select-units":
+    case "for-each-unit": return marksOnly(node.effect);
+    case "conditional": return marksOnly(node.effect) && (node.on_fail == null || marksOnly(node.on_fail));
+    case "sequence": return Array.isArray(node.steps) && node.steps.length > 0 && node.steps.every(marksOnly);
+    default: return false;
+  }
+}
+
+/**
  * Snapshot comparison ignores object-key order but preserves array order and
  * every supplied field. Callers provide only live event-time evidence and
  * assert activation/equipment; the resolver has no internal history or clock.
@@ -62,6 +79,7 @@ export function resolveRecipientSnapshots(
     if (!record(node)) return node;
     const events = (Array.isArray(event) ? event : [event]).filter(record);
     const historical = events.filter((item) => typeof item.event === "string" && !isAttackStep(item));
+    if (node.type === "for-each-unit" && historical.length > 0 && marksOnly(node)) return { type: "sequence", steps: [] };
     if (node.type === "for-each-unit" && historical.length > 0) {
       const matches = (context.recipientSnapshots ?? []).filter((snapshot) =>
         source.kind === "ability" && sourceId !== undefined && sideId !== undefined &&

@@ -17,13 +17,12 @@
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Feel No Pain" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit has Feel No Pain X+, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Lethal Ichor" typeName="Abilities">
@@ -33,13 +32,13 @@
             </profile>
             <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Nurgle’s Gift (Aura)" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">If your Army Faction is DEATH GUARD, while an enemy unit is within 3", 6", 9" in battle rounds 1, 2, 3 respectively (using the final range in later battle rounds) (to a maximum of 12", extensions included) of one or more friendly DEATH GUARD models, that unit is Afflicted.
--&gt; When declaring Battle Formations, for the rest of the battle: if your Army Faction is DEATH GUARD, select exactly 1 distinct options (Plague): while making ranged attacks, while the attacking unit is an enemy unit that is Afflicted, the target has the Benefit of Cover; while making melee attacks, while the attacking unit is an enemy unit that is Afflicted, enemy units that are Afflicted get -1 to Hit rolls / worsen the Save characteristic of enemy units that are Afflicted by 1 / worsen the Move characteristic of enemy units that are Afflicted by 1; worsen the Leadership characteristic of enemy units that are Afflicted by 1; worsen the Objective Control characteristic of enemy units that are Afflicted by 1 (to a minimum of 1); subtract 1 from the Toughness characteristic of enemy units that are Afflicted.</characteristic>
+When declaring Battle Formations, for the rest of the battle, if your Army Faction is DEATH GUARD, choose one of the following (Plague): while making ranged attacks, while the attacking unit is an enemy unit that is Afflicted, the target has the Benefit of Cover; while making melee attacks, while the attacking unit is an enemy unit that is Afflicted, subtract 1 from the Hit rolls of enemy units that are Afflicted / worsen the Save characteristic of enemy units that are Afflicted by 1 / worsen the Move characteristic of enemy units that are Afflicted by 1; worsen the Leadership characteristic of enemy units that are Afflicted by 1; worsen the Objective Control characteristic of enemy units that are Afflicted by 1, to a minimum of 1; subtract 1 from the Toughness characteristic of enemy units that are Afflicted.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -87,25 +86,24 @@
             </profile>
             <profile name="Fire Support" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll the Wound roll for attacks made by all friendly models.</characteristic>
+                <characteristic name="Description">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll Wound rolls for attacks made by friendly models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Firing Deck" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Nurgle’s Gift (Aura)" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">If your Army Faction is DEATH GUARD, while an enemy unit is within 3", 6", 9" in battle rounds 1, 2, 3 respectively (using the final range in later battle rounds) (to a maximum of 12", extensions included) of one or more friendly DEATH GUARD models, that unit is Afflicted.
--&gt; When declaring Battle Formations, for the rest of the battle: if your Army Faction is DEATH GUARD, select exactly 1 distinct options (Plague): while making ranged attacks, while the attacking unit is an enemy unit that is Afflicted, the target has the Benefit of Cover; while making melee attacks, while the attacking unit is an enemy unit that is Afflicted, enemy units that are Afflicted get -1 to Hit rolls / worsen the Save characteristic of enemy units that are Afflicted by 1 / worsen the Move characteristic of enemy units that are Afflicted by 1; worsen the Leadership characteristic of enemy units that are Afflicted by 1; worsen the Objective Control characteristic of enemy units that are Afflicted by 1 (to a minimum of 1); subtract 1 from the Toughness characteristic of enemy units that are Afflicted.</characteristic>
+When declaring Battle Formations, for the rest of the battle, if your Army Faction is DEATH GUARD, choose one of the following (Plague): while making ranged attacks, while the attacking unit is an enemy unit that is Afflicted, the target has the Benefit of Cover; while making melee attacks, while the attacking unit is an enemy unit that is Afflicted, subtract 1 from the Hit rolls of enemy units that are Afflicted / worsen the Save characteristic of enemy units that are Afflicted by 1 / worsen the Move characteristic of enemy units that are Afflicted by 1; worsen the Leadership characteristic of enemy units that are Afflicted by 1; worsen the Objective Control characteristic of enemy units that are Afflicted by 1, to a minimum of 1; subtract 1 from the Toughness characteristic of enemy units that are Afflicted.</characteristic>
               </characteristics>
             </profile>
           </profiles>

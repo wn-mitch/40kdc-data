@@ -28,13 +28,17 @@ from wh40kdc.translate.condition import (
     unit_filter_phrase,
 )
 from wh40kdc.translate.condition_refs import (
+    _battle_round_ord,
     _state_phrase,
     alternative_filters,
     event_relation_phrase,
+    keyword_alternatives,
     named_use_phrase,
+    place_ref_phrase,
     roll_word,
     unit_ref_phrase,
     used_ability_phrase,
+    with_article,
 )
 
 AbilityTrigger = dict[str, Any]
@@ -91,9 +95,9 @@ def _transport_phrase(ref: Any) -> str:
 
 
 def _actor(ref: Any) -> str:
-    """The actor of a trigger: "the unit", "an enemy unit", "this model"."""
+    """The actor of a trigger: "this unit", "an enemy unit", "a friendly EXORCIST unit"."""
     if ref is None or ref == "this-unit":
-        return "the unit"
+        return "this unit"
     if ref == "this-model":
         return "this model"
     if ref == "model-in-this-unit":
@@ -106,6 +110,8 @@ def _actor(ref: Any) -> str:
     # A moment nested in a triggered effect: the unit that triggered it.
     if ref == "event-subject":
         return "the triggering unit"
+    if ref == "event-subject-model":
+        return "the triggering model"
     if isinstance(ref, (dict, list)):
         f = _obj(ref)
         # The unit an aura reaches, as the effect's aura names it (effect_aura.with_aura_recipient).
@@ -117,56 +123,61 @@ def _actor(ref: Any) -> str:
             return unit_ref_phrase(f)
         if any(key not in _SIMPLE_ACTOR_KEYS for key in f):
             return unit_filter_phrase(f)
-        # Keywords on the actor read as a trailing requirement, as the event names them; states read
-        # as a relative clause ("an enemy unit that is unengaged").
         owner = (
-            "a friendly"
+            "friendly "
             if f.get("owner") == "friendly"
-            else "an enemy"
+            else "enemy "
             if f.get("owner") == "enemy"
-            else "a"
+            else ""
         )
+        noun = "model" if f.get("level") == "model" else "unit"
+        all_ = (
+            f"{' '.join(_str(k) for k in f['all_of'])} "
+            if isinstance(f.get("all_of"), list)
+            else ""
+        )
+        compact = keyword_alternatives(f)
+        any_multi = (
+            f"{_or_list([_str(k) for k in f['any_of']])} "
+            if not all_
+            and compact is None
+            and isinstance(f.get("any_of"), list)
+            and len(f["any_of"]) > 1
+            else ""
+        )
+        s = with_article(
+            f"{owner}{_or_list(compact)} {noun}"
+            if compact is not None
+            else f"{owner}{all_}{any_multi}{noun}"
+        )
+        if isinstance(f.get("any_of_filters"), list) and compact is None:
+            s += f" that is {_or_list([unit_filter_phrase(a) for a in alternative_filters(f)])}"
+        if isinstance(f.get("any_of"), list) and not any_multi:
+            s += f" with the {_or_list([_str(k) for k in f['any_of']])} keyword"
+        if isinstance(f.get("none_of"), list):
+            s += f" (excluding {_or_list([_str(k) for k in f['none_of']])} {noun}s)"
+        if isinstance(f.get("not_all_of"), list):
+            s += f" (excluding {' '.join(_str(k) for k in f['not_all_of'])} {noun}s)"
         states = ([_state_phrase(_str(f["state"]))] if f.get("state") is not None else []) + (
             [_state_phrase(_str(x), True) for x in f["not_states"]]
             if isinstance(f.get("not_states"), list)
             else []
         )
-        clause = f" that is {_and_list(states)}" if states else ""
-        return f"{owner} {'model' if f.get('level') == 'model' else 'unit'}{clause}"
+        if states:
+            s += f" that is {_and_list(states)}"
+        return s
     return dekebab(_str(ref))
 
 
 def _stratagem_target(ref: Any) -> str:
-    """The unit a used Stratagem targets: "the unit" for the holder's own role, else the object
+    """The unit a used Stratagem targets: "this unit" for the holder's own role, else the object
     filter."""
-    return _object_phrase(ref) if isinstance(ref, dict) else "the unit"
+    return _object_phrase(ref) if isinstance(ref, dict) else "this unit"
 
 
 def _actor_keywords(ref: Any) -> str:
-    """Keyword requirements on a filter actor: " (the triggering unit must have A and B)"."""
-    if not isinstance(ref, dict):
-        return ""
-    if any(key not in _SIMPLE_ACTOR_KEYS for key in ref):
-        return ""
-    noun = "model" if ref.get("level") == "model" else "unit"
-    s = ""
-    if isinstance(ref.get("all_of"), list):
-        s += f" (the triggering {noun} must have {_and_list([_str(k) for k in ref['all_of']])})"
-    if isinstance(ref.get("any_of"), list):
-        keywords = [_str(k) for k in ref["any_of"]]
-        s += f" (the triggering {noun} must have {_or_list(keywords)})"
-    # Alternatives: "(the triggering model must be an A model or a B C model)".
-    if isinstance(ref.get("any_of_filters"), list):
-        alts = [unit_filter_phrase(a) for a in alternative_filters(ref)]
-        s += f" (the triggering {noun} must be {_or_list(alts)})"
-    if isinstance(ref.get("none_of"), list):
-        s += f" (the triggering {noun} must not have {_or_list([_str(k) for k in ref['none_of']])})"
-    if isinstance(ref.get("not_all_of"), list):
-        s += (
-            f" (the triggering {noun} must not have all of "
-            f"{_and_list([_str(k) for k in ref['not_all_of']])})"
-        )
-    return s
+    """No-op helper; keyword requirements are now folded directly into `_actor`."""
+    return ""
 
 
 def _object_phrase(ref: Any) -> str:
@@ -435,7 +446,7 @@ def _event_phrase(t: AbilityTrigger) -> str:
             target = "a unit" if obj is None else _object_phrase(obj)
             return f"each time {who} destroys {target}{melee}"
         if obj is None or obj == "this-unit":
-            return f"when the unit is destroyed{melee}"
+            return f"when this unit is destroyed{melee}"
         if isinstance(obj, dict) and obj.get("designated") is not None and len(obj) == 1:
             return "each time your quarry is destroyed"
         return f"{'when' if melee else 'each time'} {_object_phrase(obj)} is destroyed{melee}"
@@ -449,21 +460,21 @@ def _event_phrase(t: AbilityTrigger) -> str:
             after = "after the units embarked within it have made their emergency disembark moves"
             return f"{_event_phrase(rest)}, {after}"
         if f.get("first") is True:
-            return "the first time a model in the unit is destroyed"
-        # A subject names who destroyed the model: "each time the unit destroys an enemy
+            return "the first time a model in this unit is destroyed"
+        # A subject names who destroyed the model: "each time this unit destroys an enemy
         # CHARACTER model".
         if t.get("subject") is not None:
             if obj == "this-model":
                 return f"when this model is destroyed by {who}"
             if obj in ("model-in-this-unit", "this-unit") or obj is None:
-                return f"when a model in the unit is destroyed by {who}"
+                return f"when a model in this unit is destroyed by {who}"
             return f"each time {who} destroys {_object_phrase(obj)}"
         if obj == "this-model":
             return "when this model is destroyed"
         # A model of this unit dying: the object names the model's unit, never the whole
         # unit's destruction.
         if obj in ("model-in-this-unit", "this-unit") or obj is None:
-            return "when a model in the unit is destroyed"
+            return "when a model in this unit is destroyed"
         return f"when {_object_phrase(obj)} is destroyed"
     if event == "used":
         # A rule your opponent used: the subject names only the enemy owner.
@@ -688,6 +699,21 @@ def _destroy_attack_phrase(t: AbilityTrigger, f: dict[str, Any]) -> str:
     return ""
 
 
+def _round_boundary(t: AbilityTrigger) -> str | None:
+    """'At the start of the first battle round': a round boundary narrowed to one battle round."""
+    event = t.get("event")
+    if event not in ("round-started", "round-ended"):
+        return None
+    c = t.get("condition")
+    if not isinstance(c, dict) or _truthy(c.get("operator")) or c.get("type") != "battle-round":
+        return None
+    p = _obj(c.get("parameters"))
+    if p.get("min") is not None and p.get("max") is not None and int(p["min"]) == int(p["max"]):
+        edge = "start" if event == "round-started" else "end"
+        return f"at the {edge} of the {_battle_round_ord(int(p['min']))} battle round"
+    return None
+
+
 def describe_trigger(t: AbilityTrigger) -> str:
     """Reactive trigger -> front-of-sentence lead clause ("an enemy unit ends a move within
     9\\" of this model")."""
@@ -700,9 +726,9 @@ def describe_trigger(t: AbilityTrigger) -> str:
         and not _truthy(t.get("binds_selected_die_variable"))
         and (subject is None or subject == "this-unit")
     )
-    boundary = (_phase_boundary(t) or _turn_boundary(t)) if plain else None
+    boundary = (_phase_boundary(t) or _turn_boundary(t) or _round_boundary(t)) if plain else None
     if boundary:
-        return f"{boundary}, you may use this ability" if _truthy(t.get("optional")) else boundary
+        return f"{boundary}, you can use this ability" if _truthy(t.get("optional")) else boundary
     edge = "start" if event == "phase-started" else "end" if event == "phase-ended" else None
     condition = t.get("condition")
     disembark_shock = event == "phase-ended" and _disembark_battle_shock(condition)
@@ -744,10 +770,14 @@ def describe_trigger(t: AbilityTrigger) -> str:
         s += ", after the attacking unit has resolved its attacks"
     prox = t.get("proximity")
     if isinstance(prox, dict) and prox.get("range") is not None:
-        of = "this model" if prox.get("of") == "this-model" else "this unit"
+        of = (
+            "this unit"
+            if prox.get("of") is None or prox.get("of") == "this-unit"
+            else place_ref_phrase(prox["of"])
+        )
         s += f" within {range_phrase(prox['range'])} of {of}"
     if disembark_shock:
-        s += ", if the unit disembarked from a Transport this turn and is Battle-shocked"
+        s += ", if this unit disembarked from a Transport this turn and is Battle-shocked"
     elif split is not None:
         if edge and not _truthy(split.get("phase")) and _truthy(split.get("owner")):
             s += f" in {split['owner']} turn"
@@ -755,14 +785,8 @@ def describe_trigger(t: AbilityTrigger) -> str:
             s += f" {split['window']}"
         if _truthy(split["rest"]):
             s += f", if {describe_condition(split['rest'])}"
-    if _truthy(t.get("binds_die_variable")):
-        binding = _str(t["binds_die_variable"]).replace("_", "-")
-        s += f" (binding the generated die as {dekebab(binding)})"
-    if _truthy(t.get("binds_selected_die_variable")):
-        binding = _str(t["binds_selected_die_variable"]).replace("_", "-")
-        s += f" (binding one chosen die used in that Act of Faith as {dekebab(binding)})"
     if _truthy(t.get("optional")):
-        s += ", you may use this ability"
+        s += ", you can use this ability"
     return s
 
 

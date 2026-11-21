@@ -1,3 +1,4 @@
+import { allMenuOptions } from "./compile-menu-options.js";
 import type { CompileOptions } from "./compile.js";
 import { exactSpan } from "./contracts.js";
 import { AURA_RECIPIENT, momentNamesUnit } from "./compile-antecedent.js";
@@ -15,6 +16,10 @@ import { prohibitedRollName } from "./compile-roll-prohibition.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import { isAdvanceInPlace, PROHIBITIONS, resolveInstead } from "./compile-part-instead.js";
 import { wrapDelayed } from "./compile-delayed-moment.js";
+import { ATTACK_UNITS } from "./families/targeting-and-permissions.js";
+
+/** The attack units a leaf names directly; any other value was bound from antecedent. */
+const ATTACK_UNIT_VALUES: ReadonlySet<string> = new Set(ATTACK_UNITS);
 
 type Node = Record<string, unknown>;
 
@@ -61,7 +66,9 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
     if (consumedByContainer.has(index)) return;
     if (leaf.role !== "EFFECT") return;
     const { sentence, clause } = places[index]!;
-    const node = containerNodes.has(index) ? containerNodes.get(index)! : attempt(() => {
+    const node = containerNodes.has(index) ? containerNodes.get(index)!
+      // "It has both of the following abilities": every option of the menu before it (compile-menu-options.ts).
+      : leaf.family_id === "menu-options-grant" ? attempt(() => allMenuOptions(list, index, containerNodes)) : attempt(() => {
       // Find the current attack and event frames without copying the preceding leaves.
       let attack: CompileLeaf | undefined;
       let currentMoment: CompileLeaf | undefined;
@@ -92,8 +99,13 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
       // selected unit. An attack on "your unit" printed before the selection is on the bearer's or the target's unit.
       const onSelected = !onObject && attack?.parameters.direction === "targeted" && attack.parameters.unit === "that-unit"
         && list.slice(0, attackAt).some((other) => other.family_id === "select-unit");
+      // "… each time an attack targets one of those units": an attacked unit bound from antecedent (a Stratagem
+      // target reference, or the unit an earlier leaf introduced) gates on the defender being that unit.
+      const attacked = attack?.parameters.direction === "targeted" && !ATTACK_UNIT_VALUES.has(String(attack.parameters.unit))
+        ? attack.parameters.unit : undefined;
       // "… after that enemy unit has shot": the effect waits for that moment (compile-delayed-moment.ts).
       const held = wrapDelayed(leaf, compiled);
+      if (attacked !== undefined) return { type: "conditional", condition: { type: "same-unit", parameters: { subject: "defender", as: attacked } }, effect: held };
       if (onObject || onSelected) return { type: "conditional", condition: { type: "same-unit", parameters: { subject: "defender", as: onObject ? "event-object" : "selected-unit" } }, effect: held };
       return held;
     });

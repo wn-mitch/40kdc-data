@@ -32,24 +32,24 @@ export function rollEffect(leaf: CompileLeaf, context: EffectContext, target: Ta
   };
   switch (leaf.family_id) {
     case "reroll": {
-      // Version 3: a pick of one from several rolls is a choice of one re-roll each.
+      // A pick of one from several rolls is a choice of one re-roll each.
       if (Array.isArray(leaf.parameters.rolls)) {
         if (leaf.parameters.each !== true) return pickOne(leaf, context);
-        // Version 4 `each`: every listed roll can be re-rolled, together.
+        // `each`: every listed roll can be re-rolled, together.
         const { rolls, each: _each, ...rest } = leaf.parameters as { rolls: string[] } & Record<string, unknown>;
         return { type: "sequence", steps: rolls.map((roll) => effect({ ...leaf, parameters: { ...rest, roll } }, context)) };
       }
       const roll = abilityRollOf(leaf) ?? closed(leaf, "roll");
       const subset = closed(leaf, "subset");
       const modifier: Node = subset === "ones" || subset === "ones-and-twos" ? { roll, subset } : subset === "failed" ? { roll, subset: "all-failures" } : { roll, result_scope: "any-result" };
-      // Version 1 leaves have neither field; version 2 adds them, weapon_type defaulting to "all".
+      // count and the weapon scope are optional; weapon_type defaults to "all".
       const count = leaf.parameters.count === undefined ? undefined : closed(leaf, "count");
       if (count !== undefined) modifier.count = count;
       Object.assign(modifier, weaponScope(leaf));
       return { type: "re-roll", target: rollTarget(roll), modifier };
     }
     case "ignore-modifiers": {
-      // Version 2 lists kinds; compileLeaves splits a two-kind leaf first, so only a lone leaf
+      // A list of kinds: compileLeaves splits a two-kind leaf first, so only a lone leaf
       // (a preview) reaches here with both, and it reads as one effect per kind.
       if (Array.isArray(leaf.parameters.what)) {
         const { what: kinds, stats, rolls, except_rolls: except, ...rest } = leaf.parameters as Record<string, unknown> & { what: string[] };
@@ -105,7 +105,7 @@ export function rollEffect(leaf: CompileLeaf, context: EffectContext, target: Ta
       return {
         type: "roll-modifier", target: rollTarget(roll),
         modifier: {
-          // "Halve Advance and Charge rolls" (roll-modifier@11) takes no value.
+          // "Halve Advance and Charge rolls" takes no value.
           roll, operation: closed(leaf, "operation"), ...(leaf.parameters.operation === "halve" ? {} : { value: typeof leaf.parameters.value_var === "string" ? { roll_var: leaf.parameters.value_var } : closed(leaf, "value") }),
           ...(leaf.parameters.cap !== undefined ? { cap: closed(leaf, "cap") } : {}), ...weaponScope(leaf),
         },

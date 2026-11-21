@@ -333,7 +333,8 @@
         "namespace": "mfm",
         "id": "5a59aaf5-dcc9-485b-97a1-b3fc9b62696a"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "lone-hunter-askars-wolfpack-space-wolves",

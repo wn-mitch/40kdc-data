@@ -18,12 +18,14 @@ import re
 from typing import Any
 
 from wh40kdc.translate.condition_equipment import named_equipment_phrase
+from wh40kdc.translate.condition_filter_predicate import filter_predicate
 from wh40kdc.translate.condition_history import _describe_happened, _destroyed_count
 from wh40kdc.translate.condition_refs import (
+    EVENT_OBJECT_MODEL,
+    EVENT_SUBJECT_MODEL,
     Condition,
     P,
     _and_list,
-    _article,
     _battle_round_ord,
     _cap_word,
     _designation_phrase,
@@ -48,6 +50,8 @@ from wh40kdc.translate.condition_refs import (
     title_case,
     unit_filter_phrase,
     unit_ref_phrase,
+    with_article,
+    within_clause,
 )
 from wh40kdc.translate.effect_words import dice_case, dice_table_result_label, weapon_noun
 
@@ -179,14 +183,14 @@ def _describe_matches(p: P, negated: bool) -> str:
             target = (
                 ""
                 if within.get("range") in ("weapon", "half-weapon")
-                else f" of {place_ref_phrase(within.get('of'))}"
+                else place_ref_phrase(within.get("of"))
             )
-            wholly = "wholly " if within.get("wholly") is True else ""
-            return (
-                f"{who} is {no}{wholly}within "
-                f"{range_phrase(within.get('range'))}{target}"
-            )
-    return f"{who} is {no}{unit_filter_phrase(f)}"
+            return f"{who} is {no}{within_clause(within, target).lstrip()}"
+    # A trigger's model reads as a model ("the triggering model is within Engagement Range of ...").
+    if p.get("subject") in (EVENT_SUBJECT_MODEL, EVENT_OBJECT_MODEL):
+        phrase = filter_predicate({**f, "level": "model"}, "model", negated)
+        return f"{who} is {no}{phrase}"
+    return f"{who} is {no}{filter_predicate(f, 'unit', negated)}"
 
 
 _ELIGIBLE_TO: dict[str, str] = {
@@ -239,8 +243,9 @@ def negate_phrase(phrase: str) -> str:
     for frm, to in _NEGATED_OPENERS:
         if phrase.startswith(frm):
             return to + phrase[len(frm) :]
-    if phrase.startswith("1+ "):
-        return f"no {phrase[3:]}"
+    if re.match(r"^(?:1\+|one or more) ", phrase):
+        rest = re.sub(r"^(?:1\+|one or more) ", "", phrase, count=1)
+        return f"no {rest}"
     m = _NEGATE_SPLIT.match(phrase)
     if m:
         who, verb, rest = m.group(1), m.group(2), m.group(3)
@@ -300,7 +305,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         whose = (
             "your"
             if turn == "your-turn"
-            else "the opponent's"
+            else "your opponent's"
             if turn == "opponent-turn"
             else "either player's"
         )
@@ -362,25 +367,21 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         all_of = w.get("all_of")
         kw = f"{' '.join(_str(k) for k in all_of)} " if isinstance(all_of, list) else ""
         if p.get("role") == "leading":
-            leader = "the model" if p.get("subject") in (None, "this-model") else _subject_of(p)
-            return f"{neg}{leader} is leading a {kw}unit"
+            leader = "this model" if p.get("subject") in (None, "this-model") else _subject_of(p)
+            return f"{neg}{leader} is leading {with_article(f'{kw}unit')}"
         if p.get("role") == "led":
-            return f"{neg}{_subject_of(p, 'this unit')} is being led by {_article(kw)} {kw}model"
+            who = _subject_of(p, "this unit")
+            return f"{neg}{who} is being led by {with_article(f'{kw}model')}"
         if kw:
-            return f"{neg}{_subject_of(p)} is attached to {_article(kw)} {kw}unit"
+            return f"{neg}{_subject_of(p)} is attached to {with_article(f'{kw}unit')}"
         return f"{neg}{_subject_of(p)} is an attached unit"
     if ctype == "strength":
-        below = "half strength" if p.get("below") == "half" else "starting strength"
+        below = "Half-strength" if p.get("below") == "half" else "Starting Strength"
         rel = "at or below" if p.get("at_or_below") is True else "below"
         return f"{neg}{_subject_of(p)} is {rel} {below}"
     if ctype == "model-count":
         kw = f"{_str(p['keyword'])} " if p.get("keyword") is not None else ""
-        if p.get("min") is not None and p.get("max") is not None:
-            rng = f"{_str(p['min'])}-{_str(p['max'])}"
-        elif p.get("min") is not None:
-            rng = f"{_str(p['min'])}+"
-        else:
-            rng = f"at most {_str(p.get('max'))}"
+        rng = count_phrase({"min": p.get("min"), "max": p.get("max")})
         return f"{neg}{_subject_of(p)} contains {rng} {kw}models"
     if ctype == "wounds":
         who = (
@@ -442,7 +443,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             source = _obj(p.get("source_ability")).get("ability_id")
             return (
                 f"{neg}the candidate was eligible for the {dekebab(_str(source))} ability "
-                "at the end of the opponent's previous turn"
+                "at the end of your opponent's previous turn"
             )
         to = _str(p.get("to"))
         return f"{_subject_of(p)} is {nt}eligible to {_ELIGIBLE_TO.get(to, dekebab(to))}"
@@ -482,6 +483,12 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         target = (
             "" if range_v in ("half-weapon", "weapon") else f" of {place_ref_phrase(of)}"
         )
+        zero = isinstance(range_v, dict) and range_v.get("inches") == 0 and of is not None
+        dist = (
+            f"in contact with {place_ref_phrase(of)}"
+            if zero
+            else f"{wholly}within {range_phrase(range_v)}{target}"
+        )
         at = {
             "phase-start": " at the start of the phase",
             "move-start": " at the start of that move",
@@ -490,7 +497,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             verb = "were" if plural else "was"
         else:
             verb = "are" if plural else "is"
-        return f"{who} {verb} {nt}{wholly}within {range_phrase(range_v)}{target}{at}"
+        return f"{who} {verb} {nt}{dist}{at}"
     if ctype == "in-region":
         r = _obj(p.get("region"))
         wholly = "wholly " if p.get("wholly") is True else ""
@@ -528,7 +535,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             clauses.append(f"{who} {count_phrase(p.get('count'))} {objective}")
         compare = p.get("compare")
         if isinstance(compare, dict):
-            other = "you" if compare.get("owner") == "friendly" else "the opponent"
+            other = "you" if compare.get("owner") == "friendly" else "your opponent"
             holder = "your opponent holds" if p.get("by") == "enemy" else "you hold"
             if compare.get("comparison") == "gt":
                 clauses.append(f"{holder} more {objective} than {other}")
@@ -539,7 +546,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
                 compared = (
                     "you control"
                     if compare.get("owner") == "friendly"
-                    else "the opponent controls"
+                    else "your opponent controls"
                 )
                 clauses.append(
                     f"the number of {objective} {controller} is "
@@ -619,17 +626,8 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
     if ctype == "designated":
         s_v = p.get("subject")
         if isinstance(s_v, dict) and _truthy(s_v.get("objective")):
-            minimum, maximum = _count_bounds(p)
-            if minimum is not None and maximum is not None and minimum == maximum:
-                count = f"exactly {_str(minimum)}"
-            elif minimum is not None and maximum is not None:
-                count = f"{_str(minimum)}-{_str(maximum)}"
-            elif minimum is not None:
-                count = f"{_str(minimum)}+"
-            else:
-                count = f"at most {_str(maximum)}"
             return (
-                f"{neg}{count} {_objective_phrase(s_v['objective'], True)} "
+                f"{neg}{count_phrase(p.get('count'))} {_objective_phrase(s_v['objective'], True)} "
                 f"tagged {dekebab(_str(p.get('tag')))}"
             )
         if p.get("count") is not None:
@@ -654,16 +652,9 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             source = _obj(p.get("source_ability")).get("ability_id")
             return (
                 f"{neg}the {dekebab(_str(source))} ability had unused selection capacity "
-                "at the end of the opponent's previous turn"
+                "at the end of your opponent's previous turn"
             )
-        bounds = _obj(p.get("count"))
-        minimum = bounds.get("min")
-        maximum = bounds.get("max")
-        amount = (
-            f"{_str(minimum)}+"
-            if minimum is not None
-            else f"at most {_str(maximum)}"
-        )
+        amount = count_phrase(p.get("count"))
         # A pool is the player's ("If you have 3 or more Pact points").
         return f"you have {amount} {dekebab(_str(p.get('pool')))}"
     if ctype == "roll-total":
@@ -681,7 +672,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             suffix = "" if lo == 1 else "s"
             s = f"exactly {_str(lo)} {side_s}operation marker{suffix} on the battlefield"
         else:
-            s = f"{_str(lo if lo is not None else 1)}+ {side_s}operation markers on the battlefield"
+            s = f"{count_phrase(p.get('count'))} {side_s}operation markers on the battlefield"
         if p.get("within") is not None:
             within = p["within"]
             within_obj: dict[str, Any] = within if isinstance(within, dict) else {}
@@ -699,17 +690,14 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
             s += " and no enemy units in that terrain area"
         return f"{neg}{s}"
     if ctype == "engagement-fronts":
-        fronts = _count_bounds(p)[0]
-        return f"{neg}you are engaged on {_str(fronts if fronts is not None else 1)}+ fronts"
+        return f"{neg}you are engaged on {count_phrase(p.get('count'))} fronts"
     if ctype == "destroyed-while-on-objective":
         obj = (
             f"a {dekebab(_str(p['objective_role']))} objective"
             if _truthy(p.get("objective_role"))
             else "an objective"
         )
-        destroyed_count = _count_bounds(p)[0]
-        count = _str(destroyed_count if destroyed_count is not None else 1)
-        s = f"{neg}{count}+ enemy units destroyed"
+        s = f"{neg}{count_phrase(p.get('count'))} enemy units destroyed"
         if _truthy(p.get("destroyer_on_objective")):
             s += f" by a unit on {obj}"
         if _truthy(p.get("victim_on_objective")):
@@ -722,9 +710,7 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         terrain = (
             f"{dekebab(_str(p['tag']))} terrain" if p.get("tag") is not None else "a terrain area"
         )
-        terrain_destroyed_count = _count_bounds(p)[0]
-        count = _str(terrain_destroyed_count if terrain_destroyed_count is not None else 1)
-        return f"{neg}{count}+ enemy units destroyed {where} {terrain}"
+        return f"{neg}{count_phrase(p.get('count'))} enemy units destroyed {where} {terrain}"
     if ctype == "army-state":
         owner = "your" if p.get("owner") == "friendly" else "your opponent's"
         return f"{owner} army is {'not ' if negated else ''}honoured"

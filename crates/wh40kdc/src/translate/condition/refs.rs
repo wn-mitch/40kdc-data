@@ -8,14 +8,40 @@ use crate::translate::dekebab;
 use crate::translate::designations::designation_label;
 use crate::translate::effect::title_case;
 
+/// Phonetic indefinite article ("a unit", "an ASPECT WARRIORS unit", "an Advance", "an ability").
+pub(crate) fn with_article(phrase: &str) -> String {
+    let s = phrase.trim_start();
+    if s.is_empty() {
+        return "a".to_string();
+    }
+    let lower = s.to_ascii_lowercase();
+    let word_boundary = |prefix: &str| {
+        lower.starts_with(prefix)
+            && !lower
+                .as_bytes()
+                .get(prefix.len())
+                .is_some_and(|b| b.is_ascii_alphanumeric() || *b == b'_')
+    };
+    let vowel = (lower.starts_with(['a', 'e', 'i', 'o'])
+        || (lower.starts_with('u')
+            && !lower.starts_with("uni")
+            && !lower.starts_with("use")
+            && !lower.starts_with("ut"))
+        || word_boundary("8")
+        || word_boundary("11")
+        || word_boundary("18"))
+        && !word_boundary("one");
+    format!("{} {s}", if vowel { "an" } else { "a" })
+}
+
 /// Causal links name an exact bound event; sharing its actor is not enough.
 pub(crate) fn event_relation_phrase(filter: &P) -> String {
     let mut phrase = String::new();
     if nn(filter, "caused_by").is_some() {
-        phrase.push_str(" as a result of the exact bound event");
+        phrase.push_str(" as a result of that event");
     }
     if nn(filter, "causes").is_some() {
-        phrase.push_str(" and causing the exact bound event");
+        phrase.push_str(" triggering this ability");
     }
     phrase
 }
@@ -26,8 +52,10 @@ pub(crate) fn event_relation_phrase(filter: &P) -> String {
 const FACTION_SUFFIXES: &[&str] = &[
     "agents-of-the-imperium",
     "chaos-space-marines",
+    "titanicus-traitoris",
     "adeptus-mechanicus",
     "leagues-of-votann",
+    "adeptus-titanicus",
     "emperors-children",
     "genestealer-cults",
     "adepta-sororitas",
@@ -121,12 +149,18 @@ pub(crate) fn count_phrase(value: Option<&Value>) -> String {
             crate::translate::effect::dice_case(Some(max))
         ),
         (_, Some(max)) => format!("at most {}", crate::translate::effect::dice_case(Some(max))),
-        (Some(min), _) if min.is_number() => format!("{}+", st(Some(min))),
+        (Some(min), _) if min.is_number() => {
+            if min.as_f64() == Some(1.0) {
+                "one or more".to_string()
+            } else {
+                format!("{} or more", st(Some(min)))
+            }
+        }
         (Some(min), _) => format!(
             "at least {}",
             crate::translate::effect::dice_case(Some(min))
         ),
-        _ => "1+".to_string(),
+        _ => "one or more".to_string(),
     }
 }
 
@@ -143,9 +177,11 @@ pub(crate) fn comparison_phrase(value: Option<&Value>) -> String {
 
 // ── Shared references ───────────────────────────────────────────────────────
 
-/// The describer's spelling of `event-object` when every trigger's object is a model ("that model"
-/// rather than "that unit"). `model_object_refs` writes it into the effect before rendering.
+/// The describer's spellings of `event-object` and `event-subject` when every trigger's object (or
+/// subject) is a model ("that model", "the triggering model" rather than "that unit", "the
+/// triggering unit"). `model_event_refs` writes them into the effect before rendering.
 pub(crate) const EVENT_OBJECT_MODEL: &str = "event-object-model";
+pub(crate) const EVENT_SUBJECT_MODEL: &str = "event-subject-model";
 
 /// Whether `v` is the trigger's event object, a unit or a model.
 pub(crate) fn is_event_object(v: Option<&Value>) -> bool {
@@ -155,33 +191,107 @@ pub(crate) fn is_event_object(v: Option<&Value>) -> bool {
     )
 }
 
-/// `v` with every `event-object` ref spelled `EVENT_OBJECT_MODEL`.
-pub(crate) fn model_object_refs(v: &Value) -> Value {
-    match v {
-        Value::String(s) if s == "event-object" => Value::String(EVENT_OBJECT_MODEL.into()),
-        Value::Array(a) => Value::Array(a.iter().map(model_object_refs).collect()),
-        Value::Object(o) => Value::Object(
-            o.iter()
-                .map(|(k, x)| (k.clone(), model_object_refs(x)))
-                .collect(),
-        ),
-        _ => v.clone(),
+/// Whether `v` is the trigger's event subject, a unit or a model.
+pub(crate) fn is_event_subject(v: Option<&Value>) -> bool {
+    matches!(
+        v.and_then(Value::as_str),
+        Some("event-subject" | EVENT_SUBJECT_MODEL)
+    )
+}
+
+/// The triggers of a spec that name an event.
+fn live_triggers<'a>(triggers: &[&'a Value]) -> Vec<&'a Value> {
+    triggers
+        .iter()
+        .copied()
+        .filter(|t| t.get("event").is_some_and(|v| !v.is_null()))
+        .collect()
+}
+
+/// Whether every trigger names a model as its `role` (its subject or object).
+fn all_models(triggers: &[&Value], role: &str) -> bool {
+    let live = live_triggers(triggers);
+    !live.is_empty()
+        && live.iter().all(|t| {
+            t.get(role)
+                .and_then(|o| o.get("level"))
+                .and_then(Value::as_str)
+                == Some("model")
+        })
+}
+
+/// Whether any trigger of a spec (one trigger or a list) with an event names a `role`.
+fn names_role(trigger: Option<&Value>, role: &str) -> bool {
+    let list: Vec<&Value> = match trigger {
+        None | Some(Value::Null) => Vec::new(),
+        Some(Value::Array(a)) => a.iter().collect(),
+        Some(t) => vec![t],
+    };
+    live_triggers(&list)
+        .iter()
+        .any(|t| t.get(role).is_some_and(|v| !v.is_null()))
+}
+
+/// `v` with its `event-object` refs spelled `EVENT_OBJECT_MODEL` when every trigger's object is a
+/// model, and its `event-subject` refs spelled `EVENT_SUBJECT_MODEL` when every trigger's subject
+/// is. Inside an `ability-part` whose own trigger names an object (a subject), that ref names the
+/// part's event instead, so it is left for the part to rewrite when it renders.
+pub(crate) fn model_event_refs(v: &Value, triggers: &[&Value]) -> Value {
+    fn rewrite(v: &Value, object: bool, subject: bool) -> Value {
+        match v {
+            Value::String(s) if object && s == "event-object" => {
+                Value::String(EVENT_OBJECT_MODEL.into())
+            }
+            Value::String(s) if subject && s == "event-subject" => {
+                Value::String(EVENT_SUBJECT_MODEL.into())
+            }
+            Value::Array(a) => {
+                Value::Array(a.iter().map(|x| rewrite(x, object, subject)).collect())
+            }
+            Value::Object(o) => {
+                let part = o.get("type").and_then(Value::as_str) == Some("ability-part");
+                Value::Object(
+                    o.iter()
+                        .map(|(k, x)| {
+                            let (ob, su) = if part && k == "effect" {
+                                (
+                                    object && !names_role(o.get("trigger"), "object"),
+                                    subject && !names_role(o.get("trigger"), "subject"),
+                                )
+                            } else {
+                                (object, subject)
+                            };
+                            (k.clone(), rewrite(x, ob, su))
+                        })
+                        .collect(),
+                )
+            }
+            _ => v.clone(),
+        }
+    }
+    let object = all_models(triggers, "object");
+    let subject = all_models(triggers, "subject");
+    if object || subject {
+        rewrite(v, object, subject)
+    } else {
+        v.clone()
     }
 }
 
 pub(crate) fn role_phrase(role: &str) -> Option<&'static str> {
     Some(match role {
-        "this-unit" => "the unit",
+        "this-unit" => "this unit",
         "this-model" => "this model",
         "model-in-this-unit" => "a model in this unit",
         "attacker" => "the attacking unit",
         "defender" => "the target unit",
         "event-subject" => "the triggering unit",
+        EVENT_SUBJECT_MODEL => "the triggering model",
         "event-object" => "that unit",
         EVENT_OBJECT_MODEL => "that model",
         "stratagem-target" => "the Stratagem's target",
         "selected-unit" => "the selected unit",
-        "recipient" => "the unit",
+        "recipient" => "this unit",
         "bearer-transport" => "the Transport this unit is embarked within",
         "ability-unit" => "this unit",
         _ => return None,
@@ -240,9 +350,23 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     let all = strs(f.get("all_of"))
         .map(|k| format!("{} ", k.join(" ")))
         .unwrap_or_default();
+    let unit_id_names = strs(f.get("unit_ids"))
+        .map(|ids| {
+            let names: Vec<String> = ids.iter().map(|id| title_case(id)).collect();
+            or_list(&names)
+        })
+        .unwrap_or_default();
+    let inline_unit_ids = if !unit_id_names.is_empty()
+        && all.is_empty()
+        && !f.get("any_of_filters").is_some_and(Value::is_array)
+    {
+        format!("{unit_id_names} ")
+    } else {
+        String::new()
+    };
     let noun = if is(f, "level", "model") {
         nn(f, "attachment_role")
-            .map(|role| format!("{} model", st(Some(role))))
+            .map(|role| format!("{} model", title_case(&st(Some(role)))))
             .unwrap_or_else(|| "model".to_string())
     } else {
         "unit".to_string()
@@ -251,13 +375,9 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     let compact = keyword_alternatives(f);
     let base = match &compact {
         Some(alts) => format!("{owner}{} {noun}", or_list(alts)),
-        None => format!("{owner}{all}{noun}"),
+        None => format!("{owner}{all}{inline_unit_ids}{noun}"),
     };
-    // `/^(?:[aeio]|u(?!ni))/i`: "an ORKS unit", "a unit", "an UNDEAD unit".
-    let lower = base.to_lowercase();
-    let an = lower.starts_with(['a', 'e', 'i', 'o'])
-        || (lower.starts_with('u') && !lower.starts_with("uni"));
-    let mut s = format!("{} {base}", if an { "an" } else { "a" });
+    let mut s = with_article(&base);
     // Any other alternatives: "a unit that is a PSYKER unit or a unit that is Battle-shocked".
     if compact.is_none() && f.get("any_of_filters").is_some_and(Value::is_array) {
         let alts: Vec<String> = alternative_filters(f)
@@ -300,26 +420,26 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     if let Some(names) = strs(f.get("model_names")) {
         s.push_str(&format!(" named {}", or_list(&names)));
     }
-    if let Some(ids) = strs(f.get("unit_ids")) {
-        s.push_str(&format!(" with unit ID {}", or_list(&ids)));
+    if !unit_id_names.is_empty() && inline_unit_ids.is_empty() {
+        s.push_str(&format!(" ({unit_id_names})"));
     }
     if let Some(e) = nn(f, "embarked_in") {
         s.push_str(&format!(
             " embarked within {}",
-            unit_ref_phrase(Some(e), "the unit")
+            unit_ref_phrase(Some(e), "this unit")
         ));
     }
     if let Some(m) = nn(f, "member_of") {
-        s.push_str(&format!(" in {}", unit_ref_phrase(Some(m), "the unit")));
+        s.push_str(&format!(" in {}", unit_ref_phrase(Some(m), "this unit")));
     }
     if let Some(g) = nn(f, "engaged_with") {
         s.push_str(&format!(
             " within Engagement Range of {}",
-            unit_ref_phrase(Some(g), "the unit")
+            unit_ref_phrase(Some(g), "this unit")
         ));
     }
     if let Some(g) = nn(f, "not_engaged_with") {
-        let phrase = unit_ref_phrase(Some(g), "the unit");
+        let phrase = unit_ref_phrase(Some(g), "this unit");
         let filter = g.as_object().is_some_and(|o| {
             !["selection_var", "event_var", "stratagem_target"]
                 .iter()
@@ -336,7 +456,7 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     }
     if let Some(d) = nn(f, "designated") {
         let by = nn(f, "designated_by")
-            .map(|b| format!(" by {}", unit_ref_phrase(Some(b), "the unit")))
+            .map(|b| format!(" by {}", unit_ref_phrase(Some(b), "this unit")))
             .unwrap_or_default();
         s.push_str(&format!(
             " that is {}{by}",
@@ -365,30 +485,52 @@ pub(crate) fn unit_filter_phrase(f: &P) -> String {
     if let Some(visible) = nn(f, "visible") {
         s.push_str(&format!(
             " that is visible to {}",
-            unit_ref_phrase(obj(Some(visible)).get("to"), "the unit")
+            unit_ref_phrase(obj(Some(visible)).get("to"), "this unit")
         ));
     }
     if let Some(within) = nn(f, "within") {
-        let w = obj(Some(within));
-        let wholly = if w.get("wholly") == Some(&Value::Bool(true)) {
-            "wholly "
-        } else {
-            ""
-        };
-        s.push_str(&format!(" {wholly}within {}", range_phrase(w.get("range"))));
-        if let Some(of) = nn(w, "of") {
-            s.push_str(&format!(" of {}", place_ref_phrase(Some(of))));
-        }
+        s.push_str(&within_clause(obj(Some(within)), None));
     }
     if let Some(ex) = nn(f, "excluding") {
         let other = if ex.as_str() == Some("this-unit") {
             "this unit".to_string()
         } else {
-            unit_ref_phrase(Some(ex), "the unit")
+            unit_ref_phrase(Some(ex), "this unit")
         };
         s.push_str(&format!(" other than {other}"));
     }
     s
+}
+
+/// " within 6\" of this unit", or " in contact with a cult ambush marker" when range is 0".
+pub(crate) fn within_clause(within: &P, of_override: Option<&str>) -> String {
+    let zero = within
+        .get("range")
+        .and_then(Value::as_object)
+        .is_some_and(|r| r.get("inches").and_then(Value::as_f64) == Some(0.0));
+    let of = match of_override {
+        Some(o) => o.to_string(),
+        None => nn(within, "of")
+            .map(|o| place_ref_phrase(Some(o)))
+            .unwrap_or_default(),
+    };
+    if zero && !of.is_empty() {
+        return format!(" in contact with {of}");
+    }
+    let wholly = if within.get("wholly") == Some(&Value::Bool(true)) {
+        "wholly "
+    } else {
+        ""
+    };
+    let tail = if of.is_empty() {
+        String::new()
+    } else {
+        format!(" of {of}")
+    };
+    format!(
+        " {wholly}within {}{tail}",
+        range_phrase(within.get("range"))
+    )
 }
 
 /// A unit-ref as a noun phrase; `fallback` names the default subject.
@@ -403,7 +545,10 @@ pub(crate) fn unit_ref_phrase(r: Option<&Value>, fallback: &str) -> String {
                 return "that unit".to_string();
             }
             if o.get("selection_var").is_some_and(Value::is_string) {
-                return format!("the bound {}", st(o.get("selection_var")).replace('_', " "));
+                return format!(
+                    "the chosen {}",
+                    st(o.get("selection_var")).replace('_', " ")
+                );
             }
             if let Some(t) = o.get("stratagem_target").and_then(Value::as_str) {
                 return format!(
@@ -491,7 +636,7 @@ pub(crate) fn place_ref_phrase(r: Option<&Value>) -> String {
         let name = dekebab(marker.strip_suffix("-marker").unwrap_or(&marker));
         return format!("{} {name} marker", article(&marker));
     }
-    unit_ref_phrase(r, "the unit")
+    unit_ref_phrase(r, "this unit")
 }
 
 pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
@@ -553,7 +698,7 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
         };
         s.push_str(&format!(
             " that {} was controlling {}",
-            unit_ref_phrase(Some(u), "the unit"),
+            unit_ref_phrase(Some(u), "this unit"),
             when
         ));
     }
@@ -597,7 +742,7 @@ pub(crate) fn state_phrase_base(state: &str) -> Option<&'static str> {
         "on-battlefield" => "on the battlefield",
         "hidden" => "hidden",
         "fights-first" => "a Fights First unit",
-        "benefit-of-cover" => "receiving the benefit of cover",
+        "benefit-of-cover" => "receiving the Benefit of Cover",
         _ => return None,
     })
 }
@@ -624,7 +769,7 @@ pub(crate) fn designation_phrase(tag: &str, plural: bool) -> String {
     if tag == tag.to_uppercase() {
         tag.to_string()
     } else {
-        format!("tagged {}", dekebab(tag))
+        format!("designated as {}", title_case(tag))
     }
 }
 
@@ -650,7 +795,7 @@ pub(crate) fn move_name(t: &str) -> String {
         "charge" => "Charge".to_string(),
         "pile-in" => "Pile-in".to_string(),
         "consolidation" => "Consolidation".to_string(),
-        "ingress" => "ingress".to_string(),
+        "ingress" => "Ingress".to_string(),
         "surge" => "Surge".to_string(),
         "scout" => "Scout".to_string(),
         "disembark" => "Disembark".to_string(),

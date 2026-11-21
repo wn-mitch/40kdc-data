@@ -2,17 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { createValidator } from "../src/schema-loader.js";
-
-/** The family versions the extensions under test create. */
-const STRATAGEM_TARGET_ALTERNATIVES_FOLLOWUP_VERSIONS: ReadonlySet<string> = new Set(["move-through@4", "eligibility-permission@6"]);
 
 /**
  * Stratagem target alternatives, follow-up: a move-through and a move permission on the triggering
  * unit (event-subject), a move-must-end cannot-end restriction bound to that unit, and the plural
  * wording guard for a set-up that names several targets. Every leaf is fabricated wording; each case
- * pins one binding, one version boundary, or one refusal.
+ * pins one binding, one accepted form, or one refusal.
  */
 
 const ajv = createValidator();
@@ -53,13 +49,8 @@ function refused(text: string, leaves: CompileLeaf[]): string {
 const MOVE_TYPES = ["normal", "advance", "fall-back"];
 const BEFORE = "After a friendly unit makes a Normal move, ";
 
-describe("move-through version: the triggering unit and a pair of passthrough tokens", () => {
-  // move-through@4 added the triggering unit and passthrough pairs.
-  const V = 4;
-  const PREVIOUS = V - 1;
-
-  it("widens the previous version: every value it accepted still normalizes the same", () => {
-    expect(V).toBeGreaterThanOrEqual(4);
+describe("move-through: the triggering unit and a pair of passthrough tokens", () => {
+  it("keeps a single token, a typed item and a move-type list as they are", () => {
     const accepted: Array<Record<string, unknown>> = [
       { subject: "this-unit", passthrough: "models" },
       { subject: "this-model", passthrough: "all-terrain" },
@@ -67,23 +58,18 @@ describe("move-through version: the triggering unit and a pair of passthrough to
       { subject: "this-unit", passthrough: "models", applies_to_moves: ["normal"] },
     ];
     for (const parameters of accepted) {
-      expect(normalizeFingerprintParameters("move-through", parameters, V)).toEqual(normalizeFingerprintParameters("move-through", parameters, PREVIOUS));
+      expect(normalizeFingerprintParameters("move-through", parameters)).toEqual(parameters);
     }
   });
 
   it("accepts the triggering unit as subject, and a pair of tokens in canonical order", () => {
     const pair = { subject: "event-subject", passthrough: ["models", "all-terrain"] };
-    expect(normalizeFingerprintParameters("move-through", pair, V)).toEqual({ subject: "event-subject", passthrough: ["all-terrain", "models"] });
-    expect(normalizeFingerprintParameters("move-through", { ...pair, passthrough: ["all-terrain", "models"] }, V)).toEqual({ subject: "event-subject", passthrough: ["all-terrain", "models"] });
-  });
-
-  it("refuses the new forms at the previous version", () => {
-    expect(() => normalizeFingerprintParameters("move-through", { subject: "event-subject", passthrough: "models" }, PREVIOUS)).toThrow();
-    expect(() => normalizeFingerprintParameters("move-through", { subject: "this-unit", passthrough: ["models", "all-terrain"] }, PREVIOUS)).toThrow();
+    expect(normalizeFingerprintParameters("move-through", pair)).toEqual({ subject: "event-subject", passthrough: ["all-terrain", "models"] });
+    expect(normalizeFingerprintParameters("move-through", { ...pair, passthrough: ["all-terrain", "models"] })).toEqual({ subject: "event-subject", passthrough: ["all-terrain", "models"] });
   });
 
   it("refuses a pair that is not two distinct listed tokens, and a typed item inside a pair", () => {
-    const with_ = (passthrough: unknown) => normalizeFingerprintParameters("move-through", { subject: "this-unit", passthrough }, V);
+    const with_ = (passthrough: unknown) => normalizeFingerprintParameters("move-through", { subject: "this-unit", passthrough });
     expect(() => with_(["models", "models"])).toThrow(/twice/u);
     expect(() => with_(["models"])).toThrow(/exactly two/u);
     expect(() => with_(["models", "all-terrain", "tall-terrain"])).toThrow(/exactly two/u);
@@ -93,14 +79,14 @@ describe("move-through version: the triggering unit and a pair of passthrough to
 
   it("lowers a pair as one passthrough list and the triggering unit as event-subject", () => {
     const text = `${BEFORE}it can move through models and all-terrain features.`;
-    const move = normalizeFingerprintParameters("move-through", { subject: "event-subject", passthrough: ["models", "all-terrain"] }, V);
+    const move = normalizeFingerprintParameters("move-through", { subject: "event-subject", passthrough: ["models", "all-terrain"] });
     const trigger = at(text, "After a friendly unit makes a Normal move", "event", { kind: "move-ended", owner: "friendly", move_types: ["normal"] }, "WHEN");
     const result = JSON.parse(compiled(text, [trigger, at(text, "it can move through models and all-terrain features", "move-through", move, "EFFECT")])).mechanics;
     expect(result.effect).toEqual({ type: "move-modifier", target: "event-subject", modifier: { passthrough: ["all-terrain", "models"] } });
     expect(effectOk(result.effect)).toBe(true);
   });
 
-  it("lowers a single token and a typed item as version 3 did", () => {
+  it("lowers a single token as a one-item passthrough list", () => {
     const text = "it can move through models.";
     const single = compiled(text, [at(text, "it can move through models", "move-through", { subject: "this-unit", passthrough: "models" }, "EFFECT")]);
     expect(JSON.parse(single).mechanics.effect).toEqual({ type: "move-modifier", target: "this-unit", modifier: { passthrough: ["models"] } });
@@ -108,25 +94,11 @@ describe("move-through version: the triggering unit and a pair of passthrough to
 });
 
 describe("eligibility-permission: the triggering unit as subject", () => {
-  // The version that first accepts event-subject: the lowest one that does, not the current top (later versions widen it further).
-  const accepts = (version: number) => { try { normalizeFingerprintParameters("eligibility-permission", { subject: "event-subject", activity: "move", allow: true }, version); return true; } catch { return false; } };
-  const V = Array.from({ length: currentFamilyVersion("eligibility-permission") }, (_, at) => at + 1).find(accepts)!;
-  // The version just before this follow-up's extension; later extensions may sit above it.
-  const AT = Array.from({ length: currentFamilyVersion("eligibility-permission") }, (_, index) => currentFamilyVersion("eligibility-permission") - index).find((version) => {
-    const extension = familyExtension("eligibility-permission", version);
-    return extension !== undefined && STRATAGEM_TARGET_ALTERNATIVES_FOLLOWUP_VERSIONS.has(`${extension.family}@${extension.version}`);
-  })!;
-  const PREVIOUS = AT - 1;
-
-  it("keeps every value the previous version accepted, and accepts event-subject only from this version", () => {
-    const plain = { subject: "this-unit", activity: "move", allow: true };
-    expect(normalizeFingerprintParameters("eligibility-permission", plain, V)).toEqual(normalizeFingerprintParameters("eligibility-permission", plain, PREVIOUS));
-    const moved = { subject: "event-subject", activity: "move", allow: true };
-    expect(normalizeFingerprintParameters("eligibility-permission", moved, AT)).toEqual(moved);
-    expect(normalizeFingerprintParameters("eligibility-permission", moved, V)).toEqual(moved);
-    expect(() => normalizeFingerprintParameters("eligibility-permission", moved, PREVIOUS)).toThrow();
-    const modelPlain = { subject: "this-model", activity: "move", allow: true };
-    expect(normalizeFingerprintParameters("eligibility-permission", modelPlain, V)).toEqual(normalizeFingerprintParameters("eligibility-permission", modelPlain, PREVIOUS));
+  it("accepts event-subject beside this unit and this model", () => {
+    for (const subject of ["this-unit", "event-subject", "this-model"]) {
+      const permission = { subject, activity: "move", allow: true };
+      expect(normalizeFingerprintParameters("eligibility-permission", permission)).toEqual(permission);
+    }
   });
 
   it("refuses a permission on the triggering unit after a selection, which does not name the moving unit", () => {

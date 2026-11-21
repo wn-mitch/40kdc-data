@@ -90,7 +90,7 @@ def test_translate_effect_op() -> None:
     assert resp["ok"]
     assert (
         resp["value"]["text"]
-        == "Until the end of the phase, the unit has the Feel No Pain 5+ ability."
+        == "Until the end of the phase, this unit has Feel No Pain 5+."
     )
 
 

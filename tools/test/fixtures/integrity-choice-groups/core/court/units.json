@@ -1,0 +1,11 @@
+[
+  { "id": "jester", "conditional_keywords": [
+    { "keyword": "Mirth", "choice_group": "oath-masque" },
+    { "keyword": "mirth", "choice_group": "oath-masque" },
+    { "keyword": "Gloom", "choice_group": "oath-unknown" }
+  ] },
+  { "id": "herald", "conditional_keywords": [
+    { "keyword": "Revel", "required_detachment_id": "masque" },
+    { "keyword": "Dirge", "required_detachment_id": "lost-revel" }
+  ] }
+]

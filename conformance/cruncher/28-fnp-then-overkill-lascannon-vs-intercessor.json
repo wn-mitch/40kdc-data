@@ -1,0 +1,21 @@
+{
+  "name": "lascannon vs intercessors with 5+ FNP: Feel No Pain rolls each wound, then damage past a model's 2 Wounds is lost",
+  "attacker": { "weaponId": "lascannon", "profileIndex": 0 },
+  "modelsFiring": 3,
+  "target": { "unitId": "intercessor-squad", "profileIndex": 0, "modelCount": 5 },
+  "context": { "phase": "shooting", "attackerStationary": false, "withinHalfRange": false },
+  "buffs": [
+    { "source": { "kind": "manual", "label": "5+ FNP all" }, "contribution": { "type": "feel-no-pain", "threshold": 5 } }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 3,
+      "hits": 2,
+      "wounds": 1.6667,
+      "unsaved": 1.3889,
+      "damage": 6.9444,
+      "after-fnp": 4.6296,
+      "models-killed": 1.3444
+    }
+  }
+}

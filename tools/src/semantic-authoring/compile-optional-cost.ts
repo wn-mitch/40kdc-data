@@ -3,12 +3,6 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;
 
-/**
- * The designation an optional spend of a pool sets, for version-1 window-use leaves that name no
- * tag. Version 2 leaves name their own tag (optional-cost-paid@2, families/army.ts).
- */
-const OPTIONAL_COST_TAGS: Record<string, string> = { "yp-pool": "yp-spent-this-use" };
-
 /** A read of an optional spend that the ability's own spend feeds: this use, or a trigger later in the ability. */
 export function isSpendRead(leaf: CompileLeaf): boolean {
   return leaf.family_id === "optional-cost-paid" && (leaf.parameters.window === "use" || leaf.parameters.window === "trigger");
@@ -24,9 +18,7 @@ export function flatLeaves(list: readonly CompileLeaf[]): CompileLeaf[] {
 /** The designation tag a read tests and its spend sets. */
 function optionalCostTag(leaf: CompileLeaf): string {
   if (typeof leaf.parameters.tag === "string") return leaf.parameters.tag;
-  const legacy = leaf.family_version === 1 && leaf.parameters.window === "use" ? OPTIONAL_COST_TAGS[String(leaf.parameters.pool)] : undefined;
-  if (legacy === undefined) throw new CompileError(`optional-cost-paid window ${String(leaf.parameters.window)} names no designation tag.`);
-  return legacy;
+  throw new CompileError(`optional-cost-paid window ${String(leaf.parameters.window)} names no designation tag.`);
 }
 
 /**

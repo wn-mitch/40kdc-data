@@ -36,6 +36,10 @@ import (
 // allocation stage: every probability is the one the
 // expected-value stages use. Mirror of AttackModel in tools/src/cruncher/engine.ts.
 type AttackModel struct {
+	// DamageDealt is the expected wounds removed with each attack's damage beyond one model's
+	// Wounds lost, before the target unit's size caps it: the damage that reaches models, as the
+	// models-killed stage counts it.
+	DamageDealt  float64
 	ModelsFiring float64
 	// AttacksStat is one model's Attacks characteristic, before AttacksBonus.
 	AttacksStat any

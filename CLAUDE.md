@@ -114,9 +114,11 @@ the per-change regen commands below are the manual equivalents:
   cargo run -p xtask -- bundle-data    # crates/.../data/bundle.generated.json
   python3 python/codegen/sync_bundle.py  # python/.../_bundle.json
   bash go/codegen/sync.sh                 # go/{bundle.json,share_registry.json,schemas/,spec.go}
+  cd tools && npm run export:bsdata:repo  # bsdata/ (the committed BSData export), after codegen:data
   ```
   (`npm run build`/`test` regenerate the TS bundle via `codegen:data`, but
-  **not** the Rust/Python/Go ones.)
+  **not** the Rust/Python/Go ones or `bsdata/`. A change to the exporter, or a
+  version bump, also changes `bsdata/`.)
 - **Edited any Rust** → run `cargo fmt --all` (CI runs `cargo fmt --all -- --check`).
 - **Edited any Go** → run `gofmt -w go/` (CI runs `gofmt -l go/`).
 - **Changed `schemas/`** → also `npm run codegen:types` (TS `generated.ts`),

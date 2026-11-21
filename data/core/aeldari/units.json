@@ -655,7 +655,7 @@
     },
     "model_count": {
       "min": 5,
-      "max": 13
+      "max": 10
     },
     "weapon_ids": [
       "blaster",
@@ -737,7 +737,8 @@
         "namespace": "mfm",
         "id": "ff6c74d5-c2ad-4f9c-980c-baeacbadd918"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "fire-prism",
@@ -2542,13 +2543,13 @@
     "profiles": [
       {
         "name": "Hemlock Wraithfighter",
-        "M": 20,
+        "M": null,
         "T": 8,
         "W": 12,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -5296,13 +5297,13 @@
     "profiles": [
       {
         "name": "Crimson Hunter",
-        "M": 20,
+        "M": null,
         "T": 8,
         "W": 12,
         "Sv": 3,
         "invuln_sv": 5,
         "Ld": 6,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -6403,6 +6404,10 @@
       "diameter": 28.5
     },
     "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a73e601d-1ccf-42b5-bb19-a1435979f5f6"
+      },
       {
         "namespace": "mfm",
         "id": "fabc435d-8f73-4659-8748-a8aeb22a467c"

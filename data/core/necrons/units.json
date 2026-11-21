@@ -1479,7 +1479,7 @@
     "profiles": [
       {
         "name": "Convergence of Dominion",
-        "M": 0,
+        "M": null,
         "T": 9,
         "W": 7,
         "Sv": 3,
@@ -3790,13 +3790,13 @@
     "profiles": [
       {
         "name": "Doom Scythe",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [

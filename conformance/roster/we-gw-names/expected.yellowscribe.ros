@@ -8,7 +8,7 @@
             <profile name="Khorne Berzerker" typeName="Unit">
               <characteristics>
                 <characteristic name="M">8"</characteristic>
-                <characteristic name="T">4</characteristic>
+                <characteristic name="T">5</characteristic>
                 <characteristic name="SV">3+</characteristic>
                 <characteristic name="W">2</characteristic>
                 <characteristic name="LD">6+</characteristic>
@@ -17,30 +17,30 @@
             </profile>
             <profile name="Blood Surge" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">After an enemy unit shoots, during the Shooting phase, in the opponent's turn, if the triggering unit has destroyed 1+ models with its just-resolved attacks, the unit can make a Surge move of up to D6+2".</characteristic>
+                <characteristic name="Description">After an enemy unit shoots, during your opponent's Shooting phase, if the triggering unit has destroyed one or more models with those attacks, this unit can make a Surge move of up to D6+2".</characteristic>
               </characteristics>
             </profile>
             <profile name="Icon of Khorne" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">-&gt; Each time an enemy unit is destroyed: you gain 1 Bloodshed point.
+                <characteristic name="Description">Each time an enemy unit is destroyed, you gain 1 Bloodshed point.
 Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have, after which all your Bloodshed points are lost.</characteristic>
               </characteristics>
             </profile>
             <profile name="Murderous Charge" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If the unit charged this turn, improve the Strength characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
+                <characteristic name="Description">If this unit charged this turn, improve the Strength characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
               </characteristics>
             </profile>
             <profile name="Blessings of Khorne" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
-  -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
-    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
-    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
-    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+                <characteristic name="Description">At the start of the battle round, you can use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
+  - Roll 8D6; allocate dice to activate up to 2 of the following:
+    - Unbridled Bloodlust (requires pair of 1+): add 1 to this unit's Charge rolls.
+    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to this unit's Pile-in and Consolidation moves.
+    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
     - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
     - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
-    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
+    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, this unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -105,29 +105,29 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
             </profile>
             <profile name="Feel No Pain" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit has Feel No Pain X+, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="To Slake its Rage" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
+                <characteristic name="Description">This unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
               </characteristics>
             </profile>
             <profile name="Blessings of Khorne" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
-  -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
-    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
-    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
-    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+                <characteristic name="Description">At the start of the battle round, you can use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
+  - Roll 8D6; allocate dice to activate up to 2 of the following:
+    - Unbridled Bloodlust (requires pair of 1+): add 1 to this unit's Charge rolls.
+    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to this unit's Pile-in and Consolidation moves.
+    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
     - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
     - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
-    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
+    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, this unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -175,30 +175,29 @@ Add one rolled D6 to your Blessings of Khorne for each Bloodshed points you have
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Firing Deck" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Meet Any Challenge" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When an enemy unit is set up or each time an enemy unit ends a Normal, Advance or Fall Back move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of this model, until the end of the phase, the unit is eligible to disembark.</characteristic>
+                <characteristic name="Description">When an enemy unit is set up or each time an enemy unit ends a Normal, Advance or Fall Back move, during your opponent's Movement phase, while the triggering unit is within 8" of this model, until the end of the phase, this unit is eligible to disembark.</characteristic>
               </characteristics>
             </profile>
             <profile name="Blessings of Khorne" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
-  -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
-    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
-    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
-    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+                <characteristic name="Description">At the start of the battle round, you can use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
+  - Roll 8D6; allocate dice to activate up to 2 of the following:
+    - Unbridled Bloodlust (requires pair of 1+): add 1 to this unit's Charge rolls.
+    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to this unit's Pile-in and Consolidation moves.
+    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
     - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
     - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
-    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
+    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, this unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
               </characteristics>
             </profile>
           </profiles>

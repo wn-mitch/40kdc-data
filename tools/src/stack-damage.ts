@@ -8,4 +8,4 @@
  */
 import { runDamageMatrix } from "./stack-damage/runner.js";
 
-runDamageMatrix();
+await runDamageMatrix();

@@ -202,10 +202,16 @@ func runDSLCorpus(t *testing.T, filename string) {
 			var acts []any
 			for _, aAny := range result.activatable {
 				a, _ := asMap(aAny)
-				var buffs []any
+				var buffs, gates []any
+				gated := false
 				for _, b := range getList(a, "buffs") {
 					bm, _ := asMap(b)
 					buffs = append(buffs, bm["contribution"])
+					gates = append(gates, bm["applicableWhen"])
+					gated = gated || bm["applicableWhen"] != nil
+				}
+				if !gated {
+					gates = nil
 				}
 				acts = append(acts, map[string]any{
 					"id":             a["id"],
@@ -215,15 +221,17 @@ func runDSLCorpus(t *testing.T, filename string) {
 					"capRaise":       a["capRaise"],
 					"requiresOption": a["requiresOption"],
 					"excludesOption": a["excludesOption"],
+					"secondary":      a["secondary"],
+					"gates":          gates,
 					"buffs":          orEmpty(buffs),
 				})
 			}
-			// An expected lever omits "group", "requires", "capRaise", "requiresOption" and "excludesOption" when it has none.
+			// An expected lever omits "group", "requires", "capRaise", "requiresOption", "excludesOption", "secondary" and "gates" when it has none.
 			var expActs []any
 			for _, eAny := range getList(expected, "activatable") {
 				e, _ := asMap(eAny)
 				ne := cloneMap(e)
-				for _, key := range []string{"group", "requires", "capRaise", "requiresOption", "excludesOption"} {
+				for _, key := range []string{"group", "requires", "capRaise", "requiresOption", "excludesOption", "secondary", "gates"} {
 					if _, has := ne[key]; !has {
 						ne[key] = nil
 					}

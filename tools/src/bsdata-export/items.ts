@@ -6,18 +6,47 @@ import { characteristic, cost, profile } from "./nodes.js";
 import type { BsNode } from "./source.js";
 import type { SystemRefs } from "./system.js";
 
-/** A weapon keyword's label as datasheets print it: `Anti-Infantry 4+`, `Rapid Fire 1`, `Lethal Hits`. */
+function keywordList(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((k): k is string => typeof k === "string" && k.length > 0) : [];
+}
+
+/**
+ * A weapon keyword's label in BSData's form: `Anti-Infantry 4+`, `Rapid Fire 1`,
+ * `Lethal Hits`. A target condition follows a colon (`Devastating Wounds: Psyker`,
+ * `Sustained Hits 1: non-Monster/Vehicle`, `Hunter: Monster`); an Anti keyword
+ * whose target is "anything but" reads `Anti-non-Monster/Vehicle 3+`.
+ */
 export function keywordLabel(name: string, parameters: Record<string, unknown> | undefined): string {
-  if (parameters) {
-    const target = parameters.target_keyword;
-    const threshold = parameters.threshold;
-    if (typeof target === "string" && (typeof threshold === "number" || typeof threshold === "string")) {
-      return `${name}-${target} ${threshold}+`;
-    }
-    const value = parameters.value;
-    if (value !== undefined && value !== null) return `${name} ${String(value)}`;
+  if (!parameters) return name;
+  const target = typeof parameters.target_keyword === "string" ? parameters.target_keyword : undefined;
+  const threshold = parameters.threshold;
+  const hasThreshold = typeof threshold === "number" || typeof threshold === "string";
+  const required = keywordList(parameters.required_target_keywords_any);
+  const excluded = keywordList(parameters.excluded_target_keywords);
+  if (hasThreshold && (target || excluded.length > 0)) {
+    const against = target ?? `non-${excluded.join("/")}`;
+    const label = `${name}-${against} ${threshold}+`;
+    return target && excluded.length > 0 ? `${label}: non-${excluded.join("/")}` : label;
   }
-  return name;
+  const value = parameters.value;
+  const base = value !== undefined && value !== null ? `${name} ${String(value)}` : name;
+  const conditions = [
+    ...(target ? [target] : []),
+    ...(required.length > 0 ? [required.join("/")] : []),
+    ...(excluded.length > 0 ? [`non-${excluded.join("/")}`] : []),
+  ];
+  return conditions.length > 0 ? `${base}: ${conditions.join(", ")}` : base;
+}
+
+/**
+ * A weapon profile's name. A weapon with several profiles names each
+ * `➤ <weapon> - <profile>`, as BSData does, so a reader of the profile alone
+ * still sees the weapon; a profile already named for its weapon keeps its name.
+ */
+export function weaponProfileName(weaponName: string, profileName: string, profileCount: number): string {
+  if (profileCount < 2) return profileName;
+  if (profileName.toLowerCase().startsWith(weaponName.toLowerCase())) return `➤ ${profileName}`;
+  return `➤ ${weaponName} - ${profileName}`;
 }
 
 /** A profile is melee when its range is `Melee`; a weapon can carry both kinds. */
@@ -47,7 +76,8 @@ export function weaponProfiles(weapon: WeaponView, refs: SystemRefs, ids: IdAllo
       .keywordsAt(index)
       .map((k) => keywordLabel(k.keyword.name, k.parameters))
       .join(", ");
-    return profile(p.name, ids.id(`${key}:profile:${index}`), type.id, typeName, [
+    const name = weaponProfileName(weapon.name, p.name, weapon.raw.profiles.length);
+    return profile(name, ids.id(`${key}:profile:${index}`), type.id, typeName, [
       characteristic("Range", c.Range, rangeText(p.range)),
       characteristic("A", c.A, String(stats.A)),
       characteristic(ranged ? "BS" : "WS", ranged ? c.BS : c.WS, skillText(ranged ? stats.BS : stats.WS)),
@@ -64,9 +94,50 @@ function displayName(name: string): string {
   return name.length > 0 ? `${name[0].toUpperCase()}${name.slice(1)}` : name;
 }
 
+function itemWeapon(dataset: Dataset, factionId: string, itemId: string): WeaponView | undefined {
+  return dataset.weapons.byFaction(factionId).find((w) => w.id === itemId) ?? dataset.weapons.getAny(itemId);
+}
+
+/** Per dataset: each wargear id's linked ability names, by their lower-case form. */
+const LINKED_ABILITY_NAMES = new WeakMap<Dataset, Map<string, Map<string, string>>>();
+
+function linkedAbilityName(dataset: Dataset, itemId: string, name: string): string | undefined {
+  let byItem = LINKED_ABILITY_NAMES.get(dataset);
+  if (!byItem) {
+    byItem = new Map();
+    for (const unit of dataset.units.all) {
+      for (const ref of unit.raw.ability_ids ?? []) {
+        if (typeof ref !== "object" || ref === null || typeof ref.wargear !== "string" || typeof ref.id !== "string") continue;
+        const ability = dataset.abilities.byFaction(unit.raw.faction_id).find((a) => a.id === ref.id) ?? dataset.abilities.getAny(ref.id);
+        if (!ability) continue;
+        const names = byItem.get(ref.wargear) ?? new Map<string, string>();
+        names.set(ability.name.toLowerCase(), ability.name);
+        byItem.set(ref.wargear, names);
+      }
+    }
+    LINKED_ABILITY_NAMES.set(dataset, byItem);
+  }
+  return byItem.get(itemId)?.get(name.toLowerCase());
+}
+
 /**
- * The shared entry for one item a faction's units carry, or undefined when the
- * id names neither a weapon nor a wargear record.
+ * The name an item's entry takes, or undefined when the id names neither a weapon nor a wargear
+ * record. A wargear record's name is lower case in the dataset; when an ability linked to the item
+ * has the same name, the entry takes the ability's capitalisation ("Simulacrum Imperialis"), as
+ * BSData prints it.
+ */
+export function itemName(dataset: Dataset, factionId: string, itemId: string): string | undefined {
+  const weapon = itemWeapon(dataset, factionId, itemId);
+  if (weapon) return weapon.name;
+  const wargear = dataset.wargear.getAny(itemId);
+  return wargear ? (linkedAbilityName(dataset, itemId, wargear.name) ?? displayName(wargear.name)) : undefined;
+}
+
+/**
+ * The shared entry for one item a faction's units carry, keyed `key`, or undefined
+ * when the id names neither a weapon nor a wargear record. `abilityProfiles` are the
+ * Abilities profiles the item prints after its weapon profiles (`catalogue.ts` keys
+ * one entry per distinct set of them).
  */
 export function itemEntry(
   dataset: Dataset,
@@ -74,29 +145,21 @@ export function itemEntry(
   ids: IdAllocator,
   factionId: string,
   itemId: string,
+  key: string,
   preferredId: string | undefined,
+  abilityProfiles: readonly BsNode[] = [],
 ): BsNode | undefined {
-  const key = `item:${factionId}/${itemId}`;
-  const weapon = dataset.weapons.byFaction(factionId).find((w) => w.id === itemId) ?? dataset.weapons.getAny(itemId);
-  if (weapon) {
-    return {
-      name: weapon.name,
-      id: ids.id(key, preferredId),
-      hidden: false,
-      import: true,
-      type: "upgrade",
-      costs: [cost("pts", refs.cost.pts, 0)],
-      profiles: weaponProfiles(weapon, refs, ids, key),
-    };
-  }
-  const wargear = dataset.wargear.getAny(itemId);
-  if (!wargear) return undefined;
+  const name = itemName(dataset, factionId, itemId);
+  if (name === undefined) return undefined;
+  const weapon = itemWeapon(dataset, factionId, itemId);
+  const profiles = [...(weapon ? weaponProfiles(weapon, refs, ids, key) : []), ...abilityProfiles];
   return {
-    name: displayName(wargear.name),
+    name,
     id: ids.id(key, preferredId),
     hidden: false,
     import: true,
     type: "upgrade",
     costs: [cost("pts", refs.cost.pts, 0)],
+    ...(profiles.length > 0 ? { profiles } : {}),
   };
 }

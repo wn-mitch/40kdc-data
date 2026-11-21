@@ -128,6 +128,9 @@ pub struct Stage {
 pub struct EngineOutput {
     pub stages: Vec<Stage>,
     pub resolved: ResolvedModifiers,
+    /// Expected wounds removed with each attack's damage beyond one model's Wounds lost, before
+    /// the target unit's size caps it: the damage that reaches models, as `models-killed` counts it.
+    pub damage_dealt: f64,
 }
 
 /// A check's probability of passing and of passing as a critical success.
@@ -362,6 +365,13 @@ pub fn crunch_model(
     let mut all_buffs = profile_buffs_for(input.attacker, ds, &ctx);
     all_buffs.extend(input.buffs.iter().cloned());
     let mut resolved = resolve_buffs(&all_buffs, &ctx);
+    // A granted keyword whose rule is catalog DSL ([HEAVY], [TWIN-LINKED], [LANCE]) applies that DSL,
+    // credited to the grant; resolving again keeps every grant's applicability and keyword removals.
+    let granted = granted_keyword_buffs(&resolved, input.attacker, ds, &ctx);
+    if !granted.is_empty() {
+        all_buffs.extend(granted);
+        resolved = resolve_buffs(&all_buffs, &ctx);
+    }
     // A buff gated on the attack's Strength against the target's Toughness needs both, which the
     // buffs themselves modify: take them from the stack without the comparison-gated buffs, then
     // resolve again with them known. No comparison-gated buff feeds any comparison, which keeps a
@@ -424,13 +434,27 @@ pub fn crunch_model(
             .map(|mc| mc.min.get())
             .unwrap_or(1)
     });
-    let blast_extra_per_model = match blast.and_then(|keyword| parameter(keyword, "value")) {
+    // Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
+    let blast_extra_per_model = match blast {
+        Some(keyword) => match parameter(keyword, "value") {
+            Some(value) => (target_model_count / 5) as f64 * eval_param_value(Some(value))?,
+            None => (target_model_count / 5) as f64,
+        },
+        None => 0.0,
+    };
+    // [CLEAVE X] adds X attacks per five target models when the weapon picks one target, as every crunch does.
+    let cleave_extra_per_model = match find_extra_keyword(&resolved, "cleave")
+        .and_then(|keyword| parameter(keyword, "value"))
+    {
         Some(value) => (target_model_count / 5) as f64 * eval_param_value(Some(value))?,
         None => 0.0,
     };
     let models_firing = input.models_firing as f64;
-    let attacks =
-        models_firing * (attacks_per_model + rapid_fire_extra_per_model + blast_extra_per_model);
+    let attacks = models_firing
+        * (attacks_per_model
+            + rapid_fire_extra_per_model
+            + blast_extra_per_model
+            + cleave_extra_per_model);
     stages.push(Stage {
         name: StageName::Attacks,
         expected: attacks,
@@ -440,6 +464,7 @@ pub fn crunch_model(
                 attacks_per_model,
                 rapid_fire_extra_per_model,
                 blast_extra_per_model,
+                cleave_extra_per_model,
             );
             if let (None, Some(reroll), StatValue::DiceExpression(dice)) = (
                 &resolved.stat_set.a,
@@ -1108,9 +1133,40 @@ pub fn crunch_model(
     });
 
     // 7. Models killed
+    // One attack's damage goes to one model and what exceeds its Wounds is lost; Feel No Pain
+    // rolls for each wound before that. Devastating Wounds' mortal wounds are capped the same
+    // way; mortal wounds an ability inflicts on a roll carry over. Each stream keeps its share of
+    // the expected damage above (re-roll-one gains included), scaled by what the cap leaves of it.
     let w = unit_profile.w.get() as f64;
+    let main_capped = if critical.is_some() {
+        unsaved_regular * capped_damage(&per_attack.distribution, p_survive_all, w)
+            + unsaved_critical * capped_damage(&per_critical.distribution, p_survive_all, w)
+    } else {
+        unsaved * capped_damage(&per_attack.distribution, p_survive_all, w)
+    };
+    let main_raw = if critical.is_some() {
+        unsaved_regular * damage_per_hit + unsaved_critical * per_critical.expected
+    } else {
+        unsaved * damage_per_hit
+    } * p_survive_all;
+    let mortal_survive = p_survive_all * p_survive_mortal;
+    let devastating_raw = mortal_wounds_stream * per_critical.expected * mortal_survive;
+    let devastating_capped =
+        mortal_wounds_stream * capped_damage(&per_critical.distribution, mortal_survive, w);
+    let ability_mortals = roll_mortals * mortal_survive;
+    let share = |capped: f64, raw: f64| if raw > 0.0 { capped / raw } else { 1.0 };
+    let main_share = share(main_capped, main_raw);
+    let devastating_share = share(devastating_capped, devastating_raw);
+    let after_mortal_devastating = (after_mortal - ability_mortals).max(0.0);
+    let damage_dealt = if w > 0.0 {
+        after_main * main_share
+            + after_mortal_devastating * devastating_share
+            + (after_mortal - after_mortal_devastating)
+    } else {
+        0.0
+    };
     let expected_models_killed = if w > 0.0 {
-        (after_fnp / w).min(target_model_count as f64)
+        (damage_dealt / w).min(target_model_count as f64)
     } else {
         0.0
     };
@@ -1118,8 +1174,8 @@ pub fn crunch_model(
         name: StageName::ModelsKilled,
         expected: expected_models_killed,
         detail: format!(
-            "W{w} per model, {target_model_count} models in target; {after_fnp:.4} damage / {w} = {:.4} (capped at {target_model_count})",
-            after_fnp / w,
+            "W{w} per model, {target_model_count} models in target; {damage_dealt:.4} damage with overkill lost / {w} = {:.4} (capped at {target_model_count})",
+            if w > 0.0 { damage_dealt / w } else { 0.0 },
         ),
     });
 
@@ -1130,7 +1186,7 @@ pub fn crunch_model(
             |set| Value::from(set.value as u64),
         ),
         attacks_reroll: attacks_reroll.filter(|_| resolved.stat_set.a.is_none()),
-        attacks_bonus: resolved.attacks_mod.value + blast_extra_per_model,
+        attacks_bonus: resolved.attacks_mod.value + blast_extra_per_model + cleave_extra_per_model,
         rapid_fire_stat: rapid_fire
             .filter(|_| half_range)
             .and_then(|kw| parameter(kw, "value").cloned()),
@@ -1164,7 +1220,14 @@ pub fn crunch_model(
         .filter_map(|(priced, what)| priced.then(|| what.to_string()))
         .collect(),
     };
-    Ok((EngineOutput { stages, resolved }, model))
+    Ok((
+        EngineOutput {
+            stages,
+            resolved,
+            damage_dealt,
+        },
+        model,
+    ))
 }
 
 /// A characteristic as the JSON value TS carries it as: a number or a string.
@@ -1255,6 +1318,63 @@ fn profile_buffs_for(
             params_value.as_ref(),
             ctx,
         ));
+    }
+    out
+}
+
+/// The catalog buffs of each resolved granted keyword the profile does not print, with the
+/// grant's source. Engine-dispatched keywords have no catalog DSL and are read from
+/// `extra_keywords` directly.
+fn granted_keyword_buffs(
+    resolved: &ResolvedModifiers,
+    attacker: AttackProfileRef<'_>,
+    dataset: &Dataset,
+    ctx: &EngineContext,
+) -> Vec<Buff> {
+    let printed: Vec<String> = attacker
+        .weapon
+        .profiles
+        .get(attacker.profile_index)
+        .map(|profile| {
+            profile
+                .keywords
+                .iter()
+                .map(|kref| kref.keyword_id.to_string())
+                .collect()
+        })
+        .unwrap_or_default();
+    let weapon_id = attacker.weapon.id.to_string();
+    let mut out = Vec::new();
+    for entry in &resolved.extra_keywords {
+        let keyword_id = entry.keyword_ref.keyword_id.as_str();
+        if printed.iter().any(|id| id == keyword_id) {
+            continue;
+        }
+        let Some(effect) = dataset
+            .weapon_keywords
+            .get(keyword_id)
+            .and_then(|catalog| catalog.effect.as_ref())
+            .and_then(|effect| serde_json::to_value(effect).ok())
+        else {
+            continue;
+        };
+        if !keyword_applies_to_target(entry.keyword_ref.parameters.as_ref(), ctx) {
+            continue;
+        }
+        out.extend(
+            buffs_from_keyword(
+                keyword_id,
+                &weapon_id,
+                Some(&effect),
+                entry.keyword_ref.parameters.as_ref(),
+                ctx,
+            )
+            .into_iter()
+            .map(|buff| Buff {
+                source: entry.source.clone(),
+                ..buff
+            }),
+        );
     }
     out
 }
@@ -1519,6 +1639,37 @@ fn signed(n: f64) -> String {
 }
 
 /// Fraction of damage that survives a single FNP roll (1 if no FNP).
+/// Expected wounds one unsaved attack removes from a model with `wounds` Wounds: each point of
+/// its Damage is a wound lost with probability `lost` (Feel No Pain), and wounds past the model's
+/// Wounds are lost. A fractional Damage value is capped in expectation.
+pub(crate) fn capped_damage(distribution: &[(f64, f64)], lost: f64, wounds: f64) -> f64 {
+    let mut total = 0.0;
+    for &(value, probability) in distribution {
+        if probability == 0.0 || value <= 0.0 {
+            continue;
+        }
+        if value.fract() != 0.0 {
+            total += probability * (value * lost).min(wounds);
+            continue;
+        }
+        let mut expected = 0.0;
+        let mut coefficient = 1.0;
+        let mut removed = 0.0;
+        while removed <= value {
+            if removed > 0.0 {
+                coefficient = coefficient * (value - removed + 1.0) / removed;
+            }
+            expected += coefficient
+                * lost.powf(removed)
+                * (1.0 - lost).powf(value - removed)
+                * removed.min(wounds);
+            removed += 1.0;
+        }
+        total += probability * expected;
+    }
+    total
+}
+
 fn fnp_survival_fraction(fnp: Option<&FeelNoPainState>) -> f64 {
     match fnp {
         None => 1.0,
@@ -1543,13 +1694,16 @@ fn describe_fnp(all: Option<&FeelNoPainState>, mortal: Option<&FeelNoPainState>)
     }
 }
 
-fn attacks_detail(models: f64, per: f64, rapid_fire: f64, blast: f64) -> String {
+fn attacks_detail(models: f64, per: f64, rapid_fire: f64, blast: f64, cleave: f64) -> String {
     let mut parts = vec![format!("{models} × {per}")];
     if rapid_fire != 0.0 {
         parts.push(format!("+ Rapid Fire {rapid_fire} (half range)"));
     }
     if blast != 0.0 {
         parts.push(format!("+ Blast {blast}/model"));
+    }
+    if cleave != 0.0 {
+        parts.push(format!("+ Cleave {cleave}/model"));
     }
     parts.join(" ")
 }

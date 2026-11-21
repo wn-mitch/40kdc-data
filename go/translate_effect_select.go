@@ -31,28 +31,47 @@ func selectUnitsSubject(sel map[string]any) string {
 	return selectUnitsSubjectIn(sel, false)
 }
 
+var endsWithThatIsRe = regexp.MustCompile(`\bthat is [^\n]+$`)
+
 // selectUnitsSubjectIn is selectUnitsSubject inside a loop over models when eachModel.
 func selectUnitsSubjectIn(sel map[string]any, eachModel bool) string {
 	filter := mapOr(sel["filter"])
 	phrase, plural := selectorCountPhrase(sel)
-	subject := strings.TrimPrefix(filterSubject(filter, effCtx{eachModel: eachModel}), "all ")
+	base := strings.TrimPrefix(filterSubject(filter, effCtx{eachModel: eachModel}), "all ")
 	if !plural {
-		subject = strings.Replace(subject, "units", "unit", 1)
-		subject = strings.Replace(subject, "models", "model", 1)
-		subject = strings.ReplaceAll(subject, "that are", "that is")
+		base = strings.Replace(base, "units", "unit", 1)
+		base = strings.Replace(base, "models", "model", 1)
+		base = strings.ReplaceAll(base, "that are", "that is")
 	}
+	tail := ""
 	bounds, _ := getMap(sel, "count")
 	cap, _ := asMap(bounds["max"])
 	if cap != nil && (bounds["min"] == nil || jsNumber(bounds["min"]) == 0) {
 		capPhrase := quantityPhrase(cap)
 		if cap["count_of"] != nil {
 			phrase = "any number of"
-			return phrase + " " + subject + " (at most " + capPhrase + ")" + selectionEligibilityAndLimit(sel)
+			tail = " (at most " + capPhrase + ")"
+		} else {
+			phrase = "up to " + capParenTailRe.ReplaceAllString(capPhrase, "")
+			tail = " (" + capParenInnerRe.ReplaceAllString(capPhrase, "$1") + ")"
 		}
-		phrase = "up to " + capParenTailRe.ReplaceAllString(capPhrase, "")
-		return phrase + " " + subject + " (" + capParenInnerRe.ReplaceAllString(capPhrase, "$1") + ")" + selectionEligibilityAndLimit(sel)
 	}
-	return phrase + " " + subject + selectionEligibilityAndLimit(sel)
+	eligibility := ""
+	if el, ok := asMap(sel["eligibility"]); ok && el != nil {
+		elig := describeSelectionEligibility(el)
+		if endsWithThatIsRe.MatchString(base) && strings.HasPrefix(elig, "that is ") {
+			eligibility = " and " + strings.TrimPrefix(elig, "that is ")
+		} else if endsWithThatIsRe.MatchString(base) && strings.HasPrefix(elig, "that ") {
+			eligibility = " and " + strings.TrimPrefix(elig, "that ")
+		} else {
+			eligibility = " " + elig
+		}
+	}
+	limit := ""
+	if lim, ok := asMap(sel["limit"]); ok && lim != nil {
+		limit = " (" + selectionLimitPhrase(lim, selectorNoun(sel)) + ")"
+	}
+	return phrase + " " + base + tail + eligibility + limit
 }
 
 func selectorCountPhrase(sel map[string]any) (string, bool) {
@@ -72,7 +91,7 @@ func selectorCountPhrase(sel map[string]any) (string, bool) {
 	case same:
 		return quantity(min), jsNumber(max) != 1
 	case min != nil && max != nil && jsNumber(min) != 0:
-		return "from " + quantity(min) + " through " + quantity(max), jsNumber(max) != 1
+		return quantity(min) + " to " + quantity(max), jsNumber(max) != 1
 	case max != nil:
 		return "up to " + quantity(max), jsNumber(max) != 1
 	case min != nil:
@@ -147,15 +166,20 @@ func selectUnitsPlural(sel map[string]any) bool {
 
 // eachContext is a for-each-unit body's context: a loop over models names each pass's model "that model".
 func eachContext(ctx effCtx, sel map[string]any) effCtx {
-	ctx = selectedContext(ctx, sel)
+	ctx = selectedContextPlural(ctx, sel, false)
 	ctx.eachModel = selectorNoun(sel) == "model"
 	return ctx
 }
 
 func selectedContext(ctx effCtx, sel map[string]any) effCtx {
+	return selectedContextPlural(ctx, sel, selectUnitsPlural(sel))
+}
+
+func selectedContextPlural(ctx effCtx, sel map[string]any, plural bool) effCtx {
 	model := selectorNoun(sel) == "model"
 	ctx.selectedUnit = !model
 	ctx.selectedModel = model
+	ctx.selectedPlural = plural
 	ctx.unitSubject = ""
 	return ctx
 }
@@ -164,7 +188,7 @@ func selectUnitsInline(sel, effect map[string]any, ctx effCtx) string {
 	subject := selectUnitsSubjectIn(sel, ctx.eachModel)
 	binding := selectionBinding(sel)
 	nested := describeEffectInline(effect, selectedContext(ctx, sel))
-	return "select " + subject + binding + ": " + nested
+	return "select " + subject + binding + "; " + nested
 }
 
 // forEachUnitSubject renders the canonical for-each-unit selector phrase.
@@ -298,7 +322,7 @@ func persistentDesignationLead(e map[string]any) string {
 		clauses = append(clauses, "When "+persistentDesignationName(e["designation"], sel["kind"])+" is destroyed, "+must+" select "+noun+" to replace it.")
 	}
 	if lifecycle["exclusivity"] == "one-active-per-bearer-unit" {
-		clauses = append(clauses, "Only one such designation can be active for this bearer unit.")
+		clauses = append(clauses, "Only one such designation can be active for this unit.")
 	}
 	return strings.Join(clauses, " ")
 }
@@ -336,7 +360,7 @@ func persistentDesignationReplacement(e map[string]any) string {
 		must = "you may"
 	}
 	return "when " + previous + " is destroyed, " + must + " select " + designationTargetSubject(sel) + label +
-		" to replace this bearer unit's existing designation. Its existing effects apply to the new target without changing the designation's expiry" + embarked
+		" to replace this unit's existing designation. Its existing effects apply to the new target without changing the designation's expiry" + embarked
 }
 
 func selectionRefName(ref any, fallback string) string {
@@ -346,22 +370,30 @@ func selectionRefName(ref any, fallback string) string {
 		id = value["event_var"]
 	}
 	if s, ok := id.(string); ok && s != "" {
-		return "the bound " + dekebab(strings.ReplaceAll(s, "_", "-"))
+		return "the chosen " + dekebab(strings.ReplaceAll(s, "_", "-"))
 	}
 	return fallback
 }
+
+// genericBindings are internal binding names that add no player-facing information when printed.
+var genericBindings = map[string]bool{
+	"objective": true, "selected_objective": true, "selected-objective": true, "quarry_selection": true, "mark_selection": true,
+	"selected_unit": true, "selected-unit": true, "enemy_unit": true, "enemy-unit": true, "target_unit": true, "target-unit": true,
+	"friendly_unit": true, "friendly-unit": true, "unit": true, "target": true, "model": true, "trap_objective": true, "trap-objective": true,
+}
+
+var genericBindingNormRe = regexp.MustCompile(`[-_\s]+`)
 
 func selectionBinding(sel map[string]any) string {
 	b, ok := sel["bind_as"].(string)
 	if !ok || b == "" {
 		return ""
 	}
-	_, plural := selectorCountPhrase(sel)
-	it := "it"
-	if plural {
-		it = "them"
+	norm := genericBindingNormRe.ReplaceAllString(strings.ToLower(b), "_")
+	if genericBindings[norm] {
+		return ""
 	}
-	return ", binding " + it + " as " + strings.ReplaceAll(strings.ReplaceAll(b, "_", " "), "-", " ")
+	return " (referred to below as the " + strings.ReplaceAll(strings.ReplaceAll(b, "_", " "), "-", " ") + ")"
 }
 
 func designatedAttackWhen(applies map[string]any) string {
@@ -371,6 +403,10 @@ func designatedAttackWhen(applies map[string]any) string {
 }
 
 func designatedRecipientContext(applies map[string]any, ctx effCtx) effCtx {
+	if applies["to"] == "attackers-of-target" {
+		ctx.attackOnTarget = true
+		return ctx
+	}
 	if applies["to"] != "bound-unit-attacks-reference" {
 		return ctx
 	}
@@ -442,7 +478,7 @@ func designateTargetBlock(e map[string]any, indent, arrow string, depth int, ctx
 		for _, applies := range designationEntries(e) {
 			recipient := designatedRecipientContext(applies, ctx)
 			entry := mapOr(applies["effect"])
-			lead := indent + "  -> " + capitalize(designateTargetWhen(applies, true))
+			lead := indent + "  - " + capitalize(designateTargetWhen(applies, true))
 			if containerTypes[ejstrType(entry)] {
 				lines = append(lines, lead+":\n"+describeEffect(entry, depth+2, recipient))
 			} else {

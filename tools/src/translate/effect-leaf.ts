@@ -14,7 +14,7 @@ import {
 } from "./effect-words.js";
 import { describeCondition, type Condition } from "./condition.js";
 import type { P } from "./condition-refs.js";
-import { selectionBinding, selectUnitsSubject } from "./effect-bind.js";
+import { selectionBinding, selectorSubject, selectUnitsSubject } from "./effect-bind.js";
 import { expiryTrail } from "./expiry.js";
 
 /** A leaf effect node: `{type, target, modifier, scaling?}`. */
@@ -64,21 +64,52 @@ function statChange(m: Record<string, unknown>, what: string): string {
 
 /** Characteristics a model rolls against, where a better value is a lower number ("3+"). */
 const ROLL_TARGET_STATS = new Set(["Sv", "WS", "BS", "Ld"]);
+/** Characteristics measured in inches. */
+const DISTANCE_STATS = new Set(["M", "Range", "detection-range"]);
 
 function bounds(m: Record<string, unknown>): string {
   // An improved roll target is capped from below: "this cannot improve a model's Save to better than 3+".
-  if (m.operation === "improve" && ROLL_TARGET_STATS.has(String(m.stat)) && m.minimum != null && m.maximum == null) return ` (to no better than ${jstr(m.minimum)}+)`;
-  const min = m.minimum != null ? ` (to a minimum of ${jstr(m.minimum)})` : "";
-  const max = m.maximum != null ? ` (to a maximum of ${jstr(m.maximum)})` : "";
+  if (m.operation === "improve" && ROLL_TARGET_STATS.has(String(m.stat)) && m.minimum != null && m.maximum == null) return `, to no better than ${jstr(m.minimum)}+`;
+  const min = m.minimum != null ? `, to a minimum of ${jstr(m.minimum)}` : "";
+  const max = m.maximum != null ? `, to a maximum of ${jstr(m.maximum)}` : "";
   return min + max;
 }
 
+/** The characteristics an attack has: under an `attackers-of-target` designation, each attack's. */
+const ATTACK_STATS = new Set(["S", "WS", "BS", "AP", "D"]);
+
+/**
+ * Which attacks against the target a per-attack change covers: " if it is made with ranged weapons
+ * by a friendly ASTRA MILITARUM unit". A target that is any friendly unit or model, or the attacking
+ * unit, adds nothing: every such attack already qualifies.
+ */
+function attackMaker(target: unknown, m: Record<string, unknown>, subj: string): string {
+  const withWeapons = hasWeapon(m) ? ` with ${weaponNoun(m)}` : "";
+  const f = target != null && typeof target === "object" && !Array.isArray(target) ? (target as P) : undefined;
+  const refKeys = ["selection_var", "event_var", "stratagem_target", "aura_recipient", "role"];
+  // A null field is an absent one.
+  const isFilter = f != null && !refKeys.some((k) => f[k] != null);
+  const anyAttacker = target == null || target === "attacker" || (isFilter && Object.keys(f).every((k) => f[k] == null || (k === "owner" && f.owner === "friendly") || k === "level"));
+  const maker = anyAttacker ? "" : isFilter ? selectorSubject({ filter: f }, false) : subj;
+  const by = maker === "" ? "" : ` by ${isFilter ? `${/^[aeiou]/i.test(maker) ? "an" : "a"} ${maker}` : maker}`;
+  return withWeapons || by ? ` if it is made${withWeapons}${by}` : "";
+}
+
 function statModifier(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
+  const statKey = jstr(m.stat);
   // AP is printed negative; the DSL stores its magnitude.
-  if (m.stat === "AP" && m.operation === "set" && typeof m.value === "number" && m.value > 0) m = { ...m, value: `-${m.value}` };
-  const stat = `${statName(m.stat)} characteristic`;
+  if (statKey === "AP" && m.operation === "set" && typeof m.value === "number" && m.value > 0) m = { ...m, value: `-${m.value}` };
+  // Roll-target stats (Sv, WS, BS, Ld) set to a number print with a trailing "+" ("2+").
+  if (ROLL_TARGET_STATS.has(statKey) && m.operation === "set" && typeof m.value === "number") m = { ...m, value: `${m.value}+` };
+  // Distance stats (M, Range, detection-range) print with inches on add/subtract/set.
+  if (DISTANCE_STATS.has(statKey) && (m.operation === "add" || m.operation === "subtract" || m.operation === "set") && (typeof m.value === "number" || (typeof m.value === "string" && !m.value.endsWith('"')))) {
+    m = { ...m, value: `${diceCase(m.value)}"` };
+  }
+  const stat = statKey === "detection-range" ? "detection range" : `${statName(m.stat)} characteristic`;
   if (m.incoming === true) return `${incomingLead(m, subj)}${statChange(m, `the ${stat} of that attack`)}${bounds(m)}`;
+  if (ctx.attackOnTarget && ATTACK_STATS.has(statKey)) return `${statChange(m, `the ${stat} of that attack`)}${bounds(m)}${attackMaker(e.target, m, subj)}`;
   if (hasWeapon(m)) return `${statChange(m, `the ${stat} of ${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)}`)}${bounds(m)}`;
+  if (e.target === "attacker" && ATTACK_STATS.has(statKey)) return `${statChange(m, `the ${stat} of the attacking unit's attacks`)}${bounds(m)}`;
   return `${statChange(m, ofOrPossessive(subj, stat))}${bounds(m)}`;
 }
 
@@ -94,25 +125,46 @@ function ignoreModifiers(m: Record<string, unknown>, subj: string): string {
   return `${subj} ${v(subj, "ignores")} any ${kind}modifiers to ${pronoun(subj)} ${things}${except}${weaponRollScope(m)}`;
 }
 
-function rollModifier(m: Record<string, unknown>, subj: string): string {
+const ATTACK_ROLLS = new Set(["hit", "wound", "damage"]);
+
+/** Whether a weapon filter only restates the enclosing `while making <type> attacks` condition. */
+function suppressedWeaponScope(m: Record<string, unknown>, ctx: Ctx): string {
+  if (!hasWeapon(m)) return "";
+  const w = m.weapons as P;
+  if (ctx.suppressWeaponType && w.type === ctx.suppressWeaponType && Object.keys(w).length === 1) return "";
+  return weaponRollScope(m);
+}
+
+function rollModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   // A bound roll's result as the value ("add 1 for each of those mortal wounds", one roll for both).
   const bound = typeof m.value === "object" && m.value !== null && typeof (m.value as P).roll_var === "string" && (m.value as P).successes_on == null;
-  const value = m.value_from === "previous-roll" || bound ? "the result of that roll" : null;
-  const cap = m.cap != null ? ` (to a maximum of ${signed(m.operation, m.cap)})` : "";
+  const boundValue = m.value_from === "previous-roll" || bound ? "the result of that roll" : null;
+  const cap = m.cap != null ? `, to a maximum of ${signed(m.operation, m.cap)}` : "";
+  const rn = jstr(m.roll);
   const rolls = `${rollName(m.roll)} rolls`;
+  const scope = suppressedWeaponScope(m, ctx);
   // "Halve Advance and Charge rolls made for that unit": the result is halved, with no value.
-  if (m.operation === "halve") return `halve ${ofOrPossessive(subj, rolls)}${weaponRollScope(m)}`;
-  if (m.incoming === true) {
-    const change = value ? `${m.operation === "subtract" ? "subtract" : "add"} ${value} ${m.operation === "subtract" ? "from" : "to"}` : `apply ${signed(m.operation, m.value)} to`;
-    return `${incomingLead(m, subj)}${change} the ${rollName(m.roll)} roll${cap}`;
+  if (m.operation === "halve") return `halve ${ofOrPossessive(subj, rolls)}${scope}`;
+  let sub = m.operation === "subtract" || m.operation === "worsen";
+  let rawVal: unknown = m.value;
+  const num = Number(rawVal);
+  if (!boundValue && !Number.isNaN(num) && num < 0) {
+    sub = !sub;
+    rawVal = Math.abs(num);
   }
-  if (value) return `${m.operation === "subtract" ? "subtract" : "add"} ${value} ${m.operation === "subtract" ? "from" : "to"} ${ofOrPossessive(subj, rolls)}${weaponRollScope(m)}${cap}`;
-  return `${subj} ${v(subj, "gets")} ${signed(m.operation, m.value)} to ${rolls}${weaponRollScope(m)}${cap}`;
+  const verb = sub ? "subtract" : "add";
+  const prep = sub ? "from" : "to";
+  const val = boundValue ?? diceCase(rawVal);
+  if (m.incoming === true) {
+    return `${incomingLead(m, subj)}${verb} ${val} ${prep} the ${rollName(m.roll)} roll${cap}`;
+  }
+  return `${verb} ${val} ${prep} ${ofOrPossessive(subj, rolls)}${scope}${cap}`;
 }
 
 function reRoll(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const rn = jstr(m.roll);
   const noun = rn === "any" ? "roll" : `${rollName(m.roll)} roll`;
+  const isAttackRoll = ATTACK_ROLLS.has(rn);
   const cnt = typeof m.count === "number" ? m.count : undefined;
   // A counted allowance ("one for each model equipped with …") reads as a number of rolls.
   const counted = m.count != null && typeof m.count === "object" ? `a number of ${failedNoun(m, noun)}s equal to ${diceCase(m.count)}` : undefined;
@@ -122,22 +174,31 @@ function reRoll(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): st
       ? counted
       : cnt != null
       ? `${cnt === 1 ? "one" : `up to ${cnt}`} ${failed}${noun}${cnt === 1 ? "" : "s"}${m.subset === "ones" ? " of 1" : m.subset === "ones-and-twos" ? " of 1 or 2" : ""}`
-      : m.subset === "ones"
-        ? `${rn === "any" ? "any" : "a"} ${noun} of 1`
-        : m.subset === "ones-and-twos"
-        ? `${rn === "any" ? "any" : "a"} ${noun} of 1 or 2`
-        : m.subset === "all-failures"
-          ? `a failed ${noun}`
-          : rn === "any" ? "any roll" : `the ${noun}`;
+      : isAttackRoll
+        ? m.subset === "ones"
+          ? `${noun}s of 1`
+          : m.subset === "ones-and-twos"
+            ? `${noun}s of 1 or 2`
+            : m.subset === "all-failures"
+              ? `failed ${noun}s`
+              : `${noun}s`
+        : m.subset === "ones"
+          ? `${rn === "any" ? "any" : "a"} ${noun} of 1`
+          : m.subset === "ones-and-twos"
+            ? `${rn === "any" ? "any" : "a"} ${noun} of 1 or 2`
+            : m.subset === "all-failures"
+              ? `a failed ${noun}`
+              : rn === "any" ? "any roll" : `the ${noun}`;
   const pool = m.pool != null ? ` by spending a die from your ${titleCase(jstr(m.pool))}` : "";
   const can = m.mandatory === true ? "must" : "can";
+  const scope = suppressedWeaponScope(m, ctx);
   if (m.incoming === true) return `${incomingLead(m, subj)}the attacking player ${can} re-roll ${which}${pool}`;
   // "you can re-roll …" names whose roll it is unless that is the ability's own unit.
   const own = e.target == null || e.target === "this-unit" || e.target === "attacker" || (e.target === "recipient" && !ctx.auraRecipient);
   const model = e.target === "this-model" || (e.target === "selected-unit" && ctx.selectedModel);
   const holder = model ? weaponHolder(e.target, ctx) : subj;
-  const owner = own ? "" : ` for ${["hit", "wound", "damage"].includes(rn) ? "attacks made by " : ""}${holder}`;
-  return `you ${can} re-roll ${which}${owner}${weaponRollScope(m)}${pool}`;
+  const owner = own ? "" : ` for ${isAttackRoll ? "attacks made by " : ""}${holder}`;
+  return `you ${can} re-roll ${which}${owner}${scope}${pool}`;
 }
 
 function failedNoun(m: Record<string, unknown>, noun: string): string {
@@ -389,7 +450,7 @@ const TARGET_KINDS: Record<string, string> = {
   stratagem: " with Stratagems", ability: " with abilities",
 };
 
-function targeting(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
+function targeting(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const who = (m.by != null ? effectSubject(m.by, ctx) : m.target != null ? subj : "units").replace(/^all /, "");
   const attacking = typeof m.by === "object" || who === "units" || isPlural(who) ? (/\bmodels\b/.test(who) ? "the attacking model" : "the attacking unit") : who;
   const whom = m.target === "every-eligible" ? "every eligible target" : m.target != null ? effectSubject(m.target, ctx) : subj;
@@ -416,7 +477,8 @@ function targeting(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
     const units = whom.replace(/^all /, "");
     return `${units} ${isPlural(units) ? "are" : "is"} not considered to be within Engagement Range of ${effectSubject(m.not_engaged_with, ctx)} when targets are selected${kind}`;
   }
-  const range = m.range == null ? "" : m.may === "cannot-target" ? ` unless ${attacking} is within ${rangePhrase(m.range)}` : ` within ${rangePhrase(m.range)}`;
+  const rangeText = m.range != null ? rangePhrase(m.range) : "";
+  const range = m.range == null ? "" : m.may === "cannot-target" ? ` unless ${attacking} is within ${rangeText}` : whom.includes(`within ${rangeText}`) ? "" : ` within ${rangeText}`;
   const unless = m.only_if_none != null ? `, unless there is no other eligible ${effectSubject(m.only_if_none, ctx).replace(/^all /, "").replace(/ units\b/, " unit")}` : "";
   if (m.may === "redirect") {
     const to = effectSubject(m.to, ctx);
@@ -426,6 +488,13 @@ function targeting(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
     return `${what}${m.by != null ? ` made by ${who}` : ""} that target ${one} must target ${to} instead${m.if_eligible === true ? `, if ${to} is an eligible target` : ""}`;
   }
   const except = m.except === "core-stratagems" ? " (Core Stratagems can still target it)" : "";
+  // When no `by` is specified and `m.target` is the same entity as `e.target`, render passively
+  // ("this unit cannot be targeted with ranged weapons") instead of "this unit cannot target this unit".
+  if (m.by == null && m.target != null && m.target !== "every-eligible" && JSON.stringify(m.target) === JSON.stringify(e.target)) {
+    const passive = m.may === "cannot-target" ? "cannot be targeted" : m.may === "must-target" ? "must be targeted" : "can be targeted";
+    const passiveRange = m.range == null ? "" : m.may === "cannot-target" ? ` unless the attacking unit is within ${rangePhrase(m.range)}` : ` within ${rangePhrase(m.range)}`;
+    return `${whom} ${passive}${kind}${passiveRange}${unless}${except}`;
+  }
   // "cannot target enemy units … if the target unit was engaged with this unit at the start of the turn".
   if (m.target_condition != null) {
     const condition = describeCondition(asTargetCandidate(m.target_condition) as Condition);
@@ -550,7 +619,7 @@ export function describeLeaf(e: Leaf, ctx: Ctx, inline: Inline): string {
   switch (e.type) {
     case "stat-modifier": return statModifier(e, m, subj, ctx);
     case "ignore-modifiers": return ignoreModifiers(m, subj);
-    case "roll-modifier": return rollModifier(m, subj);
+    case "roll-modifier": return rollModifier(m, subj, ctx);
     case "re-roll": return reRoll(e, m, subj, ctx);
     case "roll-result": return rollResult(m, subj);
     case "end-attack-sequence": return "the attack sequence ends";
@@ -566,7 +635,7 @@ export function describeLeaf(e: Leaf, ctx: Ctx, inline: Inline): string {
     case "ability-activate": return abilityActivate(m, subj);
     case "oath-modifier": return oathModifier(m, subj, ctx, inline);
     case "permission": return permission(m, subj, ctx);
-    case "targeting": return targeting(m, subj, ctx);
+    case "targeting": return targeting(e, m, subj, ctx);
     case "counts-as": return countsAs(m, subj, ctx);
     case "rule-state": return ruleState(m, subj);
     default: return describeShapeLeaf(e, m, subj, ctx) ?? describeBoardLeaf(e, m, subj, ctx, inline);

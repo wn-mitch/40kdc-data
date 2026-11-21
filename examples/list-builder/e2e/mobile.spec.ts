@@ -38,7 +38,8 @@ test('mobile: picker + detail open as bottom sheets', async ({ page }) => {
 	const detail = page.getByRole('dialog');
 	await expect(detail).toBeVisible();
 	await expect(detail.getByText(/Helbrecht/).first()).toBeVisible();
-	await expect(detail.getByText('Models')).toBeVisible();
+	// Exact: the datacard's ability descriptions also mention "models".
+	await expect(detail.getByText('Models', { exact: true })).toBeVisible();
 
 	// The sheet closes on its close button, leaving the roster in place.
 	await detail.getByRole('button', { name: 'Close' }).click();

@@ -328,6 +328,87 @@
       "consumers": ["tools/src/mfm/attachment.ts#runAttachmentRoles"],
       "reason": "A condition references a concrete roster unit."
     },
+    "/conditional_groups/*/required_detachment_id": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.datasheet_bodyguard_group.requiredDetachmentId",
+        "data.detachment.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "datasheet_bodyguard_group.datasheetId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/converters/id-generator.ts#nameToId",
+          "operation": "Convert the detachment's English name to its repo detachment id; an id with no repo record fails the pass."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/attachment.ts#runAttachmentRoles"
+      ],
+      "reason": "The group applies only when the army has selected this detachment (Pactbound Zealots)."
+    },
+    "/conditional_groups/*/excluded_detachment_id": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.datasheet_bodyguard_group.excludedDetachmentId",
+        "data.detachment.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "datasheet_bodyguard_group.datasheetId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/converters/id-generator.ts#nameToId",
+          "operation": "Convert the detachment's English name to its repo detachment id; an id with no repo record fails the pass."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/attachment.ts#runAttachmentRoles"
+      ],
+      "reason": "The group applies only when the army has not selected this detachment."
+    },
+    "/conditional_groups/*/required_shared_keyword": {
+      "provenance": "derived",
+      "coverage": "implemented",
+      "sources": [
+        "data.datasheet_bodyguard_group.requiresAllUnitsHaveKeywordId",
+        "data.keyword.localisations.*.name"
+      ],
+      "joins": [
+        {
+          "relation": "datasheet_bodyguard_group.datasheetId",
+          "direction": "parent",
+          "purpose": "eligibility"
+        }
+      ],
+      "transforms": [
+        {
+          "symbol": "tools/src/mfm/keywords.ts#keywordLabel",
+          "operation": "Resolve the keyword id to its repo label; an unresolved id fails the pass."
+        }
+      ],
+      "filters": [],
+      "precedence": [],
+      "consumers": [
+        "tools/src/mfm/attachment.ts#runAttachmentRoles"
+      ],
+      "reason": "Every unit in the attachment must carry the keyword (a shared Mark of Chaos under Pactbound Zealots); roster validation checks the leader and the bodyguard."
+    },
     "/game_version": {
       "provenance": "repo-authored",
       "coverage": "implemented",
@@ -383,27 +464,5 @@
       "reason": "Edition is repository-owned game-version context."
     }
   },
-  "unmapped_mfm_fields": [
-    {
-      "source": "data.datasheet_bodyguard_group.excludedDetachmentId",
-      "candidate_pointer": null,
-      "reason": "Set on 60 bodyguard groups that are barred under one detachment. attachment.ts should read it.",
-      "classification": "needs-consumer",
-      "spread": "1291 rows, 1291 values (1231 null/absent): string, 1 distinct"
-    },
-    {
-      "source": "data.datasheet_bodyguard_group.requiredDetachmentId",
-      "candidate_pointer": null,
-      "reason": "Set on 300 bodyguard groups valid only under one detachment; conditional-keywords.ts reads it; attachment.ts should too.",
-      "classification": "needs-consumer",
-      "spread": "1291 rows, 1291 values (991 null/absent): string, 1 distinct"
-    },
-    {
-      "source": "data.datasheet_bodyguard_group.requiresAllUnitsHaveKeywordId",
-      "candidate_pointer": "/eligible_bodyguard_keywords",
-      "reason": "Set on 300 bodyguard groups with 5 distinct keywords every unit in the group must also carry. attachment.ts should read it.",
-      "classification": "needs-consumer",
-      "spread": "1291 rows, 1291 values (991 null/absent): string, 5 distinct"
-    }
-  ]
+  "unmapped_mfm_fields": []
 }

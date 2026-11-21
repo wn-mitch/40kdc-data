@@ -19,13 +19,13 @@ const base = (JSON.parse(readFileSync(join(dataRoot, "adeptus-mechanicus", "abil
 /** "zero": a zero-width leaf at the first byte of its wording (a frame that precedes the leaf it grants). */
 type Item = [wording: string, family: string, parameters: Record<string, unknown>, ("zero" | undefined)?];
 
-/** Leaves on their own wording in `text`, in order, with parameters as stored. `version` pins a family version other than the current one. */
-function placed(text: string, items: Item[], version?: { family: string; version: number }): CompileLeaf[] {
-  return unnormalized(text, items, version).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
+/** Leaves on their own wording in `text`, in order, with parameters as stored. */
+function placed(text: string, items: Item[]): CompileLeaf[] {
+  return unnormalized(text, items).map((leaf) => ({ ...leaf, parameters: normalizeFingerprintParameters(leaf.family_id, leaf.parameters, leaf.family_version) }));
 }
 
 /** As placed, with parameters as given: only for leaves a test compiles outside the contract on purpose. */
-function unnormalized(text: string, items: Item[], version?: { family: string; version: number }): CompileLeaf[] {
+function unnormalized(text: string, items: Item[]): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
   return items.map(([wording, family, parameters, zero]) => {
@@ -33,14 +33,14 @@ function unnormalized(text: string, items: Item[], version?: { family: string; v
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     const end = zero ? start : start + Buffer.byteLength(wording, "utf8");
     if (!zero) from = end;
-    const family_version = version?.family === family ? version.version : currentFamilyVersion(family);
+    const family_version = currentFamilyVersion(family);
     return { role: familyRole(family, family_version), family_id: family, family_version, parameters, start_byte: start, end_byte: end, fragment: "RAW_TEXT" };
   });
 }
 
 /** The compile result for a text, with the entry checked against the ability schema. */
-function compiled(text: string, items: Item[], version?: { family: string; version: number }) {
-  const result = compileLeaves(placed(text, items, version), text);
+function compiled(text: string, items: Item[]) {
+  const result = compileLeaves(placed(text, items), text);
   if (!result.ok) throw new Error(result.errors.join("; "));
   const check = checkEntry(entryWithMechanics(base, result.mechanics));
   expect(check.errors).toEqual([]);
@@ -78,7 +78,7 @@ describe("Semantic authoring attacker-side filter on a destruction by an attack"
     const text = SHOT_TEXT;
     const leaves = placed(text, [ASTRA, destroyed(), makesByEnemy(), FLY, hitRoll()]);
     leaves[1]!.parameters = { kind: "unit-destroyed", destroy_filter: { weapon: "any" } };
-    expect(() => normalizeFingerprintParameters("event", leaves[1]!.parameters, currentFamilyVersion("event"))).toThrow(/event parameters must be exactly/u);
+    expect(() => normalizeFingerprintParameters("event", leaves[1]!.parameters)).toThrow(/event\.destroy_filter does not apply to kind unit-destroyed/u);
     // The contract has no destroy_filter on event; the compiler refuses the fold too, behind that check.
     const result = compileLeaves(outsideContract(leaves), text);
     expect(result.ok).toBe(false);
@@ -89,7 +89,7 @@ describe("Semantic authoring attacker-side filter on a destruction by an attack"
     const text = SHOT_TEXT;
     const leaves = placed(text, [ASTRA, destroyed(), makesByEnemy(), FLY, hitRoll()]);
     leaves[1]!.parameters = { kind: "unit-destroyed", subject_filter: { owner: "enemy" } };
-    expect(() => normalizeFingerprintParameters("event", leaves[1]!.parameters, currentFamilyVersion("event"))).toThrow(/event parameters must be exactly/u);
+    expect(() => normalizeFingerprintParameters("event", leaves[1]!.parameters)).toThrow(/event\.subject_filter does not apply to kind unit-destroyed/u);
     // The contract has no subject_filter on event; the compiler refuses the fold too, behind that check.
     const result = compileLeaves(outsideContract(leaves), text);
     expect(result.ok).toBe(false);
@@ -272,13 +272,6 @@ describe("Semantic authoring characteristic setter on the attack (characteristic
     expect(add.mechanics.effect.target).toBe(mechanics.effect.target);
   });
 
-  it("refuses subject attack on version 6, which predates the attack subject", () => {
-    expect(() => normalizeFingerprintParameters("characteristic-set", ITEMS[1]![2], 6)).toThrow(/characteristic-set.subject must be one of/u);
-    // Version 6's contract refuses subject attack; the compiler has no DSL target for it either, behind that check.
-    const result = compileLeaves(outsideContract(unnormalized(TEXT, ITEMS, { family: "characteristic-set", version: 6 })), TEXT);
-    expect(result.ok).toBe(false);
-    expect(result.ok ? "" : result.errors.join(" ")).toContain("has no DSL target");
-  });
 });
 
 describe("Semantic authoring benefit of cover for a marked unit's targets", () => {

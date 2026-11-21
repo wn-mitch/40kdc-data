@@ -5,11 +5,11 @@ import { hashJson } from "../canonical-hash.js";
 
 import { currentFamilyVersion, familyRole, LEAF_ROLES, NAME_FRAGMENT, REVIEWED_FAMILY_REGISTRY, validateFingerprint } from "./contracts.js";
 import { getAbilityCoverage, getCurrentCoverage, type AbilityCoverage, type SourceFragmentView } from "./coverage.js";
-import { BODY_SPAN_SQL, bumpWorkbenchRevision, getWorkbenchRevision, insertSpan, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
+import { BODY_SPAN_SQL, bumpWorkbenchRevision, getWorkbenchRevision, historyCompactedAt, insertSpan, invalidateWholeReview, parseStoredFragments, RESTATES_ACTIVE_ANNOTATION, withTransaction } from "./db.js";
 import { resolveAbilityContext, type AbilityContext } from "./context.js";
 import { abilityReadiness, currentReadiness, type Readiness } from "./readiness.js";
 import { applySourceAtomUndo, assertSourceAtomUndo, sourceAtomsForAbility } from "./atoms.js";
-import { applyLeafUndo, assertLeafUndo, stillAuthorized } from "./leaves.js";
+import { applyLeafUndo, assertLeafUndo, requeueSurfaces, stillAuthorized } from "./leaves.js";
 import { retractOrphanedCopies } from "./propagate.js";
 import { assertResolved } from "./placeholders.js";
 import { applyShapeUndo, assertShapeUndo, COMPILED_MEMBER_KINDS } from "./shapes.js";
@@ -1141,21 +1141,10 @@ function currentAnnotationForUndo(db: DatabaseSync, annotationId: number): UndoA
     WHERE annotations.id = ?
   `).get(annotationId) as UndoAnnotation | undefined;
   if (!annotation) conflict("An annotation in this batch no longer exists.");
-  // A family-version migration replaces a leaf with an identical one on the successor version; the
-  // successor is this batch's leaf, and what the batch superseded is still what undo restores.
-  let current = annotation;
-  while (current.status === "superseded") {
-    const successor = db.prepare(`
-      SELECT annotations.id, annotations.span_id, annotations.supersedes_id, annotations.status, source_spans.ability_version_id
-      FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
-      JOIN annotation_batches ON annotation_batches.id = annotations.batch_id
-      WHERE annotations.supersedes_id = ? AND annotation_batches.operation = 'migration-family-versions'
-    `).get(current.id) as UndoAnnotation | undefined;
-    if (!successor) break;
-    current = successor;
-  }
-  if (current.status !== "active") conflict("This batch cannot be undone because one of its annotations was later changed.");
-  return { ...current, supersedes_id: annotation.supersedes_id };
+  // A family-version bump moves a leaf to its successor fingerprint in place, so the row is still
+  // this batch's leaf.
+  if (annotation.status !== "active") conflict("This batch cannot be undone because one of its annotations was later changed.");
+  return annotation;
 }
 
 /** Batch members keyed by a text id; their own undo hooks handle them. */
@@ -1211,11 +1200,14 @@ export function undoBatch(
   assertReviewer(actor, undo.reviewer);
   return withTransaction(db, () => {
     const original = db.prepare(`
-      SELECT id, operation, reviewer, metadata_json
+      SELECT id, operation, reviewer, metadata_json, created_at
       FROM annotation_batches
       WHERE id = ?
-    `).get(batchId) as { id: string; operation: string; reviewer: string; metadata_json: string | null } | undefined;
+    `).get(batchId) as { id: string; operation: string; reviewer: string; metadata_json: string | null; created_at: string } | undefined;
     if (!original) missing(`Unknown annotation batch ${batchId}.`);
+    // Compaction dropped the rows a batch from before it replaced, so undo has nothing to restore.
+    const compacted = historyCompactedAt(db);
+    if (compacted !== null && original.created_at < compacted) conflict("This batch predates the workbench history compaction; the rows it replaced are gone.");
     if (original.reviewer !== undo.reviewer) conflict("Only the original reviewer can undo this decision batch.");
     const alreadyReversed = db.prepare("SELECT id FROM annotation_batches WHERE reversed_batch_id = ?").get(batchId);
     if (alreadyReversed) conflict("This batch has already been reversed.");
@@ -1319,9 +1311,13 @@ export function undoBatch(
     }
     for (const id of applySourceAtomUndo(db, reversalId, members)) touchedAbilities.add(id);
     for (const id of applyOntologyUndo(db, batchId, reversalId, members)) touchedAbilities.add(id);
-    applyLeafUndo(db, batchId, reversalId, members);
+    const requeue = applyLeafUndo(db, batchId, reversalId, members);
     for (const annotation of annotations) if (annotation.supersedes_id !== null) restore(annotation.supersedes_id, "The superseded annotation changed during undo.");
     for (const id of mergedMembers) restore(id, "A merged annotation changed during undo.");
+    // Last, once everything this batch replaced is back: wording a surviving surface covers gets
+    // its leaf again.
+    requeueSurfaces(db, undo.reviewer, reversalId, requeue);
+    for (const id of requeue) touchedAbilities.add(id);
     applyShapeUndo(db, reversalId, members);
     // Copies of what this undo retracted, on byte-identical records, go with it.
     retractOrphanedCopies(db, reversalId);

@@ -85,7 +85,7 @@ func TestUnitWithoutSelectorKeywordsGetsNothingAndUnknownKeywordsRefuse(t *testi
 	if len(unknown.activatable) != 0 {
 		t.Fatalf("activatable = %#v", unknown.activatable)
 	}
-	if got, want := reasonsOf(unknown), []any{"select-units: the crunched unit's keywords are unavailable for the selector"}; !reflect.DeepEqual(got, want) {
+	if got, want := reasonsOf(unknown), []any{"select-units: candidate identity or state is unavailable"}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("reasons = %#v", got)
 	}
 }

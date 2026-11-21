@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 
 // Fabricated wording only; no rules text.
 
-function leaf(text: string, wording: string, family: string, version: number, parameters: Record<string, unknown>): CompileLeaf {
+function leaf(text: string, wording: string, family: string, parameters: Record<string, unknown>): CompileLeaf {
+  const version = currentFamilyVersion(family);
   const start = Buffer.from(text).indexOf(Buffer.from(wording));
   if (start < 0) throw new Error(`"${wording}" is not in the text`);
   return {
@@ -19,10 +20,10 @@ type Node = Record<string, any>;
 
 describe("the unit another ability's use selected", () => {
   const text = "Each time the bearer uses its Gear Blessing ability, until the start of your next Command phase, add 2\" to the Move characteristic of the selected **WALKER** model.";
-  const use = (parameters: Record<string, unknown>) => leaf(text, "Each time the bearer uses its Gear Blessing ability", "event", 35,
+  const use = (parameters: Record<string, unknown>) => leaf(text, "Each time the bearer uses its Gear Blessing ability", "event",
     { kind: "used", activity: "ability", id: "gear-blessing-astra-militarum", subject: "this-model", ...parameters });
-  const lasting = () => leaf(text, "until the start of your next Command phase", "duration", 5, { endpoint: "start-of-next-command-phase" });
-  const change = () => leaf(text, "add 2\" to the Move characteristic of the selected **WALKER** model", "characteristic-modifier", 19,
+  const lasting = () => leaf(text, "until the start of your next Command phase", "duration", { endpoint: "start-of-next-command-phase" });
+  const change = () => leaf(text, "add 2\" to the Move characteristic of the selected **WALKER** model", "characteristic-modifier",
     { subject: "selected-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" });
 
   it("binds the selected model to the use's object, under a trigger on that ability's use", () => {

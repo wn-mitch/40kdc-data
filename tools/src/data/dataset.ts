@@ -13,6 +13,7 @@ import type {
   Detachment,
   Enhancement,
   ForceDisposition,
+  KeywordChoiceGroup,
   GameEvent,
   GameVersion,
   HullShape,
@@ -132,6 +133,7 @@ export class Dataset {
   readonly missionCards: Collection<SecondaryCard, SecondaryCard>;
   readonly deploymentPatterns: Collection<DeploymentPattern, DeploymentPattern>;
   readonly forceDispositions: Collection<ForceDisposition, ForceDisposition>;
+  readonly keywordChoiceGroups: Collection<KeywordChoiceGroup, KeywordChoiceGroup>;
   readonly terrainTemplates: Collection<TerrainTemplate, TerrainTemplate>;
   readonly terrainLayouts: Collection<TerrainLayout, TerrainLayout>;
   readonly hullShapes: Collection<HullShape, HullShape>;
@@ -279,6 +281,7 @@ export class Dataset {
     this.missionCards = idCollection(raw.missionCards);
     this.deploymentPatterns = idCollection(raw.deploymentPatterns);
     this.forceDispositions = idCollection(raw.forceDispositions);
+    this.keywordChoiceGroups = idCollection(raw.keywordChoiceGroups);
     this.terrainTemplates = idCollection(raw.terrainTemplates);
     this.terrainLayouts = idCollection(raw.terrainLayouts);
     this.hullShapes = idCollection(raw.hullShapes);
@@ -430,7 +433,8 @@ export class Dataset {
 
   /**
    * The allied-rules **offered** for an army of `factionId` running the given
-   * detachments. A rule applies when both its gates pass: the **army gate**
+   * detachments. A rule applies when all its gates pass: the **host gate**
+   * (`host_faction_ids` empty, or listing `factionId`), the **army gate**
    * (`army_keywords_any` empty, or intersecting the faction's keywords) and the
    * **detachment gate** (`detachment_ids` empty, or any listed id among `detachmentIds`). Order
    * follows the allied-rules data file. The strict "every *model* carries an
@@ -520,12 +524,17 @@ export class Dataset {
     return attachments.bodyguardsAttachableFrom(this, leaderUnitId, factionId, rosterUnitIds);
   }
 
-  /** Conditional roster groups override the flat role; leader wins on overlap. */
+  /**
+   * Conditional roster groups override the flat role; leader wins on overlap. Only a group that
+   * names required or excluded roster units sets a role: a group gated on a detachment or keyword
+   * alone carries its datasheet's own role, and a shared leader id would carry it across factions.
+   */
   conditionalAttachmentRole(leaderUnitId: string, rosterUnitIds: ReadonlySet<string>): "leader" | "support" | undefined {
     let supportApplies = false;
     for (const attachment of this.leaderAttachments) {
       if (attachment.leader_id !== leaderUnitId) continue;
       for (const group of attachment.conditional_groups ?? []) {
+        if (!group.required_roster_unit_ids && !group.excluded_roster_unit_ids) continue;
         if (!attachments.attachmentGroupApplies(group, rosterUnitIds)) continue;
         if (group.role === "leader") return "leader";
         supportApplies = true;
@@ -639,6 +648,8 @@ export class Dataset {
    * ```
    *
    * A lever that raises another pool's cap or applies only under a stance option is not listed.
+   * The caller pays an opted-in Stratagem's CP; the option its `choice` marks as the secondary
+   * effect carries the Stratagem's `secondary_effect_extra_cp` as its `cost`.
    */
   defensiveLeversFor(
     input: EligibilityInput & { optedInStratagemIds?: string[] },
@@ -794,6 +805,7 @@ function push<T>(map: Map<string, T[]>, key: string, value: T): void {
  */
 function eligibilityKey(input: EligibilityInput, phase: Phase): string {
   const roles = Object.entries(input.attachmentRoles ?? {}).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
+  const choices = Object.entries(input.keywordChoices ?? {}).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
   return JSON.stringify([phase, input.unitId, input.factionId ?? null, input.detachmentId ?? null,
-    input.attachedUnitIds ?? [], roles, input.supportingUnitIds ?? []]);
+    input.attachedUnitIds ?? [], roles, input.supportingUnitIds ?? [], choices]);
 }

@@ -1,5 +1,5 @@
 import { closed, CompileError, effect, type CompileLeaf } from "./compile-fragments.js";
-import { PSYCHIC_TEST_ROLL, RITUAL_MANIFEST, TEST_DOUBLES } from "./psychic-families.js";
+import { PSYCHIC_TEST_ROLL, RITUAL_MANIFEST, TEST_DOUBLES } from "./families/vocabulary.js";
 
 type Node = Record<string, unknown>;
 

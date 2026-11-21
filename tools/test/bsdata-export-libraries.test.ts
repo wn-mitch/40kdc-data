@@ -61,4 +61,30 @@ describe("library catalogues", () => {
     // Without the split the allied armies would cycle.
     expect(documents.slice(1).some((d) => rootOf(d).library === true)).toBe(true);
   }, 120_000);
+
+  it("puts both Titan Legions in BSData's one Titans library, linked once from each catalogue", () => {
+    const documents = buildExport({ version: "1.5.1", dataset });
+    const titans = rootOf(documents.find((d) => d.file === "Library - Titans.json")!);
+    expect(str(titans, "id")).toBe("7481-280e-b55e-7867");
+    const names = new Set(children(titans, "sharedSelectionEntries").map((e) => String(e.name)));
+    for (const faction of ["adeptus-titanicus", "titanicus-traitoris"]) {
+      for (const unit of dataset.units.byFaction(faction)) expect(names.has(unit.name), `${faction} ${unit.id}`).toBe(true);
+    }
+    for (const doc of documents.slice(1)) {
+      const toTitans = children(rootOf(doc), "catalogueLinks").filter((l) => str(l, "targetId") === str(titans, "id") && l.importRootEntries !== true);
+      expect(toTitans.length, doc.file).toBeLessThanOrEqual(1);
+    }
+    expect(documents.some((d) => /Titanicus.* Library\.json$/.test(d.file))).toBe(false);
+  }, 120_000);
+
+  it("writes BSData's libraries the export has no content for, empty and linked from the armies BSData links them from", () => {
+    const documents = buildExport({ version: "1.5.1", dataset });
+    const shells = { "Aeldari - Aeldari Library": "Aeldari - Craftworlds", "Library - Tyranids": "Tyranids", "Unaligned Forces": "Necrons" };
+    for (const [name, linker] of Object.entries(shells)) {
+      const shell = rootOf(documents.find((d) => d.file === `${name}.json`)!);
+      expect(shell.library, name).toBe(true);
+      expect(["sharedSelectionEntries", "entryLinks", "categoryEntries", "sharedRules"].some((k) => children(shell, k).length > 0), name).toBe(false);
+      expect(targets(documents.slice(1) as CatalogueDocument[], `${linker}.json`), `${linker} -> ${name}`).toContain(str(shell, "id"));
+    }
+  }, 120_000);
 });

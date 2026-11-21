@@ -23,42 +23,42 @@ describe("canonical condition predicates", () => {
   });
 
   it("preserves keyword, state and ownership wording without retired atoms", () => {
-    expect(describeCondition(matches({ all_of: ["INFANTRY"] }))).toBe('the unit has the INFANTRY keyword');
+    expect(describeCondition(matches({ all_of: ["INFANTRY"] }))).toBe('this unit has the INFANTRY keyword');
     expect(conditionLeadIn(matches({ any_of: ["MONSTER", "VEHICLE"] }, "defender"))).toBe("against MONSTER or VEHICLE targets");
-    expect(describeCondition(not(matches({ all_of: ["INFANTRY"] })))).toBe('the unit does not have the INFANTRY keyword');
-    expect(describeCondition(matches({ none_of: ["MONSTER", "VEHICLE"] }))).toBe('the unit does not have the MONSTER or VEHICLE keyword');
-    expect(describeCondition(matches({ not_all_of: ["MONSTER", "CHARACTER"] }))).toBe('the unit does not have all of the MONSTER and CHARACTER keywords');
-    expect(conditionLeadIn(matches({ state: "battle-shocked" }))).toBe("while the unit is Battle-shocked");
+    expect(describeCondition(not(matches({ all_of: ["INFANTRY"] })))).toBe('this unit does not have the INFANTRY keyword');
+    expect(describeCondition(matches({ none_of: ["MONSTER", "VEHICLE"] }))).toBe('this unit does not have the MONSTER or VEHICLE keyword');
+    expect(describeCondition(matches({ not_all_of: ["MONSTER", "CHARACTER"] }))).toBe('this unit does not have all of the MONSTER and CHARACTER keywords');
+    expect(conditionLeadIn(matches({ state: "battle-shocked" }))).toBe("while this unit is Battle-shocked");
     expect(describeSelectionEligibility(not(matches({ state: "battle-shocked" })))).toBe("that is not Battle-shocked");
-    expect(describeCondition(matches({ owner: "enemy" }))).toBe("the unit is an enemy unit");
-    expect(describeCondition({ type: "has-keyword", parameters: { chosen_by: "chosen-mark" } })).toBe("the unit has the keyword selected for Chosen Mark");
+    expect(describeCondition(matches({ owner: "enemy" }))).toBe("this unit is an enemy unit");
+    expect(describeCondition({ type: "has-keyword", parameters: { chosen_by: "chosen-mark" } })).toBe("this unit has the keyword selected for Chosen Mark");
     expect(describeCondition({ type: "owned-by", parameters: { owner: "enemy" } })).toBe("owned by");
     expect(describeCondition({ type: "has-ability", parameters: { ability: "stealth" } })).toBe("has ability");
   });
 
   it("retains conjunction and alternative filter semantics", () => {
     const filter = { all_of: ["INFANTRY"], state: "battle-shocked" };
-    expect(describeCondition(not(matches(filter)))).toBe("the unit is not an INFANTRY unit that is Battle-shocked");
-    expect(describeCondition(matches({ any_of_filters: [{ all_of: ["PSYKER"] }, { state: "battle-shocked" }] }))).toBe("the unit is a unit that is a PSYKER unit or a unit that is Battle-shocked");
-    expect(conditionLeadIn({ operator: "and", operands: [matches({ all_of: ["INFANTRY"] }), matches({ all_of: ["CHARACTER"] })] })).toBe("if the unit is an INFANTRY CHARACTER unit");
+    expect(describeCondition(not(matches(filter)))).toBe("this unit is not an INFANTRY unit that is Battle-shocked");
+    expect(describeCondition(matches({ any_of_filters: [{ all_of: ["PSYKER"] }, { state: "battle-shocked" }] }))).toBe("this unit is a unit that is a PSYKER unit or a unit that is Battle-shocked");
+    expect(conditionLeadIn({ operator: "and", operands: [matches({ all_of: ["INFANTRY"] }), matches({ all_of: ["CHARACTER"] })] })).toBe("if this unit is an INFANTRY CHARACTER unit");
   });
 
   it("names actual attachment membership and exact reference kinds", () => {
     const filter = { level: "model", attachment_role: "bodyguard", member_of: "this-unit", model_names: ["Guard"] };
-    expect(unitFilterPhrase(filter)).toBe("a bodyguard model named Guard in the unit");
-    expect(describeCondition(matches(filter, "this-model"))).toBe("this model is a bodyguard model named Guard in the unit");
-    expect(unitFilterPhrase({ visible: { to: { selection_var: "observer" } }, engaged_with: "this-model" })).toBe("a unit within Engagement Range of this model that is visible to the bound observer");
-    expect(unitFilterPhrase({ not_engaged_with: { selection_var: "target" } })).toBe("a unit not within Engagement Range of the bound target");
+    expect(unitFilterPhrase(filter)).toBe("a Bodyguard model named Guard in this unit");
+    expect(describeCondition(matches(filter, "this-model"))).toBe("this model is a Bodyguard model named Guard in this unit");
+    expect(unitFilterPhrase({ visible: { to: { selection_var: "observer" } }, engaged_with: "this-model" })).toBe("a unit within Engagement Range of this model that is visible to the chosen observer");
+    expect(unitFilterPhrase({ not_engaged_with: { selection_var: "target" } })).toBe("a unit not within Engagement Range of the chosen target");
     expect(placeRefPhrase({ objective: { selection_var: "marker" } })).toBe("that objective marker");
-    expect(describeCondition(matches({ within: { range: { inches: 6 }, of: "battlefield-centre", wholly: true } }))).toBe('the unit is wholly within 6" of the centre of the battlefield');
+    expect(describeCondition(matches({ within: { range: { inches: 6 }, of: "battlefield-centre", wholly: true } }))).toBe('this unit is wholly within 6" of the centre of the battlefield');
     expect(describeCondition(matches({ visible: { to: "attacker" } }, "defender"))).toBe("the target is visible to the attacking model");
   });
 
   it("retains differentiated visibility, historical state and per-model position", () => {
     expect(describeCondition({ type: "visible", parameters: { subject: "defender", fully: true, blocked_by: "this-unit" } })).toBe("the target is not fully visible to the attacking model because of this unit");
-    expect(describeCondition({ type: "unit-state", parameters: { state: "engaged", at: "turn-start" } })).toBe("the unit was engaged at the start of the turn");
-    expect(describeCondition({ type: "within", parameters: { models: "every", of: "battlefield-edge", range: { inches: 6 }, wholly: true } })).toBe('every model in the unit is wholly within 6" of a battlefield edge');
-    expect(describeCondition({ type: "within", parameters: { count: { min: 2, max: 3 }, of: { objective: { role: "central" } }, range: "objective-control", at: "phase-start" } })).toBe("2-3 models in the unit were within range of a central objective marker at the start of the phase");
+    expect(describeCondition({ type: "unit-state", parameters: { state: "engaged", at: "turn-start" } })).toBe("this unit was engaged at the start of the turn");
+    expect(describeCondition({ type: "within", parameters: { models: "every", of: "battlefield-edge", range: { inches: 6 }, wholly: true } })).toBe('every model in this unit is wholly within 6" of a battlefield edge');
+    expect(describeCondition({ type: "within", parameters: { count: { min: 2, max: 3 }, of: { objective: { role: "central" } }, range: "objective-control", at: "phase-start" } })).toBe("2-3 models in this unit were within range of a central objective marker at the start of the phase");
   });
 
   it("renders all count bounds and persistent range tiers", () => {
@@ -74,12 +74,12 @@ describe("canonical condition predicates", () => {
   });
 
   it("preserves controls comparison, proportion and mission correlation", () => {
-    expect(describeCondition({ type: "controls", parameters: { compare: { owner: "enemy", comparison: "gt" } } })).toBe("you hold more objectives than the opponent");
-    expect(describeCondition({ type: "controls", parameters: { by: "enemy", objective: { role: "central" }, count: { min: 1 }, proportion: { comparison: "gt", fraction: 0.5 } } })).toBe("your opponent controls 1+ central objectives and your opponent controls more than half of the central objectives");
+    expect(describeCondition({ type: "controls", parameters: { compare: { owner: "enemy", comparison: "gt" } } })).toBe("you hold more objectives than your opponent");
+    expect(describeCondition({ type: "controls", parameters: { by: "enemy", objective: { role: "central" }, count: { min: 1 }, proportion: { comparison: "gt", fraction: 0.5 } } })).toBe("your opponent controls one or more central objectives and your opponent controls more than half of the central objectives");
     expect(describeCondition({ type: "operation-markers", parameters: { count: { min: 2, max: 2 }, within: { range: "objective-control", of: { objective: { role: "central" } } }, friendly_unit_in_same_terrain_area: true, no_enemy_in_terrain_area: true } })).toBe("exactly 2 operation markers on the battlefield within range of a central objective marker with a friendly unit in the same terrain area and no enemy units in that terrain area");
     expect(describeCondition({ type: "destroyed-while-on-objective", parameters: { count: { max: 2 }, objective_role: "central", destroyer_on_objective: true, victim_started_turn_on_objective: true } })).toBe("at most 2 enemy units destroyed by a unit on a central objective that started the turn on a central objective");
     expect(objectivePhrase({ controlled_by: "friendly", within: { range: "objective-control", of: "this-unit" } })).toBe("objective your unit controls");
-    expect(describeCondition(not({ type: "controls", parameters: { count: { min: 1 }, compare: { owner: "enemy", comparison: "gt" } } }))).toBe("not (you control 1+ objectives and you hold more objectives than the opponent)");
+    expect(describeCondition(not({ type: "controls", parameters: { count: { min: 1 }, compare: { owner: "enemy", comparison: "gt" } } }))).toBe("not (you control one or more objectives and you hold more objectives than your opponent)");
   });
 
   it("names immutable stance options rather than treating them as global rules", () => {
@@ -98,15 +98,15 @@ describe("canonical triggers and durations", () => {
 
   it("renders structured weapon keyword parameters", () => {
     const weapons = { keyword: { keyword_id: "anti", parameters: { target_keyword: "VEHICLE", threshold: 4 } } };
-    expect(describeTrigger({ event: "destroyed", filter: { weapons } })).toBe("when the unit is destroyed with a [ANTI-VEHICLE 4+] weapon");
+    expect(describeTrigger({ event: "destroyed", filter: { weapons } })).toBe("when this unit is destroyed with a [ANTI-VEHICLE 4+] weapon");
     expect(describeCondition({ type: "attack-is", parameters: { weapons } })).toBe("for attacks made with [ANTI-VEHICLE 4+] weapons");
     expect(describeCondition({ type: "happened", parameters: { event: "after-roll", filter: { roll: "hit", result: "success", weapons }, window: "phase" } })).toBe("the unit was hit by an attack made with a [ANTI-VEHICLE 4+] weapon this phase");
   });
 
   it("uses shared expiry phrases", () => {
     expect(expiryTrail("while-leading")).toBe("while this model is leading a unit");
-    expect(expiryTrail("after-resolving")).toBe("after resolving this use");
-    expect(expiryTrail("resolution")).toBe("when resolving this use");
+    expect(expiryTrail("after-resolving")).toBe("after resolving this ability");
+    expect(expiryTrail("resolution")).toBe("for this activation");
     expect(expiryTrail("permanent")).toBe("");
   });
 });
@@ -129,10 +129,10 @@ describe("canonical effect container contracts", () => {
     const text = describeCondition({ type: "matches", parameters: { subject: "this-unit", filter: {
       level: "unit", unit_ids: ["example-unit", "another-unit"],
     } } });
-    expect(text).toContain("with unit ID example-unit or another-unit");
+    expect(text).toBe("this unit is an Example Unit or Another Unit unit");
     expect(describeEffectInline({ type: "stat-modifier", target: { level: "unit", unit_ids: ["example-unit"] }, modifier: {
       stat: "S", operation: "add", value: 1,
-    } } as Effect)).toContain("with unit ID example-unit");
+    } } as Effect)).toContain("Example Unit");
   });
 
   it("renders used-ability source and usage qualifications together", () => {
@@ -148,14 +148,14 @@ describe("canonical effect container contracts", () => {
     const effect = { type: "move-modifier", target: "this-unit", modifier: {
       maximum: "unlimited", applies_to_moves: ["advance"], no_end_in_engagement: true,
     } } as Effect;
-    expect(describeEffectInline(effect)).toBe("the unit can move any distance; the unit cannot end a move within Engagement Range of any enemy unit, during its Advance moves");
+    expect(describeEffectInline(effect)).toBe("this unit can move any distance; this unit cannot end a move within Engagement Range of any enemy unit, during its Advance moves");
   });
 
   it("renders typed dice-test subjects without legacy target aliases", () => {
     for (const [subject, label] of [
       ["this-model", "this model"],
       ["selected-unit", "the selected unit"],
-      [{ selection_var: "chosen" }, "the bound chosen"],
+      [{ selection_var: "chosen" }, "the chosen chosen"],
     ] as const) {
       const text = describeEffectInline({ type: "dice-gated", test: { kind: "leadership", subject }, on_success: nothing });
       expect(text).toContain(`${label} takes a Leadership test`);
@@ -173,13 +173,13 @@ describe("canonical effect container contracts", () => {
       effect: nothing,
     };
     for (const text of [describeEffect(effect), describeEffectInline(effect)]) {
-      expect(text).toContain("from one through 2 friendly INFANTRY models");
+      expect(text).toContain("one to 2 friendly INFANTRY models");
       expect(text).toContain("excluding CHARACTER models");
       expect(text).toContain('wholly within 7" of this model');
       expect(text).toContain("visible to this model");
       expect(text).toContain("not Battle-shocked");
       expect(text).toContain("at most 2 times per battle round across your army");
-      expect(text).toContain("binding them as chosen models");
+      expect(text).toContain("(referred to below as the chosen models)");
     }
   });
 
@@ -187,7 +187,7 @@ describe("canonical effect container contracts", () => {
     const selector = { filter: { owner: "enemy", any_of: ["MONSTER", "VEHICLE"] } };
     expect(describeEffectInline({ type: "select-units", selector: { ...selector, count: { min: 2 } }, effect: nothing })).toContain("select at least 2 enemy units");
     expect(describeEffectInline({ type: "select-units", selector: { ...selector, count: { min: 1, max: 1 } }, effect: nothing })).toContain("select one enemy unit");
-    expect(describeEffectInline({ type: "for-each-unit", selector: { ...selector, bind_as: "victim" }, effect: nothing })).toBe("for each enemy unit with the MONSTER or VEHICLE keyword, binding it as victim: nothing happens");
+    expect(describeEffectInline({ type: "for-each-unit", selector: { ...selector, bind_as: "victim" }, effect: nothing })).toBe("for each enemy unit with the MONSTER or VEHICLE keyword (referred to below as the victim): nothing happens");
   });
 
   it("keeps designation attacker model and attacker unit predicates independent", () => {
@@ -197,7 +197,7 @@ describe("canonical effect container contracts", () => {
       applies: { to: "attackers-of-target", attacker_filter: { all_of: ["CHARACTER"] }, attacker_unit_filter: { all_of: ["INFANTRY"] }, effect: nothing },
     };
     for (const text of [describeEffect(effect), describeEffectInline(effect)]) {
-      expect(text).toContain("one enemy unit (excluding TITANIC units), binding it as priority");
+      expect(text).toContain("one enemy unit (excluding TITANIC units) (referred to below as the priority)");
       expect(text).toContain("each time a CHARACTER model in a friendly INFANTRY unit");
       expect(text).toMatch(/until the end of the phase/i);
     }
@@ -210,7 +210,7 @@ describe("canonical effect container contracts", () => {
       consumer: { beneficiary: "this-unit", relation: "within-selected-marker", effect: nothing },
     };
     const text = describeEffect(effect);
-    expect(text).toContain("Select one objective marker you control, binding it as watch marker");
+    expect(text).toContain("Select one objective marker you control (referred to below as the watch marker)");
     expect(text).toContain("each objective marker can be selected for this ability at most once per battle across your army");
     expect(text).toContain("This selection can be made while this unit is embarked.");
     expect(text).toContain("while a model in this unit is within range of your Watch Marker");
@@ -222,7 +222,7 @@ describe("canonical effect container contracts", () => {
     expect(text.match(/start of/g)).toHaveLength(1);
     expect(text).toContain("once per battle");
     expect(describeEffect(effect)).toMatch(/^Select/);
-    expect(describeEffectInline(effect)).toContain("each may be chosen once per battle");
+    expect(describeEffectInline(effect)).toContain("each can be chosen once per battle");
     expect(describeEffectInline({ type: "stance-selection-capacity", modifier: { ability_id: "stances", option: { ability_id: "stances", option_id: "guard" }, allocation: "fixed-option", additional_selections: 1 } })).toBe("you can select Guard one additional time per battle");
   });
 
@@ -238,7 +238,7 @@ describe("canonical effect container contracts", () => {
     expect(text).toContain("enemy territory is within Example Region until the end of the turn");
     expect(text).toContain("evaluated once at that time");
     expect(text).toContain('within 8" of one or more');
-    expect(text).toContain("Ordinary: all friendly INFANTRY units get +1 to Hit rolls");
+    expect(text).toContain("Ordinary: add 1 to friendly INFANTRY units' Hit rolls");
     expect(text).toContain("Empowered, once per turn: nothing happens");
     expect(text).not.toContain("half");
     expect(text).not.toContain("No Man's Land");
@@ -249,7 +249,7 @@ describe("canonical effect container contracts", () => {
     expect(text).toContain('3", 6" in battle rounds 1, 2 respectively');
     expect(text).toContain("INFANTRY or MOUNTED");
     expect(text).toContain("excluding CHARACTER FLY");
-    expect(text).toContain("this model with PSYKER without MONSTER");
+    expect(text).toContain("this model with PSYKER (excluding MONSTER models)");
   });
 
   it("uses canonical menu durations and eligibility, and delegates defined grants", () => {
@@ -266,7 +266,7 @@ describe("canonical effect container contracts", () => {
 
   it("retains all four applies-to predicate semantics", () => {
     expect(describeAppliesTo({ all_of: ["INFANTRY"], any_of: ["FLY", "MOUNTED"], none_of: ["MONSTER"], not_all_of: ["CHARACTER", "PSYKER"] })).toBe(
-      "Applies to: units with INFANTRY and at least one of FLY or MOUNTED (excluding MONSTER) (excluding units with all of CHARACTER, PSYKER).",
+      "Applies to: units with INFANTRY and the FLY or MOUNTED keyword (excluding MONSTER units) (excluding units with all of CHARACTER and PSYKER).",
     );
   });
 });

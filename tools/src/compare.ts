@@ -117,8 +117,8 @@ export function expectedKills(
 }
 
 /**
- * Expected post-FNP damage (wounds dealt) for one weapon profile against a
- * target. The summable counterpart to {@link expectedKills}: damage adds
+ * Expected wounds dealt for one weapon profile against a target: damage after
+ * Feel No Pain, with each attack's damage past one model's Wounds lost. The summable counterpart to {@link expectedKills}: damage adds
  * linearly across weapons, so a unit's total output is built by summing this
  * over its loadout and converting to kills once — never by summing per-weapon
  * kills (each weapon's models-killed caps independently, which over-counts).
@@ -147,8 +147,7 @@ export function expectedDamage(
     },
     ds,
   );
-  const stage = out.stages.find((s) => s.name === "after-fnp");
-  return stage ? stage.expected : 0;
+  return out.damageDealt;
 }
 
 /**
@@ -305,7 +304,7 @@ export interface LoadoutRanking {
 }
 
 /**
- * Total a single loadout against one target, summing post-FNP damage across all
+ * Total a single loadout against one target, summing wounds dealt across all
  * weapon lines (each fired by `count` models) and converting to kills *once*.
  * A line whose weapon can't reach `distance` contributes nothing.
  */

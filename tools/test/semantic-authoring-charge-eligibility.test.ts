@@ -177,8 +177,8 @@ describe("event transport on a disembarked moment", () => {
   });
 
   it("refuses transport on any kind but disembarked", () => {
-    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", transport: "this-unit" })).toThrow(/disembarked/u);
-    expect(() => normalizeFingerprintParameters("event", { kind: "selected", transport: "this-unit" })).toThrow(/disembarked/u);
+    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", transport: "this-unit" })).toThrow(/event\.transport does not apply to kind move-ended/u);
+    expect(() => normalizeFingerprintParameters("event", { kind: "selected", transport: "this-unit" })).toThrow(/event\.transport does not apply to kind selected/u);
   });
 
   it("refuses transport with a subject or an owner on the same moment", () => {

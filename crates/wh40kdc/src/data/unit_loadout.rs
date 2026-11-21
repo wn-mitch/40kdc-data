@@ -15,7 +15,8 @@ use super::dataset::Dataset;
 use super::loadout::{
     base_loadout, check_unit_legality, complete_loadout, group_loadout, loadout_candidates,
     loadout_models, loadout_tiers, maximal_loadout, weapon_bounds, CompletedLoadout, LoadoutGroup,
-    LoadoutModel, LoadoutTier, Violation, WeaponBound, LOADOUT_CANDIDATES_DEFAULT_LIMIT,
+    LoadoutModel, LoadoutTier, Violation, ViolationCode, WeaponBound,
+    LOADOUT_CANDIDATES_DEFAULT_LIMIT,
 };
 use super::mfm_loadout::{mfm_unit_candidates, MfmComposition, MfmSearchTooLarge};
 use crate::{Unit, UnitComposition, WargearOption};
@@ -35,6 +36,9 @@ type Bounds = Result<Option<BTreeMap<String, WeaponBound>>, MfmSearchTooLarge>;
 /// A unit's wargear legality at a model count. Counts are copies across the whole unit.
 pub struct UnitLoadout {
     unit_id: String,
+    /// The unit's `max_model_count`: a size above it cannot be built, so every
+    /// query answers as for a size no composition has.
+    max_model_count: Option<u64>,
     inner: Inner,
 }
 
@@ -64,10 +68,12 @@ pub fn unit_loadout(
     options: &[&WargearOption],
 ) -> UnitLoadout {
     let unit_id = unit.id.as_str().to_string();
+    let max_model_count = unit.max_model_count.map(|cap| cap.get());
     if let Some(composition) = composition.filter(|c| c.loadout.is_some()) {
         let composition = MfmComposition::from_composition(composition);
         return UnitLoadout {
             unit_id,
+            max_model_count,
             inner: Inner::Mfm(MfmView::new(composition)),
         };
     }
@@ -89,6 +95,7 @@ pub fn unit_loadout(
     };
     UnitLoadout {
         unit_id,
+        max_model_count,
         inner: Inner::Options(OptionsView {
             unit: unit.clone(),
             options: options.iter().map(|o| (*o).clone()).collect(),
@@ -115,6 +122,11 @@ impl OptionsView {
 }
 
 impl UnitLoadout {
+    /// Whether `model_count` exceeds the unit's `max_model_count`.
+    fn over_cap(&self, model_count: u64) -> bool {
+        self.max_model_count.is_some_and(|cap| model_count > cap)
+    }
+
     /// Which rules decide this unit's wargear.
     pub fn source(&self) -> LoadoutSource {
         match self.inner {
@@ -127,6 +139,9 @@ impl UnitLoadout {
     /// models. Under MFM rules a few dump defaults break their own rules;
     /// [`check`](Self::check) reports those.
     pub fn base(&self, model_count: u64) -> Option<BTreeMap<String, i64>> {
+        if self.over_cap(model_count) {
+            return None;
+        }
         match &self.inner {
             Inner::Mfm(view) => view.base(model_count),
             Inner::Options(view) => view.buildable(model_count).then(|| {
@@ -143,6 +158,9 @@ impl UnitLoadout {
 
     /// Each item's fewest and most copies on any legal loadout; None when the size cannot be built.
     pub fn bounds(&self, model_count: u64) -> Bounds {
+        if self.over_cap(model_count) {
+            return Ok(None);
+        }
         match &self.inner {
             Inner::Mfm(view) => view.bounds(model_count),
             Inner::Options(view) => Ok(view.buildable(model_count).then(|| {
@@ -163,6 +181,9 @@ impl UnitLoadout {
         &self,
         model_count: u64,
     ) -> Result<Option<BTreeMap<String, i64>>, MfmSearchTooLarge> {
+        if self.over_cap(model_count) {
+            return Ok(None);
+        }
         match &self.inner {
             Inner::Mfm(view) => view.maximal(model_count),
             Inner::Options(view) => Ok(view.buildable(model_count).then(|| {
@@ -183,6 +204,14 @@ impl UnitLoadout {
         model_count: u64,
         counts: &HashMap<String, i64>,
     ) -> Result<Vec<Violation>, MfmSearchTooLarge> {
+        if self.over_cap(model_count) {
+            let unit_id = &self.unit_id;
+            return Ok(vec![Violation {
+                id: unit_id.clone(),
+                code: ViolationCode::InvalidModelCount,
+                message: format!("{unit_id}: no squad size has {model_count} models"),
+            }]);
+        }
         match &self.inner {
             Inner::Mfm(view) => view.check(&self.unit_id, model_count, counts),
             Inner::Options(view) => Ok(check_unit_legality(
@@ -202,6 +231,9 @@ impl UnitLoadout {
         model_count: u64,
         counts: &BTreeMap<String, i64>,
     ) -> Result<Option<Vec<LoadoutGroup>>, MfmSearchTooLarge> {
+        if self.over_cap(model_count) {
+            return Ok(None);
+        }
         match &self.inner {
             Inner::Mfm(view) => view.groups(model_count, counts),
             Inner::Options(view) => Ok(group_loadout(
@@ -222,6 +254,9 @@ impl UnitLoadout {
         model_count: u64,
         explicit: &BTreeMap<String, i64>,
     ) -> Result<Option<CompletedLoadout>, MfmSearchTooLarge> {
+        if self.over_cap(model_count) {
+            return Ok(None);
+        }
         match &self.inner {
             Inner::Mfm(view) => view.complete(model_count, explicit),
             Inner::Options(view) => Ok(complete_loadout(
@@ -241,6 +276,9 @@ impl UnitLoadout {
         model_count: u64,
         limit: Option<usize>,
     ) -> Result<Vec<String>, MfmSearchTooLarge> {
+        if self.over_cap(model_count) {
+            return Ok(Vec::new());
+        }
         match &self.inner {
             Inner::Mfm(view) => mfm_unit_candidates(
                 &view.composition,

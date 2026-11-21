@@ -1,6 +1,6 @@
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { ALTERNATIVELY, OR_CONNECTIVE, ONE_OR_MORE, uncoveredText } from "./compile-target-modes.js";
-import { awaitsFollowingFilter, MATCHED_UNITS } from "./families/shared.js";
+import { awaitsFollowingFilter, MATCHED_UNITS } from "./families/vocabulary.js";
 import { alternativeFilter } from "./compile-filter-alternatives.js";
 import { type FilterAlternative, normalizeAlternatives } from "./unit-filter-alternatives.js";
 import { claimedByEmbarkedState } from "./compile-embarked-exclusion.js";
@@ -86,7 +86,7 @@ export function mergedFilter(first: CompileLeaf, second: CompileLeaf): CompileLe
   if ((memberA ?? memberB) !== undefined) parameters.member_of = memberA ?? memberB;
   const embarkedIn = a.embarked_in ?? b.embarked_in;
   if (embarkedIn !== undefined) parameters.embarked_in = embarkedIn;
-  // "(excluding units with the Lone Operative ability that are not … within 12" of this model)" (unit-filter@19).
+  // "(excluding units with the Lone Operative ability that are not … within 12" of this model)".
   const protectionA = (a as Record<string, unknown>).lone_operative_protection;
   const protectionB = (b as Record<string, unknown>).lone_operative_protection;
   if (protectionA !== undefined && protectionB !== undefined) return null;

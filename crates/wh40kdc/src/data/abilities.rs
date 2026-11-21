@@ -2,7 +2,7 @@
 //! `tools/src/abilities-resolver/resolver.ts`; the `conformance/abilities-resolver` corpus pins
 //! the shared contract. The buff translation of one ability record lives in `describe_buffs`.
 
-use std::collections::HashSet;
+use std::collections::{BTreeMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -59,6 +59,10 @@ pub struct EligibilityInput {
     /// Friendly units whose aura-ranged abilities could apply.
     #[serde(default)]
     pub supporting_unit_ids: Vec<String>,
+    /// The keyword-choice options each member took at muster (a Mark of Chaos), keyed by unit
+    /// id; an option not listed is not the unit's.
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub keyword_choices: BTreeMap<String, Vec<String>>,
 }
 
 /// One eligible ability with its source and the requested phase it acts in.
@@ -246,7 +250,13 @@ impl Dataset {
                     .iter()
                     .map(|id| self.resolve_unit(id, Some(&faction_id))),
             )
-            .map(|member| member_keywords(member, input.detachment_id.as_deref()))
+            .map(|member| {
+                let chosen = member
+                    .and_then(|unit| input.keyword_choices.get(unit.id.as_str()))
+                    .map(Vec::as_slice)
+                    .unwrap_or(&[]);
+                member_keywords(member, input.detachment_id.as_deref(), chosen)
+            })
             .collect();
         let printed = self.printed_keyword();
         let applies = |ability: &Ability| {

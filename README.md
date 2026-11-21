@@ -3,191 +3,138 @@
 [![Cross-impl parity](https://github.com/wn-mitch/40kdc-data/actions/workflows/parity.yml/badge.svg)](https://github.com/wn-mitch/40kdc-data/actions/workflows/parity.yml)
 [![CI](https://github.com/wn-mitch/40kdc-data/actions/workflows/validate.yml/badge.svg)](https://github.com/wn-mitch/40kdc-data/actions/workflows/validate.yml)
 
-> **Looking for 10th edition data?** The 10e dataset is preserved on branch [`10e-archive`](https://github.com/wn-mitch/40kdc-data/tree/10e-archive) and tagged [`10th/2025-q3`](https://github.com/wn-mitch/40kdc-data/releases/tag/10th/2025-q3). The `main` branch is migrating to **11th edition** — see [`11e-migration.md`](11e-migration.md) for status and the work plan.
+> **Looking for 10th edition data?** The 10th edition dataset is preserved on the [`10e-archive`](https://github.com/wn-mitch/40kdc-data/tree/10e-archive) branch and tagged [`10th/2025-q3`](https://github.com/wn-mitch/40kdc-data/releases/tag/10th/2025-q3). The `main` branch targets **11th edition**.
 
-Community-owned data schemas for Warhammer 40,000 developer tooling — **and** a linked, typed API over the dataset they describe.
+Community-maintained JSON Schemas and an embedded Warhammer 40,000 dataset — plus roster import/export, legality checking, damage calculation, mission scoring, terrain geometry, and Ability-DSL descriptions — shipped in lockstep across TypeScript, Rust, Python, and Go.
 
-## What This Is
+## What's Included
 
-Two things, both community-owned:
+- **Linked dataset API:** Units, weapons, factions, detachments, enhancements, stratagems, wargear options, unit compositions, missions, and terrain embedded in the package with no runtime database, network, or filesystem calls.
+- **Ability DSL & English describer:** Structured JSON representations of game mechanics, a deterministic plain-English describer, and an eligibility resolver (`eligibleAbilities`, `stratagemCanTargetUnit`, `unitMatchesAppliesTo`).
+- **Army-list pipeline:** Importers (ListForge, NewRecruit, GW app, Rosterizer, Roster JSON), 9 exporters (including WTC, ATC 2026, and Yellowscribe), army/wargear legality checking, and compact `share-v1` URL tokens.
+- **Combat, scoring & terrain engines:** Closed-form expected-value damage cruncher, buff/lever resolution, leave-one-out attribution, exact wound allocation, mission VP scoring, and board-space terrain layout resolution.
+- **BSData exports & JSON Schemas:** Ready-to-import NewRecruit and BattleScribe catalogues on every release, plus draft 2020-12 schemas and validators.
 
-1. **The schema layer** for the [40kdc](https://40kdc.alpacasoft.dev) ecosystem — JSON Schemas that model 40K entities so tools can exchange data. Entity IDs are the interoperability contract.
-2. **A ready-to-use dataset package.** The whole dataset ships embedded behind an intuitive, typed API: find a unit, then walk to its weapons, abilities, the phases those abilities act in, and its faction — no database, no network, no runtime filesystem access. Same ergonomics consumers expect, available today.
+### Guides
 
-```ts
-import { units } from "@alpaca-software/40kdc-data";
+- [Abilities, DSL, and Descriptions](docs/guides/abilities.md) — fetching abilities, rendering English text, resolving eligible rules, and Stratagem targeting
+- [Army Lists, Legality, and Share Tokens](docs/guides/rosters.md) — importing/exporting lists, checking legality, and encoding `share-v1` URLs
+- [Damage Projection (Crunching)](docs/guides/crunching.md) — `crunch`, DSL buff/lever resolution, `conditionFacts`, attribution, exact wound allocation, and out-of-attack mortal wounds
+- [Mission Scoring, Terrain, and Validation](docs/guides/scoring-terrain-validation.md) — VP scoring, WTC bands, terrain layout geometry/keystones, and schema validation
+- [TypeScript API Reference](tools/docs/api/README.md) — auto-generated TypeDoc reference
 
-units.find("Kharn")!.abilities
-  .filter(a => a.phases.includes("fight"))
-  .map(a => a.id); // ["berzerker-frenzy-world-eaters", "legendary-killer-world-eaters"]
-```
-
-`find` is diacritic- and punctuation-insensitive — 40K is played globally, so `find("Kharn")` resolves "Khârn the Betrayer" and `find("Belakor")` resolves "Be'lakor". Full API reference: [`tools/docs/api/`](tools/docs/api/README.md).
-
-The dataset is a view of one game mode. The default view is matched play: listings and name searches skip Combat Patrol-only units, detachments, enhancements, Stratagems and weapons, while lookups by id still resolve every record. `dataset.forGameMode("combat-patrol")` or `dataset.forGameMode("all")` opens another view (`for_game_mode` in Rust and Python, `ForGameMode` in Go).
-
-## What This Is Not
-
-This is not a database of source rules prose. Source prose is kept outside the
-public dataset. The package contains structured mechanical representations,
-generated descriptions, stat lines, and point costs.
-
-## IP Stance
-
-| Content | Included? | Rationale |
-|---------|-----------|-----------|
-| Stat lines (M, T, W, Sv, etc.) | Yes | Numerical facts |
-| Point costs | Yes | Numerical facts |
-| Weapon stats (A, S, AP, D) | Yes | Numerical facts |
-| Source ability prose | **No** | Kept in private authoring inputs |
-| Source rules prose | **No** | Kept outside the public dataset |
-| Artwork / logos | **No** | Creative IP |
-
-## Use It in NewRecruit or BattleScribe
-
-NewRecruit and BattleScribe are army list builders that read data in the
-format of the community [BSData](https://github.com/BSData) project. Each
-release of the 40kdc-data package also exports its Warhammer 40,000 11th
-edition dataset in that format, as a game system file and one catalogue file
-per faction, attached to a `bsdata-v<version>` release
-([all BSData releases](https://github.com/wn-mitch/40kdc-data/releases?q=bsdata)).
-
-- **NewRecruit:** download `wh40k-11e-40kdc-<version>-newrecruit.zip` from the
-  newest `bsdata-v<version>` release and unzip it. In NewRecruit, open
-  **My Systems → Add more games** and upload every JSON file from the zip.
-  Uploaded data stays on that device, so install it on each device you build
-  lists on. To update, upload the files from a newer release the same way.
-- **BattleScribe:** add
-  `https://github.com/wn-mitch/40kdc-data/releases/download/bsdata-latest/index.bsi`
-  as a data index URL. `bsdata-latest` is a release that always carries the
-  newest export's game system and catalogue files, so BattleScribe picks up
-  each new version from it. For a manual install, each `bsdata-v<version>`
-  release also has `wh40k-11e-40kdc-<version>-battlescribe.zip`, which holds
-  the game system and catalogue files in BattleScribe's `.gst` and `.cat`
-  format. `bsdata-latest` holds only BattleScribe files.
-
-  BattleScribe's format cannot express three things NewRecruit supports:
-  - A unit's starting models. NewRecruit starts each unit with the models the
-    official app gives it by default; BattleScribe starts each model type at
-    its minimum count, so some units need models added by hand.
-  - Leader attachments. BattleScribe does not check which leaders a unit can
-    take.
-  - Points that rise with each copy of a unit in the army. BattleScribe
-    prices every copy at the first copy's cost, so a list with repeated units
-    shows fewer points than it costs. NewRecruit prices those copies
-    correctly.
-
-The export carries the same points and stat lines as the package.
-Ability text is this project's own plain-English descriptions, not the
-published rules wording.
-
-## Quick Start
-
-Use the dataset (TypeScript / JavaScript):
+## Quick Examples (TypeScript)
 
 ```bash
 npm install @alpaca-software/40kdc-data
 ```
 
-```ts
-import { units, factions } from "@alpaca-software/40kdc-data";
+### 1. Look up units, weapons, and generated ability descriptions
 
-const kharn = units.find("Kharn");
-kharn?.faction?.id;            // "world-eaters"
-kharn?.weapons.map(w => w.name);
-factions.find("World Eaters")?.units.length;
+```ts
+import { units } from "@alpaca-software/40kdc-data";
+
+const kharn = units.find("Kharn")!; // diacritic- and punctuation-insensitive
+console.log(kharn.faction?.id);     // "world-eaters"
+
+for (const ability of kharn.abilities.filter(a => a.phases.includes("fight"))) {
+  console.log(`${ability.name}: ${ability.describe()}`);
+}
 ```
 
-See [`tools/README.md`](tools/README.md) for the full collection/link reference.
+### 2. Import, validate, export, and share an army list
 
-Validate data against schemas (the package also ships an AJV validator + CLI):
+```ts
+import {
+  checkRoster,
+  dataset,
+  encodeShareToken,
+  exportRoster,
+  importRoster,
+  rosterToShareList,
+} from "@alpaca-software/40kdc-data";
+
+const roster = importRoster(rawListTextOrJson, dataset);
+const { legal, violations } = checkRoster(roster, dataset);
+const wtcSummary = exportRoster(roster, "newrecruit-wtc-compact");
+const shareUrlToken = encodeShareToken(rosterToShareList(roster));
+```
+
+### 3. Project expected damage
+
+```ts
+import { crunch, dataset, units, weapons } from "@alpaca-software/40kdc-data";
+
+const out = crunch(
+  {
+    attacker: { weapon: weapons.find("Bolt Rifle")!.raw, profileIndex: 0 },
+    target: { unit: units.find("Intercessor Squad")!.raw, profileIndex: 0 },
+    modelsFiring: 5,
+    buffs: [],
+    context: { phase: "shooting", attackerStationary: false, withinHalfRange: false },
+  },
+  dataset,
+);
+// out.stages: attacks -> hits -> wounds -> unsaved -> damage -> after-fnp -> models-killed
+```
+
+### Game Modes
+
+A `Dataset` represents one game-mode view. The default embedded view is **matched play**: listings and name searches exclude Combat Patrol-only units, detachments, enhancements, stratagems, weapons, wargear options, and unit compositions, while exact ID lookups resolve every record so saved rosters and share tokens continue to decode. Call `dataset.forGameMode("combat-patrol")` or `dataset.forGameMode("all")` (`for_game_mode` in Rust and Python, `ForGameMode` in Go) for another view.
+
+## Scope and IP Policy
+
+This repository does not store Games Workshop rules text, ability prose, lore, or artwork. Public data is restricted to numerical facts (stat lines, point costs, weapon profiles) and community-authored structured mechanics (the Ability DSL) rendered by a deterministic English describer.
+
+| Content | Included | Basis |
+|---------|----------|-------|
+| Stat lines (`M`, `T`, `W`, `Sv`, etc.) | Yes | Numerical facts |
+| Point costs | Yes | Numerical facts |
+| Weapon profiles (`A`, `S`, `AP`, `D`) | Yes | Numerical facts |
+| Source ability or rules prose | **No** | Excluded from the public dataset |
+| Artwork and logos | **No** | Excluded from the public dataset |
+
+## Using the Data in NewRecruit, ListForge, and BattleScribe
+
+Each release exports the 11th edition dataset in [BSData](https://github.com/BSData) format (a `.gst` game system file and per-faction `.cat` catalogues) under `bsdata-v<version>` releases ([all BSData releases](https://github.com/wn-mitch/40kdc-data/releases?q=bsdata)):
+
+- **NewRecruit:** Download `wh40k-11e-40kdc-<version>-newrecruit.zip` from the latest `bsdata-v<version>` release, unzip it, open **My Systems -> Add more games**, and upload all JSON files. Data is stored per device; repeat the upload to update.
+- **ListForge:** In ListForge's game-system / data-source settings, add `https://github.com/wn-mitch/40kdc-data/releases/download/bsdata-latest/index.bsi` as a custom BSData index URL to track the latest export, or import the `.gst` and `.cat` files manually from `wh40k-11e-40kdc-battlescribe.zip` (also committed under [`bsdata/xml/`](bsdata/xml)).
+- **BattleScribe:** Add `https://github.com/wn-mitch/40kdc-data/releases/download/bsdata-latest/index.bsi` as a data index URL to track the latest export automatically. For manual installation, use `wh40k-11e-40kdc-<version>-battlescribe.zip` (`.gst` and `.cat` XML files).
+- **Direct archive URLs:** The `bsdata-latest` release publishes fixed-name archives at `https://github.com/wn-mitch/40kdc-data/releases/download/bsdata-latest/<file>` for `wh40k-11e-40kdc-newrecruit.zip` (JSON) and `wh40k-11e-40kdc-battlescribe.zip` (XML).
+- **Loading directly from GitHub:** The same files are committed on `main` under [`bsdata/json/`](bsdata/json) and [`bsdata/xml/`](bsdata/xml). List them via `https://api.github.com/repos/wn-mitch/40kdc-data/contents/bsdata/json?ref=main` and fetch individual files from `https://raw.githubusercontent.com/wn-mitch/40kdc-data/main/bsdata/json/<file>`.
+
+BattleScribe's file format has three limitations that NewRecruit does not share:
+
+- **Default starting models:** NewRecruit initializes units with their default model counts; BattleScribe starts each model type at its minimum count.
+- **Leader attachments:** BattleScribe does not validate leader-to-bodyguard attachment eligibility.
+- **Ordinal unit pricing:** BattleScribe prices every copy of a repeated unit at the first copy's cost; NewRecruit applies escalating per-copy costs.
+
+BSData exports contain the same stat lines and points as the language packages, with ability descriptions generated from the Ability DSL rather than published rules text.
+
+## Language Packages
+
+All four official packages expose the same dataset and engines, verified against the shared [`conformance/`](conformance/) corpus (`±5e-4` per cruncher stage; exact equality on text exports, validation codes, scoring, and share tokens).
+
+### TypeScript / JavaScript
+
+Package: [`@alpaca-software/40kdc-data`](tools/README.md) (Node 20+, bundlers, browsers). See [`tools/README.md`](tools/README.md) and the guides above.
+
+To validate repository data locally:
 
 ```bash
 cd tools
 npm install
-npm run validate           # all data
-npm run validate:core      # or just core / enrichment
+npm run validate            # validate core + enrichment data
+npm run validate:core
 npm run validate:enrichment
 ```
 
-The package also ships a `40kdc-runner` binary that implements the
-language-agnostic [conformance runner protocol](conformance/RUNNER_PROTOCOL.md):
-NDJSON requests on stdin, NDJSON responses on stdout. The cross-implementation
-parity differ uses this to compare every port against the same corpus. It is
-not the recommended way to use the library — import the package directly for
-that — but it is the supported entry point for cross-language verification.
-
-## Schemas
-
-### Core (structural entities)
-
-| Schema | Description |
-|--------|-------------|
-| [faction](schemas/core/faction.schema.json) | Playable factions and sub-factions |
-| [unit](schemas/core/unit.schema.json) | Unit datasheets with stat profiles and points |
-| [weapon](schemas/core/weapon.schema.json) | Weapons with stat lines |
-| [game-version](schemas/core/game-version.schema.json) | Edition and dataslate tracking |
-
-### Enrichment (community-authored intelligence)
-
-| Schema | Description |
-|--------|-------------|
-| [phase-mapping](schemas/enrichment/phase-mapping.schema.json) | Maps abilities to game phases |
-| [interaction-flag](schemas/enrichment/interaction-flag.schema.json) | Ability conflicts, combos, sequencing |
-| [ability](schemas/enrichment/ability-dsl/ability.schema.json) | Structured ability definitions (DSL) |
-
-### Shared Definitions
-
-| Schema | Description |
-|--------|-------------|
-| [common](schemas/$defs/common.schema.json) | Entity IDs, keywords, stat values |
-| [game-version-ref](schemas/$defs/game-version-ref.schema.json) | Edition + dataslate reference |
-
-## Ability DSL
-
-40kdc builds community-authored structured game trees that express what abilities
-do. A deterministic describer renders those trees for consumers; it does not
-consult source prose. Records are authored through reviewed semantic leaves that
-a deterministic compiler lowers to DSL; see
-[`SEMANTIC_AUTHORING.md`](SEMANTIC_AUTHORING.md).
-
-An ability entry composes four primitives:
-
-- **Trigger**: when it activates (phase, timing, type)
-- **Condition**: prerequisites (recursive AND/OR/NOT tree)
-- **Effect**: what it does (stat modifiers, re-rolls, mortal wounds, etc.)
-- **Scope**: targeting range and duration
-
-Effects support composition: `choice` (pick one of N) and `sequence` (ordered steps).
-
-See [schemas/enrichment/ability-dsl/](schemas/enrichment/ability-dsl/) and [data/enrichment/_example/abilities.example.json](data/enrichment/_example/abilities.example.json) for examples.
-
-## Versioning
-
-Everything is tagged to edition + dataslate (e.g., `11th/2026-10-14`). Dataslates that follow a Munitorum Field Manual release are named by that release's date. See [VERSIONING.md](VERSIONING.md).
-
-## For Tool Developers
-
-Multiple ways to consume this repo, depending on language and use case.
-
-**The data package** — `npm install @alpaca-software/40kdc-data` for the embedded
-dataset behind the linked typed API (above), plus the generated entity types and
-an AJV validator. This is the fastest path for most tools.
-
-**The schemas directly** — for non-JS toolchains or custom pipelines:
-
-1. Add `40kdc-data` as a git submodule, or reference schema `$id` URLs
-2. Point your JSON Schema validator (draft 2020-12) at `schemas/`
-3. Use entity IDs from the 40kdc dataset for interoperability
+The package also ships `40kdc-runner` implementing the NDJSON [conformance runner protocol](conformance/RUNNER_PROTOCOL.md) for cross-language parity verification.
 
 ### Rust
 
-The [`wh40kdc`](crates/wh40kdc/) crate on crates.io mirrors the same surface:
-serde-deserializable structs generated from these schemas (one flat module,
-regenerated by `cargo run -p xtask -- codegen`), the embedded dataset behind a
-linked `Dataset` API, the roster importers and exporters, share tokens, the
-cruncher, the DSL/scoring describers, and a schema validator. With
-`default-features = false` it is types-only.
+The [`wh40kdc`](crates/wh40kdc/README.md) crate provides generated serde types, the embedded `Dataset` API, roster importers and exporters, share tokens, the damage cruncher, DSL/scoring describers, and a schema validator. Disable default features (`default-features = false`) for a types-only build.
 
 ```toml
 [dependencies]
@@ -202,19 +149,9 @@ let kharn = ds.find_unit("Kharn").unwrap();
 assert_eq!(ds.faction_of(kharn).unwrap().id.as_str(), "world-eaters");
 ```
 
-The crate also embeds the schema as `wh40kdc::VALIDATION_SCHEMA` for downstream
-validation, and ships a `wh40kdc-runner` binary used by the
-cross-implementation parity differ — see [`CONFORMANCE.md`](CONFORMANCE.md).
-Crate code is MIT; the schema content it describes is CC0. See
-[`crates/wh40kdc/README.md`](crates/wh40kdc/README.md) for features and examples.
-
 ### Python
 
-The [`wh40kdc`](python/) package on PyPI mirrors the TypeScript API surface:
-Dataset linked queries, importers and exporters for all roster formats, the
-damage-projection cruncher and attribution, the abilities resolver, scoring,
-terrain geometry, the DSL/scoring describers, and a schema validator emitting
-the shared closed-enum error codes.
+The [`wh40kdc`](python/README.md) package mirrors the TypeScript API over plain dicts with generated `TypedDict` types in `wh40kdc._types`. The only runtime dependency is `jsonschema`.
 
 ```bash
 pip install wh40kdc
@@ -228,77 +165,51 @@ unit = ds.units.find("Khârn the Betrayer")
 print([w.name for w in unit.weapons])
 ```
 
-Entities are plain dicts (mirroring the JSON the schemas describe) behind
-linked views; generated `TypedDict`s in `wh40kdc._types` provide static
-typing. The only runtime dependency is `jsonschema`. The package also ships
-the conformance runner (`python -m wh40kdc.runner`) used by the
-cross-implementation parity differ — see [`CONFORMANCE.md`](CONFORMANCE.md).
-Package code is MIT; the schema content it describes is CC0.
-
 ### Go
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/wn-mitch/40kdc-data/go.svg)](https://pkg.go.dev/github.com/wn-mitch/40kdc-data/go)
 
-The [`wh40kdc`](go/) Go module mirrors the same surface — the embedded dataset
-behind a linked `Dataset` API, all roster importers/exporters, the cruncher and
-attribution, the abilities resolver, scoring, terrain geometry, the DSL/scoring
-describers, and a schema validator emitting the shared closed-enum error codes.
+The [`wh40kdc`](go/) Go module mirrors the same API over `map[string]any` records behind linked views. Its only external dependency is `golang.org/x/text` for Unicode name normalization, and it ships the conformance runner at `go/cmd/wh40kdc-runner`.
 
 ```bash
 go get github.com/wn-mitch/40kdc-data/go@latest
 ```
 
-Records are modelled as plain `map[string]any` (mirroring the JSON the schemas
-describe) behind linked views; the only external dependency is
-`golang.org/x/text` (Unicode normalization for diacritic-insensitive lookup).
-The module ships the conformance runner (`go/cmd/wh40kdc-runner`) used by the
-cross-implementation parity differ — see [`CONFORMANCE.md`](CONFORMANCE.md).
-Module code is MIT; the schema content it describes is CC0.
+### Direct Schema Usage
 
-### R *(planned)*
+For other languages or custom pipelines:
 
-An R package is planned, likely as an `extendr` wrapper around the Rust crate
-rather than a native port (the Rust ecosystem handles cruncher numerics and JSON
-parity more cleanly than R's idioms allow at the boundary). The decision is
-pending a wrapper prototype; the [`CONFORMANCE.md`](CONFORMANCE.md) FAQ explains
-the trade-off in more detail.
+1. Add `40kdc-data` as a git submodule or reference the schema `$id` URLs.
+2. Point a JSON Schema draft 2020-12 validator at `schemas/`.
+3. Exchange records using the canonical kebab-case entity IDs.
 
-### Parity guarantee
+An R binding (likely via an `extendr` wrapper around the Rust crate) is planned; see [`CONFORMANCE.md`](CONFORMANCE.md).
 
-All official ports — TypeScript, Rust, Python, and Go (R planned) —
-are held in behavioral agreement by a shared conformance corpus in
-[`conformance/`](conformance/). Within the documented tolerances (notably
-`±5e-4` per cruncher stage; byte-equal export goldens otherwise), the same
-inputs produce the same outputs in every language. See [`CONFORMANCE.md`](CONFORMANCE.md)
-for what's pinned, the per-area invariants, and the contribution rules.
+## Schemas
 
-## Contributors and acknowledgements
+| Group | Schemas |
+|-------|---------|
+| **Core** | [faction](schemas/core/faction.schema.json), [unit](schemas/core/unit.schema.json), [weapon](schemas/core/weapon.schema.json), [game-version](schemas/core/game-version.schema.json), plus detachments, enhancements, stratagems, wargear options, unit compositions, leader attachments, missions, terrain, and rosters in [`schemas/core/`](schemas/core/) |
+| **Enrichment** | [ability](schemas/enrichment/ability-dsl/ability.schema.json) (Ability DSL), [phase-mapping](schemas/enrichment/phase-mapping.schema.json), [interaction-flag](schemas/enrichment/interaction-flag.schema.json) in [`schemas/enrichment/`](schemas/enrichment/) |
+| **Shared `$defs`** | [common](schemas/$defs/common.schema.json), [game-version-ref](schemas/$defs/game-version-ref.schema.json) |
 
-40kdc-data is sustained by people who build its schemas, author and correct its
-data, maintain its ports, and provide upstream community resources. Major,
-long-running contributions include:
+## Versioning
 
-- [@wn-mitch](https://github.com/wn-mitch) — project creator and maintainer;
-  schema and data architecture, ingestion and authoring systems, and the
-  TypeScript, Rust, Python, and Go packages.
-- **Oberyn ([@bmerrill17](https://github.com/bmerrill17))** — foundational
-  project and data work; ability-authoring and ingestion infrastructure,
-  canonical ability IDs, raw-text store tooling, detachment-rule
-  reconciliation, and MFM synchronization.
-- [@Cmnspro](https://github.com/Cmnspro) — ongoing roster-legality, wargear,
-  ability-link, and faction-asset contributions.
-- [@stopsign002](https://github.com/stopsign002) — repeated live-datasheet,
-  points, wargear, and shared-unit corrections.
-- [@superwutz](https://github.com/superwutz) and
-  [Battlemaster](https://battlemaster.online) — structured terrain-layout data
-  and its [public Data API](https://battlemaster.online/v1/public/docs#tag/data),
-  used with permission.
+Records are tagged with an edition and dataslate (for example, `11th/2026-10-14`). Dataslates following a Munitorum Field Manual update are named by release date. See [`VERSIONING.md`](VERSIONING.md).
 
-Many other contributors have supplied data corrections, schema improvements,
-tests, and tooling. GitHub's
-[contributors page](https://github.com/wn-mitch/40kdc-data/graphs/contributors)
-is the durable, complete record of accepted code contributions; issue reports,
-reviews, and community research are valued even when they do not appear there.
+## Contributors and Acknowledgements
+
+Major ongoing contributions include:
+
+- [@wn-mitch](https://github.com/wn-mitch) — creator and maintainer; schema and data architecture, ingestion and authoring pipelines, and the TypeScript, Rust, Python, and Go packages.
+- **Clemens Probst ([@Cmnspro](https://github.com/Cmnspro))** — terrain layout keystones, roster legality, allied points pricing, wargear and ability DSL authoring, faction assets, and cross-language conformance work.
+- **Oberyn ([@bmerrill17](https://github.com/bmerrill17))** — foundational data and authoring work, canonical ability IDs, detachment-rule reconciliation, and MFM synchronization.
+- **David Trimoulet ([@DavidTrimoulet](https://github.com/DavidTrimoulet))** — ability DSL authoring, leader attachment parsing, and MFM/detachment fixes.
+- **Margus Niitsoo ([@velochy](https://github.com/velochy))** — Ability DSL schema refinements, condition validation, source-digest provenance, and name-normalization performance.
+- [@stopsign002](https://github.com/stopsign002) — datasheet, points, wargear, and shared-unit corrections.
+- [@superwutz](https://github.com/superwutz) and [Battlemaster](https://battlemaster.online) — structured terrain-layout data via its [public Data API](https://battlemaster.online/v1/public/docs#tag/data), used with permission.
+
+See the GitHub [contributors page](https://github.com/wn-mitch/40kdc-data/graphs/contributors) for the complete contribution history.
 
 ## Licensing
 
@@ -308,8 +219,8 @@ reviews, and community research are valued even when they do not appear there.
 | `data/enrichment/` | [CC BY 4.0](LICENSE-DATA) (attribution required) |
 | `tools/` | [MIT + attribution](LICENSE-TOOLS) (public deployments must credit) |
 
-**Public deployment requirement:** Any publicly accessible application or service that ships `@alpaca-software/40kdc-data` as part of its end-user product must display a visible credit containing the text **"Powered by 40kdc-data"** and a link to <https://40kdc.alpacasoft.dev> in a user-accessible location (footer, about page, or credits section). Private use and library redistribution are exempt. Full terms: [`LICENSE-TOOLS`](LICENSE-TOOLS).
+**Public deployment attribution:** Any publicly accessible application or service shipping `@alpaca-software/40kdc-data` must display a visible credit reading **"Powered by 40kdc-data"** with a link to <https://40kdc.alpacasoft.dev> in a user-accessible location (footer, about page, or credits). Private use and library redistribution are exempt. See [`LICENSE-TOOLS`](LICENSE-TOOLS) for full terms.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [`CONTRIBUTING.md`](CONTRIBUTING.md).

@@ -48,7 +48,15 @@ export type EngineInput = {
   context: EngineContext;
 };
 
-export type EngineOutput = { stages: Stage[]; resolved: ResolvedModifiers };
+export type EngineOutput = {
+  stages: Stage[];
+  resolved: ResolvedModifiers;
+  /**
+   * Expected wounds removed with each attack's damage beyond one model's Wounds lost, before the
+   * target unit's size caps it: the damage that reaches models, as `models-killed` counts it.
+   */
+  damageDealt: number;
+};
 
 /**
  * The per-roll parameters behind one crunch, for the discrete allocation stage
@@ -156,6 +164,13 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const profileBuffs = profileBuffsFor(input.attacker, ds, ctx);
   const allBuffs = [...profileBuffs, ...input.buffs];
   let resolved = resolveBuffs(allBuffs, ctx);
+  // A granted keyword whose rule is catalog DSL ([HEAVY], [TWIN-LINKED], [LANCE]) applies that DSL,
+  // credited to the grant; resolving again keeps every grant's applicability and keyword removals.
+  const granted = grantedKeywordBuffs(resolved, weaponProfile, input.attacker.weapon.id, ds, ctx);
+  if (granted.length > 0) {
+    allBuffs.push(...granted);
+    resolved = resolveBuffs(allBuffs, ctx);
+  }
   // A buff gated on the attack's Strength against the target's Toughness needs both, which the
   // buffs themselves modify: take them from the stack without the comparison-gated buffs, then
   // resolve again with them known. No comparison-gated buff feeds any comparison, which keeps a
@@ -184,14 +199,18 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const rapidFireExtraPerModel = rapidFire && halfRange ? evalStatValue(rapidFire.parameters?.value) : 0;
   const blast = findKeyword(resolved, "blast");
   const targetModelCount = input.target.modelCount ?? input.target.unit.model_count?.min ?? 1;
-  const blastExtraPerModel = blast?.parameters?.value !== undefined
-    ? Math.floor(targetModelCount / 5) * evalStatValue(blast.parameters.value)
+  // Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
+  const blastExtraPerModel = blast
+    ? Math.floor(targetModelCount / 5) * (blast.parameters?.value !== undefined ? evalStatValue(blast.parameters.value) : 1)
     : 0;
-  const attacks = input.modelsFiring * (attacksPerModel + rapidFireExtraPerModel + blastExtraPerModel);
+  // [CLEAVE X] adds X attacks per five target models when the weapon picks one target, as every crunch does.
+  const cleave = findKeyword(resolved, "cleave");
+  const cleaveExtraPerModel = cleave?.parameters?.value !== undefined ? Math.floor(targetModelCount / 5) * evalStatValue(cleave.parameters.value) : 0;
+  const attacks = input.modelsFiring * (attacksPerModel + rapidFireExtraPerModel + blastExtraPerModel + cleaveExtraPerModel);
   stages.push({
     name: "attacks",
     expected: attacks,
-    detail: attacksDetail(input.modelsFiring, attacksPerModel, rapidFireExtraPerModel, blastExtraPerModel)
+    detail: attacksDetail(input.modelsFiring, attacksPerModel, rapidFireExtraPerModel, blastExtraPerModel, cleaveExtraPerModel)
       + (attacksReroll && resolved.statSet.A === undefined && typeof weaponProfile.stats.A === "string" ? `; reroll ${attacksReroll} of A ${weaponProfile.stats.A}` : ""),
   });
 
@@ -464,19 +483,36 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   stages.push({ name: "after-fnp", expected: afterFnp, detail: fnpDetail });
 
   // 7. Models killed
+  // One attack's damage goes to one model and what exceeds its Wounds is lost; Feel No Pain rolls
+  // for each wound before that. Devastating Wounds' mortal wounds are capped the same way; mortal
+  // wounds an ability inflicts on a roll carry over. Each stream keeps its share of the expected
+  // damage above (re-roll-one gains included), scaled by what the cap leaves of it.
   const W = unitProfile.W;
-  const expectedModelsKilled = W > 0 ? Math.min(targetModelCount, afterFnp / W) : 0;
+  const mainCapped = critical
+    ? unsavedRegular * cappedDamage(perAttack.distribution, pSurviveAll, W) + unsavedCritical * cappedDamage(perCritical.distribution, pSurviveAll, W)
+    : unsaved * cappedDamage(perAttack.distribution, pSurviveAll, W);
+  const mainRaw = (critical ? unsavedRegular * damagePerHit + unsavedCritical * perCritical.expected : unsaved * damagePerHit) * pSurviveAll;
+  const mortalSurvive = pSurviveAll * pSurviveMortal;
+  const devastatingRaw = mortalWoundsStream * perCritical.expected * mortalSurvive;
+  const devastatingCapped = mortalWoundsStream * cappedDamage(perCritical.distribution, mortalSurvive, W);
+  const abilityMortals = rollMortals * mortalSurvive;
+  const share = (capped: number, raw: number) => (raw > 0 ? capped / raw : 1);
+  const mainShare = share(mainCapped, mainRaw);
+  const devastatingShare = share(devastatingCapped, devastatingRaw);
+  const afterMortalDevastating = Math.max(0, afterMortal - abilityMortals);
+  const damageDealt = W > 0 ? afterMain * mainShare + afterMortalDevastating * devastatingShare + (afterMortal - afterMortalDevastating) : 0;
+  const expectedModelsKilled = W > 0 ? Math.min(targetModelCount, damageDealt / W) : 0;
   stages.push({
     name: "models-killed",
     expected: expectedModelsKilled,
-    detail: `W${W} per model, ${targetModelCount} models in target; ${afterFnp.toFixed(4)} damage / ${W} = ${(afterFnp / W).toFixed(4)} (capped at ${targetModelCount})`,
+    detail: `W${W} per model, ${targetModelCount} models in target; ${damageDealt.toFixed(4)} damage with overkill lost / ${W} = ${(W > 0 ? damageDealt / W : 0).toFixed(4)} (capped at ${targetModelCount})`,
   });
 
   const model: AttackModel = {
     modelsFiring: input.modelsFiring,
     attacksStat: resolved.statSet.A?.value ?? weaponProfile.stats.A,
     ...(attacksReroll && resolved.statSet.A === undefined ? { attacksReroll } : {}),
-    attacksBonus: resolved.attacksMod.value + blastExtraPerModel,
+    attacksBonus: resolved.attacksMod.value + blastExtraPerModel + cleaveExtraPerModel,
     rapidFireStat: rapidFire && halfRange ? rapidFire.parameters?.value : null,
     torrent,
     hit: hitProbs,
@@ -508,7 +544,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
       ...(damageRerollOne > 0 ? ["re-roll one Damage roll"] : []),
     ],
   };
-  return { output: { stages, resolved }, model };
+  return { output: { stages, resolved, damageDealt }, model };
 }
 
 // ---------------------------------------------------------------------------
@@ -551,6 +587,25 @@ function profileBuffsFor(
     );
   }
   return out;
+}
+
+/**
+ * The catalog buffs of each resolved granted keyword the profile does not print, with the grant's
+ * source. Engine-dispatched keywords have no catalog DSL and are read from `extraKeywords` directly.
+ */
+function grantedKeywordBuffs(
+  resolved: ResolvedModifiers,
+  profile: Weapon["profiles"][number],
+  weaponId: string,
+  dataset: Dataset,
+  ctx: EngineContext,
+): Buff[] {
+  const printed = new Set((profile.keywords ?? []).map((ref) => ref.keyword_id));
+  return resolved.extraKeywords.flatMap(({ keywordRef, source }) => {
+    const view = dataset.weaponKeywords.get(keywordRef.keyword_id);
+    if (printed.has(keywordRef.keyword_id) || !view || view.raw.effect == null) return [];
+    return view.getBuffs(keywordRef.parameters as Record<string, unknown> | undefined, weaponId, ctx).map((buff) => ({ ...buff, source }));
+  });
 }
 
 function findKeyword(
@@ -668,6 +723,30 @@ function signed(n: number): string {
 }
 
 /** Fraction of damage that survives a single FNP roll (1 if no FNP). */
+/**
+ * Expected wounds one unsaved attack removes from a model with `wounds` Wounds: each point of its
+ * Damage is a wound lost with probability `lost` (Feel No Pain), and wounds past the model's
+ * Wounds are lost. A fractional Damage value is capped in expectation.
+ */
+export function cappedDamage(distribution: ReadonlyArray<{ value: number; probability: number }>, lost: number, wounds: number): number {
+  let total = 0;
+  for (const { value, probability } of distribution) {
+    if (probability === 0 || value <= 0) continue;
+    if (!Number.isInteger(value)) {
+      total += probability * Math.min(value * lost, wounds);
+      continue;
+    }
+    let expected = 0;
+    let coefficient = 1;
+    for (let removed = 0; removed <= value; removed += 1) {
+      if (removed > 0) coefficient = coefficient * (value - removed + 1) / removed;
+      expected += coefficient * Math.pow(lost, removed) * Math.pow(1 - lost, value - removed) * Math.min(removed, wounds);
+    }
+    total += probability * expected;
+  }
+  return total;
+}
+
 function fnpSurvivalFraction(
   fnp: { threshold: number; dominantSource: unknown } | null,
 ): number {
@@ -698,10 +777,12 @@ function attacksDetail(
   per: number,
   rapidFire: number,
   blast: number,
+  cleave: number,
 ): string {
   const parts = [`${models} × ${per}`];
   if (rapidFire) parts.push(`+ Rapid Fire ${rapidFire} (half range)`);
   if (blast) parts.push(`+ Blast ${blast}/model`);
+  if (cleave) parts.push(`+ Cleave ${cleave}/model`);
   return parts.join(" ");
 }
 

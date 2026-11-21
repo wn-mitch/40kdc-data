@@ -3707,7 +3707,7 @@
         },
         "default_weapon_ids": [
           "kinetic-destroyer",
-          "tarsis-buckler"
+          "tarsus-buckler"
         ]
       }
     ],
@@ -3737,7 +3737,7 @@
               "count": 3
             },
             {
-              "id": "tarsis-buckler",
+              "id": "tarsus-buckler",
               "count": 3
             }
           ]
@@ -3752,7 +3752,7 @@
               "count": 1
             },
             {
-              "id": "tarsis-buckler",
+              "id": "tarsus-buckler",
               "count": 1
             }
           ]
@@ -3771,7 +3771,7 @@
                 "count": 1
               },
               {
-                "id": "tarsis-buckler",
+                "id": "tarsus-buckler",
                 "count": 1
               }
             ]
@@ -3788,7 +3788,7 @@
         },
         {
           "model": "Venatari",
-          "id": "tarsis-buckler",
+          "id": "tarsus-buckler",
           "input": "stepper",
           "default": 3
         }
@@ -4226,7 +4226,7 @@
         },
         "default_weapon_ids": [
           "kinetic-destroyer",
-          "tarsis-buckler"
+          "tarsus-buckler"
         ]
       }
     ],
@@ -4259,7 +4259,7 @@
               "count": 3
             },
             {
-              "id": "tarsis-buckler",
+              "id": "tarsus-buckler",
               "count": 3
             }
           ]
@@ -4274,7 +4274,7 @@
               "count": 1
             },
             {
-              "id": "tarsis-buckler",
+              "id": "tarsus-buckler",
               "count": 1
             }
           ]
@@ -4293,7 +4293,7 @@
                 "count": 1
               },
               {
-                "id": "tarsis-buckler",
+                "id": "tarsus-buckler",
                 "count": 1
               }
             ]
@@ -4310,7 +4310,7 @@
         },
         {
           "model": "Venatari",
-          "id": "tarsis-buckler",
+          "id": "tarsus-buckler",
           "input": "stepper",
           "default": 3
         }

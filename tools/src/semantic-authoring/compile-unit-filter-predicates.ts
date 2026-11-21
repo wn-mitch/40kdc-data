@@ -1,6 +1,6 @@
 import { exactSpan } from "./contracts.js";
 import { AURA_RECIPIENT, FILTERED_UNITS } from "./compile-antecedent.js";
-import { awaitsFollowingFilter } from "./families/shared.js";
+import { awaitsFollowingFilter } from "./families/vocabulary.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { isBackref } from "./compile-attack-backref.js";
 import { dslUnitFilter, filterOf } from "./compile-unit-filter-dsl.js";
@@ -50,8 +50,8 @@ export function nearOther(leaf: CompileLeaf | undefined, quantifier: CompileLeaf
 }
 
 /**
- * The distance a quantifier's unit-position folds into its filter: inches, or a roll ("within D6\"", unit-position@30).
- * A position read at the start of the triggering move (unit-position@29) is not a filter's distance; it refuses here
+ * The distance a quantifier's unit-position folds into its filter: inches, or a roll ("within D6\"").
+ * A position read at the start of the triggering move is not a filter's distance; it refuses here
  * rather than folding as the position now.
  */
 function nearRange(leaf: CompileLeaf): Record<string, unknown> {

@@ -14,9 +14,11 @@ imports this module; that import is deferred to call time to avoid a cycle.
 
 from __future__ import annotations
 
+import json
 from typing import Any
 
 from wh40kdc.cruncher.buffs import Buff, BuffSource, EngineContext
+from wh40kdc.cruncher.from_dsl_selection_backrefs import designated_tags, selection_holds
 
 _SELECTED_UNIT = "selected-unit"
 
@@ -33,110 +35,66 @@ def plan_selection(
     the crunched unit), ``{"kind": "unsupported", "reason"}``, or ``{"kind": "lever", "effect",
     "applicability"?, "requires", "label"}``.
 
-    - A friendly selection reaches the crunched unit when its keywords match the selector. When
-      the eligibility excludes the ability's own unit, the lever exists only when another unit
-      provides the ability (``abilityKind: "support"``).
-    - An enemy selection reaches the other side of the attack.
+    - A selection whose ``count.max`` is 0 picks nothing, so nothing reaches the crunched unit.
+    - A friendly selection reaches the crunched unit when the selector's unit filter holds for it
+      (range and visibility are the player's to vouch for); a predicate the context cannot decide
+      leaves it unsupported. When the eligibility or ``filter.excluding`` excludes the ability's
+      own unit, the lever exists only when another unit provides the ability
+      (``abilityKind: "support"``).
+    - An enemy selection reaches the other side of the attack, gated by the selector's unit
+      filter less range and visibility; the gate is decided when the attack resolves.
     - A top-level dice gate with no failure branch becomes the lever's content; its roll joins
       ``requires``.
     """
-    selector = node.get("selector") if isinstance(node.get("selector"), dict) else None
-    filt = selector.get("filter") if isinstance(selector, dict) else None
-    unit_ids = filt.get("unit_ids") if isinstance(filt, dict) else None
-    owner = filt.get("owner") if isinstance(filt, dict) else None
-    if selector is None or not isinstance(filt, dict) or (
-        owner not in ("friendly", "enemy")
-        and not (unit_ids is not None and owner in (None, "any"))
-    ):
+    if not _is_selection_candidate(node):
         return {"kind": "none"}
-    if unit_ids is not None and owner in (None, "any"):
-        owner = "friendly"
-    if (
-        filt.get("level") == "model"
-        or filt.get("model_names") is not None
-        or selector.get("bind_as") is not None
-    ):
-        return {"kind": "none"}
-    if not _references_selected_unit(node.get("effect")):
-        return {"kind": "none"}
+    selector = node["selector"]
+    filt = selector["filter"]
+    owner = filt["owner"]
+    bind_as = selector.get("bind_as")
+    binding = bind_as if isinstance(bind_as, str) else None
 
-    all_of = filt.get("all_of")
-    any_of = filt.get("any_of")
-    excluded = filt.get("none_of")
-    has_keywords = "all_of" in filt or "any_of" in filt
-    has_excluded = "none_of" in filt
-    if (all_of is not None and not _is_keyword_list(all_of)) or (
-        any_of is not None and not _is_keyword_list(any_of)
-    ) or (excluded is not None and not _is_keyword_list(excluded)):
-        return {
-            "kind": "unsupported",
-            "reason": "select-units: the selector's keyword lists are malformed",
-        }
+    count = selector.get("count")
+    if isinstance(count, dict) and _is_zero(count.get("max")):
+        return {"kind": "skip"}
     selection = {k: v for k, v in node.items() if k != "effect"}
     requires: list[Any] = [selection]
     applicability: dict[str, Any] | None = None
 
-    unit_ids = filt.get("unit_ids")
-    if unit_ids is not None and (
-        filt.get("level") != "unit"
-        or not isinstance(unit_ids, list)
-        or not unit_ids
-        or any(not isinstance(unit_id, str) for unit_id in unit_ids)
-    ):
-        return {
-            "kind": "unsupported",
-            "reason": "select-units: unit_ids identity filter is malformed",
-        }
-    if unit_ids is not None:
-        identity_key = (
-            "attackerUnitId"
-            if (owner == "friendly") == (perspective == "attacker")
-            else "targetUnitId"
-        )
-        identity = context.get(identity_key)
-        if not isinstance(identity, str):
-            return {"kind": "unsupported", "reason": "select-units: unit identity is unavailable"}
-        if identity not in unit_ids:
-            return {"kind": "skip"}
     if owner == "friendly":
         provided = source.get("kind") == "ability" and source.get("abilityKind") == "support"
-        if _excludes_ability_unit(selector.get("eligibility")) and not provided:
+        excludes_self = filt.get("excluding") in ("ability-unit", "this-unit") or (
+            _excludes_ability_unit(selector.get("eligibility"))
+        )
+        if excludes_self and not provided:
             return {"kind": "skip"}
-        if has_keywords or has_excluded:
-            own = context.get("attackerKeywords" if perspective == "attacker" else "targetKeywords")
-            if own is None:
-                return {
-                    "kind": "unsupported",
-                    "reason": (
-                        "select-units: the crunched unit's keywords are unavailable for the "
-                        "selector"
-                    ),
-                }
-            holds = (
-                (not all_of or all(_includes_keyword(own, k) for k in all_of))
-                and (not any_of or any(_includes_keyword(own, k) for k in any_of))
-                and not any(_includes_keyword(own, k) for k in excluded or [])
-            )
-            if not holds:
-                return {"kind": "skip"}
-        effect = node.get("effect")
+        from wh40kdc.cruncher import from_dsl as dsl
+
+        known = {k: v for k, v in filt.items() if k not in ("within", "visible", "excluding")}
+        verdict = dsl._matches_unit_filter(
+            known, context, "attacker" if perspective == "attacker" else "target"
+        )
+        if verdict is False:
+            return {"kind": "skip"}
+        if verdict == "unknown":
+            return {
+                "kind": "unsupported",
+                "reason": "select-units: candidate identity or state is unavailable",
+            }
+        effect = _retarget(node.get("effect"), _SELECTED_UNIT, binding)
         label = "Selected unit"
     else:
         other = "defender" if perspective == "attacker" else "attacker"
-        enemy_keywords: list[str] = []
-        if isinstance(all_of, list):
-            enemy_keywords.extend(all_of)
-        if isinstance(any_of, list):
-            enemy_keywords.extend(any_of)
-        gate = _selected_enemy_gate(
-            enemy_keywords if has_keywords else None,
-            excluded if has_excluded else None,
-            perspective,
+        known = {k: v for k, v in filt.items() if k not in ("within", "visible", "excluding")}
+        applicability = (
+            {"targetFilter": known} if perspective == "attacker" else {"attackerFilter": known}
         )
-        if isinstance(gate, str):
-            return {"kind": "unsupported", "reason": gate}
-        applicability = gate
-        effect = _retarget(node.get("effect"), other)
+        effect = selection_holds(
+            _retarget(node.get("effect"), other, binding),
+            other,
+            designated_tags(node.get("effect"), binding),
+            binding,
+        )
         label = "Selected enemy unit"
 
     if isinstance(effect, dict) and effect.get("type") == "dice-gated":
@@ -154,43 +112,83 @@ def plan_selection(
     return plan
 
 
-def _selected_enemy_gate(
-    keywords: list[str] | None, excluded: list[str] | None, perspective: str
-) -> dict[str, Any] | None | str:
-    """The keyword gate an enemy selector puts on the selected unit, or a reason the buff layer
-    cannot express it."""
-    out: dict[str, Any] = {}
-    if keywords:
-        if len(keywords) > 1:
-            return (
-                "select-units: more than one required keyword on the selected enemy unit is not "
-                "gated by the buff layer"
-            )
-        if perspective == "attacker":
-            out["requiresTargetKeyword"] = keywords[0]
-        else:
-            out["requiresAttackerKeyword"] = keywords[0]
-    if excluded:
-        if perspective != "attacker":
-            return (
-                "select-units: excluded keywords on the attacking unit are not gated by the buff "
-                "layer"
-            )
-        out["excludedTargetKeywords"] = list(excluded)
-    return out or None
+def _names_selected(value: Any, binding: str | None) -> bool:
+    """Whether a unit-ref names the selection's unit: ``selected-unit`` or its own binding."""
+    return value == _SELECTED_UNIT or (
+        binding is not None and isinstance(value, dict) and value.get("selection_var") == binding
+    )
 
 
-def _references_selected_unit(node: Any) -> bool:
-    """Does the effect name the selected unit as a target anywhere, outside a nested selection?"""
+def _is_selection_candidate(node: dict[str, Any]) -> bool:
+    """Whether a ``select-units`` node is planned as a selection in any context: a friendly or
+    enemy unit selection whose effect reaches the selected unit."""
+    selector = node.get("selector")
+    if not isinstance(selector, dict):
+        return False
+    filt = selector.get("filter")
+    if not isinstance(filt, dict) or filt.get("owner") not in ("friendly", "enemy"):
+        return False
+    if filt.get("level") == "model" or filt.get("model_names") is not None:
+        return False
+    bind_as = selector.get("bind_as")
+    binding = bind_as if isinstance(bind_as, str) else None
+    return _references_selected_unit(node.get("effect"), binding)
+
+
+def _selection_text(node: Any) -> str:
+    return json.dumps(node, sort_keys=True, separators=(",", ":"))
+
+
+def selection_order(effect: Any) -> list[str]:
+    """The selections of an effect in document order (an object's keys sorted), each as its JSON
+    text. A selection's lever id is numbered by its place here, so it does not depend on which
+    branches the context prunes; two identical selections share a place."""
+    order: list[str] = []
+
+    def visit(node: Any) -> None:
+        if isinstance(node, list):
+            for child in node:
+                visit(child)
+            return
+        if not isinstance(node, dict):
+            return
+        if node.get("type") == "select-units" and _is_selection_candidate(node):
+            text = _selection_text(node)
+            if text not in order:
+                order.append(text)
+        # Keys in sorted order, so every port numbers the same way.
+        for key in sorted(node):
+            visit(node[key])
+
+    visit(effect)
+    return order
+
+
+def selection_lever_id(ability_id: str, node: dict[str, Any], order: list[str] | None) -> str:
+    """A selection lever's id: ``<ability>#selected`` for the effect's first selection, and
+    ``<ability>#selected-<n>`` for its nth."""
+    text = _selection_text(node)
+    place = order.index(text) if order and text in order else -1
+    return f"{ability_id}#selected-{place + 1}" if place > 0 else f"{ability_id}#selected"
+
+
+def _references_selected_unit(node: Any, binding: str | None = None) -> bool:
+    """Does the effect name the selected unit as a target, or as the unit a target is a member
+    of, anywhere outside a nested selection?"""
     if isinstance(node, list):
-        return any(_references_selected_unit(child) for child in node)
+        return any(_references_selected_unit(child, binding) for child in node)
     if not isinstance(node, dict):
         return False
     if node.get("type") == "select-units":
         return False
-    if node.get("target") == _SELECTED_UNIT:
+    target = node.get("target")
+    if _names_selected(target, binding):
         return True
-    return any(_references_selected_unit(v) for k, v in node.items() if k != "target")
+    if isinstance(target, dict) and _names_selected(target.get("member_of"), binding):
+        return True
+    return any(
+        _references_selected_unit(v, binding) for k, v in node.items() if k != "target"
+    )
 
 def bind_each_recipient(node: dict[str, Any], replacement: Any | None = None) -> Any | None:
     """Bind a for-each-unit recipient to its canonical candidate filter."""
@@ -232,16 +230,21 @@ def bind_each_recipient(node: dict[str, Any], replacement: Any | None = None) ->
     return effect if bound_recipient and not other_target else None
 
 
-def _retarget(node: Any, target: str) -> Any:
-    """Copy the effect with each ``selected-unit`` target replaced, leaving nested selections."""
+def _retarget(node: Any, target: str, binding: str | None = None) -> Any:
+    """Copy the effect with each target (or ``member_of``) naming the selected unit replaced,
+    leaving nested selections. A ``member_of`` read from the selected unit's own side names
+    ``this-unit``."""
     if isinstance(node, list):
-        return [_retarget(child, target) for child in node]
+        return [_retarget(child, target, binding) for child in node]
     if not isinstance(node, dict) or node.get("type") == "select-units":
         return node
-    return {
-        k: target if k == "target" and v == _SELECTED_UNIT else _retarget(v, target)
-        for k, v in node.items()
-    }
+    out: dict[str, Any] = {}
+    for k, v in node.items():
+        if k in ("target", "member_of") and _names_selected(v, binding):
+            out[k] = "this-unit" if k == "member_of" and target == _SELECTED_UNIT else target
+        else:
+            out[k] = _retarget(v, target, binding)
+    return out
 
 
 def _excludes_ability_unit(condition: Any) -> bool:
@@ -260,6 +263,11 @@ def _excludes_ability_unit(condition: Any) -> bool:
     if condition.get("operator") == "and" and isinstance(operands, list):
         return any(_excludes_ability_unit(operand) for operand in operands)
     return False
+
+
+def _is_zero(value: Any) -> bool:
+    """Whether a JSON value is the number 0 (a boolean is not a number)."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and value == 0
 
 
 def _is_keyword_list(value: Any) -> bool:
@@ -291,7 +299,7 @@ def translate_selection(
         opts,
         out,
         {
-            "id": f"{opts['abilityId']}#selected",
+            "id": selection_lever_id(opts["abilityId"], node, opts.get("selections")),
             "label": plan["label"],
             "requires": plan["requires"],
             "applicability": plan.get("applicability"),
@@ -316,7 +324,17 @@ def offer_lever(
     applicability = lever.get("applicability")
 
     def gate(buff: Buff) -> Buff:
-        return dsl._apply_applicability(buff, applicability) if applicability else buff
+        # A nested enemy selection names its own unit on that side of the attack, so its filter,
+        # not this lever's, gates its buffs; this lever's selection stays in ``requires``.
+        if not applicability:
+            return buff
+        own = buff.get("applicableWhen") or {}
+        outer = {
+            key: value
+            for key, value in applicability.items()
+            if not (key in ("targetFilter", "attackerFilter") and own.get(key))
+        }
+        return dsl._apply_applicability(buff, outer)
 
     out["unsupported"].extend(sub["unsupported"])
     for nested in sub["activatable"]:

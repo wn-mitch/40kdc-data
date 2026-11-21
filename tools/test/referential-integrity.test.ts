@@ -328,3 +328,16 @@ describe("enhancement required abilities", () => {
     }
   });
 });
+
+describe("keyword-choice group references", () => {
+  it("flags an unknown group, an option listed twice, and a group or grant naming an unknown detachment", async () => {
+    const result = await checkReferentialIntegrity(resolve(FIXTURES, "integrity-choice-groups"));
+    const messages = result.errors.flatMap((e) => e.errors.map((x) => x.message)).filter((m) => /keyword-choice|requires detachment/.test(m));
+    expect(messages).toEqual([
+      "keyword-choice group oath-lost-revel names detachment lost-revel, which no faction prints",
+      "jester: keyword-choice group oath-masque lists option mirth twice",
+      "jester: conditional keyword Gloom names keyword-choice group oath-unknown, which keyword-choice-groups.json does not define",
+      "herald: conditional keyword Dirge requires detachment lost-revel, which no faction prints",
+    ]);
+  });
+});

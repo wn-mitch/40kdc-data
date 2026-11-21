@@ -20,6 +20,19 @@
       "Ultramarines",
       "White Scars"
     ],
+    "host_faction_ids": [
+      "adeptus-astartes",
+      "black-templars",
+      "blood-angels",
+      "dark-angels",
+      "imperial-fists",
+      "iron-hands",
+      "raven-guard",
+      "salamanders",
+      "space-wolves",
+      "ultramarines",
+      "white-scars"
+    ],
     "source_faction_id": "adeptus-astartes",
     "source_datasheet_ids": [
       "corvus-blackstar",
@@ -60,6 +73,9 @@
     "army_keywords_any": [
       "Adeptus Custodes"
     ],
+    "host_faction_ids": [
+      "adeptus-custodes"
+    ],
     "source_faction_id": "adeptus-custodes",
     "source_datasheet_ids": [
       "anathema-psykana-rhino",
@@ -68,6 +84,129 @@
       "vigilator-squad",
       "witchseeker-squad"
     ],
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true
+  },
+  {
+    "id": "adeptus-titanicus-allies",
+    "name": "Adeptus Titanicus",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "label": "Adeptus Titanicus",
+    "army_keywords_any": [
+      "Adepta Sororitas",
+      "Adeptus Astartes",
+      "Adeptus Custodes",
+      "Adeptus Mechanicus",
+      "Agents of the Imperium",
+      "Astra Militarum",
+      "Black Templars",
+      "Blood Angels",
+      "Dark Angels",
+      "Deathwatch",
+      "Grey Knights",
+      "Imperial Fists",
+      "Imperial Knights",
+      "Iron Hands",
+      "Raven Guard",
+      "Salamanders",
+      "Space Wolves",
+      "Ultramarines",
+      "White Scars"
+    ],
+    "host_faction_ids": [
+      "adepta-sororitas",
+      "adeptus-astartes",
+      "adeptus-custodes",
+      "adeptus-mechanicus",
+      "agents-of-the-imperium",
+      "astra-militarum",
+      "black-templars",
+      "blood-angels",
+      "dark-angels",
+      "deathwatch",
+      "grey-knights",
+      "imperial-fists",
+      "imperial-knights",
+      "iron-hands",
+      "raven-guard",
+      "salamanders",
+      "space-wolves",
+      "ultramarines",
+      "white-scars"
+    ],
+    "source_faction_id": "adeptus-titanicus",
+    "source_datasheet_ids": [
+      "reaver-titan",
+      "warbringer-nemesis-titan",
+      "warhound-titan",
+      "warlord-titan"
+    ],
+    "keyword_limits": [
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      }
+    ],
+    "keyword_limits_exclusive": true,
     "cannot_be_warlord": true,
     "cannot_take_enhancements": true
   },
@@ -81,6 +220,9 @@
     "label": "Harlequins",
     "army_keywords_any": [
       "Asuryani"
+    ],
+    "host_faction_ids": [
+      "aeldari"
     ],
     "source_faction_id": "aeldari",
     "source_datasheet_ids": [
@@ -106,6 +248,9 @@
     "label": "Ynnari",
     "army_keywords_any": [
       "Asuryani"
+    ],
+    "host_faction_ids": [
+      "aeldari"
     ],
     "detachment_ids": [
       "devoted-of-ynnead"
@@ -154,6 +299,26 @@
       "Space Wolves",
       "Ultramarines",
       "White Scars"
+    ],
+    "host_faction_ids": [
+      "adepta-sororitas",
+      "adeptus-astartes",
+      "adeptus-custodes",
+      "adeptus-mechanicus",
+      "adeptus-titanicus",
+      "astra-militarum",
+      "black-templars",
+      "blood-angels",
+      "dark-angels",
+      "grey-knights",
+      "imperial-fists",
+      "imperial-knights",
+      "iron-hands",
+      "raven-guard",
+      "salamanders",
+      "space-wolves",
+      "ultramarines",
+      "white-scars"
     ],
     "source_faction_id": "agents-of-the-imperium",
     "source_datasheet_ids": [
@@ -221,17 +386,74 @@
       {
         "keyword": "Retinue",
         "battle_size": "incursion",
-        "max_count": 1
+        "max_count": 1,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       },
       {
         "keyword": "Retinue",
         "battle_size": "strike-force",
-        "max_count": 2
+        "max_count": 2,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       },
       {
         "keyword": "Retinue",
         "battle_size": "onslaught",
-        "max_count": 3
+        "max_count": 3,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       }
     ],
     "cannot_be_warlord": true,
@@ -247,6 +469,9 @@
     "label": "Imperial Agents",
     "army_keywords_any": [
       "Deathwatch"
+    ],
+    "host_faction_ids": [
+      "deathwatch"
     ],
     "source_faction_id": "agents-of-the-imperium",
     "source_datasheet_ids": [
@@ -309,17 +534,74 @@
       {
         "keyword": "Retinue",
         "battle_size": "incursion",
-        "max_count": 1
+        "max_count": 1,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       },
       {
         "keyword": "Retinue",
         "battle_size": "strike-force",
-        "max_count": 2
+        "max_count": 2,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       },
       {
         "keyword": "Retinue",
         "battle_size": "onslaught",
-        "max_count": 3
+        "max_count": 3,
+        "exemptions": [
+          {
+            "donor_keywords": [
+              "Character",
+              "Voidfarers"
+            ],
+            "receiver_keywords": [
+              "Voidsmen-At-Arms"
+            ]
+          },
+          {
+            "donor_keywords": [
+              "Inquisitor"
+            ],
+            "receiver_keywords": [
+              "Inquisitorial Agents"
+            ]
+          }
+        ]
       }
     ],
     "cannot_be_warlord": true,
@@ -335,6 +617,9 @@
     "label": "Brood Brothers",
     "army_keywords_any": [
       "Genestealer Cults"
+    ],
+    "host_faction_ids": [
+      "genestealer-cults"
     ],
     "detachment_ids": [
       "brood-brothers-auxilia"
@@ -426,6 +711,9 @@
     "army_keywords_any": [
       "Legiones Daemonica"
     ],
+    "host_faction_ids": [
+      "chaos-daemons"
+    ],
     "detachment_ids": [
       "shadow-legion"
     ],
@@ -486,6 +774,15 @@
       "Titanicus Traitoris",
       "World Eaters"
     ],
+    "host_faction_ids": [
+      "chaos-daemons",
+      "chaos-space-marines",
+      "death-guard",
+      "emperors-children",
+      "thousand-sons",
+      "titanicus-traitoris",
+      "world-eaters"
+    ],
     "source_faction_id": "chaos-knights",
     "source_datasheet_ids": [
       "chaos-acastus-knight-asterius",
@@ -541,6 +838,7 @@
         "max_count": 3
       }
     ],
+    "keyword_limits_exclusive": true,
     "cannot_be_warlord": true,
     "cannot_take_enhancements": true
   },
@@ -554,6 +852,9 @@
     "label": "Renegades",
     "army_keywords_any": [
       "Heretic Astartes"
+    ],
+    "host_faction_ids": [
+      "chaos-space-marines"
     ],
     "detachment_ids": [
       "cabal-of-chaos",
@@ -593,6 +894,7 @@
         "max_points": 750
       }
     ],
+    "replaces_faction_keywords": true,
     "cannot_be_warlord": true,
     "cannot_take_enhancements": true
   },
@@ -607,6 +909,10 @@
     "army_keywords_any": [
       "Chaos Knights",
       "Heretic Astartes"
+    ],
+    "host_faction_ids": [
+      "chaos-knights",
+      "chaos-space-marines"
     ],
     "source_faction_id": "chaos-daemons",
     "source_datasheet_ids": [
@@ -699,6 +1005,9 @@
     "army_keywords_any": [
       "Death Guard"
     ],
+    "host_faction_ids": [
+      "death-guard"
+    ],
     "detachment_ids": [
       "tallyband-summoners"
     ],
@@ -738,6 +1047,9 @@
     "label": "Aeldari",
     "army_keywords_any": [
       "Drukhari"
+    ],
+    "host_faction_ids": [
+      "drukhari"
     ],
     "detachment_ids": [
       "covenite-coterie",
@@ -794,6 +1106,9 @@
     "army_keywords_any": [
       "Drukhari"
     ],
+    "host_faction_ids": [
+      "drukhari"
+    ],
     "detachment_ids": [
       "reapers-wager"
     ],
@@ -835,6 +1150,9 @@
     "army_keywords_any": [
       "Emperor’s Children"
     ],
+    "host_faction_ids": [
+      "emperors-children"
+    ],
     "detachment_ids": [
       "carnival-of-excess"
     ],
@@ -873,6 +1191,9 @@
     "label": "Damned",
     "army_keywords_any": [
       "Chaos Knights"
+    ],
+    "host_faction_ids": [
+      "chaos-knights"
     ],
     "detachment_ids": [
       "iconoclast-fiefdom"
@@ -932,6 +1253,27 @@
       "Ultramarines",
       "White Scars"
     ],
+    "host_faction_ids": [
+      "adepta-sororitas",
+      "adeptus-astartes",
+      "adeptus-custodes",
+      "adeptus-mechanicus",
+      "adeptus-titanicus",
+      "agents-of-the-imperium",
+      "astra-militarum",
+      "black-templars",
+      "blood-angels",
+      "dark-angels",
+      "deathwatch",
+      "grey-knights",
+      "imperial-fists",
+      "iron-hands",
+      "raven-guard",
+      "salamanders",
+      "space-wolves",
+      "ultramarines",
+      "white-scars"
+    ],
     "source_faction_id": "imperial-knights",
     "source_datasheet_ids": [
       "acastus-knight-asterius",
@@ -989,6 +1331,7 @@
         "max_count": 1
       }
     ],
+    "keyword_limits_exclusive": true,
     "cannot_be_warlord": true,
     "cannot_take_enhancements": true
   },
@@ -1002,6 +1345,9 @@
     "label": "Questor Forgepact",
     "army_keywords_any": [
       "Imperial Knights"
+    ],
+    "host_faction_ids": [
+      "imperial-knights"
     ],
     "detachment_ids": [
       "questor-forgepact"
@@ -1040,6 +1386,9 @@
     "label": "Tyranids",
     "army_keywords_any": [
       "Genestealer Cults"
+    ],
+    "host_faction_ids": [
+      "genestealer-cults"
     ],
     "detachment_ids": [
       "final-day"
@@ -1088,6 +1437,9 @@
     "army_keywords_any": [
       "Thousand Sons"
     ],
+    "host_faction_ids": [
+      "thousand-sons"
+    ],
     "detachment_ids": [
       "changehost-of-deceit"
     ],
@@ -1118,6 +1470,105 @@
     "cannot_be_warlord": true
   },
   {
+    "id": "titanicus-traitoris-allies",
+    "name": "Titanicus Traitoris",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    },
+    "label": "Titanicus Traitoris",
+    "army_keywords_any": [
+      "Chaos Knights",
+      "Death Guard",
+      "Emperor’s Children",
+      "Heretic Astartes",
+      "Legiones Daemonica",
+      "Thousand Sons",
+      "World Eaters"
+    ],
+    "host_faction_ids": [
+      "chaos-daemons",
+      "chaos-knights",
+      "chaos-space-marines",
+      "death-guard",
+      "emperors-children",
+      "thousand-sons",
+      "world-eaters"
+    ],
+    "source_faction_id": "titanicus-traitoris",
+    "source_datasheet_ids": [
+      "chaos-reaver-titan",
+      "chaos-warbringer-nemesis-titan",
+      "chaos-warhound-titan",
+      "chaos-warlord-titan"
+    ],
+    "keyword_limits": [
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Reaver Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warbringer Nemesis Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warhound Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "incursion",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "strike-force",
+        "max_count": 1
+      },
+      {
+        "keyword": "Warlord Titan",
+        "battle_size": "onslaught",
+        "max_count": 1
+      }
+    ],
+    "keyword_limits_exclusive": true,
+    "cannot_be_warlord": true,
+    "cannot_take_enhancements": true
+  },
+  {
     "id": "world-eaters-khorne-daemons",
     "name": "World Eaters — Khorne Daemons Allies",
     "game_version": {
@@ -1127,6 +1578,9 @@
     "label": "Daemons of Khorne",
     "army_keywords_any": [
       "World Eaters"
+    ],
+    "host_faction_ids": [
+      "world-eaters"
     ],
     "detachment_ids": [
       "khorne-daemonkin"

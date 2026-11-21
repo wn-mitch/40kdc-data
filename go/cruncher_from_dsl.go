@@ -51,15 +51,15 @@ type dslOpts struct {
 	// usage is the usage limit inherited from the owning ability or nearest
 	// ability part.
 	usage any
-	// selfDesignations holds the tags the owning ability designates on the
-	// units holding it (selfDesignations); nil outside an ability walk.
-	selfDesignations map[string]bool
 	// definitions holds the abilities the owning record prints, by definition id, for a grant
 	// that names one by reference (ownDefinitions).
 	definitions map[string]any
 	// attackRoll is set inside a part triggered by each hit or wound roll of the attack: that
 	// roll and its outcome.
 	attackRoll *attackRollInfo
+	// selections lists the effect's selections in document order
+	// (selectionOrder), which number their lever ids.
+	selections []string
 }
 
 // attackRollInfo is the hit or wound roll a single after-roll trigger fires on; outcome is ""
@@ -89,14 +89,15 @@ const scopeDepth = 4
 // scopeOf is the scope of a fragment. An undecided condition matters only as much as what it
 // gates: its body is translated as if the condition held, and a body that yields no buff or lever
 // takes the widest scope of its own fragments; a body that could change the attack keeps the
-// condition unresolved.
+// condition unresolved. An undecided trigger moment is reported as the ability part it gates,
+// whose body is its effect.
 func scopeOf(fragment map[string]any, source map[string]any, context map[string]any, perspective string, depth int) string {
 	reason, _ := fragment["reason"].(string)
 	if !undecidedConditionReason.MatchString(reason) {
 		return fragmentScope(reason, fragment["effectFragment"])
 	}
 	node, _ := fragment["effectFragment"].(map[string]any)
-	if depth >= scopeDepth || node == nil || node["type"] != "conditional" {
+	if depth >= scopeDepth || node == nil || (node["type"] != "conditional" && node["type"] != "ability-part") {
 		return scopeUnresolved
 	}
 	body, has := node["effect"]
@@ -138,7 +139,10 @@ func translateEffect(effect any, source map[string]any, context map[string]any, 
 	if len(activation) > 0 {
 		act = activation[0]
 	}
-	opts := dslOpts{context: context, perspective: perspective, abilityID: abilityID, selfDesignations: selfDesignations(effect, abilityID), definitions: ownDefinitions(effect, abilityID)}
+	if act != nil {
+		effect = lastingSetup(effect, act["duration"])
+	}
+	opts := dslOpts{context: context, perspective: perspective, abilityID: abilityID, definitions: ownDefinitions(effect, abilityID)}
 	if act != nil {
 		opts.duration = act["duration"]
 		opts.usage = act["usage"]
@@ -148,6 +152,7 @@ func translateEffect(effect any, source map[string]any, context map[string]any, 
 			effect = gated
 		}
 	}
+	opts.selections = selectionOrder(effect)
 	dslWalk(effect, source, opts, out)
 	if act == nil || (act["usage"] == nil && act["cost"] == nil && act["optional"] != true) {
 		return out
@@ -386,14 +391,10 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		}
 	}
 	if n["type"] == "for-each-unit" {
-		selector, _ := getMap(n, "selector")
-		filter, _ := getMap(selector, "filter")
-		if filter == nil {
-			out.unsupported = append(out.unsupported, unsup("for-each-unit: recipient filter is malformed", n))
+		if bound, ok := bindEachRecipient(n); ok {
+			dslWalk(bound, source, opts, out)
 			return
 		}
-		dslWalk(bindEachRecipient(n["effect"], filter), source, opts, out)
-		return
 	}
 	// Walking a granted definition for a non-holder: what is not an aura is the holder's own.
 	if opts.auraEmitter != nil && !auraEmitterNodes[getStr(n, "type")] {
@@ -522,9 +523,7 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	case "conditional":
 		translateConditional(n, source, opts, out)
 	case "rules-bundle", "sequence":
-		for _, step := range getList(n, "steps") {
-			dslWalk(step, source, opts, out)
-		}
+		walkSequence(getList(n, "steps"), source, opts, out)
 	case "ability-part":
 		partOpts := opts
 		if n["duration"] != nil {
@@ -552,6 +551,13 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 			partOpts.attackRoll = roll
 			part = cloneMap(n)
 			part["effect"] = effect
+		}
+		// An untriggered part with its own duration is a record root of its own (lastingSetup).
+		if _, hasDuration := n["duration"]; hasDuration && n["trigger"] == nil {
+			if body, changed := lastingSetupChanged(part["effect"], n["duration"]); changed {
+				part = cloneMap(part)
+				part["effect"] = body
+			}
 		}
 		// A part with its own optionality, cost or usage is an activation.
 		// Otherwise its trigger is only the moment at which its effect fires.
@@ -777,6 +783,10 @@ func recipientSnapshotUnavailable(trigger, effect any) bool {
 			if item["type"] == "ability-part" && item["trigger"] != nil {
 				inherited = item["trigger"]
 			}
+			// A loop that only marks units grants nothing to snapshot (marksOnly).
+			if item["type"] == "for-each-unit" && marksOnly(item) {
+				return false
+			}
 			if item["type"] == "for-each-unit" {
 				candidates, ok := asList(inherited)
 				if !ok {
@@ -918,6 +928,9 @@ func resolveRecipientSnapshots(trigger, effect any, source map[string]any, conte
 			if t, ok := raw.(map[string]any); ok && getStr(t, "event") != "" && !isAttackStep(t) {
 				historical = append(historical, t)
 			}
+		}
+		if m["type"] == "for-each-unit" && len(historical) > 0 && marksOnly(m) {
+			return map[string]any{"type": "sequence", "steps": []any{}}
 		}
 		if m["type"] == "for-each-unit" && len(historical) > 0 {
 			matches := []map[string]any{}
@@ -1265,10 +1278,15 @@ func enumerateChoice(node, source map[string]any, opts dslOpts, out *effectTrans
 		if len(buffs) == 0 {
 			continue
 		}
-		out.activatable = append(out.activatable, withStanceGate(map[string]any{
+		lever := withStanceGate(map[string]any{
 			"id": opts.abilityID + "?" + strconv.Itoa(i), "label": labelForBuffs(buffs),
 			"buffs": buffs, "group": map[string]any{"id": opts.abilityID + "?choice", "maxActivations": maxActivations},
-		}, gate))
+		}, gate)
+		// The option the choice marks is a Stratagem's secondary effect, costing its extra CP.
+		if secondary, ok := node["secondary_option"].(float64); ok && secondary == float64(i) {
+			lever["secondary"] = true
+		}
+		out.activatable = append(out.activatable, lever)
 	}
 }
 
@@ -1882,6 +1900,8 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		out.unsupported = append(out.unsupported, unsup("stat-modifier: operation \""+jsStr(modifier["operation"])+"\" not supported", node))
 		return
 	}
+	// The attacker's rule changing a characteristic of the unit its attacks target.
+	debuffsTarget := opts.perspective == "attacker" && classifyTarget(node) == "defender"
 	switch stat {
 	case "A":
 		if opts.perspective != "attacker" || !isOnBuffedUnit {
@@ -1894,11 +1914,13 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		}
 		emit(map[string]any{"type": "strength-mod", "value": value})
 	case "T":
-		if opts.perspective != "target" {
+		// Defender stat: the buffed unit's own under target perspective, or the attack's target
+		// when the attacker's rule changes it ("enemy units within Contagion Range get -1 Toughness").
+		if opts.perspective != "target" && !debuffsTarget {
 			out.unsupported = append(out.unsupported, unsup("stat-modifier T: defender-side stat; applies when the buffed unit is the target", node))
 			return
 		}
-		if !isOnBuffedUnit {
+		if !isOnBuffedUnit && !debuffsTarget {
 			return
 		}
 		emit(map[string]any{"type": "toughness-mod", "value": value})
@@ -1921,11 +1943,12 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 		}
 		emit(map[string]any{"type": "damage-mod", "value": value})
 	case "Sv":
-		if opts.perspective != "target" {
+		// Like T, the attacker's rule can change the attack's target's Save.
+		if opts.perspective != "target" && !debuffsTarget {
 			out.unsupported = append(out.unsupported, unsup("stat-modifier Sv: defender-side stat; applies when the buffed unit is the target", node))
 			return
 		}
-		if !isOnBuffedUnit {
+		if !isOnBuffedUnit && !debuffsTarget {
 			return
 		}
 		// A capped improvement ("cannot improve a Save to better than N+") changes the Save
@@ -2278,6 +2301,91 @@ func withoutSelectionWindow(condition map[string]any, effect any) (guard map[str
 	return map[string]any{"operator": "and", "operands": kept}, true
 }
 
+// outlastsPhase reports whether a record duration outlasts the phase its top-level gate names
+// ("until the end of the turn"). Mirrors TS outlastsPhase.
+func outlastsPhase(duration any) bool {
+	d, ok := duration.(string)
+	return ok && (d == "turn" || d == "battle-round" || d == "battle" || strings.HasPrefix(d, "until-"))
+}
+
+// lastingSelections are selections made in the gate's phase whose result lasts the record's duration.
+var lastingSelections = map[string]bool{"choice": true, "select-units": true, "designate-target": true, "designate": true}
+
+func hasPhaseClock(condition map[string]any) bool {
+	if condition["type"] == "phase-is" {
+		return true
+	}
+	items, ok := condition["operands"].([]any)
+	if condition["operator"] != "and" || !ok {
+		return false
+	}
+	for _, item := range items {
+		if child, ok := item.(map[string]any); ok && hasPhaseClock(child) {
+			return true
+		}
+	}
+	return false
+}
+
+// lastingSetup reads a record's top-level phase gate under a duration that outlasts the phase as
+// when the effect is set up, not when it applies. Around a selection the window only times the
+// pick, so it is dropped; around any other effect the gate still holds in its own phase, and in a
+// later phase it is the player-timed activation clock. Mirrors TS lastingSetup; the activation
+// source travels inside the cloned node.
+func lastingSetup(effect any, duration any) any {
+	out, _ := lastingSetupChanged(effect, duration)
+	return out
+}
+
+// lastingSetupChanged is lastingSetup, also reporting whether it rewrote the effect.
+func lastingSetupChanged(effect any, duration any) (any, bool) {
+	node, ok := effect.(map[string]any)
+	if !ok || node["type"] != "conditional" || !outlastsPhase(duration) {
+		return effect, false
+	}
+	condition, ok := node["condition"].(map[string]any)
+	if !ok || !hasPhaseClock(condition) {
+		return effect, false
+	}
+	if inner, ok := node["effect"].(map[string]any); ok {
+		if kind, _ := inner["type"].(string); lastingSelections[kind] {
+			var operands func(n map[string]any) []map[string]any
+			operands = func(n map[string]any) []map[string]any {
+				items, isList := n["operands"].([]any)
+				if n["operator"] != "and" || !isList {
+					return []map[string]any{n}
+				}
+				var leaves []map[string]any
+				for _, item := range items {
+					if child, ok := item.(map[string]any); ok {
+						leaves = append(leaves, operands(child)...)
+					}
+				}
+				return leaves
+			}
+			var kept []any
+			for _, operand := range operands(condition) {
+				if kind, _ := operand["type"].(string); !selectionWindow[kind] {
+					kept = append(kept, operand)
+				}
+			}
+			if len(kept) == 0 {
+				return inner, true
+			}
+			out := cloneMap(node)
+			if len(kept) == 1 {
+				out["condition"] = kept[0]
+			} else {
+				out["condition"] = map[string]any{"operator": "and", "operands": kept}
+			}
+			return out, true
+		}
+	}
+	out := cloneMap(node)
+	out["condition"] = map[string]any{"operator": "or", "operands": []any{condition, activationCondition(condition, duration)}}
+	return out, true
+}
+
 func translateConditional(node, source map[string]any, opts dslOpts, out *effectTranslation) {
 	condition, ok := getMap(node, "condition")
 	if !ok {
@@ -2296,6 +2404,25 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 		translateConditional(narrowed, source, opts, out)
 		return
 	}
+	var reduceSource map[string]any
+	if !opts.grantedHolder {
+		reduceSource = source
+	}
+	if reduced, holds, changed := reduceNegatedConjunctions(condition, func(leaf map[string]any) any {
+		return evaluateCondition(leaf, opts.context, opts.perspective, reduceSource)
+	}); changed {
+		if holds {
+			dslWalk(node["effect"], source, opts, out)
+			return
+		}
+		narrowed := make(map[string]any, len(node))
+		for key, value := range node {
+			narrowed[key] = value
+		}
+		narrowed["condition"] = reduced
+		translateConditional(narrowed, source, opts, out)
+		return
+	}
 	if isWeaponScopedCondition(condition) {
 		if applicability, ok := conditionToApplicability(condition, opts.perspective, ownToughness(opts.context)).(map[string]any); ok {
 			walkWithApplicability(node["effect"], source, opts, applicability, out)
@@ -2308,8 +2435,8 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 		out.unsupported = append(out.unsupported, unsup(postAttackMoment, metadata["fragment"]))
 		return
 	}
-	if tag, ok := selfDesignationGate(condition, opts); ok {
-		offerSelfDesignated(node, tag, source, opts, out)
+	if tag, ok := ownDesignationGate(condition, opts); ok {
+		offerOwnDesignated(node, tag, source, opts, out)
 		return
 	}
 	if activeRulesUndeclared(opts.context) {
@@ -2345,15 +2472,7 @@ func translateConditional(node, source map[string]any, opts dslOpts, out *effect
 		if conditionMentionsTiming(condition) {
 			enumerateTimingGate(node, source, opts, out)
 		} else {
-			// An operator condition (`and`, `or`, `not`) has no type; it is named by its operator.
-			conditionName := condition["type"]
-			if conditionName == nil {
-				conditionName = condition["operator"]
-			}
-			entry := unsup(
-				"conditional: cannot evaluate condition \""+jsStr(conditionName)+"\" against current context",
-				activationFragment(node),
-			)
+			entry := unsup(undecidedConditionText(condition), activationFragment(node))
 			entry["needs"] = undecidedNeeds(evaluated, opts.context, opts.perspective, evalSource)
 			out.unsupported = append(out.unsupported, entry)
 		}
@@ -2435,6 +2554,100 @@ func negatedWeaponApplicability(operands []any) any {
 		return "context"
 	}
 	return map[string]any{"excludedWeaponKeywords": included}
+}
+
+// reduceNegatedConjunctions decides each negated conjunction in condition as far as the context
+// allows. In `not (A and B)` the operands that are not attack-scoped are evaluated: one false
+// makes the negation hold, so it drops out of an enclosing `and` (and the whole condition holds
+// when nothing is left); all true leave `not` of the one attack-scoped operand, which gates per
+// attack. Any undecided operand, or more than one attack-scoped operand, leaves the negation as
+// authored. It returns holds when the condition holds outright, changed when it rewrote
+// anything, and the rewritten condition otherwise. Mirrors reduceNegatedConjunctions in
+// tools/src/cruncher/from-dsl.ts.
+func reduceNegatedConjunctions(condition map[string]any, evaluate func(map[string]any) any) (reduced map[string]any, holds bool, changed bool) {
+	raw, isList := asList(condition["operands"])
+	switch getStr(condition, "operator") {
+	case "not":
+		if !isList || len(raw) != 1 {
+			return condition, false, false
+		}
+		inner, ok := asMap(raw[0])
+		if !ok || getStr(inner, "operator") != "and" {
+			return condition, false, false
+		}
+		innerRaw, ok := asList(inner["operands"])
+		if !ok {
+			return condition, false, false
+		}
+		var scoped, rest []map[string]any
+		for _, item := range innerRaw {
+			operand, ok := asMap(item)
+			if !ok {
+				return condition, false, false
+			}
+			if operand["operator"] == nil && isWeaponScopedCondition(operand) {
+				scoped = append(scoped, operand)
+			} else {
+				rest = append(rest, operand)
+			}
+		}
+		if len(scoped) == 0 || len(rest) == 0 {
+			return condition, false, false
+		}
+		undecided := false
+		for _, operand := range rest {
+			switch evaluate(operand) {
+			case false:
+				return nil, true, true
+			case true:
+			default:
+				undecided = true
+			}
+		}
+		if undecided || len(scoped) != 1 {
+			return condition, false, false
+		}
+		return map[string]any{"operator": "not", "operands": []any{scoped[0]}}, false, true
+	case "and":
+		if !isList {
+			return condition, false, false
+		}
+		anyChanged := false
+		kept := make([]any, 0, len(raw))
+		for _, item := range raw {
+			operand, ok := asMap(item)
+			if !ok {
+				kept = append(kept, item)
+				continue
+			}
+			next, operandHolds, operandChanged := reduceNegatedConjunctions(operand, evaluate)
+			if operandChanged {
+				anyChanged = true
+			}
+			if operandHolds {
+				continue
+			}
+			kept = append(kept, next)
+		}
+		if !anyChanged {
+			return condition, false, false
+		}
+		if len(kept) == 0 {
+			return nil, true, true
+		}
+		if len(kept) == 1 {
+			if only, ok := asMap(kept[0]); ok {
+				return only, false, true
+			}
+		}
+		next := make(map[string]any, len(condition))
+		for key, value := range condition {
+			next[key] = value
+		}
+		next["operands"] = kept
+		return next, false, true
+	}
+	return condition, false, false
 }
 
 // isWeaponScopedCondition reports an `attack-is` naming weapons, or its negation, or an
@@ -2584,6 +2797,11 @@ func combineApplicability(a, b map[string]any) map[string]any {
 	}
 	if v, ok := b["onCritical"]; ok && v != nil {
 		out["onCritical"] = v
+	}
+	for _, key := range []string{"attackerFilter", "targetFilter"} {
+		if v, ok := b[key]; ok {
+			out[key] = v
+		}
 	}
 	if v, ok := b["requiresTargetKeyword"]; ok && v != nil {
 		out["requiresTargetKeyword"] = v
@@ -2926,6 +3144,16 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 		if _, predicate := predicates[key]; predicate {
 			continue
 		}
+		if view, ok := value.(map[string]any); key == "visible" && ok && side == "target" && len(view) == 1 && view["to"] == "attacker" {
+			// The attack's target as the attacking model sees it is a declared fact.
+			switch visible, known := ctx["targetVisible"].(bool); {
+			case !known:
+				unknown = true
+			case !visible:
+				return false
+			}
+			continue
+		}
 		switch key {
 		case "owner":
 			wanted, ok := value.(string)
@@ -3091,6 +3319,10 @@ func matchesUnitFilter(filter, ctx map[string]any, side, owner string) any {
 			}
 		case "level":
 			if value == "unit" || (value == "model" && filter["attachment_role"] != nil && memberSide) {
+				continue
+			}
+			// "Each model from your army": every model of a unit on that side, so the whole unit.
+			if value == "model" && onlyLevelAndOwner(filter) {
 				continue
 			}
 			// Every model of the unit meets the keyword predicate, so the filter selects the whole unit.
@@ -3368,7 +3600,8 @@ func evaluateConditionFromContext(condition, ctx map[string]any, rest ...any) an
 	case "battle-round", "player-turn-is", "strength", "wounds", "closest":
 		return evaluateScenarioCondition(getStr(condition, "type"), params, ctx, perspective)
 	case "guided":
-		if (params["subject"] != nil && !isBuffedUnit(params["subject"])) || ctx["attackerGuided"] == nil {
+		// "attacker" names the attacking unit in either perspective.
+		if (params["subject"] != nil && params["subject"] != "attacker" && !isBuffedUnit(params["subject"])) || ctx["attackerGuided"] == nil {
 			return nil
 		}
 		return ctx["attackerGuided"] == true
@@ -3491,21 +3724,8 @@ func hasUnresolvedFidelityBinding(n map[string]any) bool {
 	applies, _ := getMap(n, "applies")
 	modifier, _ := getMap(n, "modifier")
 	consumer, _ := getMap(modifier, "consumer")
-	selectorUnresolved := false
-	if n["type"] == "select-units" || n["type"] == "for-each-unit" {
-		filter, _ := getMap(selector, "filter")
-		for key := range filter {
-			switch key {
-			case "owner", "level", "member_of", "attachment_role", "all_of", "any_of", "none_of", "not_all_of":
-			default:
-				selectorUnresolved = true
-			}
-		}
-		selectorUnresolved = selectorUnresolved ||
-			selector["eligibility"] != nil ||
-			selector["limit"] != nil ||
-			selector["bind_as"] != nil
-	}
+	// TS hasUnresolvedFidelityBinding: any selector names a binding the buff engine cannot hold.
+	selectorUnresolved := (n["type"] == "select-units" || n["type"] == "for-each-unit") && selector != nil
 	// A designation's own selection (range, visibility, eligibility) is what its lever's player vouches for.
 	designationUnresolved := n["type"] == "designate-target" && (applies["attacker_filter"] != nil ||
 		applies["attacker_unit_filter"] != nil ||
@@ -3644,4 +3864,44 @@ func translateDiceTable(node, source map[string]any, opts dslOpts, out *effectTr
 		fragment = restricted
 	}
 	out.unsupported = append(out.unsupported, unsup(diceTableReason, fragment))
+}
+
+// onlyLevelAndOwner reports whether a unit filter names nothing but its level and side.
+func onlyLevelAndOwner(filter map[string]any) bool {
+	for name := range filter {
+		if name != "level" && name != "owner" {
+			return false
+		}
+	}
+	return true
+}
+
+// marksOnly reports whether an effect only marks units: designations, possibly under
+// selections, loops, gates and sequences. It grants no buff, so a loop over it needs no
+// trigger-time recipients; the marks it leaves are scenario facts.
+func marksOnly(node any) bool {
+	m, ok := node.(map[string]any)
+	if !ok || m == nil {
+		return false
+	}
+	switch m["type"] {
+	case "designate":
+		return true
+	case "select-units", "for-each-unit":
+		return marksOnly(m["effect"])
+	case "conditional":
+		return marksOnly(m["effect"]) && (m["on_fail"] == nil || marksOnly(m["on_fail"]))
+	case "sequence":
+		steps, ok := m["steps"].([]any)
+		if !ok || len(steps) == 0 {
+			return false
+		}
+		for _, step := range steps {
+			if !marksOnly(step) {
+				return false
+			}
+		}
+		return true
+	}
+	return false
 }

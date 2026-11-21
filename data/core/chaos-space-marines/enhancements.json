@@ -1895,6 +1895,7 @@
       {
         "unit_id": "zarkans-daemonkin-possessed"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   }
 ]

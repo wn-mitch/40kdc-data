@@ -627,25 +627,37 @@ export type MoveMode =
  */
 export type DefiniteOwner = "friendly" | "enemy" | "any";
 /**
+ * A donor unit carries all of these keywords.
+ *
+ * @minItems 1
+ */
+export type KeywordList5 = [Keyword, ...Keyword[]];
+/**
+ * A receiver unit carries all of these keywords.
+ *
+ * @minItems 1
+ */
+export type KeywordList6 = [Keyword, ...Keyword[]];
+/**
  * Army gate: every model in the army must carry at least one of these keywords for the rule to apply (e.g. ['Chaos Knights', 'Heretic Astartes'] for Daemonic Pact). Empty = no army-level gate (the rule is then gated only by `detachment_ids`, whose detachments are themselves faction-locked).
- */
-export type KeywordList5 = Keyword[];
-/**
- * A unit qualifies for this pool when it carries any of these keywords (e.g. ['Legiones Daemonica'], ['Damned'], ['Vanguard Invader']). Empty = the whole `source_faction_id` is the pool.
- */
-export type KeywordList6 = Keyword[];
-/**
- * Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool).
  */
 export type KeywordList7 = Keyword[];
 /**
- * A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...).
+ * A unit qualifies for this pool when it carries any of these keywords (e.g. ['Legiones Daemonica'], ['Damned'], ['Vanguard Invader']). Empty = the whole `source_faction_id` is the pool.
  */
 export type KeywordList8 = Keyword[];
 /**
- * Per-keyword Battleline ratio constraint: for each keyword listed, the number of non-BATTLELINE units with that keyword included via this rule cannot exceed the number of BATTLELINE units with that keyword included via this rule (e.g. Daemonic Pact's per-god ['Khorne','Tzeentch','Nurgle','Slaanesh']).
+ * Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool).
  */
 export type KeywordList9 = Keyword[];
+/**
+ * A unit carrying ANY of these cannot be included via this rule (e.g. Brood Brothers bans 'Aircraft', 'Epic Hero', 'Ogryn', ...).
+ */
+export type KeywordList10 = Keyword[];
+/**
+ * Per-keyword Battleline ratio constraint: for each keyword listed, the number of non-BATTLELINE units with that keyword included via this rule cannot exceed the number of BATTLELINE units with that keyword included via this rule (e.g. Daemonic Pact's per-god ['Khorne','Tzeentch','Nurgle','Slaanesh']).
+ */
+export type KeywordList11 = Keyword[];
 /**
  * A zone footprint, expressed as an axis-aligned rectangle or an explicit polygon. Vertices/extent are relative to the owning element's position.
  *
@@ -687,7 +699,7 @@ export type GameModes2 = [GameModeId, ...GameModeId[]];
 /**
  * Units carrying any of these faction keywords do not count toward the cap (e.g. YNNARI for the Asuryani Yvraine cap).
  */
-export type KeywordList10 = Keyword[];
+export type KeywordList12 = Keyword[];
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
@@ -991,11 +1003,11 @@ export type AbilityDSLCondition9 = SimpleCondition | CompoundCondition;
 /**
  * AND set: the target must carry every keyword listed here.
  */
-export type KeywordList11 = Keyword[];
+export type KeywordList13 = Keyword[];
 /**
  * OR set: the target must carry at least one keyword listed here. Use for rules that target a unit with one of several keywords (e.g. Crushing Impact's MONSTER/VEHICLE, Explosives' EXPLOSIVES/GRENADES). Mirrors the `army_keywords_any` OR-gate on allied-rule.schema.json.
  */
-export type KeywordList12 = Keyword[];
+export type KeywordList14 = Keyword[];
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
@@ -1069,11 +1081,11 @@ export type GameModes6 = [GameModeId, ...GameModeId[]];
  *
  * @minItems 1
  */
-export type KeywordList13 = [Keyword, ...Keyword[]];
+export type KeywordList15 = [Keyword, ...Keyword[]];
 /**
  * The profile cannot target a unit carrying any listed keyword.
  */
-export type KeywordList14 = Keyword[];
+export type KeywordList16 = Keyword[];
 /**
  * Game modes this weapon is legal or authored for; absent implies matched-play.
  *
@@ -1119,7 +1131,7 @@ export type RuleStateCoreRuleSlug =
  *
  * @minItems 1
  */
-export type KeywordList15 = [Keyword, ...Keyword[]];
+export type KeywordList17 = [Keyword, ...Keyword[]];
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "effect".
@@ -2944,9 +2956,23 @@ export interface AlliedKeywordLimit {
    * Maximum number of units carrying `keyword` includable via the rule at this battle size.
    */
   max_count: number;
+  /**
+   * Units that do not count towards this cap: for each included unit carrying every `donor_keywords`, one included unit carrying every `receiver_keywords` is not counted (e.g. one INQUISITORIAL AGENTS unit per INQUISITOR unit does not count towards RETINUE).
+   */
+  exemptions?: AlliedKeywordLimitExemption[];
 }
 /**
- * A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_ids`).
+ * A donor/receiver pair exempting receiver units from an allied keyword cap, one receiver per donor unit.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "allied-keyword-limit-exemption".
+ */
+export interface AlliedKeywordLimitExemption {
+  donor_keywords: KeywordList5;
+  receiver_keywords: KeywordList6;
+}
+/**
+ * A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by three optional, AND-combined conditions: the army's faction (`host_faction_ids`), an army-wide keyword condition (`army_keywords_any`) and a selected detachment (`detachment_ids`).
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "allied-rule".
@@ -2958,7 +2984,11 @@ export interface AlliedRule {
    * Short panel/category heading a list builder groups this pool under (e.g. 'Daemons', 'Imperial Agents', 'Titanic Allies'). Defaults to `name` when omitted.
    */
   label?: string;
-  army_keywords_any?: KeywordList5;
+  army_keywords_any?: KeywordList7;
+  /**
+   * Host gate: the factions whose armies may take this pool (the MFM dump's host faction keywords, mapped to faction ids). When non-empty, only an army of a listed faction is offered the rule, even if another of its faction keywords appears in `army_keywords_any` (a Deathwatch army carries ADEPTUS ASTARTES but is not a host of the generic Agents of the Imperium pool). Empty/absent = no host gate.
+   */
+  host_faction_ids?: EntityId[];
   /**
    * Detachment gate: the rule applies only when at least one listed detachment is selected. Empty/absent = no detachment gate. Replaces the former single detachment_id (GW pools may gate on several detachments).
    */
@@ -2967,13 +2997,13 @@ export interface AlliedRule {
    * Faction the ally pool is drawn from, when scoping by faction is needed to disambiguate units whose id is shared across factions. Optional hint; `source_keywords` is the primary filter.
    */
   source_faction_id?: EntityId | null;
-  source_keywords?: KeywordList6;
+  source_keywords?: KeywordList8;
   /**
    * Explicit datasheet allowlist: when non-empty, a unit qualifies only if its id is listed (AND-combined with source_keywords/required_keywords/excluded_keywords/roles). GW soup pools enumerate by datasheet; this is the primary unit selector for generated rules. Empty/absent = no datasheet-level restriction.
    */
   source_datasheet_ids?: EntityId[];
-  required_keywords?: KeywordList7;
-  excluded_keywords?: KeywordList8;
+  required_keywords?: KeywordList9;
+  excluded_keywords?: KeywordList10;
   /**
    * Optional battlefield-role filter (matched against a unit's `role`). Empty = no role restriction.
    */
@@ -2986,6 +3016,14 @@ export interface AlliedRule {
    * Per-keyword, per-battle-size cap on how many units carrying `keyword` may be included via this rule (e.g. Imperial Knights' Titanic 1 / Armiger 3; Agents of the Imperium's Character/Retinue/Requisitioned counts). Advisory construction cap.
    */
   keyword_limits?: AlliedKeywordLimit[];
+  /**
+   * True when the rule's `keyword_limits` are alternatives: the units included via the rule may carry only one of the limited keywords, whose cap then applies (e.g. Imperial Knights allies: one TITANIC model or up to three ARMIGER models, never both; Titan pools: one Titan of any class).
+   */
+  keyword_limits_exclusive?: boolean;
+  /**
+   * True when units included via this rule have their Faction keywords replaced with the army's (e.g. Renegades: legion units taken by a Heretic Astartes army become HERETIC ASTARTES).
+   */
+  replaces_faction_keywords?: boolean;
   /**
    * Optional cap on the number of units included via this rule, independent of points. null = no unit-count cap.
    */
@@ -3014,7 +3052,7 @@ export interface AlliedRule {
    * Abilities that included units lose under this rule (e.g. Astra Militarum units lose 'voice-of-command' under Brood Brothers). A display/effect hint, not a construction constraint.
    */
   removes_ability_ids?: EntityId[];
-  battleline_ratio_keywords?: KeywordList9;
+  battleline_ratio_keywords?: KeywordList11;
   game_version: GameVersionReference;
   notes?: string;
 }
@@ -3193,6 +3231,28 @@ export interface Enhancement {
    * Number of units this enhancement may be applied to. Only meaningful when `upgrade_tag` is true; defaults to 1.
    */
   max_targets?: number;
+  /**
+   * False when taking this enhancement does not count toward the battle size's Enhancement limit.
+   */
+  counts_toward_enhancement_limit?: boolean;
+  /**
+   * True when a unit that is not a CHARACTER may be given this enhancement. An `upgrade_tag` enhancement is always equipable by a non-CHARACTER unit.
+   */
+  equipable_by_non_character?: boolean;
+  /**
+   * True when an EPIC HERO may be given this enhancement. Without it, no EPIC HERO may take it.
+   */
+  equipable_by_epic_hero?: boolean;
+  /**
+   * True when the unit given this enhancement cannot be the army's Warlord.
+   */
+  bearer_cannot_be_warlord?: boolean;
+  /**
+   * Weapon ids the bearer's unit must carry in its chosen loadout to be given this enhancement. Every listed id is required.
+   *
+   * @minItems 1
+   */
+  required_wargear_ids?: [EntityId, ...EntityId[]];
   keyword_restrictions?: KeywordList;
   /**
    * Alternative bearer eligibility groups. Every keyword in one group is required (AND), while satisfying any group is sufficient (OR). When present, this supersedes the legacy flat `keyword_restrictions` field.
@@ -3269,7 +3329,7 @@ export interface Faction {
      * How the cap counts. `units` (default): the number of units carrying every keyword in `keywords` (one datasheet's identity, e.g. PATRIARCH, or EPIC HERO + YVRAINE). `alternatives`: each keyword is an alternative carried by a different datasheet, and the cap is the number of distinct alternatives present in the army (e.g. COMMANDER FARSIGHT / ETHEREAL with max 1: an army has Farsight or Ethereals, not both).
      */
     mode?: "units" | "alternatives";
-    exempt_faction_keywords?: KeywordList10;
+    exempt_faction_keywords?: KeywordList12;
   }[];
   /**
    * Army-construction constraints evaluated against faction keywords. `faction-keyword-cohesion` limits how many distinct additional faction keywords an army built from this faction may include — the Space Marine Chapters rule, where a second Faction keyword names the unit's Chapter and only one Chapter may be fielded.
@@ -3368,6 +3428,33 @@ export interface HullShape {
   game_version: GameVersionReference;
 }
 /**
+ * A keyword a unit takes from a set of alternatives when its army is mustered (a Mark of Chaos, a Daemonic Allegiance, a detachment's CHARACTER pick). Each option is a unit's conditional_keywords entry whose choice_group is this group's id; a unit takes at most one option of a group.
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "keyword-choice-group".
+ */
+export interface KeywordChoiceGroup {
+  id: EntityId;
+  name: string;
+  /**
+   * The detachment whose army makes the choice; null when any army that includes the unit makes it.
+   */
+  detachment_id: EntityId | null;
+  /**
+   * Whether every unit with options in this group must take one.
+   */
+  mandatory: boolean;
+  /**
+   * The fewest units in the army that must take an option of this group; null for no minimum.
+   */
+  min_units: number | null;
+  /**
+   * The most units in the army that can take an option of this group; null for no maximum.
+   */
+  max_units: number | null;
+  game_version: GameVersionReference;
+}
+/**
  * Defines which character units can attach to which bodyguard units.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -3383,7 +3470,7 @@ export interface LeaderAttachment {
    */
   eligible_bodyguard_keywords?: [string, ...string[]];
   /**
-   * Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.
+   * Attachment eligibility and role that apply only when their conditions hold: every required roster unit and no excluded roster unit is present, the required detachment is selected and the excluded one is not, and the leader and bodyguard share the required keyword.
    *
    * @minItems 1
    */
@@ -3402,6 +3489,18 @@ export interface LeaderAttachment {
        * @minItems 1
        */
       excluded_roster_unit_ids?: [EntityId, ...EntityId[]];
+      /**
+       * Kebab-case identifier
+       */
+      required_detachment_id?: string;
+      /**
+       * Kebab-case identifier
+       */
+      excluded_detachment_id?: string;
+      /**
+       * The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos).
+       */
+      required_shared_keyword?: string;
     },
     ...{
       role: "leader" | "support";
@@ -3417,6 +3516,18 @@ export interface LeaderAttachment {
        * @minItems 1
        */
       excluded_roster_unit_ids?: [EntityId, ...EntityId[]];
+      /**
+       * Kebab-case identifier
+       */
+      required_detachment_id?: string;
+      /**
+       * Kebab-case identifier
+       */
+      excluded_detachment_id?: string;
+      /**
+       * The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos).
+       */
+      required_shared_keyword?: string;
     }[]
   ];
   game_version: GameVersionReference;
@@ -3505,6 +3616,10 @@ export interface ScoringTrigger {
     min?: number;
     max?: number;
   };
+  /**
+   * The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`.
+   */
+  final_round_timing?: "end-of-turn";
 }
 /**
  * A draw-time predicate over an army list (not runtime board state, so deliberately NOT the Ability DSL condition). Used to gate when_drawn operations such as redraws. Example: a card that is void unless the opponent fields a large unit (10e 'Cull the Horde' redrew when the opponent had no unit of 14+ models) is { subject: 'opponent', quantifier: 'none', unit_filter: { model_count_min: 14 } } with operation 'redraw'.
@@ -4057,6 +4172,10 @@ export interface ChoiceEffect {
    * Who picks the option: the opponent ("your opponent must decide whether that unit will take cover or stand firm"). Absent, the player using the ability picks.
    */
   chosen_by?: "opponent";
+  /**
+   * Index into `options` of the Stratagem's secondary effect: picking that option costs the Stratagem's `secondary_effect_extra_cp` on top of its CP cost. Absent, every option costs the Stratagem's CP cost alone.
+   */
+  secondary_option?: number;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -5888,6 +6007,10 @@ export interface MoveEffect {
     ends_when?: AbilityDSLCondition7;
     keeps_eligible?: true;
     ends_nearest?: EndsNearest1;
+    /**
+     * The target must make the move ("must make an ingress move"); absent, the move is optional.
+     */
+    mandatory?: true;
   };
   scaling?: Scaling;
 }
@@ -7522,8 +7645,8 @@ export interface StratagemTargetRestriction {
    * Kebab-case identifier
    */
   name?: string;
-  required_keywords?: KeywordList11;
-  required_keywords_any?: KeywordList12;
+  required_keywords?: KeywordList13;
+  required_keywords_any?: KeywordList14;
   excluded_keywords?: KeywordList;
   /**
    * The target is your Warlord: the Warlord model when `selects` is model, the unit that contains it when `selects` is unit. Warlord is the model chosen at mustering, not a keyword, so it never appears in the keyword lists; those still apply to the Warlord ("your DEATH GUARD WARLORD" is warlord plus required_keywords DEATH GUARD). Absent when the target need not be the Warlord. An enemy target is never your Warlord (integrity rejects warlord with side enemy).
@@ -7592,6 +7715,10 @@ export interface Stratagem {
    */
   detachment_id?: EntityId | null;
   cp_cost: number;
+  /**
+   * CP spent on top of cp_cost to use the Stratagem's secondary (alternate) effect instead of its main one. Absent when the Stratagem has no paid secondary effect.
+   */
+  secondary_effect_extra_cp?: number;
   phases: PhaseList;
   player_turn: PlayerTurn;
   timing: "once-per-phase" | "once-per-turn" | "once-per-battle" | "unlimited";
@@ -8419,7 +8546,10 @@ export interface Unit {
        * Profile name (e.g., 'Wounded' for degrading)
        */
       name?: string;
-      M: StatValue;
+      /**
+       * Move in inches. Null where the datasheet prints "-" (an aircraft, a fortification).
+       */
+      M: StatValue | null;
       T: number;
       W: number;
       Sv: number;
@@ -8433,7 +8563,10 @@ export interface Unit {
        */
       invuln_sv_melee?: number | null;
       Ld: number;
-      OC: number;
+      /**
+       * Objective Control. Null where the datasheet prints "-" (an aircraft, a fortification).
+       */
+      OC: number | null;
       [k: string]: unknown;
     },
     ...{
@@ -8441,7 +8574,10 @@ export interface Unit {
        * Profile name (e.g., 'Wounded' for degrading)
        */
       name?: string;
-      M: StatValue;
+      /**
+       * Move in inches. Null where the datasheet prints "-" (an aircraft, a fortification).
+       */
+      M: StatValue | null;
       T: number;
       W: number;
       Sv: number;
@@ -8455,7 +8591,10 @@ export interface Unit {
        */
       invuln_sv_melee?: number | null;
       Ld: number;
-      OC: number;
+      /**
+       * Objective Control. Null where the datasheet prints "-" (an aircraft, a fortification).
+       */
+      OC: number | null;
       [k: string]: unknown;
     }[]
   ];
@@ -8533,6 +8672,10 @@ export interface Unit {
     keyword: Keyword;
     required_detachment_id?: EntityId | null;
     required_faction_keyword?: Keyword | null;
+    /**
+     * Kebab-case identifier
+     */
+    choice_group?: string;
   }[];
   /**
    * Faction keywords whose armies are barred from taking this otherwise-generic unit. Used where the game removes a generic unit from a specific sub-faction without printing a replacement (e.g. Black Templars cannot field Librarians; Deathwatch cannot field the generic Tactical Squad). An army may take this unit only if none of its faction keywords appear here. Absent/empty = available to every keyword-eligible army. Distinct from `faction_keywords`, which is the positive access list; this is the negative one for the rare exclusions a flat shared pool cannot otherwise express.
@@ -8547,6 +8690,10 @@ export interface Unit {
     max: number;
     [k: string]: unknown;
   };
+  /**
+   * The most models the unit may contain, across all of its composition rows. It caps a composition whose row maxima sum higher (Corsair Voidscarred: 10 models although its rows allow 13).
+   */
+  max_model_count?: number;
   weapon_ids?: EntityId[];
   /**
    * The abilities the unit's datasheet prints: an ability id, or an object for a rated rule ({id, value}: Deadly Demise D3, Feel No Pain 5+, Scouts 9", Firing Deck 2, whose record reads the value through {rating: true}) or for the ability a wargear item prints ({id, wargear}: the unit's default wargear that carries it).
@@ -8719,8 +8866,8 @@ export interface Weapon {
        * Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
        */
       target_restrictions?: {
-        required_keywords_any?: KeywordList13;
-        excluded_keywords?: KeywordList14;
+        required_keywords_any?: KeywordList15;
+        excluded_keywords?: KeywordList16;
       } | null;
     },
     ...{
@@ -8743,8 +8890,8 @@ export interface Weapon {
        * Target legality for this profile. Distinct from Anti and other effects that modify attacks after a legal target is selected.
        */
       target_restrictions?: {
-        required_keywords_any?: KeywordList13;
-        excluded_keywords?: KeywordList14;
+        required_keywords_any?: KeywordList15;
+        excluded_keywords?: KeywordList16;
       } | null;
     }[]
   ];
@@ -8760,6 +8907,12 @@ export interface Weapon {
 export interface AbilityDSLEntry {
   ability_id: EntityId;
   name: string;
+  /**
+   * The printed name of each option of the record's one choice effect, in option order ("Paragon of Hatred"). Present only on a record whose effect holds exactly one choice, with one name per option.
+   *
+   * @minItems 2
+   */
+  option_names?: [string, string, ...string[]];
   authored_by: ContributorRef;
   game_version: GameVersionReference;
   /**
@@ -8924,7 +9077,7 @@ export interface PersistentBattlefieldMarkerState {
    * Where the marker is placed at the moment the ability resolves.
    */
   placement: "bearer" | "bearer-unit" | "battlefield";
-  setup_keywords?: KeywordList15;
+  setup_keywords?: KeywordList17;
   /**
    * Whether a single set-up use spends the marker.
    */

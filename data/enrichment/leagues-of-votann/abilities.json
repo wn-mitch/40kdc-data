@@ -2548,22 +2548,11 @@
     "source_digest": "33e6699498b8fe53cba86ddf09fa505c74983600f41a4fec0602ff49bf576ff8",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "resource-gain",
-        "target": "this-model",
-        "modifier": {
-          "pool": "yp-pool",
-          "amount": 1
-        }
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "yp-pool",
+        "amount": 1
       }
     },
     "scope": {
@@ -7820,7 +7809,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {
@@ -8910,19 +8899,80 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "brandfast-oathband",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "LEAGUES OF VOTANN"
+          ],
+          "embarked_in": "this-unit"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": "selected-unit",
+            "modifier": {
+              "activity": "disembark",
+              "allow": true
+            }
+          },
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "battlefield",
+              "from": "transport",
+              "near": [
+                {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 6
+                  },
+                  "wholly": true
+                }
+              ]
+            }
+          },
+          {
+            "type": "permission",
+            "target": "selected-unit",
+            "modifier": {
+              "activity": "declare-charge",
+              "allow": false
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "player-turn-is",
+        "parameters": {
+          "turn": "your-turn"
+        }
+      }
+    },
+    "source_digest": "b74dbc012731c0ad347dd688bbe2fbabbd5b17908bb262d3593293b42d33aa3b"
   },
   {
     "ability_id": "secure-resources-leagues-of-votann",
@@ -9549,19 +9599,37 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "leagues-of-votann",
     "detachment_id": "delve-assault-shift",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "move-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "applies_to_moves": [
+          "pile-in",
+          "consolidation"
+        ],
+        "distance_bonus": 3
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-started",
+      "filter": {
+        "move_types": [
+          "pile-in",
+          "consolidation"
+        ]
+      }
+    },
+    "source_digest": "6873c41a5219eb8f71892210972f2614a246470f4d97457c9830181a8951e978"
   },
   {
     "ability_id": "unwavering-accuracy-hearthfyre-arsenal-leagues-of-votann",

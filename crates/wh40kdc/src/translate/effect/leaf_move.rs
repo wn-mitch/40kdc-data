@@ -142,7 +142,7 @@ fn mode_clause(m: &P) -> String {
 /// alternative end when `waives` is closest-enemy-model.
 fn ends_nearest_phrase(e: &P, ctx: &Ctx, who: &str, move_ref: &str) -> String {
     // The enemy unit the trigger names is "that enemy unit", not the closest of a group.
-    let event_subject = e.get("of").and_then(Value::as_str) == Some("event-subject");
+    let event_subject = crate::translate::condition::is_event_subject(e.get("of"));
     // An objective names no unit: any marker, or the one a select-objective bound.
     let objective = e.get("of").and_then(|of| of.get("objective"));
     let named = if event_subject {
@@ -164,7 +164,14 @@ fn ends_nearest_phrase(e: &P, ctx: &Ctx, who: &str, move_ref: &str) -> String {
         named.replacen(" units", " unit", 1).replace(" units)", ")")
     };
     let nearest = if event_subject {
-        "as close as possible to that enemy unit".to_string()
+        let noun = if e.get("of").and_then(Value::as_str)
+            == Some(crate::translate::condition::EVENT_SUBJECT_MODEL)
+        {
+            "model"
+        } else {
+            "unit"
+        };
+        format!("as close as possible to that enemy {noun}")
     } else {
         format!("as close as possible to the closest {named}")
     };
@@ -213,7 +220,13 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
         Some(d) => format!(" up to {}\"", dice_case(Some(d))),
         None => String::new(),
     };
-    let mut s = format!("{subj} can {verb}{up_to}{}", mode_clause(m));
+    // mandatory: the target must make the move ("must make an ingress move").
+    let modal = if is_true(m, "mandatory") {
+        "must"
+    } else {
+        "can"
+    };
+    let mut s = format!("{subj} {modal} {verb}{up_to}{}", mode_clause(m));
     // An embark's reach replaces the core 3" to the Transport.
     if let Some(reach) = nn(m, "reach") {
         s.push_str(&format!(

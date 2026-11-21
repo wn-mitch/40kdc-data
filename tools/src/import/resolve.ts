@@ -163,6 +163,14 @@ function mapBattleSize(raw: string | null): BattleSize | null {
   return null;
 }
 
+/**
+ * A Combat Patrol label names a game mode, not a matched-play battle size: it resolves to no
+ * battle size and is not an unmapped label.
+ */
+function isCombatPatrolLabel(raw: string): boolean {
+  return normalizeName(raw).includes("combat patrol");
+}
+
 /** 11e detachment-point budget for a battle size; null when the size is unknown. */
 const detachmentCap = detachmentCapForBattleSize;
 
@@ -381,7 +389,7 @@ export function resolve(
 
   // --- Battle size. ---------------------------------------------------------
   const battle_size = mapBattleSize(parsed.battle_size_raw);
-  if (parsed.battle_size_raw && battle_size === null) {
+  if (parsed.battle_size_raw && battle_size === null && !isCombatPatrolLabel(parsed.battle_size_raw)) {
     diag.warn("battle-size-unmapped", "Battle size label could not be mapped.", parsed.battle_size_raw);
   }
   const detachment_cap = detachmentCap(battle_size);

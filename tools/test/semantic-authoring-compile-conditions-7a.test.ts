@@ -4,13 +4,13 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
-import { normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { previewLeaf } from "../src/semantic-authoring/leaf-preview.js";
 
 /**
- * Batch 7a: event@8's six new trigger kinds, duration@3's seven new endpoints, usage-limit@2's
- * three new frequencies, the mission/composition predicate families (model-profile, loadout,
+ * Batch 7a: event's six trigger kinds, duration's seven endpoints, usage-limit's
+ * three frequencies, the mission/composition predicate families (model-profile, loadout,
  * eligible, resource, operation-markers, engagement-fronts, destroyed-while-on-objective,
  * destroyed-in-tagged-terrain), and the two behavior flags aura.range_cap/counts_as_move.
  */
@@ -25,9 +25,9 @@ function authored(factionId: string, abilityId: string): Record<string, unknown>
 }
 
 let offset = 0;
-function leaf(role: string, familyId: string, parameters: Record<string, unknown>, familyVersion = 1): CompileLeaf {
+function leaf(role: string, familyId: string, parameters: Record<string, unknown>): CompileLeaf {
   offset += 10;
-  return { role, family_id: familyId, family_version: familyVersion, parameters: normalizeFingerprintParameters(familyId, parameters, familyVersion), start_byte: offset };
+  return { role, family_id: familyId, family_version: currentFamilyVersion(familyId), parameters: normalizeFingerprintParameters(familyId, parameters), start_byte: offset };
 }
 
 function compiled(leaves: CompileLeaf[]) {
@@ -43,11 +43,11 @@ function rendered(base: Record<string, unknown>, leaves: CompileLeaf[]): string 
   return check.rendered_text!;
 }
 
-const heal = () => leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" }, 2);
+const heal = () => leaf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" });
 const base = () => authored("adeptus-mechanicus", "control-edict-adeptus-mechanicus");
 
-describe("Semantic authoring batch-7a event@8 trigger kinds", () => {
-  it("compiles the six new trigger kinds", () => {
+describe("Semantic authoring batch-7a event trigger kinds", () => {
+  it("compiles the six trigger kinds", () => {
     const cases: Array<[Record<string, unknown>, Record<string, unknown>]> = [
       [{ kind: "after-roll", roll: "hit" }, { event: "after-roll", filter: { roll: "hit" } }],
       [{ kind: "battle-formations-declared" }, { event: "battle-formations-declared" }],
@@ -57,19 +57,15 @@ describe("Semantic authoring batch-7a event@8 trigger kinds", () => {
       [{ kind: "resource-spent", pool: "flux" }, { event: "resource-spent", filter: { pool: "flux" } }],
     ];
     for (const [parameters, expected] of cases) {
-      const result = compiled([leaf("EVENT", "event", parameters, 8), heal()]);
+      const result = compiled([leaf("EVENT", "event", parameters), heal()]);
       expect(result.mechanics.trigger).toEqual(expected);
-      expect(rendered(base(), [leaf("EVENT", "event", parameters, 8), heal()])).toBeTruthy();
+      expect(rendered(base(), [leaf("EVENT", "event", parameters), heal()])).toBeTruthy();
     }
-  });
-
-  it("migrates a version-7 event leaf straight through to version 8", () => {
-    expect(normalizeFingerprintParameters("event", { kind: "disembarked" }, 8)).toEqual({ kind: "disembarked" });
   });
 });
 
-describe("Semantic authoring batch-7a duration@3 endpoints", () => {
-  it("compiles all seven new endpoints to their scope.duration value", () => {
+describe("Semantic authoring batch-7a duration endpoints", () => {
+  it("compiles all seven endpoints to their scope.duration value", () => {
     const cases: Array<[string, string]> = [
       ["end-of-attack-sequence", "attack-sequence"],
       ["end-of-this-use", "resolution"],
@@ -80,38 +76,37 @@ describe("Semantic authoring batch-7a duration@3 endpoints", () => {
       ["control-lost", "control-lost"],
     ];
     for (const [endpoint, scopeDuration] of cases) {
-      const result = compiled([leaf("DURATION", "duration", { endpoint }, 3), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" })]);
+      const result = compiled([leaf("DURATION", "duration", { endpoint }), leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" })]);
       expect(result.mechanics.scope).toEqual({ duration: scopeDuration });
     }
   });
 });
 
-describe("Semantic authoring batch-7a usage-limit@2 frequencies", () => {
-  it("accepts the three new frequencies and passes them through to usage", () => {
+describe("Semantic authoring batch-7a usage-limit frequencies", () => {
+  it("accepts the three frequencies and passes them through to usage", () => {
     for (const frequency of ["once-per-command-phase", "first-this-battle", "first-time-this-phase"]) {
       const result = compiled([
-        leaf("RESTRICTION", "usage-limit", { frequency, per: "any" }, 2),
-        leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }),
+        leaf("RESTRICTION", "usage-limit", { frequency, per: "any" }),
+        leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }),
       ]);
       expect(result.mechanics.usage).toEqual({ frequency });
     }
   });
 });
 
-describe("usage-limit@6 first-time-this-turn", () => {
-  it("passes the turn frequency through, and earlier versions refuse it", () => {
+describe("usage-limit first-time-this-turn", () => {
+  it("passes the turn frequency through", () => {
     const result = compiled([
-      leaf("RESTRICTION", "usage-limit", { frequency: "first-time-this-turn", per: "any" }, 6),
-      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }),
+      leaf("RESTRICTION", "usage-limit", { frequency: "first-time-this-turn", per: "any" }),
+      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }),
     ]);
     expect(result.mechanics.usage).toEqual({ frequency: "first-time-this-turn" });
-    expect(() => normalizeFingerprintParameters("usage-limit", { frequency: "first-time-this-turn", per: "any" }, 5)).toThrow();
   });
 
   it("renders the turn frequency as its own phrase, not the phase one", () => {
     const text = rendered(base(), [
-      leaf("RESTRICTION", "usage-limit", { frequency: "first-time-this-turn", per: "any" }, 6),
-      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" }),
+      leaf("RESTRICTION", "usage-limit", { frequency: "first-time-this-turn", per: "any" }),
+      leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" }),
     ]);
     expect(text).toMatch(/first time each turn/u);
     expect(text).not.toMatch(/each phase/u);
@@ -119,7 +114,7 @@ describe("usage-limit@6 first-time-this-turn", () => {
 });
 
 describe("Semantic authoring batch-7a mission/composition predicates", () => {
-  const effect = () => leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" });
+  const effect = () => leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" });
   function conditionCase(familyId: string, parameters: Record<string, unknown>, expected: Record<string, unknown>): void {
     const result = compiled([leaf("CONDITION", familyId, parameters), effect()]);
     expect(result.mechanics.effect).toEqual({ type: "conditional", condition: expected, effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } } });
@@ -152,36 +147,31 @@ describe("Semantic authoring batch-7a mission/composition predicates", () => {
 });
 
 describe("Semantic authoring batch-7a behavior flags", () => {
-  it("compiles aura-range@2's range_cap_inches and make-move@2's counts_as_move", () => {
+  it("compiles aura-range's range_cap_inches and make-move's counts_as_move", () => {
     const grant = leaf("EFFECT", "fights-first", { subject: "this-model" });
-    const withCap = compiled([leaf("CONDITION", "aura-range", { side: "friendly", inches: 6, range_cap_inches: 12 }, 2), grant]);
+    const withCap = compiled([leaf("CONDITION", "aura-range", { side: "friendly", inches: 6, range_cap_inches: 12 }), grant]);
     // The DSL's range_cap is a whole number of inches (effect.schema.json aura-effect), not a range-ref.
     expect(withCap.mechanics.effect).toMatchObject({ type: "aura", modifier: { range: { inches: 6 }, range_cap: { inches: 12 } } });
 
-    const move = compiled([leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", counts_as_move: "advance" }, 2)]);
+    const move = compiled([leaf("EFFECT", "make-move", { subject: "this-unit", move_type: "normal", counts_as_move: "advance" })]);
     expect(move.mechanics.effect).toEqual({ type: "move", target: "this-unit", modifier: { move_type: "normal", counts_as_move: "advance" } });
-  });
-
-  it("migrates aura-range@1 and make-move@1 leaves straight through", () => {
-    expect(normalizeFingerprintParameters("aura-range", { side: "enemy", inches: 6 }, 2)).toEqual({ side: "enemy", inches: 6 });
-    expect(normalizeFingerprintParameters("make-move", { subject: "this-unit", move_type: "normal" }, 2)).toEqual({ subject: "this-unit", move_type: "normal" });
   });
 });
 
 describe("Semantic authoring batch-7a describer round-trip", () => {
   it("round-trips leaf parameters to readable describer English", () => {
-    const previews: Array<[string, Record<string, unknown>, number, RegExp]> = [
-      ["model-profile", { profile: "szarekh" }, 1, /Szarekh model/iu],
-      ["loadout", { uniform: "ranged" }, 1, /ranged weapons/iu],
-      ["eligible", { to: "shoot" }, 1, /eligible to shoot/iu],
-      ["resource", { pool: "cp", at_least: 3 }, 1, /3\+ cp/iu],
-      ["operation-markers", { count_min: 2 }, 1, /operation markers/iu],
-      ["engagement-fronts", { count_min: 2 }, 1, /engaged on 2\+ fronts/iu],
-      ["destroyed-while-on-objective", { count_min: 1 }, 1, /enemy units destroyed/iu],
-      ["destroyed-in-tagged-terrain", { tag: "toxic" }, 1, /toxic terrain/iu],
+    const previews: Array<[string, Record<string, unknown>, RegExp]> = [
+      ["model-profile", { profile: "szarekh" }, /Szarekh model/iu],
+      ["loadout", { uniform: "ranged" }, /ranged weapons/iu],
+      ["eligible", { to: "shoot" }, /eligible to shoot/iu],
+      ["resource", { pool: "cp", at_least: 3 }, /3 or more cp/iu],
+      ["operation-markers", { count_min: 2 }, /operation markers/iu],
+      ["engagement-fronts", { count_min: 2 }, /engaged on 2 or more fronts/iu],
+      ["destroyed-while-on-objective", { count_min: 1 }, /enemy units destroyed/iu],
+      ["destroyed-in-tagged-terrain", { tag: "toxic" }, /toxic terrain/iu],
     ];
-    for (const [family_id, parameters, family_version, expected] of previews) {
-      const preview = previewLeaf({ family_id, family_version, parameters });
+    for (const [family_id, parameters, expected] of previews) {
+      const preview = previewLeaf({ family_id, family_version: currentFamilyVersion(family_id), parameters });
       expect(preview.problem).toBeNull();
       expect(preview.text).toMatch(expected);
     }
@@ -195,7 +185,7 @@ describe("Semantic authoring batch-7a describer round-trip", () => {
 // EFFECT (roll-auto-result/critical-hit-threshold's output shape) the coverage sweep used to
 // conflate it with.
 describe("Semantic authoring roll-outcome predicate (closes the roll-result coverage gap)", () => {
-  const effect = () => leaf("EFFECT", "reroll", { roll: "hit", subset: "ones" });
+  const effect = () => leaf("EFFECT", "reroll", { roll: "hit", subset: "ones", weapon_type: "all" });
 
   it("compiles roll, result and an optional source binding", () => {
     const bare = compiled([leaf("CONDITION", "roll-outcome", { roll: "wound", result: "critical" }), effect()]);
@@ -223,7 +213,7 @@ describe("Semantic authoring roll-outcome predicate (closes the roll-result cove
     expect((authoredCondition.condition as Record<string, unknown>)).toEqual({ type: "roll-result", parameters: { roll: "wound", result: "critical" } });
 
     const result = compiled([leaf("CONDITION", "roll-outcome", { roll: "wound", result: "critical" }),
-      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "ranged" }, 3)]);
+      leaf("EFFECT", "characteristic-modifier", { subject: "this-unit", characteristics: ["AP"], operation: "improve", value: 1, weapon_type: "ranged" })]);
     expect((result.mechanics.effect as Record<string, unknown>).condition).toEqual(authoredCondition.condition);
   });
 
@@ -233,7 +223,7 @@ describe("Semantic authoring roll-outcome predicate (closes the roll-result cove
   });
 
   it("renders readable describer English", () => {
-    const preview = previewLeaf({ family_id: "roll-outcome", family_version: 1, parameters: { roll: "wound", result: "critical" } });
+    const preview = previewLeaf({ family_id: "roll-outcome", family_version: currentFamilyVersion("roll-outcome"), parameters: { roll: "wound", result: "critical" } });
     expect(preview.problem).toBeNull();
     expect(preview.text?.length ?? 0).toBeGreaterThan(0);
   });

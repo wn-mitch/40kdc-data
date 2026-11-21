@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Death Guard" id="5108-f98-63c2-53cb" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+  <entryLinks>
+    <entryLink name="Lord of Poxes" id="ce37-30ed-6eb1-bca6" hidden="false" import="true" targetId="c5a7-5f07-2b1a-8f98" type="selectionEntry"/>
+    <entryLink name="Defiler" id="cd2f-34bc-3a90-f0fa" hidden="false" import="true" targetId="bc88-0833-743e-0146" type="selectionEntry"/>
+    <entryLink name="Chaos Spawn" id="579b-ef1a-9433-1337" hidden="false" import="true" targetId="1d85-475f-5ab-9823" type="selectionEntry"/>
+    <entryLink name="Tallyman" id="f181-855c-49f1-fca7" hidden="false" import="true" targetId="506c-16a8-68f7-c08a" type="selectionEntry"/>
+    <entryLink name="Poxwalkers" id="b340-06c8-b9d3-5d00" hidden="false" import="true" targetId="7c30-1e92-2faa-eb03" type="selectionEntry"/>
+    <entryLink name="Lord of Contagion" id="ef0e-32c5-4538-1c6b" hidden="false" import="true" targetId="8700-3d3-efbb-ef8d" type="selectionEntry"/>
+    <entryLink name="Chaos Predator Annihilator" id="8bc8-6cf0-4b72-6087" hidden="false" import="true" targetId="9b58-210d-c12f-4d46" type="selectionEntry"/>
+    <entryLink name="Chaos Predator Destructor" id="f6d9-6b32-93a6-eb07" hidden="false" import="true" targetId="ab4e-466d-e9e8-89d5" type="selectionEntry"/>
+    <entryLink name="Foetid Bloat-Drone with Heavy Blight Launcher" id="8ae2-95ac-47bc-bba8" hidden="false" import="true" targetId="d055-25eb-eb2b-7f6a" type="selectionEntry"/>
+    <entryLink name="Plagueburst Crawler" id="147c-39d5-1946-925c" hidden="false" import="true" targetId="e58b-507a-937f-7abf" type="selectionEntry"/>
+    <entryLink name="Biologus Putrifier" id="b5d8-70a6-77e5-0286" hidden="false" import="true" targetId="690b-a189-5935-f32e" type="selectionEntry"/>
+    <entryLink name="Plague Marines" id="a8a4-008f-259c-f907" hidden="false" import="true" targetId="8467-b3a2-2597-de0d" type="selectionEntry"/>
+    <entryLink name="Plague Surgeon" id="0f5c-831a-a06f-b19c" hidden="false" import="true" targetId="9a82-ea13-3511-6c08" type="selectionEntry"/>
+    <entryLink name="Daemon Prince of Nurgle" id="8da2-f13a-a093-da6f" hidden="false" import="true" targetId="4cb3-e6b6-4e82-23bf" type="selectionEntry"/>
+    <entryLink name="Deathshroud Terminators" id="41ff-09e5-40eb-bfa4" hidden="false" import="true" targetId="83e8-ebb7-785a-2115" type="selectionEntry"/>
+    <entryLink name="Lord of Virulence" id="1915-3674-9873-a2e6" hidden="false" import="true" targetId="c15c-2b5a-dcab-7627" type="selectionEntry"/>
+    <entryLink name="Foetid Bloat-Drone" id="fdb0-a207-b9dd-e997" hidden="false" import="true" targetId="26d5-ec73-3517-f3f" type="selectionEntry"/>
+    <entryLink name="Noxious Blightbringer" id="553e-63ad-949b-172d" hidden="false" import="true" targetId="1ffc-27de-8aea-e7bb" type="selectionEntry"/>
+    <entryLink name="Daemon Prince of Nurgle with Wings" id="99fa-5f08-c376-83bb" hidden="false" import="true" targetId="f4d7-244d-16c4-f2f3" type="selectionEntry"/>
+    <entryLink name="Miasmic Malignifier" id="c8ce-3574-423b-7c6d" hidden="false" import="true" targetId="55c7-e5b8-9737-f58e" type="selectionEntry"/>
+    <entryLink name="Helbrute" id="02a8-1aa0-0a1e-3113" hidden="false" import="true" targetId="2a2b-643e-860e-b524" type="selectionEntry"/>
+    <entryLink name="Myphitic Blight-haulers" id="b22b-5760-a890-2818" hidden="false" import="true" targetId="e3f4-9f58-df01-ca76" type="selectionEntry"/>
+    <entryLink name="Mortarion" id="5b75-6df0-937b-baf9" hidden="false" import="true" targetId="f5ac-4f37-fe7b-36b6" type="selectionEntry"/>
+    <entryLink name="Malignant Plaguecaster" id="0cd8-7d0f-cad6-8418" hidden="false" import="true" targetId="9900-77d7-10e3-5c91" type="selectionEntry"/>
+    <entryLink name="Chaos Rhino" id="6131-cfc0-ac75-49c4" hidden="false" import="true" targetId="b899-92e2-693a-975f" type="selectionEntry"/>
+    <entryLink name="Chaos Land Raider" id="f11e-71e3-1eaa-fad2" hidden="false" import="true" targetId="89d-b0c0-6e19-f017" type="selectionEntry"/>
+    <entryLink name="Foul Blightspawn" id="3f6f-8352-d9b6-52d1" hidden="false" import="true" targetId="c88f-d4dc-84b3-1b31" type="selectionEntry"/>
+    <entryLink name="Icon Bearer" id="86e0-b10e-7059-9b67" hidden="false" import="true" targetId="3e5b-23db-4ccd-ea97" type="selectionEntry"/>
+    <entryLink name="Typhus" id="f5cd-6e67-f3d2-6573" hidden="false" import="true" targetId="e6a4-7055-fd23-5123" type="selectionEntry"/>
+    <entryLink name="Blightlord Terminators" id="ef61-7a07-69f3-7cb7" hidden="false" import="true" targetId="5b4e-dcf1-5c6f-4d35" type="selectionEntry"/>
+    <entryLink name="Beasts of Nurgle" id="2c95-0706-ea78-e4f6" hidden="false" import="true" targetId="5f38-3bbb-ce09-485b" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="69e5-13c7-06bf-d454" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Daemons of Nurgle" id="4882-e97e-0049-f1a7" hidden="false" primary="false" targetId="4f8d-b640-81fa-1e94"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Great Unclean One" id="f7ca-cffb-0179-f686" hidden="false" import="true" targetId="2425-13a7-77f0-0112" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="69e5-13c7-06bf-d454" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Daemons of Nurgle" id="b6e6-84b1-b85f-de72" hidden="false" primary="false" targetId="4f8d-b640-81fa-1e94"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Nurglings" id="5534-b752-abd9-1947" hidden="false" import="true" targetId="7e32-0162-71e2-57a0" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="69e5-13c7-06bf-d454" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Daemons of Nurgle" id="3026-6138-38e0-70e1" hidden="false" primary="false" targetId="4f8d-b640-81fa-1e94"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Plague Drones" id="a1f1-8c48-6309-d76a" hidden="false" import="true" targetId="cd03-e1f3-fa31-a271" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="69e5-13c7-06bf-d454" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Daemons of Nurgle" id="cd18-dc02-cbe2-b61f" hidden="false" primary="false" targetId="4f8d-b640-81fa-1e94"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Plaguebearers" id="7fee-b356-09e1-7040" hidden="false" import="true" targetId="904b-0319-7b2e-2145" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="69e5-13c7-06bf-d454" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Daemons of Nurgle" id="85bc-8c21-2bd7-dc37" hidden="false" primary="false" targetId="4f8d-b640-81fa-1e94"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Rotigus" id="f623-6983-4247-f9a4" hidden="false" import="true" targetId="66dd-f8c9-f9a6-0e6b" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="69e5-13c7-06bf-d454" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Daemons of Nurgle" id="f44c-d0cb-4d20-c4cc" hidden="false" primary="false" targetId="4f8d-b640-81fa-1e94"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Acastus Knight Asterius" id="cea5-1edd-df86-0d80" hidden="false" import="true" targetId="e289-ad32-c78a-e055" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="a0b2-f787-3808-582b" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="373b-6057-114a-53b9" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Acastus Knight Porphyrion" id="e5f3-5abf-5233-e09e" hidden="false" import="true" targetId="fe77-6f85-5ddb-65bf" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="cc66-2b1c-426e-7e16" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="da2a-2d23-d1f8-26a6" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Cerastus Knight Acheron" id="a9b4-8b96-7171-d08c" hidden="false" import="true" targetId="ec6e-d1d6-f7c6-d008" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="af9a-0826-e02c-d60c" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="cd7c-f1f7-562d-4113" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Cerastus Knight Atrapos" id="96d9-9b63-7b8d-6028" hidden="false" import="true" targetId="8b1d-9029-f9e1-42d9" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="c4c2-9a71-9c9f-0528" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="4053-aad9-4771-c45f" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Cerastus Knight Castigator" id="d431-c0d7-e347-5380" hidden="false" import="true" targetId="b6e5-911b-93f-476" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="aecd-6fae-de6d-a99e" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="14cf-f3f0-a984-8d79" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Cerastus Knight Lancer" id="415f-d803-2a11-a5ac" hidden="false" import="true" targetId="4175-82c6-8e96-bef8" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="e6ae-b956-a543-8477" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="adff-dc44-c266-0b98" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Questoris Knight Magaera" id="4d76-724c-2de1-9a4c" hidden="false" import="true" targetId="2d0e-5b83-b678-56dc" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="db72-8beb-eb6f-b596" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="03a5-a85a-bb7b-5473" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Questoris Knight Styrix" id="1ed3-4e40-1150-3648" hidden="false" import="true" targetId="106c-4bdf-79a4-1c70" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="1e75-322b-194a-1fe3" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="bbeb-829a-bc31-93a6" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Abominant" id="20e9-d309-d75c-30a7" hidden="false" import="true" targetId="a78d-828b-302b-1bec" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="83d0-1f5f-e951-ccf5" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="712a-539a-3901-a546" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Desecrator" id="98d9-c389-72c0-5ef3" hidden="false" import="true" targetId="7a51-8f1f-7290-d9d2" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="2e23-4fbe-05fb-3573" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="1120-2c67-190c-9ed3" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Despoiler" id="83a7-780a-2dd5-5fe8" hidden="false" import="true" targetId="0119-8c04-435e-c782" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="69b9-6524-14c7-1ea0" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="3175-a308-e9bb-15ee" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Rampager" id="c559-5895-f37d-c668" hidden="false" import="true" targetId="61e0-e55b-1926-44df" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="ea57-5167-5518-5a20" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="7c52-52f1-8dcd-52ca" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Ruinator" id="1c54-3599-7f66-ee17" hidden="false" import="true" targetId="c0a2-eb65-6d34-5bc6" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="0f05-b2f6-a450-643d" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="f854-bd9e-a506-e123" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Tyrant" id="5808-1bd8-f7f0-ca39" hidden="false" import="true" targetId="87ea-c7bd-6df0-f056" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="990d-9aa6-ccab-1abc" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="b64b-59ba-d0ca-03db" hidden="false" primary="false" targetId="2526-f59f-1385-fe00"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Brigand" id="f8d7-acdc-6891-7269" hidden="false" import="true" targetId="753d-4e02-eda3-4809" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="e3a7-3755-b84b-8047" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="7ccd-1c04-6ed4-1be8" hidden="false" primary="false" targetId="9fe6-0341-7857-e72e"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Executioner" id="145d-91af-6a2b-1882" hidden="false" import="true" targetId="8df0-fc3c-8ced-ffce" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="4ce5-be6b-5676-4d1a" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="3d82-e534-4e63-7e73" hidden="false" primary="false" targetId="9fe6-0341-7857-e72e"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Huntsman" id="8170-914f-9384-2901" hidden="false" import="true" targetId="6e6d-7950-ce6d-4cd4" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="10b2-89c1-a40a-20d4" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="75d3-37f4-66a4-d814" hidden="false" primary="false" targetId="9fe6-0341-7857-e72e"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Karnivore" id="ffdf-52f5-fd45-0128" hidden="false" import="true" targetId="e96b-ac98-7fd2-a155" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="37ce-ddca-2612-8fc4" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="f9c6-87fd-985e-dd28" hidden="false" primary="false" targetId="9fe6-0341-7857-e72e"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Moirax" id="295d-c79c-e3b5-0d8e" hidden="false" import="true" targetId="ae7c-3679-a88-6895" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="0a59-4f03-702f-1fd9" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="3528-4665-e2d2-7a80" hidden="false" primary="false" targetId="9fe6-0341-7857-e72e"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Stalker" id="38e7-7fe3-228e-81af" hidden="false" import="true" targetId="bbc6-c0ed-24e8-86b7" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="cb85-b521-45e8-e8b4" hidden="false" primary="false" targetId="7f35-cefe-46f4-4974"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="bd74-1ba9-492b-e758" hidden="false" primary="false" targetId="9fe6-0341-7857-e72e"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Reaver Titan" id="6b7e-0cb3-6733-b77d" hidden="false" import="true" targetId="0141-e2cd-472c-1a1d" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Titanicus Traitoris" id="3b0a-9d9f-c649-0540" hidden="false" primary="false" targetId="046c-eff9-1b94-a447"/>
+        <categoryLink name="Allies: Titanicus Traitoris: Reaver Titan" id="4a93-d985-5d46-c794" hidden="false" primary="false" targetId="9db4-94c8-a96b-6fca"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Warbringer Nemesis Titan" id="d676-fdd8-1d02-cfdb" hidden="false" import="true" targetId="c93d-98d6-9a89-8900" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Titanicus Traitoris" id="9da3-0a71-6071-4aa5" hidden="false" primary="false" targetId="046c-eff9-1b94-a447"/>
+        <categoryLink name="Allies: Titanicus Traitoris: Warbringer Nemesis Titan" id="7ade-ac11-51b3-c6eb" hidden="false" primary="false" targetId="52c2-71ac-73fe-91ea"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Warhound Titan" id="c6a0-6dc9-5093-5f4c" hidden="false" import="true" targetId="bc5d-9d13-6c87-5f9f" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Titanicus Traitoris" id="11d7-6ad7-502b-7aa0" hidden="false" primary="false" targetId="046c-eff9-1b94-a447"/>
+        <categoryLink name="Allies: Titanicus Traitoris: Warhound Titan" id="7c05-c0d2-7574-bac4" hidden="false" primary="false" targetId="e1ca-7c31-8072-c9f1"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Warlord Titan" id="2bab-7c6f-66c3-bd5d" hidden="false" import="true" targetId="9210-30cc-eecc-2958" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Titanicus Traitoris" id="cba7-d9f4-a73c-c918" hidden="false" primary="false" targetId="046c-eff9-1b94-a447"/>
+        <categoryLink name="Allies: Titanicus Traitoris: Warlord Titan" id="a006-1deb-213b-35e7" hidden="false" primary="false" targetId="7f90-1ecb-4fa7-08d6"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Detachment" id="88fc-b042-779e-0e9f" hidden="false" import="true" targetId="57f2-e2d6-47ed-ddd2" type="selectionEntry"/>
+  </entryLinks>
+  <infoLinks>
+    <infoLink name="Nurgle's Gift (Aura)" id="2169-236e-d660-83dd" hidden="false" targetId="060a-4f66-a08e-c72b" type="rule"/>
+    <infoLink name="Pact of Decay" id="7274-b5e6-3348-432d" hidden="false" targetId="6a4d-ab07-7a66-17e6" type="rule"/>
+  </infoLinks>
+  <catalogueLinks>
+    <catalogueLink name="Chaos - Death Guard Library" id="ca35-9ce3-2e61-9cb3" importRootEntries="false" targetId="fb4a-fea9-2e89-6fb0" type="catalogue"/>
+    <catalogueLink name="Chaos - Chaos Knights Library" id="900b-9bd7-bde1-1929" importRootEntries="false" targetId="4d13-39bb-3d9b-fd5e" type="catalogue"/>
+    <catalogueLink name="Library - Titans" id="d02d-9b59-4f6a-61b6" importRootEntries="false" targetId="7481-280e-b55e-7867" type="catalogue"/>
+    <catalogueLink name="Library - Astartes Heresy Legends" id="3174-6df5-4e4f-b9c2" importRootEntries="false" targetId="ac3b-689c-4ad4-70cb" type="catalogue"/>
+    <catalogueLink name="Unaligned Forces" id="590a-74f5-09db-b557" importRootEntries="false" targetId="581a-46b9-5b86-44b7" type="catalogue"/>
+  </catalogueLinks>
+</catalogue>

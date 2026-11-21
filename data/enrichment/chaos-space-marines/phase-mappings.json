@@ -506,7 +506,7 @@
     "source_id": "daemonforge-chaos-space-marines",
     "source_type": "ability",
     "phases": [
-      "command",
+      "shooting",
       "fight"
     ],
     "game_version": {
@@ -895,7 +895,8 @@
     "source_id": "unholy-mechanisms-chaos-space-marines",
     "source_type": "ability",
     "phases": [
-      "shooting"
+      "shooting",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",
@@ -1072,7 +1073,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "authored_by": "40kdc-community"
   },

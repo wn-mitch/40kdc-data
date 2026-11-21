@@ -25,8 +25,8 @@ const COMMON = new Set(["that", "which", "who", "if", "while", "unless", "such",
   "unit", "units", "model", "models", "is", "are", "this", "it", "its", "attack", "attacks", "weapon", "weapons", "enemy", "your", "not", "cannot", "can", "can't", "isn't"]);
 const VOCABULARY: Record<string, Set<string>> = {
   "unit-keyword": new Set(["fly"]),
-  "unit-state": new Set(["below", "half-strength", "half", "strength", "starting", "battle-shocked", "battle", "shocked", "within", "engagement", "range", "of", "on", "battlefield"]),
-  "unit-mark": new Set(["oath", "of", "moment", "afflicted", "spotted", "hidden", "marked"]),
+  "unit-state": new Set(["below", "half-strength", "half", "strength", "starting", "battle-shocked", "battle", "shocked", "within", "engagement", "range", "of", "on", "battlefield", "hidden"]),
+  "unit-mark": new Set(["oath", "of", "moment", "afflicted", "spotted", "marked"]),
   "unit-position": new Set(["within", "range", "of", "objective", "marker", "markers", "than", "closest", "eligible", "you", "control", "controls", "opponent", "away", "from"]),
 };
 

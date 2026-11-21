@@ -8,7 +8,7 @@ import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from
 // Reads the repo's own record ids and option ids; no rule prose.
 
 const refLeaf = (familyId: string, parameters: Record<string, unknown>, role = "EFFECT"): CompileLeaf =>
-  ({ role, family_id: familyId, family_version: 1, parameters, start_byte: 0 });
+  ({ role, family_id: familyId, family_version: currentFamilyVersion(familyId), parameters, start_byte: 0 });
 
 describe("printed rule and ability names resolve to the records that print them", () => {
   it("resolves a printed name to its faction-suffixed record", () => {

@@ -11,14 +11,30 @@ use super::{child, inline, is_container, join_nonempty, ty, P};
 use crate::generated::{
     Ability, AbilityTrigger, AbilityUsage, EffectNode, KeywordPredicate, Scope,
 };
-use crate::translate::condition::{condition_lead_in_for, is_defensive_effect, nn, obj, or_list};
+use crate::translate::condition::{
+    and_list, condition_lead_in_for, is_defensive_effect, nn, obj, or_list,
+};
 use crate::translate::dekebab;
 
-/// Join non-empty clauses with ", ", capitalize the sentence, and end with a period.
+/// Join non-empty clauses with ", ", merging adjacent `if` clauses, capitalize, and end with a period.
 pub(super) fn assemble_sentence(parts: &[&str]) -> String {
-    let body = join_nonempty(parts, ", ");
-    if body.is_empty() {
+    let non_empty: Vec<&str> = parts.iter().copied().filter(|p| !p.is_empty()).collect();
+    if non_empty.is_empty() {
         return String::new();
+    }
+    let mut body = non_empty[0].to_string();
+    for &next in &non_empty[1..] {
+        let ends_with_if = body.rfind(", if ").is_some_and(|pos| {
+            let tail = &body[pos + ", if ".len()..];
+            !tail.is_empty() && !tail.contains('.')
+        });
+        if ends_with_if && next.starts_with("if ") {
+            body.push_str(" and ");
+            body.push_str(&next[3..]);
+        } else {
+            body.push_str(", ");
+            body.push_str(next);
+        }
     }
     let period = if body.ends_with('.') || body.ends_with(':') {
         ""
@@ -26,6 +42,78 @@ pub(super) fn assemble_sentence(parts: &[&str]) -> String {
         "."
     };
     format!("{}{period}", capitalize(&body))
+}
+
+fn starts_with_word(s: &str, words: &[&str]) -> bool {
+    for &w in words {
+        if let Some(rest) = s.strip_prefix(w) {
+            let boundary = rest
+                .chars()
+                .next()
+                .is_none_or(|c| !(c.is_ascii_alphanumeric() || c == '_'));
+            if boundary {
+                return true;
+            }
+        }
+    }
+    false
+}
+
+fn contains_word_phrase(s: &str, phrase: &str) -> bool {
+    let bytes = s.as_bytes();
+    let mut from = 0;
+    while let Some(pos) = s[from..].find(phrase) {
+        let start = from + pos;
+        let end = start + phrase.len();
+        let before_ok =
+            start == 0 || !(bytes[start - 1].is_ascii_alphanumeric() || bytes[start - 1] == b'_');
+        let after_ok =
+            end == bytes.len() || !(bytes[end].is_ascii_alphanumeric() || bytes[end] == b'_');
+        if before_ok && after_ok {
+            return true;
+        }
+        from = end;
+    }
+    false
+}
+
+/// Weave `optional: true` cleanly without a clunky `You can: ` prefix.
+fn with_optionality(rendered: &str) -> String {
+    if rendered.is_empty() {
+        return String::new();
+    }
+    if starts_with_word(rendered, &["You can", "Choose", "Select"])
+        || contains_word_phrase(rendered, "you can")
+    {
+        return rendered.to_string();
+    }
+    if let Some(newline) = rendered.find('\n') {
+        if newline > 0 {
+            let first = &rendered[..newline];
+            let rest = &rendered[newline..];
+            if let Some(head) = first.strip_suffix(':') {
+                return format!("{head}, you can use this ability:{rest}");
+            }
+        }
+    }
+    format!("You can use this ability: {rendered}")
+}
+
+const OPT_VERBS: &[&str] = &[
+    "add", "subtract", "return", "remove", "destroy", "heal", "move", "place", "roll", "spend",
+    "discard", "improve", "worsen", "set", "halve", "multiply", "reduce", "increase", "issue",
+    "split",
+];
+
+fn opt_body(body: &str, optional: bool) -> String {
+    if optional
+        && !starts_with_word(body, &["you can", "choose", "select"])
+        && starts_with_word(body, OPT_VERBS)
+    {
+        format!("you can {body}")
+    } else {
+        body.to_string()
+    }
 }
 
 /// The inch range of a top-level `within` condition, else `None`.
@@ -41,27 +129,13 @@ pub(super) fn render_top_level(
     scope: Option<&Value>,
     usage: Option<&Value>,
     trigger: Option<&Value>,
+    optional: bool,
 ) -> String {
     let mut ctx = Ctx::default();
-    // Every trigger's object is a model: the effect's `event-object` reads "that model".
-    let model_objects = normalize_triggers(trigger)
-        .into_iter()
-        .filter(|t| t.get("event").is_some_and(|v| !v.is_null()))
-        .map(|t| {
-            t.get("object")
-                .and_then(|o| o.get("level"))
-                .and_then(Value::as_str)
-                == Some("model")
-        })
-        .fold(None, |all, m| Some(all.unwrap_or(true) && m))
-        == Some(true);
-    let rewritten;
-    let e = if model_objects {
-        rewritten = crate::translate::condition::model_object_refs(e);
-        &rewritten
-    } else {
-        e
-    };
+    // Every trigger's object (subject) is a model: the effect's `event-object` reads "that model"
+    // (`event-subject` "the triggering model").
+    let rewritten = crate::translate::condition::model_event_refs(e, &normalize_triggers(trigger));
+    let e = &rewritten;
     let e_map = obj(Some(e));
     let (dur_lead, trail) = duration_clauses(scope.and_then(|s| s.get("duration")));
     // An explicit usage limit supersedes the duration's coarse "once per battle" lead.
@@ -87,6 +161,23 @@ pub(super) fn render_top_level(
         ev == Some("destroyed") || ev == Some("model-destroyed")
     }) {
         ctx.destroyed_trigger = true;
+    }
+    if triggers
+        .iter()
+        .any(|t| t.get("event").and_then(Value::as_str) == Some("damage-allocated"))
+    {
+        ctx.allocated_trigger = true;
+    }
+    // When every trigger introduces a friendly filtered unit (e.g. a Stratagem's "When a friendly X unit is selected to fight"),
+    // `this-unit` / `event-subject` in the effect body refers back to "that unit".
+    if !triggers.is_empty()
+        && triggers.iter().all(|t| {
+            t.get("subject")
+                .and_then(Value::as_object)
+                .is_some_and(|s| s.get("owner").and_then(Value::as_str) == Some("friendly"))
+        })
+    {
+        ctx.unit_subject = Some("that unit".to_string());
     }
     let mut phrases: Vec<String> = Vec::new();
     let triggers: Vec<Value> = triggers
@@ -115,25 +206,29 @@ pub(super) fn render_top_level(
     let trig = phrases.join(" or ");
 
     if ty(e_map) == "conditional" {
-        let inner = child(e_map, "effect");
-        let lead_in = condition_lead_in_for(child(e_map, "condition"), is_defensive_effect(inner));
-        let gate = super::recipient_gate::recipient_gate(e_map, &ctx);
-        if let Some(g) = gate
-            .as_ref()
-            .filter(|g| ty(obj(Some(&g.inner))) == "sequence")
-        {
-            // "While a friendly X unit is …:" then that unit's effects.
-            let header = join_nonempty(&[&trig, &lead, &g.lead, trail], ", ");
-            return format!("{}:\n{}", capitalize(&header), block(&g.inner, 1, &g.ctx));
-        }
-        if is_container(obj(Some(inner))) {
-            let header = join_nonempty(&[&trig, &lead, &lead_in, trail], ", ");
-            return format!("{}:\n{}", capitalize(&header), block(inner, 1, &ctx));
-        }
-        if let Some(g) = gate {
+        if let Some(g) = super::recipient_gate::recipient_gate(e_map, &ctx) {
+            if ty(obj(Some(&g.inner))) == "sequence" {
+                // "While a friendly X unit is …:" then that unit's effects.
+                let header = join_nonempty(&[&trig, &lead, &g.lead, trail], ", ");
+                return format!("{}:\n{}", capitalize(&header), block(&g.inner, 1, &g.ctx));
+            }
             return assemble_sentence(&[&trig, &lead, &g.lead, trail, &inline(&g.inner, &g.ctx)]);
         }
-        return assemble_sentence(&[&trig, &lead, &lead_in, trail, &inline(inner, &ctx)]);
+        let (cond, inner) = super::flatten_conditional(e_map, &ctx);
+        let lead_in = condition_lead_in_for(&cond, is_defensive_effect(&inner));
+        let child_ctx = match super::attack_type_from_condition(&cond) {
+            Some(t) => Ctx {
+                suppress_weapon_type: Some(t.to_string()),
+                ..ctx.clone()
+            },
+            None => ctx.clone(),
+        };
+        if is_container(obj(Some(&inner))) {
+            let header = join_nonempty(&[&trig, &lead, &lead_in, trail], ", ");
+            return format!("{}:\n{}", capitalize(&header), block(&inner, 1, &child_ctx));
+        }
+        let body = opt_body(&inline(&inner, &child_ctx), optional);
+        return assemble_sentence(&[&trig, &lead, &lead_in, trail, &body]);
     }
 
     if is_container(e_map) || super::leaf_ability::is_defined_grant(e_map) {
@@ -141,6 +236,28 @@ pub(super) fn render_top_level(
         let own_duration = matches!(ty(e_map), "designate-target" | "persistent-designation")
             && nn(e_map, "duration").is_some();
         let head = join_nonempty(&[&trig, &lead, if own_duration { "" } else { trail }], ", ");
+        // Inline simple single-leaf `dice-gated` or `select-units` under a header instead of a 1-bullet list.
+        if !head.is_empty() && ty(e_map) == "dice-gated" {
+            return assemble_sentence(&[&head, &inline(e, &ctx)]);
+        }
+        if !head.is_empty()
+            && ty(e_map) == "select-units"
+            && !is_container(obj(Some(child(e_map, "effect"))))
+        {
+            let sel = obj(nn(e_map, "selector"));
+            let plural = super::select::select_units_plural(sel);
+            let nested = inline(
+                child(e_map, "effect"),
+                &super::select::selected_context_with_plural(&ctx, sel, plural),
+            );
+            return format!(
+                "{}, select {}{}. {}.",
+                capitalize(&head),
+                super::select::select_units_subject_in(sel, ctx.each_model),
+                super::select::selection_binding(sel),
+                capitalize(&nested)
+            );
+        }
         // Under a header, the block's steps are indented as they are under a condition's lead-in.
         return if head.is_empty() {
             block(e, 0, &ctx)
@@ -149,7 +266,8 @@ pub(super) fn render_top_level(
         };
     }
 
-    assemble_sentence(&[&trig, &lead, trail, &inline(e, &ctx)])
+    let body = opt_body(&inline(e, &ctx), optional);
+    assemble_sentence(&[&trig, &lead, trail, &body])
 }
 
 pub(super) fn to_value<T: serde::Serialize>(v: &T) -> Value {
@@ -205,36 +323,40 @@ pub fn describe_applies_to(filter: Option<&KeywordPredicate>) -> String {
     if required.is_empty() && any.is_empty() && excluded.is_empty() && not_all.is_empty() {
         return String::new();
     }
-    let positive = [
-        if required.is_empty() {
-            String::new()
-        } else {
-            required.join(", ")
-        },
-        if any.is_empty() {
-            String::new()
-        } else {
-            format!("at least one of {}", or_list(&any))
-        },
-    ]
-    .into_iter()
-    .filter(|s| !s.is_empty())
-    .collect::<Vec<_>>()
-    .join(" and ");
-    let base = if positive.is_empty() {
-        "all units".to_string()
+    let base = if !required.is_empty() && any.is_empty() {
+        format!("{} units", required.join(" "))
     } else {
-        format!("units with {positive}")
+        let positive = [
+            if required.is_empty() {
+                String::new()
+            } else {
+                required.join(", ")
+            },
+            if any.is_empty() {
+                String::new()
+            } else {
+                format!("the {} keyword", or_list(&any))
+            },
+        ]
+        .into_iter()
+        .filter(|s| !s.is_empty())
+        .collect::<Vec<_>>()
+        .join(" and ");
+        if positive.is_empty() {
+            "all units".to_string()
+        } else {
+            format!("units with {positive}")
+        }
     };
     let exc = if excluded.is_empty() {
         String::new()
     } else {
-        format!(" (excluding {})", excluded.join(", "))
+        format!(" (excluding {} units)", or_list(&excluded))
     };
     let partial = if not_all.is_empty() {
         String::new()
     } else {
-        format!(" (excluding units with all of {})", not_all.join(", "))
+        format!(" (excluding units with all of {})", and_list(&not_all))
     };
     format!("Applies to: {base}{exc}{partial}.")
 }
@@ -282,10 +404,9 @@ pub fn describe_ability_value_with_optional(
     trigger: Option<&Value>,
     optional: bool,
 ) -> String {
-    let rendered = render_top_level(e, scope, usage, trigger);
-    // An optional ability is the player's choice, unless its text already opens with that choice.
-    let base = if optional && !rendered.is_empty() && !rendered.starts_with("You can ") {
-        format!("You can: {rendered}")
+    let rendered = render_top_level(e, scope, usage, trigger, optional);
+    let base = if optional {
+        with_optionality(&rendered)
     } else {
         rendered
     };

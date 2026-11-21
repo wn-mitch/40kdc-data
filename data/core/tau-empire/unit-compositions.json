@@ -345,7 +345,8 @@
           "plasma-rifle",
           "missile-pod",
           "battlesuit-fists"
-        ]
+        ],
+        "profile_name": "Crisis Fireknife Shas’ui"
       },
       {
         "name": "Crisis Fireknife Shas’ui",
@@ -947,7 +948,7 @@
     "models": [
       {
         "name": "Stealth Shas’vre",
-        "profile_name": "Stealth Battlesuit",
+        "profile_name": "Stealth Shas’ui",
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
@@ -2985,7 +2986,8 @@
           "xv-pulse-pistol",
           "shardstorm-burst-system",
           "mv15-gun-drone"
-        ]
+        ],
+        "profile_name": "Ri’Locai"
       },
       {
         "name": "Ri’Locai",
@@ -3240,7 +3242,8 @@
           "burst-cannon",
           "tau-flamer",
           "battlesuit-fists"
-        ]
+        ],
+        "profile_name": "Crisis Starscythe Shas’ui"
       },
       {
         "name": "Crisis Starscythe Shas’ui",
@@ -3882,7 +3885,7 @@
     "models": [
       {
         "name": "Breacher Fire Warrior Shas’ui",
-        "profile_name": "Fire Warrior",
+        "profile_name": "Breacher Fire Warrior",
         "min": 1,
         "max": 1,
         "default_weapon_ids": [
@@ -7073,7 +7076,8 @@
         "default_weapon_ids": [
           "crushing-bulk",
           "heavy-rail-rifle"
-        ]
+        ],
+        "profile_name": "Broadside Shas’vre"
       }
     ],
     "game_version": {
@@ -8981,7 +8985,8 @@
           "fusion-blaster",
           "fusion-blaster",
           "battlesuit-fists"
-        ]
+        ],
+        "profile_name": "Crisis Sunforge Shas’ui"
       },
       {
         "name": "Crisis Sunforge Shas’ui",

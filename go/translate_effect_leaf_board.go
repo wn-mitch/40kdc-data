@@ -33,14 +33,14 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 		rng = " within " + rangePhrase(m["range"])
 	}
 	who := subj + rng
-	// "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
+	// ", to a maximum of 6 mortal wounds": a cap on the total, however many are rolled or counted.
 	cap := ""
 	if m["max"] != nil {
 		noun := "wounds"
 		if f, ok := m["max"].(float64); ok && f == 1 {
 			noun = "wound"
 		}
-		cap = " (to a maximum of " + ejstr(m["max"]) + " mortal " + noun + ")"
+		cap = ", to a maximum of " + ejstr(m["max"]) + " mortal " + noun
 	}
 	if roll, ok := asMap(m["roll"]); ok && roll != nil {
 		each := ""
@@ -266,7 +266,12 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 			upTo = " up to " + diceCase(m["distance"]) + "\""
 		}
 	}
-	s := subj + " can " + verb + upTo + moveModeClause(m)
+	// mandatory: the target must make the move ("must make an ingress move").
+	modal := "can"
+	if m["mandatory"] == true {
+		modal = "must"
+	}
+	s := subj + " " + modal + " " + verb + upTo + moveModeClause(m)
 	// An embark's reach replaces the core 3" to the Transport.
 	if m["reach"] != nil {
 		s += " within a Transport it is able to embark within, if every model is within " + rangePhrase(m["reach"]) + " of that Transport instead of 3\""
@@ -315,8 +320,8 @@ func endsNearestPhrase(e map[string]any, ctx effCtx, who, moveRef string) string
 	// The enemy unit the trigger names is "that enemy unit", not the closest of a group.
 	// An objective names no unit: any marker, or the one a select-objective bound.
 	var named string
-	eventSubject, _ := e["of"].(string)
-	if eventSubject == "event-subject" {
+	eventSubject := isEventSubject(e["of"])
+	if eventSubject {
 		named = ""
 	} else if of, ok := asMap(e["of"]); ok && of != nil && of["objective"] != nil {
 		named = "objective marker"
@@ -335,8 +340,12 @@ func endsNearestPhrase(e map[string]any, ctx effCtx, who, moveRef string) string
 		named = strings.ReplaceAll(named, " units)", ")")
 	}
 	nearest := "as close as possible to the closest " + named
-	if eventSubject == "event-subject" {
-		nearest = "as close as possible to that enemy unit"
+	if eventSubject {
+		noun := "unit"
+		if e["of"] == eventSubjectModel {
+			noun = "model"
+		}
+		nearest = "as close as possible to that enemy " + noun
 	}
 	// optional: this end is the unit's choice in place of the closest enemy unit.
 	optional := e["optional"] == true
@@ -704,6 +713,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		case "to-zero":
 			how = "change the Damage of that attack to 0"
 		}
+		if ctx.allocatedTrigger && m["weapons"] == nil {
+			return how
+		}
 		attack := "an attack"
 		if hasWeapon(m) {
 			attack = "an attack with " + weaponNoun(m)
@@ -711,9 +723,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return "each time " + attack + " is allocated to " + subj + ", " + how
 	case "feel-no-pain":
 		if describerRatingRef(m["threshold"]) {
-			return subj + " " + ev(subj, "has") + " the Feel No Pain X+ ability" + fnpAgainst[ejstr(m["against"])] + ", X being its rating"
+			return subj + " " + ev(subj, "has") + " Feel No Pain X+" + fnpAgainst[ejstr(m["against"])] + ", X being its rating"
 		}
-		return subj + " " + ev(subj, "has") + " the Feel No Pain " + ejstr(m["threshold"]) + "+ ability" + fnpAgainst[ejstr(m["against"])]
+		return subj + " " + ev(subj, "has") + " Feel No Pain " + ejstr(m["threshold"]) + "+" + fnpAgainst[ejstr(m["against"])]
 	case "invulnerable-save":
 		vs := ""
 		if m["weapons"] != nil {
@@ -782,9 +794,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "cp-gain":
 		n := jsNumber(m["amount"])
 		if n < 0 {
-			return "you lose " + numStr(math.Abs(n)) + "CP"
+			return "you lose " + numStr(math.Abs(n)) + " CP"
 		}
-		return "you gain " + ejstr(m["amount"]) + "CP"
+		return "you gain " + ejstr(m["amount"]) + " CP"
 	case "cost-modifier":
 		return costModifierLeaf(m, subj)
 	case "resource-gain":

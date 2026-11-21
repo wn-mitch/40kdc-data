@@ -76,7 +76,7 @@ def test_unit_without_selector_keywords_gets_nothing_and_unknown_keywords_refuse
     unknown = effect_to_buffs(friendly_selection(["DESTROYER CULT"]), PROVIDED, {"phase": "fight"})
     assert unknown["activatable"] == []
     assert reasons(unknown) == [
-        "select-units: the crunched unit's keywords are unavailable for the selector"
+        "select-units: candidate identity or state is unavailable"
     ]
 
 
@@ -131,7 +131,11 @@ def test_enemy_selection_incoming_grant_is_the_attackers_own_behind_its_roll() -
             },
             "applicableWhen": {
                 "phases": ["shooting"],
-                "excludedTargetKeywords": ["MONSTER", "VEHICLE"],
+                "targetFilter": {
+                    "owner": "enemy",
+                    "level": "unit",
+                    "none_of": ["MONSTER", "VEHICLE"],
+                },
             },
         }
     ]

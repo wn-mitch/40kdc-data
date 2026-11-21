@@ -1,0 +1,42 @@
+{
+  "name": "power weapon x5 granted [LANCE] after charging: +1 to wound from the granted keyword's catalog rule",
+  "attacker": {
+    "weaponId": "power-weapon",
+    "profileIndex": 0
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "fight",
+    "attackerCharged": true
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-keyword-grant",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+          "keyword_id": "lance"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 20,
+      "hits": 16.6667,
+      "wounds": 8.3333,
+      "unsaved": 5.5556,
+      "damage": 11.1111,
+      "after-fnp": 11.1111,
+      "models-killed": 5
+    }
+  }
+}

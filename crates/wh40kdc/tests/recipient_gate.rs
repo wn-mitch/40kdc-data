@@ -27,7 +27,7 @@ fn names_the_unit_with_the_effects_filter_and_refers_back_to_it_as_that_unit() {
         "effect": oc(json!({"owner": "enemy"}))});
     assert_eq!(
         render(e),
-        "While an enemy unit is within 3\" of the unit, worsen that unit's Objective Control characteristic by 1."
+        "While an enemy unit is within 3\" of this unit, worsen that unit's Objective Control characteristic by 1."
     );
 }
 
@@ -39,7 +39,7 @@ fn says_model_for_a_model_level_filter_and_keeps_later_mentions_as_that_model() 
         "effect": oc(json!({"owner": "enemy", "level": "model"}))});
     assert_eq!(
         render(e),
-        "While an enemy model is within 3\" of the unit, while that model is Battle-shocked, worsen that model's Objective Control characteristic by 1."
+        "While an enemy model is within 3\" of this unit and that model is Battle-shocked, worsen that model's Objective Control characteristic by 1."
     );
 }
 
@@ -50,7 +50,7 @@ fn reads_the_same_inside_a_sequence() {
     let e = json!({"type": "sequence", "steps": [gated, {"type": "stat-modifier",
         "target": "this-unit", "modifier": {"stat": "OC", "operation": "improve", "value": 1}}]});
     assert!(render(e).contains(
-        "While an enemy VEHICLE unit is within 3\" of the unit, worsen that unit's Objective Control characteristic by 1."
+        "While an enemy VEHICLE unit is within 3\" of this unit, worsen that unit's Objective Control characteristic by 1."
     ));
 }
 
@@ -62,6 +62,6 @@ fn leaves_a_condition_on_the_abilitys_own_unit_as_it_was() {
         "effect": oc(json!({"owner": "enemy"}))});
     assert_eq!(
         render(e),
-        "While the unit is within 3\" of this model, worsen all enemy units' Objective Control characteristic by 1."
+        "While this unit is within 3\" of this model, worsen enemy units' Objective Control characteristic by 1."
     );
 }

@@ -30,6 +30,7 @@ from wh40kdc.translate.effect_words import (
     roll_name,
     title_case,
     v,
+    with_article,
 )
 
 
@@ -44,14 +45,14 @@ def cost_modifier(m: dict[str, Any], subj: str) -> str:
     if m.get("applies_to") == "the-triggering-use":
         if op == "decrease":
             return (
-                f"reduce the CP cost of that use of the {noun} by {jstr(m.get('amount'))}CP (to a "
-                "minimum of 0CP)"
+                f"reduce the CP cost of that use of the {noun} by {jstr(m.get('amount'))} CP, to a "
+                "minimum of 0 CP"
             )
         if op == "increase":
-            return f"increase the CP cost of that use of the {noun} by {jstr(m.get('amount'))}CP"
+            return f"increase the CP cost of that use of the {noun} by {jstr(m.get('amount'))} CP"
         if op == "waive":
-            return f"that use of the {noun} costs no CP"
-        return f"that use of the {noun} costs {jstr(m.get('amount'))}CP"
+            return f"that use of the {noun} costs 0 CP (waiving its CP cost)"
+        return f"that use of the {noun} costs {jstr(m.get('amount'))} CP"
     named = m.get("id") is not None
     which = (
         f"the {ability_label(m['id'])} {noun}"
@@ -67,15 +68,15 @@ def cost_modifier(m: dict[str, Any], subj: str) -> str:
         whose = ""
     verb = "costs" if named else "cost"
     if op == "waive":
-        return f"{which}{whose} can be used without paying {'its' if named else 'their'} CP cost"
+        return f"{which}{whose} can be used without spending CP"
     if op == "set":
-        return f"{which}{whose} {verb} {jstr(m.get('amount'))}CP"
+        return f"{which}{whose} {verb} {jstr(m.get('amount'))} CP"
     if op == "multiply":
         a = m.get("amount")
         times = "twice" if a == 2 else "three times" if a == 3 else f"{jstr(a)} times"
         return f"{which}{whose} {verb} {times} {'its' if named else 'their'} stated CP cost"
     amount = jstr(m["amount"] if m.get("amount") is not None else 1)
-    return f"{which}{whose} {verb} {amount}CP {'less' if op == 'decrease' else 'more'}"
+    return f"{which}{whose} {verb} {amount} CP {'less' if op == 'decrease' else 'more'}"
 
 
 def resource_die(m: dict[str, Any]) -> str:
@@ -83,8 +84,8 @@ def resource_die(m: dict[str, Any]) -> str:
     if m.get("operation") == "substitute":
         rolls = [roll_name(r) for r in m["rolls"]] if isinstance(m.get("rolls"), list) else ["dice"]
         return (
-            f"discard a die from your {pool} and use its value in place of a {' or '.join(rolls)} "
-            "roll"
+            f"discard a die from your {pool} and use its value in place of "
+            f"{with_article(f'{or_list(rolls)} roll')}"
         )
     shown = "the highest result" if m.get("value") == "highest" else jstr(m.get("value"))
     if m.get("count_per_pool") is not None:
@@ -402,4 +403,4 @@ def resource_spend(m: dict[str, Any], ctx: Any = None) -> str:
 
 def cp_gain(m: dict[str, Any]) -> str:
     n = num(m.get("amount"))
-    return f"you lose {num_str(abs(n))}CP" if n < 0 else f"you gain {jstr(m.get('amount'))}CP"
+    return f"you lose {num_str(abs(n))} CP" if n < 0 else f"you gain {jstr(m.get('amount'))} CP"

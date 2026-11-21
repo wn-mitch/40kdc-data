@@ -71,14 +71,18 @@ describe("yellowscribeSerializer", () => {
     expect(out).toContain("Rapid Fire 1");
   });
 
-  it("sources ability text from the describer and XML-escapes it", () => {
+  it("sources ability text from the describer and XML-escapes special characters", () => {
     const out = yellowscribeSerializer.serialize(terminators, ds);
     expect(out).toContain('typeName="Abilities"');
-    expect(out).toContain('<characteristic name="Description">');
-    // Describer prose contains `>` (e.g. "on a 6+"), which must be escaped.
-    expect(out).toContain("&gt;");
+    expect(out).toContain('<characteristic name="Description">When this model is destroyed');
     // The invuln save is emitted as a numeric-fact ability.
     expect(out).toMatch(/<characteristic name="Description">\d+\+ invulnerable save<\/characteristic>/);
+    // XML-sensitive characters in attributes and text must be escaped.
+    const escaped = yellowscribeSerializer.serialize(
+      { ...terminators, name: 'Blood & Skulls <10e> "Test"' },
+      ds,
+    );
+    expect(escaped).toContain('name="Blood &amp; Skulls &lt;10e&gt; &quot;Test&quot;"');
   });
 
   it("emits faction keywords with the Faction: prefix", () => {

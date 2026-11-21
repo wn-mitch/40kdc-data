@@ -198,6 +198,7 @@ describe("army and pool limits", () => {
     expect(schemaErrors(mechanics)).toEqual([]);
     expect(normalize("army-construction", { rule: "composition", with_keywords: ["AGENT"], max: { incursion: 1, "strike-force": 2, onslaught: 3 }, per_keywords: ["INQUISITOR"] }))
       .toMatchObject({ max: { incursion: 1, "strike-force": 2, onslaught: 3 }, per_keywords: ["INQUISITOR"] });
+    expect(() => normalize("army-construction", { rule: "composition", with_keywords: ["AGENT"], max: 1, per_keywords: [] })).toThrow(/army-construction\.per_keywords/u);
   });
 
   it("refuses a points-sized max counted in units and points on a non-composition rule", () => {

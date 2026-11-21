@@ -48,6 +48,13 @@ function laterConditions(node: unknown, negated = false, out: Array<{ node: Node
 
 const PARAMETER_KEY: Record<string, string> = { "phase-is": "phase", "player-turn-is": "turn" };
 
+/** A later part's own triggers (one or a list). */
+function triggersOf(part: Node): Node[] {
+  const trigger = part.trigger;
+  if (Array.isArray(trigger)) return trigger.filter((item): item is Node => item !== null && typeof item === "object");
+  return trigger !== null && typeof trigger === "object" ? [trigger as Node] : [];
+}
+
 /**
  * "In your Shooting phase, …, if this unit is unengaged, … Or: At the end of your opponent's Fight phase, if this
  * unit is engaged, …": the record-wide conditions that a later part contradicts head the first part only. A gate
@@ -59,8 +66,11 @@ export function firstPartContradicted(global: readonly Node[], laterParts: reado
   const rounds = firstPartRounds(global, laterParts);
   const later = laterConditions(laterParts);
   const same = (a: Node, b: Node) => JSON.stringify(a) === JSON.stringify(b);
+  // "At the start of each phase, …": a later part that fires in every phase of either turn is not inside the record's phase or turn.
+  const everyPhase = laterParts.some((part) => triggersOf(part).some((trigger) => trigger.event === "phase-started" && trigger.phase === undefined && trigger.turn === undefined));
   const contradicted = (atom: Node): boolean => {
     const key = typeof atom.type === "string" ? PARAMETER_KEY[atom.type] : undefined;
+    if (key !== undefined && everyPhase) return true;
     if (key !== undefined) {
       const value = (atom.parameters as Node | undefined)?.[key];
       return later.some(({ node, negated }) => !negated && node.type === atom.type && (node.parameters as Node | undefined)?.[key] !== value);

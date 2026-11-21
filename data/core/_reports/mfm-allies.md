@@ -2,7 +2,7 @@
 
 Mode: **write**
 
-Pools emitted: **21**, skipped: **2**.
+Pools emitted: **23**, skipped: **0**.
 
 ## Emitted
 
@@ -10,6 +10,7 @@ Pools emitted: **21**, skipped: **2**.
 |---|---|---|---|---|---|---|
 | adeptus-astartes-allies | Adeptus Astartes, Black Templars, Blood Angels, Dark Angels, Imperial Fists, Iron Hands, Raven Guard, Salamanders, Space Wolves, Ultramarines, White Scars | adeptus-astartes | 10 | — | — | — |
 | adeptus-custodes-allies | Adeptus Custodes | adeptus-custodes | 5 | — | — | — |
+| adeptus-titanicus-allies | Adepta Sororitas, Adeptus Astartes, Adeptus Custodes, Adeptus Mechanicus, Agents of the Imperium, Astra Militarum, Black Templars, Blood Angels, Dark Angels, Deathwatch, Grey Knights, Imperial Fists, Imperial Knights, Iron Hands, Raven Guard, Salamanders, Space Wolves, Ultramarines, White Scars | adeptus-titanicus | 4 | — | — | 12 |
 | aeldari-harlequins | Asuryani | aeldari | 8 | — | — | — |
 | aeldari-ynnari | Asuryani | aeldari | 11 | 1 | — | — |
 | agents-of-the-imperium-allies | Adepta Sororitas, Adeptus Astartes, Adeptus Custodes, Adeptus Mechanicus, Adeptus Titanicus, Astra Militarum, Black Templars, Blood Angels, Dark Angels, Grey Knights, Imperial Fists, Imperial Knights, Iron Hands, Raven Guard, Salamanders, Space Wolves, Ultramarines, White Scars | agents-of-the-imperium | 29 | — | — | 9 |
@@ -28,15 +29,13 @@ Pools emitted: **21**, skipped: **2**.
 | imperial-knights-questor-forgepact | Imperial Knights | adeptus-mechanicus | 5 | 1 | — | — |
 | star-childrens-blessings | Genestealer Cults | tyranids | 14 | 1 | — | — |
 | thousand-sons-tzeentch-daemons | Thousand Sons | thousand-sons | 6 | 1 | — | — |
+| titanicus-traitoris-allies | Chaos Knights, Death Guard, Emperor’s Children, Heretic Astartes, Legiones Daemonica, Thousand Sons, World Eaters | titanicus-traitoris | 4 | — | — | 12 |
 | world-eaters-khorne-daemons | World Eaters | world-eaters | 5 | 1 | — | — |
-
-## Skipped (0 datasheets resolved)
-
-- `31a47518-f0d5-48c1-8cf8-f1f3ea1c008b` (Titanicus Traitoris): Chaos Warbringer Nemesis Titan; Chaos Warhound Titan; Chaos Reaver Titan; Chaos Warlord Titan
-- `5c07d9ae-8023-43c2-ac7d-6de32fd268b3` (Adeptus Titanicus): Warhound Titan; Warlord Titan; Reaver Titan; Warbringer Nemesis Titan
 
 ## New pools (not in overlay — synthesized id)
 
+- `31a47518-f0d5-48c1-8cf8-f1f3ea1c008b`
+- `5c07d9ae-8023-43c2-ac7d-6de32fd268b3`
 - `43a5642f-4032-4c6f-9532-ee22e5aa6dc1`
 - `fdbc15cb-ed1e-4278-bbd6-2c44ee4ad808`
 

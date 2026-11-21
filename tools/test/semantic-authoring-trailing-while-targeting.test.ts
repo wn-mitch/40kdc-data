@@ -65,7 +65,7 @@ describe("unit-filter subject target after an effect", () => {
 
   it("refuses subject target on a side-less filter", () => {
     const parts: Part[] = [...GRANT, ["while targeting an enemy unit", "unit-filter", "EFFECT", { side: "any", subject: "target" }], TARGET_RANGE];
-    expect(errorsOf(GRANT_TEXT, parts)).toContain("A unit-filter naming an attack's target must say friendly or enemy.");
+    expect(() => placed(GRANT_TEXT, parts)).toThrow(/unit-filter\.subject target .* side must be friendly or enemy/u);
   });
 
   it("refuses subject target in a Stratagem's target fragment", () => {

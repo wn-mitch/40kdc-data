@@ -10,14 +10,14 @@ import { Dataset } from "../src/data/dataset.js";
 import { RAW_DATA } from "../src/data/bundle.generated.js";
 import type { MfmLoadoutRules } from "../src/data/mfm-loadout.js";
 import { evaluateConstraint, type EvalContext } from "../src/bsdata-export/evaluate.js";
-import { buildExport } from "../src/bsdata-export/export.js";
+import { bsName, buildExport } from "../src/bsdata-export/export.js";
 import { children, str, type BsNode } from "../src/bsdata-export/source.js";
 import { IdAllocator } from "../src/bsdata-export/ids.js";
 import { modelWargear, splitStartingRows, startingBundles } from "../src/bsdata-export/model-wargear.js";
 import { compositionRows, modelCounts } from "../src/bsdata-export/wargear.js";
 import { mfmRows } from "../src/data/mfm-loadout-unit.js";
 import { BSDATA_IDS } from "../src/bsdata-export/ids.js";
-import { dataset, factionCatalogue, FACTIONS, loadExportFixture, type ExportFixture, type UnitEntry } from "./bsdata-export-fixture.js";
+import { dataset, factionCatalogue, FACTIONS, loadExportFixture, unitForEntry, type ExportFixture, type UnitEntry } from "./bsdata-export-fixture.js";
 
 interface ChoiceNode {
   readonly id: string;
@@ -115,7 +115,7 @@ function readUnit(entry: UnitEntry, rules: MfmLoadoutRules): UnitModel | null {
         })),
       ]
     : [{ id: "", min: 1, max: 1, members: [{ id: "", name: unit.name, min: 1, max: 1, groups: [], fixed: new Map() }] }];
-  const unitFixed = itemsOfLinks(children(entry.node, "entryLinks").filter((l) => l.name !== "Warlord"));
+  const unitFixed = itemsOfLinks(children(entry.node, "entryLinks").filter((l) => l.name !== "Warlord" && l.type !== "selectionEntryGroup"));
   const model: UnitModel = { entry, rules, sets, rows: sets.flatMap((set) => set.members), unitGroups: wargearGroups(entry.node), unitFixed, modelsGroup };
   return ambiguous ? null : model;
 }
@@ -388,7 +388,7 @@ describe("BSData export per-model wargear agrees with the MFM loadout checker", 
         let left = count;
         // `name#k` is the k-th row of that name.
         const hash = /^(.*)#(\d+)$/.exec(name);
-        const named = model.rows.filter((r) => r.name === (hash ? hash[1] : name));
+        const named = model.rows.filter((r) => r.name === bsName(hash ? hash[1] : name));
         for (const row of hash ? [named[Number(hash[2]) - 1]] : named) {
           const take = Math.min(left, row.max);
           addAll(items, row.fixed, take);
@@ -415,7 +415,7 @@ describe("BSData export per-model wargear agrees with the MFM loadout checker", 
     let checked = 0;
     for (const model of models) {
       for (const slot of model.rules.slots.filter((s) => s.alternate && s.model !== undefined)) {
-        for (const row of model.rows.filter((r) => r.name === slot.model!.replace(/#\d+$/, ""))) {
+        for (const row of model.rows.filter((r) => r.name === bsName(slot.model!.replace(/#\d+$/, "")))) {
           for (const items of slot.choices.filter((c) => c.length > 0)) {
             checked += 1;
             const want = new Map(items.map((i) => [i.id, i.count]));
@@ -457,7 +457,7 @@ describe("BSData export per-model wargear agrees with the MFM loadout checker", 
               continue;
             }
             const hash = /^(.*)#(\d+)$/.exec(match[1]);
-            const name = hash ? hash[1] : match[1];
+            const name = bsName(hash ? hash[1] : match[1]);
             // `name#k` is the k-th row of that name; its bare-model entry sits beside it.
             const sameName = model.sets.filter((set) => set.members.some((r) => r.name === name));
             const sets = hash ? [sameName[Number(hash[2]) - 1]].filter(Boolean) : sameName;
@@ -507,7 +507,7 @@ describe("BSData export flat wargear for units without MFM rules", () => {
       const catalogue = factionCatalogue(documents, factionId)!;
       for (const entry of children(catalogue, "sharedSelectionEntries").filter((e) => e.type === "unit" || e.type === "model").slice(0, 40)) {
         // Names repeat across factions (each Chaos army has its own Helbrute).
-        const view = flat.units.byFaction(factionId).find((u) => u.name === entry.name);
+        const view = unitForEntry(flat, factionId, entry);
         if (!view) continue;
         for (const n of modelCounts(view.raw)) {
           const bounds = flat.loadoutOf(view.raw).bounds(n);

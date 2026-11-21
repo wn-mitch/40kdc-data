@@ -28,6 +28,12 @@
       "description": "Null for core stratagems"
     },
     "cp_cost": { "type": "integer", "minimum": 0, "maximum": 4 },
+    "secondary_effect_extra_cp": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4,
+      "description": "CP spent on top of cp_cost to use the Stratagem's secondary (alternate) effect instead of its main one. Absent when the Stratagem has no paid secondary effect."
+    },
     "phases": { "$ref": "../defs/common.schema.json#/$defs/phase-list" },
     "player_turn": { "$ref": "../defs/common.schema.json#/$defs/player-turn" },
     "timing": {

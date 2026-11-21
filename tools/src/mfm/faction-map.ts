@@ -9,8 +9,6 @@
  *   - The Chaos Daemons faction is "Legiones Daemonica"; its four mono-god
  *     allegiances ("Blood/Plague/Scintillating Legions", "Legions of Excess")
  *     are daemon rosters filed under `chaos-daemons`.
- * Titan factions ("Adeptus Titanicus" / "Titanicus Traitoris") have no repo dir
- * yet and resolve to null (deferred — repo/MFM intentionally skip titans).
  *
  * SHARED_ROSTERS captures supplement dirs whose units live in a parent dir: a
  * supplement republishes a parent's roster, so a datasheet that misses its own
@@ -87,7 +85,7 @@ export function repoDirs(): Set<string> {
 
 /**
  * Resolve a faction-keyword English name to a repo dir, or null when the dir
- * doesn't exist (titans) or the name is unmappable. Aliases win; otherwise the
+ * doesn't exist or the name is unmappable. Aliases win; otherwise the
  * `nameToId` slug is used iff a dir by that name exists on disk.
  */
 export function repoDirForFactionName(name: string | undefined): string | null {

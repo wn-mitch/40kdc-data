@@ -17,10 +17,10 @@ func dekebab(s string) string { return strings.ReplaceAll(s, "-", " ") }
 func eventRelationPhrase(filter map[string]any) string {
 	phrase := ""
 	if filter["caused_by"] != nil {
-		phrase += " as a result of the exact bound event"
+		phrase += " as a result of that event"
 	}
 	if filter["causes"] != nil {
-		phrase += " and causing the exact bound event"
+		phrase += " triggering this ability"
 	}
 	return phrase
 }
@@ -109,6 +109,66 @@ func article(s string) string {
 	return "a"
 }
 
+var (
+	articleNumRe = regexp.MustCompile(`^(?:8|11|18)\b`)
+	articleOneRe = regexp.MustCompile(`(?i)^one\b`)
+)
+
+// withArticle renders a phonetic indefinite article ("a unit", "an ASPECT WARRIORS unit",
+// "an Advance", "an ability").
+func withArticle(phrase string) string {
+	s := strings.TrimLeft(phrase, " \t\n\r\f\v")
+	if s == "" {
+		return "a"
+	}
+	if articleOneRe.MatchString(s) {
+		return "a " + s
+	}
+	lower := strings.ToLower(s)
+	vowel := false
+	switch lower[0] {
+	case 'a', 'e', 'i', 'o':
+		vowel = true
+	case 'u':
+		vowel = !strings.HasPrefix(lower, "uni") && !strings.HasPrefix(lower, "use") && !strings.HasPrefix(lower, "ut")
+	default:
+		vowel = articleNumRe.MatchString(s)
+	}
+	if vowel {
+		return "an " + s
+	}
+	return "a " + s
+}
+
+// withinClause renders " within 6\" of this unit", or " in contact with a cult ambush marker" when range is 0".
+func withinClause(within map[string]any, ofOverride *string) string {
+	r, _ := asMap(within["range"])
+	zero := false
+	if r != nil {
+		if v, ok := r["inches"].(float64); ok && v == 0 {
+			zero = true
+		}
+	}
+	of := ""
+	if ofOverride != nil {
+		of = *ofOverride
+	} else if within["of"] != nil {
+		of = placeRefPhrase(within["of"])
+	}
+	if zero && of != "" {
+		return " in contact with " + of
+	}
+	wholly := ""
+	if within["wholly"] == true {
+		wholly = "wholly "
+	}
+	tail := ""
+	if of != "" {
+		tail = " of " + of
+	}
+	return " " + wholly + "within " + rangePhrase(within["range"]) + tail
+}
+
 // trimEnd is JS String.prototype.trimEnd for the ASCII whitespace the
 // describers can produce.
 func trimEnd(s string) string { return strings.TrimRight(s, " \t\n\r\f\v") }
@@ -138,51 +198,116 @@ func jsNumberStr(v any) (float64, string) {
 
 // -- Shared references --------------------------------------------------------
 
-// eventObjectModel is the describer's spelling of `event-object` when every trigger's object is a
-// model ("that model" rather than "that unit"). modelObjectRefs writes it into the effect before
-// rendering.
-const eventObjectModel = "event-object-model"
+// eventObjectModel and eventSubjectModel are the describer's spellings of `event-object` and
+// `event-subject` when every trigger's object (or subject) is a model ("that model", "the triggering
+// model" rather than "that unit", "the triggering unit"). modelEventRefs writes them into the effect
+// before rendering.
+const (
+	eventObjectModel  = "event-object-model"
+	eventSubjectModel = "event-subject-model"
+)
 
 // isEventObject reports whether ref is the trigger's event object, a unit or a model.
 func isEventObject(ref any) bool {
 	return ref == "event-object" || ref == eventObjectModel
 }
 
-// modelObjectRefs returns v with every `event-object` ref spelled eventObjectModel.
-func modelObjectRefs(v any) any {
-	switch x := v.(type) {
-	case string:
-		if x == "event-object" {
-			return eventObjectModel
+// isEventSubject reports whether ref is the trigger's event subject, a unit or a model.
+func isEventSubject(ref any) bool {
+	return ref == "event-subject" || ref == eventSubjectModel
+}
+
+// liveTriggers is the triggers of a spec (one trigger or a list) that name an event.
+func liveTriggers(triggers []map[string]any) []map[string]any {
+	var out []map[string]any
+	for _, t := range triggers {
+		if t["event"] != nil {
+			out = append(out, t)
 		}
-	case []any:
-		out := make([]any, len(x))
-		for i, item := range x {
-			out[i] = modelObjectRefs(item)
-		}
-		return out
-	case map[string]any:
-		out := make(map[string]any, len(x))
-		for k, item := range x {
-			out[k] = modelObjectRefs(item)
-		}
-		return out
 	}
-	return v
+	return out
+}
+
+// allModels reports whether every trigger names a model as its role (its subject or object).
+func allModels(triggers []map[string]any, role string) bool {
+	live := liveTriggers(triggers)
+	if len(live) == 0 {
+		return false
+	}
+	for _, t := range live {
+		if mapOr(t[role])["level"] != "model" {
+			return false
+		}
+	}
+	return true
+}
+
+// namesRole reports whether any trigger of a spec with an event names a role.
+func namesRole(trigger any, role string) bool {
+	for _, t := range liveTriggers(normalizeTriggers(trigger)) {
+		if t[role] != nil {
+			return true
+		}
+	}
+	return false
+}
+
+// modelEventRefs returns v with its `event-object` refs spelled eventObjectModel when every
+// trigger's object is a model, and its `event-subject` refs spelled eventSubjectModel when every
+// trigger's subject is. Inside an `ability-part` whose own trigger names an object (a subject), that
+// ref names the part's event instead, so it is left for the part to rewrite when it renders.
+func modelEventRefs(v any, triggers []map[string]any) any {
+	var rewrite func(v any, object, subject bool) any
+	rewrite = func(v any, object, subject bool) any {
+		switch x := v.(type) {
+		case string:
+			if object && x == "event-object" {
+				return eventObjectModel
+			}
+			if subject && x == "event-subject" {
+				return eventSubjectModel
+			}
+		case []any:
+			out := make([]any, len(x))
+			for i, item := range x {
+				out[i] = rewrite(item, object, subject)
+			}
+			return out
+		case map[string]any:
+			part := x["type"] == "ability-part"
+			out := make(map[string]any, len(x))
+			for k, item := range x {
+				if part && k == "effect" {
+					out[k] = rewrite(item, object && !namesRole(x["trigger"], "object"), subject && !namesRole(x["trigger"], "subject"))
+				} else {
+					out[k] = rewrite(item, object, subject)
+				}
+			}
+			return out
+		}
+		return v
+	}
+	object := allModels(triggers, "object")
+	subject := allModels(triggers, "subject")
+	if !object && !subject {
+		return v
+	}
+	return rewrite(v, object, subject)
 }
 
 var rolePhrases = map[string]string{
-	"this-unit":          "the unit",
+	"this-unit":          "this unit",
 	"this-model":         "this model",
 	"model-in-this-unit": "a model in this unit",
 	"attacker":           "the attacking unit",
 	"defender":           "the target unit",
 	"event-subject":      "the triggering unit",
+	eventSubjectModel:    "the triggering model",
 	"event-object":       "that unit",
 	eventObjectModel:     "that model",
 	"stratagem-target":   "the Stratagem's target",
 	"selected-unit":      "the selected unit",
-	"recipient":          "the unit",
+	"recipient":          "this unit",
 	"bearer-transport":   "the Transport this unit is embarked within",
 	"ability-unit":       "this unit",
 }
@@ -250,26 +375,34 @@ func unitFilterPhrase(f map[string]any) string {
 	if isList(f["all_of"]) {
 		all = strings.Join(cstrList(f["all_of"]), " ") + " "
 	}
+	unitIdNames := ""
+	if isList(f["unit_ids"]) {
+		raw := cstrList(f["unit_ids"])
+		titled := make([]string, len(raw))
+		for i, id := range raw {
+			titled[i] = titleCase(id)
+		}
+		unitIdNames = orList(titled)
+	}
+	inlineUnitIds := ""
+	if unitIdNames != "" && all == "" && !isList(f["any_of_filters"]) {
+		inlineUnitIds = unitIdNames + " "
+	}
 	noun := "unit"
 	if f["level"] == "model" {
 		if role := cstr(f["attachment_role"]); role != "" && role != "?" {
-			noun = role + " model"
+			noun = titleCase(role) + " model"
 		} else {
 			noun = "model"
 		}
 	}
 	// "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
 	compact, isCompact := keywordAlternatives(f)
-	s := owner + all + noun
+	s := owner + all + inlineUnitIds + noun
 	if isCompact {
 		s = owner + orList(compact) + " " + noun
 	}
-	lower := strings.ToLower(s)
-	if lower != "" && (strings.ContainsRune("aeio", rune(lower[0])) || (lower[0] == 'u' && !strings.HasPrefix(lower, "uni"))) {
-		s = "an " + s
-	} else {
-		s = "a " + s
-	}
+	s = withArticle(s)
 	// Any other alternatives: "a unit that is a PSYKER unit or a unit that is Battle-shocked".
 	if isList(f["any_of_filters"]) && !isCompact {
 		alts := []string{}
@@ -304,20 +437,20 @@ func unitFilterPhrase(f map[string]any) string {
 	if isList(f["model_names"]) {
 		s += " named " + orList(cstrList(f["model_names"]))
 	}
-	if isList(f["unit_ids"]) {
-		s += " with unit ID " + orList(cstrList(f["unit_ids"]))
+	if unitIdNames != "" && inlineUnitIds == "" {
+		s += " (" + unitIdNames + ")"
 	}
 	if f["embarked_in"] != nil {
-		s += " embarked within " + unitRefPhrase(f["embarked_in"], "the unit")
+		s += " embarked within " + unitRefPhrase(f["embarked_in"], "this unit")
 	}
 	if f["member_of"] != nil {
-		s += " in " + unitRefPhrase(f["member_of"], "the unit")
+		s += " in " + unitRefPhrase(f["member_of"], "this unit")
 	}
 	if f["engaged_with"] != nil {
-		s += " within Engagement Range of " + unitRefPhrase(f["engaged_with"], "the unit")
+		s += " within Engagement Range of " + unitRefPhrase(f["engaged_with"], "this unit")
 	}
 	if f["not_engaged_with"] != nil {
-		ref := unitRefPhrase(f["not_engaged_with"], "the unit")
+		ref := unitRefPhrase(f["not_engaged_with"], "this unit")
 		if m, ok := asMap(f["not_engaged_with"]); ok && m != nil && m["selection_var"] == nil && m["event_var"] == nil && m["stratagem_target"] == nil {
 			ref = "any " + strings.TrimSpace(strings.TrimPrefix(strings.TrimPrefix(ref, "a "), "an "))
 		}
@@ -326,7 +459,7 @@ func unitFilterPhrase(f map[string]any) string {
 	if f["designated"] != nil {
 		s += " that is " + designationPhrase(cstr(f["designated"]), false)
 		if f["designated_by"] != nil {
-			s += " by " + unitRefPhrase(f["designated_by"], "the unit")
+			s += " by " + unitRefPhrase(f["designated_by"], "this unit")
 		}
 	}
 	if f["not_designated"] != nil {
@@ -343,25 +476,18 @@ func unitFilterPhrase(f map[string]any) string {
 		s += " that is " + andList(negs)
 	}
 	if visible, ok := asMap(f["visible"]); ok && visible != nil {
-		s += " that is visible to " + unitRefPhrase(visible["to"], "the unit")
+		s += " that is visible to " + unitRefPhrase(visible["to"], "this unit")
 	} else if f["visible"] == true {
 		s += " that is visible to it"
 	}
 	if within, ok := asMap(f["within"]); ok && within != nil {
-		s += " "
-		if within["wholly"] == true {
-			s += "wholly "
-		}
-		s += "within " + rangePhrase(within["range"])
-		if within["of"] != nil {
-			s += " of " + placeRefPhrase(within["of"])
-		}
+		s += withinClause(within, nil)
 	}
 	if f["excluding"] != nil {
 		if f["excluding"] == "this-unit" {
 			s += " other than this unit"
 		} else {
-			s += " other than " + unitRefPhrase(f["excluding"], "the unit")
+			s += " other than " + unitRefPhrase(f["excluding"], "this unit")
 		}
 	}
 	return s
@@ -382,7 +508,7 @@ func unitRefPhrase(ref any, fallback string) string {
 			return "that unit"
 		}
 		if sv, ok := r["selection_var"].(string); ok {
-			return "the bound " + strings.ReplaceAll(sv, "_", " ")
+			return "the chosen " + strings.ReplaceAll(sv, "_", " ")
 		}
 		if st, ok := r["stratagem_target"].(string); ok {
 			return "the " + dekebab(strings.TrimPrefix(st, "the-")) + " target"
@@ -417,7 +543,7 @@ func placeRefPhrase(ref any) string {
 			return article(phrase) + " " + dekebab(strings.TrimSuffix(phrase, "-marker")) + " marker"
 		}
 	}
-	return unitRefPhrase(ref, "the unit")
+	return unitRefPhrase(ref, "this unit")
 }
 
 // subjectOf renders the subject of a predicate.
@@ -536,7 +662,7 @@ func objectivePhrase(f map[string]any, plural bool, noun string) string {
 		if f["controlled_at"] == "previous-phase-end" {
 			when = "at the end of the previous phase"
 		}
-		s += " that " + unitRefPhrase(f["controlled_by_unit"], "the unit") + " was controlling " + when
+		s += " that " + unitRefPhrase(f["controlled_by_unit"], "this unit") + " was controlling " + when
 	}
 	if clear, ok := asMap(f["clear_of"]); ok && clear != nil {
 		phrase := leadingArticleRe.ReplaceAllString(unitFilterPhrase(clear), "")
@@ -559,7 +685,7 @@ var statePhrases = map[string]string{
 	"on-battlefield":        "on the battlefield",
 	"hidden":                "hidden",
 	"fights-first":          "a Fights First unit",
-	"benefit-of-cover":      "receiving the benefit of cover",
+	"benefit-of-cover":      "receiving the Benefit of Cover",
 }
 
 var negatedStates = map[string]string{"engaged": "unengaged"}
@@ -587,7 +713,7 @@ func designationPhrase(tag string, plural bool) string {
 	if tag == strings.ToUpper(tag) {
 		return tag
 	}
-	return "tagged " + dekebab(tag)
+	return "designated as " + titleCase(tag)
 }
 
 var windowPhrases = map[string]string{
@@ -616,7 +742,7 @@ func withWindow(s string, w any) string {
 
 var moveNames = map[string]string{
 	"normal": "Normal", "advance": "Advance", "remain-stationary": "Remain Stationary", "fall-back": "Fall Back",
-	"charge": "Charge", "pile-in": "Pile-in", "consolidation": "Consolidation", "ingress": "ingress",
+	"charge": "Charge", "pile-in": "Pile-in", "consolidation": "Consolidation", "ingress": "Ingress",
 	"surge": "Surge", "scout": "Scout", "disembark": "Disembark",
 }
 
@@ -725,18 +851,31 @@ func describeSelectionEligibility(c map[string]any) string {
 			return []map[string]any{n}
 		}
 		var parts []string
-		all := true
-		for _, n := range flat(c) {
-			part, ok := candidateClause(n)
-			if !ok {
-				all = false
-				break
+		for _, op := range flat(c) {
+			if orOps, ok := conditionOperands(op, "or"); ok {
+				var orParts []string
+				allOr := true
+				for _, o := range orOps {
+					part, ok := candidateClause(o)
+					if !ok {
+						allOr = false
+						break
+					}
+					orParts = append(orParts, part)
+				}
+				if allOr {
+					parts = append(parts, "that ("+joinRelative(orParts, "or")+")")
+					continue
+				}
+				return "if " + describeCondition(c)
 			}
-			parts = append(parts, part)
+			clause, ok := candidateClause(op)
+			if !ok {
+				return "if " + describeCondition(c)
+			}
+			parts = append(parts, clause)
 		}
-		if all {
-			return strings.Join(parts, " and ")
-		}
+		return joinRelative(parts, "and")
 	}
 	if ops, ok := conditionOperands(c, "or"); ok {
 		var parts []string
@@ -750,7 +889,7 @@ func describeSelectionEligibility(c map[string]any) string {
 			parts = append(parts, part)
 		}
 		if all {
-			return strings.Join(parts, " or ")
+			return joinRelative(parts, "or")
 		}
 	}
 	if part, ok := candidateClause(c); ok {
@@ -759,22 +898,96 @@ func describeSelectionEligibility(c map[string]any) string {
 	return "if " + describeCondition(c)
 }
 
-var candidatePrefixes = [][2]string{
-	{"the unit is not the same unit as ", "other than "},
-	{"the unit does not have ", "without "},
-	{"the unit has not ", "that has not "},
-	{"the unit has ", "with "},
-	{"not the unit is ", "that is not "},
-	{"the unit ", "that "},
+var withoutKeywordRe = regexp.MustCompile(`^without the ([A-Z0-9 -]+) keyword$`)
+
+// joinRelative joins relative clauses cleanly, collapsing repeated "that is " / "without the X keyword" runs.
+func joinRelative(parts []string, conj string) string {
+	if len(parts) <= 1 {
+		if len(parts) == 1 {
+			return parts[0]
+		}
+		return ""
+	}
+	var merged []string
+	if conj == "and" {
+		for i := 0; i < len(parts); {
+			if kw := withoutKeywordRe.FindStringSubmatch(parts[i]); kw != nil {
+				kws := []string{kw[1]}
+				j := i + 1
+				for j < len(parts) {
+					next := withoutKeywordRe.FindStringSubmatch(parts[j])
+					if next == nil {
+						break
+					}
+					kws = append(kws, next[1])
+					j++
+				}
+				if len(kws) > 1 {
+					merged = append(merged, "without the "+orList(kws)+" keyword")
+				} else {
+					merged = append(merged, parts[i])
+				}
+				i = j
+				continue
+			}
+			merged = append(merged, parts[i])
+			i++
+		}
+	} else {
+		merged = append(merged, parts...)
+	}
+	allThatIs := true
+	for _, p := range merged {
+		if !strings.HasPrefix(p, "that is ") {
+			allThatIs = false
+			break
+		}
+	}
+	if allThatIs {
+		rest := make([]string, len(merged))
+		for i, p := range merged {
+			rest[i] = strings.TrimPrefix(p, "that is ")
+		}
+		if conj == "and" {
+			return "that is " + andList(rest)
+		}
+		return "that is " + orList(rest)
+	}
+	deduped := make([]string, len(merged))
+	for idx, p := range merged {
+		if idx > 0 && strings.HasPrefix(p, "that is ") && strings.HasPrefix(merged[idx-1], "that is ") {
+			deduped[idx] = strings.TrimPrefix(p, "that is ")
+		} else if idx > 0 && strings.HasPrefix(p, "that ") && strings.HasPrefix(merged[idx-1], "that ") {
+			deduped[idx] = strings.TrimPrefix(p, "that ")
+		} else {
+			deduped[idx] = p
+		}
+	}
+	return strings.Join(deduped, " "+conj+" ")
 }
 
+var candidateSubjects = []string{"this unit", "the unit", "the selected unit", "the selected model"}
+
 // candidateClause renders a condition on the candidate as a relative clause
-// ("that was hit...", "without \"MONSTER\""), else ok=false.
+// ("that was hit...", "without the MONSTER keyword"), else ok=false.
 func candidateClause(c map[string]any) (string, bool) {
+	// Never strip prefixes off compound `and`/`or` nodes — that would lose logical grouping.
+	if c["operator"] == "and" || c["operator"] == "or" {
+		return "", false
+	}
 	phrase := describeCondition(c)
-	for _, pair := range candidatePrefixes {
-		if rest, ok := strings.CutPrefix(phrase, pair[0]); ok {
-			return pair[1] + rest, true
+	for _, subj := range candidateSubjects {
+		for _, pair := range [][2]string{
+			{subj + " is not the same unit as ", "other than "},
+			{subj + " does not have ", "without "},
+			{subj + " has not ", "that has not "},
+			{subj + " has ", "with "},
+			{"not " + subj + " is ", "that is not "},
+			{subj + " ", "that "},
+		} {
+			if rest, ok := strings.CutPrefix(phrase, pair[0]); ok {
+				return pair[1] + rest, true
+			}
 		}
 	}
 	return "", false

@@ -125,10 +125,10 @@ describe("T7 destroyed model's unit keywords (SS-D)", () => {
     const version = currentFamilyVersion("event");
     const base = { kind: "model-destroyed", object_owner: "enemy" };
     expect(normalizeFingerprintParameters("event", { ...base, object_keywords: ["CHARACTER"] }, version)).toMatchObject({ object_keywords: ["CHARACTER"] });
-    // A value the previous version accepted keeps its meaning.
+    // A destruction with no keywords keeps its meaning.
     expect(normalizeFingerprintParameters("event", base, version)).toMatchObject({ kind: "model-destroyed", object_owner: "enemy" });
     expect(() => normalizeFingerprintParameters("event", { kind: "model-destroyed", object_keywords: ["CHARACTER"] }, version)).toThrow(/object_owner/);
-    expect(() => normalizeFingerprintParameters("event", { kind: "unit-destroyed", object_owner: "enemy", object_keywords: ["CHARACTER"] }, version)).toThrow(/model-destroyed/);
+    expect(() => normalizeFingerprintParameters("event", { kind: "unit-destroyed", object_owner: "enemy", object_keywords: ["CHARACTER"] }, version)).toThrow(/event\.object_keywords does not apply to kind unit-destroyed/);
   });
 
   it("unit-activity keywords: on the destroyed models only, and one leaf may name both destruction activities (family)", () => {
@@ -136,7 +136,7 @@ describe("T7 destroyed model's unit keywords (SS-D)", () => {
     const shared = { named: "after", container: "none", destroyer: "this-unit", negated: false };
     const models = normalizeFingerprintParameters("unit-activity", { ...shared, activities: ["destroyed-models-by-triggering-attacks"], keywords: ["CHARACTER"] }, version);
     expect(models).toMatchObject({ keywords: ["CHARACTER"], activities: ["destroyed-models-by-triggering-attacks"] });
-    // A value the previous version accepted keeps its meaning.
+    // A destruction with no keywords keeps its meaning.
     expect(normalizeFingerprintParameters("unit-activity", { ...shared, activities: ["destroyed-units-by-triggering-attacks"] }, version))
       .toMatchObject({ activities: ["destroyed-units-by-triggering-attacks"] });
     const pair = normalizeFingerprintParameters("unit-activity", { ...shared, activities: ["destroyed-models-by-triggering-attacks", "destroyed-units-by-triggering-attacks"], keywords: ["CHARACTER"] }, version);
@@ -293,7 +293,7 @@ describe("T7 bearer-named grants with no bearer filter (SS-J)", () => {
   it("refuses a grant with no subject and no filter (regression pin)", () => {
     const text = "Ranged weapons equipped by models in this unit have the ASSAULT ability.";
     const grant: [string, string, Record<string, unknown>] = ["Ranged weapons", "weapon-ability-grant", { weapon_type: "ranged" }];
-    expect(() => normalizeFingerprintParameters("weapon-ability-grant", grant[2], currentFamilyVersion("weapon-ability-grant"))).toThrow(/must contain subject/u);
+    expect(() => normalizeFingerprintParameters("weapon-ability-grant", grant[2], currentFamilyVersion("weapon-ability-grant"))).toThrow(/weapon-ability-grant needs subject and weapon_type/u);
     // The compiler refuses the subject-less grant on its own, behind the contract check above.
     const leaves = outsideContract(located(text, [grant, ["ASSAULT", "weapon-ability-keyword", { keyword: "Assault" }]]));
     const result = compileLeaves(leaves, text);

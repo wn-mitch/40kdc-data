@@ -179,7 +179,7 @@ def expected_damage(
     models_firing: int,
     within_half_range: bool,
 ) -> float:
-    """Expected post-FNP damage (wounds dealt) for one weapon profile.
+    """Expected wounds dealt for one weapon profile: post-FNP, overkill lost per attack.
 
     The summable counterpart to :func:`expected_kills`: damage adds linearly
     across weapons, so a unit's total output is the sum of this over its
@@ -205,10 +205,7 @@ def expected_damage(
         },
         ds,
     )
-    for stage in out["stages"]:
-        if stage["name"] == "after-fnp":
-            return float(stage["expected"])
-    return 0.0
+    return float(out["damageDealt"])
 
 
 def compare_cell(

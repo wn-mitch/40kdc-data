@@ -39,16 +39,16 @@ describe("describeCondition", () => {
       type: "controls",
       parameters: { objective: { role: "central" } },
     };
-    expect(describeCondition(c)).toBe("you control 1+ central objectives");
+    expect(describeCondition(c)).toBe("you control one or more central objectives");
     expect(describeCondition({ type: "controls", parameters: { objective: { role: "central" }, count: { min: 2 } } })).toBe(
-      "you control 2+ central objectives",
+      "you control 2 or more central objectives",
     );
   });
 
   it("controls more objectives than the opponent", () => {
     expect(
       describeCondition({ type: "controls", parameters: { compare: { comparison: "gt", owner: "enemy" } } }),
-    ).toBe("you hold more objectives than the opponent");
+    ).toBe("you hold more objectives than your opponent");
   });
 
   it("compound and", () => {
@@ -60,7 +60,7 @@ describe("describeCondition", () => {
       ],
     };
     expect(describeCondition(c)).toBe(
-      "1+ objectives tagged mined and 1+ enemy units destroyed this turn",
+      "one or more objectives tagged mined and one or more enemy units destroyed this turn",
     );
   });
 
@@ -80,7 +80,7 @@ describe("describeCondition", () => {
         type: "destroyed-in-tagged-terrain",
         parameters: { tag: "mined", at_start_of_turn: true, count: { min: 1 } },
       }),
-    ).toBe("1+ enemy units destroyed that started the turn in mined terrain");
+    ).toBe("one or more enemy units destroyed that started the turn in mined terrain");
   });
 
   it("destroyed-in-tagged-terrain (moment of kill)", () => {
@@ -89,7 +89,7 @@ describe("describeCondition", () => {
         type: "destroyed-in-tagged-terrain",
         parameters: { tag: "marked", count: { min: 2 } },
       }),
-    ).toBe("2+ enemy units destroyed while in marked terrain");
+    ).toBe("2 or more enemy units destroyed while in marked terrain");
   });
 });
 
@@ -101,7 +101,7 @@ describe("describeAward", () => {
       vp: 2,
     };
     expect(describeAward(a)).toBe(
-      "End of your turn (rounds 1-2): 2 VP when you hold more objectives than the opponent",
+      "End of your turn (rounds 1-2): 2 VP when you hold more objectives than your opponent",
     );
   });
 
@@ -114,7 +114,7 @@ describe("describeAward", () => {
       when: { type: "controls", parameters: { objective: { role: "central" } } },
     };
     expect(describeAward(a)).toBe(
-      "+ End of your Command phase (round 2+): 2 VP per controlled central objective at end of command phase when you control 1+ central objectives",
+      "+ End of your Command phase (round 2+): 2 VP per controlled central objective at end of command phase when you control one or more central objectives",
     );
   });
 });
@@ -126,9 +126,9 @@ describe("describeScoringCard against the embedded dataset", () => {
     const card = ds.missionCards.get("battlefield-dominance");
     expect(card).toBeDefined();
     expect(describeScoringCard(card!)).toEqual([
-      "End of your turn (rounds 1-2): 2 VP when you hold more objectives than the opponent",
-      "End of your Command phase (round 2+): 3 VP per controlled objective",
-      "+ End of your Command phase (round 2+): 2 VP per controlled non home objective when you control 1+ objectives (your home)",
+      "End of your turn (rounds 1-2): 2 VP when you hold more objectives than your opponent",
+      "End of your Command phase (round 2+), or end of your turn in round 5: 3 VP per controlled objective",
+      "+ End of your Command phase (round 2+), or end of your turn in round 5: 2 VP per controlled non home objective when you control one or more objectives (your home)",
     ]);
   });
 

@@ -62,6 +62,36 @@ var designationTerms = map[string]struct{ adjective, noun string }{
 	"sabotaged":                  {adjective: "Sabotaged"},
 	"warded":                     {adjective: "Warded"},
 	"corrupted":                  {adjective: "Corrupted"},
+	"condemned":                  {adjective: "Condemned"},
+	"quarry":                     {noun: "Quarry"},
+	"hunted":                     {adjective: "Hunted"},
+	"pinned":                     {adjective: "Pinned"},
+	"suppressed":                 {adjective: "Suppressed"},
+	"secured":                    {adjective: "Secured"},
+	"illuminated":                {adjective: "Illuminated"},
+	"identified":                 {adjective: "Identified"},
+	"assailed":                   {adjective: "Assailed"},
+	"cleansed":                   {adjective: "Cleansed"},
+	"consecrated":                {adjective: "Consecrated"},
+	"trapped":                    {adjective: "Trapped"},
+	"marked":                     {adjective: "Marked"},
+	"trap":                       {adjective: "marked as a Trap"},
+	"beacon":                     {noun: "Beacon"},
+	"unmasked":                   {adjective: "Unmasked"},
+	"surveilled":                 {adjective: "Surveilled"},
+	"triangulated":               {adjective: "Triangulated"},
+	"decoyed":                    {adjective: "Decoyed"},
+	"tethered":                   {adjective: "Tethered"},
+	"aflame":                     {adjective: "Aflame"},
+	"busted":                     {adjective: "Busted"},
+	"staggered":                  {adjective: "Staggered"},
+	"shocked":                    {adjective: "Shocked"},
+	"plundered":                  {adjective: "Plundered"},
+	"prosecuted":                 {adjective: "Prosecuted"},
+	"analysed":                   {adjective: "Analysed"},
+	"entrenched":                 {adjective: "Entrenched"},
+	"flame-wreathed":             {adjective: "Flame-wreathed"},
+	"unhideable":                 {adjective: "Unhideable"},
 	"warlord":                    {adjective: "the Warlord"},
 }
 
@@ -86,10 +116,10 @@ func designationTerm(id string, plural bool) (string, bool) {
 }
 
 var expiryTrails = map[string]string{
-	"attack-sequence":                            "until that unit finishes resolving its attacks",
-	"resolution":                                 "when resolving this use",
+	"attack-sequence":                            "until the attacking unit finishes resolving its attacks",
+	"resolution":                                 "for this activation",
 	"while-leading":                              "while this model is leading a unit",
-	"after-resolving":                            "after resolving this use",
+	"after-resolving":                            "after resolving this ability",
 	"phase":                                      "until the end of the phase",
 	"turn":                                       "until the end of the turn",
 	"battle":                                     "for the rest of the battle",
@@ -374,10 +404,10 @@ var (
 
 // filterRelations renders a unit filter's relations to other units and
 // abilities: " embarked within this model", " with the Deep Strike ability".
-// memberOf renders " in the unit": the unit a model-level filter's models are in.
+// memberOf renders " in this unit": the unit a model-level filter's models are in.
 func memberOf(unit any, ctx effCtx) string {
 	if value, ok := unit.(string); ok && value == "this-unit" {
-		return " in the unit"
+		return " in this unit"
 	}
 	return " in " + effectSubject(unit, ctx)
 }
@@ -444,7 +474,7 @@ func filterRelations(f map[string]any, ctx effCtx) string {
 		if exactReference(f["engaged_with"]) {
 			s += " within Engagement Range of " + w
 		} else {
-			s += " within Engagement Range of " + replaceFirst(anOtherRe, article(w)+" "+w, "another ")
+			s += " within Engagement Range of " + replaceFirst(anOtherRe, withArticle(w), "another ")
 		}
 	}
 	if f["not_engaged_with"] != nil {
@@ -460,7 +490,7 @@ func filterRelations(f map[string]any, ctx effCtx) string {
 // factionSuffixes are the faction dir slugs an ability or Stratagem id ends
 // with (`<name>-<faction>`), longest first. The suffix is identity, not name,
 // so it never reaches the English.
-var factionSuffixes = []string{"agents-of-the-imperium", "chaos-space-marines", "adeptus-mechanicus", "leagues-of-votann", "emperors-children",
+var factionSuffixes = []string{"agents-of-the-imperium", "chaos-space-marines", "titanicus-traitoris", "adeptus-mechanicus", "leagues-of-votann", "adeptus-titanicus", "emperors-children",
 	"genestealer-cults", "adepta-sororitas", "imperial-knights", "adeptus-custodes", "adeptus-astartes", "astra-militarum", "black-templars",
 	"imperial-fists", "chaos-knights", "thousand-sons", "chaos-daemons", "blood-angels", "ultramarines", "space-wolves",
 	"grey-knights", "world-eaters", "white-scars", "raven-guard", "dark-angels", "salamanders", "death-guard", "iron-hands", "tau-empire",

@@ -103,7 +103,7 @@
       {
         "name": "Grand Master in Nemesis Dreadknight",
         "M": 8,
-        "T": 8,
+        "T": 9,
         "W": 13,
         "Sv": 2,
         "invuln_sv": 4,
@@ -306,7 +306,7 @@
       {
         "name": "Grand Master",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 7,
         "Sv": 2,
         "invuln_sv": 4,
@@ -473,7 +473,7 @@
       {
         "name": "Purifier",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 2,
         "invuln_sv": null,
@@ -582,7 +582,7 @@
       {
         "name": "Nemesis Dreadknight",
         "M": 8,
-        "T": 8,
+        "T": 9,
         "W": 13,
         "Sv": 2,
         "invuln_sv": 4,
@@ -869,7 +869,7 @@
       {
         "name": "Brother-Captain",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -1037,7 +1037,7 @@
       {
         "name": "Castellan Crowe",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -1114,7 +1114,7 @@
       {
         "name": "Grey Knight",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 2,
         "invuln_sv": null,
@@ -1211,7 +1211,7 @@
       {
         "name": "Brotherhood Techmarine",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 2,
         "invuln_sv": null,
@@ -1289,7 +1289,7 @@
       {
         "name": "Brotherhood Librarian",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -1374,7 +1374,7 @@
       {
         "name": "Brotherhood Champion",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 2,
         "invuln_sv": 4,
@@ -1448,7 +1448,7 @@
       {
         "name": "Purgator",
         "M": 6,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 2,
         "invuln_sv": null,
@@ -1561,13 +1561,13 @@
     "profiles": [
       {
         "name": "Stormtalon Gunship",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 10,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -1639,7 +1639,7 @@
       {
         "name": "Interceptor",
         "M": 12,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 2,
         "invuln_sv": null,
@@ -1749,7 +1749,7 @@
       {
         "name": "Brotherhood Chaplain",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
@@ -1823,7 +1823,7 @@
       {
         "name": "Paladin",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -1949,7 +1949,8 @@
         "namespace": "mfm",
         "id": "4ccd8473-d395-4554-88e1-5dcdef152878"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "land-raider",
@@ -2052,7 +2053,7 @@
       {
         "name": "Grand Master Voldus",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 7,
         "Sv": 2,
         "invuln_sv": 4,
@@ -2129,7 +2130,7 @@
       {
         "name": "Terminator",
         "M": 5,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -2222,7 +2223,8 @@
         "namespace": "mfm",
         "id": "c599d862-face-40da-830d-7f88b8d9aef4"
       }
-    ]
+    ],
+    "max_model_count": 10
   },
   {
     "id": "stormhawk-interceptor",
@@ -2231,13 +2233,13 @@
     "profiles": [
       {
         "name": "Stormhawk Interceptor",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 10,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [

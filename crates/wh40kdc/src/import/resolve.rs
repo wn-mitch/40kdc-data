@@ -161,6 +161,12 @@ fn map_battle_size(raw: Option<&str>) -> Option<BattleSize> {
     }
 }
 
+/// A Combat Patrol label names a game mode, not a matched-play battle size: it
+/// resolves to no battle size and is not an unmapped label.
+fn is_combat_patrol_label(raw: &str) -> bool {
+    normalize_name(raw).contains("combat patrol")
+}
+
 /// 11e detachment-point budget for a battle size; `None` when unknown.
 fn detachment_cap_for(battle_size: Option<BattleSize>) -> Option<u64> {
     match battle_size {
@@ -293,7 +299,12 @@ pub fn resolve(parsed: &ParsedRoster, ds: &Dataset, format: RosterFormat) -> Ros
 
     // --- Battle size. -------------------------------------------------------
     let battle_size = map_battle_size(parsed.battle_size_raw.as_deref());
-    if parsed.battle_size_raw.is_some() && battle_size.is_none() {
+    if battle_size.is_none()
+        && parsed
+            .battle_size_raw
+            .as_deref()
+            .is_some_and(|raw| !is_combat_patrol_label(raw))
+    {
         diag.warn(
             WarningCode::BattleSizeUnmapped,
             "Battle size label could not be mapped.",

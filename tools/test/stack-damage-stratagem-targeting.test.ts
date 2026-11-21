@@ -5,7 +5,7 @@ import { Dataset, emptyRawData } from "../src/data/index.js";
 import { parseMatrixConfig } from "../src/stack-damage/config.js";
 import { resolveFactionContext } from "../src/stack-damage/factions.js";
 import { damageScoringSession, emptySpec } from "../src/stack-damage/search.js";
-import { filterStackEligibleAbilities } from "../src/stack-damage/stratagem-eligibility.js";
+import { filterStackEligibleAbilities, stratagemCost } from "../src/stack-damage/stratagem-eligibility.js";
 
 const dataset = Dataset.embedded();
 const factionId = "adeptus-custodes";
@@ -90,5 +90,41 @@ describe("static target and trigger facts", () => {
       { selects: "unit", bound_to: "triggering-unit", eligibility: { type: "matches", parameters: { filter: { level: "unit", unit_ids: ["vigilator-squad"] } } } },
       { owner: "enemy", level: "unit", unit_ids: ["prosecutor-squad"] },
     )).toBe(true);
+  });
+});
+
+describe("attached-unit Stratagem targets", () => {
+  const dgFaction = resolveFactionContext(dataset, "death-guard");
+  const dgConfig = parseMatrixConfig(
+    { HC_FACTIONS: "death-guard", HC_TARGETS: "rhino", HC_PHASES: "fight", HC_OUTPUT: "stack-damage.json" },
+    { factionIds: new Set(["death-guard"]), targetIds: ["rhino"] },
+  );
+  const dgSession = damageScoringSession({
+    dataset, config: dgConfig, faction: dgFaction, target: resolveTarget(dataset, dataset.targetProfiles.get("rhino")!)!, phase: "fight",
+  });
+  const offered = (members: { unitId: string; role: "bodyguard" | "leader" }[]) =>
+    dgSession.pool(emptySpec("death-guard", members.map(({ unitId, role }) => ({ unit: dataset.units.getInFaction(unitId, "death-guard")!, role })), ["champions-of-contagion"]))
+      .levers.some((lever) => lever.source.kind === "ability" && lever.source.abilityId === "blessings-of-filth-champions-of-contagion-death-guard");
+
+  it("refuses Blessings of Filth to a unit nothing is attached to", () => {
+    expect(offered([{ unitId: "blightlord-terminators", role: "bodyguard" }])).toBe(false);
+  });
+
+  it("offers Blessings of Filth to an attached unit", () => {
+    expect(offered([{ unitId: "blightlord-terminators", role: "bodyguard" }, { unitId: "lord-of-contagion", role: "leader" }])).toBe(true);
+  });
+});
+
+describe("a Stratagem's cost on a stack", () => {
+  const dataset = Dataset.embedded();
+  const strat = dataset.stratagems.all.find((candidate) => candidate.id === "point-blank-ambush-kauyon-tau-empire")!;
+  const unit = (id: string) => dataset.units.getInFaction(id, "tau-empire")!.raw;
+
+  it("triples a Stratagem used on the Manta (Air Caste Colossus)", () => {
+    expect(stratagemCost(dataset, strat, [unit("manta")])).toEqual({ cp: strat.cp_cost * 3, modifiedBy: ["air-caste-colossus-tau-empire"], unapplied: [] });
+  });
+
+  it("leaves the printed cost on a unit with no cost rule", () => {
+    expect(stratagemCost(dataset, strat, [unit("broadside-battlesuits")])).toEqual({ cp: strat.cp_cost, modifiedBy: [], unapplied: [] });
   });
 });

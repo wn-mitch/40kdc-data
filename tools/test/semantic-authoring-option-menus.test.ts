@@ -119,15 +119,15 @@ describe("A start-of-phase moment with a lasting effect", () => {
 const SOURCE = "This leader can give up to 2 Orders to SQUAD or TANK units. This leader can only give the Duty and Honour! and Fix Bayonets! Orders.";
 const FACTION = { units: { faction_id: "astra-militarum" }, abilityId: "orders-example-astra-militarum" };
 
-function at(text: string, role: string, family_id: string, family_version: number, parameters: Record<string, unknown>): CompileLeaf {
+function at(text: string, role: string, family_id: string, parameters: Record<string, unknown>): CompileLeaf {
   const start = SOURCE.indexOf(text);
   if (start < 0) throw new Error(`Missing ${text}`);
-  return { role, family_id, family_version, parameters, start_byte: start, end_byte: start + text.length, fragment: "RAW_TEXT" };
+  return { role, family_id, family_version: currentFamilyVersion(family_id), parameters, start_byte: start, end_byte: start + text.length, fragment: "RAW_TEXT" };
 }
 
-const opener = at("This leader can give up to 2 Orders", "EFFECT", "issue-orders-open", 1, { count: 2 });
-const units = at("SQUAD or TANK units", "CONDITION", "unit-filter", 18, { side: "friendly", any_keywords: ["SQUAD", "TANK"] });
-const only = (orders: string[]) => at("This leader can only give the Duty and Honour! and Fix Bayonets! Orders", "RESTRICTION", "order-rule", 2, { rule: "only-orders", orders });
+const opener = at("This leader can give up to 2 Orders", "EFFECT", "issue-orders-open", { count: 2 });
+const units = at("SQUAD or TANK units", "CONDITION", "unit-filter", { side: "friendly", any_keywords: ["SQUAD", "TANK"] });
+const only = (orders: string[]) => at("This leader can only give the Duty and Honour! and Fix Bayonets! Orders", "RESTRICTION", "order-rule", { rule: "only-orders", orders });
 
 function ordersCompiled(leaves: CompileLeaf[], options: Parameters<typeof compileLeaves>[2] = FACTION) {
   const result = compileLeaves(leaves, SOURCE, options);
@@ -152,13 +152,13 @@ describe("an officer's Orders from its army rule's menu", () => {
 
   it("reads one filter per bullet as alternatives, not keywords every unit must have", () => {
     const bulleted = "This leader can give up to 3 Orders to:\n■ **SQUAD** units\n■ **TANK** units\n■ **WALKER** units";
-    const leafAt = (text: string, role: string, family_id: string, family_version: number, parameters: Record<string, unknown>): CompileLeaf => {
+    const leafAt = (text: string, role: string, family_id: string, parameters: Record<string, unknown>): CompileLeaf => {
       const start = Buffer.byteLength(bulleted.slice(0, bulleted.indexOf(text)));
-      return { role, family_id, family_version, parameters, start_byte: start, end_byte: start + Buffer.byteLength(text), fragment: "RAW_TEXT" };
+      return { role, family_id, family_version: currentFamilyVersion(family_id), parameters, start_byte: start, end_byte: start + Buffer.byteLength(text), fragment: "RAW_TEXT" };
     };
     const result = compileLeaves([
-      leafAt("This leader can give up to 3 Orders", "EFFECT", "issue-orders-open", 1, { count: 3 }),
-      ...["SQUAD", "TANK", "WALKER"].map((keyword) => leafAt(`${keyword}** units`, "CONDITION", "unit-filter", 18, { side: "friendly", keywords: [keyword] })),
+      leafAt("This leader can give up to 3 Orders", "EFFECT", "issue-orders-open", { count: 3 }),
+      ...["SQUAD", "TANK", "WALKER"].map((keyword) => leafAt(`${keyword}** units`, "CONDITION", "unit-filter", { side: "friendly", keywords: [keyword] })),
     ], bulleted, FACTION);
     expect(result.ok ? result.mechanics.effect : result.errors).toMatchObject({ eligible: { any_of: ["SQUAD", "TANK", "WALKER"] } });
   });

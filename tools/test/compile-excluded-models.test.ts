@@ -31,7 +31,7 @@ describe("excluded model keywords", () => {
 
   it("refuses an exclusion on this model, which has no models to pick from", () => {
     expect(() => normalizeFingerprintParameters("characteristic-modifier",
-      { subject: "this-model", characteristics: ["A"], operation: "improve", value: 1, weapon_type: "melee", excluded_model_keywords: ["CHARACTER"] }, 20)).toThrow(/picks models of a unit/u);
+      { subject: "this-model", characteristics: ["A"], operation: "improve", value: 1, weapon_type: "melee", excluded_model_keywords: ["CHARACTER"] })).toThrow(/picks models of a unit/u);
   });
 });
 

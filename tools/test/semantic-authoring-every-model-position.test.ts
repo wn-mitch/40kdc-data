@@ -2,13 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { describeCondition } from "../src/translate/condition.js";
 import { expectRefused } from "./semantic-authoring-connective-fixture.js";
 import { outsideContract } from "./leaf-contract.js";
-
-/** The family versions the extensions under test create. */
-const EVERY_MODEL_POSITION_VERSIONS: ReadonlySet<string> = new Set(["unit-position@23"]);
 
 /**
  * Every-model position: `models: every` on a unit-position within or objective-range. Every
@@ -37,25 +33,10 @@ function mechanicsOf(list: CompileLeaf[], text: string): Record<string, any> {
 }
 
 const POSITION = "unit-position";
-/** The unit-position version this wave's extension introduced (later extensions may sit above it). */
-const VERSION = (() => {
-  for (let version = currentFamilyVersion(POSITION); version > 1; version -= 1) {
-    const extension = familyExtension(POSITION, version);
-    if (extension !== undefined && EVERY_MODEL_POSITION_VERSIONS.has(`${extension.family}@${extension.version}`)) return version;
-  }
-  throw new Error("The every-model-position extension does not extend unit-position.");
-})();
-/** The version just before the one that added models; later extensions may sit above it. */
-const BEFORE_MODELS = (() => {
-  for (let version = currentFamilyVersion(POSITION); version > 1; version -= 1) {
-    const extension = familyExtension(POSITION, version);
-    if (extension !== undefined && EVERY_MODEL_POSITION_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
-  }
-  throw new Error("The every-model extension is not registered.");
-})();
+const VERSION = currentFamilyVersion(POSITION);
 const WITHIN = { kind: "within", inches: 3, negated: false };
 
-describe("unit-position models every: family version", () => {
+describe("unit-position models every: family parameters", () => {
   it("accepts every model within 3 inches of this unit, and of the following filter's unit", () => {
     const transport = { ...WITHIN, of: "this-unit", subject: "antecedent", models: "every" };
     expect(normalizeFingerprintParameters(POSITION, transport, VERSION)).toEqual(transport);
@@ -68,14 +49,9 @@ describe("unit-position models every: family version", () => {
     expect(normalizeFingerprintParameters(POSITION, beacon, VERSION)).toEqual(beacon);
   });
 
-  it("is not accepted by the previous version: models is new in this version", () => {
-    const filter = { ...WITHIN, of: "following-filter", subject: "this-unit", models: "every" };
-    expect(() => normalizeFingerprintParameters(POSITION, filter, BEFORE_MODELS)).toThrow();
-  });
-
-  it("leaves a leaf without models normalizing exactly as the previous version does", () => {
+  it("adds no models to a leaf that names none", () => {
     const plain = { ...WITHIN, of: "this-unit", subject: "this-unit" };
-    expect(normalizeFingerprintParameters(POSITION, plain, VERSION)).toEqual(normalizeFingerprintParameters(POSITION, plain, VERSION - 1));
+    expect(normalizeFingerprintParameters(POSITION, plain, VERSION)).toEqual(plain);
   });
 
   it.each([
@@ -106,7 +82,7 @@ describe("unit-position models every: compiled shapes", () => {
       ["attacks that target this unit have -1 AP", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "worsen", value: 1, weapon_type: "all" }],
     ), BEACON_TEXT);
     expect(mechanics.effect.condition).toEqual({ type: "within", parameters: { of: { objective: {} }, range: "objective-control", models: "every" } });
-    expect(describeCondition(mechanics.effect.condition)).toBe("every model in the unit is within range of an objective marker");
+    expect(describeCondition(mechanics.effect.condition)).toBe("every model in this unit is within range of an objective marker");
   });
 
   it("keeps the every-model flag off an objective check that does not carry it", () => {
@@ -117,7 +93,7 @@ describe("unit-position models every: compiled shapes", () => {
       ["attacks that target this unit have -1 AP", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "worsen", value: 1, weapon_type: "all" }],
     ), BEACON_TEXT);
     expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { filter: { within: { of: { objective: {} }, range: "objective-control" } } } });
-    expect(describeCondition(mechanics.effect.condition)).toBe("the unit is within range of an objective marker");
+    expect(describeCondition(mechanics.effect.condition)).toBe("this unit is within range of an objective marker");
   });
 
   it("compiles the bearer's own every-model check on a selection as eligibility of the selected unit", () => {
@@ -148,7 +124,9 @@ describe("unit-position models every: compiled shapes", () => {
       ["from your army", "unit-owner", { owner: "friendly" }],
       ["it can embark within that TRANSPORT", "eligibility-permission", { subject: "this-unit", activity: "embark", allow: true }],
     ), text);
-    const within = mechanics.effect.condition.operands[2];
+    // "One ZETA unit from your army" restates the target's side, so it gates nothing (compile-owner-restatement.ts).
+    expect(JSON.stringify(mechanics.effect.condition)).not.toContain('{"type":"matches","parameters":{"filter":{"owner":"friendly"}}}');
+    const within = mechanics.effect.condition.operands.find((operand: { type: string }) => operand.type === "within");
     expect(within).toEqual({
       type: "within",
       parameters: { of: { owner: "friendly", all_of: ["TRANSPORT", "ZETA"] }, range: { inches: 3 }, models: "every" },
@@ -203,12 +181,12 @@ describe("unit-position models every: describer wording", () => {
   const objective = (extra: Record<string, unknown>) => ({ type: "within", parameters: { of: { objective: {} }, range: "objective-control", ...extra } });
 
   it("names every model of the subject for an objective check", () => {
-    expect(describeCondition(objective({ models: "every" }) as any)).toBe("every model in the unit is within range of an objective marker");
-    expect(describeCondition(objective({}) as any)).toBe("the unit is within range of an objective marker");
+    expect(describeCondition(objective({ models: "every" }) as any)).toBe("every model in this unit is within range of an objective marker");
+    expect(describeCondition(objective({}) as any)).toBe("this unit is within range of an objective marker");
   });
 
   it("names every model of the subject for a selected objective marker", () => {
     const selected = { type: "within", parameters: { of: { objective: { selection_var: "marker" } }, range: "objective-control", models: "every" } };
-    expect(describeCondition(selected as any)).toBe("every model in the unit is within range of that objective marker");
+    expect(describeCondition(selected as any)).toBe("every model in this unit is within range of that objective marker");
   });
 });

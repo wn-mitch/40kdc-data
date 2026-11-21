@@ -70,7 +70,7 @@ func TestCanonicalMatchesPredicateRendersInsteadOfFallback(t *testing.T) {
 			"filter":  map[string]any{"all_of": []any{"INFANTRY", "PSYKER"}},
 		},
 	}
-	if got, want := describeCondition(condition), `the unit has the INFANTRY and PSYKER keywords`; got != want {
+	if got, want := describeCondition(condition), `this unit has the INFANTRY and PSYKER keywords`; got != want {
 		t.Fatalf("matches render = %q, want %q", got, want)
 	}
 }
@@ -82,7 +82,7 @@ func TestCanonicalAppliesToPreservesAllFilterPredicates(t *testing.T) {
 		"none_of":    []any{"MONSTER"},
 		"not_all_of": []any{"EPIC HERO", "VEHICLE"},
 	})
-	want := "Applies to: units with INFANTRY and at least one of PSYKER or CHARACTER (excluding MONSTER) (excluding units with all of EPIC HERO, VEHICLE)."
+	want := "Applies to: units with INFANTRY and the PSYKER or CHARACTER keyword (excluding MONSTER units) (excluding units with all of EPIC HERO and VEHICLE)."
 	if got != want {
 		t.Fatalf("applies_to render = %q, want %q", got, want)
 	}
@@ -114,7 +114,7 @@ func TestControlsStructuredComparisonRendersCanonicalScope(t *testing.T) {
 			"compare":   map[string]any{"owner": "enemy", "comparison": "gte"},
 		},
 	}
-	want := "you control 2-3 objectives (excluding home) and the number of objectives (excluding home) you control is at least the number the opponent controls"
+	want := "you control 2-3 objectives (excluding home) and the number of objectives (excluding home) you control is at least the number your opponent controls"
 	if got := describeCondition(condition); got != want {
 		t.Fatalf("controls render = %q, want %q", got, want)
 	}

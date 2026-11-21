@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from wh40kdc.data.attachment_gates import attachment_gates_hold
 from wh40kdc.data.battle_sizes import (
     detachment_cap_for_battle_size,
     enhancement_limit_for_battle_size,
@@ -23,11 +24,20 @@ from wh40kdc.data.battle_sizes import (
 )
 from wh40kdc.data.dataset import Dataset
 from wh40kdc.data.enhancement_eligibility import (
+    equipable_by_non_character,
     meets_enhancement_groups,
     missing_required_abilities,
+    missing_required_wargear,
 )
 from wh40kdc.data.list_keywords import list_building_keyword_changes, with_keyword_changes
 from wh40kdc.data.pricing import host_unit_points, wargear_points
+from wh40kdc.data.roster_allies import (
+    AllyMember,
+    ally_keyword_limit_violations,
+    ally_pool_violations,
+    attribute_allies,
+)
+from wh40kdc.data.roster_chapter import chapter_mismatches
 from wh40kdc.data.roster_warlord import warlord_violations
 
 #: Army-construction violation codes (distinct from per-unit loadout codes).
@@ -38,6 +48,8 @@ ROSTER_VIOLATION_CODES = (
     "enhancement-on-excluded-model",
     "enhancement-keyword-mismatch",
     "enhancement-missing-ability",
+    "enhancement-missing-wargear",
+    "enhancement-bearer-cannot-be-warlord",
     "enhancement-excluded-keyword",
     "enhancement-over-max-targets",
     "leader-attachment-illegal",
@@ -50,6 +62,7 @@ ROSTER_VIOLATION_CODES = (
     "detachment-restriction-required",
     "detachment-restriction-excluded",
     "unit-excluded-from-faction",
+    "unit-chapter-mismatch",
     "no-warlord",
     "multiple-warlords",
     "warlord-not-mandated",
@@ -64,24 +77,37 @@ ROSTER_VIOLATION_CODES = (
     "ally-points-over-limit",
     "ally-cannot-be-warlord",
     "ally-cannot-take-enhancements",
+    "ally-keyword-limit-exceeded",
+    "ally-keyword-limits-exclusive",
+    "ally-battleline-ratio-exceeded",
     "unit-minimum-unmet",
 )
 
 
-def _keyword_set(
+def _unit_keyword_set(
     unit: dict[str, Any],
     army_keywords: list[str],
     army_keyword_set: set[str],
     detachment_ids: list[str],
     keyword_overrides: list[str] | None = None,
+    replaced: bool = False,
 ) -> set[str]:
-    """Return the roster-contextual keyword set used by construction checks."""
-    owned = set(unit.get("keywords") or []) | set(unit.get("faction_keywords") or [])
-    owned.add(unit.get("name"))
+    """Return the roster-contextual keyword set used by construction checks.
+
+    A unit included through an allied rule that replaces Faction keywords
+    (``replaced``) carries the army's Faction keywords instead of its own.
+    """
     faction_keywords = unit.get("faction_keywords") or []
-    if army_keyword_set and all(keyword in army_keyword_set for keyword in faction_keywords):
+    owned = set(unit.get("keywords") or []) | (set() if replaced else set(faction_keywords))
+    owned.add(unit.get("name"))
+    if army_keyword_set and (
+        replaced or all(keyword in army_keyword_set for keyword in faction_keywords)
+    ):
         owned.update(army_keywords)
     for grant in unit.get("conditional_keywords") or []:
+        # A keyword-choice option is the unit's only when the roster takes it (keyword overrides).
+        if grant.get("choice_group") is not None:
+            continue
         required_detachment_id = grant.get("required_detachment_id")
         if required_detachment_id and required_detachment_id not in detachment_ids:
             continue
@@ -159,6 +185,29 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
     army_keyword_set = set(army_keywords)
 
     views = [resolve_unit(u.get("unit_id") or "") for u in spec_units]
+    allies = attribute_allies(dataset, faction_id, detachment_ids, army_keyword_set, views)
+    # Raw records of units whose allied rule replaces their Faction keywords.
+    # Attribution depends only on the resolved unit, so every roster entry of
+    # one record shares it.
+    replaced_raw = {
+        id(views[idx].raw) for idx, rule in allies.items() if rule.get("replaces_faction_keywords")
+    }
+
+    def _keyword_set(
+        unit: dict[str, Any],
+        army_keywords: list[str],
+        army_keyword_set: set[str],
+        detachment_ids: list[str],
+        keyword_overrides: list[str] | None = None,
+    ) -> set[str]:
+        return _unit_keyword_set(
+            unit,
+            army_keywords,
+            army_keyword_set,
+            detachment_ids,
+            keyword_overrides,
+            replaced=id(unit) in replaced_raw,
+        )
 
     def attached_to_keywords(su: dict[str, Any]) -> set[str] | None:
         """The roster keywords of the unit ``su`` attaches to as a leader or support character."""
@@ -225,7 +274,7 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
         if (
             not _is_character(view.raw)
             and "Character" not in overrides
-            and enh.get("upgrade_tag") is not True
+            and not equipable_by_non_character(enh)
         ):
             err(
                 "enhancement-on-non-character",
@@ -241,12 +290,30 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
             overrides,
         )
         # 11e Select Enhancements: EPIC HERO models cannot be given Enhancements
-        # (Upgrades included). Mirror of TS ``enhancement-on-epic-hero``.
-        if view.raw.get("role") == "epic-hero" or "Epic Hero" in kws:
+        # (Upgrades included) unless the enhancement says an Epic Hero may take it.
+        # Mirror of TS ``enhancement-on-epic-hero``.
+        if (view.raw.get("role") == "epic-hero" or "Epic Hero" in kws) and enh.get(
+            "equipable_by_epic_hero"
+        ) is not True:
             err(
                 "enhancement-on-epic-hero",
                 enh["id"],
                 f"{enh['id']} cannot be given to Epic Hero {view.id}",
+                idx,
+            )
+        if enh.get("bearer_cannot_be_warlord") is True and su.get("is_warlord") is True:
+            err(
+                "enhancement-bearer-cannot-be-warlord",
+                enh["id"],
+                f"{view.id} carries {enh['id']} and cannot be the Warlord",
+                idx,
+            )
+        missing_wargear = missing_required_wargear(enh, su.get("counts") or {})
+        if missing_wargear:
+            err(
+                "enhancement-missing-wargear",
+                enh["id"],
+                f"{view.id} lacks the {', '.join(missing_wargear)} {enh['id']} requires",
                 idx,
             )
         # A unit whose every model is ``excluded_from_enhancements`` has no model
@@ -325,9 +392,31 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
             enhancement = (
                 dataset.enhancements.get(su["enhancement_id"]) if su.get("enhancement_id") else None
             )
-            if enhancement is not None:
-                eligible_bodyguards.update(enhancement.get("attachment_bodyguard_ids") or [])
-            if leader_bodyguard_id not in eligible_bodyguards:
+            granted = enhancement is not None and leader_bodyguard_id in (
+                enhancement.get("attachment_bodyguard_ids") or []
+            )
+            if granted:
+                eligible_bodyguards.add(leader_bodyguard_id)
+            # Detachment and shared-keyword gates (Pactbound Zealots' Marks of Chaos) narrow
+            # the eligible set; an enhancement's grant is not gated.
+            leader_keywords = _keyword_set(
+                view.raw,
+                army_keywords,
+                army_keyword_set,
+                detachment_ids,
+                su.get("keyword_overrides") or [],
+            )
+            bodyguard_keywords = attached_to_keywords(su) or set()
+            gated = not granted and not attachment_gates_hold(
+                dataset,
+                view.id,
+                leader_bodyguard_id,
+                present_unit_ids,
+                detachment_ids,
+                leader_keywords.__contains__,
+                bodyguard_keywords.__contains__,
+            )
+            if leader_bodyguard_id not in eligible_bodyguards or gated:
                 err(
                     "leader-attachment-illegal",
                     view.id,
@@ -467,6 +556,32 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                     idx,
                 )
 
+    # --- Chapter cohesion (chapter-locked units the army may not take). --------
+    # Mirror of TS ``unit-chapter-mismatch`` (``roster_chapter.py``).
+    army_raw = faction_view.raw if faction_view else None
+    parent_id = army_raw.get("parent_faction_id") if army_raw else None
+    parent_view = dataset.factions.get(parent_id) if parent_id else None
+    # Units included through an allied rule are judged by that rule, not by chapter.
+    unit_keywords = [
+        view.raw.get("faction_keywords") if view is not None and idx not in allies else None
+        for idx, view in enumerate(views)
+    ]
+    children = [
+        f.raw
+        for f in dataset.factions.all
+        if faction_id and f.raw.get("parent_faction_id") == faction_id
+    ]
+    for index, chapter_keywords in chapter_mismatches(
+        army_raw, parent_view.raw if parent_view else None, children, unit_keywords
+    ):
+        view = views[index]
+        err(
+            "unit-chapter-mismatch",
+            view.id,
+            f"{view.id} belongs to {', '.join(chapter_keywords)}, not {faction_id}",
+            index,
+        )
+
     # --- Warlord present (exactly one). ---------------------------------------
     warlords = sum(1 for su in spec_units if su.get("is_warlord") is True)
     if warlords == 0:
@@ -572,7 +687,14 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
 
     # --- Enhancement limit (incursion 2, strike-force 4), distinct choices. ---
     enhancement_limit = enhancement_limit_for_battle_size(spec.get("battle_size"))
-    chosen = {su.get("enhancement_id") for su in spec_units if su.get("enhancement_id")}
+    # An enhancement whose record sets ``counts_toward_enhancement_limit: false`` is not counted.
+    chosen = {
+        enhancement_id
+        for su in spec_units
+        if (enhancement_id := su.get("enhancement_id"))
+        and (dataset.enhancements.get(enhancement_id) or {}).get("counts_toward_enhancement_limit")
+        is not False
+    }
     if enhancement_limit is not None and len(chosen) > enhancement_limit:
         err(
             "enhancement-limit-exceeded",
@@ -619,10 +741,17 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                 f"army includes {count} of {id_}, over the limit of {cap}",
             )
 
-    # --- Exclusive allied pools (the army faction's own pool-only units). -----
-    # Mirror of TS: the rule must be offered, and its points cap and
-    # Warlord/Enhancement locks apply; a selected detachment's mandatory or
-    # granted Warlord datasheets lift the Warlord lock.
+    # --- Allied pools: the offer gate of exclusive pools, then every pool's caps and locks.
+    # Mirror of TS: an exclusive pool's units must come through an offered rule
+    # (``allies_for``); foreign units count against the rule ``attribute_allies``
+    # assigns them. Each pool's points cap, Warlord/Enhancement locks and
+    # Battleline ratio apply to its members (a selected detachment's mandatory or
+    # granted Warlord datasheets lift the Warlord lock); keyword caps apply to the
+    # attributed pools.
+    offered = (
+        {r["id"] for r in dataset.allies_for(faction_id, detachment_ids)} if faction_id else set()
+    )
+    pools: list[tuple[dict[str, Any], list[int]]] = []
     for rule in dataset.allied_rules.all if faction_id else []:
         if not rule.get("exclusive") or rule.get("source_faction_id") != faction_id:
             continue
@@ -636,11 +765,7 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
         ]
         if not members:
             continue
-        army_any = rule.get("army_keywords_any") or []
-        det_any = rule.get("detachment_ids") or []
-        army_gate = not army_any or any(k in army_keyword_set for k in army_any)
-        detachment_gate = not det_any or any(d in detachment_ids for d in det_any)
-        if not (army_gate and detachment_gate):
+        if rule["id"] not in offered:
             for idx in members:
                 uid = spec_units[idx].get("unit_id") or ""
                 err(
@@ -649,40 +774,45 @@ def validate_roster_core(spec: dict[str, Any], dataset: Dataset) -> dict[str, An
                     f"{uid} is only available through {rule['id']}, which this army does not offer",
                     idx,
                 )
-        cap_points = next(
-            (
-                p["max_points"]
-                for p in rule.get("points_limits") or []
-                if p.get("battle_size") == spec.get("battle_size")
-            ),
-            None,
+        pools.append((rule, members))
+    by_rule: dict[str, tuple[dict[str, Any], list[int]]] = {}
+    for idx, rule in sorted(allies.items()):
+        by_rule.setdefault(rule["id"], (rule, []))[1].append(idx)
+    pools.extend(by_rule.values())
+
+    def _ally_member(idx: int) -> AllyMember:
+        su = spec_units[idx]
+        raw = views[idx].raw
+        kws = _keyword_set(
+            raw,
+            army_keywords,
+            army_keyword_set,
+            detachment_ids,
+            su.get("keyword_overrides") or [],
         )
-        if cap_points is not None:
-            spent = sum(unit_costs[idx] for idx in members)
-            if spent > cap_points:
-                err(
-                    "ally-points-over-limit",
-                    rule["id"],
-                    f"{rule['id']} units total {spent}, over the {cap_points} limit",
-                )
-        for idx in members:
-            su = spec_units[idx]
-            uid = su.get("unit_id") or ""
-            locked = rule.get("cannot_be_warlord") and uid not in detachment_warlords
-            if locked and su.get("is_warlord") is True:
-                err(
-                    "ally-cannot-be-warlord",
-                    uid,
-                    f"{uid} cannot be Warlord under {rule['id']}",
-                    idx,
-                )
-            if rule.get("cannot_take_enhancements") and su.get("enhancement_id"):
-                err(
-                    "ally-cannot-take-enhancements",
-                    uid,
-                    f"{uid} cannot take an Enhancement under {rule['id']}",
-                    idx,
-                )
+        return AllyMember(
+            unit_id=su.get("unit_id") or "",
+            unit_index=idx,
+            cost=unit_costs[idx],
+            is_warlord=su.get("is_warlord") is True,
+            has_enhancement=bool(su.get("enhancement_id")),
+            battleline=raw.get("role") == "battleline"
+            or any(k.lower() == "battleline" for k in kws),
+            keywords=kws,
+        )
+
+    for rule, idxs in pools:
+        ally_members = [_ally_member(idx) for idx in idxs]
+        for code, id_, message, unit_index in ally_pool_violations(
+            rule, ally_members, spec.get("battle_size"), detachment_warlords
+        ):
+            err(code, id_, message, unit_index)
+        if rule.get("exclusive"):
+            continue
+        for code, id_, message in ally_keyword_limit_violations(
+            rule, [m.keywords for m in ally_members], spec.get("battle_size")
+        ):
+            err(code, id_, message)
 
     # --- Unit minimums (e.g. Houndpack: 3+ WAR DOG units). --------------------
     for d in detachments:

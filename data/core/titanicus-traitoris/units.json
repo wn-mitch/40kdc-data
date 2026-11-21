@@ -1,0 +1,317 @@
+[
+  {
+    "id": "chaos-reaver-titan",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8f87372e-5a06-47dd-a98f-68061be3f51e"
+      }
+    ],
+    "name": "Chaos Reaver Titan",
+    "faction_id": "titanicus-traitoris",
+    "profiles": [
+      {
+        "name": "Chaos Reaver Titan",
+        "M": 12,
+        "T": 14,
+        "W": 60,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 20
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 2200
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Walker",
+      "Titanic",
+      "Towering",
+      "Chaos",
+      "Reaver Titan",
+      "Frame",
+      "Chaos Reaver Titan"
+    ],
+    "faction_keywords": [
+      "Titanicus Traitoris"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "reaver-gatling-blaster",
+      "reaver-laser-blaster",
+      "reaver-volcano-cannon",
+      "reaver-melta-cannon",
+      "reaver-power-fist",
+      "reaver-apocalypse-launcher",
+      "reaver-feet"
+    ],
+    "ability_ids": [
+      "god-machine-titanicus-traitoris",
+      "striding-colossus-titanicus-traitoris",
+      "super-heavy-walker-imperial-knights",
+      {
+        "id": "damaged",
+        "value": 20
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 10
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6+6"
+      }
+    ]
+  },
+  {
+    "id": "chaos-warbringer-nemesis-titan",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "232ffc10-a301-4e38-9f71-93682f54dcc8"
+      }
+    ],
+    "name": "Chaos Warbringer Nemesis Titan",
+    "faction_id": "titanicus-traitoris",
+    "profiles": [
+      {
+        "name": "Chaos Warbringer Nemesis Titan",
+        "M": 12,
+        "T": 14,
+        "W": 80,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 20
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 2600
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Walker",
+      "Titanic",
+      "Towering",
+      "Chaos",
+      "Warbringer Nemesis Titan",
+      "Frame",
+      "Chaos Warbringer Nemesis Titan"
+    ],
+    "faction_keywords": [
+      "Titanicus Traitoris"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "nemesis-quake-cannon",
+      "nemesis-volcano-cannon",
+      "reaver-gatling-blaster",
+      "reaver-laser-blaster",
+      "reaver-volcano-cannon",
+      "reaver-melta-cannon",
+      "anvillus-defence-battery",
+      "ardex-defensor-mauler",
+      "nemesis-feet"
+    ],
+    "ability_ids": [
+      "striding-colossus-titanicus-traitoris",
+      "super-heavy-walker-imperial-knights",
+      "titanic-fire-support-titanicus-traitoris",
+      {
+        "id": "damaged",
+        "value": 26
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 10
+      },
+      {
+        "id": "deadly-demise",
+        "value": "D6+6"
+      }
+    ]
+  },
+  {
+    "id": "chaos-warhound-titan",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "89a9e228-43e5-4741-8dbe-37b5b65ab71f"
+      }
+    ],
+    "name": "Chaos Warhound Titan",
+    "faction_id": "titanicus-traitoris",
+    "profiles": [
+      {
+        "name": "Chaos Warhound Titan",
+        "M": 14,
+        "T": 13,
+        "W": 40,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 16
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 1100
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Walker",
+      "Titanic",
+      "Towering",
+      "Chaos",
+      "Warhound Titan",
+      "Frame",
+      "Chaos Warhound Titan"
+    ],
+    "faction_keywords": [
+      "Titanicus Traitoris"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "warhound-turbo-laser-destructor",
+      "warhound-plasma-blastgun",
+      "warhound-vulcan-mega-bolter",
+      "warhound-inferno-gun",
+      "warhound-feet"
+    ],
+    "ability_ids": [
+      "flank-speed-titanicus-traitoris",
+      "super-heavy-walker-imperial-knights",
+      {
+        "id": "damaged",
+        "value": 13
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 8
+      },
+      {
+        "id": "deadly-demise",
+        "value": "2D6"
+      },
+      "striding-colossus-chaos-warhound-titan-titanicus-traitoris"
+    ]
+  },
+  {
+    "id": "chaos-warlord-titan",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "afbb101d-c97e-4fa7-b194-8e2733f8883c"
+      }
+    ],
+    "name": "Chaos Warlord Titan",
+    "faction_id": "titanicus-traitoris",
+    "profiles": [
+      {
+        "name": "Chaos Warlord Titan",
+        "M": 10,
+        "T": 16,
+        "W": 100,
+        "Sv": 2,
+        "invuln_sv": null,
+        "Ld": 6,
+        "OC": 30
+      }
+    ],
+    "points": [
+      {
+        "models": 1,
+        "cost": 3500
+      }
+    ],
+    "keywords": [
+      "Vehicle",
+      "Walker",
+      "Titanic",
+      "Towering",
+      "Chaos",
+      "Warlord Titan",
+      "Frame",
+      "Chaos Warlord Titan"
+    ],
+    "faction_keywords": [
+      "Titanicus Traitoris"
+    ],
+    "model_count": {
+      "min": 1,
+      "max": 1
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_legend": false,
+    "points_provisional": false,
+    "weapon_ids": [
+      "apocalypse-launcher",
+      "laser-blaster",
+      "sunfury-plasma-annihilator",
+      "arioch-power-claw",
+      "macro-gatling-blaster",
+      "mori-quake-cannon",
+      "belicosa-volcano-cannon",
+      "ardex-defensor-lascannon",
+      "ardex-defensor-mauler",
+      "warlord-feet"
+    ],
+    "ability_ids": [
+      "super-heavy-walker-imperial-knights",
+      "wrath-of-the-omnissiah-titanicus-traitoris",
+      {
+        "id": "damaged",
+        "value": 33
+      },
+      {
+        "id": "damaged-objective-control",
+        "value": 15
+      },
+      {
+        "id": "deadly-demise",
+        "value": "2D6+6"
+      },
+      "striding-colossus-chaos-warlord-titan-titanicus-traitoris"
+    ]
+  }
+]

@@ -571,20 +571,39 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
-          "subject": "defender",
-          "filter": {
-            "designated": "SPOTTED"
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attack-is",
+            "parameters": {
+              "attack_type": "ranged"
+            }
+          },
+          {
+            "type": "guided",
+            "parameters": {
+              "subject": "attacker"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "designated": "spotted"
+              }
+            }
           }
-        }
+        ]
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": {
+              "owner": "friendly"
+            },
             "modifier": {
               "roll": "hit",
               "subset": "ones"
@@ -592,7 +611,9 @@
           },
           {
             "type": "re-roll",
-            "target": "this-unit",
+            "target": {
+              "owner": "friendly"
+            },
             "modifier": {
               "roll": "wound",
               "subset": "ones"
@@ -611,23 +632,12 @@
     "behavior": "reactive",
     "community_notes": "auto-generated, partial",
     "faction_id": "tau-empire",
-    "trigger": [
-      {
-        "event": "designation-changed",
-        "filter": {
-          "tag": "observer"
-        }
-      },
-      {
-        "event": "attacks-resolved",
-        "subject": {
-          "owner": "friendly"
-        },
-        "filter": {
-          "kind": "shoot"
-        }
+    "trigger": {
+      "event": "designation-changed",
+      "filter": {
+        "tag": "observer"
       }
-    ]
+    }
   },
   {
     "ability_id": "homing-beacon-tau-empire",
@@ -794,7 +804,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "tau-empire",
     "trigger": {
       "event": "battle-started"
@@ -851,7 +860,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
-            "designated": "SPOTTED"
+            "designated": "spotted"
           }
         }
       },
@@ -2508,28 +2517,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-unit",
-              "filter": {
-                "has_ability": [
-                  "my-will-be-done-necrons"
-                ]
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "my-will-be-done-necrons"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "cost-modifier",
@@ -2967,7 +2963,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "usage": {
       "frequency": "n-per-battle",
       "count": 2,
@@ -3648,7 +3643,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "tau-empire"
   },
   {
@@ -4105,7 +4099,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
-            "designated": "SPOTTED"
+            "designated": "spotted"
           }
         }
       },
@@ -4232,28 +4226,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-unit",
-              "filter": {
-                "has_ability": [
-                  "war-leader-tau-empire"
-                ]
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "war-leader-tau-empire"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "cost-modifier",
@@ -4789,65 +4770,280 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "11787154416c929b478342d9fae8bfa749c02d597a8165496d3622ec08512f5f",
     "version": "2025-q3",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "SPOTTED"
-              },
-              "subject": "defender"
-            }
-          }
-        ]
+        "type": "army-faction",
+        "parameters": {
+          "faction": "tau-empire"
+        }
       },
       "effect": {
         "type": "sequence",
         "steps": [
           {
-            "type": "roll-modifier",
-            "target": "this-unit",
-            "modifier": {
-              "roll": "hit",
-              "operation": "add",
-              "value": 1
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "friendly"
+              },
+              "count": {
+                "min": 1
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "has_ability": [
+                      "for-the-greater-good-tau-empire"
+                    ]
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "observer"
+              }
             }
           },
           {
-            "type": "weapon-ability-grant",
-            "target": "this-unit",
-            "modifier": {
-              "keywords": [
-                {
-                  "keyword_id": "ignores-cover"
-                }
-              ]
-            }
+            "type": "ability-part",
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "shooting"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "your-turn"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "for-each-unit",
+                    "selector": {
+                      "filter": {
+                        "owner": "friendly",
+                        "designated": "observer"
+                      }
+                    },
+                    "effect": {
+                      "type": "select-units",
+                      "selector": {
+                        "filter": {
+                          "owner": "enemy",
+                          "not_designated": "spotted"
+                        },
+                        "count": {
+                          "min": 1,
+                          "max": 1
+                        },
+                        "eligibility": {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "recipient"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "effect": {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "and",
+                          "operands": [
+                            {
+                              "operator": "not",
+                              "operands": [
+                                {
+                                  "type": "happened",
+                                  "parameters": {
+                                    "subject": "recipient",
+                                    "event": "selected",
+                                    "filter": {
+                                      "to": "shoot"
+                                    },
+                                    "window": "phase"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eligible",
+                              "parameters": {
+                                "subject": "recipient",
+                                "to": "shoot"
+                              }
+                            },
+                            {
+                              "operator": "not",
+                              "operands": [
+                                {
+                                  "type": "matches",
+                                  "parameters": {
+                                    "subject": "recipient",
+                                    "filter": {
+                                      "all_of": [
+                                        "FORTIFICATION"
+                                      ]
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "operator": "not",
+                              "operands": [
+                                {
+                                  "type": "matches",
+                                  "parameters": {
+                                    "subject": "recipient",
+                                    "filter": {
+                                      "state": "battle-shocked"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "designate",
+                          "target": "selected-unit",
+                          "modifier": {
+                            "tag": "spotted",
+                            "by": "recipient",
+                            "clears_on": "phase"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "guided",
+                          "parameters": {
+                            "subject": "attacker"
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "designated": "spotted"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "stat-modifier",
+                      "target": {
+                        "owner": "friendly",
+                        "level": "model"
+                      },
+                      "modifier": {
+                        "stat": "BS",
+                        "operation": "improve",
+                        "value": 1
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "guided",
+                          "parameters": {
+                            "subject": "attacker"
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "designated": "spotted"
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "designated": "spotted",
+                              "designated_by": {
+                                "owner": "friendly",
+                                "all_of": [
+                                  "MARKERLIGHT"
+                                ],
+                                "designated": "observer"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "weapon-ability-grant",
+                      "target": {
+                        "owner": "friendly",
+                        "level": "model"
+                      },
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "ignores-cover"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "duration": "phase"
           }
         ]
       }
     },
     "scope": {
-      "duration": "phase"
+      "duration": "permanent"
     },
     "faction_id": "tau-empire",
     "ability_type": "faction",
-    "behavior": "activated",
-    "community_notes": "Assumes targets are SPOTTED (observer unit sacrifices shooting). +1 BS is the primary offensive benefit; Ignores Cover is kept for completeness but has no effect in the current damage engine (cover not simulated).",
+    "behavior": "reactive",
+    "community_notes": "[APPROX] Spotted units are marked at the start of your Shooting phase; the rule lets each Observer spot at any point during the phase. Ignores Cover has no effect in the current damage engine (cover not simulated).",
     "unit_ids": [
       "ax-1-0-tiger-shark",
       "breacher-team",
@@ -4879,7 +5075,28 @@
       "taunar-supremacy-armour",
       "the-twin-lance",
       "tiger-shark"
-    ]
+    ],
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    }
   },
   {
     "ability_id": "coordinated-strike-tau-empire",
@@ -4907,7 +5124,7 @@
             "parameters": {
               "subject": "defender",
               "filter": {
-                "designated": "SPOTTED"
+                "designated": "spotted"
               }
             }
           }
@@ -4915,7 +5132,7 @@
       },
       "effect": {
         "type": "re-roll",
-        "target": "this-unit",
+        "target": "this-model",
         "modifier": {
           "roll": "hit",
           "subset": "ones"
@@ -4929,15 +5146,9 @@
       "taunar-supremacy-armour"
     ],
     "ability_type": "unit",
-    "behavior": "reactive",
+    "behavior": "passive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "tau-empire",
-    "trigger": {
-      "event": "attacks-resolved",
-      "filter": {
-        "kind": "attack"
-      }
-    }
+    "faction_id": "tau-empire"
   },
   {
     "ability_id": "expert-fieldcraft-tau-empire",
@@ -5700,7 +5911,7 @@
                   "parameters": {
                     "subject": "defender",
                     "filter": {
-                      "designated": "SPOTTED"
+                      "designated": "spotted"
                     }
                   }
                 }
@@ -5746,7 +5957,7 @@
                   "parameters": {
                     "subject": "defender",
                     "filter": {
-                      "designated": "SPOTTED"
+                      "designated": "spotted"
                     }
                   }
                 }
@@ -7631,7 +7842,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
-            "designated": "SPOTTED"
+            "designated": "spotted"
           }
         }
       },
@@ -8236,7 +8447,7 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
@@ -8726,7 +8937,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "01df90f93ca7a1f8b9aaaf32bbe78819ed1abb9c9c5edd620e1e0737e1af84ca",
     "version": "2025-q3",
@@ -8735,64 +8946,63 @@
     "faction_id": "tau-empire",
     "detachment_id": "montka",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "selected",
-              "subject": "this-unit",
-              "filter": {
-                "to": "observe"
-              },
-              "window": "phase"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "SPOTTED"
-              },
-              "subject": "defender"
-            }
-          }
-        ]
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
-        "type": "weapon-ability-grant",
-        "target": {
-          "owner": "friendly",
-          "designated": "GUIDED"
-        },
-        "modifier": {
-          "weapons": {
-            "type": "ranged"
-          },
-          "keywords": [
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
             {
-              "keyword_id": "sustained-hits",
+              "type": "guided",
               "parameters": {
-                "value": 1
+                "subject": "recipient"
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "designated": "spotted",
+                  "designated_by": "this-unit"
+                }
               }
             }
           ]
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": {
+            "owner": "friendly",
+            "level": "model"
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "sustained-hits",
+                "parameters": {
+                  "value": 1
+                }
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
@@ -8805,7 +9015,13 @@
         "type": "combos-with"
       }
     ],
-    "community_notes": "[APPROX] While the bearer is leading a unit, each time that unit is an Observer, ranged weapons of a Guided unit gain [SUSTAINED HITS 1] while targeting their Spotted unit. Encoded as an opaque grant. Kroot Shaper models cannot take this."
+    "community_notes": "[APPROX] While the bearer is leading a unit, each time that unit is an Observer, ranged weapons of a Guided unit gain [SUSTAINED HITS 1] while targeting their Spotted unit. Encoded as an opaque grant. Kroot Shaper models cannot take this.",
+    "trigger": {
+      "event": "designation-changed",
+      "filter": {
+        "tag": "observer"
+      }
+    }
   },
   {
     "ability_id": "kroothawk-flock-kroot-hunting-pack-tau-empire",
@@ -9520,7 +9736,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "6f29cfb93eb31e53f495b48d288d21d7dd91d35261d2fc765f149ed9d333e14c",
     "version": "2025-q3",
@@ -9529,61 +9745,60 @@
     "faction_id": "tau-empire",
     "detachment_id": "kauyon",
     "ability_type": "enhancement",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-model",
-              "role": "leading"
-            }
-          },
-          {
-            "type": "happened",
-            "parameters": {
-              "event": "selected",
-              "subject": "this-unit",
-              "filter": {
-                "to": "observe"
-              },
-              "window": "phase"
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "designated": "SPOTTED"
-              },
-              "subject": "defender"
-            }
-          }
-        ]
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading"
+        }
       },
       "effect": {
-        "type": "weapon-ability-grant",
-        "target": {
-          "owner": "friendly",
-          "designated": "GUIDED"
-        },
-        "modifier": {
-          "weapons": {
-            "type": "ranged"
-          },
-          "keywords": [
+        "type": "conditional",
+        "condition": {
+          "operator": "and",
+          "operands": [
             {
-              "keyword_id": "lethal-hits"
+              "type": "guided",
+              "parameters": {
+                "subject": "recipient"
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "defender",
+                "filter": {
+                  "designated": "spotted",
+                  "designated_by": "this-unit"
+                }
+              }
             }
           ]
+        },
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": {
+            "owner": "friendly",
+            "level": "model"
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "lethal-hits"
+              }
+            ],
+            "weapons": {
+              "type": "ranged"
+            }
+          }
         }
       }
     },
     "scope": {
-      "duration": "battle"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [
@@ -9596,7 +9811,13 @@
         "type": "combos-with"
       }
     ],
-    "community_notes": "[APPROX] While the bearer is leading a unit, each time that unit is an Observer, ranged weapons of a Guided unit gain [LETHAL HITS] while targeting their Spotted unit. Encoded as an opaque grant. Kroot Shaper models cannot take this."
+    "community_notes": "[APPROX] While the bearer is leading a unit, each time that unit is an Observer, ranged weapons of a Guided unit gain [LETHAL HITS] while targeting their Spotted unit. Encoded as an opaque grant. Kroot Shaper models cannot take this.",
+    "trigger": {
+      "event": "designation-changed",
+      "filter": {
+        "tag": "observer"
+      }
+    }
   },
   {
     "ability_id": "student-of-kauyon-auxiliary-cadre-tau-empire",
@@ -10078,7 +10299,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
-            "designated": "SPOTTED"
+            "designated": "spotted"
           }
         }
       },
@@ -10319,9 +10540,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "commander-cloudspear",
       "sudden-dawn-cadre-breacher-team",
@@ -10332,7 +10552,267 @@
     "detachment_id": "sudden-dawn-cadre",
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "army-faction",
+        "parameters": {
+          "faction": "tau-empire"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "friendly"
+              },
+              "count": {
+                "min": 1
+              },
+              "eligibility": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "has_ability": [
+                      "for-the-greater-good-sudden-dawn-cadre-tau-empire"
+                    ]
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "designate",
+              "target": "selected-unit",
+              "modifier": {
+                "tag": "observer"
+              }
+            }
+          },
+          {
+            "type": "ability-part",
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "shooting"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "your-turn"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "for-each-unit",
+                    "selector": {
+                      "filter": {
+                        "owner": "friendly",
+                        "designated": "observer"
+                      }
+                    },
+                    "effect": {
+                      "type": "select-units",
+                      "selector": {
+                        "filter": {
+                          "owner": "enemy",
+                          "not_designated": "spotted"
+                        },
+                        "count": {
+                          "min": 1,
+                          "max": 1
+                        },
+                        "eligibility": {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "selected-unit",
+                            "filter": {
+                              "visible": {
+                                "to": "recipient"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "effect": {
+                        "type": "conditional",
+                        "condition": {
+                          "operator": "and",
+                          "operands": [
+                            {
+                              "operator": "not",
+                              "operands": [
+                                {
+                                  "type": "happened",
+                                  "parameters": {
+                                    "subject": "recipient",
+                                    "event": "selected",
+                                    "filter": {
+                                      "to": "shoot"
+                                    },
+                                    "window": "phase"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eligible",
+                              "parameters": {
+                                "subject": "recipient",
+                                "to": "shoot"
+                              }
+                            },
+                            {
+                              "operator": "not",
+                              "operands": [
+                                {
+                                  "type": "matches",
+                                  "parameters": {
+                                    "subject": "recipient",
+                                    "filter": {
+                                      "all_of": [
+                                        "FORTIFICATION"
+                                      ]
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "operator": "not",
+                              "operands": [
+                                {
+                                  "type": "matches",
+                                  "parameters": {
+                                    "subject": "recipient",
+                                    "filter": {
+                                      "state": "battle-shocked"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "effect": {
+                          "type": "designate",
+                          "target": "selected-unit",
+                          "modifier": {
+                            "tag": "spotted",
+                            "by": "recipient",
+                            "clears_on": "phase"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "guided",
+                          "parameters": {
+                            "subject": "attacker"
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "designated": "spotted"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "stat-modifier",
+                      "target": {
+                        "owner": "friendly",
+                        "level": "model"
+                      },
+                      "modifier": {
+                        "stat": "BS",
+                        "operation": "improve",
+                        "value": 1
+                      }
+                    }
+                  },
+                  {
+                    "type": "conditional",
+                    "condition": {
+                      "operator": "and",
+                      "operands": [
+                        {
+                          "type": "guided",
+                          "parameters": {
+                            "subject": "attacker"
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "designated": "spotted"
+                            }
+                          }
+                        },
+                        {
+                          "type": "matches",
+                          "parameters": {
+                            "subject": "defender",
+                            "filter": {
+                              "designated": "spotted",
+                              "designated_by": {
+                                "owner": "friendly",
+                                "all_of": [
+                                  "MARKERLIGHT"
+                                ],
+                                "designated": "observer"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "effect": {
+                      "type": "weapon-ability-grant",
+                      "target": {
+                        "owner": "friendly",
+                        "level": "model"
+                      },
+                      "modifier": {
+                        "keywords": [
+                          {
+                            "keyword_id": "ignores-cover"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "duration": "phase"
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
@@ -10342,7 +10822,30 @@
         "ability_ref": "for-the-greater-good-tau-empire",
         "type": "replaces"
       }
-    ]
+    ],
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "11787154416c929b478342d9fae8bfa749c02d597a8165496d3622ec08512f5f"
   },
   {
     "ability_id": "grav-inhibitor-drone-sudden-dawn-cadre-pathfinder-team-tau-empire",

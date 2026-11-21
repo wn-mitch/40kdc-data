@@ -3412,7 +3412,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-daemons",
     "trigger": {
       "event": "phase-started",
@@ -3784,7 +3783,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-daemons",
     "trigger": {
       "event": "attacks-resolved",
@@ -4955,7 +4953,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-daemons",
     "trigger": {
       "event": "phase-started",
@@ -5906,7 +5903,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-daemons",
     "trigger": [
       {
@@ -9203,19 +9199,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "shadow-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "set-up",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "to": "strategic-reserves",
+            "from": "battlefield",
+            "mandatory": true
+          }
+        },
+        {
+          "type": "set-up",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "to": "strategic-reserves",
+            "from": "battlefield",
+            "mandatory": true
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "fight"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "13f9581582bf51703aa4ba16392e5222283292761c442ce51f25ff8ec9558a06"
   },
   {
     "ability_id": "blood-begets-skulls-blood-legion-chaos-daemons",
@@ -9299,19 +9340,128 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "legion-of-excess",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "engaged_with": "this-unit"
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "all_of": [
+                        "MONSTER"
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1,
+                "per": "success",
+                "roll": {
+                  "dice": 1,
+                  "threshold": 4,
+                  "for_each": {
+                    "filter": {
+                      "owner": "friendly",
+                      "level": "model",
+                      "member_of": "this-unit"
+                    },
+                    "eligibility": {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "engaged_with": "selected-unit"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "MONSTER"
+                  ]
+                }
+              }
+            },
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1,
+                "per": "success",
+                "roll": {
+                  "dice": 6,
+                  "threshold": 4
+                }
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "LEGIONES DAEMONICA",
+          "SLAANESH"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "charge"
+        ]
+      }
+    },
+    "source_digest": "11ee35d78ace3cd5b13297f7682716a9479b35363c8273d385a5f56484755910"
   },
   {
     "ability_id": "channelled-wrath-shadow-legion-chaos-daemons",
@@ -9849,19 +9999,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "shadow-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "weapon-ability-grant",
+          "target": {
+            "stratagem_target": "first"
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
+          }
+        },
+        {
+          "type": "weapon-ability-grant",
+          "target": {
+            "stratagem_target": "second"
+          },
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "ignores-cover"
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "79075c3fbc17e83fed73fed0033f2f8dbfab98e83bd24a440bc38f91c5a96004"
   },
   {
     "ability_id": "fade-to-darkness-shadow-legion-chaos-daemons",
@@ -10573,19 +10752,80 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "scintillating-legion",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "visible": {
+                  "to": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "LEGIONES DAEMONICA",
+                      "TZEENTCH"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "recipient",
+            "modifier": {
+              "stat": "detection-range",
+              "operation": "add",
+              "value": 9
+            }
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-this-unit-has-shot"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "to": "shoot"
+      }
+    },
+    "source_digest": "92ddd29098aa946f6ca365c5db2f557261b526430346c3f70b3b495bc5312e0d"
   },
   {
     "ability_id": "leaping-shadows-shadow-legion-chaos-daemons",
@@ -11893,7 +12133,8 @@
               "owner": "friendly"
             },
             "modifier": {
-              "move_type": "ingress"
+              "move_type": "ingress",
+              "mandatory": true
             }
           }
         }

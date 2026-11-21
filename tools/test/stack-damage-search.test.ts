@@ -7,8 +7,9 @@ import { parseMatrixConfig } from "../src/stack-damage/config.js";
 import { exhaustiveLevers, exhaustiveLoadout } from "../src/stack-damage/exhaustive.js";
 import { resolveFactionContext } from "../src/stack-damage/factions.js";
 import { searchLevers, type LeverSpace, type SearchLever } from "../src/stack-damage/lever-search.js";
-import { countsKey, MFM_EXHAUSTIVE_LOADOUTS, searchLoadout, type LoadoutSpace, type MfmLoadouts } from "../src/stack-damage/loadout-search.js";
-import { damageScoringSession, legalDetachmentSpec } from "../src/stack-damage/search.js";
+import { countsKey, MFM_EXHAUSTIVE_LOADOUTS, mfmCandidates, searchLoadout, type LoadoutSpace, type MfmLoadouts } from "../src/stack-damage/loadout-search.js";
+import { phaseScoredItem } from "../src/stack-damage/weapon-grants.js";
+import { damageScoringSession, deepOptimise, detachmentCombos, emptySpec, legalDetachmentSpec } from "../src/stack-damage/search.js";
 
 type Scored = { total: number; selected: string[] };
 
@@ -121,6 +122,54 @@ describe("stack-damage search against the exhaustive oracle", () => {
     expect(best.spec.selectedLeverIds).not.toContain("dark-pacts-chaos-space-marines?0");
   });
 
+  it("finds the exhaustive best of all 31k Legionaries loadouts by searching their melee candidates", () => {
+    const faction = resolveFactionContext(dataset, "chaos-space-marines");
+    const target = resolveTarget(dataset, dataset.targetProfiles.get("meq-intercessors")!)!;
+    const config = parseMatrixConfig(
+      { HC_FACTIONS: "chaos-space-marines", HC_TARGETS: "meq-intercessors", HC_PHASES: "fight", HC_OUTPUT: "search-oracle.json" },
+      { factionIds: new Set(["chaos-space-marines"]), targetIds: ["meq-intercessors"] },
+    );
+    const session = damageScoringSession({ dataset, config, faction, target, phase: "fight" });
+    const unit = faction.units.find((candidate) => candidate.id === "legionaries")!;
+    const spec = { factionId: "chaos-space-marines", members: [{ unit, role: "bodyguard" as const }], detachmentIds: [], selectedLeverIds: [], detachmentIssues: [] };
+    const space = session.loadoutSpace(unit, session.defensiveBuffs, session.state.contextFor(spec, spec.members[0]));
+    expect(space.scaffold.mfm!.loadouts.length).toBeGreaterThan(30_000);
+    expect(space.scaffold.mfmCandidates!.length).toBeLessThanOrEqual(MFM_EXHAUSTIVE_LOADOUTS);
+    expect(searchLoadout(space).total).toBeCloseTo(exhaustiveLoadout(space).total, 9);
+  });
+
+  it("skips detachments idle alone without losing any combination's best", () => {
+    const faction = resolveFactionContext(dataset, "adeptus-custodes");
+    const target = resolveTarget(dataset, dataset.targetProfiles.get("questoris-knight")!)!;
+    const config = parseMatrixConfig(
+      { HC_FACTIONS: "adeptus-custodes", HC_TARGETS: "questoris-knight", HC_PHASES: "fight", HC_OUTPUT: "search-oracle.json" },
+      { factionIds: new Set(["adeptus-custodes"]), targetIds: ["questoris-knight"] },
+    );
+    const session = damageScoringSession({ dataset, config, faction, target, phase: "fight" });
+    const detachments = faction.lineage.flatMap((id) => dataset.detachments.byFaction(id)).sort((left, right) => left.id.localeCompare(right.id));
+    const combinations = detachmentCombos(detachments, config);
+    expect(combinations.length).toBeGreaterThan(100);
+    for (const unitId of ["custodian-guard-sodality", "allarus-custodians", "custodian-wardens"]) {
+      const members = [{ unit: faction.units.find((candidate) => candidate.id === unitId)!, role: "bodyguard" as const }];
+      let full = session.optimiseLevers(emptySpec("adeptus-custodes", members)).total;
+      for (const combination of combinations.filter((candidate) => candidate.length > 0)) {
+        const spec = legalDetachmentSpec(session, "adeptus-custodes", members, combination);
+        if (spec) full = Math.max(full, session.optimiseLevers(spec).total);
+      }
+      expect(deepOptimise(session, "adeptus-custodes", members, combinations).total).toBeCloseTo(full, 9);
+    }
+  });
+
+  it("keeps only weapons and wargear that can score in the phase", () => {
+    const unit = dataset.units.getInFaction("legionaries", "chaos-space-marines")!.raw;
+    const shooting = phaseScoredItem(dataset, unit, "shooting");
+    const fight = phaseScoredItem(dataset, unit, "fight");
+    expect([shooting("astartes-chainsword"), fight("astartes-chainsword")]).toEqual([false, true]);
+    expect([shooting("boltgun-legionaries"), fight("boltgun-legionaries")]).toEqual([true, false]);
+    // Wargear stays in both phases: a rule may read it.
+    expect([shooting("chaos-icon"), fight("chaos-icon")]).toEqual([true, true]);
+  });
+
   it("reaches Unshackled Wrath's combined option and the optimal loadout", () => {
     const { session, spec } = cell("adeptus-mechanicus", "geq-guardsmen", "skitarii-rangers", "eradication-cohort");
     const best = session.optimiseLevers(spec);
@@ -171,5 +220,34 @@ describe("loadout search under MFM rules", () => {
     const best = searchLoadout(space);
     expect(best.counts.get("plasma-gun")).toBe(10);
     expect(best.total).toBeCloseTo(exhaustiveLoadout(space).total, 9);
+  });
+});
+
+describe("MFM loadout candidates", () => {
+  const scores = (id: string) => id !== "chainsword";
+  const group = (count: number, ...weapons: string[]) => ({ model_name: "Legionary", count, weapons: weapons.map((id) => ({ id, count: 1 })) });
+  const loadout = (groups: ReturnType<typeof group>[]) => {
+    const counts = new Map<string, number>();
+    for (const { count, weapons } of groups) for (const { id } of weapons) counts.set(id, (counts.get(id) ?? 0) + count);
+    return { counts, groups };
+  };
+
+  it("merges loadouts that differ only in unscored items, standing for them by the one nearest the base", () => {
+    const base = loadout([group(2, "boltgun", "pistol")]);
+    const far = loadout([group(2, "boltgun", "pistol", "chainsword")]);
+    const near = loadout([group(1, "boltgun", "pistol", "chainsword"), group(1, "boltgun", "pistol")]);
+    const mfm: MfmLoadouts = { loadouts: [far, base, near], byKey: new Map() };
+    const candidates = mfmCandidates(mfm, base.counts, scores);
+    expect(candidates).toHaveLength(1);
+    expect(candidates[0].counts).toBe(base.counts);
+    expect(candidates[0].scored).toEqual(new Map([["boltgun", 2], ["pistol", 2]]));
+  });
+
+  it("keeps apart loadouts with the same scored counts carried by different models", () => {
+    // Pistols are fired instead of other guns model by model, so who carries what is scored.
+    const together = loadout([group(1, "boltgun", "pistol"), group(1)]);
+    const apart = loadout([group(1, "boltgun"), group(1, "pistol")]);
+    const mfm: MfmLoadouts = { loadouts: [together, apart], byKey: new Map() };
+    expect(mfmCandidates(mfm, together.counts, scores)).toHaveLength(2);
   });
 });

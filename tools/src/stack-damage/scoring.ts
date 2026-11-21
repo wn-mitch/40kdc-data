@@ -12,15 +12,17 @@ import { DamageCellCache } from "./cache.js";
 import { validateCandidateLoadout, type CandidateLoadoutLegality, type LocalStackMember } from "./legality.js";
 import { isLegalStackLevers } from "./lever-legality.js";
 import { searchLevers, type LeverSpace } from "./lever-search.js";
-import { countsKey, mfmLoadouts, searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
+import { countsKey, MFM_EXHAUSTIVE_LOADOUTS, mfmCandidates as mfmCandidatesOf, mfmLoadouts, searchLoadout, type LoadoutScaffold, type LoadoutSpace } from "./loadout-search.js";
 import type { ProfileDamage } from "./loadout-scoring.js";
 import { attributeSelectedProfile, crunchProfileScorer, profileApplicableBuffs, unitLoadoutDamage, type DamageAttribution, type UnscoreableProfile } from "./unit-damage.js";
 import { translationWarnings } from "./translation-warnings.js";
 import { loadoutLeverBuffs, namedLoadoutWargear, surfacedByLoadout, wargearRules, wargearTranslation, type WargearRules } from "./wargear-levers.js";
-import { combinedWargear, equippedBuffs, loadoutWargear, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrants } from "./weapon-grants.js";
-import { equippedLevers, othersEquippedBuffs, othersUnequippedKey, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
+import { combinedWargear, equippedBuffs, loadoutWargear, phaseScoredItem, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrant, type WeaponGrants } from "./weapon-grants.js";
+import { enhancementGrants, scoredByBearer, selectedBearerGrants, withEnhancementGrantLevers, type EnhancementGrant } from "./enhancement-grants.js";
+import { equippedLevers, othersEquippedBuffs, othersUnequippedKey, sameLoadoutCounts, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
 import { activationPossible, filterStackEligibleAbilities, filterStackableStratagems, unitLookup } from "./stratagem-eligibility.js";
 import { combinedKeywords, issuesOrders, ordersReach } from "./orders.js";
+import { memberKey, ownKeywords } from "./keyword-choices.js";
 import type {
   DamageCellState,
   PoolLever,
@@ -53,7 +55,7 @@ function buffKey(buffs: readonly Buff[]): string {
 function memberKeywords(members: readonly StackMember[]): string[] {
   const keywords = new Set<string>();
   for (const member of members) {
-    for (const keyword of [...member.unit.keywords, ...member.unit.factionKeywords]) keywords.add(keyword.toLowerCase());
+    for (const keyword of ownKeywords(member)) keywords.add(keyword.toLowerCase());
   }
   return [...keywords].sort();
 }
@@ -83,6 +85,7 @@ export class DamageScoringSession {
   private readonly wargearRuleCache = new Map<string, WargearRules>();
   private readonly suppressedCache = new Map<string, ReadonlySet<string>>();
   private readonly loadoutLeverCache = new Map<string, StackableBuff[] | null>();
+  private readonly enhancementGrantCache = new Map<string, EnhancementGrant[]>();
 
   constructor(
     readonly dataset: Dataset,
@@ -138,7 +141,11 @@ export class DamageScoringSession {
       const base = mfm.byKey.has(countsKey(stock)) || mfm.loadouts.length === 0 ? stock : new Map(mfm.loadouts[0].counts);
       const carriable = new Set<string>();
       for (const { counts } of mfm.loadouts) for (const id of counts.keys()) carriable.add(id);
-      scaffold = { models, modelCount, options: [], caps: [], base, carriable: [...carriable].sort(), mfm };
+      const phase = this.state.phase === "fight" ? "fight" : "shooting";
+      const mfmCandidates = mfm.loadouts.length > MFM_EXHAUSTIVE_LOADOUTS
+        ? mfmCandidatesOf(mfm, base, phaseScoredItem(this.dataset, unit.raw, phase))
+        : undefined;
+      scaffold = { models, modelCount, options: [], caps: [], base, carriable: [...carriable].sort(), mfm, ...(mfmCandidates ? { mfmCandidates } : {}) };
     } else {
       const authored = this.dataset.wargearOptionsOf(unit.raw);
       const options = this.config.perFiveSensitivity
@@ -229,12 +236,25 @@ export class DamageScoringSession {
     return grants;
   }
 
+  /** The weapon grants the spec's Enhancements offer its members; see {@link enhancementGrants}. */
+  enhancementGrantsOf(spec: StackSpec): EnhancementGrant[] {
+    const key = this.poolKey(spec);
+    let grants = this.enhancementGrantCache.get(key);
+    if (!grants) this.enhancementGrantCache.set(key, grants = enhancementGrants(this.dataset, spec, (member) => this.state.contextFor(spec, member)));
+    return grants;
+  }
+
+  /** The weapons the spec's selected Enhancements give `member`'s bearer model. */
+  bearerGrants(spec: StackSpec, member: StackMember): WeaponGrant[] {
+    return selectedBearerGrants(this.enhancementGrantsOf(spec), spec.selectedLeverIds, member.unit.id);
+  }
+
   /**
    * Scores one loadout. Its wargear decides which granted weapons it fires and drops the unit's
    * printed rules for items it leaves out; the profiles crunch under `context`, as the buffs were
    * translated without a loadout.
    */
-  private scoreCounts(unit: UnitView, counts: ReadonlyMap<string, number>, allBuffs: Buff[], context: EngineContext): UnitLoadoutResult {
+  private scoreCounts(unit: UnitView, counts: ReadonlyMap<string, number>, allBuffs: Buff[], context: EngineContext, granted: readonly WeaponGrant[]): UnitLoadoutResult {
     const buffs = equippedBuffs(unit.raw, counts, allBuffs);
     const scaffold = this.scaffold(unit);
     const target = { unit: this.state.target.unitRaw, modelCount: this.state.target.modelCount };
@@ -264,7 +284,7 @@ export class DamageScoringSession {
       buffs,
       context,
       groups: this.loadoutLegality(unit, scaffold, counts).groups,
-      grants: this.weaponGrants(unit, counts, context).grants,
+      grants: [...this.weaponGrants(unit, counts, context).grants, ...granted],
       scoreProfile: scoreProfileForBuffs(buffs),
       scoreProfileForBuffs,
     });
@@ -284,17 +304,17 @@ export class DamageScoringSession {
    * The unit's wargear choices under `buffs`, for {@link searchLoadout} and the exhaustive oracle.
    * With `perLoadout`, each loadout is scored with the buffs it gives instead.
    */
-  loadoutSpace(unit: UnitView, buffs: Buff[], context: EngineContext, perLoadout?: LoadoutBuffs): LoadoutSpace<UnitLoadoutResult> {
+  loadoutSpace(unit: UnitView, buffs: Buff[], context: EngineContext, perLoadout?: LoadoutBuffs, granted: readonly WeaponGrant[] = []): LoadoutSpace<UnitLoadoutResult> {
     const scaffold = this.scaffold(unit);
     return {
       scaffold,
       legal: (counts) => this.loadoutLegality(unit, scaffold, counts).legal,
-      score: (counts) => this.scoreCounts(unit, counts, perLoadout ? perLoadout.at(counts) : buffs, context),
+      score: (counts) => this.scoreCounts(unit, counts, perLoadout ? perLoadout.at(counts) : buffs, context, granted),
     };
   }
 
-  bestLoadout(unit: UnitView, buffs: Buff[], context: EngineContext, perLoadout?: LoadoutBuffs): UnitLoadoutResult {
-    const cacheKey = `${unit.id}|${buffKey(buffs)}|${JSON.stringify(context)}|${perLoadout?.key ?? ""}`;
+  bestLoadout(unit: UnitView, buffs: Buff[], context: EngineContext, perLoadout?: LoadoutBuffs, granted: readonly WeaponGrant[] = []): UnitLoadoutResult {
+    const cacheKey = `${unit.id}|${buffKey(buffs)}|${JSON.stringify(context)}|${perLoadout?.key ?? ""}|${JSON.stringify(granted)}`;
     const cached = this.loadoutCache.get(cacheKey);
     if (cached) return cached;
     const scaffold = this.scaffold(unit);
@@ -305,7 +325,7 @@ export class DamageScoringSession {
       this.loadoutCache.set(cacheKey, invalid);
       return invalid;
     }
-    const best = searchLoadout(this.loadoutSpace(unit, buffs, context, perLoadout), () => { this.illegalLoadoutsRejected += 1; });
+    const best = searchLoadout(this.loadoutSpace(unit, buffs, context, perLoadout, granted), () => { this.illegalLoadoutsRejected += 1; });
     this.loadoutCache.set(cacheKey, best);
     return best;
   }
@@ -319,6 +339,9 @@ export class DamageScoringSession {
       attachmentRoles: attachmentRoles(spec.members),
       supportingUnitIds: this.supportUnits.filter((support) => !spec.members.some((candidate) => candidate.unit.id === support.id)).map((support) => support.id),
       weaponProfiles: [],
+      ...(spec.members.some((candidate) => candidate.chosen) ? {
+        keywordChoices: Object.fromEntries(spec.members.flatMap((candidate) => candidate.chosen ? [[candidate.unit.id, [...candidate.chosen]]] : [])),
+      } : {}),
     };
   }
 
@@ -341,7 +364,7 @@ export class DamageScoringSession {
   }
 
   private poolKey(spec: StackSpec): string {
-    return `${spec.members.map((member) => `${member.unit.id}:${member.role}`).join("+")}|${spec.detachmentIds.join("+")}`;
+    return `${spec.members.map((member) => `${memberKey(member)}:${member.role}`).join("+")}|${spec.detachmentIds.join("+")}`;
   }
 
   /** Each detachment resolves on its own; a spec without one resolves once. */
@@ -418,6 +441,7 @@ export class DamageScoringSession {
         warnings.push(...this.translationWarnings(input, context, "attacker", undefined, replaced));
       }
     }
+    withEnhancementGrantLevers(levers, groups, this.enhancementGrantsOf(spec));
     const uniqueWarnings = [...new Map(warnings.map((warning) => [JSON.stringify(warning), warning])).values()];
     const value = { levers: [...levers.values()], groups: [...groups.values()], warnings: uniqueWarnings };
     this.poolCache.set(key, value);
@@ -486,15 +510,54 @@ export class DamageScoringSession {
   }
 
   scoreStack(spec: StackSpec): StackResult {
-    const key = `${spec.members.map((member) => member.unit.id).join("+")}|${spec.detachmentIds.join("+")}|${[...spec.selectedLeverIds].sort().join("+")}`;
+    const key = `${spec.members.map(memberKey).join("+")}|${spec.detachmentIds.join("+")}|${[...spec.selectedLeverIds].sort().join("+")}`;
     const cached = this.stackCache.get(key);
     if (cached) return cached;
     this.stackEvaluations += 1;
-    const members = settleMemberLoadouts(spec.members, (member, chosen) =>
-      this.bestLoadout(member.unit, this.memberBuffs(spec, member, undefined, chosen), this.state.contextFor(spec, member), this.perLoadoutBuffs(spec, member, chosen)));
+    const respond = (member: StackMember, chosen?: MemberLoadouts) =>
+      this.bestLoadout(member.unit, this.memberBuffs(spec, member, undefined, chosen), this.state.contextFor(spec, member), this.perLoadoutBuffs(spec, member, chosen), this.bearerGrants(spec, member));
+    const members = this.jointMemberLoadouts(spec, settleMemberLoadouts(spec.members, respond), respond);
     const result = { spec, total: members.reduce((sum, member) => sum + member.loadout.total, 0), members };
     this.stackCache.set(key, result);
     return result;
+  }
+
+  /**
+   * Settled loadouts, improved where one member's best loadout for itself costs the stack: each
+   * member picks the loadout that scores it most, so one that drops an item whose rule buffs the
+   * others (a leader's shield granting the unit +1 to Wound) can lower the stack's total. For each
+   * member whose out-of-the-box loadout would change another member's buffs, that loadout is
+   * scored with the others answering it, and kept when the stack's total rises.
+   */
+  private jointMemberLoadouts(
+    spec: StackSpec,
+    settled: { member: StackMember; loadout: UnitLoadoutResult }[],
+    respond: (member: StackMember, chosen?: MemberLoadouts) => UnitLoadoutResult,
+  ): { member: StackMember; loadout: UnitLoadoutResult }[] {
+    if (spec.members.length < 2) return settled;
+    const total = (members: readonly { loadout: UnitLoadoutResult }[]) => members.reduce((sum, { loadout }) => sum + loadout.total, 0);
+    const chosenOf = (members: readonly { member: StackMember; loadout: UnitLoadoutResult }[]): MemberLoadouts =>
+      new Map(members.map(({ member, loadout }) => [member.unit.id, loadout.counts]));
+    const othersKey = (member: StackMember, chosen: MemberLoadouts) => spec.members.filter((other) => other !== member)
+      .map((other) => `${othersUnequippedKey(spec, other, chosen)}#${this.perLoadoutBuffs(spec, other, chosen)?.key ?? ""}`).join("~");
+    let best = settled;
+    for (const member of spec.members) {
+      const current = best.find((entry) => entry.member === member)!;
+      const base = this.scaffold(member.unit).base;
+      if (sameLoadoutCounts(current.loadout.counts, base)) continue;
+      const chosen = chosenOf(best);
+      const pinned = new Map(chosen).set(member.unit.id, base);
+      if (othersKey(member, pinned) === othersKey(member, chosen)) continue;
+      const context = this.state.contextFor(spec, member);
+      const own = this.loadoutSpace(member.unit, this.memberBuffs(spec, member, undefined, pinned), context, this.perLoadoutBuffs(spec, member, pinned), this.bearerGrants(spec, member));
+      if (!own.legal(base)) continue;
+      const candidate = spec.members.map((other) => ({
+        member: other,
+        loadout: other === member ? own.score(base) : respond(other, pinned),
+      }));
+      if (total(candidate) > total(best)) best = candidate;
+    }
+    return best;
   }
 
   /** How a member's buffs follow its loadout, when its rules read `unit-wargear`; `chosen` as in {@link memberBuffs}. */
@@ -589,6 +652,7 @@ export class DamageScoringSession {
       }
     }
     const warnings = translated.filter((warning) => warning.sourceKind !== "support" || selectedAbilityIds.has(warning.sourceAbilityId));
+    const granted = this.enhancementGrantsOf(result.spec);
     for (const lever of selectedLevers) {
       if (lever.source.kind !== "ability") continue;
       const ability = this.dataset.abilities.getInFaction(lever.source.abilityId, result.spec.factionId)
@@ -597,6 +661,7 @@ export class DamageScoringSession {
       for (const member of result.spec.members) {
         const translation = ability.describeBuffs(lever.source, contexts.get(member.unit.id) ?? this.state.contextFor(result.spec, member), "attacker");
         for (const fragment of translation.unsupported) {
+          if (scoredByBearer(granted, lever.id, fragment)) continue;
           warnings.push({
             sourceAbilityId: ability.id,
             ...(lever.source.sourceUnitId ? { sourceUnitId: lever.source.sourceUnitId } : {}),

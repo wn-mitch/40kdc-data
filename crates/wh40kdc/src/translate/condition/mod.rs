@@ -14,6 +14,7 @@
 
 mod board;
 mod equipment;
+mod filter_predicate;
 mod history;
 mod js;
 mod leadin;
@@ -106,39 +107,147 @@ pub fn describe_selection_eligibility_value(c: &Value) -> String {
         }
         let mut nodes = Vec::new();
         flat(c, &mut nodes);
-        let parts: Vec<Option<String>> = nodes.into_iter().map(candidate_clause).collect();
-        if parts.iter().all(Option::is_some) {
-            return parts
-                .into_iter()
-                .flatten()
-                .collect::<Vec<_>>()
-                .join(" and ");
+        let mut parts = Vec::new();
+        for op in nodes {
+            if operator(op) == Some("or") {
+                if let Some(or_ops) = operands(op) {
+                    let or_parts: Vec<Option<String>> =
+                        or_ops.iter().map(candidate_clause).collect();
+                    if or_parts.iter().all(Option::is_some) {
+                        let unwrapped: Vec<String> = or_parts.into_iter().flatten().collect();
+                        parts.push(format!("that ({})", join_relative(&unwrapped, "or")));
+                        continue;
+                    }
+                    return format!("if {}", describe_condition_value(c));
+                }
+            }
+            match candidate_clause(op) {
+                Some(clause) => parts.push(clause),
+                None => return format!("if {}", describe_condition_value(c)),
+            }
         }
+        return join_relative(&parts, "and");
     }
     if operator(c) == Some("or") {
         if let Some(ops) = operands(c) {
             let parts: Vec<Option<String>> = ops.iter().map(candidate_clause).collect();
             if parts.iter().all(Option::is_some) {
-                return parts.into_iter().flatten().collect::<Vec<_>>().join(" or ");
+                let unwrapped: Vec<String> = parts.into_iter().flatten().collect();
+                return join_relative(&unwrapped, "or");
             }
         }
     }
     candidate_clause(c).unwrap_or_else(|| format!("if {}", describe_condition_value(c)))
 }
 
-/// A condition on the candidate as a relative clause ("that was hit…", "without \"MONSTER\""), else None.
+fn without_keyword(s: &str) -> Option<&str> {
+    let mid = s.strip_prefix("without the ")?.strip_suffix(" keyword")?;
+    if !mid.is_empty()
+        && mid
+            .bytes()
+            .all(|b| b.is_ascii_uppercase() || b.is_ascii_digit() || b == b' ' || b == b'-')
+    {
+        Some(mid)
+    } else {
+        None
+    }
+}
+
+/// Join relative clauses cleanly, collapsing repeated "that is " / "without the X keyword" runs.
+fn join_relative(parts: &[String], conj: &str) -> String {
+    if parts.len() <= 1 {
+        return parts.first().cloned().unwrap_or_default();
+    }
+    let mut merged: Vec<String> = Vec::new();
+    if conj == "and" {
+        let mut i = 0;
+        while i < parts.len() {
+            if let Some(kw) = without_keyword(&parts[i]) {
+                let mut kws = vec![kw.to_string()];
+                let mut j = i + 1;
+                while j < parts.len() {
+                    if let Some(next) = without_keyword(&parts[j]) {
+                        kws.push(next.to_string());
+                        j += 1;
+                    } else {
+                        break;
+                    }
+                }
+                if kws.len() > 1 {
+                    merged.push(format!("without the {} keyword", or_list(&kws)));
+                } else {
+                    merged.push(parts[i].clone());
+                }
+                i = j;
+                continue;
+            }
+            merged.push(parts[i].clone());
+            i += 1;
+        }
+    } else {
+        merged.extend(parts.iter().cloned());
+    }
+    if merged.iter().all(|p| p.starts_with("that is ")) {
+        let rest: Vec<String> = merged
+            .iter()
+            .map(|p| p["that is ".len()..].to_string())
+            .collect();
+        return format!(
+            "that is {}",
+            if conj == "and" {
+                and_list(&rest)
+            } else {
+                or_list(&rest)
+            }
+        );
+    }
+    let deduped: Vec<String> = merged
+        .iter()
+        .enumerate()
+        .map(|(idx, p)| {
+            if idx > 0 {
+                if let (Some(rest), true) = (
+                    p.strip_prefix("that is "),
+                    merged[idx - 1].starts_with("that is "),
+                ) {
+                    return rest.to_string();
+                }
+                if let (Some(rest), true) = (
+                    p.strip_prefix("that "),
+                    merged[idx - 1].starts_with("that "),
+                ) {
+                    return rest.to_string();
+                }
+            }
+            p.clone()
+        })
+        .collect();
+    deduped.join(&format!(" {conj} "))
+}
+
+/// A condition on the candidate as a relative clause ("that was hit…", "without the MONSTER keyword"), else None.
 fn candidate_clause(c: &Value) -> Option<String> {
+    if matches!(operator(c), Some("and" | "or")) {
+        return None;
+    }
     let phrase = describe_condition_value(c);
-    for (from, to) in [
-        ("the unit is not the same unit as ", "other than "),
-        ("the unit does not have ", "without "),
-        ("the unit has not ", "that has not "),
-        ("the unit has ", "with "),
-        ("not the unit is ", "that is not "),
-        ("the unit ", "that "),
+    for subj in [
+        "this unit",
+        "the unit",
+        "the selected unit",
+        "the selected model",
     ] {
-        if let Some(rest) = phrase.strip_prefix(from) {
-            return Some(format!("{to}{rest}"));
+        for (from, to) in [
+            (format!("{subj} is not the same unit as "), "other than "),
+            (format!("{subj} does not have "), "without "),
+            (format!("{subj} has not "), "that has not "),
+            (format!("{subj} has "), "with "),
+            (format!("not {subj} is "), "that is not "),
+            (format!("{subj} "), "that "),
+        ] {
+            if let Some(rest) = phrase.strip_prefix(&from) {
+                return Some(format!("{to}{rest}"));
+            }
         }
     }
     None

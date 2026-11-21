@@ -39,30 +39,24 @@ function nodesOf(tree: unknown, type: string): Record<string, any>[] {
   return [...(record.type === type ? [record] : []), ...Object.values(record).flatMap((value) => nodesOf(value, type))];
 }
 
-const v2 = (input: Record<string, unknown>) => normalizeFingerprintParameters("optional-cost-paid", input, 2);
-const refused = (input: Record<string, unknown>) => expect(() => v2(input)).toThrow();
+const normalize = (input: Record<string, unknown>) => normalizeFingerprintParameters("optional-cost-paid", input);
+const refused = (input: Record<string, unknown>) => expect(() => normalize(input)).toThrow();
 
-describe("optional-cost-paid version 2 parameters", () => {
-  it("is the current version, and version 1 leaves keep their normalized form", () => {
-    expect(currentFamilyVersion("optional-cost-paid")).toBe(2);
-    expect(normalizeFingerprintParameters("optional-cost-paid", { pool: "yp-pool", window: "use", subject: "this-unit" }, 1))
-      .toEqual({ pool: "yp-pool", window: "use", subject: "this-unit" });
-  });
-
-  it("keeps a version-1 use leaf readable under version 2 by giving it the legacy tag", () => {
-    expect(v2({ pool: "yp-pool", window: "use", subject: "this-unit" })).toEqual({ pool: "yp-pool", window: "use", subject: "this-unit", tag: "yp-spent-this-use" });
-    expect(() => v2({ pool: "yp-pool", window: "trigger", subject: "this-unit" })).toThrow(/needs the designation tag/);
+describe("optional-cost-paid parameters", () => {
+  it("gives a use leaf with no tag the legacy tag, and refuses a trigger with none", () => {
+    expect(normalize({ pool: "yp-pool", window: "use", subject: "this-unit" })).toEqual({ pool: "yp-pool", window: "use", subject: "this-unit", tag: "yp-spent-this-use" });
+    expect(() => normalize({ pool: "yp-pool", window: "trigger", subject: "this-unit" })).toThrow(/needs the designation tag/);
   });
 
   it("accepts a trigger with its subject and tag, and defaults the holder to this unit", () => {
-    expect(v2({ pool: "pain-token-pool", window: "trigger", subject: "this-unit", tag: "eye-of-spite-pain-spent" }))
+    expect(normalize({ pool: "pain-token-pool", window: "trigger", subject: "this-unit", tag: "eye-of-spite-pain-spent" }))
       .toEqual({ pool: "pain-token-pool", window: "trigger", subject: "this-unit", tag: "eye-of-spite-pain-spent", holder: "this-unit" });
   });
 
   it("accepts a use with its own tag, and a turn with negation unchanged", () => {
-    expect(v2({ pool: "yp-pool", window: "use", subject: "attacker", tag: "cyberstimm-infusion-yp-spent" }))
+    expect(normalize({ pool: "yp-pool", window: "use", subject: "attacker", tag: "cyberstimm-infusion-yp-spent" }))
       .toEqual({ pool: "yp-pool", window: "use", subject: "attacker", tag: "cyberstimm-infusion-yp-spent" });
-    expect(v2({ pool: "yp-pool", window: "turn", negated: true })).toEqual({ pool: "yp-pool", window: "turn", negated: true });
+    expect(normalize({ pool: "yp-pool", window: "turn", negated: true })).toEqual({ pool: "yp-pool", window: "turn", negated: true });
   });
 
   it("refuses a Pain token spend read as a use: a use reads YP", () => {
@@ -256,10 +250,10 @@ describe("attacker-subject use read in the attack moment (SS-A, 4213 shape)", ()
     expect(designates).toEqual([{ type: "designate", target: "this-unit", modifier: { tag: "cyberstimm-infusion-yp-spent", clears_on: "phase" } }]);
   });
 
-  it("refuses a use read with no tag: version 2 leaves name their designation", () => {
+  it("refuses a use read with no tag: stored leaves name their designation", () => {
     const untagged = { pool: "yp-pool", window: "use", subject: "attacker" };
-    // No stored version 2 leaf lacks a tag (normalization gives the legacy one); the compiler refuses one regardless.
-    expect(v2(untagged)).toEqual({ ...untagged, tag: "yp-spent-this-use" });
+    // No stored leaf lacks a tag (normalization gives the legacy one); the compiler refuses one regardless.
+    expect(normalize(untagged)).toEqual({ ...untagged, tag: "yp-spent-this-use" });
     const leaves = outsideContract(attackUseLeaves({ ...untagged, tag: "x-spent" }).map((leaf) => leaf.family_id === "optional-cost-paid" ? { ...leaf, parameters: untagged } : leaf));
     expect(errorsOf(leaves, ATTACK_USE_TEXT).join(" ")).toMatch(/names no designation tag/);
   });
@@ -386,8 +380,8 @@ describe("describer output for the trigger shapes", () => {
     const text = describeAbility({ effect: mechanics.effect, scope: mechanics.scope, trigger: mechanics.trigger } as never);
     expect(text).toContain("You can: ");
     expect(text).toContain("spend 1 Pain token");
-    expect(text).toContain("tagged eye of spite pain spent");
-    expect(text).toContain("improve the unit's Armour Penetration characteristic by 2");
+    expect(text).toContain("designated as Eye of Spite Pain Spent");
+    expect(text).toContain("improve this unit's Armour Penetration characteristic by 2");
   });
 });
 

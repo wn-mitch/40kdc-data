@@ -18,9 +18,9 @@
  *   missions      Reconcile mission scoring-card numbers (vp/vp_max/cumulative)
  *                 + exclusive_group guard, for secondary + generic primary cards
  *   chapter-scope Reconcile Space Marine chapter access in the shared
- *                 adeptus-astartes pool: collapse Black Templars exclude-and-replace
- *                 twins to generic faction_keywords (#36) + stamp
- *                 excluded_faction_keywords for genuine chapter bars (e.g. Librarians)
+ *                 adeptus-astartes pool: generic vs chapter faction_keywords, chapter
+ *                 bars (excluded_faction_keywords) and a unit per chapter reprint
+ *                 of a generic datasheet (e.g. the Black Templars Gladiators)
  *   cull-legends  Drop dump-absent Legends/Forge-World units + prune refs
  *   reissued-refs Move dead detachment/stratagem/enhancement refs to a reissued row
  *   mirror        Ability identity from the dump (`mfm:mirror`): stubs, unit ability_ids, retirement
@@ -39,6 +39,8 @@
  *                 (profiles, stats, keywords, Hunter restrictions); a shared id whose
  *                 datasheets disagree keeps the majority line and the rest get
  *                 per-unit variants. Refuses rather than drop repo-authored detail.
+ *   unit-stats    Reconcile each unit profile's M, T, W, Sv, Ld and OC with the
+ *                 dump miniature statline of its name; a "-" keeps the authored value
  *
  * Every mutating subcommand is DRY RUN by default; pass --write to apply.
  *
@@ -117,6 +119,7 @@ import {
   buildWeaponVariantsReport,
 } from "./mfm/weapon-variants.js";
 import { buildWeaponStatsReport, runWeaponStats } from "./mfm/weapon-stats.js";
+import { buildUnitStatsReport, runUnitStats } from "./mfm/unit-stats.js";
 import {
   runConditionalKeywords,
   buildConditionalKeywordReport,
@@ -946,7 +949,7 @@ async function runPointsAndCompositionTiersCmd(
     report.dirs.reduce((a, d) => a + f(d), 0);
   console.log(
     `Composition tiers — matched ${sum((d) => d.matched)}, units tiered ${sum((d) => d.unitsTiered)}, ` +
-      `model rows adjusted ${sum((d) => d.rowsAdjusted)}, model_count re-synced ${sum((d) => d.modelCountResynced)}, ` +
+      `model rows adjusted ${sum((d) => d.rowsAdjusted)}, model_count re-synced ${sum((d) => d.modelCountResynced)}, max_model_count synced ${sum((d) => d.maxModelCountSynced)}, ` +
       `game modes stamped ${sum((d) => d.modesStamped)}, ` +
       `skipped (kill-team / structure differs) ${report.skipped.length}.`,
   );
@@ -1033,7 +1036,7 @@ async function runStratagemsCmd(dump: MfmDump, write: boolean): Promise<void> {
     report.dirs.reduce((a, d) => a + f(d), 0);
   console.log(`Stratagems report → ${path.relative(REPO_ROOT, reportPath)}`);
   console.log(
-    `Matched ${sum((d) => d.matched)}, cp applied ${sum((d) => d.cpChanged.length)}, ` +
+    `Matched ${sum((d) => d.matched)}, cp applied ${sum((d) => d.cpChanged.length)}, extra cp ${sum((d) => d.extraCpChanged.length)}, ` +
       `turn applied ${sum((d) => d.turnApplied.length)}, type filled ${sum((d) => d.typeFilled.length)}, ` +
       `type conflict ${sum((d) => d.typeConflict.length)}, category set ${sum((d) => d.categoryChanged.length)}, ` +
       `phases (review) ${sum((d) => d.phasesReview.length)}, ` +
@@ -1239,8 +1242,9 @@ async function runChapterScopeCmd(
 
   console.log(`Chapter-scope report → ${path.relative(REPO_ROOT, reportPath)}`);
   console.log(
-    `Matched ${report.matched}, faction_keywords collapsed ${report.factionKeywordsChanged.length}, ` +
-      `excluded_faction_keywords set ${report.excludedChanged.length}, ` +
+    `Matched ${report.matched}, faction_keywords changed ${report.factionKeywordsChanged.length}, ` +
+      `excluded_faction_keywords changed ${report.excludedChanged.length}, ` +
+      `reprints created ${report.reprintsCreated.length}, refs moved ${report.refsMoved.length}, ` +
       `repo-only ${report.repoOnly.length}, dump-only ${report.dumpOnly.length}.`,
   );
   await applyWrites(report.staged, { write, label: "chapter-scope" });
@@ -1363,7 +1367,7 @@ async function runCompositionTiersCmd(
     report.dirs.reduce((a, d) => a + f(d), 0);
   console.log(
     `Composition tiers — matched ${sum((d) => d.matched)}, units tiered ${sum((d) => d.unitsTiered)}, ` +
-      `model rows adjusted ${sum((d) => d.rowsAdjusted)}, model_count re-synced ${sum((d) => d.modelCountResynced)}, ` +
+      `model rows adjusted ${sum((d) => d.rowsAdjusted)}, model_count re-synced ${sum((d) => d.modelCountResynced)}, max_model_count synced ${sum((d) => d.maxModelCountSynced)}, ` +
       `game modes stamped ${sum((d) => d.modesStamped)}, ` +
       `skipped (kill-team / structure differs) ${report.skipped.length}.`,
   );
@@ -1576,6 +1580,16 @@ async function runWeaponStatsCmd(dump: MfmDump, write: boolean, onlyDir?: string
   if (!write) console.log("DRY RUN — no files written. Re-run with --write to apply.");
 }
 
+async function runUnitStatsCmd(dump: MfmDump, write: boolean): Promise<void> {
+  const report = runUnitStats(dump);
+  const reportPath = mfmReportPath("mfm-unit-stats.md", write);
+  fs.writeFileSync(reportPath, buildUnitStatsReport(report, write));
+  console.log(`Unit-stats report → ${path.relative(REPO_ROOT, reportPath)}`);
+  console.log(`Corrected ${report.corrected.length}, confirmed ${report.confirmed}, no number ${report.noNumber.length}, unmatched ${report.unmatched.length}.`);
+  await applyWrites(report.staged, { write, label: "unit-stats" });
+  if (!write) console.log("DRY RUN — no files written. Re-run with --write to apply.");
+}
+
 /**
  * Append the weapons of inline profiles (enhancement and drone wargear) to each faction's
  * weapons.json. A weapon whose id already exists with other values is refused, not replaced.
@@ -1703,6 +1717,7 @@ export const INGEST_MFM_COMMANDS = [
   "allies",
   "weapon-variants",
   "weapon-stats",
+  "unit-stats",
   "weapons",
   "external-refs",
   "dataslates",
@@ -1794,6 +1809,7 @@ export async function runIngestMfmCommand(
     await runWeaponVariantsCmd(dump, options.write, options.onlyDir);
   else if (command === "weapon-stats")
     await runWeaponStatsCmd(dump, options.write, options.onlyDir);
+  else if (command === "unit-stats") await runUnitStatsCmd(dump, options.write);
   else if (command === "weapons") await runWeaponsCmd(dump, options.write);
   else if (command === "dataslates")
     await runDataslatesCmd(dump, options.write, options.dumpPath);

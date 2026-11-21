@@ -85,9 +85,53 @@ def unit_loadout(
     unit: Mapping[str, Any], composition: Mapping[str, Any] | None, options: list[Any]
 ) -> UnitLoadout:
     """The view for ``unit`` with its faction-scoped ``composition`` and ``options``."""
+    view: UnitLoadout
     if composition is not None and composition.get("loadout") is not None:
-        return _MfmView(unit, composition)
-    return _OptionsView(unit, composition, options)
+        view = _MfmView(unit, composition)
+    else:
+        view = _OptionsView(unit, composition, options)
+    cap = unit.get("max_model_count")
+    return view if cap is None else _CappedView(unit["id"], cap, view)
+
+
+class _CappedView:
+    """``view`` with the unit's ``max_model_count`` applied: a size above the cap cannot be
+    built, so every query answers as for a size no composition has."""
+
+    def __init__(self, unit_id: str, cap: int, view: UnitLoadout) -> None:
+        self.source = view.source
+        self._unit_id = unit_id
+        self._cap = cap
+        self._view = view
+
+    def base(self, model_count: int) -> Counts | None:
+        return None if model_count > self._cap else self._view.base(model_count)
+
+    def bounds(self, model_count: int) -> Bounds | None:
+        return None if model_count > self._cap else self._view.bounds(model_count)
+
+    def maximal(self, model_count: int) -> Counts | None:
+        return None if model_count > self._cap else self._view.maximal(model_count)
+
+    def check(self, model_count: int, counts: Mapping[str, int]) -> list[Violation]:
+        if model_count > self._cap:
+            return [
+                {
+                    "id": self._unit_id,
+                    "code": "invalid-model-count",
+                    "message": f"{self._unit_id}: no squad size has {model_count} models",
+                }
+            ]
+        return self._view.check(model_count, counts)
+
+    def groups(self, model_count: int, counts: Mapping[str, int]) -> list[LoadoutGroup] | None:
+        return None if model_count > self._cap else self._view.groups(model_count, counts)
+
+    def complete(self, model_count: int, explicit: Mapping[str, int]) -> dict[str, Any] | None:
+        return None if model_count > self._cap else self._view.complete(model_count, explicit)
+
+    def candidates(self, model_count: int, limit: float | None = None) -> list[str]:
+        return [] if model_count > self._cap else self._view.candidates(model_count, limit)
 
 
 def _model_name(row: str) -> str:

@@ -63,17 +63,20 @@ function stratagemAllowsUnitIds(dataset: Dataset, stratagemId: string, trigger: 
   return targets.some((target) => {
     const candidates = target.selects === "model" ? memberIds.map((id) => [id]) : [memberIds];
     return candidates.some((ids) =>
-      conditionVerdict(target.eligibility, ids, units) !== false &&
+      conditionVerdict(target.eligibility, ids, units, memberIds.length > 1) !== false &&
       (target.bound_to !== "triggering-unit" || friendlyTriggerVerdict(triggerSubject, ids) !== false));
   });
 }
 
-/** Evaluate only unit-id facts; unknown battlefield predicates intentionally remain permissive. */
-function conditionVerdict(condition: unknown, ids: readonly string[], units?: UnitLookup): Verdict {
+/**
+ * Evaluate unit-id facts, and with `attached` (whether the stack has more than one member) whether
+ * the unit is an attached unit; unknown battlefield predicates intentionally remain permissive.
+ */
+function conditionVerdict(condition: unknown, ids: readonly string[], units?: UnitLookup, attached?: boolean): Verdict {
   if (condition === null || typeof condition !== "object" || Array.isArray(condition)) return undefined;
   if ("operator" in condition && typeof condition.operator === "string") {
     if (!("operands" in condition) || !Array.isArray(condition.operands)) return undefined;
-    const values = condition.operands.map((operand) => conditionVerdict(operand, ids, units));
+    const values = condition.operands.map((operand) => conditionVerdict(operand, ids, units, attached));
     if (condition.operator === "and") return values.includes(false) ? false : values.every((value) => value === true) ? true : undefined;
     if (condition.operator === "or") return values.includes(true) ? true : values.every((value) => value === false) ? false : undefined;
     if (condition.operator === "not" && values.length === 1) return values[0] === undefined ? undefined : !values[0];
@@ -82,11 +85,20 @@ function conditionVerdict(condition: unknown, ids: readonly string[], units?: Un
   if (units && "type" in condition && condition.type === "happened" && "parameters" in condition) {
     return eventVerdict(condition.parameters, ids, units);
   }
+  if ("type" in condition && condition.type === "attachment") return attachmentVerdict((condition as { parameters?: unknown }).parameters, attached);
   if (!("type" in condition) || condition.type !== "matches" || !("parameters" in condition)) return undefined;
   const { parameters } = condition;
   if (parameters === null || typeof parameters !== "object" || Array.isArray(parameters)) return undefined;
   if ("subject" in parameters && parameters.subject !== "this-unit") return undefined;
   return "filter" in parameters ? filterVerdict(parameters.filter, ids) : undefined;
+}
+
+/** Whether the stack is an attached unit, for `attached` on the unit itself; other roles stay unknown. */
+function attachmentVerdict(parameters: unknown, attached: boolean | undefined): Verdict {
+  if (attached === undefined || parameters === null || typeof parameters !== "object" || Array.isArray(parameters)) return undefined;
+  const params = parameters as Record<string, unknown>;
+  if (params.role !== "attached" || params.with !== undefined || !OWN_SUBJECTS.has(params.subject)) return undefined;
+  return attached;
 }
 
 /** A trigger subject is a unit filter, not a condition wrapper. */
@@ -170,7 +182,7 @@ export function activationPossible(requires: readonly unknown[] | undefined, ids
     if (triggers.length === 0) continue;
     const verdicts = triggers.map((item) => {
       const own = eventVerdict({ event: item.event, filter: item.filter, subject: ownSubject(item.subject) }, ids, units);
-      return own === false ? false : conditionVerdict(item.condition, ids, units);
+      return own === false ? false : conditionVerdict(item.condition, ids, units, ids.length > 1);
     });
     if (verdicts.every((verdict) => verdict === false)) return false;
   }
@@ -220,4 +232,70 @@ export function assumedEligibility(dataset: Dataset, stratagemId: string): strin
   };
   for (const target of Array.isArray(raw) ? raw : raw ? [raw] : []) if (target.side !== "enemy") walk(target.eligibility);
   return [...out];
+}
+
+/** A Stratagem's cost on a stack: its printed CP and the cost rules its members' abilities print. */
+export interface StratagemCost {
+  cp: number;
+  /** The abilities that changed it, in the order they applied. */
+  modifiedBy: string[];
+  /** Cost rules for this Stratagem the stack carries but this cost does not apply: conditional ones. */
+  unapplied: string[];
+}
+
+/**
+ * The CP a Stratagem costs used on `units` (one attached unit): its printed cost with each member's
+ * unconditional `cost-modifier` "targeting this unit" applied (Air Caste Colossus triples it, a
+ * named waiver makes it free). A rule naming another Stratagem does not apply. Waivers and sets
+ * apply first, then multipliers, then increases and decreases, never below 0. A cost rule inside a
+ * condition or a timed part is listed as unapplied rather than assumed.
+ */
+export function stratagemCost(dataset: Dataset, stratagem: { id: string; ability_id?: string | null; cp_cost: number }, units: readonly Unit[]): StratagemCost {
+  type Rule = { abilityId: string; operation: string; amount: number };
+  const rules: Rule[] = [];
+  const unapplied = new Set<string>();
+  const names = new Set([stratagem.id, stratagem.ability_id].filter((id): id is string => typeof id === "string"));
+  const visit = (node: unknown, abilityId: string, gated: boolean): void => {
+    if (Array.isArray(node)) {
+      for (const item of node) visit(item, abilityId, gated);
+      return;
+    }
+    if (typeof node !== "object" || node === null) return;
+    const record = node as Record<string, unknown>;
+    const modifier = typeof record.modifier === "object" && record.modifier !== null ? record.modifier as Record<string, unknown> : undefined;
+    if (record.type === "cost-modifier" && modifier?.of === "stratagem" && modifier.applies_to === "targeting-this-unit" &&
+      (record.target === "this-unit" || record.target === "this-model") &&
+      (modifier.id === undefined || (typeof modifier.id === "string" && [...names].some((name) => name === modifier.id || name.startsWith(`${modifier.id as string}-`))))) {
+      if (gated) unapplied.add(abilityId);
+      else rules.push({ abilityId, operation: String(modifier.operation), amount: typeof modifier.amount === "number" ? modifier.amount : 0 });
+      return;
+    }
+    const gates = gated || record.type === "conditional" || record.type === "ability-part";
+    for (const value of Object.values(record)) visit(value, abilityId, gates);
+  };
+  for (const unit of units) {
+    for (const ref of unit.ability_ids ?? []) {
+      const abilityId = abilityRefId(ref);
+      const ability = dataset.abilities.getInFaction(abilityId, unit.faction_id) ?? dataset.abilities.getAny(abilityId);
+      if (ability) visit(ability.raw.effect, abilityId, false);
+    }
+  }
+  const order = ["waive", "set", "multiply", "increase", "decrease"];
+  rules.sort((left, right) => order.indexOf(left.operation) - order.indexOf(right.operation));
+  let cp = stratagem.cp_cost;
+  const modifiedBy: string[] = [];
+  for (const rule of rules) {
+    const before = cp;
+    if (rule.operation === "waive") cp = 0;
+    else if (rule.operation === "set") cp = rule.amount;
+    else if (rule.operation === "multiply") cp *= rule.amount;
+    else if (rule.operation === "increase") cp += rule.amount;
+    else if (rule.operation === "decrease") cp = Math.max(0, cp - rule.amount);
+    else {
+      unapplied.add(rule.abilityId);
+      continue;
+    }
+    if (cp !== before && !modifiedBy.includes(rule.abilityId)) modifiedBy.push(rule.abilityId);
+  }
+  return { cp, modifiedBy, unapplied: [...unapplied].sort() };
 }

@@ -2,23 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { designationLabel, DESIGNATION_IDS } from "../src/translate/designations.js";
 import { describeEffect, type Effect } from "../src/translate/index.js";
 
-/** The family versions the extensions under test create. */
-const SET_UP_RESTRICTION_VERSIONS: ReadonlySet<string> = new Set(["unit-size@2", "add-unit@3", "unit-position@19", "apply-mark@5"]);
-
 type Item = [string, string, Record<string, unknown>];
-
-/** The unit-position version that added the enemy deployment zone as a beyond-only place; later versions widen it. */
-const ZONE_BEYOND_ONLY = (() => {
-  for (let version = currentFamilyVersion("unit-position"); version > 1; version -= 1) {
-    const extension = familyExtension("unit-position", version);
-    if (extension !== undefined && SET_UP_RESTRICTION_VERSIONS.has(`${extension.family}@${extension.version}`)) return version;
-  }
-  throw new Error("The set-up restriction extension of unit-position is not registered.");
-})();
 
 /** Leaves on their own wording in `text`, in order (fabricated wording, not rules text). */
 function placed(text: string, ...items: Item[]): CompileLeaf[] {
@@ -48,7 +35,7 @@ function errorsOf(text: string, ...items: Item[]): string {
 const beyondEnemy = (wording: string, inches: number, extra: Record<string, unknown> = {}): Item =>
   [wording, "unit-position", { kind: "beyond", inches, of: "matching-unit", of_side: "enemy", subject: "antecedent", negated: false, ...extra }];
 
-describe("Wave 10 family versions: unit-size dice, objective and zone distances, designated units", () => {
+describe("Wave 10 family parameters: unit-size dice, objective and zone distances, designated units", () => {
   it("accepts a dice amount for an added unit's models and keeps the 1 to 20 bound on a whole number", () => {
     const size = currentFamilyVersion("unit-size");
     expect(normalizeFingerprintParameters("unit-size", { models: "D3" }, size)).toEqual({ models: "D3" });
@@ -64,21 +51,16 @@ describe("Wave 10 family versions: unit-size dice, objective and zone distances,
       .toMatchObject({ of: "objective", objective_tag: "warded", controlled_by: "you", inches: 6 });
     expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", inches: 6, of: "objective", subject: "this-unit", negated: false }, position)).toThrow(/objective_tag/u);
     expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", inches: 6, of: "objective", objective_tag: "not-registered", subject: "this-unit", negated: false }, position)).toThrow(/registered designation/u);
-    // The v11 objective-range form keeps its own rules: a distance kind cannot take objective: designated.
+    // The objective-range form keeps its own rules: a distance kind cannot take objective: designated.
     expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", inches: 6, objective: "designated", objective_tag: "warded", subject: "this-unit", negated: false }, position)).toThrow();
   });
 
-  it("measures a beyond distance from the enemy deployment zone, and no within distance from it", () => {
-    const position = ZONE_BEYOND_ONLY;
+  it("measures a beyond or a within distance from the enemy deployment zone", () => {
+    const position = currentFamilyVersion("unit-position");
     expect(normalizeFingerprintParameters("unit-position", { kind: "beyond", inches: 8, of: "enemy-deployment-zone", subject: "antecedent", negated: false }, position))
-      .toMatchObject({ of: "enemy-deployment-zone", inches: 8 });
-    expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", inches: 8, of: "enemy-deployment-zone", subject: "antecedent", negated: false }, position)).toThrow(/beyond distance/u);
-    // A later version widens it to a within distance; the beyond form keeps normalizing the same.
-    const current = currentFamilyVersion("unit-position");
-    expect(normalizeFingerprintParameters("unit-position", { kind: "within", inches: 8, of: "enemy-deployment-zone", subject: "antecedent", negated: false }, current))
-      .toMatchObject({ kind: "within", of: "enemy-deployment-zone" });
-    expect(normalizeFingerprintParameters("unit-position", { kind: "beyond", inches: 8, of: "enemy-deployment-zone", subject: "antecedent", negated: false }, current))
-      .toEqual(normalizeFingerprintParameters("unit-position", { kind: "beyond", inches: 8, of: "enemy-deployment-zone", subject: "antecedent", negated: false }, position));
+      .toMatchObject({ kind: "beyond", of: "enemy-deployment-zone", inches: 8 });
+    expect(normalizeFingerprintParameters("unit-position", { kind: "within", inches: 8, of: "enemy-deployment-zone", subject: "antecedent", negated: false }, position))
+      .toMatchObject({ kind: "within", of: "enemy-deployment-zone", inches: 8 });
   });
 
   it("names units that carry or lack a designation, with their side, and refuses them on other places", () => {
@@ -89,7 +71,7 @@ describe("Wave 10 family versions: unit-size dice, objective and zone distances,
     expect(normalizeFingerprintParameters("unit-position", { ...base, of: "matching-unit", of_side: "enemy", of_keywords: ["DAEMON"], of_not_designated: "afflicted" }, position))
       .toMatchObject({ of_keywords: ["DAEMON"], of_not_designated: "afflicted" });
     expect(() => normalizeFingerprintParameters("unit-position", { ...base, of: "matching-unit", of_designated: "afflicted" }, position)).toThrow(/of_side/u);
-    expect(() => normalizeFingerprintParameters("unit-position", { ...base, of: "this-unit", of_designated: "afflicted" }, position)).toThrow(/matching-unit only/u);
+    expect(() => normalizeFingerprintParameters("unit-position", { ...base, of: "this-unit", of_designated: "afflicted" }, position)).toThrow(/only describes of: matching-unit/u);
     expect(() => normalizeFingerprintParameters("unit-position", { ...base, of: "matching-unit", of_side: "enemy", of_designated: "not-registered" }, position)).toThrow(/registered designation/u);
   });
 
@@ -141,7 +123,7 @@ describe("Wave 10 placement after a set-up (SS1, SS2)", () => {
 
   it("refuses a dice model count on a copy of a destroyed unit, and on a count other than one", () => {
     const add = currentFamilyVersion("add-unit");
-    expect(() => normalizeFingerprintParameters("add-unit", { source: "copy", count: "1", models: "D3" }, add)).toThrow(/named datasheet/u);
+    expect(() => normalizeFingerprintParameters("add-unit", { source: "copy-of-destroyed", count: "1", models: "D3" }, add)).toThrow(/named datasheet/u);
     expect(() => normalizeFingerprintParameters("add-unit", { source: "datasheet", datasheet: "spore-mines", count: "D3", models: "D3" }, add)).toThrow(/count is 1/u);
     expect(normalizeFingerprintParameters("add-unit", { source: "datasheet", datasheet: "spore-mines", count: "1", models: "d3" }, add)).toMatchObject({ models: "D3" });
   });
@@ -285,9 +267,5 @@ describe("Wave 10 designated-unit distances and deployment-zone distances (SS4, 
     const words = describeEffect(mechanics.effect as Effect);
     expect(words).toContain("during deployment");
     expect(words).toContain("your opponent's deployment zone");
-  });
-
-  it("refuses a within distance from the enemy deployment zone in the version that had no form for it", () => {
-    expect(() => normalizeFingerprintParameters("unit-position", { kind: "within", inches: 8, of: "enemy-deployment-zone", subject: "this-unit", negated: false }, ZONE_BEYOND_ONLY)).toThrow();
   });
 });

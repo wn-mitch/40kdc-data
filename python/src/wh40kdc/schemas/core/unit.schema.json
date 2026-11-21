@@ -41,7 +41,10 @@
             "type": "string",
             "description": "Profile name (e.g., 'Wounded' for degrading)"
           },
-          "M": { "$ref": "../defs/common.schema.json#/$defs/stat-value" },
+          "M": {
+            "description": "Move in inches. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+            "oneOf": [{ "$ref": "../defs/common.schema.json#/$defs/stat-value" }, { "type": "null" }]
+          },
           "T": { "type": "integer", "minimum": 1 },
           "W": { "type": "integer", "minimum": 1 },
           "Sv": { "type": "integer", "minimum": 2, "maximum": 7 },
@@ -66,7 +69,10 @@
             ]
           },
           "Ld": { "type": "integer", "minimum": 2, "maximum": 10 },
-          "OC": { "type": "integer", "minimum": 0 }
+          "OC": {
+            "description": "Objective Control. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+            "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }]
+          }
         },
         "required": ["M", "T", "W", "Sv", "Ld", "OC"]
       },
@@ -190,6 +196,10 @@
               { "$ref": "../defs/common.schema.json#/$defs/keyword" },
               { "type": "null" }
             ]
+          },
+          "choice_group": {
+            "$ref": "../defs/common.schema.json#/$defs/entity-id",
+            "description": "The keyword-choice group (keyword-choice-groups.json) this keyword is one option of: the unit has it only when it takes this option at muster, and takes at most one option per group."
           }
         },
         "required": ["keyword"],
@@ -217,6 +227,11 @@
         "max": { "type": "integer", "minimum": 1 }
       },
       "required": ["min", "max"]
+    },
+    "max_model_count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The most models the unit may contain, across all of its composition rows. It caps a composition whose row maxima sum higher (Corsair Voidscarred: 10 models although its rows allow 13)."
     },
     "weapon_ids": {
       "type": "array",

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  DAMAGE_DEALT,
   attributeSelectedProfile,
   Dataset,
   profileApplicableBuffs,
@@ -76,14 +77,14 @@ function salvoUnit(unitId: string, factionId: string, phase: EngineContext["phas
 
 const salvoNobz = (phase: EngineContext["phase"], counts: ReadonlyMap<string, number>) => salvoUnit("nobz", "orks", phase, counts);
 
-const afterFnp = (attributed: Parameters<typeof stageOf>[0]) => stageOf(attributed, "after-fnp")!;
+const dealt = (attributed: Parameters<typeof stageOf>[0]) => stageOf(attributed, DAMAGE_DEALT)!;
 
 describe("model-scoped wargear rules on a shared weapon line", () => {
   it("re-rolls only the Paired Krumpas bearer's krumpa attacks, as the loadout scoring does", () => {
     const { selection, results, shared, buffs } = salvoNobz("fight", MIXED);
     expect(buffs.some((buff) => buff.applicableWhen?.modelScoped === true && buff.source.kind === "ability" && buff.source.wargearId === "paired-krumpas")).toBe(true);
     const used = results.filter((result) => selection.firing.has(result.id) && !result.error);
-    const total = used.reduce((sum, result) => sum + afterFnp(result.attributed).expected, 0);
+    const total = used.reduce((sum, result) => sum + dealt(result.attributed).expected, 0);
     expect(total).toBeCloseTo(shared.total, 9);
     expect(total).toBeCloseTo(selection.total, 9);
   });
@@ -97,15 +98,15 @@ describe("model-scoped wargear rules on a shared weapon line", () => {
     for (const group of krumpa.groups!) {
       const row = shared.selected.find((candidate) => candidate.weaponId === "kustom-krumpa" && candidate.count === group.models)!;
       const matrix = attributeSelectedProfile({ dataset: ds, unit: member.unit.raw, selected: row, target, buffs: matrixBuffs(row), context })!;
-      const salvo = afterFnp(group.attributed);
+      const salvo = dealt(group.attributed);
       expect(salvo.expected).toBeCloseTo(row.damage, 9);
       expect(salvo.baseline).toBeCloseTo(matrix.baseline, 9);
       expect(salvo.lifts.map((lift) => [lift.source, lift.delta])).toEqual(matrix.lifts.map((lift) => [lift.source, lift.delta]));
     }
     // The line's own stages are its groups' sum, so the bearer's re-roll lift is all the line shows.
-    const line = afterFnp(krumpa.attributed);
-    expect(line.expected).toBeCloseTo(krumpa.groups!.reduce((sum, group) => sum + afterFnp(group.attributed).expected, 0), 9);
-    expect(line.lifts.map((lift) => lift.delta)).toEqual(afterFnp(krumpa.groups![1]!.attributed).lifts.map((lift) => lift.delta));
+    const line = dealt(krumpa.attributed);
+    expect(line.expected).toBeCloseTo(krumpa.groups!.reduce((sum, group) => sum + dealt(group.attributed).expected, 0), 9);
+    expect(line.lifts.map((lift) => lift.delta)).toEqual(dealt(krumpa.groups![1]!.attributed).lifts.map((lift) => lift.delta));
   });
 
   it("splits an unused line's carriers by the model groups that carry it", () => {
@@ -126,7 +127,7 @@ describe("model-scoped wargear rules on a shared weapon line", () => {
       contextOf: () => context,
     });
     expect(shown!.groups?.map((group) => [group.models, group.bearer])).toEqual([[4, []], [1, ["paired-krumpas"]]]);
-    expect(afterFnp(shown!.attributed).expected).toBeCloseTo(afterFnp(used.attributed).expected, 9);
+    expect(dealt(shown!.attributed).expected).toBeCloseTo(dealt(used.attributed).expected, 9);
 
     // Carriers the groups do not account for cannot be told apart, so no bearer-only rule reaches them.
     expect(lineRows(unused, used, 3)).toEqual([{ count: 3, rerollOne: true }]);
@@ -137,7 +138,7 @@ describe("model-scoped wargear rules on a shared weapon line", () => {
     const { results, shared } = salvoNobz("fight", counts);
     const krumpa = results.find((result) => result.id === lineId("nobz", "kustom-krumpa", 0))!;
     expect(krumpa.groups).toBeUndefined();
-    expect(afterFnp(krumpa.attributed).expected).toBeCloseTo(shared.total, 9);
+    expect(dealt(krumpa.attributed).expected).toBeCloseTo(shared.total, 9);
   });
 });
 
@@ -148,6 +149,6 @@ describe("re-roll-one permissions across a unit's lines", () => {
     const used = results.filter((result) => selection.firing.has(result.id) && !result.error);
     expect(used.length).toBeGreaterThan(1);
     expect(shared.selected.filter((row) => row.rerollOne)).toHaveLength(1);
-    expect(used.reduce((sum, result) => sum + afterFnp(result.attributed).expected, 0)).toBeCloseTo(shared.total, 9);
+    expect(used.reduce((sum, result) => sum + dealt(result.attributed).expected, 0)).toBeCloseTo(shared.total, 9);
   });
 });

@@ -46,10 +46,10 @@ fn mortal_wounds(m: &P, subj: &str, ctx: &Ctx) -> String {
         None => String::new(),
     };
     let who = format!("{subj}{range}");
-    // "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
+    // ", to a maximum of 6 mortal wounds": a cap on the total, however many are rolled or counted.
     let cap = match nn(m, "max") {
         Some(max) => format!(
-            " (to a maximum of {} mortal {})",
+            ", to a maximum of {} mortal {}",
             jstr(Some(max)),
             if max.as_f64() == Some(1.0) {
                 "wound"
@@ -415,6 +415,9 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
                 "to-zero" => "change the Damage of that attack to 0".to_string(),
                 _ => format!("subtract {r} from the Damage characteristic of that attack"),
             };
+            if ctx.allocated_trigger && nn(m, "weapons").is_none() {
+                return how;
+            }
             let attack = if has_weapon(m) {
                 format!("an attack with {}", weapon_noun(m))
             } else {
@@ -431,7 +434,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             };
             let rated = is_rating_ref(m.get("threshold"));
             format!(
-                "{subj} {} the Feel No Pain {}+ ability{against}{}",
+                "{subj} {} Feel No Pain {}+{against}{}",
                 v(subj, "has"),
                 if rated {
                     "X".to_string()
@@ -538,9 +541,9 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
         Some("cp-gain") => {
             let n = num(m.get("amount"));
             if n < 0.0 {
-                format!("you lose {}CP", fnum(n.abs()))
+                format!("you lose {} CP", fnum(n.abs()))
             } else {
-                format!("you gain {}CP", jstr(m.get("amount")))
+                format!("you gain {} CP", jstr(m.get("amount")))
             }
         }
         Some("cost-modifier") => cost_modifier(m, subj),

@@ -87,6 +87,8 @@ export function armyKeywords(dataset: Dataset, unit: Unit, host: string, detachm
   const owned = new Set<string>([...(unit.keywords ?? []), ...(unit.faction_keywords ?? []), unit.name]);
   if (army.length > 0 && (unit.faction_keywords ?? []).every((k) => army.includes(k))) for (const k of army) owned.add(k);
   for (const grant of unit.conditional_keywords ?? []) {
+    // A keyword-choice option is taken per unit at muster, so the army is not assumed to give it.
+    if (grant.choice_group) continue;
     if (grant.required_detachment_id && grant.required_detachment_id !== detachmentId) continue;
     if (grant.required_faction_keyword && !army.includes(grant.required_faction_keyword)) continue;
     owned.add(grant.keyword);

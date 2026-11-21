@@ -2566,7 +2566,8 @@
         },
         "default_weapon_ids": [
           "aberrant-weapons"
-        ]
+        ],
+        "profile_name": "Aberrant"
       },
       {
         "name": "Aberrant",
@@ -4338,9 +4339,8 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "oval",
-          "width": 60,
-          "length": 35.5
+          "shape": "round",
+          "diameter": 60
         },
         "default_weapon_ids": [
           "mining-laser",
@@ -4564,7 +4564,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "metamorph-mutations"
+          "metamorph-mutations-claw-of-ascension-hybrid-metamorphs"
         ]
       },
       {
@@ -4577,7 +4577,7 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "autopistol",
+          "autopistol-claw-of-ascension-hybrid-metamorphs",
           "leaders-weapon-symbiote"
         ]
       },
@@ -4592,8 +4592,8 @@
           "diameter": 32
         },
         "default_weapon_ids": [
-          "hand-flamer",
-          "metamorph-mutations"
+          "hand-flamer-claw-of-ascension-hybrid-metamorphs",
+          "metamorph-mutations-claw-of-ascension-hybrid-metamorphs"
         ]
       }
     ],
@@ -4632,7 +4632,7 @@
           "models": 1,
           "items": [
             {
-              "id": "autopistol",
+              "id": "autopistol-claw-of-ascension-hybrid-metamorphs",
               "count": 1
             },
             {
@@ -4646,11 +4646,11 @@
           "models": 3,
           "items": [
             {
-              "id": "hand-flamer",
+              "id": "hand-flamer-claw-of-ascension-hybrid-metamorphs",
               "count": 3
             },
             {
-              "id": "metamorph-mutations",
+              "id": "metamorph-mutations-claw-of-ascension-hybrid-metamorphs",
               "count": 3
             }
           ]
@@ -4660,7 +4660,7 @@
           "models": 1,
           "items": [
             {
-              "id": "metamorph-mutations",
+              "id": "metamorph-mutations-claw-of-ascension-hybrid-metamorphs",
               "count": 1
             }
           ]
@@ -4676,7 +4676,7 @@
           "choices": [
             [
               {
-                "id": "autopistol",
+                "id": "autopistol-claw-of-ascension-hybrid-metamorphs",
                 "count": 1
               },
               {
@@ -4694,11 +4694,11 @@
           "choices": [
             [
               {
-                "id": "hand-flamer",
+                "id": "hand-flamer-claw-of-ascension-hybrid-metamorphs",
                 "count": 1
               },
               {
-                "id": "metamorph-mutations",
+                "id": "metamorph-mutations-claw-of-ascension-hybrid-metamorphs",
                 "count": 1
               }
             ]
@@ -4712,7 +4712,7 @@
           "choices": [
             [
               {
-                "id": "metamorph-mutations",
+                "id": "metamorph-mutations-claw-of-ascension-hybrid-metamorphs",
                 "count": 1
               }
             ]
@@ -4723,7 +4723,7 @@
       "options": [
         {
           "model": "Metamorph Leader",
-          "id": "autopistol",
+          "id": "autopistol-claw-of-ascension-hybrid-metamorphs",
           "input": "checkbox",
           "default": 1
         },
@@ -4735,19 +4735,19 @@
         },
         {
           "model": "Metamorph with Hand Flamer",
-          "id": "hand-flamer",
+          "id": "hand-flamer-claw-of-ascension-hybrid-metamorphs",
           "input": "stepper",
           "default": 3
         },
         {
           "model": "Metamorph with Hand Flamer",
-          "id": "metamorph-mutations",
+          "id": "metamorph-mutations-claw-of-ascension-hybrid-metamorphs",
           "input": "stepper",
           "default": 3
         },
         {
           "model": "Metamorph",
-          "id": "metamorph-mutations",
+          "id": "metamorph-mutations-claw-of-ascension-hybrid-metamorphs",
           "input": "checkbox",
           "default": 1
         }

@@ -56,6 +56,12 @@ pub(crate) fn recipient_snapshot_reason(
                     Some(event) => is_historical(event),
                     None => false,
                 };
+                // A loop that only marks units grants nothing to snapshot (marks_only).
+                if node.get("type").and_then(Value::as_str) == Some("for-each-unit")
+                    && marks_only(value)
+                {
+                    return false;
+                }
                 (node.get("type").and_then(Value::as_str) == Some("for-each-unit") && historical)
                     || node
                         .iter()
@@ -65,6 +71,31 @@ pub(crate) fn recipient_snapshot_reason(
         }
     }
     check(effect, trigger).then_some(RECIPIENT_SNAPSHOT_UNAVAILABLE)
+}
+
+/// Whether an effect only marks units ("for each Observer unit, select one enemy unit … to be
+/// marked as their Spotted unit"): designations, possibly under selections, loops, gates and
+/// sequences. It grants no buff, so a loop over it needs no trigger-time recipients; the marks it
+/// leaves are scenario facts.
+pub(crate) fn marks_only(value: &Value) -> bool {
+    let Some(node) = value.as_object() else {
+        return false;
+    };
+    match node.get("type").and_then(Value::as_str) {
+        Some("designate") => true,
+        Some("select-units") | Some("for-each-unit") => node.get("effect").is_some_and(marks_only),
+        Some("conditional") => {
+            node.get("effect").is_some_and(marks_only)
+                && node
+                    .get("on_fail")
+                    .is_none_or(|fail| fail.is_null() || marks_only(fail))
+        }
+        Some("sequence") => node
+            .get("steps")
+            .and_then(Value::as_array)
+            .is_some_and(|steps| !steps.is_empty() && steps.iter().all(marks_only)),
+        _ => false,
+    }
 }
 
 fn is_historical(event: &Value) -> bool {
@@ -132,6 +163,9 @@ impl Resolver<'_> {
             None => &[],
         };
         let kind = node.get("type").and_then(Value::as_str);
+        if kind == Some("for-each-unit") && events.iter().any(is_historical) && marks_only(value) {
+            return Ok(json!({"type": "sequence", "steps": []}));
+        }
         if kind == Some("for-each-unit") && events.iter().any(is_historical) {
             let selector: UnitSelector =
                 serde_json::from_value(node.get("selector").cloned().unwrap_or(Value::Null))

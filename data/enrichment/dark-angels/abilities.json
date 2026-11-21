@@ -1020,7 +1020,7 @@
           "target": "this-model",
           "modifier": {
             "stat": "AP",
-            "operation": "add",
+            "operation": "improve",
             "value": 1,
             "weapons": {
               "type": "melee"
@@ -1912,7 +1912,6 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "dark-angels"
   },
   {
@@ -2450,7 +2449,12 @@
       },
       "optional": true
     },
-    "faction_id": "dark-angels"
+    "faction_id": "dark-angels",
+    "option_names": [
+      "Mist-wreathed Shadow Realms",
+      "Martial Exemplar",
+      "No Hiding from the Watchers"
+    ]
   },
   {
     "ability_id": "psychic-hood-dark-angels",
@@ -2987,7 +2991,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "dark-angels"
   },
   {
@@ -4303,7 +4306,7 @@
                 },
                 {
                   "type": "roll-modifier",
-                  "target": "this-unit",
+                  "target": "attacker",
                   "modifier": {
                     "roll": "hit",
                     "operation": "subtract",

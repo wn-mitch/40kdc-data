@@ -8,7 +8,6 @@ import { compileLeaves } from "../src/semantic-authoring/compile.js";
 import type { CompileLeaf } from "../src/semantic-authoring/compile-fragments.js";
 import { coreCheckErrors } from "../src/semantic-authoring/core-checks.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
 
 let at = 0;
 function leaf(family_id: string, parameters: Record<string, unknown>): CompileLeaf {
@@ -44,42 +43,8 @@ afterEach(() => {
 });
 
 describe("Semantic authoring family extensions", () => {
-  it("keeps every earlier leaf of an extended family, which moves across unchanged", () => {
-    // One table for every widened family across the first three rounds.
-    for (const [family, parameters] of [
-      ["bearer-eligibility", { keywords: ["CAPTAIN"], match: "all", excluded_keywords: [] }],
-      ["unit-position", { kind: "within", inches: 6, of: "this-unit", subject: "selected-unit", negated: false }],
-      ["leading-unit", { subject: "this-model", attachment: "leading" }],
-      ["event", { kind: "move-ended", owner: "enemy" }],
-      ["roll-modifier", { roll: "charge", operation: "add", value: 1 }],
-      ["rule-state", { subject: "this-unit", direction: "suppressed", rule_kind: "core-rule", rule: "benefit-of-cover" }],
-      ["characteristic-modifier", { subject: "this-unit", characteristics: ["M"], operation: "add", value: 2, weapon_type: "all" }],
-      ["make-move", { subject: "this-unit", move_type: "normal", distance: 6 }],
-      ["make-move", { subject: "this-unit", move_type: "normal", distance: "D6" }],
-      ["characteristic-modifier", { subject: "this-unit", characteristics: ["S"], operation: "add", value: 1, weapon_type: "melee" }],
-      ["unit-activity", { activities: ["advanced-this-turn"], subject: "this-unit", negated: false }],
-      ["select-unit", { scope: "enemy", distance: "within", inches: 12, visible: true }],
-      ["battle-round", { min: 3 }],
-      ["event", { kind: "step-started", step: "battle-shock" }],
-      ["weapon-ability-grant", { subject: "this-unit", keyword: "Lethal Hits", weapon_type: "all" }],
-      ["feel-no-pain", { subject: "this-unit", threshold: 5, against: "all" }],
-      ["core-ability-grant", { subject: "this-unit", ability: "scouts", value: 6 }],
-      ["invulnerable-save", { subject: "this-model", threshold: 4 }],
-      ["ability-record-grant", { subject: "this-unit", ability: "some-ability" }],
-      ["event", { kind: "unit-destroyed" }],
-      ["mortal-wounds", { recipient: "target", count: "D3" }],
-      ["set-up", { subject: "this-unit", to: "battlefield", from: "strategic-reserves" }],
-      ["characteristic-set", { subject: "this-model", characteristic: "M", value: 7 }],
-    ] as const) {
-      const version = currentFamilyVersion(family);
-      expect(normalizeFingerprintParameters(family, parameters, version - 1), family).toEqual(normalizeFingerprintParameters(family, parameters, version));
-      expect(mapToLatest(family, version - 1, parameters), family).toEqual({ family, version, parameters: normalizeFingerprintParameters(family, parameters, version) });
-    }
-  });
-
   it("grants Deadly Demise with a dice rating and refuses dice on other abilities", () => {
     expect(normalize("core-ability-grant", { subject: "this-model", ability: "deadly-demise", value: "D3+1" })).toEqual({ subject: "this-model", ability: "deadly-demise", value: "D3+1" });
-    expect(() => normalizeFingerprintParameters("core-ability-grant", { subject: "this-model", ability: "deadly-demise", value: "D6" }, 6)).toThrow();
     expect(() => normalize("core-ability-grant", { subject: "this-unit", ability: "scouts", value: "D6" })).toThrow();
     expect(() => normalize("core-ability-grant", { subject: "this-model", ability: "deadly-demise", value: "D4" })).toThrow(/dice rating/u);
     const text = "This model has the Deadly Demise D6 ability.";
@@ -87,9 +52,8 @@ describe("Semantic authoring family extensions", () => {
     expect(result.ok && result.mechanics.effect).toEqual({ type: "ability-grant", target: "this-model", modifier: { ability: "deadly-demise", value: "D6" } });
   });
 
-  it("re-rolls a failed 1 or 2 from reroll version 8, and refuses the subset before it", () => {
+  it("re-rolls a failed 1 or 2, and refuses a subset of only twos", () => {
     expect(normalize("reroll", { roll: "hit", subset: "ones-and-twos", weapon_type: "all" })).toEqual({ roll: "hit", subset: "ones-and-twos", weapon_type: "all" });
-    expect(() => normalizeFingerprintParameters("reroll", { roll: "hit", subset: "ones-and-twos", weapon_type: "all" }, 7)).toThrow();
     expect(() => normalize("reroll", { roll: "hit", subset: "twos", weapon_type: "all" })).toThrow();
     const result = compileLeaves([leaf("reroll", { roll: "hit", subset: "ones-and-twos", weapon_type: "all" })], "You can re-roll a Hit roll of 1 or 2.");
     expect(result.ok && result.mechanics.effect).toEqual({ type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones-and-twos" } });
@@ -159,7 +123,7 @@ describe("Semantic authoring family extensions", () => {
     expect(() => normalize("roll-modifier", { roll: "hit", rolls: ["charge", "advance"], operation: "add", value: 1 })).toThrow(/not both/u);
     expect(() => normalize("roll-modifier", { operation: "add", value: 1 })).toThrow(/a roll or rolls/u);
     // Each listed roll must be one the single-roll leaf accepts.
-    expect(() => normalize("roll-modifier", { rolls: ["charge", "psychic"], operation: "add", value: 1 })).toThrow();
+    expect(() => normalize("roll-modifier", { rolls: ["charge", "attacks"], operation: "add", value: 1 })).toThrow();
   });
 
   it("denies cover to a selected unit or the attack's target as a suppressed core rule", () => {
@@ -221,6 +185,8 @@ describe("Semantic authoring family extensions, second round", () => {
   it("moves a dice amount plus a number, and refuses a malformed one", () => {
     expect(first(compiled([leaf("make-move", { subject: "this-unit", move_type: "normal", distance: "d3+3" })]), "move")!.modifier).toEqual({ move_type: "normal", distance: "D3+3" });
     expect(() => normalize("make-move", { subject: "this-unit", move_type: "normal", distance: "D4+1" })).toThrow(/dice amount/u);
+    expect(normalize("make-move", { subject: "this-unit", move_type: "normal", distance: { source: "up to D3+1" } })).toMatchObject({ distance: { source: "up to D3+1" } });
+    expect(() => normalize("make-move", { subject: "this-unit", move_type: "normal", distance: { source: "D3+1", inches: 4 } })).toThrow(/make-move.distance must be/u);
   });
 
   it("limits a characteristic change to weapons with one ability, only with a weapon scope", () => {
@@ -284,7 +250,7 @@ describe("Semantic authoring family extensions, second round", () => {
     expect(trigger({ kind: "used", activity: "stratagem", owner: "enemy" })).toEqual({ event: "used", filter: { kind: "stratagem" }, subject: { owner: "enemy" } });
     const failed = trigger({ kind: "after-roll", roll: "battle-shock", result: "failure", subject: "antecedent" }, [leaf("select-unit", { scope: "enemy", distance: "any", visible: false })]);
     expect(failed).toEqual({ event: "after-roll", filter: { roll: "battle-shock", result: "failure" }, subject: "selected-unit" });
-    expect(() => normalize("event", { kind: "used", activity: "stratagem", result: "failure" })).toThrow(/after-roll only/u);
+    expect(() => normalize("event", { kind: "used", activity: "stratagem", result: "failure" })).toThrow(/event.result does not apply to kind used/u);
     expect(() => normalize("event", { kind: "phase-start", phase: "command", turn: "your", owner: "enemy" })).toThrow();
   });
 

@@ -435,8 +435,9 @@
         "max": 6,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "round",
-          "diameter": 75
+          "shape": "oval",
+          "width": 75,
+          "length": 42
         },
         "default_weapon_ids": [
           "choppa-deffkoptas",
@@ -2102,7 +2103,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         },
         "default_weapon_ids": [
           "choppa-breaka-boyz",
@@ -2632,7 +2633,7 @@
         "is_leader_model": true,
         "base_size_mm": {
           "shape": "round",
-          "diameter": 32
+          "diameter": 40
         },
         "default_weapon_ids": [
           "choppa-tankbustas",
@@ -3184,7 +3185,11 @@
           "kustom-choppa-boyz",
           "kombi-skorcha-boyz"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Boy",
@@ -3195,7 +3200,11 @@
           "shoota-boyz",
           "slugga"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -4570,8 +4579,9 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "round",
-          "diameter": 120
+          "shape": "oval",
+          "width": 120,
+          "length": 92
         },
         "default_weapon_ids": [
           "armoured-impact",
@@ -5024,8 +5034,9 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "round",
-          "diameter": 120
+          "shape": "oval",
+          "width": 120,
+          "length": 92
         },
         "default_weapon_ids": [
           "armoured-impact",
@@ -7096,8 +7107,9 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "round",
-          "diameter": 120
+          "shape": "oval",
+          "width": 120,
+          "length": 92
         },
         "default_weapon_ids": [
           "armoured-impact",
@@ -8218,9 +8230,13 @@
         "default_weapon_ids": [
           "big-choppa",
           "kustom-shoota",
-          "slugga"
+          "slugga-ardmob-boyz"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Boyz",
@@ -8228,10 +8244,14 @@
         "max": 9,
         "default_weapon_ids": [
           "choppa",
-          "shoota",
-          "slugga"
+          "shoota-ardmob-boyz",
+          "slugga-ardmob-boyz"
         ],
-        "is_leader_model": false
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        }
       }
     ],
     "game_version": {
@@ -8272,7 +8292,7 @@
               "count": 1
             },
             {
-              "id": "slugga",
+              "id": "slugga-ardmob-boyz",
               "count": 1
             }
           ]
@@ -8286,11 +8306,11 @@
               "count": 9
             },
             {
-              "id": "shoota",
+              "id": "shoota-ardmob-boyz",
               "count": 9
             },
             {
-              "id": "slugga",
+              "id": "slugga-ardmob-boyz",
               "count": 9
             }
           ]
@@ -8314,7 +8334,7 @@
                 "count": 1
               },
               {
-                "id": "slugga",
+                "id": "slugga-ardmob-boyz",
                 "count": 1
               }
             ]
@@ -8332,11 +8352,11 @@
                 "count": 1
               },
               {
-                "id": "shoota",
+                "id": "shoota-ardmob-boyz",
                 "count": 1
               },
               {
-                "id": "slugga",
+                "id": "slugga-ardmob-boyz",
                 "count": 1
               }
             ]
@@ -8359,7 +8379,7 @@
         },
         {
           "model": "Boss Nob",
-          "id": "slugga",
+          "id": "slugga-ardmob-boyz",
           "input": "checkbox",
           "default": 1
         },
@@ -8371,13 +8391,13 @@
         },
         {
           "model": "Boyz",
-          "id": "shoota",
+          "id": "shoota-ardmob-boyz",
           "input": "stepper",
           "default": 9
         },
         {
           "model": "Boyz",
-          "id": "slugga",
+          "id": "slugga-ardmob-boyz",
           "input": "stepper",
           "default": 9
         }
@@ -9415,6 +9435,207 @@
           "id": "zzap-gun",
           "input": "checkbox",
           "default": 0
+        }
+      ],
+      "uniform": []
+    }
+  },
+  {
+    "unit_id": "ardmob-boyz-2",
+    "faction_id": "orks",
+    "models": [
+      {
+        "name": "Boss Nob",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        },
+        "default_weapon_ids": [
+          "big-choppa",
+          "kombi-rokkit-ardmob-boyz-2",
+          "slugga-ardmob-boyz-2",
+          "kombi-shoota"
+        ]
+      },
+      {
+        "name": "Boyz",
+        "min": 9,
+        "max": 9,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 32
+        },
+        "default_weapon_ids": [
+          "choppa",
+          "shoota",
+          "slugga-ardmob-boyz-2"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Boss Nob",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Boyz",
+            "min": 9,
+            "max": 9
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Boss Nob",
+          "models": 1,
+          "items": [
+            {
+              "id": "big-choppa",
+              "count": 1
+            },
+            {
+              "id": "kombi-rokkit-ardmob-boyz-2",
+              "count": 1
+            },
+            {
+              "id": "kombi-shoota",
+              "count": 1
+            },
+            {
+              "id": "slugga-ardmob-boyz-2",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Boyz",
+          "models": 9,
+          "items": [
+            {
+              "id": "choppa",
+              "count": 9
+            },
+            {
+              "id": "shoota",
+              "count": 9
+            },
+            {
+              "id": "slugga-ardmob-boyz-2",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Boss Nob",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "big-choppa",
+                "count": 1
+              },
+              {
+                "id": "kombi-rokkit-ardmob-boyz-2",
+                "count": 1
+              },
+              {
+                "id": "kombi-shoota",
+                "count": 1
+              },
+              {
+                "id": "slugga-ardmob-boyz-2",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Boyz",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "choppa",
+                "count": 1
+              },
+              {
+                "id": "shoota",
+                "count": 1
+              },
+              {
+                "id": "slugga-ardmob-boyz-2",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Boss Nob",
+          "id": "big-choppa",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Boss Nob",
+          "id": "kombi-rokkit-ardmob-boyz-2",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Boss Nob",
+          "id": "kombi-shoota",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Boss Nob",
+          "id": "slugga-ardmob-boyz-2",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Boyz",
+          "id": "choppa",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Boyz",
+          "id": "shoota",
+          "input": "stepper",
+          "default": 9
+        },
+        {
+          "model": "Boyz",
+          "id": "slugga-ardmob-boyz-2",
+          "input": "stepper",
+          "default": 9
         }
       ],
       "uniform": []

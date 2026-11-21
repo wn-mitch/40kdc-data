@@ -1,10 +1,10 @@
 # Versioning
 
-All data in this repository is versioned by **edition + dataslate**.
+Records in this repository are versioned along two independent axes: **game version** (edition + dataslate) and **game mode**.
 
-## Game Version Format
+## Game Version (`game_version`)
 
-Every entity and enrichment entry carries a `game_version` object:
+Every core and enrichment entity carries a `game_version` object:
 
 ```json
 {
@@ -13,51 +13,38 @@ Every entity and enrichment entry carries a `game_version` object:
 }
 ```
 
-- **edition**: The game edition (e.g., `10th`, `11th`)
-- **dataslate**: The balance or rules update the record matches. The registry
-  `data/core/game-versions.json` lists every dataslate with its effective date
-  and the slate it supersedes. A slate that follows a Munitorum Field Manual
-  release is named by that release's date (`2026-09-30`, `2026-10-14`), and
-  `tools/src/mfm/dataslate.ts` maps each MFM dump `data_version` to its slate.
-  Other slates use a kebab-case slug (`pre-launch-provisional`, `launch`,
-  `codex-orks`), and the 10th-edition archive uses quarterly tags (`2025-q3`).
+- **`edition`:** The Warhammer 40,000 edition (`10th`, `11th`).
+- **`dataslate`:** The balance or rules release the record reflects. All valid slates, effective dates, and supersession chains are registered in `data/core/game-versions.json`.
+  - Slates matching a Munitorum Field Manual release use its release date (`2026-09-30`, `2026-10-14`), mapped from each dump's `data_version` in `tools/src/mfm/dataslate.ts`.
+  - Other slates use kebab-case slugs (`pre-launch-provisional`, `launch`, `codex-orks`); the 10th-edition archive uses quarterly tags (`2025-q3`).
 
-The `ingest-mfm dataslates` pass stamps a record with the current dump's slate
-only when the record matches the dump. Records that claim a dump-confirmed slate but fail that
-check fall back to `pre-launch-provisional`.
+The `ingest-mfm dataslates` pass stamps records with the current dump's dataslate only when they match the dump; records that fail verification revert to `pre-launch-provisional`.
 
-## Game Modes
+## Game Modes (`game_modes`)
 
-Orthogonal to `game_version` (the *edition* axis), army-construction entities carry an optional **`game_modes`** array — the *mode* axis — naming the game mode(s) the entity is legal or authored for:
+Army-construction entities carry an optional `game_modes` array specifying which modes they belong to:
 
 ```json
 { "game_modes": ["combat-patrol"] }
 ```
 
-- An **absent** `game_modes` means `["matched-play"]` (the competitive default), so every existing matched-play entity validates unchanged.
-- The vocabulary is the closed enum `game-mode-id` in `schemas/$defs/common.schema.json`: `matched-play` (competitive) plus `combat-patrol`, `boarding-actions`, `crusade` (non-competitive). Per-mode metadata — notably `is_competitive` — lives in the registry `data/core/game-modes.json`, mirroring `game-versions.json` / `force-dispositions.json`.
-- Only the army-construction entities carry it: `unit`, `detachment`, `enhancement`, `stratagem`, `weapon`, `unit-composition`, `wargear-option`. Faction / mission / registry entities do not.
-- Stratagems, weapons and wargear options take their modes from the records that use them: a Stratagem from its detachment, a wargear option from its unit, and a weapon from every unit that carries it, can take it, or equips it by default. Validation fails when a stamp drifts; `npm run stamp:game-modes -- --write` (from `tools/`) re-derives them, and MFM ingest writes re-derive them before validating.
-- The data packages read this axis as views. A `Dataset` lists one game mode, matched play by default; `forGameMode("combat-patrol" | "all")` opens another view. Id lookups resolve records outside the view, so share tokens and saved rosters keep resolving.
-- The MFM completeness golden dimensions coverage by mode: the headline competitive number excludes non-matched-play content, and each non-competitive mode is tracked on its own dimension. Only `combat-patrol` is auto-detected from the dump (`publication.isCombatPatrol`); the rest are schema-homed for hand-authoring. See `11e-migration.md` § "Game modes axis" for the full rationale.
+- **Default:** An omitted `game_modes` field means `["matched-play"]`.
+- **Allowed values:** Closed enum `game-mode-id` in `schemas/$defs/common.schema.json` (`matched-play`, `combat-patrol`, `boarding-actions`, `crusade`). Mode metadata (including `is_competitive`) is stored in `data/core/game-modes.json`.
+- **Entities carrying `game_modes`:** `unit`, `detachment`, `enhancement`, `stratagem`, `weapon`, `unit-composition`, and `wargear-option`. Factions, missions, and registries do not carry it.
+- **Derived stamps:** Stratagems inherit `game_modes` from their detachment, wargear options from their unit, and weapons from every unit that carries, can take, or equips them by default. Validation rejects stale stamps; run `cd tools && npm run stamp:game-modes -- --write` to re-derive them (MFM ingest writes re-derive them automatically).
+- **Dataset views:** Each `Dataset` exposes one game mode (`matched-play` by default). Call `forGameMode("combat-patrol")` or `forGameMode("all")` (`for_game_mode` in Rust/Python, `ForGameMode` in Go) for another view. Exact ID lookups resolve across all modes so share tokens and saved rosters continue to resolve.
 
-## Git Tags
+## Package Releases and Git Tags
 
-The 10th-edition dataset is tagged `10th/2025-q3`.
+- The 10th-edition dataset archive is tagged `10th/2025-q3`.
+- All four language packages share one synchronized semantic version across `tools/package.json`, `crates/wh40kdc/Cargo.toml`, `python/src/wh40kdc/_version.py`, and `go/version.go` (enforced by CI).
+- CI creates per-registry release tags: `npm-v{version}`, `wh40kdc-v{version}` (crates.io), `pypi-v{version}`, and `go/v{version}`.
 
-Package releases carry one shared semantic version across the four packages
-(`tools/package.json`, `crates/wh40kdc/Cargo.toml`,
-`python/src/wh40kdc/_version.py`, `go/version.go`; CI fails on drift). CI tags
-each release per registry: `npm-v{version}`, `wh40kdc-v{version}` (crates.io),
-`pypi-v{version}`, and `go/v{version}`.
+## Data Directory Layout
 
-## Data File Organization
+Data is organized by faction rather than dataslate; individual records carry their own `game_version`:
 
-Data is organized by faction, not by dataslate. Each faction has a directory
-under `data/core/` and `data/enrichment/`, and each record carries its own
-`game_version`:
-
-```
+```text
 data/
 ├── core/
 │   ├── game-versions.json
@@ -72,21 +59,20 @@ data/
         └── phase-mappings.json
 ```
 
-A new dataslate adds an entry to `game-versions.json`; records move to it as
-they are checked against its source.
+When a new dataslate arrives, an entry is added to `data/core/game-versions.json` and records advance as they are verified against the new source.
 
 ## Game Phases Across Editions
 
-The five game phases (`command`, `movement`, `shooting`, `charge`, `fight`) are **shared between 10th and 11th edition** — the `phase` enum in `schemas/$defs/common.schema.json` is not edition-versioned. 11e's combat changes (the Pile In timing reorder, "Overrun Fight") happen *within* the Fight phase and do not introduce a new top-level phase, so no enum extension or per-edition split is required. If a future edition adds or removes a top-level phase, split `phase` into edition-scoped `$defs` at that point.
+The five core game phases (`command`, `movement`, `shooting`, `charge`, `fight`) are shared across 10th and 11th edition in `schemas/$defs/common.schema.json`. Eleventh-edition Fight phase updates occur within the existing `fight` phase rather than introducing a new top-level phase.
 
 ## Schema Versioning
 
-Schemas are versioned via git tags. Breaking schema changes bump the version in the `$id` URL (e.g., `v2/core/faction.schema.json`). Non-breaking additions maintain the same `$id`.
+Schemas are versioned via git tags. Breaking schema changes increment the version segment in the schema `$id` URL (for example, `v2/core/faction.schema.json`); non-breaking additions keep the existing `$id`.
 
 ## Enrichment Entry Versioning
 
-Each ability DSL entry has its own `version` field and a `supersedes` field. When a FAQ changes a mechanic:
+Ability DSL entries include `version` and `supersedes` fields. When an errata or FAQ changes an ability:
 
-1. The old entry remains for historical reference
-2. A new entry is created with the updated `version` and `supersedes` pointing to the old one
-3. Tools resolve the chain to find the current version for a given dataslate
+1. The prior entry remains for historical reference.
+2. A new entry increments `version` and sets `supersedes` to the prior entry's ID.
+3. Consumers resolve the chain for the target dataslate.

@@ -71,8 +71,8 @@ export function bindCharacteristicFloors(leaves: readonly CompileLeaf[]): Compil
     if (change?.family_id !== CHANGE || change.fragment !== floor.fragment) throw new CompileError(`A characteristic floor at byte ${floor.start_byte} needs its characteristic change right before it.`);
     const lowered = change.parameters.characteristics as string[];
     const floored = floor.parameters.characteristics as string[];
-    // Version 2: "(this cannot improve a model's Save to better than 3+)" floors an improved roll-target characteristic.
-    const capsImprovement = floor.family_version >= 2 && change.parameters.operation === "improve" && floored.every((stat) => ROLL_TARGET.has(stat));
+    // "(this cannot improve a model's Save to better than 3+)" floors an improved roll-target characteristic.
+    const capsImprovement = change.parameters.operation === "improve" && floored.every((stat) => ROLL_TARGET.has(stat));
     if (!LOWERING.has(String(change.parameters.operation)) && !capsImprovement) throw new CompileError(`A characteristic floor at byte ${floor.start_byte} follows a change that does not lower a characteristic.`);
     const minimum = floor.parameters.minimum as number;
     const missing = floored.filter((stat) => !lowered.includes(stat));

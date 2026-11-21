@@ -7,10 +7,13 @@
 use serde_json::{json, Map, Value};
 
 use super::applicability::{condition_to_applicability, label_for_buffs, App};
-use super::attack_scope::{is_weapon_scoped_condition, split_attack_scoped, walk_gated};
+use super::attack_scope::{
+    is_weapon_scoped_condition, reduce_negated_conjunctions, split_attack_scoped, walk_gated,
+    Reduced,
+};
 use super::conditions::evaluate_condition_for_source;
 use super::gated::{
-    gated, offer_self_designated, offer_stance_gated, self_designation_gate, split_stance_option,
+    gated, offer_own_designated, offer_stance_gated, own_designation_gate, split_stance_option,
 };
 use super::js::*;
 use super::{walk, Lever, Out, WalkOpts, STOCHASTIC_DICE_GATED};
@@ -398,6 +401,114 @@ fn without_selection_window(condition: &Obj, effect: Option<&Value>) -> Option<O
     })
 }
 
+/// A record duration that outlasts the phase its top-level gate names ("until the end of the
+/// turn"). Mirrors TS `outlastsPhase`.
+fn outlasts_phase(duration: Option<&Value>) -> bool {
+    duration.and_then(Value::as_str).is_some_and(|d| {
+        d == "turn" || d == "battle-round" || d == "battle" || d.starts_with("until-")
+    })
+}
+
+/// Selections made in the gate's phase whose result lasts the record's duration.
+const LASTING_SELECTIONS: [&str; 4] = ["choice", "select-units", "designate-target", "designate"];
+
+fn has_phase_clock(condition: &Obj) -> bool {
+    if is_str(condition, "type", "phase-is") {
+        return true;
+    }
+    is_str(condition, "operator", "and")
+        && condition
+            .get("operands")
+            .and_then(Value::as_array)
+            .is_some_and(|items| {
+                items
+                    .iter()
+                    .filter_map(Value::as_object)
+                    .any(has_phase_clock)
+            })
+}
+
+/// A record's top-level phase gate under a duration that outlasts the phase says when the effect
+/// is set up, not when it applies. Around a selection the window only times the pick, so it is
+/// dropped; around any other effect the gate still holds in its own phase, and in a later phase
+/// it is the player-timed activation clock. Mirrors TS `lastingSetup`; the activation source
+/// travels inside the cloned node.
+pub(super) fn lasting_setup(effect: &Value, duration: Option<&Value>) -> Value {
+    let Some(node) = effect.as_object() else {
+        return effect.clone();
+    };
+    let Some(condition) = object(node.get("condition")) else {
+        return effect.clone();
+    };
+    if !is_str(node, "type", "conditional")
+        || !outlasts_phase(duration)
+        || !has_phase_clock(condition)
+    {
+        return effect.clone();
+    }
+    let inner = node.get("effect");
+    let selection = inner
+        .and_then(Value::as_object)
+        .and_then(|o| o.get("type"))
+        .and_then(Value::as_str)
+        .is_some_and(|kind| LASTING_SELECTIONS.contains(&kind));
+    let mut rewritten = node.clone();
+    if selection {
+        fn operands(node: &Obj) -> Vec<&Obj> {
+            match (
+                node.get("operator").and_then(Value::as_str),
+                node.get("operands").and_then(Value::as_array),
+            ) {
+                (Some("and"), Some(items)) => items
+                    .iter()
+                    .filter_map(Value::as_object)
+                    .flat_map(operands)
+                    .collect(),
+                _ => vec![node],
+            }
+        }
+        let kept: Vec<Value> = operands(condition)
+            .into_iter()
+            .filter(|operand| {
+                !operand
+                    .get("type")
+                    .and_then(Value::as_str)
+                    .is_some_and(|kind| SELECTION_WINDOW.contains(&kind))
+            })
+            .map(|operand| Value::Object(operand.clone()))
+            .collect();
+        let guard = match kept.len() {
+            0 => return inner.cloned().unwrap_or(Value::Null),
+            1 => kept.into_iter().next().unwrap(),
+            _ => json!({ "operator": "and", "operands": kept }),
+        };
+        rewritten.insert("condition".into(), guard);
+    } else {
+        rewritten.insert(
+            "condition".into(),
+            json!({
+                "operator": "or",
+                "operands": [Value::Object(condition.clone()), activation_condition(condition, duration)],
+            }),
+        );
+    }
+    Value::Object(rewritten)
+}
+
+/// The reason a conditional whose condition the context leaves undecided is reported under,
+/// naming an operator condition by its operator.
+pub(super) fn undecided_condition_reason(condition: &Obj) -> String {
+    format!(
+        "conditional: cannot evaluate condition \"{}\" against current context",
+        js_string(
+            condition
+                .get("type")
+                .filter(|kind| !kind.is_null())
+                .or_else(|| condition.get("operator"))
+        )
+    )
+}
+
 pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     let Some(condition) = object(node.get("condition")) else {
         return;
@@ -412,6 +523,19 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             }
         }
         return;
+    }
+    match reduce_negated_conjunctions(condition, &|leaf| evaluate_condition(leaf, opts)) {
+        Reduced::Unchanged => {}
+        Reduced::Holds => {
+            walk(node.get("effect").unwrap_or(&Value::Null), opts, out);
+            return;
+        }
+        Reduced::Narrowed(reduced) => {
+            let mut narrowed = node.clone();
+            narrowed.insert("condition".to_string(), Value::Object(reduced));
+            conditional(&narrowed, opts, out);
+            return;
+        }
     }
     if is_weapon_scoped_condition(condition) {
         if let App::When(applicability) =
@@ -437,8 +561,8 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     }
     // A designation the ability grants its own holders, undeclared by the context, is the
     // player's to ready.
-    if let Some(tag) = self_designation_gate(condition, opts) {
-        offer_self_designated(node, tag, opts, out);
+    if let Some(tag) = own_designation_gate(condition, opts) {
+        offer_own_designated(node, tag, opts, out);
         return;
     }
     // A gate on a stance option the context does not declare follows the player's stance pick.
@@ -486,15 +610,7 @@ pub(super) fn conditional(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 enumerate_timing_gate(node, opts, out);
             } else {
                 out.unsupported.push((
-                    format!(
-                        "conditional: cannot evaluate condition \"{}\" against current context",
-                        js_string(
-                            condition
-                                .get("type")
-                                .filter(|kind| !kind.is_null())
-                                .or_else(|| condition.get("operator"))
-                        )
-                    ),
+                    undecided_condition_reason(condition),
                     Value::Object(activation_fragment(node).unwrap_or(node).clone()),
                     Some(undecided_needs(evaluated, opts)),
                 ));
@@ -552,6 +668,7 @@ pub(super) fn named_effect(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             .and_then(Value::as_str)
             .map_or_else(|| label_for_buffs(&sub.applied), str::to_string);
         out.activatable.push(Lever {
+            secondary: false,
             id: format!("{}#{name}", opts.ability_id),
             label: name,
             buffs: sub.applied,
@@ -595,6 +712,7 @@ fn enumerate_timing_gate(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     if !buffs.is_empty() {
         let timing = extract_timing(condition).unwrap_or_else(|| "timing".to_string());
         out.activatable.push(Lever {
+            secondary: false,
             id: format!("{}@{timing}", opts.ability_id),
             label: label_for_buffs(&buffs),
             buffs,

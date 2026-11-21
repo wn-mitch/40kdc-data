@@ -28,6 +28,33 @@
       "default": 1,
       "description": "Number of units this enhancement may be applied to. Only meaningful when `upgrade_tag` is true; defaults to 1."
     },
+    "counts_toward_enhancement_limit": {
+      "type": "boolean",
+      "default": true,
+      "description": "False when taking this enhancement does not count toward the battle size's Enhancement limit."
+    },
+    "equipable_by_non_character": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when a unit that is not a CHARACTER may be given this enhancement. An `upgrade_tag` enhancement is always equipable by a non-CHARACTER unit."
+    },
+    "equipable_by_epic_hero": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when an EPIC HERO may be given this enhancement. Without it, no EPIC HERO may take it."
+    },
+    "bearer_cannot_be_warlord": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when the unit given this enhancement cannot be the army's Warlord."
+    },
+    "required_wargear_ids": {
+      "type": "array",
+      "items": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Weapon ids the bearer's unit must carry in its chosen loadout to be given this enhancement. Every listed id is required."
+    },
     "keyword_restrictions": {
       "$ref": "../defs/common.schema.json#/$defs/keyword-list"
     },

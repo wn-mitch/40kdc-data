@@ -346,9 +346,41 @@ describe("validateRosterCore — unit-excluded-from-faction", () => {
     expect(army.map((v) => v.code)).not.toContain("unit-excluded-from-faction");
   });
 
-  it("allows a collapsed generic twin (Repulsor) in the chapter that excluded it", () => {
-    const { army } = validateRosterCore(norm("black-templars", "repulsor"), ds);
-    expect(army.map((v) => v.code)).not.toContain("unit-excluded-from-faction");
+  it("bars the generic unit from a chapter that prints its own copy, and takes the copy", () => {
+    expect(validateRosterCore(norm("black-templars", "repulsor"), ds).army.map((v) => v.code)).toContain("unit-excluded-from-faction");
+    expect(validateRosterCore(norm("black-templars", "repulsor-black-templars"), ds).army.map((v) => v.code)).not.toContain("unit-excluded-from-faction");
+  });
+});
+
+// --- validateRosterCore: unit-chapter-mismatch ------------------------------
+describe("validateRosterCore — unit-chapter-mismatch", () => {
+  const codes = (factionId: string, unitId: string): string[] =>
+    validateRosterCore(
+      {
+        factionId,
+        battleSize: null,
+        forceDisposition: "purge-the-foe",
+        detachmentIds: [],
+        units: [{ unitId, modelCount: 1, isWarlord: true, enhancementId: null, leaderBodyguardId: null, counts: new Map() }],
+      },
+      ds,
+    ).army.map((v) => v.code);
+
+  it("bars another chapter's unit from a chapter army", () => {
+    expect(codes("space-wolves", "repulsor-black-templars")).toContain("unit-chapter-mismatch");
+    expect(codes("space-wolves", "crusader-squad")).toContain("unit-chapter-mismatch");
+  });
+
+  it("takes the army's own chapter units and generic units", () => {
+    expect(codes("black-templars", "repulsor-black-templars")).not.toContain("unit-chapter-mismatch");
+    expect(codes("space-wolves", "repulsor")).not.toContain("unit-chapter-mismatch");
+  });
+
+  it("bars a generic army from every chapter's units, and takes generic units", () => {
+    expect(codes("adeptus-astartes", "repulsor-black-templars")).toContain("unit-chapter-mismatch");
+    expect(codes("adeptus-astartes", "ragnar-blackmane")).toContain("unit-chapter-mismatch");
+    expect(codes("adeptus-astartes", "roboute-guilliman")).toContain("unit-chapter-mismatch");
+    expect(codes("adeptus-astartes", "repulsor")).not.toContain("unit-chapter-mismatch");
   });
 });
 

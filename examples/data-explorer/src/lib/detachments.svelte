@@ -23,6 +23,7 @@
   function stratMeta(s: Stratagem): string {
     return [
       `${s.cp_cost}CP`,
+      s.secondary_effect_extra_cp ? `+${s.secondary_effect_extra_cp}CP for the alternate effect` : null,
       s.type ? titleCase(s.type) : null,
       s.phases?.length ? s.phases.map(titleCase).join("/") : null,
       titleCase(s.player_turn),

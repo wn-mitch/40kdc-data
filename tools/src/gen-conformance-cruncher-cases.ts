@@ -11,6 +11,8 @@ import type { Trigger, UnitSelector } from "./generated.js";
 
 export const RECIPIENT_CASE_PREFIX = "canonical/recipient-snapshot/";
 export const HALF_WEAPON_RANGE_CASE_PREFIX = "canonical/half-weapon-range/";
+export const NEGATED_CONJUNCTION_CASE_PREFIX = "canonical/negated-conjunction/";
+export const TARGET_DEBUFF_CASE_PREFIX = "canonical/target-debuff/";
 export const SCENARIO_CASE_PREFIX = "canonical/scenario/";
 export const TRIGGER_SUBJECT_CASE_PREFIX = "canonical/trigger-subject/";
 export const STRATAGEM_MODEL_CASE_PREFIX = "canonical/stratagem-model/";
@@ -54,6 +56,10 @@ export function canonicalRecipientCases() {
     context: { phase: "fight", targetUnitId: "recipient", targetKeywords: ["INFANTRY", "CHARACTER"], targetAttached: false, recipientSnapshots: [{ ...snapshot, perspective: "target" }] },
   });
   add("missing", []);
+  // A loop that only marks units grants nothing, so it needs no snapshot and leaves the rest of the part scored.
+  const marking = { type: "for-each-unit", selector: { filter: { owner: "friendly" } }, effect: { type: "designate", target: "recipient", modifier: { tag: "example-mark" } } };
+  add("mark-only-loop-needs-none", [], { effect: { ...effect, effect: { type: "sequence", steps: [marking,
+    { type: "stat-modifier", target: "this-unit", modifier: { stat: "S", operation: "add", value: 1, weapons: { type: "melee" } } }] } } });
   add("wrong-source-unit", [{ ...snapshot, sourceUnitId: "outsider" }]);
   add("wrong-source-identity", [{ ...snapshot, source: { ...source, sourceUnitId: "outsider" } }]);
   add("conflicting", [snapshot, { ...snapshot, selected: false }]);
@@ -305,6 +311,74 @@ export function canonicalHalfWeaponRangeCases() {
 }
 
 /**
+ * A negated conjunction mixing unit and attack-scoped operands (Blight Bombardment's "ranged, and not
+ * (ranged and Blast)"): its unit operands are decided first, leaving the attack-scoped operand's
+ * negation as the per-weapon gate, the negation holding outright, or the condition unresolved.
+ */
+export function canonicalNegatedConjunctionCases() {
+  const source = { kind: "ability", abilityId: "fabricated-negated-conjunction", abilityKind: "unit" } as const;
+  const ranged = { type: "attack-is", parameters: { attack_type: "ranged" } };
+  const blast = { type: "attack-is", parameters: { weapons: { keyword: { keyword_id: "blast" } } } };
+  const lateRounds = { type: "battle-round", parameters: { min: 3 } };
+  const rerollOnes = (condition: unknown) => ({
+    type: "conditional",
+    condition,
+    effect: { type: "re-roll", target: "this-unit", modifier: { roll: "hit", subset: "ones" } },
+  });
+  const notBoth = (left: unknown) => ({ operator: "not", operands: [{ operator: "and", operands: [left, blast] }] });
+  const blightShape = { operator: "and", operands: [ranged, notBoth(ranged)] };
+  const inputs: Array<{ id: string; context: EngineContext; effect: unknown }> = [
+    { id: "unit-operand-true-gates-per-weapon", context: { phase: "shooting" }, effect: rerollOnes(blightShape) },
+    { id: "enclosing-operand-fails", context: { phase: "fight" }, effect: rerollOnes(blightShape) },
+    { id: "unit-operand-false-holds-outright", context: { phase: "fight" }, effect: rerollOnes(notBoth(ranged)) },
+    { id: "unit-operand-undecided", context: { phase: "shooting" }, effect: rerollOnes(notBoth(lateRounds)) },
+  ];
+  return inputs.map((input) => {
+    const row: DslInput = {
+      caseId: `${NEGATED_CONJUNCTION_CASE_PREFIX}${input.id}`,
+      abilityId: source.abilityId,
+      source,
+      effect: input.effect,
+      context: input.context,
+      perspective: "attacker",
+    };
+    const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+    return { ...row, expected: dslProjection(result) };
+  });
+}
+
+/**
+ * The attacker's rule changing the attack target's Toughness or Save (Nurgle's Gift on Afflicted
+ * enemies): a target-side contribution from the attacker perspective, gated by the enemy filter.
+ */
+export function canonicalTargetDebuffCases() {
+  const source = { kind: "ability", abilityId: "fabricated-target-debuff", abilityKind: "army" } as const;
+  const afflicted = { owner: "enemy", designated: "afflicted" };
+  const toughness = { type: "stat-modifier", target: afflicted, modifier: { stat: "T", operation: "subtract", value: 1 } };
+  const save = { type: "stat-modifier", target: afflicted, modifier: { stat: "Sv", operation: "worsen", value: 1 } };
+  const onDefender = { type: "stat-modifier", target: "defender", modifier: { stat: "T", operation: "subtract", value: 1 } };
+  const inputs: Array<{ id: string; context: EngineContext; effect: unknown }> = [
+    { id: "toughness-on-designated-target", context: { phase: "fight", targetDesignations: ["afflicted"] }, effect: toughness },
+    { id: "save-on-designated-target", context: { phase: "fight", targetDesignations: ["afflicted"] }, effect: save },
+    { id: "target-not-designated", context: { phase: "fight", targetDesignations: [] }, effect: toughness },
+    { id: "designation-undecided", context: { phase: "fight" }, effect: save },
+    { id: "toughness-on-defender", context: { phase: "shooting" }, effect: onDefender },
+  ];
+  return inputs.map((input) => {
+    const row: DslInput = {
+      caseId: `${TARGET_DEBUFF_CASE_PREFIX}${input.id}`,
+      abilityId: source.abilityId,
+      source,
+      effect: input.effect,
+      context: input.context,
+      perspective: "attacker",
+    };
+    const result = effectToBuffs(row.effect, row.source, row.context, row.perspective);
+    return { ...row, expected: dslProjection(result) };
+  });
+}
+
+/**
  * A translation's from-dsl expectation as every port projects it: contributions, reasons, each
  * reason's scope, need keys and levers.
  */
@@ -318,6 +392,10 @@ export function dslProjection(result: EffectTranslation) {
       id: lever.id, label: lever.label, group: lever.group ?? null,
       requires: lever.requires ?? null, capRaise: lever.capRaise ?? null,
       ...stanceOptionFields(lever),
+      // Projected only on a secondary-effect lever, so other goldens keep their shape.
+      ...(lever.secondary ? { secondary: true } : {}),
+      // Each buff's gate (null when ungated), projected only on a lever with a gated buff.
+      ...(lever.buffs.some((applied) => applied.applicableWhen) ? { gates: lever.buffs.map((applied) => applied.applicableWhen ?? null) } : {}),
       buffs: lever.buffs.map((applied) => applied.contribution),
     })),
   };
@@ -353,6 +431,8 @@ export function canonicalScenarioCases() {
   const fabricatedId = "fabricated-scenario";
   const readyHolders = { type: "designate", target: { owner: "friendly", has_ability: [fabricatedId] }, modifier: { tag: "readied" } };
   const readied = { type: "matches", parameters: { subject: "this-unit", filter: { designated: "readied" } } };
+  // No subject: the schema's default, this unit.
+  const riledUp = { type: "matches", parameters: { filter: { designated: "riled-up" } } };
   const atOrBelowHalf = { type: "strength", parameters: { subject: "this-unit", below: "half", at_or_below: true } };
   const shooting = { type: "phase-is", parameters: { phase: "shooting" } };
   const hitPlus = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
@@ -380,6 +460,10 @@ export function canonicalScenarioCases() {
   ] };
   // A defender's rule naming the attacker's Toughness: the translation cannot know it.
   const enemyWeaker = { type: "attack-compare", parameters: { left: { of: "attacker", stat: "T" }, comparison: "lt", right: { of: "defender", stat: "T" } } };
+  const eachLoop = (filter: Record<string, unknown>, also?: Record<string, unknown>) => {
+    const bs = { type: "stat-modifier", target: "recipient", modifier: { stat: "BS", operation: "improve", value: 1 } };
+    return { type: "for-each-unit", selector: { filter }, effect: also ? { type: "sequence", steps: [bs, also] } : bs };
+  };
   const members = (bodyguard: string[]) => [
     { unitId: "leader", role: "leader" as const, keywords: ["CHARACTER"] },
     { unitId: "squad", role: "bodyguard" as const, keywords: bodyguard },
@@ -436,12 +520,21 @@ export function canonicalScenarioCases() {
     { id: "rule-active-option-with-condition", effect: gated({ operator: "and", operands: [doctrine, shooting] }), context: {} },
     { id: "rule-active-option-with-failed-condition", effect: gated({ operator: "and", operands: [doctrine, { type: "phase-is", parameters: { phase: "fight" } }] }), context: {} },
     { id: "rule-active-option-shared-lever", effect: { type: "sequence", steps: [gated(doctrine), woundGated(doctrine)] }, context: {} },
+    // A Stratagem's secondary effect: the option the choice marks is the only secondary lever.
+    { id: "choice-secondary-option", effect: { type: "choice", secondary_option: 1, options: [gated(sAboveT), hitPlus] }, context: {} },
+    { id: "choice-secondary-option-out-of-range", effect: { type: "choice", secondary_option: 2, options: [hitPlus, woundPlus] }, context: {} },
     { id: "rule-active-option-in-choice", effect: { type: "choice", options: [hitPlus, { type: "sequence", steps: [gated(doctrine), { type: "conditional", condition: doctrine, effect: apImprove }] }] }, context: {} },
     { id: "rule-active-option-mixed-choice", effect: { type: "choice", options: [{ type: "sequence", steps: [woundPlus, gated(doctrine)] }] }, context: {} },
     { id: "rule-active-option-negated", effect: gated(notDoctrine), context: {} },
     { id: "self-designation-gate", effect: { type: "sequence", steps: [readyHolders, gated(readied)] }, context: {} },
-    { id: "self-designation-other-tag", effect: { type: "sequence", steps: [readyHolders, gated({ ...readied, parameters: { ...readied.parameters, filter: { designated: "marked" } } })] }, context: {} },
+    // A designation another of the player's rules applies (Waaagh! riles a unit up) is the player's toggle too.
+    { id: "own-designation-other-rule", effect: { type: "sequence", steps: [readyHolders, gated({ ...readied, parameters: { ...readied.parameters, filter: { designated: "marked" } } })] }, context: {} },
     { id: "self-designation-declared", effect: { type: "sequence", steps: [readyHolders, gated(readied)] }, context: { attackerDesignations: [] } },
+    { id: "own-designation-default-subject", effect: gated(riledUp), context: {} },
+    { id: "own-designation-declared-other", effect: gated(riledUp), context: { attackerDesignations: ["spotted"] } },
+    { id: "own-designation-target-lever", effect: defensive(riledUp), context: { attackerDesignations: [] }, perspective: "target" },
+    { id: "own-designation-target-declared", effect: defensive(riledUp), context: { targetDesignations: ["riled-up"] }, perspective: "target" },
+    { id: "own-designation-other-subject", effect: gated({ type: "matches", parameters: { subject: "defender", filter: { designated: "riled-up" } } }), context: {} },
     { id: "rule-active-option-both-sides", effect: { type: "sequence", steps: [gated({ operator: "and", operands: [notDoctrine, shooting] }), woundGated(doctrine)] }, context: {} },
     { id: "in-region-rule-region", effect: gated(region), context: { attackerRegions: [{ ruleRegion: "example-region" }] } },
     { id: "in-region-elsewhere", effect: gated(region), context: { attackerRegions: [{ ruleRegion: "other-region" }] } },
@@ -483,6 +576,16 @@ export function canonicalScenarioCases() {
     { id: "guided-true", effect: gated(guided), context: { attackerGuided: true } },
     { id: "guided-false", effect: gated(guided), context: { attackerGuided: false } },
     { id: "guided-undeclared", effect: gated(guided), context: {} },
+    // "attacker" names the attacking unit, the one attackerGuided describes.
+    { id: "guided-attacker-subject", effect: gated({ type: "guided", parameters: { subject: "attacker" } }), context: { attackerGuided: true } },
+    // "Each model from your army": every model of a friendly unit, so the whole unit.
+    { id: "every-friendly-model-target", effect: { type: "stat-modifier", target: { owner: "friendly", level: "model" }, modifier: { stat: "BS", operation: "improve", value: 1 } }, context: {} },
+    // A loop binds its recipient to the selector's filter, then reads that filter like any unit-filter target.
+    { id: "each-bodyguard-model-recipient", effect: eachLoop({ level: "model", member_of: "this-unit", attachment_role: "bodyguard" }), context: { attackerMembers: members(["EXAMPLE SQUAD"]) }, source: attached },
+    { id: "each-friendly-recipient", effect: eachLoop({ owner: "friendly" }), context: {} },
+    // A body that also targets another unit, or a selector with eligibility, is not bound as one pool.
+    { id: "each-recipient-and-other-target", effect: eachLoop({ owner: "friendly" }, { type: "stat-modifier", target: "this-unit", modifier: { stat: "T", operation: "improve", value: 1 } }), context: {} },
+    { id: "each-recipient-eligibility", effect: { ...eachLoop({ owner: "friendly" }), selector: { filter: { owner: "friendly" }, eligibility: { type: "happened", parameters: { subject: "this-unit", event: "charge" } } } }, context: {} },
     { id: "wounds-defender-remaining", effect: gated(defenderWounds), context: { targetWounds: { remaining: 2, starting: 6 } } },
     { id: "wounds-defender-unhurt", effect: gated(defenderWounds), context: { targetWounds: { remaining: 6, starting: 6 } } },
     { id: "model-count-keyword-declared", effect: gated(championCount), context: { attackerKeywordModels: { "example champion": 1 } } },

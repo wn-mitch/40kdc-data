@@ -41,6 +41,7 @@ COLLECTION_KEYS = (
     "mission_cards",
     "deployment_patterns",
     "force_dispositions",
+    "keyword_choice_groups",
     "terrain_templates",
     "terrain_layouts",
     "hull_shapes",

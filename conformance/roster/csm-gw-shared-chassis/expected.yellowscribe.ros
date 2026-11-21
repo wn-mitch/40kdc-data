@@ -17,7 +17,7 @@
             </profile>
             <profile name="Firing Deck" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Self Repair" typeName="Abilities">
@@ -27,16 +27,15 @@
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Dark Pacts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, if your Army Faction is CHAOS SPACE MARINES, while the triggering unit has the Dark Pacts ability, until the end of the phase:
-  -&gt; The unit must take a Leadership test.
-  -&gt; If the triggering leadership roll was a failure, the triggering unit suffers D3 mortal wounds.
-  Select one of the following:
+                <characteristic name="Description">When this unit is selected to shoot, you can use this ability or when this unit is selected to fight, you can use this ability, if your Army Faction is CHAOS SPACE MARINES, while the triggering unit has the Dark Pacts ability, until the end of the phase:
+  - This unit must take a Leadership test.
+  - If the triggering leadership roll was a failure, the triggering unit suffers D3 mortal wounds.
+  Choose one of the following:
     - The triggering unit's weapons gain [LETHAL HITS].
     - The triggering unit's weapons gain [SUSTAINED HITS 1].</characteristic>
               </characteristics>
@@ -50,10 +49,6 @@
             <category name="Smoke"/>
             <category name="Chaos"/>
             <category name="Rhino"/>
-            <category name="Nurgle"/>
-            <category name="Slaanesh"/>
-            <category name="Tzeentch"/>
-            <category name="Khorne"/>
             <category name="Frame"/>
             <category name="Chaos Rhino"/>
           </categories>
@@ -113,21 +108,20 @@
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Dark Pacts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, if your Army Faction is CHAOS SPACE MARINES, while the triggering unit has the Dark Pacts ability, until the end of the phase:
-  -&gt; The unit must take a Leadership test.
-  -&gt; If the triggering leadership roll was a failure, the triggering unit suffers D3 mortal wounds.
-  Select one of the following:
+                <characteristic name="Description">When this unit is selected to shoot, you can use this ability or when this unit is selected to fight, you can use this ability, if your Army Faction is CHAOS SPACE MARINES, while the triggering unit has the Dark Pacts ability, until the end of the phase:
+  - This unit must take a Leadership test.
+  - If the triggering leadership roll was a failure, the triggering unit suffers D3 mortal wounds.
+  Choose one of the following:
     - The triggering unit's weapons gain [LETHAL HITS].
     - The triggering unit's weapons gain [SUSTAINED HITS 1].</characteristic>
               </characteristics>
@@ -140,10 +134,6 @@
             <category name="Smoke"/>
             <category name="Chaos"/>
             <category name="Land Raider"/>
-            <category name="Nurgle"/>
-            <category name="Slaanesh"/>
-            <category name="Tzeentch"/>
-            <category name="Khorne"/>
             <category name="Frame"/>
             <category name="Chaos Land Raider"/>
           </categories>

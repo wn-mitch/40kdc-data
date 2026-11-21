@@ -159,6 +159,15 @@ pub mod error {
 ///    "name": {
 ///      "type": "string"
 ///    },
+///    "option_names": {
+///      "description": "The printed name of each option of the record's one choice effect, in option order (\"Paragon of Hatred\"). Present only on a record whose effect holds exactly one choice, with one name per option.",
+///      "type": "array",
+///      "items": {
+///        "type": "string",
+///        "minLength": 1
+///      },
+///      "minItems": 2
+///    },
 ///    "optional": {
 ///      "description": "The player chooses whether to use this ability, which has no trigger. Absent when the ability always applies, when a trigger decides when it is used, or for a Stratagem, which is always the player's choice.",
 ///      "type": "boolean",
@@ -236,6 +245,9 @@ pub struct Ability {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub interactions: ::std::vec::Vec<AbilityInteractionsItem>,
     pub name: ::std::string::String,
+    ///The printed name of each option of the record's one choice effect, in option order ("Paragon of Hatred"). Present only on a record whose effect holds exactly one choice, with one name per option.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub option_names: ::std::vec::Vec<AbilityOptionNamesItem>,
     ///The player chooses whether to use this ability, which has no trigger. Absent when the ability always applies, when a trigger decides when it is used, or for a Stratagem, which is always the player's choice.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub optional: ::std::option::Option<bool>,
@@ -2430,6 +2442,78 @@ impl<'de> ::serde::Deserialize<'de> for AbilityModifierEffectModifierValueString
             })
     }
 }
+///`AbilityOptionNamesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct AbilityOptionNamesItem(::std::string::String);
+impl ::std::ops::Deref for AbilityOptionNamesItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AbilityOptionNamesItem> for ::std::string::String {
+    fn from(value: AbilityOptionNamesItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for AbilityOptionNamesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityOptionNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AbilityOptionNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AbilityOptionNamesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for AbilityOptionNamesItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///One part of a compound ability: an effect with its own moment (trigger), usage limit, cost or choice, shown as one bullet of the ability it belongs to. The ability's own trigger is its firing moment; a part's trigger is the moment of that part alone, in the same trigger shape. `name` is only for a part the rules name (a psychic power, a named rule in a bundle).
 ///
 /// <details><summary>JSON schema</summary>
@@ -4340,6 +4424,14 @@ for AddUnitEffectModifierPlacementVariant1Item {
 ///        "onslaught"
 ///      ]
 ///    },
+///    "exemptions": {
+///      "description": "Units that do not count towards this cap: for each included unit carrying every `donor_keywords`, one included unit carrying every `receiver_keywords` is not counted (e.g. one INQUISITORIAL AGENTS unit per INQUISITOR unit does not count towards RETINUE).",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/allied-keyword-limit-exemption"
+///      },
+///      "uniqueItems": true
+///    },
 ///    "keyword": {
 ///      "description": "Keyword the cap counts (matched case-insensitively against a unit's keywords union faction_keywords, e.g. 'Titanic', 'Armiger', 'Character').",
 ///      "$ref": "#/$defs/keyword"
@@ -4359,6 +4451,9 @@ for AddUnitEffectModifierPlacementVariant1Item {
 pub struct AlliedKeywordLimit {
     ///Battle size this cap applies at.
     pub battle_size: AlliedKeywordLimitBattleSize,
+    ///Units that do not count towards this cap: for each included unit carrying every `donor_keywords`, one included unit carrying every `receiver_keywords` is not counted (e.g. one INQUISITORIAL AGENTS unit per INQUISITOR unit does not count towards RETINUE).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub exemptions: ::std::option::Option<Vec<AlliedKeywordLimitExemption>>,
     ///Keyword the cap counts (matched case-insensitively against a unit's keywords union faction_keywords, e.g. 'Titanic', 'Armiger', 'Character').
     pub keyword: Keyword,
     ///Maximum number of units carrying `keyword` includable via the rule at this battle size.
@@ -4445,6 +4540,42 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedKeywordLimitBattle
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///A donor/receiver pair exempting receiver units from an allied keyword cap, one receiver per donor unit.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "A donor/receiver pair exempting receiver units from an allied keyword cap, one receiver per donor unit.",
+///  "type": "object",
+///  "required": [
+///    "donor_keywords",
+///    "receiver_keywords"
+///  ],
+///  "properties": {
+///    "donor_keywords": {
+///      "description": "A donor unit carries all of these keywords.",
+///      "minItems": 1,
+///      "$ref": "#/$defs/keyword-list"
+///    },
+///    "receiver_keywords": {
+///      "description": "A receiver unit carries all of these keywords.",
+///      "minItems": 1,
+///      "$ref": "#/$defs/keyword-list"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct AlliedKeywordLimitExemption {
+    ///A donor unit carries all of these keywords.
+    pub donor_keywords: Vec<Keyword>,
+    ///A receiver unit carries all of these keywords.
+    pub receiver_keywords: Vec<Keyword>,
 }
 ///The combined points cap for units included via an allied rule at one battle size.
 ///
@@ -4568,14 +4699,14 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedPointsLimitBattleS
         value.parse()
     }
 }
-///A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_ids`).
+///A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by three optional, AND-combined conditions: the army's faction (`host_faction_ids`), an army-wide keyword condition (`army_keywords_any`) and a selected detachment (`detachment_ids`).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
 ///  "title": "AlliedRule",
-///  "description": "A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by two optional, AND-combined conditions: an army-wide keyword condition (`army_keywords_any`) and/or a selected detachment (`detachment_ids`).",
+///  "description": "A community-authored model of an allied-detachment / 'soup' rule: the named exception by which units lacking the army's chosen Faction keyword may still be included (e.g. Daemonic Pact, Brood Brothers, Iconoclast Fiefdom's Damned access). One rule = one allied source pool; a faction that allies in several pools (the Chaos cult pattern: a Chaos Knights pool plus a matching-god Daemons pool) carries one rule per pool. The rule is gated by three optional, AND-combined conditions: the army's faction (`host_faction_ids`), an army-wide keyword condition (`army_keywords_any`) and a selected detachment (`detachment_ids`).",
 ///  "type": "object",
 ///  "required": [
 ///    "game_version",
@@ -4621,6 +4752,14 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedPointsLimitBattleS
 ///    "game_version": {
 ///      "$ref": "#/$defs/game-version-ref"
 ///    },
+///    "host_faction_ids": {
+///      "description": "Host gate: the factions whose armies may take this pool (the MFM dump's host faction keywords, mapped to faction ids). When non-empty, only an army of a listed faction is offered the rule, even if another of its faction keywords appears in `army_keywords_any` (a Deathwatch army carries ADEPTUS ASTARTES but is not a host of the generic Agents of the Imperium pool). Empty/absent = no host gate.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "uniqueItems": true
+///    },
 ///    "id": {
 ///      "$ref": "#/$defs/entity-id"
 ///    },
@@ -4631,6 +4770,11 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedPointsLimitBattleS
 ///        "$ref": "#/$defs/allied-keyword-limit"
 ///      },
 ///      "uniqueItems": true
+///    },
+///    "keyword_limits_exclusive": {
+///      "description": "True when the rule's `keyword_limits` are alternatives: the units included via the rule may carry only one of the limited keywords, whose cap then applies (e.g. Imperial Knights allies: one TITANIC model or up to three ARMIGER models, never both; Titan pools: one Titan of any class).",
+///      "default": false,
+///      "type": "boolean"
 ///    },
 ///    "label": {
 ///      "description": "Short panel/category heading a list builder groups this pool under (e.g. 'Daemons', 'Imperial Agents', 'Titanic Allies'). Defaults to `name` when omitted.",
@@ -4671,6 +4815,11 @@ impl ::std::convert::TryFrom<::std::string::String> for AlliedPointsLimitBattleS
 ///        "$ref": "#/$defs/entity-id"
 ///      },
 ///      "uniqueItems": true
+///    },
+///    "replaces_faction_keywords": {
+///      "description": "True when units included via this rule have their Faction keywords replaced with the army's (e.g. Renegades: legion units taken by a Heretic Astartes army become HERETIC ASTARTES).",
+///      "default": false,
+///      "type": "boolean"
 ///    },
 ///    "required_keywords": {
 ///      "description": "Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool).",
@@ -4756,10 +4905,16 @@ pub struct AlliedRule {
     #[serde(default)]
     pub exclusive: bool,
     pub game_version: GameVersionRef,
+    ///Host gate: the factions whose armies may take this pool (the MFM dump's host faction keywords, mapped to faction ids). When non-empty, only an army of a listed faction is offered the rule, even if another of its faction keywords appears in `army_keywords_any` (a Deathwatch army carries ADEPTUS ASTARTES but is not a host of the generic Agents of the Imperium pool). Empty/absent = no host gate.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub host_faction_ids: ::std::option::Option<Vec<EntityId>>,
     pub id: EntityId,
     ///Per-keyword, per-battle-size cap on how many units carrying `keyword` may be included via this rule (e.g. Imperial Knights' Titanic 1 / Armiger 3; Agents of the Imperium's Character/Retinue/Requisitioned counts). Advisory construction cap.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keyword_limits: ::std::option::Option<Vec<AlliedKeywordLimit>>,
+    ///True when the rule's `keyword_limits` are alternatives: the units included via the rule may carry only one of the limited keywords, whose cap then applies (e.g. Imperial Knights allies: one TITANIC model or up to three ARMIGER models, never both; Titan pools: one Titan of any class).
+    #[serde(default)]
+    pub keyword_limits_exclusive: bool,
     ///Short panel/category heading a list builder groups this pool under (e.g. 'Daemons', 'Imperial Agents', 'Titanic Allies'). Defaults to `name` when omitted.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub label: ::std::option::Option<::std::string::String>,
@@ -4775,6 +4930,9 @@ pub struct AlliedRule {
     ///Abilities that included units lose under this rule (e.g. Astra Militarum units lose 'voice-of-command' under Brood Brothers). A display/effect hint, not a construction constraint.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub removes_ability_ids: ::std::option::Option<Vec<EntityId>>,
+    ///True when units included via this rule have their Faction keywords replaced with the army's (e.g. Renegades: legion units taken by a Heretic Astartes army become HERETIC ASTARTES).
+    #[serde(default)]
+    pub replaces_faction_keywords: bool,
     ///Additional filter: a unit must carry ALL of these to be included via this rule (e.g. the matching god ['Khorne'] for a per-god Daemon pool).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub required_keywords: ::std::option::Option<KeywordList>,
@@ -8056,6 +8214,11 @@ for CharacteristicResolutionEffectModifierTie {
 ///      },
 ///      "minItems": 2
 ///    },
+///    "secondary_option": {
+///      "description": "Index into `options` of the Stratagem's secondary effect: picking that option costs the Stratagem's `secondary_effect_extra_cp` on top of its CP cost. Absent, every option costs the Stratagem's CP cost alone.",
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
 ///    "type": {
 ///      "type": "string",
 ///      "enum": [
@@ -8084,6 +8247,9 @@ pub struct ChoiceEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_choices: ::std::option::Option<u64>,
     pub options: ::std::vec::Vec<EffectNode>,
+    ///Index into `options` of the Stratagem's secondary effect: picking that option costs the Stratagem's `secondary_effect_extra_cp` on top of its CP cost. Absent, every option costs the Stratagem's CP cost alone.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub secondary_option: ::std::option::Option<u64>,
     #[serde(rename = "type")]
     pub type_: ChoiceEffectType,
 }
@@ -16288,9 +16454,19 @@ pub struct EngagementFrontsConditionParameters {
 ///      "minItems": 1,
 ///      "uniqueItems": true
 ///    },
+///    "bearer_cannot_be_warlord": {
+///      "description": "True when the unit given this enhancement cannot be the army's Warlord.",
+///      "default": false,
+///      "type": "boolean"
+///    },
 ///    "cost": {
 ///      "type": "integer",
 ///      "minimum": 0.0
+///    },
+///    "counts_toward_enhancement_limit": {
+///      "description": "False when taking this enhancement does not count toward the battle size's Enhancement limit.",
+///      "default": true,
+///      "type": "boolean"
 ///    },
 ///    "datasheet_restriction_groups": {
 ///      "description": "Datasheet-scoped bearer eligibility groups: a bearer whose unit is `unit_id` and carries every listed keyword is eligible. Each group is a further alternative (OR) to the keyword groups in `keyword_restrictions` / `keyword_restriction_groups`. A datasheet group admits only that datasheet, never another unit that carries the datasheet's name as a keyword. `exclusion_keywords` still applies.",
@@ -16319,6 +16495,16 @@ pub struct EngagementFrontsConditionParameters {
 ///    },
 ///    "detachment_id": {
 ///      "$ref": "#/$defs/entity-id"
+///    },
+///    "equipable_by_epic_hero": {
+///      "description": "True when an EPIC HERO may be given this enhancement. Without it, no EPIC HERO may take it.",
+///      "default": false,
+///      "type": "boolean"
+///    },
+///    "equipable_by_non_character": {
+///      "description": "True when a unit that is not a CHARACTER may be given this enhancement. An `upgrade_tag` enhancement is always equipable by a non-CHARACTER unit.",
+///      "default": false,
+///      "type": "boolean"
 ///    },
 ///    "exclusion_keywords": {
 ///      "oneOf": [
@@ -16389,6 +16575,15 @@ pub struct EngagementFrontsConditionParameters {
 ///      "minItems": 1,
 ///      "uniqueItems": true
 ///    },
+///    "required_wargear_ids": {
+///      "description": "Weapon ids the bearer's unit must carry in its chosen loadout to be given this enhancement. Every listed id is required.",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
 ///    "upgrade_tag": {
 ///      "description": "11e: when true, this enhancement applies to up to `max_targets` non-character units while counting as a single Enhancement choice.",
 ///      "default": false,
@@ -16407,13 +16602,25 @@ pub struct Enhancement {
     ///Additional bodyguard units the bearer may attach to because it carries this enhancement.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attachment_bodyguard_ids: ::std::option::Option<Vec<EntityId>>,
+    ///True when the unit given this enhancement cannot be the army's Warlord.
+    #[serde(default)]
+    pub bearer_cannot_be_warlord: bool,
     pub cost: u64,
+    ///False when taking this enhancement does not count toward the battle size's Enhancement limit.
+    #[serde(default = "defaults::default_bool::<true>")]
+    pub counts_toward_enhancement_limit: bool,
     ///Datasheet-scoped bearer eligibility groups: a bearer whose unit is `unit_id` and carries every listed keyword is eligible. Each group is a further alternative (OR) to the keyword groups in `keyword_restrictions` / `keyword_restriction_groups`. A datasheet group admits only that datasheet, never another unit that carries the datasheet's name as a keyword. `exclusion_keywords` still applies.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub datasheet_restriction_groups: ::std::vec::Vec<
         EnhancementDatasheetRestrictionGroupsItem,
     >,
     pub detachment_id: EntityId,
+    ///True when an EPIC HERO may be given this enhancement. Without it, no EPIC HERO may take it.
+    #[serde(default)]
+    pub equipable_by_epic_hero: bool,
+    ///True when a unit that is not a CHARACTER may be given this enhancement. An `upgrade_tag` enhancement is always equipable by a non-CHARACTER unit.
+    #[serde(default)]
+    pub equipable_by_non_character: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub exclusion_keywords: ::std::option::Option<KeywordList>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -16440,6 +16647,9 @@ pub struct Enhancement {
     ///Core abilities (data/core/unit-keywords.json ids) the bearer's datasheet must have ("HERETIC ASTARTES model with the Deep Strike ability only"). Every listed ability is required, on top of the keyword and datasheet groups.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub required_ability_ids: ::std::option::Option<Vec<EntityId>>,
+    ///Weapon ids the bearer's unit must carry in its chosen loadout to be given this enhancement. Every listed id is required.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub required_wargear_ids: ::std::option::Option<Vec<EntityId>>,
     ///11e: when true, this enhancement applies to up to `max_targets` non-character units while counting as a single Enhancement choice.
     #[serde(default)]
     pub upgrade_tag: bool,
@@ -22903,6 +23113,171 @@ impl<'de> ::serde::Deserialize<'de> for Keyword {
             })
     }
 }
+///A keyword a unit takes from a set of alternatives when its army is mustered (a Mark of Chaos, a Daemonic Allegiance, a detachment's CHARACTER pick). Each option is a unit's conditional_keywords entry whose choice_group is this group's id; a unit takes at most one option of a group.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "title": "Keyword Choice Group",
+///  "description": "A keyword a unit takes from a set of alternatives when its army is mustered (a Mark of Chaos, a Daemonic Allegiance, a detachment's CHARACTER pick). Each option is a unit's conditional_keywords entry whose choice_group is this group's id; a unit takes at most one option of a group.",
+///  "type": "object",
+///  "required": [
+///    "detachment_id",
+///    "game_version",
+///    "id",
+///    "mandatory",
+///    "max_units",
+///    "min_units",
+///    "name"
+///  ],
+///  "properties": {
+///    "detachment_id": {
+///      "description": "The detachment whose army makes the choice; null when any army that includes the unit makes it.",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/entity-id"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "game_version": {
+///      "$ref": "#/$defs/game-version-ref"
+///    },
+///    "id": {
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "mandatory": {
+///      "description": "Whether every unit with options in this group must take one.",
+///      "type": "boolean"
+///    },
+///    "max_units": {
+///      "description": "The most units in the army that can take an option of this group; null for no maximum.",
+///      "oneOf": [
+///        {
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "min_units": {
+///      "description": "The fewest units in the army that must take an option of this group; null for no minimum.",
+///      "oneOf": [
+///        {
+///          "type": "integer",
+///          "minimum": 0.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
+///    },
+///    "name": {
+///      "type": "string",
+///      "maxLength": 128,
+///      "minLength": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct KeywordChoiceGroup {
+    ///The detachment whose army makes the choice; null when any army that includes the unit makes it.
+    pub detachment_id: ::std::option::Option<EntityId>,
+    pub game_version: GameVersionRef,
+    pub id: EntityId,
+    ///Whether every unit with options in this group must take one.
+    pub mandatory: bool,
+    ///The most units in the army that can take an option of this group; null for no maximum.
+    pub max_units: ::std::option::Option<::std::num::NonZeroU64>,
+    ///The fewest units in the army that must take an option of this group; null for no minimum.
+    pub min_units: ::std::option::Option<u64>,
+    pub name: KeywordChoiceGroupName,
+}
+///`KeywordChoiceGroupName`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "maxLength": 128,
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct KeywordChoiceGroupName(::std::string::String);
+impl ::std::ops::Deref for KeywordChoiceGroupName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<KeywordChoiceGroupName> for ::std::string::String {
+    fn from(value: KeywordChoiceGroupName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for KeywordChoiceGroupName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 128usize {
+            return Err("longer than 128 characters".into());
+        }
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for KeywordChoiceGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for KeywordChoiceGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for KeywordChoiceGroupName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for KeywordChoiceGroupName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///`KeywordGrantEffectModifier`
 ///
 /// <details><summary>JSON schema</summary>
@@ -23029,7 +23404,7 @@ impl ::std::default::Default for KeywordPredicate {
 ///  ],
 ///  "properties": {
 ///    "conditional_groups": {
-///      "description": "Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.",
+///      "description": "Attachment eligibility and role that apply only when their conditions hold: every required roster unit and no excluded roster unit is present, the required detachment is selected and the excluded one is not, and the leader and bodyguard share the required keyword.",
 ///      "type": "array",
 ///      "items": {
 ///        "type": "object",
@@ -23046,6 +23421,10 @@ impl ::std::default::Default for KeywordPredicate {
 ///            },
 ///            "minItems": 1
 ///          },
+///          "excluded_detachment_id": {
+///            "description": "The group applies only when the army has not selected this detachment.",
+///            "$ref": "#/$defs/entity-id"
+///          },
 ///          "excluded_roster_unit_ids": {
 ///            "type": "array",
 ///            "items": {
@@ -23053,12 +23432,20 @@ impl ::std::default::Default for KeywordPredicate {
 ///            },
 ///            "minItems": 1
 ///          },
+///          "required_detachment_id": {
+///            "description": "The group applies only when the army has selected this detachment.",
+///            "$ref": "#/$defs/entity-id"
+///          },
 ///          "required_roster_unit_ids": {
 ///            "type": "array",
 ///            "items": {
 ///              "$ref": "#/$defs/entity-id"
 ///            },
 ///            "minItems": 1
+///          },
+///          "required_shared_keyword": {
+///            "description": "The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos).",
+///            "$ref": "#/$defs/keyword"
 ///          },
 ///          "role": {
 ///            "type": "string",
@@ -23101,7 +23488,7 @@ impl ::std::default::Default for KeywordPredicate {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct LeaderAttachment {
-    ///Attachment eligibility and role that apply only when all required roster units and no excluded roster units are present.
+    ///Attachment eligibility and role that apply only when their conditions hold: every required roster unit and no excluded roster unit is present, the required detachment is selected and the excluded one is not, and the leader and bodyguard share the required keyword.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub conditional_groups: ::std::vec::Vec<LeaderAttachmentConditionalGroupsItem>,
     pub eligible_bodyguard_ids: ::std::vec::Vec<EntityId>,
@@ -23133,6 +23520,10 @@ pub struct LeaderAttachment {
 ///      },
 ///      "minItems": 1
 ///    },
+///    "excluded_detachment_id": {
+///      "description": "The group applies only when the army has not selected this detachment.",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "excluded_roster_unit_ids": {
 ///      "type": "array",
 ///      "items": {
@@ -23140,12 +23531,20 @@ pub struct LeaderAttachment {
 ///      },
 ///      "minItems": 1
 ///    },
+///    "required_detachment_id": {
+///      "description": "The group applies only when the army has selected this detachment.",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "required_roster_unit_ids": {
 ///      "type": "array",
 ///      "items": {
 ///        "$ref": "#/$defs/entity-id"
 ///      },
 ///      "minItems": 1
+///    },
+///    "required_shared_keyword": {
+///      "description": "The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos).",
+///      "$ref": "#/$defs/keyword"
 ///    },
 ///    "role": {
 ///      "type": "string",
@@ -23163,10 +23562,19 @@ pub struct LeaderAttachment {
 #[serde(deny_unknown_fields)]
 pub struct LeaderAttachmentConditionalGroupsItem {
     pub eligible_bodyguard_ids: ::std::vec::Vec<EntityId>,
+    ///The group applies only when the army has not selected this detachment.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub excluded_detachment_id: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub excluded_roster_unit_ids: ::std::vec::Vec<EntityId>,
+    ///The group applies only when the army has selected this detachment.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub required_detachment_id: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub required_roster_unit_ids: ::std::vec::Vec<EntityId>,
+    ///The attachment holds only when both the leader and the bodyguard carry this keyword in the roster (e.g. the same Mark of Chaos).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub required_shared_keyword: ::std::option::Option<Keyword>,
     pub role: LeaderAttachmentConditionalGroupsItemRole,
 }
 ///`LeaderAttachmentConditionalGroupsItemRole`
@@ -25063,6 +25471,10 @@ for MortalWoundsEffectModifierRollPerAttackAttackType {
 ///    "keeps_eligible": {
 ///      "const": true
 ///    },
+///    "mandatory": {
+///      "description": "The target must make the move (\"must make an ingress move\"); absent, the move is optional.",
+///      "const": true
+///    },
 ///    "mode": {
 ///      "$ref": "#/$defs/move-mode"
 ///    },
@@ -25164,6 +25576,9 @@ pub struct MoveEffectModifier {
     pub engaged_with: ::std::option::Option<MoveEffectModifierEngagedWith>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keeps_eligible: ::std::option::Option<::serde_json::Value>,
+    ///The target must make the move ("must make an ingress move"); absent, the move is optional.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mandatory: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub mode: ::std::option::Option<MoveMode>,
     pub move_type: MoveEffectModifierMoveType,
@@ -42715,6 +43130,13 @@ impl ::std::convert::TryFrom<::std::string::String> for ScopeDuration {
 ///      },
 ///      "additionalProperties": false
 ///    },
+///    "final_round_timing": {
+///      "description": "The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`.",
+///      "type": "string",
+///      "enum": [
+///        "end-of-turn"
+///      ]
+///    },
 ///    "phase": {
 ///      "description": "The phase the trigger is relative to. Required when `timing` is start-of-phase or end-of-phase; omitted for turn- or battle-level timings.",
 ///      "$ref": "#/$defs/phase"
@@ -42743,6 +43165,9 @@ impl ::std::convert::TryFrom<::std::string::String> for ScopeDuration {
 pub struct ScoringTrigger {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub battle_round: ::std::option::Option<ScoringTriggerBattleRound>,
+    ///The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub final_round_timing: ::std::option::Option<ScoringTriggerFinalRoundTiming>,
     ///The phase the trigger is relative to. Required when `timing` is start-of-phase or end-of-phase; omitted for turn- or battle-level timings.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub phase: ::std::option::Option<Phase>,
@@ -42756,6 +43181,7 @@ impl ::std::default::Default for ScoringTrigger {
     fn default() -> Self {
         Self {
             battle_round: Default::default(),
+            final_round_timing: Default::default(),
             phase: Default::default(),
             player_turn: Default::default(),
             timing: Default::default(),
@@ -42801,6 +43227,78 @@ impl ::std::default::Default for ScoringTriggerBattleRound {
             max: Default::default(),
             min: Default::default(),
         }
+    }
+}
+///The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`.",
+///  "type": "string",
+///  "enum": [
+///    "end-of-turn"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ScoringTriggerFinalRoundTiming {
+    #[serde(rename = "end-of-turn")]
+    EndOfTurn,
+}
+impl ::std::fmt::Display for ScoringTriggerFinalRoundTiming {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::EndOfTurn => f.write_str("end-of-turn"),
+        }
+    }
+}
+impl ::std::str::FromStr for ScoringTriggerFinalRoundTiming {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "end-of-turn" => Ok(Self::EndOfTurn),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ScoringTriggerFinalRoundTiming {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for ScoringTriggerFinalRoundTiming {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for ScoringTriggerFinalRoundTiming {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///The moment the award is checked. 'End of your turn' = end-of-turn; 'End of your Command phase' = end-of-phase with phase: command; 'End of the battle' = end-of-battle.
@@ -51089,6 +51587,12 @@ impl ::std::convert::TryFrom<::std::string::String> for StateChangeEffectModifie
 ///    "player_turn": {
 ///      "$ref": "#/$defs/player-turn"
 ///    },
+///    "secondary_effect_extra_cp": {
+///      "description": "CP spent on top of cp_cost to use the Stratagem's secondary (alternate) effect instead of its main one. Absent when the Stratagem has no paid secondary effect.",
+///      "type": "integer",
+///      "maximum": 4.0,
+///      "minimum": 1.0
+///    },
 ///    "target_restrictions": {
 ///      "oneOf": [
 ///        {
@@ -51161,6 +51665,9 @@ pub struct Stratagem {
     pub name: StratagemName,
     pub phases: PhaseList,
     pub player_turn: PlayerTurn,
+    ///CP spent on top of cp_cost to use the Stratagem's secondary (alternate) effect instead of its main one. Absent when the Stratagem has no paid secondary effect.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub secondary_effect_extra_cp: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub target_restrictions: ::std::option::Option<StratagemTargetRestrictions>,
     pub timing: StratagemTiming,
@@ -55946,6 +56453,10 @@ impl<'de> ::serde::Deserialize<'de> for TriggerSourceAbilityKeywordsItem {
 ///          "keyword"
 ///        ],
 ///        "properties": {
+///          "choice_group": {
+///            "description": "The keyword-choice group (keyword-choice-groups.json) this keyword is one option of: the unit has it only when it takes this option at muster, and takes at most one option per group.",
+///            "$ref": "#/$defs/entity-id"
+///          },
 ///          "keyword": {
 ///            "$ref": "#/$defs/keyword"
 ///          },
@@ -56056,6 +56567,11 @@ impl<'de> ::serde::Deserialize<'de> for TriggerSourceAbilityKeywordsItem {
 ///    "keywords": {
 ///      "$ref": "#/$defs/keyword-list"
 ///    },
+///    "max_model_count": {
+///      "description": "The most models the unit may contain, across all of its composition rows. It caps a composition whose row maxima sum higher (Corsair Voidscarred: 10 models although its rows allow 13).",
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
 ///    "model_count": {
 ///      "type": "object",
 ///      "required": [
@@ -56145,11 +56661,27 @@ impl<'de> ::serde::Deserialize<'de> for TriggerSourceAbilityKeywordsItem {
 ///            "minimum": 2.0
 ///          },
 ///          "M": {
-///            "$ref": "#/$defs/stat-value"
+///            "description": "Move in inches. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+///            "oneOf": [
+///              {
+///                "$ref": "#/$defs/stat-value"
+///              },
+///              {
+///                "type": "null"
+///              }
+///            ]
 ///          },
 ///          "OC": {
-///            "type": "integer",
-///            "minimum": 0.0
+///            "description": "Objective Control. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+///            "oneOf": [
+///              {
+///                "type": "integer",
+///                "minimum": 0.0
+///              },
+///              {
+///                "type": "null"
+///              }
+///            ]
 ///          },
 ///          "Sv": {
 ///            "type": "integer",
@@ -56373,6 +56905,9 @@ pub struct Unit {
     pub is_legend: bool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub keywords: ::std::option::Option<KeywordList>,
+    ///The most models the unit may contain, across all of its composition rows. It caps a composition whose row maxima sum higher (Corsair Voidscarred: 10 models although its rows allow 13).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_model_count: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub model_count: ::std::option::Option<UnitModelCount>,
     pub name: UnitName,
@@ -59375,6 +59910,10 @@ impl<'de> ::serde::Deserialize<'de> for UnitCompositionTiersItemModelsItemName {
 ///    "keyword"
 ///  ],
 ///  "properties": {
+///    "choice_group": {
+///      "description": "The keyword-choice group (keyword-choice-groups.json) this keyword is one option of: the unit has it only when it takes this option at muster, and takes at most one option per group.",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "keyword": {
 ///      "$ref": "#/$defs/keyword"
 ///    },
@@ -59406,6 +59945,9 @@ impl<'de> ::serde::Deserialize<'de> for UnitCompositionTiersItemModelsItemName {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct UnitConditionalKeywordsItem {
+    ///The keyword-choice group (keyword-choice-groups.json) this keyword is one option of: the unit has it only when it takes this option at muster, and takes at most one option per group.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub choice_group: ::std::option::Option<EntityId>,
     pub keyword: Keyword,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub required_detachment_id: ::std::option::Option<EntityId>,
@@ -60512,11 +61054,27 @@ pub struct UnitPointsItem {
 ///      "minimum": 2.0
 ///    },
 ///    "M": {
-///      "$ref": "#/$defs/stat-value"
+///      "description": "Move in inches. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/stat-value"
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
 ///    },
 ///    "OC": {
-///      "type": "integer",
-///      "minimum": 0.0
+///      "description": "Objective Control. Null where the datasheet prints \"-\" (an aircraft, a fortification).",
+///      "oneOf": [
+///        {
+///          "type": "integer",
+///          "minimum": 0.0
+///        },
+///        {
+///          "type": "null"
+///        }
+///      ]
 ///    },
 ///    "Sv": {
 ///      "type": "integer",
@@ -60589,13 +61147,15 @@ pub struct UnitProfilesItem {
     pub invuln_sv_ranged: ::std::option::Option<i64>,
     #[serde(rename = "Ld")]
     pub ld: i64,
+    ///Move in inches. Null where the datasheet prints "-" (an aircraft, a fortification).
     #[serde(rename = "M")]
-    pub m: StatValue,
+    pub m: ::std::option::Option<StatValue>,
     ///Profile name (e.g., 'Wounded' for degrading)
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
+    ///Objective Control. Null where the datasheet prints "-" (an aircraft, a fortification).
     #[serde(rename = "OC")]
-    pub oc: u64,
+    pub oc: ::std::option::Option<u64>,
     #[serde(rename = "Sv")]
     pub sv: i64,
     #[serde(rename = "T")]

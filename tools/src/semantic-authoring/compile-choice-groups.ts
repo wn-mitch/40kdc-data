@@ -26,10 +26,15 @@ const bandKey = (item: ChoiceItem): string => JSON.stringify(item.gate.filter(is
  * boundary; each option is every effect between two markers, whatever their kinds, so an option's
  * rider ("and [HAZARDOUS]") stays in that option. Each effect keeps its own conditions inside it.
  *
+ * A marker in `secondary` opens a Stratagem's secondary effect ("Or:" before the effect its extra CP
+ * buys): the option after it is the choice's `secondary_option`. At most one marker may.
+ *
  * Replaces the first option's first effect with the choice and drops the rest of the options' effects
  * from `planned`. Returns why it cannot, or null.
  */
-export function chooseBetweenGroups(planned: ChoiceItem[], markers: readonly number[], boundaries: readonly number[]): string | null {
+export function chooseBetweenGroups(planned: ChoiceItem[], markers: readonly number[], boundaries: readonly number[], secondary: readonly number[] = []): string | null {
+  const secondaryMarkers = markers.filter((at) => secondary.includes(at));
+  if (secondaryMarkers.length > 1) return "\"Or:\" can open only one secondary effect in a choice.";
   const lower = Math.max(-1, ...boundaries.filter((at) => at < markers[0]!));
   const upper = Math.min(Number.POSITIVE_INFINITY, ...boundaries.filter((at) => at > markers.at(-1)!));
   const cuts = [lower, ...markers, upper];
@@ -48,7 +53,8 @@ export function chooseBetweenGroups(planned: ChoiceItem[], markers: readonly num
     ? gated(inside(group[0]!).gate, group[0]!.node)
     : { type: "sequence", steps: group.map((item) => gated(inside(item).gate, item.node)) };
   const first = both[0]!;
-  first.node = { type: "choice", options: groups.map(option) };
+  const secondaryOption = secondaryMarkers.length === 1 ? markers.indexOf(secondaryMarkers[0]!) + 1 : undefined;
+  first.node = { type: "choice", options: groups.map(option), ...(secondaryOption === undefined ? {} : { secondary_option: secondaryOption }) };
   first.gate = shared;
   for (const item of both.slice(1)) planned.splice(planned.indexOf(item), 1);
   return null;

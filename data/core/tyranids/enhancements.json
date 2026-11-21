@@ -890,7 +890,8 @@
           "Tyranids"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "cryptophotaic-camouflage-upgrade-ambush-predators-tyranids",
@@ -923,7 +924,8 @@
           "Tyranids"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "destabilising-predation-upgrade-talons-of-the-norn-queen-tyranids",
@@ -956,7 +958,8 @@
           "Tyranids"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "synaptoprescience-upgrade-talons-of-the-norn-queen-tyranids",
@@ -989,7 +992,8 @@
           "Tyranids"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "adapted-organism-the-vardenghast-swarm-tyranids",
@@ -1041,7 +1045,8 @@
       {
         "unit_id": "vardenghast-swarm-psychophage"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "synaptic-linchpin-invasion-fleet-tyranids",

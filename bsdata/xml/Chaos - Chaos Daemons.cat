@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Chaos Daemons" id="d265-877b-e03d-30ca" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+  <entryLinks>
+    <entryLink name="Soul Grinder" id="2c04-8504-92b4-a2f9" hidden="false" import="true" targetId="e16b-0203-c5dc-9d07" type="selectionEntry"/>
+    <entryLink name="Daemon Prince of Chaos with Wings" id="fb7e-24aa-0d06-deea" hidden="false" import="true" targetId="5800-3978-370d-b573" type="selectionEntry"/>
+    <entryLink name="Daemon Prince of Chaos" id="dcd6-f984-cd6b-b569" hidden="false" import="true" targetId="497d-e065-f5a5-5e80" type="selectionEntry"/>
+    <entryLink name="Rotigus" id="d41b-0424-b12d-8fae" hidden="false" import="true" targetId="cff8-7388-a2c9-946c" type="selectionEntry"/>
+    <entryLink name="The Masque of Slaanesh" id="ef4b-d8e2-da4c-8a45" hidden="false" import="true" targetId="1567-b99b-bd8f-d485" type="selectionEntry"/>
+    <entryLink name="Daemonettes" id="a859-4514-5f58-17b4" hidden="false" import="true" targetId="41c2-d2e6-ae43-3beb" type="selectionEntry"/>
+    <entryLink name="Nurglings" id="6f43-8291-825b-864c" hidden="false" import="true" targetId="e403-3a9-279e-41b7" type="selectionEntry"/>
+    <entryLink name="Bloodmaster" id="7429-4e3e-6b03-d616" hidden="false" import="true" targetId="ccae-b5f1-8787-4c7d" type="selectionEntry"/>
+    <entryLink name="Tranceweaver" id="dda9-246e-998d-0885" hidden="false" import="true" targetId="dba-34e3-46f2-56e0" type="selectionEntry"/>
+    <entryLink name="Burning Chariot" id="8d3e-76d0-8d28-e868" hidden="false" import="true" targetId="f6eb-b62f-5baf-d96d" type="selectionEntry"/>
+    <entryLink name="Pink Horrors" id="e490-6ab3-bc13-fde8" hidden="false" import="true" targetId="e7b8-aa40-6da7-778e" type="selectionEntry"/>
+    <entryLink name="Infernal Enrapturess" id="4533-d1f0-d6dd-d20e" hidden="false" import="true" targetId="2cc5-ef65-c4b9-28c6" type="selectionEntry"/>
+    <entryLink name="Plaguebearers" id="4dbe-bbb4-d6df-4aaa" hidden="false" import="true" targetId="d1eb-b092-d944-e729" type="selectionEntry"/>
+    <entryLink name="Keeper of Secrets" id="210b-5d97-e703-69dc" hidden="false" import="true" targetId="a903-dd97-339d-6899" type="selectionEntry"/>
+    <entryLink name="Shalaxi Helbane" id="d273-98e4-e7d3-e1a5" hidden="false" import="true" targetId="c49d-5ebc-4ee4-689e" type="selectionEntry"/>
+    <entryLink name="Seekers" id="8634-e675-9827-e0af" hidden="false" import="true" targetId="112d-8078-777f-76a5" type="selectionEntry"/>
+    <entryLink name="Syll'Esske" id="7d8c-1e40-3949-e88e" hidden="false" import="true" targetId="27f6-d907-66f-ca28" type="selectionEntry"/>
+    <entryLink name="Screamers" id="fb79-75fb-b7d7-aa84" hidden="false" import="true" targetId="550b-c5ab-5e27-f59b" type="selectionEntry"/>
+    <entryLink name="Bloodletters" id="1c5b-5521-3b78-59ee" hidden="false" import="true" targetId="4ecc-6aa5-da28-2c57" type="selectionEntry"/>
+    <entryLink name="Lord of Change" id="4b75-77da-731c-f184" hidden="false" import="true" targetId="3600-9f92-933-bf54" type="selectionEntry"/>
+    <entryLink name="Changecaster" id="17bb-b126-2a15-c465" hidden="false" import="true" targetId="8b7c-d709-90d4-298e" type="selectionEntry"/>
+    <entryLink name="Feculent Gnarlmaw" id="82c7-21de-2d52-b889" hidden="false" import="true" targetId="13f0-d2b5-6201-ba84" type="selectionEntry"/>
+    <entryLink name="Great Unclean One" id="2f97-623b-1abd-f7d9" hidden="false" import="true" targetId="d490-6c4d-e83b-b183" type="selectionEntry"/>
+    <entryLink name="Bloodcrushers" id="2ed7-6674-b559-6267" hidden="false" import="true" targetId="2f31-9132-b703-5fd8" type="selectionEntry"/>
+    <entryLink name="Fiends" id="446a-2159-f5fb-8f04" hidden="false" import="true" targetId="d1ee-8d05-4fae-1727" type="selectionEntry"/>
+    <entryLink name="Skarbrand" id="aa6a-3de9-579a-ca27" hidden="false" import="true" targetId="7998-d0a-baa4-e8b3" type="selectionEntry"/>
+    <entryLink name="Be'lakor" id="96e9-86a4-4aca-fa35" hidden="false" import="true" targetId="2c37-2898-8350-ef45" type="selectionEntry"/>
+    <entryLink name="Horticulous Slimux" id="d479-c4a3-f62e-c45b" hidden="false" import="true" targetId="7151-238f-a6eb-2f94" type="selectionEntry"/>
+    <entryLink name="Contorted Epitome" id="bbe4-281a-db0b-a390" hidden="false" import="true" targetId="36df-8f40-8a6b-7d4c" type="selectionEntry"/>
+    <entryLink name="Poxbringer" id="8505-91ec-cff4-f338" hidden="false" import="true" targetId="7b06-189d-b11e-c189" type="selectionEntry"/>
+    <entryLink name="Fateskimmer" id="2e27-b7ee-d9c6-8066" hidden="false" import="true" targetId="c199-b27c-7cc2-7935" type="selectionEntry"/>
+    <entryLink name="Hellflayers" id="f9bb-982e-e356-3a09" hidden="false" import="true" targetId="e8d-bf22-b29-d20e" type="selectionEntry"/>
+    <entryLink name="Plague Drones" id="a74e-9faa-ef61-ecd4" hidden="false" import="true" targetId="d620-146a-41cd-f28f" type="selectionEntry"/>
+    <entryLink name="Bloodthirster" id="3a03-711f-b00a-da40" hidden="false" import="true" targetId="a018-ca33-afd0-be83" type="selectionEntry"/>
+    <entryLink name="Exalted Flamer" id="9fd2-bf01-4c88-0754" hidden="false" import="true" targetId="de54-5b38-8ca1-c39c" type="selectionEntry"/>
+    <entryLink name="Skullmaster" id="5381-0cd4-1355-1c26" hidden="false" import="true" targetId="dd30-ba4c-34a4-e788" type="selectionEntry"/>
+    <entryLink name="Epidemius" id="b380-88dd-25c3-c568" hidden="false" import="true" targetId="5851-dc90-9afe-76a7" type="selectionEntry"/>
+    <entryLink name="Karanak" id="4fc4-af7c-8229-6c07" hidden="false" import="true" targetId="8436-cec1-e65a-d1a7" type="selectionEntry"/>
+    <entryLink name="Spoilpox Scrivener" id="436b-0fda-fabe-e324" hidden="false" import="true" targetId="e7cd-468b-37dd-d82f" type="selectionEntry"/>
+    <entryLink name="Tormentbringer" id="6d5b-139a-39a6-8b69" hidden="false" import="true" targetId="673b-111b-6dcb-352" type="selectionEntry"/>
+    <entryLink name="Skulltaker" id="1ed7-cfbf-0edb-05f8" hidden="false" import="true" targetId="8872-785a-1efa-7ca1" type="selectionEntry"/>
+    <entryLink name="Rendmaster on Blood Throne" id="d174-0ca2-adf6-82ac" hidden="false" import="true" targetId="d1cc-e17a-f1a1-4349" type="selectionEntry"/>
+    <entryLink name="Skull Altar" id="ac82-5caa-8752-7888" hidden="false" import="true" targetId="464a-b548-355f-2058" type="selectionEntry"/>
+    <entryLink name="Sloppity Bilepiper" id="c091-45cc-d75e-bf1a" hidden="false" import="true" targetId="3da0-5db0-7531-33b6" type="selectionEntry"/>
+    <entryLink name="Kairos Fateweaver" id="c592-8aba-9ce2-b336" hidden="false" import="true" targetId="6df5-f246-6bd-55b8" type="selectionEntry"/>
+    <entryLink name="Blue Horrors" id="4294-17b4-a46b-f36d" hidden="false" import="true" targetId="b795-b936-ad61-e407" type="selectionEntry"/>
+    <entryLink name="The Blue Scribes" id="b25a-b971-fd5b-2faf" hidden="false" import="true" targetId="caf1-8818-9e65-7154" type="selectionEntry"/>
+    <entryLink name="The Changeling" id="149b-1f8c-3117-16e0" hidden="false" import="true" targetId="ac75-c011-9a10-2c4a" type="selectionEntry"/>
+    <entryLink name="Fluxmaster" id="85a8-8fd2-3b50-b777" hidden="false" import="true" targetId="eba5-8a7a-fc5b-d7ec" type="selectionEntry"/>
+    <entryLink name="Flamers" id="8274-dd52-4a49-6b82" hidden="false" import="true" targetId="5f23-4d6-f2f9-5973" type="selectionEntry"/>
+    <entryLink name="Beasts of Nurgle" id="04af-0b7e-27d6-40e1" hidden="false" import="true" targetId="2de0-5897-f724-a592" type="selectionEntry"/>
+    <entryLink name="Flesh Hounds" id="f3a3-cda9-646a-a268" hidden="false" import="true" targetId="fd31-64a2-b20f-f0bc" type="selectionEntry"/>
+    <entryLink name="Skull Cannon" id="326b-d8c5-51aa-cb67" hidden="false" import="true" targetId="fd37-8a80-3da8-f262" type="selectionEntry"/>
+    <entryLink name="Accursed Cultists" id="b792-0d91-ebbe-413b" hidden="false" import="true" targetId="23aa-b45a-6d5d-e92b" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="cdc6-36fd-fd63-d959" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Lord" id="c983-0aa6-8baa-ed9b" hidden="false" import="true" targetId="e496-5a54-4cb2-4fc1" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="category" type="add" value="4df3-beae-010c-9087">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="7172-78ac-42c8-ea7c" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Lord in Terminator Armour" id="a476-7b89-3854-fa1d" hidden="false" import="true" targetId="b206-250d-84aa-fc42" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="category" type="add" value="4df3-beae-010c-9087">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="36ef-d823-4471-9481" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Lord with Jump Pack" id="028f-9c4b-13cb-0aae" hidden="false" import="true" targetId="d880-9968-2ed9-5a21" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="category" type="add" value="4df3-beae-010c-9087">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="f627-9bd8-60b3-aea5" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Terminator Squad" id="aed0-ea3f-5646-ebcf" hidden="false" import="true" targetId="203d-c50f-a438-4982" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="a29b-40bd-5a2f-e445" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chosen" id="ebae-5378-7eb9-b14a" hidden="false" import="true" targetId="4e85-615b-5d49-dfa4" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="a866-961c-07ca-1579" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Cultist Firebrand" id="0dc0-b163-c5a7-f99a" hidden="false" import="true" targetId="cb66-af7-2cca-1c85" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="category" type="add" value="4df3-beae-010c-9087">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="2f71-e62b-e848-c498" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Cultist Mob" id="f11c-5d3f-d715-0751" hidden="false" import="true" targetId="1267-78f1-7774-859" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="8f77-e69a-17bb-1927" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Dark Apostle" id="f88e-f9aa-aac9-2077" hidden="false" import="true" targetId="d2b8-454a-d061-b592" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="category" type="add" value="4df3-beae-010c-9087">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="952f-37da-9403-3c03" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Dark Commune" id="e0cb-a518-0aa0-f9eb" hidden="false" import="true" targetId="1780-25b8-ce0b-898d" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="category" type="add" value="4df3-beae-010c-9087">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="6b7b-52dd-6e9e-a1f9" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Fellgor Beastmen" id="03cd-5935-6df5-1f81" hidden="false" import="true" targetId="6bf7-888c-7aa6-6831" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="df9d-1219-20a2-b3ff" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Havocs" id="ba84-fd03-8398-eb14" hidden="false" import="true" targetId="946c-d784-c8be-f21" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="171a-7ff6-2241-0a99" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Legionaries" id="6a39-e4fb-4ea6-9b4e" hidden="false" import="true" targetId="615-e6bf-cfd2-9384" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="099e-2d0c-f722-1d17" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Master of Possession" id="de79-281d-f8a7-4f62" hidden="false" import="true" targetId="287f-7d48-59cf-dc1e" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="category" type="add" value="4df3-beae-010c-9087">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="d16c-1da1-2570-4079" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Possessed" id="c154-e074-2a93-b75e" hidden="false" import="true" targetId="cb1-5bcf-9e36-8136" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="7f6f-ed98-4db7-51d7" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Raptors" id="dbe5-fa77-8ed6-fa42" hidden="false" import="true" targetId="acb5-dbf2-e3a6-ad94" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="888b-7908-f6a6-1523" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Sorcerer" id="9c8c-28c6-6d7c-a265" hidden="false" import="true" targetId="980d-c80a-19b2-f641" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="category" type="add" value="4df3-beae-010c-9087">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="e947-37bf-7a32-92b4" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Sorcerer in Terminator Armour" id="3378-78e8-c2e1-56a9" hidden="false" import="true" targetId="683f-bfb2-f8d0-c39e" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="category" type="add" value="4df3-beae-010c-9087">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="3d2c-ed40-c65f-ae9c" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Traitor Enforcer" id="d90d-ab0c-0d29-febe" hidden="false" import="true" targetId="f69d-2171-5f95-9c88" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+        <modifier field="category" type="add" value="4df3-beae-010c-9087">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="atLeast" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="d3fd-cab8-0d21-093b" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Traitor Guardsmen Squad" id="d02f-fba1-e4ed-edb6" hidden="false" import="true" targetId="8dc5-4dcb-d77f-7d23" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="3768-fb4c-045f-b6bb" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Warp Talons" id="98eb-e6a2-bd5b-c8ab" hidden="false" import="true" targetId="9f33-ff4a-d948-4636" type="selectionEntry">
+      <modifiers>
+        <modifier field="hidden" type="set" value="true">
+          <conditionGroups>
+            <conditionGroup type="and">
+              <conditionGroups>
+                <conditionGroup type="and">
+                  <conditions>
+                    <condition childId="5063-25bd-d22e-665b" field="selections" includeChildSelections="true" scope="force" shared="true" type="lessThan" value="1"/>
+                  </conditions>
+                </conditionGroup>
+              </conditionGroups>
+            </conditionGroup>
+          </conditionGroups>
+        </modifier>
+      </modifiers>
+      <categoryLinks>
+        <categoryLink name="Allies: Heretic Astartes" id="b5e8-dc71-993d-7e4d" hidden="false" primary="false" targetId="11d6-17e3-fd5c-bfe7"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Acastus Knight Asterius" id="3ab0-de32-22e7-d45e" hidden="false" import="true" targetId="e289-ad32-c78a-e055" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="80c2-4d08-734e-cef3" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="f7e1-98df-dd07-103e" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Acastus Knight Porphyrion" id="569c-27ff-a51c-a935" hidden="false" import="true" targetId="fe77-6f85-5ddb-65bf" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="4978-bc9a-9531-7ad5" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="28f3-ffaf-f6cc-0455" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Cerastus Knight Acheron" id="f5f1-1dbb-c82f-3111" hidden="false" import="true" targetId="ec6e-d1d6-f7c6-d008" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="806c-f400-6ce8-726c" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="3e29-784d-d568-b2ae" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Cerastus Knight Atrapos" id="2f4d-1081-ee78-0d6d" hidden="false" import="true" targetId="8b1d-9029-f9e1-42d9" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="19fa-9533-9b24-54a6" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="35cd-46d4-b993-b8fc" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Cerastus Knight Castigator" id="8d41-cd3f-ecf5-3ded" hidden="false" import="true" targetId="b6e5-911b-93f-476" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="cb5e-bbd0-6624-6de4" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="c995-52f9-97e9-9b11" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Cerastus Knight Lancer" id="2f3d-e95c-a234-a2b7" hidden="false" import="true" targetId="4175-82c6-8e96-bef8" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="fdc0-fdd7-aa95-15e3" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="6f2e-63fd-e513-0ade" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Questoris Knight Magaera" id="5b01-0f46-8d1b-b352" hidden="false" import="true" targetId="2d0e-5b83-b678-56dc" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="ccca-d0f2-7fa9-5647" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="17c1-eb11-3fe8-8f4d" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Questoris Knight Styrix" id="20c6-093f-9cc5-9a8f" hidden="false" import="true" targetId="106c-4bdf-79a4-1c70" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="801b-b07c-9c13-2685" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="444e-4c06-0989-eef7" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Abominant" id="7cc7-46e9-6de0-4dd2" hidden="false" import="true" targetId="a78d-828b-302b-1bec" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="068d-ad75-673e-1635" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="ced1-72ad-89cb-5783" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Desecrator" id="422e-0568-56d1-6354" hidden="false" import="true" targetId="7a51-8f1f-7290-d9d2" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="a80a-dc89-e254-0077" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="9904-ec6e-b99e-be12" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Despoiler" id="4698-269e-a08e-c0f9" hidden="false" import="true" targetId="0119-8c04-435e-c782" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="69c9-db73-2fb9-ae61" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="7b00-9c19-f7af-3397" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Rampager" id="ebf2-52ff-69f8-7db9" hidden="false" import="true" targetId="61e0-e55b-1926-44df" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="a341-1766-c4c5-823c" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="baa5-df83-690d-6730" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Ruinator" id="7bc3-b74a-1197-90cb" hidden="false" import="true" targetId="c0a2-eb65-6d34-5bc6" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="6d51-7f33-4ab2-e153" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="9439-167b-ea7e-f009" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Knight Tyrant" id="055e-550e-91ac-157a" hidden="false" import="true" targetId="87ea-c7bd-6df0-f056" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="a278-16de-4710-b63d" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: Titanic" id="fcdf-0cc5-fc1c-cd12" hidden="false" primary="false" targetId="16ac-6d8d-af28-1fe2"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Brigand" id="d868-a29b-3a13-c806" hidden="false" import="true" targetId="753d-4e02-eda3-4809" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="7494-8033-dfa8-7aa2" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="39f1-1502-1f0e-ba84" hidden="false" primary="false" targetId="db6e-d6de-9655-5a91"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Executioner" id="f12c-2089-ec85-4a8a" hidden="false" import="true" targetId="8df0-fc3c-8ced-ffce" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="ae9e-5b98-b3cc-30bf" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="7059-4ea6-ea3a-a3d7" hidden="false" primary="false" targetId="db6e-d6de-9655-5a91"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Huntsman" id="73ba-c038-f3a9-de91" hidden="false" import="true" targetId="6e6d-7950-ce6d-4cd4" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="09fb-7fa2-c408-5132" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="b6e2-9cf3-e271-65a9" hidden="false" primary="false" targetId="db6e-d6de-9655-5a91"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Karnivore" id="de21-4925-c311-4dcf" hidden="false" import="true" targetId="e96b-ac98-7fd2-a155" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="1ab3-ca22-d6ef-8011" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="b119-191c-d98b-81f7" hidden="false" primary="false" targetId="db6e-d6de-9655-5a91"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Moirax" id="1f64-5930-ccb9-aba9" hidden="false" import="true" targetId="ae7c-3679-a88-6895" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="1bab-c499-406c-286a" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="53f3-ea0d-7bca-d3e3" hidden="false" primary="false" targetId="db6e-d6de-9655-5a91"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="War Dog Stalker" id="dcdd-ac5c-5935-bfaf" hidden="false" import="true" targetId="bbc6-c0ed-24e8-86b7" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Chaos Knights" id="c136-bead-0575-383c" hidden="false" primary="false" targetId="478c-d118-4ff8-0673"/>
+        <categoryLink name="Allies: Chaos Knights: War Dog" id="ca00-766b-cfb1-ec52" hidden="false" primary="false" targetId="db6e-d6de-9655-5a91"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Reaver Titan" id="b4f3-6e32-1496-91e2" hidden="false" import="true" targetId="0141-e2cd-472c-1a1d" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Titanicus Traitoris" id="b685-5149-a592-d300" hidden="false" primary="false" targetId="ec01-9e19-032f-8c63"/>
+        <categoryLink name="Allies: Titanicus Traitoris: Reaver Titan" id="15f8-0265-93b6-0175" hidden="false" primary="false" targetId="4d59-de48-ab2e-8bff"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Warbringer Nemesis Titan" id="3678-99ff-f7ef-3665" hidden="false" import="true" targetId="c93d-98d6-9a89-8900" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Titanicus Traitoris" id="c7b7-154b-3c7d-2186" hidden="false" primary="false" targetId="ec01-9e19-032f-8c63"/>
+        <categoryLink name="Allies: Titanicus Traitoris: Warbringer Nemesis Titan" id="c80c-486f-8fcd-a27c" hidden="false" primary="false" targetId="cf69-203b-2449-d84d"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Warhound Titan" id="caef-362d-e7c8-666a" hidden="false" import="true" targetId="bc5d-9d13-6c87-5f9f" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Titanicus Traitoris" id="8cce-d1b0-18f0-ca0f" hidden="false" primary="false" targetId="ec01-9e19-032f-8c63"/>
+        <categoryLink name="Allies: Titanicus Traitoris: Warhound Titan" id="3784-815b-2874-5fad" hidden="false" primary="false" targetId="b826-a3dd-fe7c-00e5"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Chaos Warlord Titan" id="b221-350b-ed8d-3a66" hidden="false" import="true" targetId="9210-30cc-eecc-2958" type="selectionEntry">
+      <categoryLinks>
+        <categoryLink name="Allies: Titanicus Traitoris" id="026d-c30b-e668-df6f" hidden="false" primary="false" targetId="ec01-9e19-032f-8c63"/>
+        <categoryLink name="Allies: Titanicus Traitoris: Warlord Titan" id="7274-ca64-c302-a2b7" hidden="false" primary="false" targetId="dcd1-48e5-f37f-a51f"/>
+      </categoryLinks>
+    </entryLink>
+    <entryLink name="Detachment" id="0865-8cc7-d483-5ddf" hidden="false" import="true" targetId="a435-b94a-eb7b-7c0c" type="selectionEntry"/>
+  </entryLinks>
+  <infoLinks>
+    <infoLink name="The Shadow of Chaos" id="a97e-33a0-9e05-03e1" hidden="false" targetId="1d05-942b-7d36-e2af" type="rule"/>
+    <infoLink name="Daemonic Pact" id="cb27-656a-4267-3414" hidden="false" targetId="6df8-0ebc-1351-d78f" type="rule"/>
+  </infoLinks>
+  <catalogueLinks>
+    <catalogueLink name="Chaos - Chaos Daemons Library" id="3edf-4d61-3e0c-454d" importRootEntries="false" targetId="76cc-c059-558a-3e02" type="catalogue"/>
+    <catalogueLink name="Chaos - Chaos Knights Library" id="d5da-ffd7-fa05-1980" importRootEntries="false" targetId="4d13-39bb-3d9b-fd5e" type="catalogue"/>
+    <catalogueLink name="Chaos - Chaos Space Marines Library" id="8a0d-65b1-b4ca-7ca2" importRootEntries="false" targetId="eb4a-ef06-cb2f-4c32" type="catalogue"/>
+    <catalogueLink name="Library - Titans" id="86f6-3fa8-3094-8bf5" importRootEntries="false" targetId="7481-280e-b55e-7867" type="catalogue"/>
+  </catalogueLinks>
+</catalogue>

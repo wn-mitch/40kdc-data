@@ -17,20 +17,20 @@
             </profile>
             <profile name="Leader" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Leader ability.</characteristic>
+                <characteristic name="Description">This unit gains the Leader ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Malign Wardings (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While this model is leading a unit, the unit has the Feel No Pain 4+ ability against Psychic Attacks.</characteristic>
+                <characteristic name="Description">While this model is leading a unit, this unit has Feel No Pain 4+ against Psychic Attacks.</characteristic>
               </characteristics>
             </profile>
             <profile name="Psychic Barrier (Psychic)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of your opponent's Shooting phase, you may use this ability, until the end of the phase:
-  -&gt; Roll one D6:
-    - On 1: The unit suffers D3 mortal wounds.
-    - On 2-6: The unit has a 4+ invulnerable save.</characteristic>
+                <characteristic name="Description">At the start of your opponent's Shooting phase, you can use this ability, until the end of the phase:
+  - Roll one D6:
+    - On 1: This unit suffers D3 mortal wounds.
+    - On 2-6: This unit has a 4+ invulnerable save.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -120,20 +120,19 @@
             <profile name="Deathstrike Missile" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">The first time this battle, during the Shooting phase, for the rest of the battle:
-  Select one of the following (Target Action):
+  Choose one of the following (Target Action):
     - Place a deathstrike target marker anywhere.
     - Move the deathstrike target marker.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>

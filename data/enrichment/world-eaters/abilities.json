@@ -3086,24 +3086,13 @@
     "ability_type": "unit",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -4952,50 +4941,39 @@
     "ability_type": "enhancement",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "any_of": [
+            "GOREMONGERS",
+            "JAKHALS"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": 3
         }
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "friendly",
-            "any_of": [
-              "GOREMONGERS",
-              "JAKHALS"
-            ]
-          },
-          "count": {
-            "min": 0,
-            "max": 3
-          }
-        },
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "set-up",
-              "target": "selected-unit",
-              "modifier": {
-                "to": "battlefield"
-              }
-            },
-            {
-              "type": "set-up",
-              "target": "selected-unit",
-              "modifier": {
-                "to": "strategic-reserves",
-                "ignore_limits": true
-              }
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "battlefield"
             }
-          ]
-        }
+          },
+          {
+            "type": "set-up",
+            "target": "selected-unit",
+            "modifier": {
+              "to": "strategic-reserves",
+              "ignore_limits": true
+            }
+          }
+        ]
       }
     },
     "scope": {
@@ -6687,7 +6665,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "trigger": {
       "event": "phase-ended",

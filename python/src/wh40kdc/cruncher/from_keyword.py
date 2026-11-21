@@ -33,6 +33,7 @@ ENGINE_DISPATCH_KEYWORDS = frozenset(
         "rapid-fire",
         "torrent",
         "blast",
+        "cleave",
         "ignores-cover",
     ]
 )
@@ -74,8 +75,6 @@ def buffs_from_keyword(
         "keywordId": keyword_id,
     }
     if not _keyword_applies_to_target(parameters, context):
-        return []
-    if keyword_id == "blast" and (parameters is None or "value" not in parameters):
         return []
 
     if keyword_id in ENGINE_DISPATCH_KEYWORDS:
@@ -219,12 +218,17 @@ def _evaluate_condition(condition: dict[str, Any], ctx: EngineContext) -> Any:
         raw_types = filt.get("move_types")
         types: list[Any] = raw_types if isinstance(raw_types, list) else []
         if (
-            parameters.get("event") == "move-ended"
-            and len(types) == 1
-            and types[0] == "remain-stationary"
-            and parameters.get("subject") is None
+            parameters.get("event") != "move-ended"
+            or len(types) != 1
+            or parameters.get("subject") is not None
         ):
+            return "unknown"
+        if types[0] == "remain-stationary":
             return ctx.get("attackerStationary") is True
+        # An unset charge flag means the caller could not say whether the unit charged.
+        if types[0] == "charge":
+            charged = ctx.get("attackerCharged")
+            return "unknown" if charged is None else charged is True
         return "unknown"
     if ctype == "has-keyword":
         raw_all = parameters.get("all_of")

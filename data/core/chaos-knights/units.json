@@ -73,6 +73,10 @@
       {
         "keyword": "Battleline",
         "required_detachment_id": "houndpack-lance"
+      },
+      {
+        "keyword": "Character",
+        "choice_group": "houndpack-lance-keyword-houndpack-lance"
       }
     ],
     "external_refs": [
@@ -165,6 +169,10 @@
       {
         "keyword": "Battleline",
         "required_detachment_id": "houndpack-lance"
+      },
+      {
+        "keyword": "Character",
+        "choice_group": "houndpack-lance-keyword-houndpack-lance"
       }
     ],
     "external_refs": [
@@ -257,6 +265,10 @@
       {
         "keyword": "Battleline",
         "required_detachment_id": "houndpack-lance"
+      },
+      {
+        "keyword": "Character",
+        "choice_group": "houndpack-lance-keyword-houndpack-lance"
       }
     ],
     "external_refs": [
@@ -354,6 +366,10 @@
       {
         "keyword": "Battleline",
         "required_detachment_id": "houndpack-lance"
+      },
+      {
+        "keyword": "Character",
+        "choice_group": "houndpack-lance-keyword-houndpack-lance"
       }
     ],
     "external_refs": [
@@ -456,6 +472,10 @@
       {
         "keyword": "Battleline",
         "required_detachment_id": "houndpack-lance"
+      },
+      {
+        "keyword": "Character",
+        "choice_group": "houndpack-lance-keyword-houndpack-lance"
       }
     ],
     "external_refs": [
@@ -547,6 +567,10 @@
       {
         "keyword": "Battleline",
         "required_detachment_id": "houndpack-lance"
+      },
+      {
+        "keyword": "Character",
+        "choice_group": "houndpack-lance-keyword-houndpack-lance"
       }
     ],
     "external_refs": [

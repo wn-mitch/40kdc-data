@@ -55,6 +55,12 @@ func buffApplies(buff map[string]any, ctx map[string]any) bool {
 	if critical := getStr(w, "onCritical"); critical != "" && getStr(ctx, "criticalRoll") != critical {
 		return false
 	}
+	// An enemy selection's filter on the selected unit: an undecided predicate drops the buff.
+	for _, gate := range [...]struct{ key, side string }{{"attackerFilter", "attacker"}, {"targetFilter", "target"}} {
+		if filter, ok := asMap(w[gate.key]); ok && filter != nil && matchesUnitFilter(filter, ctx, gate.side, "enemy") != true {
+			return false
+		}
+	}
 	if phases := getList(w, "phases"); len(phases) > 0 {
 		if !containsAny(phases, getStr(ctx, "phase")) {
 			return false

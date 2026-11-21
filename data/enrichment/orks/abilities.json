@@ -3931,7 +3931,12 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 11e source",
-    "faction_id": "orks"
+    "faction_id": "orks",
+    "option_names": [
+      "Turbo Engine",
+      "Shokk Attack Engine",
+      "Pulse Jet"
+    ]
   },
   {
     "ability_id": "fully-loaded-butchery-orks",
@@ -5269,7 +5274,7 @@
         "parameters": {
           "subject": "defender",
           "filter": {
-            "designated": "HIDDEN"
+            "state": "hidden"
           }
         }
       },
@@ -7006,24 +7011,11 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "attachment",
-            "parameters": {
-              "subject": "this-unit",
-              "role": "attached"
-            }
-          }
-        ]
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-unit",
+          "role": "attached"
+        }
       },
       "effect": {
         "type": "sequence",
@@ -8707,7 +8699,8 @@
               }
             }
           }
-        ]
+        ],
+        "secondary_option": 1
       }
     },
     "scope": {
@@ -12638,7 +12631,8 @@
       "duration": "permanent"
     },
     "unit_ids": [
-      "ardmob-boyz"
+      "ardmob-boyz",
+      "ardmob-boyz-2"
     ],
     "ability_type": "unit",
     "behavior": "passive",
@@ -14055,6 +14049,7 @@
     },
     "unit_ids": [
       "ardmob-boyz",
+      "ardmob-boyz-2",
       "ardmob-gretchin",
       "ardmob-warboss",
       "ardmob-wartrakk",

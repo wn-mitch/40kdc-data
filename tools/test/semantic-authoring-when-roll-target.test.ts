@@ -83,5 +83,10 @@ describe("a Stratagem's nested roll moment names the WHEN moment's units (compil
     expect(normalizeFingerprintParameters("attack-filter", { target: "that-unit" }, version)).toEqual({ target: "that-unit" });
     expect(() => normalizeFingerprintParameters("attack-filter", { target: "this-unit" }, version)).toThrow(/must be one of that-unit/u);
     expect(() => normalizeFingerprintParameters("attack-filter", { target: "that-unit", weapon_keyword: "Sample" }, version)).toThrow(/attack_type and negated only/u);
+    // negated alone negates the bound attacks (the compiler's polarity wraps the whole node).
+    expect(normalizeFingerprintParameters("attack-filter", { target: "that-unit", negated: true }, version)).toEqual({ target: "that-unit", negated: true });
+    expect(normalizeFingerprintParameters("attack-filter", { weapon_selected_for: "firing-deck", negated: true }, version)).toEqual({ weapon_selected_for: "firing-deck", negated: true });
+    // The attacks of an earlier moment are folded into that moment's binding, which has no negation.
+    expect(() => normalizeFingerprintParameters("attack-filter", { of: "antecedent", negated: true }, version)).toThrow(/cannot narrow them/u);
   });
 });

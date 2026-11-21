@@ -370,3 +370,22 @@ describe("mortal wounds an attack's rolls inflict", () => {
     expect(() => allocateModel(model({ rollMortals: { ...none, wound: 0.5 } }))).toThrow(/mortal wounds/);
   });
 });
+
+describe("models-killed loses damage past a model's last wound", () => {
+  it("5 Bolt Rifles (Focused Fire, D2) into W1 Boyz kill one model per unsaved wound", () => {
+    const embedded = Dataset.embedded();
+    const input: EngineInput = {
+      attacker: { weapon: embedded.weapons.getAny("bolt-rifle")!.raw, profileIndex: 0 },
+      target: { unit: embedded.units.getAny("boyz")!.raw, profileIndex: 0, modelCount: 10 },
+      modelsFiring: 5,
+      buffs: [],
+      context: { phase: "shooting", attackerStationary: false, withinHalfRange: false },
+    };
+    const out = crunch(input, embedded);
+    const stage = (name: string) => out.stages.find((s) => s.name === name)!.expected;
+    // 10 attacks × 2/3 hit × 1/3 wound (S4 v T5) × 5/6 unsaved = 1.85 unsaved, 3.70 damage at D2.
+    expect(stage("after-fnp")).toBeCloseTo(100 / 27, 10);
+    expect(stage("models-killed")).toBeCloseTo(50 / 27, 10);
+    expect(allocate(input, embedded).modelsDestroyed).toBeCloseTo(50 / 27, 10);
+  });
+});

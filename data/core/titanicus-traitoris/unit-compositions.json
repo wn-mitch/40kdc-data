@@ -1,0 +1,1029 @@
+[
+  {
+    "unit_id": "chaos-warbringer-nemesis-titan",
+    "faction_id": "titanicus-traitoris",
+    "models": [
+      {
+        "name": "Chaos Warbringer Nemesis Titan",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "anvillus-defence-battery",
+          "anvillus-defence-battery",
+          "ardex-defensor-mauler",
+          "ardex-defensor-mauler",
+          "ardex-defensor-mauler",
+          "nemesis-quake-cannon",
+          "reaver-gatling-blaster",
+          "reaver-laser-blaster",
+          "nemesis-feet"
+        ],
+        "can_be_non_character_warlord": true
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Chaos Warbringer Nemesis Titan",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "models": 1,
+          "items": [
+            {
+              "id": "anvillus-defence-battery",
+              "count": 2
+            },
+            {
+              "id": "ardex-defensor-mauler",
+              "count": 3
+            },
+            {
+              "id": "nemesis-feet",
+              "count": 1
+            },
+            {
+              "id": "nemesis-quake-cannon",
+              "count": 1
+            },
+            {
+              "id": "reaver-gatling-blaster",
+              "count": 1
+            },
+            {
+              "id": "reaver-laser-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "items": [
+            {
+              "id": "anvillus-defence-battery",
+              "count": 2
+            },
+            {
+              "id": "ardex-defensor-mauler",
+              "count": 3
+            },
+            {
+              "id": "nemesis-feet",
+              "count": 1
+            },
+            {
+              "id": "nemesis-quake-cannon",
+              "count": 1
+            },
+            {
+              "id": "reaver-gatling-blaster",
+              "count": 1
+            },
+            {
+              "id": "reaver-laser-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "anvillus-defence-battery",
+                "count": 2
+              },
+              {
+                "id": "ardex-defensor-mauler",
+                "count": 3
+              },
+              {
+                "id": "nemesis-feet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "nemesis-quake-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "nemesis-volcano-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "picks": 2,
+          "repeats": true,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "reaver-gatling-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-laser-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-melta-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-volcano-cannon",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "anvillus-defence-battery",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "ardex-defensor-mauler",
+          "input": "stepper",
+          "default": 3
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "nemesis-feet",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "nemesis-quake-cannon",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "nemesis-volcano-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "reaver-gatling-blaster",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "reaver-gatling-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "reaver-laser-blaster",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "reaver-laser-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "reaver-melta-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "reaver-melta-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "reaver-volcano-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warbringer Nemesis Titan",
+          "id": "reaver-volcano-cannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
+  },
+  {
+    "unit_id": "chaos-warhound-titan",
+    "faction_id": "titanicus-traitoris",
+    "models": [
+      {
+        "name": "Chaos Warhound Titan",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "warhound-plasma-blastgun",
+          "warhound-vulcan-mega-bolter",
+          "warhound-feet"
+        ],
+        "can_be_non_character_warlord": true
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Chaos Warhound Titan",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Warhound Titan",
+          "models": 1,
+          "items": [
+            {
+              "id": "warhound-feet",
+              "count": 1
+            },
+            {
+              "id": "warhound-plasma-blastgun",
+              "count": 1
+            },
+            {
+              "id": "warhound-vulcan-mega-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Warhound Titan",
+          "items": [
+            {
+              "id": "warhound-feet",
+              "count": 1
+            },
+            {
+              "id": "warhound-plasma-blastgun",
+              "count": 1
+            },
+            {
+              "id": "warhound-vulcan-mega-bolter",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Warhound Titan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "warhound-feet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Warhound Titan",
+          "picks": 2,
+          "repeats": true,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "warhound-inferno-gun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "warhound-plasma-blastgun",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "warhound-turbo-laser-destructor",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "warhound-vulcan-mega-bolter",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Warhound Titan",
+          "id": "warhound-feet",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Warhound Titan",
+          "id": "warhound-inferno-gun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warhound Titan",
+          "id": "warhound-inferno-gun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warhound Titan",
+          "id": "warhound-plasma-blastgun",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warhound Titan",
+          "id": "warhound-plasma-blastgun",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Warhound Titan",
+          "id": "warhound-turbo-laser-destructor",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warhound Titan",
+          "id": "warhound-turbo-laser-destructor",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warhound Titan",
+          "id": "warhound-vulcan-mega-bolter",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warhound Titan",
+          "id": "warhound-vulcan-mega-bolter",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
+  },
+  {
+    "unit_id": "chaos-reaver-titan",
+    "faction_id": "titanicus-traitoris",
+    "models": [
+      {
+        "name": "Chaos Reaver Titan",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "reaver-apocalypse-launcher",
+          "reaver-gatling-blaster",
+          "reaver-laser-blaster",
+          "reaver-feet"
+        ],
+        "can_be_non_character_warlord": true
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Chaos Reaver Titan",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Reaver Titan",
+          "models": 1,
+          "items": [
+            {
+              "id": "reaver-apocalypse-launcher",
+              "count": 1
+            },
+            {
+              "id": "reaver-feet",
+              "count": 1
+            },
+            {
+              "id": "reaver-gatling-blaster",
+              "count": 1
+            },
+            {
+              "id": "reaver-laser-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Reaver Titan",
+          "items": [
+            {
+              "id": "reaver-apocalypse-launcher",
+              "count": 1
+            },
+            {
+              "id": "reaver-feet",
+              "count": 1
+            },
+            {
+              "id": "reaver-gatling-blaster",
+              "count": 1
+            },
+            {
+              "id": "reaver-laser-blaster",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Reaver Titan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "reaver-apocalypse-launcher",
+                "count": 1
+              },
+              {
+                "id": "reaver-feet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Reaver Titan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "reaver-gatling-blaster",
+                "count": 1
+              },
+              {
+                "id": "reaver-laser-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-gatling-blaster",
+                "count": 1
+              },
+              {
+                "id": "reaver-melta-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-gatling-blaster",
+                "count": 1
+              },
+              {
+                "id": "reaver-power-fist",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-gatling-blaster",
+                "count": 1
+              },
+              {
+                "id": "reaver-volcano-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-gatling-blaster",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "reaver-laser-blaster",
+                "count": 1
+              },
+              {
+                "id": "reaver-melta-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-laser-blaster",
+                "count": 1
+              },
+              {
+                "id": "reaver-power-fist",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-laser-blaster",
+                "count": 1
+              },
+              {
+                "id": "reaver-volcano-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-laser-blaster",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "reaver-melta-cannon",
+                "count": 1
+              },
+              {
+                "id": "reaver-power-fist",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-melta-cannon",
+                "count": 1
+              },
+              {
+                "id": "reaver-volcano-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-melta-cannon",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "reaver-power-fist",
+                "count": 1
+              },
+              {
+                "id": "reaver-volcano-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "reaver-volcano-cannon",
+                "count": 2
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Reaver Titan",
+          "id": "reaver-apocalypse-launcher",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Reaver Titan",
+          "id": "reaver-feet",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Reaver Titan",
+          "id": "reaver-gatling-blaster",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Reaver Titan",
+          "id": "reaver-gatling-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Reaver Titan",
+          "id": "reaver-laser-blaster",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Reaver Titan",
+          "id": "reaver-laser-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Reaver Titan",
+          "id": "reaver-melta-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Reaver Titan",
+          "id": "reaver-melta-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Reaver Titan",
+          "id": "reaver-power-fist",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Reaver Titan",
+          "id": "reaver-volcano-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Reaver Titan",
+          "id": "reaver-volcano-cannon",
+          "input": "checkbox",
+          "default": 0
+        }
+      ],
+      "uniform": []
+    }
+  },
+  {
+    "unit_id": "chaos-warlord-titan",
+    "faction_id": "titanicus-traitoris",
+    "models": [
+      {
+        "name": "Chaos Warlord Titan",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": false,
+        "default_weapon_ids": [
+          "apocalypse-launcher",
+          "apocalypse-launcher",
+          "ardex-defensor-lascannon",
+          "ardex-defensor-lascannon",
+          "ardex-defensor-mauler",
+          "ardex-defensor-mauler",
+          "arioch-power-claw",
+          "macro-gatling-blaster",
+          "warlord-feet"
+        ],
+        "can_be_non_character_warlord": true
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Chaos Warlord Titan",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Chaos Warlord Titan",
+          "models": 1,
+          "items": [
+            {
+              "id": "apocalypse-launcher",
+              "count": 2
+            },
+            {
+              "id": "ardex-defensor-lascannon",
+              "count": 2
+            },
+            {
+              "id": "ardex-defensor-mauler",
+              "count": 2
+            },
+            {
+              "id": "arioch-power-claw",
+              "count": 1
+            },
+            {
+              "id": "macro-gatling-blaster",
+              "count": 1
+            },
+            {
+              "id": "warlord-feet",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "templates": [
+        {
+          "model": "Chaos Warlord Titan",
+          "items": [
+            {
+              "id": "apocalypse-launcher",
+              "count": 2
+            },
+            {
+              "id": "ardex-defensor-lascannon",
+              "count": 2
+            },
+            {
+              "id": "ardex-defensor-mauler",
+              "count": 2
+            },
+            {
+              "id": "arioch-power-claw",
+              "count": 1
+            },
+            {
+              "id": "macro-gatling-blaster",
+              "count": 1
+            },
+            {
+              "id": "warlord-feet",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "model": "Chaos Warlord Titan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "apocalypse-launcher",
+                "count": 2
+              }
+            ],
+            [
+              {
+                "id": "laser-blaster",
+                "count": 2
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ardex-defensor-lascannon",
+                "count": 2
+              },
+              {
+                "id": "ardex-defensor-mauler",
+                "count": 2
+              },
+              {
+                "id": "warlord-feet",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "picks": 2,
+          "repeats": true,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "arioch-power-claw",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "belicosa-volcano-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "macro-gatling-blaster",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "mori-quake-cannon",
+                "count": 1
+              }
+            ],
+            [
+              {
+                "id": "sunfury-plasma-annihilator",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "apocalypse-launcher",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "ardex-defensor-lascannon",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "ardex-defensor-mauler",
+          "input": "stepper",
+          "default": 2
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "arioch-power-claw",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "arioch-power-claw",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "belicosa-volcano-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "belicosa-volcano-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "laser-blaster",
+          "input": "stepper",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "macro-gatling-blaster",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "macro-gatling-blaster",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "mori-quake-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "mori-quake-cannon",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "sunfury-plasma-annihilator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "sunfury-plasma-annihilator",
+          "input": "checkbox",
+          "default": 0
+        },
+        {
+          "model": "Chaos Warlord Titan",
+          "id": "warlord-feet",
+          "input": "checkbox",
+          "default": 1
+        }
+      ],
+      "uniform": []
+    }
+  }
+]

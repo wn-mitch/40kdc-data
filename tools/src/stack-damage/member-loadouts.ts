@@ -5,7 +5,7 @@ import { bearerEquippedBuffs, equippedBuffs, unequippedRules } from "./weapon-gr
 /** Each stack member's chosen loadout, by unit id. */
 export type MemberLoadouts = ReadonlyMap<string, ReadonlyMap<string, number>>;
 
-function sameCounts(left: ReadonlyMap<string, number>, right: ReadonlyMap<string, number>): boolean {
+export function sameLoadoutCounts(left: ReadonlyMap<string, number>, right: ReadonlyMap<string, number>): boolean {
   const ids = new Set([...left.keys(), ...right.keys()]);
   return [...ids].every((id) => (left.get(id) ?? 0) === (right.get(id) ?? 0));
 }
@@ -24,7 +24,7 @@ export function settleMemberLoadouts(
   let scored = score();
   for (let round = 0; round < members.length; round += 1) {
     const next = score(new Map(scored.map(({ member, loadout }) => [member.unit.id, loadout.counts])));
-    const settled = next.every(({ loadout }, index) => sameCounts(loadout.counts, scored[index]!.loadout.counts));
+    const settled = next.every(({ loadout }, index) => sameLoadoutCounts(loadout.counts, scored[index]!.loadout.counts));
     scored = next;
     if (settled) break;
   }

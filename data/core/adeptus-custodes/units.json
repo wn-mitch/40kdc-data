@@ -6,12 +6,12 @@
     "profiles": [
       {
         "name": "Telemon Heavy Dreadnought",
-        "M": 8,
-        "T": 10,
-        "W": 12,
+        "M": 10,
+        "T": 11,
+        "W": 14,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 4
       }
     ],
@@ -97,12 +97,12 @@
     "profiles": [
       {
         "name": "Contemptor-Achillus Dreadnought",
-        "M": 6,
-        "T": 9,
-        "W": 10,
+        "M": 9,
+        "T": 10,
+        "W": 12,
         "Sv": 2,
         "invuln_sv": 5,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 3
       }
     ],
@@ -185,12 +185,12 @@
     "profiles": [
       {
         "name": "Contemptor-Galatus Dreadnought",
-        "M": 6,
-        "T": 9,
-        "W": 10,
+        "M": 9,
+        "T": 10,
+        "W": 12,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 3
       }
     ],
@@ -271,12 +271,12 @@
     "profiles": [
       {
         "name": "Blade Champion",
-        "M": 6,
-        "T": 6,
-        "W": 6,
+        "M": 8,
+        "T": 7,
+        "W": 7,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 2
       }
     ],
@@ -356,7 +356,7 @@
         "W": 14,
         "Sv": 2,
         "invuln_sv": 5,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 4
       }
     ],
@@ -442,12 +442,12 @@
     "profiles": [
       {
         "name": "Allarus Custodians",
-        "M": 5,
-        "T": 7,
-        "W": 4,
+        "M": 7,
+        "T": 8,
+        "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 2
       }
     ],
@@ -539,11 +539,11 @@
       {
         "name": "Shield-Captain on Dawneagle Jetbike",
         "M": 12,
-        "T": 7,
-        "W": 8,
+        "T": 8,
+        "W": 10,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 2
       }
     ],
@@ -627,7 +627,7 @@
     "profiles": [
       {
         "name": "Vigilator",
-        "M": 6,
+        "M": 7,
         "T": 3,
         "W": 1,
         "Sv": 3,
@@ -709,7 +709,7 @@
     "profiles": [
       {
         "name": "Witchseeker",
-        "M": 6,
+        "M": 7,
         "T": 3,
         "W": 1,
         "Sv": 3,
@@ -793,13 +793,13 @@
     "profiles": [
       {
         "name": "Ares Gunship",
-        "M": 20,
+        "M": null,
         "T": 12,
         "W": 22,
         "Sv": 2,
         "invuln_sv": 5,
         "Ld": 6,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -880,13 +880,13 @@
     "profiles": [
       {
         "name": "Custodian Guard",
-        "M": 6,
-        "T": 6,
-        "W": 3,
+        "M": 8,
+        "T": 7,
+        "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
-        "OC": 2
+        "Ld": 5,
+        "OC": 3
       }
     ],
     "points": [
@@ -931,10 +931,6 @@
         "wargear": "vexilla"
       },
       "impenetrable-defence-adeptus-custodes",
-      {
-        "id": "vexilla-wargear-adeptus-custodes",
-        "wargear": "vexilla"
-      },
       "aegis-of-the-emperor-adeptus-custodes",
       "martial-katah-adeptus-custodes"
     ],
@@ -966,7 +962,7 @@
     "profiles": [
       {
         "name": "Orion Assault Dropship",
-        "M": 20,
+        "M": 14,
         "T": 12,
         "W": 22,
         "Sv": 2,
@@ -1058,7 +1054,7 @@
     "profiles": [
       {
         "name": "Knight-Centura",
-        "M": 6,
+        "M": 7,
         "T": 3,
         "W": 4,
         "Sv": 3,
@@ -1230,11 +1226,11 @@
       {
         "name": "Agamatus Custodians",
         "M": 12,
-        "T": 6,
-        "W": 4,
+        "T": 8,
+        "W": 9,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 2
       }
     ],
@@ -1311,12 +1307,12 @@
     "profiles": [
       {
         "name": "Custodian Wardens",
-        "M": 6,
-        "T": 6,
-        "W": 3,
+        "M": 8,
+        "T": 7,
+        "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 2
       }
     ],
@@ -1406,11 +1402,11 @@
       {
         "name": "Pallas Grav-attack",
         "M": 12,
-        "T": 8,
-        "W": 9,
+        "T": 9,
+        "W": 10,
         "Sv": 2,
         "invuln_sv": 5,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 2
       }
     ],
@@ -1483,11 +1479,11 @@
       {
         "name": "Vertus Praetors",
         "M": 12,
-        "T": 7,
-        "W": 5,
+        "T": 8,
+        "W": 7,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 2
       }
     ],
@@ -1577,12 +1573,12 @@
     "profiles": [
       {
         "name": "Venatari Custodians",
-        "M": 10,
-        "T": 6,
-        "W": 3,
+        "M": 12,
+        "T": 7,
+        "W": 5,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 2
       }
     ],
@@ -1659,12 +1655,12 @@
     "profiles": [
       {
         "name": "Shield-Captain in Allarus Terminator Armour",
-        "M": 5,
-        "T": 7,
-        "W": 7,
+        "M": 7,
+        "T": 8,
+        "W": 9,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 2
       }
     ],
@@ -1744,12 +1740,12 @@
     "profiles": [
       {
         "name": "Aquilon Custodians",
-        "M": 5,
-        "T": 7,
-        "W": 4,
+        "M": 7,
+        "T": 8,
+        "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 2
       }
     ],
@@ -1827,7 +1823,7 @@
         "W": 16,
         "Sv": 2,
         "invuln_sv": 5,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 5
       }
     ],
@@ -1920,7 +1916,7 @@
     "profiles": [
       {
         "name": "Prosecutor",
-        "M": 6,
+        "M": 7,
         "T": 3,
         "W": 1,
         "Sv": 3,
@@ -2007,12 +2003,12 @@
     "profiles": [
       {
         "name": "Shield-Captain",
-        "M": 6,
-        "T": 6,
-        "W": 6,
+        "M": 8,
+        "T": 7,
+        "W": 8,
         "Sv": 2,
         "invuln_sv": 4,
-        "Ld": 6,
+        "Ld": 5,
         "OC": 2
       }
     ],
@@ -2102,9 +2098,9 @@
     "profiles": [
       {
         "name": "Trajann Valoris",
-        "M": 6,
-        "T": 6,
-        "W": 7,
+        "M": 8,
+        "T": 7,
+        "W": 10,
         "Sv": 2,
         "invuln_sv": 4,
         "Ld": 5,
@@ -2283,9 +2279,8 @@
     "ability_ids": [
       "sentinel-storm-adeptus-custodes",
       "stand-vigil-gilded-blades-custodian-guard-adeptus-custodes",
-      "praesidium-shield-tristraens-gilded-blades-adeptus-custodes",
       {
-        "id": "praesidium-shield-wargear-adeptus-custodes",
+        "id": "praesidium-shield-tristraens-gilded-blades-adeptus-custodes",
         "wargear": "praesidium-shield"
       },
       "martial-katah-tristraens-gilded-blades-adeptus-custodes"
@@ -2851,7 +2846,8 @@
       "diameter": 40
     },
     "weapon_ids": [
-      "kinetic-destroyer"
+      "kinetic-destroyer",
+      "tarsus-buckler"
     ]
   },
   {
@@ -3157,7 +3153,8 @@
       "diameter": 40
     },
     "weapon_ids": [
-      "kinetic-destroyer"
+      "kinetic-destroyer",
+      "tarsus-buckler"
     ]
   }
 ]

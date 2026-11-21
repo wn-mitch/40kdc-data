@@ -21,6 +21,7 @@
 
 mod applicability;
 mod attack_scope;
+mod complement;
 pub(crate) mod conditions;
 mod damage_leaves;
 mod gated;
@@ -30,6 +31,7 @@ mod levers;
 mod roll_mortals;
 pub use roll_mortals::is_own_attack_roll_trigger;
 mod selection;
+mod selection_backrefs;
 
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Map, Value};
@@ -113,6 +115,10 @@ pub struct ActivatableBuff {
     /// The stance option the lever does not apply under: a negated `rule-active` gate on it.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub excludes_option: Option<StanceOptionRef>,
+    /// The lever picks the option a `choice` marks `secondary_option`: a Stratagem's secondary
+    /// effect, which costs its `secondary_effect_extra_cp` on top of the Stratagem's CP cost.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub secondary: Option<bool>,
 }
 
 /// An [`ActivatableBuff`] that raises another ability's lever cap: `ability` names that ability
@@ -163,6 +169,8 @@ pub(crate) struct Lever {
     requires: Option<Vec<Value>>,
     cap_raise: Option<CapRaise>,
     gate: Option<gated::StanceGate>,
+    /// The option a `choice` marks `secondary_option`: a Stratagem's secondary effect.
+    secondary: bool,
 }
 
 /// The walk's sink, mirroring the TS `EffectTranslation` with JSON buffs.
@@ -200,14 +208,14 @@ pub(crate) struct WalkOpts<'a> {
     /// Inside a printed grant's definition walked for a unit that is not one of its holders: the
     /// holders' filter. Only the definition's auras can reach the buffed unit, emitted by a holder.
     aura_emitter: Option<Value>,
-    /// Tags the owning ability designates on the units holding it
-    /// ([`gated::self_designations`]).
-    self_designations: &'a std::collections::BTreeSet<String>,
     /// The abilities the owning record prints, by definition id, for a grant that names one by
     /// reference ([`damage_leaves::own_definitions`]).
     definitions: &'a std::collections::HashMap<String, Value>,
     /// Inside a part triggered by each hit or wound roll of the attack: that roll and its outcome.
     attack_roll: Option<roll_mortals::AttackRoll>,
+    /// The effect's selections in document order ([`selection::selection_order`]), which number
+    /// their lever ids.
+    selections: &'a [Value],
 }
 
 const STOCHASTIC_DICE_GATED: &str = "dice-gated effect: stochastic; not expressible as a buff";
@@ -331,7 +339,8 @@ const SCOPE_DEPTH: usize = 4;
 /// The scope of a fragment. An undecided condition matters only as much as what it gates: its
 /// body is translated as if the condition held, and a body that yields no buff or lever takes the
 /// widest scope of its own fragments; a body that could change the attack keeps the condition
-/// unresolved.
+/// unresolved. An undecided trigger moment is reported as the ability part it gates, whose body is
+/// its effect.
 fn scope_of(
     fragment: &UnsupportedFragment,
     source: &BuffSource,
@@ -350,7 +359,8 @@ fn scope_of(
     let body = match node {
         Some(node)
             if depth < SCOPE_DEPTH
-                && is_str(node, "type", "conditional")
+                && (is_str(node, "type", "conditional")
+                    || is_str(node, "type", "ability-part"))
                 && node.get("effect").is_some() =>
         {
             translate_effect(
@@ -417,6 +427,7 @@ fn translate_effect(
         effect
     };
     let effect = super::weapon_bindings::resolve_named_weapon_bindings(&effect);
+    let effect = levers::lasting_setup(&effect, duration);
     let (ability_id, ability_kind) = match source {
         BuffSource::Ability {
             ability_id,
@@ -426,7 +437,6 @@ fn translate_effect(
         _ => ("effect", None),
     };
     let source_value = serde_json::to_value(source).expect("a buff source serializes");
-    let self_designations = gated::self_designations(&effect, ability_id);
     let definitions = damage_leaves::own_definitions(&effect, ability_id);
     let mut opts = WalkOpts {
         context,
@@ -439,9 +449,9 @@ fn translate_effect(
         usage: usage.cloned(),
         granted_holder: false,
         aura_emitter: None,
-        self_designations: &self_designations,
         definitions: &definitions,
         attack_roll: None,
+        selections: &[],
     };
     // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
     let effect = match roll_mortals::on_attack_roll(trigger, &effect) {
@@ -451,6 +461,8 @@ fn translate_effect(
         }
         None => effect,
     };
+    let selections = selection::selection_order(&effect);
+    opts.selections = &selections;
     let mut out = Out::default();
     out.unsupported.extend(
         scoped
@@ -500,6 +512,7 @@ fn finish(out: Out) -> EffectTranslation {
                     .map(|gate| gate.option.clone()),
                 excludes_option: l.gate.filter(|gate| gate.negated).map(|gate| gate.option),
                 requires: l.requires,
+                secondary: l.secondary.then_some(true),
             })
             .collect(),
     }
@@ -557,6 +570,7 @@ pub fn apply_activation(result: &mut EffectTranslation, ability_id: &str, activa
             requires_option: None,
             excludes_option: None,
             requires: None,
+            secondary: None,
         });
     }
     for lever in &mut result.activatable {
@@ -675,6 +689,7 @@ fn designate_entry(node: &Obj, applies: Option<&Obj>, opts: &WalkOpts, out: &mut
                 .and_then(Value::as_str)
                 .unwrap_or("designated");
             out.activatable.push(Lever {
+                secondary: false,
                 id: format!("{}#{designation}", opts.ability_id),
                 label: format!(
                     "Designated target: {}",
@@ -896,8 +911,28 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         Some("named-region-state") => leaves::named_region_state(node, opts, out),
         Some("conditional") => levers::conditional(node, opts, out),
         Some("rules-bundle" | "sequence") => {
-            for step in list(node.get("steps")) {
-                walk(step, opts, out);
+            let steps = list(node.get("steps"));
+            let floors = complement::complementary_floors(steps, opts);
+            for (step, floor) in steps.iter().zip(floors) {
+                match floor {
+                    None => walk(step, opts, out),
+                    Some(complement::Floor::Weaker) => walk(
+                        step.get("effect").unwrap_or(&Value::Null),
+                        opts,
+                        out,
+                    ),
+                    Some(complement::Floor::Stronger) => {
+                        let condition = step
+                            .get("condition")
+                            .and_then(Value::as_object)
+                            .expect("a complementary step has an object condition");
+                        out.unsupported.push((
+                            complement::complement_reason(condition),
+                            step.clone(),
+                            Some(levers::undecided_needs(condition, opts)),
+                        ));
+                    }
+                }
             }
         }
         Some("ability-part") => {
@@ -944,6 +979,16 @@ fn dispatch(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             ) {
                 part_opts.attack_roll = Some(roll);
                 part.to_mut().insert("effect".into(), effect);
+            }
+            // An untriggered part with its own duration is a record root of its own (`lasting_setup`).
+            if present(node, "trigger").is_none() && node.get("duration").is_some() {
+                let body = levers::lasting_setup(
+                    part.get("effect").unwrap_or(&Value::Null),
+                    node.get("duration"),
+                );
+                if part.get("effect") != Some(&body) {
+                    part.to_mut().insert("effect".into(), body);
+                }
             }
             // A part firing on its own moment is gated like a timing-is step; one with only a
             // cost, a choice or a usage limit is an activation, as a named effect is.

@@ -266,6 +266,8 @@ export function projectOutside(plan: MirrorPlan, snap: RepoSnapshot, opts: Outsi
     ["examples", [".ts", ".svelte", ".js"]],
   ];
   const literal = /(["'`])([a-z0-9][a-z0-9-]*[a-z0-9])\1/g;
+  // The argument of a prefix/suffix test, in TS/JS, Python, Rust and Go.
+  const AFFIX_MATCH = /(?:\.(?:startsWith|endsWith|startswith|endswith|starts_with|ends_with|strip_prefix|strip_suffix)\(\s*|strings\.(?:HasPrefix|HasSuffix|TrimPrefix|TrimSuffix)\([^,()]*,\s*)$/;
   for (const [r, exts] of codeRoots) {
     for (const abs of walkFiles(path.join(root, r), exts, (x) => SKIP_DIRS.test(x) || GENERATED.test(x) || x.startsWith("mfm/mirror") || /^mfm-mirror[^/]*\.test\.ts$/.test(x))) {
       const text = readFileSync(abs, "utf8");
@@ -274,8 +276,11 @@ export function projectOutside(plan: MirrorPlan, snap: RepoSnapshot, opts: Outsi
       lines.forEach((line, n) => {
         // A fixture id that only looks like a repo id (a synthetic dump's) opts out per line.
         if (line.includes(KEEP_MARKER)) return;
-        lines[n] = line.replace(literal, (whole, q: string, id: string) => {
+        lines[n] = line.replace(literal, (whole, q: string, id: string, at: number) => {
           if (!id.includes("-")) return whole;
+          // A prefix or suffix pattern (`startsWith("mission-tactics")`) matches a family of ids,
+          // not the record that happens to carry that exact id.
+          if (AFFIX_MATCH.test(line.slice(0, at))) return whole;
           let v: Verdict = null;
           let kind: EntityKind = "ability";
           for (const k of ["ability", "stratagem", "enhancement"] as const) {

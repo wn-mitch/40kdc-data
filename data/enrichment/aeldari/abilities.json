@@ -922,7 +922,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "aeldari",
     "trigger": {
       "event": "phase-started",
@@ -1153,7 +1152,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "usage": {
       "frequency": "once-per-turn",
       "per": "unit"
@@ -1295,24 +1293,13 @@
     "source_digest": "7ed55043db0e9460b7ca1371bf15ebee27852bc3d13b4871e6ce64f208babe68",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -2180,7 +2167,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "aeldari",
     "trigger": {
       "event": "attacks-resolved",
@@ -3605,7 +3591,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "aeldari"
   },
   {
@@ -6804,66 +6789,55 @@
     "source_digest": "cb1126d0f26ef144b4d22f069a20fb074a71d9feb221eae7e6b8addee5e193f0",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "friendly",
-            "all_of": [
-              "AELDARI",
-              "INFANTRY"
-            ]
-          },
-          "count": {
-            "min": 1,
-            "max": 1
-          },
-          "eligibility": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "visible": {
-                      "to": "this-unit"
-                    }
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "AELDARI",
+            "INFANTRY"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "visible": {
+                    "to": "this-unit"
                   }
                 }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "within": {
-                      "of": "this-unit",
-                      "range": {
-                        "inches": 36
-                      }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-unit",
+                    "range": {
+                      "inches": 36
                     }
                   }
                 }
               }
-            ]
-          }
-        },
-        "effect": {
-          "type": "ability-grant",
-          "target": "selected-unit",
-          "modifier": {
-            "ability": "stealth"
-          }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "selected-unit",
+        "modifier": {
+          "ability": "stealth"
         }
       }
     },
@@ -7036,24 +7010,13 @@
     "source_digest": "7ed55043db0e9460b7ca1371bf15ebee27852bc3d13b4871e6ce64f208babe68",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -7434,7 +7397,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "aeldari",
     "trigger": {
       "event": "phase-started",
@@ -7444,7 +7406,12 @@
           "phase": "fight"
         }
       }
-    }
+    },
+    "option_names": [
+      "Hero’s Prowess",
+      "Villain’s Doom",
+      "Trickster’s Grace"
+    ]
   },
   {
     "ability_id": "lithe-embarkation-aeldari",
@@ -11171,19 +11138,44 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "eldritch-raiders",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "cost-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "of": "manoeuvre",
+            "operation": "waive",
+            "applies_to": "used-by-this-unit",
+            "id": "fade-back"
+          }
+        },
+        {
+          "type": "ability-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "battle-focus-aeldari",
+            "aspect": "uses",
+            "operation": "lift-limit",
+            "value": 1,
+            "consumes_shared_use": false
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "optional": true,
+    "source_digest": "37feefda0c1ebe49e1eeba8d510b247d10562de64c4a8f8bd7f88627a5e2ed9c"
   },
   {
     "ability_id": "agile-reach-aeldari",
@@ -11868,19 +11860,84 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "warhost",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "owner": "enemy"
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "within": {
+                      "of": "attacker",
+                      "range": {
+                        "inches": 12
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": "this-unit",
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ],
+              "weapons": {
+                "type": "ranged"
+              }
+            }
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": "attacker",
+          "modifier": {
+            "roll": "hit",
+            "critical_on": 5,
+            "weapons": {
+              "type": "ranged",
+              "keyword": {
+                "keyword_id": "sustained-hits"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "97629dbd79d1e48401de8beab2ef08bd209c38fa3918121c0b75692d5adfbef6"
   },
   {
     "ability_id": "bloody-dance-ghosts-of-the-webway-aeldari",
@@ -11942,7 +11999,7 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {
@@ -12590,7 +12647,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {
@@ -12647,9 +12704,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "death-jester",
       "shadowseer",
@@ -12675,11 +12731,66 @@
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "all_of": [
+                      "ASURYANI"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "army-rule",
+            "target": "this-unit",
+            "modifier": {
+              "rule": "composition",
+              "with": {
+                "all_of": [
+                  "HARLEQUINS"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "faction-forbidden",
+                "faction": "harlequins"
+              }
+            },
+            {
+              "type": "army-rule",
+              "target": "this-unit",
+              "modifier": {
+                "rule": "faction-forbidden",
+                "faction": "ynnari"
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "5d3d7c94548efc07b734b7c11a145eefeed4383d8e9c6a84ed9933a852b126be"
   },
   {
     "ability_id": "doom-inescapable-aspect-host-aeldari",
@@ -12844,19 +12955,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "guardian-battlehost",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "deployment-window",
+        "parameters": {
+          "during": "deployment"
+        }
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "GUARDIANS"
+            ]
+          },
+          "count": {
+            "min": 0,
+            "max": 2
+          }
+        },
+        "effect": {
+          "type": "ability-grant",
+          "target": "selected-unit",
+          "modifier": {
+            "ability": "infiltrators"
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "157b893cd075f3ef23abf020a26c3b10d958be28ac60a48f1a3f68b4e2624d78"
   },
   {
     "ability_id": "exit-the-stage-ghosts-of-the-webway-aeldari",
@@ -16304,7 +16444,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {
@@ -16366,7 +16506,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {
@@ -17233,9 +17373,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "spiritseer-kygharil"
     ],
@@ -17243,11 +17382,98 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "WRAITH CONSTRUCT"
+            ],
+            "within": {
+              "range": {
+                "inches": 6
+              },
+              "of": "this-model"
+            }
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "strength",
+            "parameters": {
+              "subject": "selected-unit",
+              "below": "starting"
+            }
+          }
+        },
+        "effect": {
+          "type": "choice",
+          "options": [
+            {
+              "type": "return-models",
+              "target": "selected-unit",
+              "modifier": {
+                "count": 1
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "strength",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "below": "starting"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "heal",
+                "target": "selected-unit",
+                "modifier": {
+                  "amount": "D3",
+                  "per": "one-model"
+                }
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "unit"
+    },
+    "optional": true,
+    "source_digest": "817b5830a7676cdb539fec665f4dbcc831e27a26f9e04bfb795773e2dd4026b7"
   },
   {
     "ability_id": "time-to-strike-guardian-battlehost-aeldari",
@@ -17564,7 +17790,8 @@
           "type": "move",
           "target": "this-unit",
           "modifier": {
-            "move_type": "ingress"
+            "move_type": "ingress",
+            "mandatory": true
           }
         },
         {

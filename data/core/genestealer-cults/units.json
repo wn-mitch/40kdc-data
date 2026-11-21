@@ -2204,6 +2204,11 @@
     "faction_keywords": [
       "Genestealer Cults"
     ],
+    "base_size_mm": {
+      "shape": "oval",
+      "width": 60,
+      "length": 35.5
+    },
     "model_count": {
       "min": 5,
       "max": 5
@@ -2271,15 +2276,18 @@
       "max": 5
     },
     "weapon_ids": [
-      "autopistol",
-      "hand-flamer",
+      "autopistol-claw-of-ascension-hybrid-metamorphs",
+      "hand-flamer-claw-of-ascension-hybrid-metamorphs",
       "leaders-weapon-symbiote",
-      "metamorph-mutations"
+      "metamorph-mutations-claw-of-ascension-hybrid-metamorphs"
     ],
-    "ability_ids": [],
+    "ability_ids": [
+      "brood-claim-genestealer-cults",
+      "cult-ambush-claw-of-ascension-genestealer-cults"
+    ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
@@ -2289,7 +2297,13 @@
     "base_size_mm": {
       "shape": "round",
       "diameter": 32
-    }
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5328ffb4-f458-40a5-8252-de41503f2d00"
+      }
+    ]
   },
   {
     "id": "shanus-daskovian",

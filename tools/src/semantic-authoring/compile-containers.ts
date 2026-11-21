@@ -11,8 +11,8 @@ import { condition } from "./compile-conditions.js";
 import { duration } from "./compile-duration-scope.js";
 import { gatedMoment } from "./compile-usability-gate.js";
 import { buildRitualMenu, isRitualTestLeaf } from "./compile-ritual-menu.js";
-import { RITUAL_MENU_OPEN } from "./psychic-families.js";
-import { usageFor } from "./restriction-families.js";
+import { RITUAL_MENU_OPEN } from "./families/vocabulary.js";
+import { usageFor } from "./families/vocabulary.js";
 import { buildMoveType, MOVE_TYPE_OPEN } from "./compile-move-type.js";
 
 /**
@@ -56,6 +56,11 @@ function opensMoment(list: readonly CompileLeaf[], from: number): boolean {
 const NAMED_OPTION_CONTAINERS = new Set(["stance-select-open", "issue-orders-open", "dice-pool-allocation-open", RITUAL_MENU_OPEN]);
 /** Openers whose options may number just one (the DSL's own `actions`/`outcomes` array allows it). */
 const ONE_OR_MORE_CONTAINERS = new Set(["resource-action-menu-open"]);
+
+/** True for an opener other than choice-open whose options lead with named-option leaves. */
+export function namesItsOptions(familyId: string): boolean {
+  return NAMED_OPTION_CONTAINERS.has(familyId);
+}
 
 export function isContainerOpener(familyId: string): boolean {
   return LEADING_CONTAINERS.has(familyId);
@@ -133,6 +138,7 @@ function withSharedSteps(option: Node, shared: Node): Node {
 function namedOption(group: readonly CompileLeaf[], forRequirement: boolean, sourceIndex = 0, ritual = false): { id: string; name: unknown; effect: Node; marker: CompileLeaf } {
   const marker = group[0];
   if (!marker || marker.family_id !== "named-option") throw new CompileError("Each option here needs a leading named-option leaf giving its name.");
+  if (marker.parameters.secondary === true) throw new CompileError("Only an option of a choice-open menu can be a Stratagem's secondary effect.");
   const hasRequirement = marker.parameters.requirement_type !== undefined || marker.parameters.requirement_any_of !== undefined;
   if (forRequirement !== hasRequirement) {
     throw new CompileError(forRequirement
@@ -156,6 +162,10 @@ function buildChoice(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   // A DSL choice's options carry no names, so a named-option heading adds nothing to its option.
   const options = groups.map((group) => effectsOf(group[0]?.family_id === "named-option" ? group.slice(1) : group));
   const node: Node = { type: "choice", options };
+  // The option whose named-option heading marks it as the Stratagem's secondary effect (its extra CP buys it).
+  const secondary = groups.flatMap((group, at) => group[0]?.family_id === "named-option" && group[0].parameters.secondary === true ? [at] : []);
+  if (secondary.length > 1) throw new CompileError("A choice-open menu can mark only one option as the secondary effect.");
+  if (secondary.length === 1) node.secondary_option = secondary[0];
   if (head.parameters.choice_label !== undefined) node.choice_label = closed(head, "choice_label");
   if (head.parameters.chosen_by !== undefined) node.chosen_by = closed(head, "chosen_by");
   const min = head.parameters.min_choices;

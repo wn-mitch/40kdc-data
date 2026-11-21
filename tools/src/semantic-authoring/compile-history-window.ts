@@ -2,7 +2,7 @@ import { historyConnective } from "./compile-connective-history.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
 import { sameSentence } from "./compile-named-ability.js";
 import { setUpWindow } from "./compile-history-values.js";
-import { WINDOWED_DESTRUCTION } from "./families/unit-activity.js";
+import { WINDOWED_DESTRUCTION } from "./families/vocabulary.js";
 
 /**
  * "... destroyed one or more X units from your army during the battle", "set up using the Foo

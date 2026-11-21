@@ -262,6 +262,7 @@ const FILE_TO_COLLECTION: &[(&str, &str)] = &[
     ("mission-cards", "mission_cards"),
     ("deployment-patterns", "deployment_patterns"),
     ("force-dispositions", "force_dispositions"),
+    ("keyword-choice-groups", "keyword_choice_groups"),
     ("terrain-templates", "terrain_templates"),
     ("terrain-layouts", "terrain_layouts"),
     ("hull-shapes", "hull_shapes"),

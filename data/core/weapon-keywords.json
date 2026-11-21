@@ -235,7 +235,30 @@
     "id": "lance",
     "name": "Lance",
     "required_parameters": [],
-    "effect": null,
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "charge"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "this-model",
+        "modifier": {
+          "roll": "wound",
+          "operation": "add",
+          "value": 1
+        }
+      }
+    },
     "game_version": {
       "edition": "11th",
       "dataslate": "pre-launch-provisional"

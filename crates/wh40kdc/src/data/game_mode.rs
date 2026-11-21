@@ -267,6 +267,7 @@ impl Dataset {
             mission_cards: self.mission_cards.clone(),
             deployment_patterns: self.deployment_patterns.clone(),
             force_dispositions: self.force_dispositions.clone(),
+            keyword_choice_groups: self.keyword_choice_groups.clone(),
             terrain_templates: self.terrain_templates.clone(),
             terrain_layouts: self.terrain_layouts.clone(),
             hull_shapes: self.hull_shapes.clone(),

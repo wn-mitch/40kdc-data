@@ -128,6 +128,22 @@ describe("buildSeedUnit", () => {
     expect(u.profiles[0].name).toBe("Trooper");
   });
 
+  it("prices an unpriced Combat Patrol datasheet at 0 per model count, and only that", () => {
+    const seed = (isCombatPatrol: boolean) => {
+      const dump = mkDump({
+        datasheet: [{ ...DS, localisations: { en: { name: "Patrol Squad" } } }],
+        publication: [{ id: "p1", isCombatPatrol, localisations: { en: { name: "Box" } } }],
+        miniature: [mini({})],
+        unit_composition: [{ id: "c1", datasheetId: "ds1", points: null, displayOrder: 1, referenceGroupingKeywordId: null }],
+        unit_composition_miniature: [{ id: "ucm1", min: 5, max: 5, unitCompositionId: "c1", miniatureId: "m1" }],
+      });
+      return buildSeedUnit(dump, dump.byId("datasheet").get("ds1") as never, "orks");
+    };
+    expect(seed(true)).toMatchObject({ points: [{ models: 5, cost: 0 }], points_provisional: false });
+    expect(seed(false)).not.toHaveProperty("points");
+    expect(seed(false).points_provisional).toBe(true);
+  });
+
   it("emits two profiles for two distinct visible statlines, in display order", () => {
     const dump = mkDump({
       datasheet: [{ ...DS, localisations: { en: { name: "Command Squad" } } }],

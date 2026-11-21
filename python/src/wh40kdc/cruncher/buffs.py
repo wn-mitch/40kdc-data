@@ -42,6 +42,8 @@ ResolvedModifiers = dict[str, Any]
 #: Scenario state, each left "unknown" by its condition or filter when absent:
 #: ``battleRound`` (``battle-round``, per-round range tables); ``attackerTurn`` (it is the
 #: attacking unit's player's turn, for ``player-turn-is`` read from the ability's side);
+#: ``targetVisible`` (the attack's target is visible to the attacking model, for a unit-filter's
+#: ``visible: {to: "attacker"}`` on the attack's target);
 #: ``attackerStrength`` / ``targetStrength`` (``full`` / ``below-starting`` / ``below-half``,
 #: for ``strength``); ``attackerWounds`` / ``targetWounds`` (``{remaining, starting}`` of the
 #: damaged or only model, for ``wounds``); ``attackerDesignations`` / ``targetDesignations``
@@ -160,6 +162,14 @@ def _applies(buff: Buff, ctx: EngineContext) -> bool:
         return True
     if w.get("onCritical") is not None and ctx.get("criticalRoll") != w["onCritical"]:
         return False
+    if w.get("attackerFilter") or w.get("targetFilter"):
+        # Deferred: from_dsl imports this module.
+        from wh40kdc.cruncher.from_dsl import _matches_unit_filter
+
+        # An enemy selection's filter on the selected unit: an undecided predicate drops the buff.
+        for key, side in (("attackerFilter", "attacker"), ("targetFilter", "target")):
+            if w.get(key) and _matches_unit_filter(w[key], ctx, side, "enemy") is not True:
+                return False
     phases = w.get("phases")
     if phases and ctx.get("phase") not in phases:
         return False

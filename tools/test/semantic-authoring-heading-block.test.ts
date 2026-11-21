@@ -54,7 +54,7 @@ describe("A shortened move of the enemy units an earlier filter names", () => {
   });
 
   it("refuses a bonus of zero", () => {
-    expect(() => normalizeFingerprintParameters("move-distance", { subject: "this-unit", move_types: ["pile-in"], bonus: 0 }, 3)).toThrow(/1 to 24/u);
+    expect(() => normalizeFingerprintParameters("move-distance", { subject: "this-unit", move_types: ["pile-in"], bonus: 0 })).toThrow(/1 to 24/u);
   });
 });
 

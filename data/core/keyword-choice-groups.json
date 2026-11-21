@@ -1,0 +1,62 @@
+[
+  {
+    "id": "daemonic-allegiance",
+    "name": "Daemonic Allegiance",
+    "detachment_id": null,
+    "mandatory": true,
+    "min_units": null,
+    "max_units": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "houndpack-lance-keyword-houndpack-lance",
+    "name": "Houndpack Lance Keyword",
+    "detachment_id": "houndpack-lance",
+    "mandatory": false,
+    "min_units": 3,
+    "max_units": 3,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "mark-of-chaos-pactbound-zealots",
+    "name": "Mark of Chaos",
+    "detachment_id": "pactbound-zealots",
+    "mandatory": true,
+    "min_units": null,
+    "max_units": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "steel-hammer-keywords-steel-hammer",
+    "name": "Steel Hammer Keywords",
+    "detachment_id": "steel-hammer",
+    "mandatory": false,
+    "min_units": null,
+    "max_units": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "subterranean-assault-keywords-subterranean-assault",
+    "name": "Subterranean Assault Keywords",
+    "detachment_id": "subterranean-assault",
+    "mandatory": false,
+    "min_units": null,
+    "max_units": 2,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  }
+]

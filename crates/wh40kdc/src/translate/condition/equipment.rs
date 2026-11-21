@@ -84,9 +84,17 @@ fn models_subject(models: &P) -> String {
 }
 
 fn unit_level(phrase: &str, negated: bool) -> String {
-    if negated {
-        format!("it is not the case that {phrase}")
-    } else {
-        phrase.to_string()
+    if !negated {
+        return phrase.to_string();
     }
+    if let Some(rest) = phrase.strip_prefix("one or more models in this unit are ") {
+        return format!("no model in this unit is {rest}");
+    }
+    if let Some(rest) = phrase.strip_prefix("one or more models in this unit have ") {
+        return format!("no model in this unit has {rest}");
+    }
+    if let Some(rest) = phrase.strip_prefix("at least ") {
+        return format!("fewer than {rest}");
+    }
+    format!("it is not the case that {phrase}")
 }

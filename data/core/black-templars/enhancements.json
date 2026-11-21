@@ -30,7 +30,8 @@
       {
         "unit_id": "sword-brethren-squad"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "inheritors-of-sigismund-upgrade-marshals-household-black-templars",
@@ -63,7 +64,8 @@
       {
         "unit_id": "sword-brethren-squad"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "artificer-armour-gladius-task-force-adeptus-astartes",
@@ -176,7 +178,8 @@
       {
         "unit_id": "vow-sworn-sword-brethren-squad"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "incendiary-animus-vow-sworn-crusaders-black-templars",
@@ -286,7 +289,8 @@
       {
         "unit_id": "crusader-squad"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "zealous-vanguard-vow-sworn-crusaders-black-templars",

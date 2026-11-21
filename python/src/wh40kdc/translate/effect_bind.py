@@ -65,19 +65,47 @@ def _selector_count(sel: dict[str, Any]) -> tuple[str, bool]:
     if minimum is not None and minimum == maximum:
         return quantity(minimum), maximum != 1
     if minimum is not None and maximum is not None and minimum != 0:
-        return f"from {quantity(minimum)} through {quantity(maximum)}", maximum != 1
+        return f"{quantity(minimum)} to {quantity(maximum)}", maximum != 1
     if maximum is not None:
         return f"up to {quantity(maximum)}", maximum != 1
     if minimum is not None:
-        return f"at least {quantity(minimum)}", True
+        return ("one or more" if minimum == 1 else f"at least {quantity(minimum)}"), True
     return "each", False
+
+
+_GENERIC_BINDINGS = frozenset(
+    {
+        "objective",
+        "selected_objective",
+        "selected-objective",
+        "quarry_selection",
+        "mark_selection",
+        "selected_unit",
+        "selected-unit",
+        "enemy_unit",
+        "enemy-unit",
+        "target_unit",
+        "target-unit",
+        "friendly_unit",
+        "friendly-unit",
+        "unit",
+        "target",
+        "model",
+        "trap_objective",
+        "trap-objective",
+    }
+)
+
 
 def _selection_binding(sel: dict[str, Any], plural: bool) -> str:
     binding = sel.get("bind_as")
     if not isinstance(binding, str) or not binding:
         return ""
+    norm = re.sub(r"[-_\s]+", "_", binding.lower())
+    if norm in _GENERIC_BINDINGS:
+        return ""
     name = binding.replace("-", " ").replace("_", " ")
-    return f", binding {'them' if plural else 'it'} as {name}"
+    return f" (referred to below as the {name})"
 
 
 def _selection_limit(sel: dict[str, Any], noun: str) -> str:

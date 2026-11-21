@@ -7,7 +7,6 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { describeTrigger } from "../src/translate/trigger.js";
 
 // Fabricated wording only: the keywords (ALPHA, BETA) and the sentences are invented; only the sentence shape is kept.
@@ -329,29 +328,18 @@ describe("outputs pass the describers", () => {
   });
 });
 
-describe("family versions", () => {
-  const PREVIOUS = (family: string) => {
-    const version = currentFamilyVersion(family);
-    for (let at = version - 1; at >= 1; at -= 1) {
-      const extension = familyExtension(family, at);
-      if (extension) return (input: Record<string, unknown>) => normalizeFingerprintParameters(family, input, at);
-    }
-    return (input: Record<string, unknown>) => normalizeFingerprintParameters(family, input, 1);
-  };
-
-  it("normalizes the new unit-activity values and every value the previous version accepted", () => {
+describe("family parameters", () => {
+  it("normalizes the unit-activity history values, and keeps the other activities unchanged", () => {
     const older = { activities: ["charged-this-turn", "fought-this-phase"], subject: "this-unit", negated: false };
-    const version = currentFamilyVersion("unit-activity");
-    expect(familyExtension("unit-activity", version)).toBeDefined();
-    expect(normalizeFingerprintParameters("unit-activity", older, version)).toEqual(PREVIOUS("unit-activity")(older));
+    expect(normalize("unit-activity", older)).toEqual(older);
     const destruction = { activities: ["destroyed-units-by-triggering-attacks"], named: "after", container: "none", destroyer: "this-model", negated: false };
-    expect(normalizeFingerprintParameters("unit-activity", destruction, version)).toEqual(PREVIOUS("unit-activity")(destruction));
+    expect(normalize("unit-activity", destruction)).toEqual(destruction);
     for (const activity of ["lost-wounds-to-triggering-attacks", "was-charged-this-turn", "suffered-mortal-wounds-from-this-ability", "lost-models-to-own-mortal-wounds"]) {
-      expect(normalizeFingerprintParameters("unit-activity", { activities: [activity], subject: "this-unit", negated: false }, version).activities).toEqual([activity]);
-      expect(() => normalizeFingerprintParameters("unit-activity", { activities: [activity], negated: false }, version)).toThrow();
+      expect(normalize("unit-activity", { activities: [activity], subject: "this-unit", negated: false }).activities).toEqual([activity]);
+      expect(() => normalize("unit-activity", { activities: [activity], negated: false })).toThrow();
     }
-    expect(normalizeFingerprintParameters("unit-activity", { activities: ["charged-this-turn", "was-charged-this-turn"], subject: "this-unit", negated: false }, version).activities).toEqual(["charged-this-turn", "was-charged-this-turn"]);
-    expect(() => normalizeFingerprintParameters("unit-activity", { activities: ["was-charged-this-turn", "was-charged-this-turn"], subject: "this-unit", negated: false }, version)).toThrow();
+    expect(normalize("unit-activity", { activities: ["charged-this-turn", "was-charged-this-turn"], subject: "this-unit", negated: false }).activities).toEqual(["charged-this-turn", "was-charged-this-turn"]);
+    expect(() => normalize("unit-activity", { activities: ["was-charged-this-turn", "was-charged-this-turn"], subject: "this-unit", negated: false })).toThrow();
   });
 
   it("normalizes destroyed-units-in-window and refuses its misuse", () => {
@@ -360,8 +348,8 @@ describe("family versions", () => {
       expect(normalize("unit-activity", { ...leaf, destroyer })).toMatchObject({ destroyer, activities: ["destroyed-units-in-window"] });
     }
     expect(() => normalize("unit-activity", { ...leaf, subject: "this-unit" })).toThrow(/no subject/u);
-    expect(() => normalize("unit-activity", { ...leaf, named: "none" })).toThrow(/named: before or after/u);
-    expect(() => normalize("unit-activity", { ...leaf, container: "after" })).toThrow(/container none/u);
+    expect(() => normalize("unit-activity", { ...leaf, named: "none" })).toThrow(/needs named: before, after\./u);
+    expect(() => normalize("unit-activity", { ...leaf, container: "after" })).toThrow(/needs container: none\./u);
     expect(() => normalize("unit-activity", { ...leaf, destroyer: "any" })).toThrow(/needs destroyer/u);
     expect(() => normalize("unit-activity", { ...leaf, window: "battle" })).toThrow(/no parameter window/u);
     expect(() => normalize("unit-activity", { ...leaf, activities: ["destroyed-units-in-window", "fought-this-phase"] })).toThrow(/one activity per leaf/u);

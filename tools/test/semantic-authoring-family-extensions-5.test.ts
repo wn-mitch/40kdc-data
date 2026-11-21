@@ -177,6 +177,9 @@ describe("Cult Ambush", () => {
   it("keeps everything an added copy carries, Cult Ambush included", () => {
     const copy = { source: "copy-of-destroyed", count: "1" };
     expect(() => normalize("add-unit", { source: "datasheet", datasheet: "alpha-squad", count: "1", copy_excluded_keywords: ["CHARACTER"] })).toThrow(/copy/u);
+    // Source model names its models by model; a datasheet beside it is refused, not dropped.
+    expect(() => normalize("add-unit", { source: "model", count: "1", join: true, model: "Sample Model", datasheet: "alpha-squad" })).toThrow(/datasheet names the datasheet of source datasheet/u);
+    expect(() => normalize("add-unit", { source: "datasheet", datasheet: 123, count: "1" })).toThrow(/datasheet must be a kebab-case id/u);
     expect(normalize("add-unit", { ...copy, copy_excluded_keywords: ["character"], at_starting_strength: true, reset_one_shot: true, held_in: "cult-ambush" }))
       .toEqual({ ...copy, copy_excluded_keywords: ["CHARACTER"], at_starting_strength: true, reset_one_shot: true, held_in: "cult-ambush" });
     const compile = (parameters: Record<string, unknown>) => compileLeaves(placed("Add a new unit to your army.", [["Add a new unit to your army", "add-unit", parameters]]).leaves, "Add a new unit to your army.");

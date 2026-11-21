@@ -136,6 +136,10 @@
     "faction_keywords": [
       "Orks"
     ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
     "model_count": {
       "min": 10,
       "max": 10
@@ -153,18 +157,14 @@
       {
         "namespace": "mfm",
         "id": "63cdcf67-14f9-4233-94eb-e9fc83540fc4"
-      },
-      {
-        "namespace": "mfm",
-        "id": "e6444013-4fb5-42af-92a0-9da6cccf630c"
       }
     ],
     "weapon_ids": [
       "big-choppa",
       "kustom-shoota",
       "choppa",
-      "shoota",
-      "slugga"
+      "shoota-ardmob-boyz",
+      "slugga-ardmob-boyz"
     ],
     "ability_ids": [
       "grab-dat-scrap-orks",
@@ -524,7 +524,7 @@
         "OC": 2
       },
       {
-        "name": "Boss Nob on Warbike",
+        "name": "Biker Nob",
         "M": 12,
         "T": 6,
         "W": 4,
@@ -647,8 +647,9 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "round",
-      "diameter": 75
+      "shape": "oval",
+      "width": 75,
+      "length": 42
     },
     "model_count": {
       "min": 3,
@@ -1048,7 +1049,7 @@
       {
         "name": "Warboss in Mega Armour",
         "M": 5,
-        "T": 6,
+        "T": 7,
         "W": 7,
         "Sv": 2,
         "invuln_sv": 5,
@@ -1128,13 +1129,13 @@
     "profiles": [
       {
         "name": "Wazbom Blastajet",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": 6,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -1223,7 +1224,7 @@
       {
         "name": "Battlewagon",
         "M": 10,
-        "T": 10,
+        "T": 11,
         "W": 16,
         "Sv": 3,
         "invuln_sv": 6,
@@ -1294,12 +1295,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "conditional_keywords": [
-      {
-        "keyword": "Wagon",
-        "required_detachment_id": "rollin-deff"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -1399,10 +1394,10 @@
     "profiles": [
       {
         "name": "Morkanaut",
-        "M": 8,
+        "M": 9,
         "T": 12,
         "W": 20,
-        "Sv": 3,
+        "Sv": 2,
         "invuln_sv": 5,
         "Ld": 7,
         "OC": 8
@@ -1577,7 +1572,7 @@
         "name": "Breaka Boy",
         "M": 6,
         "T": 5,
-        "W": 3,
+        "W": 2,
         "Sv": 4,
         "invuln_sv": null,
         "Ld": 7,
@@ -1749,7 +1744,7 @@
     "profiles": [
       {
         "name": "Big’ed Bossbunka",
-        "M": 0,
+        "M": null,
         "T": 10,
         "W": 12,
         "Sv": 3,
@@ -1830,7 +1825,7 @@
     "faction_id": "orks",
     "profiles": [
       {
-        "name": "Boss Nob",
+        "name": "Nob",
         "M": 6,
         "T": 5,
         "W": 3,
@@ -1943,7 +1938,7 @@
         "OC": 1
       },
       {
-        "name": "Boss Nob",
+        "name": "Nob",
         "M": 6,
         "T": 5,
         "W": 3,
@@ -2042,7 +2037,7 @@
         "OC": 2
       },
       {
-        "name": "Boss Nob",
+        "name": "Nob",
         "M": 6,
         "T": 5,
         "W": 3,
@@ -2312,10 +2307,10 @@
     "profiles": [
       {
         "name": "Gorkanaut",
-        "M": 8,
+        "M": 9,
         "T": 12,
         "W": 20,
-        "Sv": 3,
+        "Sv": 2,
         "invuln_sv": 6,
         "Ld": 7,
         "OC": 8
@@ -2410,10 +2405,10 @@
     "profiles": [
       {
         "name": "Mek Gunz",
-        "M": 3,
+        "M": 5,
         "T": 6,
         "W": 6,
-        "Sv": 5,
+        "Sv": 4,
         "invuln_sv": 6,
         "Ld": 8,
         "OC": 2
@@ -2522,7 +2517,7 @@
         "OC": 1
       },
       {
-        "name": "Boss Nob",
+        "name": "Nob",
         "M": 12,
         "T": 5,
         "W": 3,
@@ -2699,13 +2694,13 @@
     "profiles": [
       {
         "name": "Blitza-bommer",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": 6,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -2725,8 +2720,9 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "round",
-      "diameter": 120
+      "shape": "oval",
+      "width": 120,
+      "length": 92
     },
     "model_count": {
       "min": 1,
@@ -2938,13 +2934,13 @@
     "profiles": [
       {
         "name": "Dakkajet",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": 6,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -2964,8 +2960,9 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "round",
-      "diameter": 120
+      "shape": "oval",
+      "width": 120,
+      "length": 92
     },
     "model_count": {
       "min": 1,
@@ -3107,10 +3104,10 @@
         "OC": 2
       },
       {
-        "name": "Beast Snagga Nob",
+        "name": "Nob",
         "M": 6,
         "T": 5,
-        "W": 2,
+        "W": 3,
         "Sv": 5,
         "invuln_sv": null,
         "Ld": 7,
@@ -3749,12 +3746,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "conditional_keywords": [
-      {
-        "keyword": "Wagon",
-        "required_detachment_id": "rollin-deff"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -4090,13 +4081,13 @@
     "profiles": [
       {
         "name": "Burna-bommer",
-        "M": 20,
+        "M": null,
         "T": 9,
         "W": 12,
         "Sv": 3,
         "invuln_sv": 6,
         "Ld": 7,
-        "OC": 0
+        "OC": null
       }
     ],
     "points": [
@@ -4116,8 +4107,9 @@
       "Orks"
     ],
     "base_size_mm": {
-      "shape": "round",
-      "diameter": 120
+      "shape": "oval",
+      "width": 120,
+      "length": 92
     },
     "model_count": {
       "min": 1,
@@ -4248,12 +4240,6 @@
     },
     "is_legend": false,
     "points_provisional": false,
-    "conditional_keywords": [
-      {
-        "keyword": "Wagon",
-        "required_detachment_id": "rollin-deff"
-      }
-    ],
     "external_refs": [
       {
         "namespace": "bsdata",
@@ -4278,7 +4264,7 @@
       {
         "name": "Warboss",
         "M": 6,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 4,
         "invuln_sv": 5,
@@ -5082,6 +5068,84 @@
       "bust-em-orks",
       "waaagh-orks",
       "speednob-support-orks"
+    ]
+  },
+  {
+    "id": "ardmob-boyz-2",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e6444013-4fb5-42af-92a0-9da6cccf630c"
+      }
+    ],
+    "name": "’Ardmob Boyz",
+    "faction_id": "orks",
+    "profiles": [
+      {
+        "name": "Boss Nob",
+        "M": 6,
+        "T": 5,
+        "W": 2,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      },
+      {
+        "name": "Boyz",
+        "M": 6,
+        "T": 5,
+        "W": 1,
+        "Sv": 5,
+        "invuln_sv": null,
+        "Ld": 7,
+        "OC": 2
+      }
+    ],
+    "points": [
+      {
+        "models": 10,
+        "cost": 0
+      }
+    ],
+    "keywords": [
+      "'Ardmob",
+      "Explosives",
+      "Infantry",
+      "Mob",
+      "’Ardmob Boyz"
+    ],
+    "faction_keywords": [
+      "Orks"
+    ],
+    "base_size_mm": {
+      "shape": "round",
+      "diameter": 32
+    },
+    "model_count": {
+      "min": 10,
+      "max": 10
+    },
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "is_legend": false,
+    "points_provisional": false,
+    "ability_ids": [
+      "grab-dat-scrap-orks",
+      "waaagh-ardmob-orks"
+    ],
+    "weapon_ids": [
+      "big-choppa",
+      "kombi-rokkit-ardmob-boyz-2",
+      "slugga-ardmob-boyz-2",
+      "kombi-shoota",
+      "choppa",
+      "shoota"
     ]
   }
 ]

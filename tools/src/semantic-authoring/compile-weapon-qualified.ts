@@ -23,7 +23,7 @@ export function isSameAttackResolved(leaf: CompileLeaf): boolean {
     && leaf.parameters.subject === undefined && leaf.parameters.owner === undefined;
 }
 
-/** "cause it to become Below Half-strength": a unit's strength falling past a threshold (event@39). */
+/** "cause it to become Below Half-strength": a unit's strength falling past a threshold. */
 function isStrengthChange(leaf: CompileLeaf): boolean {
   return leaf.family_id === "event" && leaf.parameters.kind === "state-changed" && leaf.parameters.strength !== undefined;
 }

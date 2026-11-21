@@ -2,29 +2,29 @@
   "schema_version": 1,
   "entity_types": {
     "faction": {
-      "entities": 34,
-      "with_external_refs": 34,
+      "entities": 36,
+      "with_external_refs": 36,
       "covered_entities_by_namespace": {
         "game-datacards": 28,
-        "mfm": 32
+        "mfm": 34
       },
       "references_by_namespace": {
         "game-datacards": 28,
-        "mfm": 32
+        "mfm": 34
       }
     },
     "unit": {
-      "entities": 1104,
-      "with_external_refs": 1101,
+      "entities": 1120,
+      "with_external_refs": 1120,
       "covered_entities_by_namespace": {
-        "bsdata": 955,
+        "bsdata": 961,
         "game-datacards": 961,
-        "mfm": 1101
+        "mfm": 1120
       },
       "references_by_namespace": {
         "bsdata": 1018,
         "game-datacards": 961,
-        "mfm": 1114
+        "mfm": 1125
       }
     },
     "detachment": {
@@ -62,25 +62,25 @@
       }
     },
     "weapon": {
-      "entities": 3628,
-      "with_external_refs": 3542,
+      "entities": 3691,
+      "with_external_refs": 3612,
       "covered_entities_by_namespace": {
-        "bsdata": 2910,
-        "mfm": 3529
+        "bsdata": 2917,
+        "mfm": 3595
       },
       "references_by_namespace": {
-        "bsdata": 3758,
-        "mfm": 5217
+        "bsdata": 3767,
+        "mfm": 5287
       }
     },
     "wargear": {
       "entities": 202,
-      "with_external_refs": 150,
+      "with_external_refs": 149,
       "covered_entities_by_namespace": {
-        "mfm": 150
+        "mfm": 149
       },
       "references_by_namespace": {
-        "mfm": 181
+        "mfm": 179
       }
     }
   },
@@ -938,6 +938,22 @@
           "entity_type": "weapon",
           "id": "plasma-gun-tempestus-scions",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "2847-d130-817-7064",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "hand-flamer",
+          "faction_id": "genestealer-cults"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "hand-flamer-claw-of-ascension-hybrid-metamorphs",
+          "faction_id": "genestealer-cults"
         }
       ]
     },
@@ -3271,6 +3287,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "shoota-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
           "id": "shoota-bannernob",
           "faction_id": "orks"
         },
@@ -3719,6 +3740,22 @@
           "entity_type": "weapon",
           "id": "kustom-mega-blasta-deffkoptas",
           "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "729e-3495-ef80-33da",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "metamorph-mutations",
+          "faction_id": "genestealer-cults"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "metamorph-mutations-claw-of-ascension-hybrid-metamorphs",
+          "faction_id": "genestealer-cults"
         }
       ]
     },
@@ -5936,6 +5973,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "shoota-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
           "id": "shoota-bannernob",
           "faction_id": "orks"
         },
@@ -6455,6 +6497,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "autopistol-claw-of-ascension-hybrid-metamorphs",
+          "faction_id": "genestealer-cults"
+        },
+        {
+          "entity_type": "weapon",
           "id": "autopistol-shanus-daskovian",
           "faction_id": "genestealer-cults"
         }
@@ -6509,6 +6556,22 @@
           "entity_type": "weapon",
           "id": "twin-lascannon-repulsor",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "c3a5-5520-ca9c-4444",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "webber",
+          "faction_id": "agents-of-the-imperium"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "webber-inquisitors-hand-vigilant-squad",
+          "faction_id": "agents-of-the-imperium"
         }
       ]
     },
@@ -8015,6 +8078,22 @@
     },
     {
       "namespace": "bsdata",
+      "id": "f5a8-b008-4de1-5acb",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "webber",
+          "faction_id": "agents-of-the-imperium"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "webber-inquisitors-hand-vigilant-squad",
+          "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
       "id": "f5e3-ad89-8888-4bd4",
       "targets": [
         {
@@ -8025,6 +8104,11 @@
         {
           "entity_type": "weapon",
           "id": "chitinous-claws-and-teeth-vardenghast-swarm-barbgaunts",
+          "faction_id": "tyranids"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chitinous-claws-and-teeth-vardenghast-swarm-termagants",
           "faction_id": "tyranids"
         }
       ]
@@ -8052,6 +8136,22 @@
           "entity_type": "weapon",
           "id": "close-combat-weapon-tempestus-scions",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "bsdata",
+      "id": "f64-f4db-cee7-c077",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "angelus-boltgun",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
+          "faction_id": "adeptus-astartes"
         }
       ]
     },
@@ -10432,6 +10532,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "0f76b6cf-a977-4128-b1c8-421c72b5378f",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "arioch-power-claw",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "arioch-power-claw",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "0f931617-2dd9-4bfd-a1e0-81946b995edd",
       "targets": [
         {
@@ -10490,6 +10606,22 @@
           "entity_type": "weapon",
           "id": "bolt-rifle-vow-sworn-crusader-squad",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "10163039-ddb5-4083-813f-00905ba1577a",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-quake-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-quake-cannon",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -10641,6 +10773,22 @@
           "entity_type": "weapon",
           "id": "autocannon-catachan-heavy-weapons-squad",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "11c90f72-097b-4c4c-b9fb-b173510c223d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "ardex-defensor-mauler",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "ardex-defensor-mauler",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -11816,27 +11964,6 @@
     },
     {
       "namespace": "mfm",
-      "id": "211fe272-623a-441d-ae25-83f37e738d96",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "shoota",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "shoota-bannernob",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "shoota-boyz",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
       "id": "212867cb-ca5d-4ddd-91f0-a8dc26e4df2d",
       "targets": [
         {
@@ -11926,6 +12053,22 @@
           "entity_type": "weapon",
           "id": "relics-of-battle-bladeguard-ancient",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "23861042-6349-4b82-ada1-a45af6bbcf3d",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "ardex-defensor-lascannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "ardex-defensor-lascannon",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -12219,6 +12362,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "27ea3149-21a4-4c41-b17d-56e3e9e0e613",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "angelus-boltgun",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "2805967d-56d9-474e-9635-df35ca232c29",
       "targets": [
         {
@@ -12230,6 +12389,22 @@
           "entity_type": "weapon",
           "id": "twin-lascannon-repulsor",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "282062d5-74c6-4391-b23e-aff3d785f9f9",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "kombi-rokkit",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "kombi-rokkit-ardmob-boyz-2",
+          "faction_id": "orks"
         }
       ]
     },
@@ -13527,6 +13702,38 @@
     },
     {
       "namespace": "mfm",
+      "id": "341f48b3-663f-48fe-9919-ebc460d00dee",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-volcano-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-volcano-cannon",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "347baea8-9b43-4d3f-8e24-2ad2693be2f0",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-gatling-blaster",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-gatling-blaster",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "34915f1f-0200-4294-83ab-b90354935ab7",
       "targets": [
         {
@@ -14133,27 +14340,6 @@
     },
     {
       "namespace": "mfm",
-      "id": "3e0ae478-61a6-4da9-9897-aaf1454451c0",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha-deffkoptas",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha-trukk",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
       "id": "3e156fbc-4575-47e9-a675-b656875ac119",
       "targets": [
         {
@@ -14282,6 +14468,11 @@
         {
           "entity_type": "weapon",
           "id": "shoota",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "shoota-ardmob-boyz",
           "faction_id": "orks"
         },
         {
@@ -14760,6 +14951,27 @@
     },
     {
       "namespace": "mfm",
+      "id": "446c40e0-97d1-4e9f-8cb4-4053d4be8a87",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "slugga",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz-2",
+          "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "44c05557-501f-44f2-977c-d980654da9de",
       "targets": [
         {
@@ -14870,6 +15082,27 @@
           "entity_type": "weapon",
           "id": "power-sword-and-manus-mortis-commissar-graves",
           "faction_id": "astra-militarum"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "46abf173-c1ce-4b29-a657-0ef30df3458a",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "slugga",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz-2",
+          "faction_id": "orks"
         }
       ]
     },
@@ -15588,6 +15821,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "50ee8858-c720-4b58-9abb-0b3d90cad8c2",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "laser-blaster",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "laser-blaster",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "515cceb5-7bca-45db-b384-c5b27ddb805f",
       "targets": [
         {
@@ -15656,32 +15905,6 @@
           "entity_type": "weapon",
           "id": "hellforged-weapons-vorrakh-lord-of-the-frenzied-reavers",
           "faction_id": "world-eaters"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
-      "id": "526274e1-0f57-4659-b0ca-6a6dbd1f604c",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "kustom-shoota",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "kustom-shoota-big-mek-in-mega-armour",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "kustom-shoota-warboss",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "kustom-shoota-wartrakks",
-          "faction_id": "orks"
         }
       ]
     },
@@ -16188,6 +16411,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "5870b9e0-639b-406f-9f27-588298c3fbda",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-volcano-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-volcano-cannon",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "58d90584-b215-40e9-8eda-f47dcfe3e493",
       "targets": [
         {
@@ -16398,6 +16637,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "5e028034-99c9-48c1-8ace-52c199f761aa",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "metamorph-mutations",
+          "faction_id": "genestealer-cults"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "metamorph-mutations-claw-of-ascension-hybrid-metamorphs",
+          "faction_id": "genestealer-cults"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "5e28b88e-060f-4679-89fc-bef36336f6b2",
       "targets": [
         {
@@ -16446,6 +16701,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "5ee73c5e-76d7-4a31-bcf4-d0d38afddeb4",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol",
+          "faction_id": "emperors-children"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "bolt-pistol-callous-blades",
+          "faction_id": "emperors-children"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "5f1f7113-bcbf-4553-8b92-89d020e76594",
       "targets": [
         {
@@ -16457,6 +16728,27 @@
           "entity_type": "weapon",
           "id": "hideous-mutations-possessed",
           "faction_id": "chaos-space-marines"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "5f71ec56-5cea-40c4-8bd5-00098e0f115e",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "slugga",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz-2",
+          "faction_id": "orks"
         }
       ]
     },
@@ -16707,27 +16999,6 @@
     },
     {
       "namespace": "mfm",
-      "id": "63fb9967-e186-4d03-966b-29cd86cc1a27",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "shoota",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "shoota-bannernob",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "shoota-boyz",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
       "id": "640bcb08-a359-4497-badd-7d6012e682ac",
       "targets": [
         {
@@ -16791,6 +17062,27 @@
     },
     {
       "namespace": "mfm",
+      "id": "66020b4b-5ca7-45e5-828e-52c62d9502be",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "slugga",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz-2",
+          "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "660e4e68-1b4f-44f2-b2e0-0fd2961c41a6",
       "targets": [
         {
@@ -16802,6 +17094,27 @@
           "entity_type": "weapon",
           "id": "lamprey-bite",
           "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "6671a1f8-50ef-41fa-9022-b83bb8e3eed4",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "slugga",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz-2",
+          "faction_id": "orks"
         }
       ]
     },
@@ -16975,6 +17288,22 @@
           "entity_type": "weapon",
           "id": "kustom-choppa-wartrakks",
           "faction_id": "orks"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "6b4f11be-6d5c-43d7-a2a9-8f81e5eae2d3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "belicosa-volcano-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "belicosa-volcano-cannon",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -17200,6 +17529,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "6f2a7eee-ac32-46b7-8b56-e858a38dccb7",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warhound-inferno-gun",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warhound-inferno-gun",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "6f407c4d-5e3e-4309-81dd-fe675a2cc334",
       "targets": [
         {
@@ -17309,6 +17654,22 @@
           "entity_type": "detachment",
           "id": "assault-brethren",
           "faction_id": "white-scars"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "70adeffe-2310-43f1-8d04-6b2455882b4c",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-apocalypse-launcher",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-apocalypse-launcher",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -18553,6 +18914,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "8649c33e-5f1c-4d50-9941-0f42f46b6ad7",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "anvillus-defence-battery",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "anvillus-defence-battery",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "869a5870-c5cc-4955-8381-9119f0aa953d",
       "targets": [
         {
@@ -18661,6 +19038,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "879897b0-106d-4bdf-9210-9bffa1514c12",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "webber",
+          "faction_id": "agents-of-the-imperium"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "webber-inquisitors-hand-vigilant-squad",
+          "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "88700154-eec4-47a7-8b4a-990422ac618b",
       "targets": [
         {
@@ -18672,6 +19065,22 @@
           "entity_type": "weapon",
           "id": "havoc-launcher-maggot-lords-chaos-rhino",
           "faction_id": "death-guard"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "895aa29a-ca2e-4c2e-9ae2-920a73b1f7f8",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-laser-blaster",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-laser-blaster",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -18800,6 +19209,11 @@
           "entity_type": "weapon",
           "id": "chitinous-claws-and-teeth-vardenghast-swarm-barbgaunts",
           "faction_id": "tyranids"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "chitinous-claws-and-teeth-vardenghast-swarm-termagants",
+          "faction_id": "tyranids"
         }
       ]
     },
@@ -18832,32 +19246,6 @@
           "entity_type": "weapon",
           "id": "blackstar-rocket-launcher",
           "faction_id": "agents-of-the-imperium"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
-      "id": "8d678f43-de93-42bf-9b61-634813e0695a",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "kustom-shoota",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "kustom-shoota-big-mek-in-mega-armour",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "kustom-shoota-warboss",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "kustom-shoota-wartrakks",
-          "faction_id": "orks"
         }
       ]
     },
@@ -18953,6 +19341,22 @@
           "entity_type": "weapon",
           "id": "dark-lance-ynnari-raider",
           "faction_id": "aeldari"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "8eaec81e-19f8-40e2-a8ae-26b30e2f1bbf",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "apocalypse-launcher",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "apocalypse-launcher",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -19189,6 +19593,27 @@
           "entity_type": "weapon",
           "id": "ministorum-flamer",
           "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "9278c5b2-c0c8-4d9d-afca-cc7ebbe46ce8",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "slugga",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz-2",
+          "faction_id": "orks"
         }
       ]
     },
@@ -19634,6 +20059,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "9a0460f5-b5e5-471f-9567-0b402d178fbc",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "sunfury-plasma-annihilator",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "sunfury-plasma-annihilator",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "9a1d5aad-539a-4013-8a06-3af5b6839e08",
       "targets": [
         {
@@ -19760,6 +20201,22 @@
           "entity_type": "weapon",
           "id": "combi-weapon-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "9c7f5c9b-d955-4fd1-9c77-3f6759a69ad2",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-melta-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-melta-cannon",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -19928,6 +20385,11 @@
         {
           "entity_type": "weapon",
           "id": "shoota",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "shoota-ardmob-boyz",
           "faction_id": "orks"
         },
         {
@@ -20344,6 +20806,22 @@
           "entity_type": "weapon",
           "id": "staff-of-tomorrow",
           "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "a86f34a6-8511-4a45-95be-218390eea8d2",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-feet",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "nemesis-feet",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -20897,6 +21375,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "b0604277-fac5-4f81-9974-89596bb4f1b0",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warhound-vulcan-mega-bolter",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warhound-vulcan-mega-bolter",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "b0e16f66-2fd8-4619-a415-090ca40a3806",
       "targets": [
         {
@@ -21029,27 +21523,6 @@
     },
     {
       "namespace": "mfm",
-      "id": "b31470fb-40d7-486a-8423-e4a3c4cdd36e",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha-deffkoptas",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha-trukk",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
       "id": "b31721db-f940-4a7f-b3d5-e7cef7b3b5d2",
       "targets": [
         {
@@ -21102,6 +21575,22 @@
           "entity_type": "weapon",
           "id": "lascannon",
           "faction_id": "thousand-sons"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "b31f3b9d-ec5f-4f8a-b14e-3bfdc64a9069",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz-2",
+          "faction_id": "orks"
         }
       ]
     },
@@ -21225,6 +21714,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "b507168c-6853-420e-90d5-b49101e34b8e",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "mori-quake-cannon",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "mori-quake-cannon",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "b526157a-2607-4cea-a7df-b174634d38a3",
       "targets": [
         {
@@ -21300,6 +21805,22 @@
           "entity_type": "weapon",
           "id": "stalker-bolt-rifle",
           "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "b7419726-c004-405f-9e6f-e1b88466e6ef",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warlord-feet",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warlord-feet",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -21657,6 +22178,11 @@
         },
         {
           "entity_type": "weapon",
+          "id": "shoota-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
           "id": "shoota-bannernob",
           "faction_id": "orks"
         },
@@ -21763,6 +22289,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "bd253087-a583-454a-818f-33b2369ea408",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-power-fist",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-power-fist",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "bdaef0d5-c13b-4dbc-8abf-604189ef3752",
       "targets": [
         {
@@ -21837,6 +22379,11 @@
         {
           "entity_type": "weapon",
           "id": "shoota",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "shoota-ardmob-boyz",
           "faction_id": "orks"
         },
         {
@@ -22093,6 +22640,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "c309e16c-8377-4749-bd29-69fc77448882",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "reaver-feet",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "reaver-feet",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "c328e3e6-5254-46a2-9143-585ce4024554",
       "targets": [
         {
@@ -22259,6 +22822,11 @@
           "entity_type": "weapon",
           "id": "autopistol",
           "faction_id": "world-eaters"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "autopistol-claw-of-ascension-hybrid-metamorphs",
+          "faction_id": "genestealer-cults"
         },
         {
           "entity_type": "weapon",
@@ -23103,27 +23671,6 @@
     },
     {
       "namespace": "mfm",
-      "id": "d25e0ee6-7b2b-48dd-8dfb-d6ade7f8b74c",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "kustom-mega-blasta",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "kustom-mega-blasta-deff-dread",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "kustom-mega-blasta-deffkoptas",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
       "id": "d27db9a5-db39-4a98-a619-bc7f0af40d1f",
       "targets": [
         {
@@ -23269,6 +23816,11 @@
         {
           "entity_type": "weapon",
           "id": "hand-flamer",
+          "faction_id": "genestealer-cults"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "hand-flamer-claw-of-ascension-hybrid-metamorphs",
           "faction_id": "genestealer-cults"
         }
       ]
@@ -23529,6 +24081,27 @@
           "entity_type": "weapon",
           "id": "boltgun-sisters-of-battle-squad",
           "faction_id": "agents-of-the-imperium"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "da5f3910-5452-40b2-86c4-2ad3827196bc",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "slugga",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz-2",
+          "faction_id": "orks"
         }
       ]
     },
@@ -23801,6 +24374,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "dc0016d8-09c9-46db-987e-dbbb3ef6d017",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warhound-plasma-blastgun",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warhound-plasma-blastgun",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "dc3d0741-18a1-4fea-9836-c121c5070a35",
       "targets": [
         {
@@ -24055,6 +24644,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "e1810d06-a6e9-4449-8ae7-52596d861ec8",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "macro-gatling-blaster",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "macro-gatling-blaster",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "e193a937-84fc-42d6-93e6-5e7b938c8196",
       "targets": [
         {
@@ -24298,6 +24903,22 @@
           "entity_type": "weapon",
           "id": "heavy-bolt-pistol-vow-sworn-sword-brethren-squad",
           "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "e3d3b092-dd91-4707-bd5d-7f2e219579b3",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warhound-feet",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warhound-feet",
+          "faction_id": "titanicus-traitoris"
         }
       ]
     },
@@ -24785,6 +25406,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "ec2ecfc0-7946-4090-a3bb-342d0ec27d7b",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "warhound-turbo-laser-destructor",
+          "faction_id": "adeptus-titanicus"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "warhound-turbo-laser-destructor",
+          "faction_id": "titanicus-traitoris"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "ec4eb5f1-3d6d-4005-bf0a-ee6246142206",
       "targets": [
         {
@@ -24832,6 +25469,22 @@
     },
     {
       "namespace": "mfm",
+      "id": "ed1c8040-3507-402c-98df-cad0aaa92377",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "angelus-boltgun",
+          "faction_id": "adeptus-astartes"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
+          "faction_id": "adeptus-astartes"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
       "id": "ed2590a9-b050-488f-a467-442bae1eea53",
       "targets": [
         {
@@ -24873,6 +25526,27 @@
           "entity_type": "weapon",
           "id": "multi-melta-paragon-warsuits",
           "faction_id": "adepta-sororitas"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "ed45541e-3d67-4614-8dee-9ef591caef78",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "slugga",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "slugga-ardmob-boyz-2",
+          "faction_id": "orks"
         }
       ]
     },
@@ -25405,27 +26079,6 @@
     },
     {
       "namespace": "mfm",
-      "id": "f70fbe4c-a031-4eb4-ac52-4d96bee64d20",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha-deffkoptas",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha-trukk",
-          "faction_id": "orks"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
       "id": "f749d44e-8d0b-4eb8-9870-fe5cc52a8840",
       "targets": [
         {
@@ -25802,27 +26455,6 @@
           "entity_type": "weapon",
           "id": "storm-bolter",
           "faction_id": "astra-militarum"
-        }
-      ]
-    },
-    {
-      "namespace": "mfm",
-      "id": "fcbda1b6-22f4-4466-a97c-e8cff322bb30",
-      "targets": [
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha-deffkoptas",
-          "faction_id": "orks"
-        },
-        {
-          "entity_type": "weapon",
-          "id": "rokkit-launcha-trukk",
-          "faction_id": "orks"
         }
       ]
     },
@@ -26208,6 +26840,22 @@
           "entity_type": "weapon",
           "id": "shredder",
           "faction_id": "drukhari"
+        }
+      ]
+    },
+    {
+      "namespace": "mfm",
+      "id": "ff95beae-4009-41c3-b81b-f3ced1146961",
+      "targets": [
+        {
+          "entity_type": "weapon",
+          "id": "kombi-rokkit",
+          "faction_id": "orks"
+        },
+        {
+          "entity_type": "weapon",
+          "id": "kombi-rokkit-ardmob-boyz-2",
+          "faction_id": "orks"
         }
       ]
     },

@@ -9,7 +9,7 @@ import { currentFamilyVersion } from "./contracts.js";
  */
 
 const KEYWORD = "weapon-ability-keyword";
-const isStat = (leaf: CompileLeaf) => leaf.family_id === "characteristic-modifier" && leaf.family_version >= 5 && leaf.parameters.subject === undefined;
+const isStat = (leaf: CompileLeaf) => leaf.family_id === "characteristic-modifier" && leaf.parameters.subject === undefined;
 const isProperty = (leaf: CompileLeaf) => leaf.family_id === KEYWORD || isStat(leaf);
 /** Conditions on the attack's target that sit between it and its properties ("that target a marked unit"). */
 const TARGET_CONDITIONS = new Set(["target-is-selected", "designated-filter", "unit-mark", "unit-keyword", "unit-position", "unit-state", "attack-filter"]);

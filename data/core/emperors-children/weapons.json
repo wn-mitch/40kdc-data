@@ -527,7 +527,7 @@
     "type": "ranged",
     "profiles": [
       {
-        "name": "Bolt pistol",
+        "name": "Bolt Pistol",
         "range": 12,
         "stats": {
           "A": 1,
@@ -538,7 +538,7 @@
         },
         "keywords": [
           {
-            "keyword_id": "pistol"
+            "keyword_id": "close-quarters"
           }
         ]
       }
@@ -555,6 +555,10 @@
       {
         "namespace": "mfm",
         "id": "0d67204a-bec8-4df0-aa83-ef83d01537c6"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5ee73c5e-76d7-4a31-bcf4-d0d38afddeb4"
       }
     ],
     "game_modes": [

@@ -4,6 +4,7 @@
  * A failure is returned as an `error` for the pane to show, never thrown.
  */
 import {
+  DAMAGE_DEALT,
   resolveBuffs,
   type AbilityMortalWounds,
   baseWargear,
@@ -355,11 +356,14 @@ export function mortalSourceLine(
   return { damage, afterFnp: damage * survive(resolved.feelNoPain) * survive(resolved.feelNoPainMortal) };
 }
 
-/** The sources' line as stages, for the combined total: damage and after-FNP only. */
+/**
+ * The sources' line as stages, for the combined total: damage, after-FNP and damage dealt only.
+ * Mortal wounds from abilities carry over to the next model, so all of it is dealt.
+ */
 export function mortalSourceStages(line: { damage: number; afterFnp: number }): AttributedStage[] {
-  const stage = (name: "damage" | "after-fnp", expected: number): AttributedStage =>
+  const stage = (name: AttributedStage["name"], expected: number): AttributedStage =>
     ({ name, expected, detail: "mortal wounds from abilities", baseline: expected, lifts: [], residual: 0, intrinsics: [] });
-  return [stage("damage", line.damage), stage("after-fnp", line.afterFnp)];
+  return [stage("damage", line.damage), stage("after-fnp", line.afterFnp), stage(DAMAGE_DEALT, line.afterFnp)];
 }
 
 /**

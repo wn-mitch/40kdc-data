@@ -1,5 +1,19 @@
 import { exactKeys } from "./family-validation.js";
-import { normalizeUnitKeywords } from "./unit-filter-family.js";
+
+const UNIT_KEYWORD = /^\p{Lu}[\p{Lu}\p{N}' -]*[\p{Lu}\p{N}]$/u;
+
+/** Unit keywords as the rules print them: markdown dropped, upper case, each once. */
+export function normalizeUnitKeywords(value: unknown, label: string): string[] {
+  if (!Array.isArray(value) || value.length === 0) throw new TypeError(`${label} must list at least one keyword.`);
+  const list = value.map((item) => {
+    if (typeof item !== "string") throw new TypeError(`${label} must be strings.`);
+    const keyword = item.replaceAll("*", "").replace(/\s+/gu, " ").trim().toUpperCase();
+    if (!UNIT_KEYWORD.test(keyword)) throw new TypeError(`${label} ${JSON.stringify(item)} is not a unit keyword.`);
+    return keyword;
+  });
+  if (new Set(list).size !== list.length) throw new TypeError(`${label} lists a keyword twice.`);
+  return list.sort();
+}
 
 /**
  * Unit-filter alternatives that differ by more than one keyword: "**LEGIO CYBERNETICA** or

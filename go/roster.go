@@ -88,19 +88,26 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 	for _, k := range armyKeywords {
 		armyKeywordSet[k] = struct{}{}
 	}
+	// Unit records included through an allied rule that replaces Faction
+	// keywords (Renegades): they carry the army's Faction keywords instead of
+	// their own. Keyed by unitRecordKey; filled once views resolve.
+	replacedUnits := map[string]bool{}
 	keywordSet := func(view *UnitView, overrides []string) map[string]struct{} {
+		replaced := replacedUnits[unitRecordKey(view)]
 		s := map[string]struct{}{}
 		for _, k := range getStrList(view.Raw, "keywords") {
 			s[k] = struct{}{}
 		}
-		for _, k := range getStrList(view.Raw, "faction_keywords") {
-			s[k] = struct{}{}
+		if !replaced {
+			for _, k := range getStrList(view.Raw, "faction_keywords") {
+				s[k] = struct{}{}
+			}
 		}
 		s[getStr(view.Raw, "name")] = struct{}{}
 		if len(armyKeywordSet) > 0 {
 			inPool := true
 			for _, k := range getStrList(view.Raw, "faction_keywords") {
-				if _, ok := armyKeywordSet[k]; !ok {
+				if _, ok := armyKeywordSet[k]; !ok && !replaced {
 					inPool = false
 					break
 				}
@@ -113,7 +120,8 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 		for _, grantAny := range getList(view.Raw, "conditional_keywords") {
 			grant, ok := asMap(grantAny)
-			if !ok {
+			// A keyword-choice option is the unit's only when the roster takes it (keyword overrides).
+			if !ok || grant["choice_group"] != nil {
 				continue
 			}
 			if requiredDetachmentID := getStr(grant, "required_detachment_id"); requiredDetachmentID != "" &&
@@ -140,6 +148,12 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 	views := make([]*UnitView, len(spec.units))
 	for i, u := range spec.units {
 		views[i] = resolveUnit(u.unitID)
+	}
+	allies := attributeAllies(ds, spec.factionID, spec.detachmentIDs, armyKeywordSet, views)
+	for idx, rule := range allies {
+		if rule["replaces_faction_keywords"] == true {
+			replacedUnits[unitRecordKey(views[idx])] = true
+		}
 	}
 
 	// attachedToKeywords is the roster keyword set of the unit su attaches to as
@@ -209,14 +223,21 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		if !contains(spec.detachmentIDs, getStr(enh, "detachment_id")) {
 			errV("enhancement-wrong-detachment", enhID, idx)
 		}
-		if !isCharacter(view) && !contains(su.keywordOverrides, "Character") && enh["upgrade_tag"] != true {
+		if !isCharacter(view) && !contains(su.keywordOverrides, "Character") && !equipableByNonCharacter(enh) {
 			errV("enhancement-on-non-character", enhID, idx)
 		}
 		kws := keywordSet(view, su.keywordOverrides)
 		// 11e Select Enhancements: EPIC HERO models cannot be given Enhancements
-		// (Upgrades included). Mirror of TS enhancement-on-epic-hero.
-		if _, epic := kws["Epic Hero"]; epic || getStr(view.Raw, "role") == "epic-hero" {
+		// (Upgrades included) unless the enhancement says an Epic Hero may take it.
+		// Mirror of TS enhancement-on-epic-hero.
+		if _, epic := kws["Epic Hero"]; (epic || getStr(view.Raw, "role") == "epic-hero") && enh["equipable_by_epic_hero"] != true {
 			errV("enhancement-on-epic-hero", enhID, idx)
+		}
+		if enh["bearer_cannot_be_warlord"] == true && su.isWarlord {
+			errV("enhancement-bearer-cannot-be-warlord", enhID, idx)
+		}
+		if len(missingRequiredWargear(enh, su.counts)) > 0 {
+			errV("enhancement-missing-wargear", enhID, idx)
 		}
 		// A unit whose every model is excluded_from_enhancements has no model that
 		// can carry the Enhancement. Mirror of TS enhancement-on-excluded-model.
@@ -271,14 +292,21 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 		if su.leaderBodyguardID != "" {
 			eligible := bodyguardEligibleIDs(ds, view.ID(), presentUnitIDs)
+			granted := false
 			if su.enhancementID != "" {
 				if enhancementAny, ok := ds.Enhancements.Get(su.enhancementID); ok {
-					for _, bodyguardID := range getStrList(enhancementAny.(map[string]any), "attachment_bodyguard_ids") {
-						eligible[bodyguardID] = struct{}{}
-					}
+					granted = contains(getStrList(enhancementAny.(map[string]any), "attachment_bodyguard_ids"), su.leaderBodyguardID)
 				}
 			}
-			if _, ok := eligible[su.leaderBodyguardID]; !ok {
+			// Detachment and shared-keyword gates (Pactbound Zealots' Marks of Chaos)
+			// narrow the eligible set; an enhancement's grant is not gated.
+			gated := !granted && !attachmentGatesHold(ds, view.ID(), su.leaderBodyguardID, attachmentGateContext{
+				presentUnitIDs:    presentUnitIDs,
+				detachmentIDs:     spec.detachmentIDs,
+				leaderKeywords:    keywordSet(view, su.keywordOverrides),
+				bodyguardKeywords: attachedToKeywords(su),
+			})
+			if _, ok := eligible[su.leaderBodyguardID]; (!ok && !granted) || gated {
 				errV("leader-attachment-illegal", view.ID(), idx)
 			}
 		} else if ds.attachmentRole(view.ID(), getStr(view.Raw, "attachment_role"), presentUnitIDs) == "support" &&
@@ -422,6 +450,35 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 	}
 
+	// --- Chapter cohesion (chapter-locked units the army may not take). --------
+	// Mirror of TS unit-chapter-mismatch (roster_chapter.go).
+	if spec.factionID != "" {
+		if fac, ok := ds.Factions.Get(spec.factionID); ok {
+			var parent map[string]any
+			if parentID := getStr(fac.Raw, "parent_faction_id"); parentID != "" {
+				if p, ok := ds.Factions.Get(parentID); ok {
+					parent = p.Raw
+				}
+			}
+			// Units included through an allied rule are judged by that rule, not by chapter.
+			unitKeywords := make([][]string, len(views))
+			for idx, view := range views {
+				if _, allied := allies[idx]; view != nil && !allied {
+					unitKeywords[idx] = getStrList(view.Raw, "faction_keywords")
+				}
+			}
+			var children []map[string]any
+			for _, f := range ds.Factions.All() {
+				if getStr(f.Raw, "parent_faction_id") == spec.factionID {
+					children = append(children, f.Raw)
+				}
+			}
+			for _, m := range chapterMismatches(fac.Raw, parent, children, unitKeywords) {
+				errV("unit-chapter-mismatch", views[m.index].ID(), m.index)
+			}
+		}
+	}
+
 	// --- Warlord present (exactly one). ---------------------------------------
 	warlords := 0
 	for _, su := range spec.units {
@@ -548,9 +605,14 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 	if enhLimit, ok := enhancementLimitForBattleSize(spec.battleSize); ok {
 		chosen := map[string]bool{}
 		for _, su := range spec.units {
-			if su.enhancementID != "" {
-				chosen[su.enhancementID] = true
+			if su.enhancementID == "" {
+				continue
 			}
+			// An enhancement whose record sets counts_toward_enhancement_limit: false is not counted.
+			if eAny, ok := ds.Enhancements.Get(su.enhancementID); ok && eAny.(map[string]any)["counts_toward_enhancement_limit"] == false {
+				continue
+			}
+			chosen[su.enhancementID] = true
 		}
 		if len(chosen) > enhLimit {
 			errV("enhancement-limit-exceeded", "roster", -1)
@@ -643,11 +705,22 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 		}
 	}
 
-	// --- Exclusive allied pools (the army faction's own pool-only units). -----
-	// Mirror of TS: the rule must be offered, and its points cap and
-	// Warlord/Enhancement locks apply; a selected detachment's mandatory or
-	// granted Warlord datasheets lift the Warlord lock.
+	// --- Allied pools: the offer gate of exclusive pools, then every pool's caps and locks.
+	// Mirror of TS: an exclusive pool's units must come through an offered rule
+	// (alliesFor); foreign units count against the rule attributeAllies assigns
+	// them. Each pool's points cap, Warlord/Enhancement locks and Battleline ratio
+	// apply to its members (a selected detachment's mandatory or granted Warlord
+	// datasheets lift the Warlord lock); keyword caps apply to the attributed pools.
+	type allyPool struct {
+		rule map[string]any
+		idxs []int
+	}
+	var pools []allyPool
 	if spec.factionID != "" {
+		offered := map[string]bool{}
+		for _, r := range ds.alliesFor(spec.factionID, spec.detachmentIDs) {
+			offered[getStr(r.(map[string]any), "id")] = true
+		}
 		for _, ruleAny := range ds.AlliedRules.All() {
 			rule, ok := asMap(ruleAny)
 			if !ok || rule["exclusive"] != true || getStr(rule, "source_faction_id") != spec.factionID {
@@ -663,50 +736,60 @@ func validateRosterCore(spec normRoster, ds *Dataset) ([]unitLoadoutResult, []ro
 			if len(members) == 0 {
 				continue
 			}
-			armyAny := getStrList(rule, "army_keywords_any")
-			armyGate := len(armyAny) == 0
-			for _, k := range armyAny {
-				if _, has := armyKeywordSet[k]; has {
-					armyGate = true
-					break
-				}
-			}
-			detAny := getStrList(rule, "detachment_ids")
-			detGate := len(detAny) == 0
-			for _, id := range detAny {
-				if contains(spec.detachmentIDs, id) {
-					detGate = true
-					break
-				}
-			}
-			if !armyGate || !detGate {
+			if !offered[getStr(rule, "id")] {
 				for _, idx := range members {
 					errV("ally-pool-not-offered", spec.units[idx].unitID, idx)
 				}
 			}
-			for _, pAny := range getList(rule, "points_limits") {
-				p, ok := asMap(pAny)
-				if !ok || getStr(p, "battle_size") != spec.battleSize {
-					continue
+			pools = append(pools, allyPool{rule, members})
+		}
+	}
+	attributedAt := map[string]int{}
+	for idx := range views {
+		rule, ok := allies[idx]
+		if !ok {
+			continue
+		}
+		id := getStr(rule, "id")
+		at, seen := attributedAt[id]
+		if !seen {
+			at = len(pools)
+			attributedAt[id] = at
+			pools = append(pools, allyPool{rule, nil})
+		}
+		pools[at].idxs = append(pools[at].idxs, idx)
+	}
+	for _, p := range pools {
+		var members []allyMember
+		var keywordSets []map[string]struct{}
+		for _, idx := range p.idxs {
+			su := spec.units[idx]
+			kws := keywordSet(views[idx], su.keywordOverrides)
+			battleline := getStr(views[idx].Raw, "role") == "battleline"
+			for k := range kws {
+				if lower(k) == "battleline" {
+					battleline = true
 				}
-				spent := 0
-				for _, idx := range members {
-					spent += unitCosts[idx]
-				}
-				if spent > asInt(p["max_points"]) {
-					errV("ally-points-over-limit", getStr(rule, "id"), -1)
-				}
-				break
 			}
-			for _, idx := range members {
-				su := spec.units[idx]
-				if rule["cannot_be_warlord"] == true && su.isWarlord && !detachmentWarlords[su.unitID] {
-					errV("ally-cannot-be-warlord", su.unitID, idx)
-				}
-				if rule["cannot_take_enhancements"] == true && su.enhancementID != "" {
-					errV("ally-cannot-take-enhancements", su.unitID, idx)
-				}
-			}
+			members = append(members, allyMember{
+				unitID:         su.unitID,
+				index:          idx,
+				cost:           unitCosts[idx],
+				isWarlord:      su.isWarlord,
+				hasEnhancement: su.enhancementID != "",
+				battleline:     battleline,
+				keywords:       kws,
+			})
+			keywordSets = append(keywordSets, kws)
+		}
+		for _, v := range allyPoolViolations(p.rule, members, spec.battleSize, detachmentWarlords) {
+			errV(v.code, v.id, v.unitIndex)
+		}
+		if p.rule["exclusive"] == true {
+			continue
+		}
+		for _, v := range allyKeywordLimitViolations(p.rule, keywordSets, spec.battleSize) {
+			errV(v.code, v.id, v.unitIndex)
 		}
 	}
 

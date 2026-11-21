@@ -3,7 +3,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { compileLeaves, type CompileLeaf, type Compiled } from "./compile.js";
-import { REVIEWED_FAMILY_REGISTRY, type SemanticFamilyDefinition } from "./contracts.js";
+import { currentFamilyVersion, REVIEWED_FAMILY_REGISTRY, type SemanticFamilyDefinition } from "./contracts.js";
 import { boundedCombinations, familyCombinations, familySampling } from "./leaf-coverage-samples.js";
 
 /**
@@ -96,58 +96,58 @@ function nextByte(): number {
   return offset;
 }
 
-function leafOf(role: string, familyId: string, parameters: Record<string, unknown>, version = 1, fragment?: string): CompileLeaf {
+function leafOf(role: string, familyId: string, parameters: Record<string, unknown>, fragment?: string, version = currentFamilyVersion(familyId)): CompileLeaf {
   return { role, family_id: familyId, family_version: version, parameters, start_byte: nextByte(), ...(fragment !== undefined ? { fragment } : {}) };
 }
 
 /** A minimal effect to pair with a lone CONDITION/EVENT/DURATION/RESTRICTION leaf, as the existing compiler tests do. */
 function healLeaf(fragment?: string): CompileLeaf {
-  return leafOf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" }, 2, fragment);
+  return leafOf("EFFECT", "regain-wounds", { subject: "this-unit", amount: "1" }, fragment);
 }
 
 /** Two more option leaves for the container-opener families, so their opener actually gets options. */
 const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> = {
   "choice-open": () => [
-    leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-    leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    leafOf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
+    leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, "C"),
   ],
   "move-type-open": () => [
-    leafOf("EVENT", "move-type-section", { section: "after" }, 1, "B"),
-    leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+    leafOf("EVENT", "move-type-section", { section: "after" }, "B"),
+    leafOf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
   ],
   "stance-select-open": () => [
-    leafOf("EVENT", "named-option", { label: "Conqueror Doctrine", option_id: "conqueror-doctrine" }, 1, "B"),
-    leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-    leafOf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, 1, "C"),
-    leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    leafOf("EVENT", "named-option", { label: "Conqueror Doctrine", option_id: "conqueror-doctrine" }, "B"),
+    leafOf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
+    leafOf("EVENT", "named-option", { label: "Ballistic Doctrine", option_id: "ballistic-doctrine" }, "C"),
+    leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, "C"),
   ],
   "issue-orders-open": () => [
-    leafOf("EVENT", "named-option", { label: "First Rank, Fire!", option_id: "first-rank-fire" }, 1, "B"),
-    leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-    leafOf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, 1, "C"),
-    leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    leafOf("EVENT", "named-option", { label: "First Rank, Fire!", option_id: "first-rank-fire" }, "B"),
+    leafOf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
+    leafOf("EVENT", "named-option", { label: "Take Aim!", option_id: "take-aim" }, "C"),
+    leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, "C"),
   ],
   "dice-pool-allocation-open": () => [
-    leafOf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter", requirement_type: "pair", requirement_min_value: 3 }, 1, "B"),
-    leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
-    leafOf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, 1, "C"),
-    leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, 1, "C"),
+    leafOf("EVENT", "named-option", { label: "Path of Slaughter", option_id: "path-of-slaughter", requirement_type: "pair", requirement_min_value: 3 }, "B"),
+    leafOf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
+    leafOf("EVENT", "named-option", { label: "Path of Rage", option_id: "path-of-rage", requirement_type: "triple", requirement_min_value: 4 }, "C"),
+    leafOf("EFFECT", "invulnerable-save", { subject: "this-model", threshold: 4 }, "C"),
   ],
   "risk-reward-open": () => [
-    leafOf("EVENT", "on-fail-open", {}, 1, "B"),
-    leafOf("EFFECT", "mortal-wounds", { recipient: "this-model", count: "1" }, 1, "B"),
-    leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "C"),
+    leafOf("EVENT", "on-fail-open", {}, "B"),
+    leafOf("EFFECT", "mortal-wounds", { recipient: "this-model", count: "1" }, "B"),
+    leafOf("EFFECT", "fights-first", { subject: "this-model" }, "C"),
   ],
   "resource-action-menu-open": () => [
-    leafOf("EVENT", "menu-action", { action_id: "swift", label: "Swift", cost_amount: 1 }, 2, "B"),
-    leafOf("EVENT", "event", { kind: "phase-start", phase: "movement", turn: "your" }, 8, "B"),
-    leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+    leafOf("EVENT", "menu-action", { action_id: "swift", label: "Swift", cost_amount: 1 }, "B"),
+    leafOf("EVENT", "event", { kind: "phase-start", phase: "movement", turn: "your" }, "B"),
+    leafOf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
   ],
   "persistent-designation-open": () => [
-    leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+    leafOf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
   ],
   "select-objective-open": () => [
-    leafOf("EFFECT", "fights-first", { subject: "this-model" }, 1, "B"),
+    leafOf("EFFECT", "fights-first", { subject: "this-model" }, "B"),
   ],
 };
 
@@ -161,23 +161,23 @@ const CONTAINER_OPENER_FOLLOWUPS: Partial<Record<string, () => CompileLeaf[]>> =
  */
 const FIXED_PARAMETERS: Partial<Record<string, Array<Record<string, unknown>>>> = {
   // A move type's printed name is free text: one disembark mode and one move of its own.
-  "move-type-open@1": [
+  "move-type-open": [
     { name: "Example Drop Move", move_type: "disembark", mode: "shock", setup_inches: 3 },
     { name: "Example Jet Move", move_type: "pulse-jet", distance_dice: "D6+18" },
   ],
   // Printed weapon names and wargear ids are free text, so the sampler cannot draw them; one of each
   // quantifier state is listed so every named-equipment predicate form appears in the catalog.
-  "named-weapon@1": [
+  "named-weapon": [
     { subject: "this-model", name: "Fizz blade", count: 1 },
     { subject: "this-unit", name: "Fizz blade", count: 1, models: { at_least: 1, state: "carry" } },
     { subject: "this-unit", name: "Fizz blade", count: 1, models: { at_least: 1, state: "lack" } },
   ],
-  "unit-wargear@1": [
+  "unit-wargear": [
     { subject: "this-unit", wargear: "fizz-relay-kit" },
     { subject: "this-unit", wargear: "fizz-relay-kit", models: { at_least: 1, state: "carry" } },
   ],
-  // counts-as@3 takes a range, a named range or a region; its region object is not sampled, so all three forms are listed.
-  "counts-as@3": [
+  // counts-as takes a range, a named range or a region; its region object is not sampled, so all three forms are listed.
+  "counts-as": [
     { subject: "this-unit", within: 6 },
     { subject: "antecedent", range_ref: "synapse", of_side: "friendly" },
     { subject: "this-unit", region: { region_id: "hallowed-ground", owner_faction: "grey-knights" } },
@@ -265,7 +265,7 @@ let producedCache: Produced | undefined;
 /** Build the leaves for one family/parameter combination, wrapping a lone non-EFFECT leaf as the compile tests do. */
 function leavesFor(family: SemanticFamilyDefinition, parameters: Record<string, unknown>): CompileLeaf[] {
   const followups = CONTAINER_OPENER_FOLLOWUPS[family.id];
-  const opener = leafOf(family.role, family.id, parameters, family.version, followups ? "A" : undefined);
+  const opener = leafOf(family.role, family.id, parameters, followups ? "A" : undefined, family.version);
   if (followups) return [opener, ...followups()];
   if (family.role === "EFFECT") return [opener];
   return [opener, healLeaf()];
@@ -290,8 +290,7 @@ function produceLiterals(): Produced {
     // A COMBINATOR ("instead") replaces an earlier effect of its own family; it owns no DSL type
     // of its own and only compiles inside a fuller ability (see the COMPOSED list).
     if (family.role === "COMBINATOR") continue;
-    const combos = FIXED_PARAMETERS[`${family.id}@${family.version}`]
-      ?? FIXED_PARAMETERS[family.id]
+    const combos = FIXED_PARAMETERS[family.id]
       ?? (familySampling(family) === "pairwise" ? boundedCombinations(family) : familyCombinations(family));
     for (const parameters of combos) {
       let result: Compiled;
@@ -352,8 +351,8 @@ export const COMPOSED: readonly ComposedEntry[] = [
   },
   {
     type: "roll",
-    reason: "Needs dice-roll@2's roll_var plus a roll-result band binding to it; dice-roll@2 alone (no roll-result) has nothing to bind.",
-    pinnedTest: "tools/test/semantic-authoring-compile-containers.test.ts:319 (dice-roll@2 roll_var binding)",
+    reason: "Needs dice-roll's roll_var plus a roll-result band binding to it; dice-roll alone (no roll-result) has nothing to bind.",
+    pinnedTest: "tools/test/semantic-authoring-compile-containers.test.ts:319 (dice-roll roll_var binding)",
   },
   {
     type: "no-effect",

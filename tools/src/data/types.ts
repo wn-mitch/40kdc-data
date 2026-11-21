@@ -15,6 +15,7 @@ import type {
   Enhancement,
   Faction,
   ForceDisposition,
+  KeywordChoiceGroup,
   GameVersion,
   HullShape,
   InteractionFlag,
@@ -74,6 +75,8 @@ export interface RawData {
   missionCards: SecondaryCard[];
   deploymentPatterns: DeploymentPattern[];
   forceDispositions: ForceDisposition[];
+  /** Muster-time keyword choices (a Mark of Chaos); each option is a unit conditional keyword naming the group. */
+  keywordChoiceGroups: KeywordChoiceGroup[];
   /** Reusable terrain catalog: standard areas and scenery features. */
   terrainTemplates: TerrainTemplate[];
   /** Terrain layouts: arrangements of catalog/inline pieces on the board. */
@@ -109,6 +112,7 @@ export function emptyRawData(): RawData {
     missionCards: [],
     deploymentPatterns: [],
     forceDispositions: [],
+    keywordChoiceGroups: [],
     terrainTemplates: [],
     terrainLayouts: [],
     hullShapes: [],

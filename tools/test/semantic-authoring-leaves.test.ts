@@ -327,46 +327,6 @@ describe("Semantic authoring joining words", () => {
 });
 
 describe("Semantic authoring family versions", () => {
-  it("moves leaves to the current version, maps named event wording, and keeps unmapped leaves visible", () => {
-    const { db } = fixture([
-      { faction_id: "alpha", ability_id: "lead", raw_text: `${LEAD}, re-roll a Hit roll of 1.` },
-      { faction_id: "alpha", ability_id: "shot", raw_text: "After this unit has shot, gain 1CP." },
-      { faction_id: "alpha", ability_id: "odd", raw_text: "When a glimmer is spent, gain 1CP." },
-    ]);
-    try {
-      // Write version-1 leaves as the pre-5E workbench did.
-      db.prepare("UPDATE semantic_families SET status = 'active' WHERE version = 1").run();
-      const legacy = (abilityId: string, exactText: string, familyId: string, parameters: object): number => {
-        const row = current(db, abilityId);
-        const start = Buffer.byteLength(row.source_text.slice(0, row.source_text.indexOf(exactText)));
-        const spanId = insertSpan(db, row.id, "RAW_TEXT", start, start + Buffer.byteLength(exactText), exactText);
-        const fingerprint = validateFingerprint(db, familyId, parameters as never, 1, exactText);
-        db.prepare("INSERT OR IGNORE INTO annotation_batches (id, operation, reviewer, created_at) VALUES ('legacy', 'review', 'r', 'x')").run();
-        return Number(db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, created_at) VALUES (?, ?, 'active', 'manual', 'human', 'r', 'legacy', 'x')")
-          .run(spanId, fingerprint).lastInsertRowid);
-      };
-      const lead = legacy("lead", LEAD, "leading-unit", { subject: "this-model" });
-      legacy("shot", "After this unit has shot", "event", { kind: { source: "After this unit has shot" } });
-      const odd = legacy("odd", "When a glimmer is spent", "event", { kind: { source: "When a glimmer is spent" } });
-      db.prepare("UPDATE semantic_families SET status = 'deprecated' WHERE (version = 1 AND id IN ('leading-unit', 'event', 'weapon-ability-grant')) OR (version = 2 AND id = 'event')").run();
-
-      const report = upgradeFamilyVersions(db);
-      expect(report).toMatchObject({ migrated_fingerprints: 2, migrated_annotations: 2 });
-      expect(report.unmapped).toEqual([expect.objectContaining({ family_id: "event", active_annotations: 1 })]);
-      expect(getAbility(db, current(db, "lead").id).annotations).toEqual([expect.objectContaining({ family_version: currentFamilyVersion("leading-unit"), parameters: { subject: "this-model", attachment: "leading" } })]);
-      expect(getAbility(db, current(db, "shot").id).annotations).toEqual([expect.objectContaining({ family_version: currentFamilyVersion("event"), parameters: { kind: "after-shooting" } })]);
-      expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(lead)).toEqual({ status: "superseded" });
-      expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(odd)).toEqual({ status: "active" });
-      expect(upgradeFamilyVersions(db)).toMatchObject({ migrated_fingerprints: 0, migrated_annotations: 0 });
-      // New decisions cannot use the deprecated version.
-      const row = current(db, "odd");
-      expect(() => applyAnnotationBatch(db, { reviewer: REVIEWER, decisions: [{ action: "confirm", ability_version_id: row.id, source_hash: row.source_hash, fragment: "RAW_TEXT", start_byte: 0, end_byte: 4, exact_text: "When", role: "EVENT", family_id: "event", family_version: 1, parameters: { kind: "charge" } }] }))
-        .toThrow(/not active/u);
-    } finally {
-      db.close();
-    }
-  });
-
   it("decides a buff leaf everywhere and rejects values outside the game's range", () => {
     const text = "models in that unit have the Feel No Pain 5+ ability";
     const { db } = fixture([
@@ -408,6 +368,49 @@ describe("Semantic authoring family versions", () => {
     }
   });
 
+  it("re-queues a source when a longer wording is undone: the shorter wording's surface writes its leaf afresh", () => {
+    const long = `${CP} at the start of the battle round`;
+    const { db } = fixture([{ faction_id: "alpha", ability_id: "cp", raw_text: `${LEAD}, ${long}.` }]);
+    try {
+      confirmSurface(db, { reviewer: REVIEWER, exact_text: CP, ...cpMeaning });
+      const row = () => db.prepare(`
+        SELECT annotations.id, source_spans.exact_text FROM annotations JOIN source_spans ON source_spans.id = annotations.span_id
+        JOIN fingerprints ON fingerprints.id = annotations.fingerprint_id
+        WHERE annotations.status = 'active' AND fingerprints.family_id = 'resource-action'
+      `).all() as Array<{ id: number; exact_text: string }>;
+      const [shorter] = row();
+      expect(shorter!.exact_text).toBe(CP);
+      // Longer wording wins: the longer decision replaces the shorter leaf inside it.
+      const decided = confirmSurface(db, { reviewer: REVIEWER, exact_text: long, ...cpMeaning });
+      expect(row().map((item) => item.exact_text)).toEqual([long]);
+
+      undoBatch(db, decided.batch_id, { reviewer: REVIEWER });
+      // The replaced row is not restored; the shorter surface, still decided, writes a new one.
+      const [again] = row();
+      expect(again!.exact_text).toBe(CP);
+      expect(again!.id).not.toBe(shorter!.id);
+      expect(db.prepare("SELECT status FROM annotations WHERE id = ?").get(shorter!.id)).toEqual({ status: "superseded" });
+    } finally {
+      db.close();
+    }
+  });
+
+  it("refuses to undo a batch from before the history compaction, and undoes one from after it", () => {
+    const { db } = fixture([{ faction_id: "alpha", ability_id: "cp", raw_text: `${LEAD}, ${CP}.` }]);
+    try {
+      const older = confirmSurface(db, { reviewer: REVIEWER, exact_text: CP, ...cpMeaning });
+      const compactedAt = new Date(Date.now() + 1000).toISOString();
+      db.prepare("UPDATE workbench_state SET history_compacted_at = ? WHERE singleton = 1").run(compactedAt);
+      expect(() => undoBatch(db, older.batch_id, { reviewer: REVIEWER })).toThrow(/predates the workbench history compaction/u);
+      expect(leaves(db, "cp").map((leaf) => leaf.exact_text)).toEqual([CP]);
+      db.prepare("UPDATE annotation_batches SET created_at = ? WHERE id = ?").run(new Date(Date.now() + 2000).toISOString(), older.batch_id);
+      undoBatch(db, older.batch_id, { reviewer: REVIEWER });
+      expect(leaves(db, "cp")).toEqual([]);
+    } finally {
+      db.close();
+    }
+  });
+
   it("treats a keyword before a noun as a qualifier but not before a duration, clause or determiner", () => {
     const at = (text: string, match: string) => qualifiedAt(text, Buffer.byteLength(text.slice(0, text.indexOf(match))));
     expect(at("select one **INFANTRY** unit from your army", "unit from your army")).toBe(true);
@@ -426,7 +429,7 @@ describe("Semantic authoring family versions", () => {
       expect(confirmSurface(db, { reviewer: REVIEWER, exact_text: exact, family_id: "weapon-ability-grant", parameters: { subject: "this-unit", keyword: "Sustained Hits 1", weapon_type: "melee" } })).toMatchObject({ applied: 1 });
       expect(() => confirmSurface(db, { reviewer: REVIEWER, exact_text: exact, family_id: "weapon-ability-grant", parameters: { subject: "this-unit", keyword: "Stealth", weapon_type: "melee" } }))
         .toThrow(/named weapon ability/u);
-      expect(() => validateFingerprint(db, "weapon-ability-grant", { subject: "this-unit", keyword: "Sustained Hits 2", weapon_type: "melee" }, 2, exact))
+      expect(() => validateFingerprint(db, "weapon-ability-grant", { subject: "this-unit", keyword: "Sustained Hits 2", weapon_type: "melee" }, undefined, exact))
         .toThrow(/must occur in the exact source span/u);
     } finally {
       db.close();

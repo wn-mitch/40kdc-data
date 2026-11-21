@@ -88,6 +88,12 @@ pub(crate) fn designated_attack_when(applies: &P) -> String {
 }
 
 pub(crate) fn designated_recipient_context(applies: &P, ctx: &Ctx) -> Ctx {
+    if sv(applies, "to") == Some("attackers-of-target") {
+        return Ctx {
+            attack_on_target: true,
+            ..ctx.clone()
+        };
+    }
     if sv(applies, "to") != Some("bound-unit-attacks-reference") {
         return ctx.clone();
     }
@@ -234,7 +240,7 @@ pub(crate) fn persistent_lead(e: &P) -> String {
         ));
     }
     if sv(lifecycle, "exclusivity") == Some("one-active-per-bearer-unit") {
-        clauses.push("Only one such designation can be active for this bearer unit.".to_string());
+        clauses.push("Only one such designation can be active for this unit.".to_string());
     }
     clauses.join(" ")
 }
@@ -273,7 +279,7 @@ pub(crate) fn persistent_replacement(e: &P) -> String {
         ""
     };
     format!(
-        "when {previous} is destroyed, {} select {}{label} to replace this bearer unit's existing designation. Its existing effects apply to the new target without changing the designation's expiry{embarked}",
+        "when {previous} is destroyed, {} select {}{label} to replace this unit's existing designation. Its existing effects apply to the new target without changing the designation's expiry{embarked}",
         if is_true(replacement, "optional") { "you may" } else { "you must" },
         designation_target_subject(select),
     )

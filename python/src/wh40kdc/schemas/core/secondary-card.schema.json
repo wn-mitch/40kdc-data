@@ -28,6 +28,11 @@
           },
           "minProperties": 1,
           "additionalProperties": false
+        },
+        "final_round_timing": {
+          "type": "string",
+          "enum": ["end-of-turn"],
+          "description": "The moment the award is checked in the fifth (final) battle round, replacing `timing` and `phase` for that round only. An award checked at the end of your Command phase, except at the end of your turn in the fifth battle round, is timing: end-of-phase, phase: command, final_round_timing: end-of-turn. Absent means `timing` holds in every round of the window. Requires `timing`."
         }
       },
       "minProperties": 1,
@@ -38,6 +43,10 @@
             "properties": { "timing": { "enum": ["start-of-phase", "end-of-phase"] } }
           },
           "then": { "required": ["phase"] }
+        },
+        {
+          "if": { "required": ["final_round_timing"] },
+          "then": { "required": ["timing"] }
         }
       ],
       "additionalProperties": false

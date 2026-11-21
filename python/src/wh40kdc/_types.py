@@ -427,36 +427,9 @@ class AlliedPointsLimit(TypedDict):
     max_points: int
 
 
-class AlliedKeywordLimit(TypedDict):
-    keyword: Keyword
-    battle_size: Literal["incursion", "strike-force", "onslaught"]
-    max_count: int
-
-
-class AlliedRule(TypedDict):
-    id: EntityId
-    name: str
-    label: NotRequired[str]
-    army_keywords_any: NotRequired[KeywordList]
-    detachment_ids: NotRequired[list[EntityId]]
-    source_faction_id: NotRequired[EntityId | None]
-    source_keywords: NotRequired[KeywordList]
-    source_datasheet_ids: NotRequired[list[EntityId]]
-    required_keywords: NotRequired[KeywordList]
-    excluded_keywords: NotRequired[KeywordList]
-    roles: NotRequired[list[str]]
-    points_limits: NotRequired[list[AlliedPointsLimit]]
-    keyword_limits: NotRequired[list[AlliedKeywordLimit]]
-    max_units: NotRequired[int | None]
-    exclusive: NotRequired[bool]
-    cannot_be_warlord: NotRequired[bool]
-    cannot_take_enhancements: NotRequired[bool]
-    warlord_required_keyword: NotRequired[Keyword | None]
-    warlord_datasheet_ids: NotRequired[list[EntityId]]
-    removes_ability_ids: NotRequired[list[EntityId]]
-    battleline_ratio_keywords: NotRequired[KeywordList]
-    game_version: GameVersionRef
-    notes: NotRequired[str]
+class AlliedKeywordLimitExemption(TypedDict):
+    donor_keywords: list[Keyword]
+    receiver_keywords: list[Keyword]
 
 
 class ZoneShape1(TypedDict):
@@ -564,6 +537,11 @@ class Enhancement(TypedDict):
     points_provisional: NotRequired[bool]
     upgrade_tag: NotRequired[bool]
     max_targets: NotRequired[int]
+    counts_toward_enhancement_limit: NotRequired[bool]
+    equipable_by_non_character: NotRequired[bool]
+    equipable_by_epic_hero: NotRequired[bool]
+    bearer_cannot_be_warlord: NotRequired[bool]
+    required_wargear_ids: NotRequired[list[EntityId]]
     keyword_restrictions: NotRequired[KeywordList]
     keyword_restriction_groups: NotRequired[list[KeywordRestrictionGroup]]
     datasheet_restriction_groups: NotRequired[list[DatasheetRestrictionGroup]]
@@ -636,6 +614,16 @@ class HullShape(TypedDict):
     game_version: GameVersionRef
 
 
+class KeywordChoiceGroup(TypedDict):
+    id: EntityId
+    name: str
+    detachment_id: EntityId | None
+    mandatory: bool
+    min_units: int | None
+    max_units: int | None
+    game_version: GameVersionRef
+
+
 EligibleBodyguardKeyword: TypeAlias = str
 
 
@@ -644,6 +632,9 @@ class ConditionalGroup(TypedDict):
     eligible_bodyguard_ids: list[EntityId]
     required_roster_unit_ids: NotRequired[list[EntityId]]
     excluded_roster_unit_ids: NotRequired[list[EntityId]]
+    required_detachment_id: NotRequired[EntityId]
+    excluded_detachment_id: NotRequired[EntityId]
+    required_shared_keyword: NotRequired[Keyword]
 
 
 class LeaderAttachment(TypedDict):
@@ -687,6 +678,7 @@ class ScoringTrigger(TypedDict):
     ]
     player_turn: NotRequired[PlayerTurn]
     battle_round: NotRequired[BattleRound]
+    final_round_timing: NotRequired[Literal["end-of-turn"]]
 
 
 class UnitFilter1(TypedDict):
@@ -946,7 +938,7 @@ class UnitComposition(TypedDict):
 
 class Profile(TypedDict):
     name: NotRequired[str]
-    M: StatValue
+    M: StatValue | None
     T: int
     W: int
     Sv: int
@@ -954,7 +946,7 @@ class Profile(TypedDict):
     invuln_sv_ranged: NotRequired[int | None]
     invuln_sv_melee: NotRequired[int | None]
     Ld: int
-    OC: int
+    OC: int | None
 
 
 class Point(TypedDict):
@@ -992,6 +984,7 @@ class ConditionalKeyword(TypedDict):
     keyword: Keyword
     required_detachment_id: NotRequired[EntityId | None]
     required_faction_keyword: NotRequired[Keyword | None]
+    choice_group: NotRequired[EntityId]
 
 
 class ModelCount(TypedDict):
@@ -1048,6 +1041,7 @@ class Unit(TypedDict):
     excluded_faction_keywords: NotRequired[KeywordList | None]
     base_size_mm: NotRequired[BaseSize | None]
     model_count: NotRequired[ModelCount]
+    max_model_count: NotRequired[int]
     weapon_ids: NotRequired[list[EntityId]]
     ability_ids: NotRequired[list[EntityId | AbilityIds | AbilityIds1]]
     wargear_budgets: NotRequired[list[WargearBudget]]
@@ -1127,6 +1121,9 @@ class AbilityUsageLimit(TypedDict):
     ]
     count: NotRequired[int]
     per: NotRequired[Literal["army", "unit", "model"]]
+
+
+OptionName: TypeAlias = str
 
 
 class Interaction(TypedDict):
@@ -1741,6 +1738,42 @@ Quantity: TypeAlias = (
 class PlacementRegion(TypedDict):
     region: RegionRef
     wholly: NotRequired[Literal[True]]
+
+
+class AlliedKeywordLimit(TypedDict):
+    keyword: Keyword
+    battle_size: Literal["incursion", "strike-force", "onslaught"]
+    max_count: int
+    exemptions: NotRequired[list[AlliedKeywordLimitExemption]]
+
+
+class AlliedRule(TypedDict):
+    id: EntityId
+    name: str
+    label: NotRequired[str]
+    army_keywords_any: NotRequired[KeywordList]
+    host_faction_ids: NotRequired[list[EntityId]]
+    detachment_ids: NotRequired[list[EntityId]]
+    source_faction_id: NotRequired[EntityId | None]
+    source_keywords: NotRequired[KeywordList]
+    source_datasheet_ids: NotRequired[list[EntityId]]
+    required_keywords: NotRequired[KeywordList]
+    excluded_keywords: NotRequired[KeywordList]
+    roles: NotRequired[list[str]]
+    points_limits: NotRequired[list[AlliedPointsLimit]]
+    keyword_limits: NotRequired[list[AlliedKeywordLimit]]
+    keyword_limits_exclusive: NotRequired[bool]
+    replaces_faction_keywords: NotRequired[bool]
+    max_units: NotRequired[int | None]
+    exclusive: NotRequired[bool]
+    cannot_be_warlord: NotRequired[bool]
+    cannot_take_enhancements: NotRequired[bool]
+    warlord_required_keyword: NotRequired[Keyword | None]
+    warlord_datasheet_ids: NotRequired[list[EntityId]]
+    removes_ability_ids: NotRequired[list[EntityId]]
+    battleline_ratio_keywords: NotRequired[KeywordList]
+    game_version: GameVersionRef
+    notes: NotRequired[str]
 
 
 AbilityUsage: TypeAlias = AbilityUsageLimit | list[AbilityUsageLimit]
@@ -2403,6 +2436,7 @@ class Stratagem(TypedDict):
     type: NotRequired[Literal["battle-tactic", "strategic-ploy", "epic-deed", "wargear"]]
     detachment_id: NotRequired[EntityId | None]
     cp_cost: int
+    secondary_effect_extra_cp: NotRequired[int]
     phases: PhaseList
     player_turn: PlayerTurn
     timing: Literal["once-per-phase", "once-per-turn", "once-per-battle", "unlimited"]
@@ -2458,6 +2492,7 @@ AbilityTrigger: TypeAlias = Trigger | list[Trigger]
 class Ability(TypedDict):
     ability_id: EntityId
     name: str
+    option_names: NotRequired[list[OptionName]]
     authored_by: ContributorRef
     game_version: GameVersionRef
     source_digest: NotRequired[str]
@@ -3647,6 +3682,7 @@ class Modifier37(TypedDict):
     ends_when: NotRequired[Condition]
     keeps_eligible: NotRequired[Literal[True]]
     ends_nearest: NotRequired[EndsNearest]
+    mandatory: NotRequired[Literal[True]]
 
 
 class SingleEffect28(TypedDict):
@@ -4047,6 +4083,7 @@ class ChoiceEffect(TypedDict):
     min_choices: NotRequired[int]
     max_choices: NotRequired[int]
     chosen_by: NotRequired[Literal["opponent"]]
+    secondary_option: NotRequired[int]
 
 
 class SequenceEffect(TypedDict):

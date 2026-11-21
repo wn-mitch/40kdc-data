@@ -29,6 +29,7 @@ import { AURA_RECIPIENT } from "./compile-antecedent.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { planEffects } from "./compile-part-plan.js";
 import { loopUnderBand, stepsBeforeLoop, wrapBandLoop } from "./compile-band-loop.js";
+import { loopTail } from "./compile-loop-tail.js";
 import { firstPartContradicted } from "./compile-round-sections.js";
 import { firstPartLoop, loopInSelection, selectionPerPass, type PartBindings } from "./compile-part-bindings.js";
 
@@ -78,7 +79,7 @@ function hasLastingEffect(node: unknown): boolean {
  * duration is printed (core rule 01.02.02: "In the Shooting phase" with no duration lasts until the
  * end of that Shooting phase). A window of phases is a phase; "in your turn" alone is the turn.
  */
-function windowPeriod(list: readonly CompileLeaf[]): "phase" | "turn" | null {
+function windowPeriod(list: readonly CompileLeaf[], phaseEnd = false): "phase" | "turn" | null {
   // A folded either-phase window ("in your Shooting phase and the Fight phase") is one any-of whose
   // alternatives are each one phase window; those alternatives are the windows. Other any-of leaves
   // (an "or" with a non-window condition) hold no window.
@@ -93,7 +94,8 @@ function windowPeriod(list: readonly CompileLeaf[]): "phase" | "turn" | null {
   if (windows.length) return "turn";
   // "At the start of the Fight phase, …" names the phase it happens in, as a window does (core rule 01.02.02).
   // So does "when … is selected to fight" or "to shoot": that activation happens in its phase.
-  return flat.some((leaf) => leaf.family_id === "event" && ((leaf.parameters.kind === "phase-start" && leaf.parameters.phase !== undefined && leaf.parameters.phase !== "any")
+  // With `phaseEnd`, "At the end of your opponent's Charge phase" names its phase too.
+  return flat.some((leaf) => leaf.family_id === "event" && (((leaf.parameters.kind === "phase-start" || (phaseEnd && leaf.parameters.kind === "phase-end")) && leaf.parameters.phase !== undefined && leaf.parameters.phase !== "any")
     || (leaf.parameters.kind === "selected" && (leaf.parameters.to === "fight" || leaf.parameters.to === "shoot")))) ? "phase" : null;
 }
 
@@ -252,6 +254,16 @@ export function assemblePart(
     && partStarts.every((part) => places[part.index]!.sentence > places[durationAt[0]!]!.sentence);
   // "If an enemy unit within 8\" of this unit is below Starting Strength": a gate on each unit an
   // aura or a for-each reaches holds per recipient, inside the wrap, not once around it.
+  // "For each Observer unit …, select one enemy unit … to be marked as their Spotted unit. … Until the end of the phase, each
+  // time a model … makes an attack that targets a Spotted unit, …": the steps of the sentences after the loop's run once,
+  // after it, when they read neither the pass's unit nor the selected unit (compile-loop-tail.ts).
+  const passTail = forEachLeaf !== null && selections.length === 1 && partStarts.length === 0 && window === null && body === unwrapped
+    && selectionPerPass(list, forEachLeaf, selections, planned, (leaf) => partOf(list.indexOf(leaf)))
+    ? loopTail(steps, pieceItems.filter((item) => partOf(item.index) === 0).map((item) => places[item.index]!.sentence), places[list.indexOf(forEachLeaf)]!.sentence) : [];
+  if (passTail.length) {
+    const lead = steps.slice(0, steps.length - passTail.length);
+    body = lead.length === 1 ? lead[0]! : { type: "sequence", steps: lead };
+  }
   if (auraLeaf || forEachLeaf) {
     const perUnit = global.filter((node) => JSON.stringify(node).includes(`"${AURA_RECIPIENT}"`));
     if (perUnit.length) {
@@ -345,6 +357,7 @@ export function assemblePart(
     });
     body = ahead.length ? { type: "sequence", steps: [...ahead, select] } : select;
     if (perPass) body = attempt(() => wrapForEachUnit(forEachLeaf!, body!));
+    if (body && passTail.length) body = { type: "sequence", steps: [body, ...passTail] };
   }
   else if ((forEachLeaf && forEachPart === 0) || recordLoop) {
     const each = recordLoop ?? forEachLeaf!;
@@ -411,8 +424,15 @@ export function assemblePart(
   const windowLeaves = (part: number | null) => list.filter((_, index) => !consumedByContainer.has(index) && (part === null || windowPart(index) === part));
   const usedOrTriggered = durations.length === 0 && (behavior === "reactive" || behavior === "activated");
   // "In any phase, when …" with no duration: the effects last until the end of the phase the ability is used in.
-  const period = usedOrTriggered && hasLastingEffect(body)
-    ? windowPeriod(windowLeaves(partStarts.length ? 0 : null)) ?? (options.anyPhaseWindow === true ? "phase" : null) : null;
+  // A Stratagem used at the end of a phase ("End of your opponent's Fight phase") lasts until the end of that
+  // phase too (core rule 01.02.02).
+  const period = !usedOrTriggered ? null
+    : hasLastingEffect(body) ? windowPeriod(windowLeaves(partStarts.length ? 0 : null), stratagem) ?? (options.anyPhaseWindow === true ? "phase" : null)
+      // A Stratagem whose WHEN moment holds nothing lasting but whose later moment does ("End of your opponent's
+      // Charge phase … Before making the charge roll, …") lasts until the end of the WHEN's phase, a phase's end
+      // included (core rule 01.02.02); otherwise the later moment would keep firing after the use.
+      : stratagem && partStarts.length > 0 && !hasLastingEffect(pieces[0]) && pieces.slice(1).some(hasLastingEffect)
+        ? windowPeriod(windowLeaves(0), true) : null;
   // A later part's own window gives it a lifetime when it holds a lasting effect and the record's window does not already bound it.
   const partPeriods = partStarts.map((_, position) => usedOrTriggered && period === null && hasLastingEffect(pieces[position + 1])
     ? windowPeriod(windowLeaves(position + 1)) : null);
@@ -513,12 +533,12 @@ export function assemblePart(
     });
     // A record-wide gate that a later part contradicts (its own rounds, phase, player turn or the negated condition)
     // heads the first part only (compile-round-sections.ts).
-    const sectioned = entryTrigger
-      ? firstPartContradicted(global, partStarts.map((part, position) => ({ trigger: asTrigger(partMoments(part, position)), effect: rawEffects[position] })))
-      : [];
+    const sectioned = firstPartContradicted(global, partStarts.map((part, position) => ({ trigger: asTrigger(partMoments(part, position)), effect: rawEffects[position] })));
     if (sectioned.length) {
       const own = sectioned.filter((node, at) => sectioned.findIndex((other) => JSON.stringify(other) === JSON.stringify(node)) === at);
-      partSteps[0] = { ...partSteps[0]!, effect: gated(own, partSteps[0]!.effect as Node) };
+      if (entryPart !== null) partSteps[0] = { ...partSteps[0]!, effect: gated(own, partSteps[0]!.effect as Node) };
+      // No entry moment: the first part is its own steps, which the gate heads together.
+      else partSteps.splice(0, first.length, gated(own, first.length === 1 ? first[0]! : { type: "sequence", steps: first }));
       global.splice(0, global.length, ...global.filter((node) => !sectioned.includes(node)));
     }
     // "each time a friendly X unit within 9\" of the bearer fails a test, …": an aura no part's effect names the recipient of

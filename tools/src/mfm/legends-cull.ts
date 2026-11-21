@@ -38,6 +38,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
 import { MfmDump, type DatasheetRow } from "./loader.js";
+import { unitIdForDatasheet } from "./chapter-reprints.js";
 import { readJsonArray, CORE_DIR } from "./repo-files.js";
 import { repoDirForFactionName, repoDirs } from "./faction-map.js";
 import { effectiveDir } from "./seed-units.js";
@@ -118,14 +119,8 @@ export function dumpSlugSets(dump: MfmDump): { live: Set<string>; legends: Set<s
   const liveIds = new Set<string>();
   const fkNames = dump.byId("faction_keyword");
   for (const ds of dump.table("datasheet")) {
-    const n = dump.enName(ds);
-    if (!n) continue;
-    let id: string;
-    try {
-      id = nameToId(n);
-    } catch {
-      continue;
-    }
+    const id = unitIdForDatasheet(dump, ds);
+    if (!id) continue;
     (ds.isLegends ? legends : live).add(id);
     if (ds.isLegends) continue;
     liveIds.add(ds.id);

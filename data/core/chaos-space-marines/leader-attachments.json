@@ -1,9 +1,61 @@
 [
   {
     "leader_id": "abaddon-the-despoiler",
-    "eligible_bodyguard_ids": [
-      "chaos-terminator-squad",
-      "chosen"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -12,11 +64,73 @@
   },
   {
     "leader_id": "chaos-lord",
-    "eligible_bodyguard_ids": [
-      "chosen",
-      "legionaries",
-      "nemesis-claw",
-      "red-corsairs-raiders"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -25,8 +139,55 @@
   },
   {
     "leader_id": "chaos-lord-in-terminator-armour",
-    "eligible_bodyguard_ids": [
-      "chaos-terminator-squad"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -35,8 +196,55 @@
   },
   {
     "leader_id": "chaos-lord-with-jump-pack",
-    "eligible_bodyguard_ids": [
-      "raptors"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -45,9 +253,61 @@
   },
   {
     "leader_id": "cultist-firebrand",
-    "eligible_bodyguard_ids": [
-      "accursed-cultists",
-      "cultist-mob"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -56,13 +316,85 @@
   },
   {
     "leader_id": "dark-apostle",
-    "eligible_bodyguard_ids": [
-      "accursed-cultists",
-      "chosen",
-      "cultist-mob",
-      "legionaries",
-      "nemesis-claw",
-      "red-corsairs-raiders"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -71,9 +403,61 @@
   },
   {
     "leader_id": "dark-commune",
-    "eligible_bodyguard_ids": [
-      "accursed-cultists",
-      "cultist-mob"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "cultist-mob"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -82,12 +466,79 @@
   },
   {
     "leader_id": "fabius-bile",
-    "eligible_bodyguard_ids": [
-      "accursed-cultists",
-      "chosen",
-      "cultist-mob",
-      "legionaries",
-      "red-corsairs-raiders"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "accursed-cultists",
+          "chosen",
+          "cultist-mob",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -96,8 +547,55 @@
   },
   {
     "leader_id": "haarken-worldclaimer",
-    "eligible_bodyguard_ids": [
-      "raptors"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "raptors"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -106,11 +604,73 @@
   },
   {
     "leader_id": "huron-blackheart",
-    "eligible_bodyguard_ids": [
-      "chaos-terminator-squad",
-      "chosen",
-      "legionaries",
-      "red-corsairs-raiders"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -119,10 +679,67 @@
   },
   {
     "leader_id": "kravek-morne",
-    "eligible_bodyguard_ids": [
-      "chaos-terminator-squad",
-      "mutilators",
-      "obliterators"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "mutilators",
+          "obliterators"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "mutilators",
+          "obliterators"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "mutilators",
+          "obliterators"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "mutilators",
+          "obliterators"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "mutilators",
+          "obliterators"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad",
+          "mutilators",
+          "obliterators"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -131,11 +748,73 @@
   },
   {
     "leader_id": "master-of-executions",
-    "eligible_bodyguard_ids": [
-      "chosen",
-      "legionaries",
-      "nemesis-claw",
-      "red-corsairs-raiders"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -144,12 +823,79 @@
   },
   {
     "leader_id": "master-of-possession",
-    "eligible_bodyguard_ids": [
-      "chosen",
-      "legionaries",
-      "nemesis-claw",
-      "possessed",
-      "red-corsairs-raiders"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "possessed",
+          "red-corsairs-raiders"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "possessed",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "possessed",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "possessed",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "possessed",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "possessed",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -158,10 +904,67 @@
   },
   {
     "leader_id": "masters-of-the-maelstrom",
-    "eligible_bodyguard_ids": [
-      "chosen",
-      "legionaries",
-      "red-corsairs-raiders"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "support",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -170,11 +973,73 @@
   },
   {
     "leader_id": "red-corsairs-reave-captain",
-    "eligible_bodyguard_ids": [
-      "chosen",
-      "legionaries",
-      "nemesis-claw",
-      "red-corsairs-raiders"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -183,11 +1048,73 @@
   },
   {
     "leader_id": "sorcerer",
-    "eligible_bodyguard_ids": [
-      "chosen",
-      "legionaries",
-      "nemesis-claw",
-      "red-corsairs-raiders"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -196,8 +1123,55 @@
   },
   {
     "leader_id": "sorcerer-in-terminator-armour",
-    "eligible_bodyguard_ids": [
-      "chaos-terminator-squad"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chaos-terminator-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -206,8 +1180,55 @@
   },
   {
     "leader_id": "traitor-enforcer",
-    "eligible_bodyguard_ids": [
-      "traitor-guardsmen-squad"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "traitor-guardsmen-squad"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "traitor-guardsmen-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "traitor-guardsmen-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "traitor-guardsmen-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "traitor-guardsmen-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "traitor-guardsmen-squad"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",
@@ -216,12 +1237,79 @@
   },
   {
     "leader_id": "warpsmith",
-    "eligible_bodyguard_ids": [
-      "chosen",
-      "havocs",
-      "legionaries",
-      "nemesis-claw",
-      "red-corsairs-raiders"
+    "eligible_bodyguard_ids": [],
+    "conditional_groups": [
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "havocs",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "excluded_detachment_id": "pactbound-zealots"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "havocs",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Chaos Undivided"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "havocs",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Nurgle"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "havocs",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Khorne"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "havocs",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Tzeentch"
+      },
+      {
+        "role": "leader",
+        "eligible_bodyguard_ids": [
+          "chosen",
+          "havocs",
+          "legionaries",
+          "nemesis-claw",
+          "red-corsairs-raiders"
+        ],
+        "required_detachment_id": "pactbound-zealots",
+        "required_shared_keyword": "Slaanesh"
+      }
     ],
     "game_version": {
       "edition": "11th",

@@ -68,7 +68,7 @@ describe("Warlord designation registry and refusals (T1, T12)", () => {
   it("refuses warlord as an apply-mark tag, an event tag and an objective tag", () => {
     expect(() => normalizeFingerprintParameters("apply-mark", { subject: "this-unit", tag: "warlord" }, currentFamilyVersion("apply-mark"))).toThrow(/list-building designation/);
     expect(() => normalizeFingerprintParameters("event", { kind: "designation-changed", tag: "warlord" }, currentFamilyVersion("event"))).toThrow(/list-building designation/);
-    expect(() => normalizeFingerprintParameters("unit-position", { kind: "objective-range", objective: "designated", objective_tag: "warlord" }, currentFamilyVersion("unit-position"))).toThrow(/list-building designation/);
+    expect(() => normalizeFingerprintParameters("unit-position", { kind: "objective-range", objective: "designated", objective_tag: "warlord", controlled_by: "any", subject: "this-unit", negated: false }, currentFamilyVersion("unit-position"))).toThrow(/list-building designation/);
   });
 
   it("refuses a count of Warlords and a Warlord test with no subject", () => {
@@ -194,7 +194,7 @@ describe("Bearer condition on the Warlord (S3: 9113 shape and duplicates, T5 and
   it("describes the gate as \"while this model is the Warlord\"", () => {
     const mechanics = compiledEffect(bearerLeaves("1CP"), BEARER_TEXT("1CP"), "da-boss-orks");
     const text = describeAbility({ effect: mechanics.effect as never, scope: { duration: "permanent" } });
-    expect(text).toContain("while this model is the Warlord");
+    expect(text).toContain("and this model is the Warlord");
   });
 });
 

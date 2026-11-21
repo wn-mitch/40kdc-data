@@ -116,6 +116,29 @@ export class CoreExternalRefStore {
     return removed;
   }
 
+  /** Remove the refs of `namespace` that `keep` rejects; the count removed. */
+  removeRefs(
+    namespace: string,
+    keep: (entityType: ExternalRefEntityType, sourceId: string, dir: string, recordId: string) => boolean,
+  ): number {
+    let removed = 0;
+    for (const file of this.files) {
+      for (const record of file.records) {
+        const refs = record.external_refs;
+        if (!refs) continue;
+        const retained = refs.filter(
+          (ref) => ref.namespace !== namespace || keep(file.entityType, ref.id, file.dir, record.id),
+        );
+        if (retained.length === refs.length) continue;
+        removed += refs.length - retained.length;
+        if (retained.length > 0) record.external_refs = retained;
+        else delete record.external_refs;
+        file.dirty = true;
+      }
+    }
+    return removed;
+  }
+
   get(
     entityType: ExternalRefEntityType,
     dir: string,

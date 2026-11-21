@@ -7,6 +7,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { beforeAll, describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
 import { buildExport } from "../src/bsdata-export/export.js";
+import { namedOptions } from "../src/bsdata-export/ability-options.js";
 import { walk, type BsNode } from "../src/bsdata-export/source.js";
 import { DEFAULT_DUMP_PATH } from "../src/mfm/loader.js";
 
@@ -36,6 +37,8 @@ describe("BSData export ability text", () => {
     const rendered = new Set<string>();
     for (const faction of dataset.factions.all) for (const ability of dataset.abilities.byFaction(faction.id)) rendered.add(ability.describe());
     for (const ability of dataset.abilities.all) rendered.add(ability.describe());
+    // A named option's profile renders the ability with that option alone (ability-options.ts).
+    for (const ability of dataset.abilities.all) for (const option of namedOptions(ability.raw as unknown as Record<string, unknown>)) rendered.add(option.description);
     expect(texts.length).toBeGreaterThan(4000);
     expect(texts.filter((t) => !rendered.has(t.text)).slice(0, 5)).toEqual([]);
   });

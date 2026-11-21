@@ -120,11 +120,11 @@ describe("the permission's counts_as_until and then_cannot", () => {
     const render = (modifier: Record<string, unknown>, target: unknown = "this-unit") =>
       describeAbility({ ability_id: "x", name: "x", scope: { duration: "permanent" }, effect: { type: "permission", target, modifier: { activity: "disembark", allow: true, ...modifier } } } as never);
     expect(render({ despite: ["advanced"], counts_as_move: "normal", counts_as_until: "end-of-phase", then_cannot: ["declare-charge"] })).toBe(
-      "The unit is eligible to disembark even if it Advanced this turn; if it does, it counts as having made a Normal move that phase, and cannot declare a charge this turn.",
+      "This unit is eligible to disembark even if it Advanced this turn; if it does, it counts as having made a Normal move that phase, and cannot declare a charge this turn.",
     );
-    expect(render({ counts_as_move: "normal" })).toBe("The unit is eligible to disembark; if it does, it counts as having made a Normal move this turn.");
+    expect(render({ counts_as_move: "normal" })).toBe("This unit is eligible to disembark; if it does, it counts as having made a Normal move this turn.");
     expect(render({ then_cannot: ["declare-charge", "shoot"] }, { owner: "friendly" })).toBe(
-      "All friendly units are eligible to disembark; if they do, they cannot declare a charge or shoot this turn.",
+      "Friendly units are eligible to disembark; if they do, they cannot declare a charge or shoot this turn.",
     );
   });
 });

@@ -5,10 +5,6 @@ import { foldAsIfPhases } from "../src/semantic-authoring/compile-as-if.js";
 import { foldFightNext } from "../src/semantic-authoring/compile-fight-next.js";
 import { sentenceSegments } from "../src/semantic-authoring/compile-segments.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
-
-/** The family versions the extensions under test create. */
-const ELIGIBILITY_PERMISSION_SCOPE_GAPS_VERSIONS: ReadonlySet<string> = new Set(["eligibility-permission@8", "no-advance-roll@4"]);
 
 // Fabricated wording only; no rules text.
 
@@ -52,29 +48,18 @@ function nodes(tree: unknown, test: (node: Record<string, any>) => boolean): Arr
   return found;
 }
 
-const normalize = (family: string, parameters: Record<string, unknown>, version = currentFamilyVersion(family)) => normalizeFingerprintParameters(family, parameters, version);
-
-/** The version just before this bundle's extension of `family`; later extensions may sit above it. */
-const PREVIOUS = (family: string): number => {
-  for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
-    const extension = familyExtension(family, version);
-    if (extension !== undefined && ELIGIBILITY_PERMISSION_SCOPE_GAPS_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
-  }
-  throw new Error(`The bundle does not extend ${family}.`);
-};
+const normalize = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters);
 
 describe("eligibility-permission reach and next (fight only)", () => {
   const base = { subject: "this-unit", activity: "fight", allow: true };
 
-  it("accepts reach and next on a granting fight permission, and not at the version before", () => {
+  it("accepts reach and next on a granting fight permission", () => {
     expect(normalize("eligibility-permission", { ...base, reach: 3 })).toEqual({ ...base, reach: 3 });
     expect(normalize("eligibility-permission", { ...base, next: true, despite: ["fought-this-phase"] })).toEqual({ ...base, next: true, despite: ["fought-this-phase"] });
     expect(normalize("eligibility-permission", { ...base, reach: 12, next: true })).toEqual({ ...base, reach: 12, next: true });
-    expect(() => normalize("eligibility-permission", { ...base, reach: 3 }, PREVIOUS("eligibility-permission"))).toThrow();
-    expect(() => normalize("eligibility-permission", { ...base, next: true }, PREVIOUS("eligibility-permission"))).toThrow();
   });
 
-  it("still accepts every leaf the previous version accepted", () => {
+  it("keeps permissions without reach or next as they are", () => {
     for (const leaf of [
       base,
       { ...base, despite: ["fought-this-phase"] },
@@ -83,7 +68,7 @@ describe("eligibility-permission reach and next (fight only)", () => {
       { subject: "this-unit", activity: "embark", allow: true, into: "this-unit" },
       { subject: "event-subject", activity: "move", allow: true, despite: ["engaged"] },
     ]) {
-      expect(normalize("eligibility-permission", leaf, PREVIOUS("eligibility-permission"))).toEqual(normalize("eligibility-permission", leaf));
+      expect(normalize("eligibility-permission", leaf)).toEqual(leaf);
     }
   });
 
@@ -144,11 +129,10 @@ describe("no-advance-roll names the unit a move-ended event names", () => {
   const event: Item = ["a SQUADRON unit Advances", "event", { kind: "move-ended", owner: "friendly", move_types: ["advance"] }];
   const bonus: Item = ["Add 6 to its Move", "characteristic-modifier", { subject: "antecedent", characteristics: ["M"], operation: "add", value: 6 }];
 
-  it("accepts event-subject at the new version and not before", () => {
+  it("accepts event-subject beside the other subjects", () => {
     expect(normalize("no-advance-roll", { subject: "event-subject" })).toEqual({ subject: "event-subject" });
-    expect(() => normalize("no-advance-roll", { subject: "event-subject" }, PREVIOUS("no-advance-roll"))).toThrow();
     for (const subject of ["this-unit", "this-model", "antecedent"]) {
-      expect(normalize("no-advance-roll", { subject }, PREVIOUS("no-advance-roll"))).toEqual(normalize("no-advance-roll", { subject }));
+      expect(normalize("no-advance-roll", { subject })).toEqual({ subject });
     }
   });
 
@@ -327,23 +311,22 @@ describe("eligibility-permission model_name and weapon_names", () => {
   const base = { subject: "this-unit", activity: "shoot", allow: true };
   const named = { ...base, model_name: "Squad Leader", weapon_names: ["Drone Blaster", "drone net"] };
 
-  it("normalizes names and refuses them at the version before", () => {
-    expect(normalize("eligibility-permission", named, 9)).toEqual({ ...base, model_name: "Squad Leader", weapon_names: ["drone blaster", "drone net"] });
-    expect(() => normalize("eligibility-permission", named, 8)).toThrow();
+  it("normalizes weapon names", () => {
+    expect(normalize("eligibility-permission", named)).toEqual({ ...base, model_name: "Squad Leader", weapon_names: ["drone blaster", "drone net"] });
   });
 
   it("refuses a weapon limit off a shoot permission, a forbidding permission, a model's own models, and a repeated weapon", () => {
-    expect(() => normalize("eligibility-permission", { ...base, activity: "fight", weapon_names: ["drone net"] }, 9)).toThrow(/activity: shoot/);
-    expect(() => normalize("eligibility-permission", { ...base, allow: false, weapon_names: ["drone net"] }, 9)).toThrow(/allow: true/);
-    expect(() => normalize("eligibility-permission", { ...base, subject: "this-model", model_name: "Squad Leader" }, 9)).toThrow(/this-model/);
-    expect(() => normalize("eligibility-permission", { ...base, weapon_names: ["Drone net", "drone net"] }, 9)).toThrow(/twice/);
-    expect(() => normalize("eligibility-permission", { ...base, weapon_names: [] }, 9)).toThrow();
+    expect(() => normalize("eligibility-permission", { ...base, activity: "fight", weapon_names: ["drone net"] })).toThrow(/activity: shoot/);
+    expect(() => normalize("eligibility-permission", { ...base, allow: false, weapon_names: ["drone net"] })).toThrow(/allow: true/);
+    expect(() => normalize("eligibility-permission", { ...base, subject: "this-model", model_name: "Squad Leader" })).toThrow(/this-model/);
+    expect(() => normalize("eligibility-permission", { ...base, weapon_names: ["Drone net", "drone net"] })).toThrow(/twice/);
+    expect(() => normalize("eligibility-permission", { ...base, weapon_names: [] })).toThrow();
   });
 
   it("lowers to a model-level target in the unit and a list of weapon names", () => {
     const text = "Once per battle, the Squad Leader can shoot with its drone blaster or drone net.";
     const tree = compiled(text,
-      ["the Squad Leader can shoot with its drone blaster or drone net", "eligibility-permission", normalize("eligibility-permission", named, 9)]);
+      ["the Squad Leader can shoot with its drone blaster or drone net", "eligibility-permission", normalize("eligibility-permission", named)]);
     expect(nodes(tree, (node) => node.type === "permission")).toEqual([{
       type: "permission",
       target: { level: "model", member_of: "this-unit", model_names: ["Squad Leader"] },

@@ -53,33 +53,85 @@ def describe_selection_eligibility(c: Condition) -> str:
                 return [x for o in n["operands"] for x in flat(o)]
             return [n]
 
-        parts = [_candidate_clause(o) for o in flat(c)]
-        if all(part is not None for part in parts):
-            return " and ".join(part for part in parts if part is not None)
+        leaves = flat(c)
+        parts: list[str] = []
+        for op in leaves:
+            if op.get("operator") == "or" and op.get("operands") is not None:
+                or_parts = [_candidate_clause(o) for o in op["operands"]]
+                if all(part is not None for part in or_parts):
+                    parts.append(
+                        f"that ({_join_relative([p for p in or_parts if p is not None], 'or')})"
+                    )
+                    continue
+                return f"if {describe_condition(c)}"
+            clause = _candidate_clause(op)
+            if clause is None:
+                return f"if {describe_condition(c)}"
+            parts.append(clause)
+        return _join_relative(parts, "and")
     if c.get("operator") == "or" and operands is not None:
         alts = [_candidate_clause(o) for o in operands]
         if all(part is not None for part in alts):
-            return " or ".join(part for part in alts if part is not None)
+            return _join_relative([part for part in alts if part is not None], "or")
     clause = _candidate_clause(c)
     return clause if clause is not None else f"if {describe_condition(c)}"
 
 
-_CANDIDATE_PREFIXES = (
-    ("the unit is not the same unit as ", "other than "),
-    ("the unit does not have ", "without "),
-    ("the unit has not ", "that has not "),
-    ("the unit has ", "with "),
-    ("not the unit is ", "that is not "),
-    ("the unit ", "that "),
-)
+def _join_relative(parts: list[str], conj: str) -> str:
+    """Join relative clauses cleanly, collapsing repeated 'that is' / 'without ...' runs."""
+    if len(parts) <= 1:
+        return parts[0] if parts else ""
+    merged: list[str] = []
+    if conj == "and":
+        i = 0
+        while i < len(parts):
+            kw = re.match(r"^without the ([A-Z0-9 -]+) keyword$", parts[i])
+            if kw:
+                kws = [kw.group(1)]
+                j = i + 1
+                while j < len(parts):
+                    nxt = re.match(r"^without the ([A-Z0-9 -]+) keyword$", parts[j])
+                    if not nxt:
+                        break
+                    kws.append(nxt.group(1))
+                    j += 1
+                merged.append(f"without the {_or_list(kws)} keyword" if len(kws) > 1 else parts[i])
+                i = j
+                continue
+            merged.append(parts[i])
+            i += 1
+    else:
+        merged.extend(parts)
+    if all(p.startswith("that is ") for p in merged):
+        rest = [p[len("that is ") :] for p in merged]
+        return f"that is {_and_list(rest) if conj == 'and' else _or_list(rest)}"
+    deduped: list[str] = []
+    for idx, p in enumerate(merged):
+        if idx > 0 and p.startswith("that is ") and merged[idx - 1].startswith("that is "):
+            deduped.append(p[len("that is ") :])
+        elif idx > 0 and p.startswith("that ") and merged[idx - 1].startswith("that "):
+            deduped.append(p[len("that ") :])
+        else:
+            deduped.append(p)
+    return f" {conj} ".join(deduped)
 
 
 def _candidate_clause(c: Condition) -> str | None:
-    """A condition on the candidate as a relative clause ("that was hit...", "without ..")."""
+    """A condition on the candidate as a relative clause ('that was hit...', 'without ...')."""
+    if c.get("operator") in ("and", "or"):
+        return None
     phrase = describe_condition(c)
-    for frm, to in _CANDIDATE_PREFIXES:
-        if phrase.startswith(frm):
-            return f"{to}{phrase[len(frm) :]}"
+    for subj in ("this unit", "the unit", "the selected unit", "the selected model"):
+        for frm, to in (
+            (f"{subj} is not the same unit as ", "other than "),
+            (f"{subj} does not have ", "without "),
+            (f"{subj} has not ", "that has not "),
+            (f"{subj} has ", "with "),
+            (f"not {subj} is ", "that is not "),
+            (f"{subj} ", "that "),
+        ):
+            if phrase.startswith(frm):
+                return f"{to}{phrase[len(frm) :]}"
     return None
 
 
@@ -116,7 +168,7 @@ def _matches_lead_in(c: Condition, negated: bool) -> str:
             plural = isinstance(f.get("any_of"), list) or len(_list(f.get("all_of"))) > 1
             lead = "unless" if negated else "if"
             suffix = "s" if plural and not negated else ""
-            return f"{lead} the unit has the {words} keyword{suffix}"
+            return f"{lead} this unit has the {words} keyword{suffix}"
         return f"{'unless' if negated else 'if'} {_describe_predicate(c, False)}"
     if (
         len(keys) == 1
@@ -273,11 +325,11 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
             and f.get("phase") is None
         ):
             if types[0] == "charge":
-                return "if the unit charged this turn"
+                return "if this unit charged this turn"
             if types[0] == "advance":
-                return "if the unit Advanced this turn"
+                return "if this unit Advanced this turn"
             if types[0] == "remain-stationary":
-                return "if the unit Remained Stationary this turn"
+                return "if this unit Remained Stationary this turn"
         if (
             p.get("event") == "disembarked"
             and p.get("subject") is None
@@ -285,8 +337,8 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
             and f.get("phase") is None
         ):
             window = _window_phrase(p.get("window"))
-            return f"if the unit disembarked from a Transport {window}".rstrip()
-        # "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
+            return f"if this unit disembarked from a Transport {window}".rstrip()
+        # "while this unit is performing an Agile Manoeuvre": the use is being resolved now.
         if (
             p.get("event") == "used"
             and p.get("window") == "event"
@@ -306,11 +358,12 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
         return f"{word} {_describe_predicate(c, False)}"
     if ctype == "strength":
         phrase = re.sub(
-            r" is below starting strength$",
-            " is below its starting strength",
+            r" is below Starting Strength$",
+            " is below its Starting Strength",
             _describe_predicate(c, False),
             count=1,
         )
+        phrase = re.sub(r" is below Half-strength$", " is Below Half-strength", phrase, count=1)
         return f"while {phrase}"
     if ctype == "designated":
         tag = _str(p.get("tag"))
@@ -383,18 +436,63 @@ def _own_keyword(op: Condition) -> str | None:
     return _str(all_of[0])
 
 
+_TURN_OWNERS: dict[str, str] = {
+    "your-turn": "your",
+    "opponent-turn": "your opponent's",
+    "either": "either player's",
+}
+
+
 def _join_lead_ins(operands: list[Condition], defending: bool) -> str:
-    """Join the operands of an ``and`` lead-in. Runs of keyword exclusions collapse into one
-    clause: on the attack's target, "against a unit that is not a X or Y"; on the unit an aura
-    or effect is applied to, "(excluding X or Y units)". Either attaches to the preceding
-    clause with a space; a run of the unit's own keywords reads "if the unit is a X Y unit";
-    all other operands join with ", "."""
+    """Join the operands of an ``and`` lead-in. Merges ``phase-is`` + ``player-turn-is`` into
+    one timing window, collapses runs of keyword exclusions, and avoids doubled openers."""
+    flat: list[Condition] = []
+
+    def flatten(items: list[Condition]) -> None:
+        for op in items:
+            if op.get("operator") == "and" and op.get("operands") is not None:
+                flatten(op["operands"])
+            else:
+                flat.append(op)
+
+    flatten(operands)
+
+    phase_idx = next(
+        (
+            idx
+            for idx, o in enumerate(flat)
+            if not _truthy(o.get("operator"))
+            and o.get("type") == "phase-is"
+            and isinstance(_obj(o.get("parameters")).get("phase"), str)
+        ),
+        -1,
+    )
+    turn_idx = next(
+        (
+            idx
+            for idx, o in enumerate(flat)
+            if not _truthy(o.get("operator"))
+            and o.get("type") == "player-turn-is"
+            and str(_obj(o.get("parameters")).get("turn")) in _TURN_OWNERS
+        ),
+        -1,
+    )
+    fused_window: str | None = None
+    if phase_idx >= 0 and turn_idx >= 0:
+        pp = _obj(flat[phase_idx].get("parameters"))
+        owner = _TURN_OWNERS[str(_obj(flat[turn_idx].get("parameters")).get("turn"))]
+        fused_window = (
+            step_window(pp, owner)
+            if pp.get("step") is not None
+            else f"during {owner} {title_case(_str(pp.get('phase')))} phase"
+        )
+
     parts: list[str] = []
 
     def run(i: int, pick: Callable[[Condition], str | None]) -> tuple[list[str], int]:
         kws: list[str] = []
-        while i < len(operands):
-            kw = pick(operands[i])
+        while i < len(flat):
+            kw = pick(flat[i])
             if kw is None:
                 break
             kws.append(kw)
@@ -402,8 +500,13 @@ def _join_lead_ins(operands: list[Condition], defending: bool) -> str:
         return kws, i
 
     i = 0
-    while i < len(operands):
-        op = operands[i]
+    while i < len(flat):
+        if fused_window is not None and i in (phase_idx, turn_idx):
+            if i == min(phase_idx, turn_idx):
+                parts.append(fused_window)
+            i += 1
+            continue
+        op = flat[i]
         if _not_keyword(op, "defender") is not None:
             kws, i = run(i, lambda o: _not_keyword(o, "defender"))
             parts.append(_negated_target_keywords(kws))
@@ -415,9 +518,9 @@ def _join_lead_ins(operands: list[Condition], defending: bool) -> str:
         if _own_keyword(op) is not None:
             kws, i = run(i, _own_keyword)
             parts.append(
-                f"if the unit is {_article(kws[0])} {' '.join(kws)} unit"
+                f"if this unit is {_article(kws[0])} {' '.join(kws)} unit"
                 if len(kws) >= 2
-                else f"if the unit has the {kws[0]} keyword"
+                else f"if this unit has the {kws[0]} keyword"
             )
             continue
         parts.append(condition_lead_in(op, defending))
@@ -427,11 +530,31 @@ def _join_lead_ins(operands: list[Condition], defending: bool) -> str:
         # A second keyword gate on the same target narrows it:
         # "against ORKS targets that are also VEHICLE".
         target = re.match(r"^against (.+) targets$", part)
+        target_is = re.match(r"^while the target is (an? .+)$", part)
         if acc == "":
             acc = part
-        elif target and acc.endswith(" targets") and re.search(r"(^|, )against ", acc):
+            continue
+        if target and acc.endswith(" targets") and re.search(r"(^|, )against ", acc):
             acc = f"{acc} that are also {target.group(1)}"
-        elif (
+            continue
+        if target_is and re.search(r"while making [a-z -]*attacks$", acc):
+            acc = f"{acc} against {target_is.group(1)}"
+            continue
+        merged_opener = False
+        last_clause = acc.split(", ")[-1]
+        for opener in ("while ", "if ", "when "):
+            if (
+                last_clause.startswith(opener)
+                and part.startswith(opener)
+                and not part.startswith("while making ")
+                and not last_clause.startswith("while making ")
+            ):
+                acc = f"{acc} and {part[len(opener) :]}"
+                merged_opener = True
+                break
+        if merged_opener:
+            continue
+        if (
             part.startswith("against ") and not re.match(r"^against [a-z -]*attacks( |$)", part)
         ) or part.startswith("(excluding "):
             # A target narrowing attaches to the clause before it;

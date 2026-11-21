@@ -12,25 +12,25 @@ import { describeAbility } from "../src/translate/index.js";
  * Every text here is fabricated wording, not rules text.
  */
 
-function placed(text: string, ...items: Array<[string, string, Record<string, unknown>, number?]>): CompileLeaf[] {
+function placed(text: string, ...items: Array<[string, string, Record<string, unknown>]>): CompileLeaf[] {
   const bytes = Buffer.from(text, "utf8");
   let from = 0;
-  return items.map(([wording, family, parameters, pinned]) => {
+  return items.map(([wording, family, parameters]) => {
     const start = bytes.indexOf(Buffer.from(wording, "utf8"), from);
     if (start < 0) throw new Error(`"${wording}" is not in the text`);
     from = start + Buffer.byteLength(wording, "utf8");
-    const version = pinned ?? currentFamilyVersion(family);
+    const version = currentFamilyVersion(family);
     return { role: familyRole(family, version), family_id: family, family_version: version, parameters, start_byte: start, end_byte: from, fragment: "RAW_TEXT" };
   });
 }
 
-function effectOf(text: string, ...items: Array<[string, string, Record<string, unknown>, number?]>): Record<string, any> {
+function effectOf(text: string, ...items: Array<[string, string, Record<string, unknown>]>): Record<string, any> {
   const result = compileLeaves(placed(text, ...items), text);
   if (!result.ok) throw new Error(result.errors.join("; "));
   return result.mechanics.effect as Record<string, any>;
 }
 
-function errorsOf(text: string, ...items: Array<[string, string, Record<string, unknown>, number?]>): string[] {
+function errorsOf(text: string, ...items: Array<[string, string, Record<string, unknown>]>): string[] {
   const result = compileLeaves(placed(text, ...items), text);
   return result.ok ? [] : result.errors;
 }
@@ -53,7 +53,7 @@ describe("ability-activate option forms", () => {
   });
 
   it("drops exclusive, and lets additive qualify only an activation that could leave options out", () => {
-    // Replacing is this version's default, so a leaf still saying exclusive is on the wrong version.
+    // Replacing is the default, so the family refuses an exclusive key.
     expect(() => normalize({ subject: "this-unit", ability: "rite-x", option: "zeal", exclusive: true })).toThrow(/exclusive/u);
     expect(normalize({ subject: "this-unit", ability: "rite-x", option: "zeal", additive: true }).additive).toBe(true);
     expect(() => normalize({ subject: "this-unit", ability: "rite-x", additive: true })).toThrow(/additive/u);
@@ -80,10 +80,6 @@ describe("ability-activate lowering", () => {
     expect(effectOf(text, [wording, AA, { subject: "this-unit", ability: "rite-x", all_options: true }]).modifier).toEqual({ ability: "rite-x", all_options: true });
     // With no option form the ability resolves now: nothing to replace.
     expect(effectOf(text, [wording, AA, { subject: "this-unit", ability: "rite-x" }]).modifier).toEqual({ ability: "rite-x" });
-  });
-
-  it("keeps version 1's additive default", () => {
-    expect(effectOf(text, [wording, AA, { subject: "this-unit", ability: "rite-x", option: "zeal" }, 1]).modifier).toEqual({ ability: "rite-x", option: "zeal" });
   });
 
   it("lowers choose to the player's pick, narrowed and counted", () => {
@@ -219,12 +215,12 @@ describe("DSL schema and describer for activations", () => {
   });
 
   it("says which options are active and whether they replace or join the others", () => {
-    expect(render(activate({ options: ["aegis", "zeal"], exclusive: true }))).toBe("The Aegis and Zeal options of Rite X are active for the unit (and no other option is).");
-    expect(render(activate({ options: ["aegis", "zeal"] }))).toBe("The Aegis and Zeal options of Rite X are active for the unit.");
-    expect(render(activate({ all_options: true }))).toBe("Every option of Rite X is active for the unit.");
-    expect(render(activate({ select: { by: "player", from: ["aegis", "zeal"] }, exclusive: true }))).toBe("Select one of the Aegis or Zeal options of Rite X for the unit, in place of any already active.");
-    expect(render(activate({ select: { by: "player", count: 2 } }))).toBe("Select 2 options of Rite X for the unit, in addition to any already active.");
-    expect(render(activate({ select: { by: "roll" }, exclusive: true }))).toBe("Make a new Rite X roll and activate one result it allows for the unit, in place of any already active.");
+    expect(render(activate({ options: ["aegis", "zeal"], exclusive: true }))).toBe("The Aegis and Zeal options of Rite X are active for this unit (and no other option is).");
+    expect(render(activate({ options: ["aegis", "zeal"] }))).toBe("The Aegis and Zeal options of Rite X are active for this unit.");
+    expect(render(activate({ all_options: true }))).toBe("Every option of Rite X is active for this unit.");
+    expect(render(activate({ select: { by: "player", from: ["aegis", "zeal"] }, exclusive: true }))).toBe("Select one of the Aegis or Zeal options of Rite X for this unit, in place of any already active.");
+    expect(render(activate({ select: { by: "player", count: 2 } }))).toBe("Select 2 options of Rite X for this unit, in addition to any already active.");
+    expect(render(activate({ select: { by: "roll" }, exclusive: true }))).toBe("Make a new Rite X roll and activate one result it allows for this unit, in place of any already active.");
     expect(render({ type: "stance-selection-capacity", modifier: { ability_id: "rite-x", additional_selections: 1, allocation: "choose-one-option", options: [{ ability_id: "rite-x", option_id: "aegis" }, { ability_id: "rite-x", option_id: "zeal" }] } }))
       .toBe("You can select Aegis or Zeal one additional time per battle, shared between them.");
     const stance = { type: "stance-select", mode: "re-selectable", options: [{ name: "Aegis", effect: activate({}) }, { name: "Zeal", effect: activate({}) }] };

@@ -43,17 +43,43 @@ def selection_ref_name(ref: Any, fallback: str) -> str:
     if identifier is None:
         identifier = value.get("event_var")
     if isinstance(identifier, str) and identifier:
-        return f"the bound {dekebab(identifier.replace('_', '-'))}"
+        return f"the chosen {dekebab(identifier.replace('_', '-'))}"
     return fallback
+
+
+_GENERIC_BINDINGS = frozenset(
+    {
+        "objective",
+        "selected_objective",
+        "selected-objective",
+        "quarry_selection",
+        "mark_selection",
+        "selected_unit",
+        "selected-unit",
+        "enemy_unit",
+        "enemy-unit",
+        "target_unit",
+        "target-unit",
+        "friendly_unit",
+        "friendly-unit",
+        "unit",
+        "target",
+        "model",
+        "trap_objective",
+        "trap-objective",
+    }
+)
 
 
 def selection_binding(sel: dict[str, Any]) -> str:
     binding = sel.get("bind_as")
     if not isinstance(binding, str) or not binding:
         return ""
-    plural = selector_count(sel)[1]
+    norm = re.sub(r"[-_\s]+", "_", binding.lower())
+    if norm in _GENERIC_BINDINGS:
+        return ""
     name = binding.replace("-", " ").replace("_", " ")
-    return f", binding {'them' if plural else 'it'} as {name}"
+    return f" (referred to below as the {name})"
 
 
 def reference_origin(reference: Any) -> str:
@@ -140,7 +166,7 @@ def selector_count(sel: dict[str, Any]) -> tuple[str, bool]:
     if minimum is not None and minimum == maximum:
         return quantity(minimum), maximum != 1
     if minimum is not None and maximum is not None and minimum != 0:
-        return f"from {quantity(minimum)} through {quantity(maximum)}", maximum != 1
+        return f"{quantity(minimum)} to {quantity(maximum)}", maximum != 1
     if maximum is not None:
         return f"up to {quantity(maximum)}", maximum != 1
     if minimum is not None:
@@ -167,8 +193,19 @@ def select_units_subject(sel: Any, each_model: bool = False) -> str:
             tail = f" ({after.removesuffix(')')})"
     else:
         tail = ""
+    base = selector_subject(sel, plural, each_model)
+    elig_raw = sel.get("eligibility")
+    eligibility = ""
+    if isinstance(elig_raw, dict):
+        elig = describe_selection_eligibility(elig_raw)
+        if re.search(r"\bthat is [^\n]+$", base) and elig.startswith("that is "):
+            eligibility = f" and {elig[len('that is ') :]}"
+        elif re.search(r"\bthat is [^\n]+$", base) and elig.startswith("that "):
+            eligibility = f" and {elig[len('that ') :]}"
+        else:
+            eligibility = f" {elig}"
     return (
-        f"{phrase} {selector_subject(sel, plural, each_model)}{tail}{_eligibility(sel)}"
+        f"{phrase} {base}{tail}{eligibility}"
         f"{selection_limit(sel.get('limit'), selector_noun(sel))}"
     )
 
@@ -199,15 +236,20 @@ def select_units_plural(sel: Any) -> bool:
 
 def each_context(ctx: Ctx, sel: Any) -> Ctx:
     """A ``for-each-unit`` body: a loop over models names each pass's model "that model"."""
-    return {**selected_context(ctx, sel), "each_model": _selector_level(_obj(sel)) == "model"}
+    return {
+        **selected_context(ctx, sel, False),
+        "each_model": _selector_level(_obj(sel)) == "model",
+    }
 
 
-def selected_context(ctx: Ctx, sel: Any) -> Ctx:
+def selected_context(ctx: Ctx, sel: Any, plural: bool | None = None) -> Ctx:
     selected_model = _selector_level(_obj(sel)) == "model"
+    is_plural_sel = select_units_plural(sel) if plural is None else plural
     return {
         **ctx,
         "selected_unit": not selected_model,
         "selected_model": selected_model,
+        "selected_plural": is_plural_sel,
         "unit_subject": None,
     }
 
@@ -287,6 +329,8 @@ def designated_attack_when(applies: dict[str, Any]) -> str:
 
 def designated_recipient_context(applies: Any, ctx: Ctx) -> Ctx:
     applies = _obj(applies)
+    if applies.get("to") == "attackers-of-target":
+        return {**ctx, "attack_on_target": True}
     if applies.get("to") != "bound-unit-attacks-reference":
         return ctx
     return {
@@ -355,7 +399,7 @@ def persistent_designation_lead(e: Effect) -> str:
             f"When {name} is destroyed, {modal} select {replacement_selection} to replace it."
         )
     if lifecycle.get("exclusivity") == "one-active-per-bearer-unit":
-        clauses.append("Only one such designation can be active for this bearer unit.")
+        clauses.append("Only one such designation can be active for this unit.")
     return " ".join(clauses)
 
 
@@ -393,6 +437,6 @@ def persistent_designation_replacement(e: Effect) -> str:
     noun = "objective marker" if kind == "objective" else "enemy unit"
     return (
         f"when {previous} is destroyed, {modal} select one new {noun}{label} to replace "
-        "this bearer unit's existing designation. Its existing effects apply to the new "
+        "this unit's existing designation. Its existing effects apply to the new "
         f"target without changing the designation's expiry{embarked}"
     )

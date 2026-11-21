@@ -312,14 +312,6 @@
       {
         "namespace": "mfm",
         "id": "17a2a6af-1b11-486c-8a2c-7f3169f14d07"
-      },
-      {
-        "namespace": "mfm",
-        "id": "83af7d43-ef3c-48b4-891a-0c44bb38bd35"
-      },
-      {
-        "namespace": "mfm",
-        "id": "ebf35dd5-16cf-4c68-9370-8b622f38cc1d"
       }
     ]
   },
@@ -503,11 +495,11 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Big choppa",
+        "name": "Big Choppa",
         "range": "Melee",
         "stats": {
           "A": 3,
-          "S": 7,
+          "S": 5,
           "AP": -1,
           "D": 2,
           "WS": 3
@@ -517,10 +509,20 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "65a34ea0-9de2-4aee-ba0b-e000ec821038"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9182041a-6322-4530-92b3-aa95c6c5829e"
+      }
     ]
   },
   {
@@ -780,14 +782,6 @@
       {
         "namespace": "mfm",
         "id": "40e69e46-ce1d-4329-a091-fccd8ccf0f42"
-      },
-      {
-        "namespace": "mfm",
-        "id": "5bf19019-4b39-4172-bfc3-0a777d232878"
-      },
-      {
-        "namespace": "mfm",
-        "id": "6d2798b0-e751-4515-ae4e-81ea6e173d67"
       },
       {
         "namespace": "mfm",
@@ -1177,10 +1171,10 @@
     "type": "melee",
     "profiles": [
       {
-        "name": "Choppas",
+        "name": "Choppa",
         "range": "Melee",
         "stats": {
-          "A": 3,
+          "A": 1,
           "S": 4,
           "AP": -1,
           "D": 1,
@@ -1191,10 +1185,20 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "game_modes": [
       "combat-patrol"
+    ],
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "657458ab-fd4b-4bc2-ada6-f059387fb3b7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "703ec7fa-4349-4bd9-ba66-5972c48a4217"
+      }
     ]
   },
   {
@@ -2510,10 +2514,6 @@
       },
       {
         "namespace": "mfm",
-        "id": "1b155627-7228-4d76-a201-0caa55ef2c2a"
-      },
-      {
-        "namespace": "mfm",
         "id": "fb605037-0fac-42a3-b058-92ac34fb6399"
       }
     ]
@@ -2560,18 +2560,6 @@
       {
         "namespace": "bsdata",
         "id": "f2b6-081e-9852-f9b9"
-      },
-      {
-        "namespace": "mfm",
-        "id": "13d7261e-83df-43b4-8975-64a26420eb75"
-      },
-      {
-        "namespace": "mfm",
-        "id": "3e22a30e-65ca-4fd7-b14a-fcdd4ee5a0ae"
-      },
-      {
-        "namespace": "mfm",
-        "id": "a6d77d0b-4f37-4710-86e8-072c1f64ef5b"
       },
       {
         "namespace": "mfm",
@@ -3061,10 +3049,6 @@
       },
       {
         "namespace": "mfm",
-        "id": "d25e0ee6-7b2b-48dd-8dfb-d6ade7f8b74c"
-      },
-      {
-        "namespace": "mfm",
         "id": "f874696a-31d3-4c06-97b7-354ce44a82de"
       }
     ]
@@ -3255,15 +3239,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "526274e1-0f57-4659-b0ca-6a6dbd1f604c"
-      },
-      {
-        "namespace": "mfm",
         "id": "65a6939d-0f33-4dd4-a599-1ee0f0bbecec"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8d678f43-de93-42bf-9b61-634813e0695a"
       },
       {
         "namespace": "mfm",
@@ -4602,15 +4578,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "211fe272-623a-441d-ae25-83f37e738d96"
-      },
-      {
-        "namespace": "mfm",
         "id": "3fab525d-dc62-438f-9553-5d60b9723716"
-      },
-      {
-        "namespace": "mfm",
-        "id": "63fb9967-e186-4d03-966b-29cd86cc1a27"
       },
       {
         "namespace": "mfm",
@@ -4844,10 +4812,6 @@
         "namespace": "mfm",
         "id": "ed45541e-3d67-4614-8dee-9ef591caef78"
       }
-    ],
-    "game_modes": [
-      "matched-play",
-      "combat-patrol"
     ]
   },
   {
@@ -5043,10 +5007,6 @@
       {
         "namespace": "bsdata",
         "id": "c12-1527-2508-aa3f"
-      },
-      {
-        "namespace": "mfm",
-        "id": "32df6f1c-7452-412f-9aa9-684c97917d1c"
       },
       {
         "namespace": "mfm",
@@ -5325,14 +5285,6 @@
       {
         "namespace": "bsdata",
         "id": "e17f-30cb-5a48-0ac3"
-      },
-      {
-        "namespace": "mfm",
-        "id": "21218144-a4d6-49ef-bfeb-05471e578e00"
-      },
-      {
-        "namespace": "mfm",
-        "id": "6ee21b2d-6362-4f57-a8fd-f3ac3979131c"
       }
     ]
   },
@@ -5711,14 +5663,6 @@
       {
         "namespace": "bsdata",
         "id": "cce1-1241-fcb5-5997"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d79dee17-cc15-481c-a11a-0ea220a07c0f"
-      },
-      {
-        "namespace": "mfm",
-        "id": "f63aa747-4a62-4aae-b5b8-adfc2be821aa"
       }
     ]
   },
@@ -6301,14 +6245,6 @@
       {
         "namespace": "bsdata",
         "id": "7c7-2cc-12e-c710"
-      },
-      {
-        "namespace": "mfm",
-        "id": "4f74df14-976d-49d5-a160-d5d9a9eb401d"
-      },
-      {
-        "namespace": "mfm",
-        "id": "c6e18202-3495-440b-b223-deb784d3f5ba"
       }
     ]
   },
@@ -6563,10 +6499,6 @@
       {
         "namespace": "bsdata",
         "id": "1516-7505-3409-aeee"
-      },
-      {
-        "namespace": "mfm",
-        "id": "882592cb-43ce-4fe8-9fcf-817ba1b9cf69"
       }
     ]
   },
@@ -6926,23 +6858,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "3e0ae478-61a6-4da9-9897-aaf1454451c0"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b31470fb-40d7-486a-8423-e4a3c4cdd36e"
-      },
-      {
-        "namespace": "mfm",
         "id": "de678847-f48b-4d84-b06b-5ec45c119489"
-      },
-      {
-        "namespace": "mfm",
-        "id": "f70fbe4c-a031-4eb4-ac52-4d96bee64d20"
-      },
-      {
-        "namespace": "mfm",
-        "id": "fcbda1b6-22f4-4466-a97c-e8cff322bb30"
       }
     ],
     "game_modes": [
@@ -6983,6 +6899,9 @@
         "namespace": "mfm",
         "id": "e1f9f84c-0d33-4aec-8d57-6722a4fa115a"
       }
+    ],
+    "game_modes": [
+      "combat-patrol"
     ]
   },
   {
@@ -10372,10 +10291,6 @@
       },
       {
         "namespace": "mfm",
-        "id": "d25e0ee6-7b2b-48dd-8dfb-d6ade7f8b74c"
-      },
-      {
-        "namespace": "mfm",
         "id": "f874696a-31d3-4c06-97b7-354ce44a82de"
       }
     ]
@@ -10421,10 +10336,6 @@
       {
         "namespace": "mfm",
         "id": "29d076ad-3e44-472c-af64-d43f92dfbf53"
-      },
-      {
-        "namespace": "mfm",
-        "id": "d25e0ee6-7b2b-48dd-8dfb-d6ade7f8b74c"
       },
       {
         "namespace": "mfm",
@@ -10489,15 +10400,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "526274e1-0f57-4659-b0ca-6a6dbd1f604c"
-      },
-      {
-        "namespace": "mfm",
         "id": "65a6939d-0f33-4dd4-a599-1ee0f0bbecec"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8d678f43-de93-42bf-9b61-634813e0695a"
       },
       {
         "namespace": "mfm",
@@ -10570,15 +10473,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "526274e1-0f57-4659-b0ca-6a6dbd1f604c"
-      },
-      {
-        "namespace": "mfm",
         "id": "65a6939d-0f33-4dd4-a599-1ee0f0bbecec"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8d678f43-de93-42bf-9b61-634813e0695a"
       },
       {
         "namespace": "mfm",
@@ -10670,19 +10565,11 @@
       },
       {
         "namespace": "mfm",
-        "id": "526274e1-0f57-4659-b0ca-6a6dbd1f604c"
-      },
-      {
-        "namespace": "mfm",
         "id": "583d2809-8ec0-4ec8-a91f-6d26975834ed"
       },
       {
         "namespace": "mfm",
         "id": "65a6939d-0f33-4dd4-a599-1ee0f0bbecec"
-      },
-      {
-        "namespace": "mfm",
-        "id": "8d678f43-de93-42bf-9b61-634813e0695a"
       },
       {
         "namespace": "mfm",
@@ -10795,27 +10682,11 @@
       },
       {
         "namespace": "mfm",
-        "id": "3e0ae478-61a6-4da9-9897-aaf1454451c0"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b31470fb-40d7-486a-8423-e4a3c4cdd36e"
-      },
-      {
-        "namespace": "mfm",
         "id": "d92d83bc-00bf-438b-b105-3e9270f365ec"
       },
       {
         "namespace": "mfm",
         "id": "de678847-f48b-4d84-b06b-5ec45c119489"
-      },
-      {
-        "namespace": "mfm",
-        "id": "f70fbe4c-a031-4eb4-ac52-4d96bee64d20"
-      },
-      {
-        "namespace": "mfm",
-        "id": "fcbda1b6-22f4-4466-a97c-e8cff322bb30"
       }
     ]
   },
@@ -10883,23 +10754,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "3e0ae478-61a6-4da9-9897-aaf1454451c0"
-      },
-      {
-        "namespace": "mfm",
-        "id": "b31470fb-40d7-486a-8423-e4a3c4cdd36e"
-      },
-      {
-        "namespace": "mfm",
         "id": "de678847-f48b-4d84-b06b-5ec45c119489"
-      },
-      {
-        "namespace": "mfm",
-        "id": "f70fbe4c-a031-4eb4-ac52-4d96bee64d20"
-      },
-      {
-        "namespace": "mfm",
-        "id": "fcbda1b6-22f4-4466-a97c-e8cff322bb30"
       }
     ]
   },
@@ -11026,15 +10881,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "211fe272-623a-441d-ae25-83f37e738d96"
-      },
-      {
-        "namespace": "mfm",
         "id": "3fab525d-dc62-438f-9553-5d60b9723716"
-      },
-      {
-        "namespace": "mfm",
-        "id": "63fb9967-e186-4d03-966b-29cd86cc1a27"
       },
       {
         "namespace": "mfm",
@@ -11099,15 +10946,7 @@
       },
       {
         "namespace": "mfm",
-        "id": "211fe272-623a-441d-ae25-83f37e738d96"
-      },
-      {
-        "namespace": "mfm",
         "id": "3fab525d-dc62-438f-9553-5d60b9723716"
-      },
-      {
-        "namespace": "mfm",
-        "id": "63fb9967-e186-4d03-966b-29cd86cc1a27"
       },
       {
         "namespace": "mfm",
@@ -11343,5 +11182,233 @@
       "edition": "11th",
       "dataslate": "2026-10-14"
     }
+  },
+  {
+    "id": "kombi-rokkit-ardmob-boyz-2",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "282062d5-74c6-4391-b23e-aff3d785f9f9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ff95beae-4009-41c3-b81b-f3ced1146961"
+      }
+    ],
+    "name": "Kombi-rokkit",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Kombi-rokkit",
+        "range": 24,
+        "stats": {
+          "A": 1,
+          "S": 10,
+          "AP": -2,
+          "D": 3,
+          "BS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "shoota-ardmob-boyz",
+    "name": "Shoota",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Shoota",
+        "range": 18,
+        "stats": {
+          "A": 2,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": []
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "bsdata",
+        "id": "64da-fae7-507d-8b18"
+      },
+      {
+        "namespace": "bsdata",
+        "id": "b2ed-fcb0-cba1-63c4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "3fab525d-dc62-438f-9553-5d60b9723716"
+      },
+      {
+        "namespace": "mfm",
+        "id": "a1571847-dd0a-43f7-b913-2499da8b5c7a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bafc16ed-c4c0-4c90-aad3-551429e2e2a9"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bec3f5b4-f46a-4a1e-a60c-c91d3f3fa25c"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "slugga-ardmob-boyz",
+    "name": "Slugga",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Slugga",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "446c40e0-97d1-4e9f-8cb4-4053d4be8a87"
+      },
+      {
+        "namespace": "mfm",
+        "id": "46abf173-c1ce-4b29-a657-0ef30df3458a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5f71ec56-5cea-40c4-8bd5-00098e0f115e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "66020b4b-5ca7-45e5-828e-52c62d9502be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6671a1f8-50ef-41fa-9022-b83bb8e3eed4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9278c5b2-c0c8-4d9d-afca-cc7ebbe46ce8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b31f3b9d-ec5f-4f8a-b14e-3bfdc64a9069"
+      },
+      {
+        "namespace": "mfm",
+        "id": "da5f3910-5452-40b2-86c4-2ad3827196bc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ed45541e-3d67-4614-8dee-9ef591caef78"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
+  },
+  {
+    "id": "slugga-ardmob-boyz-2",
+    "name": "Slugga",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Slugga",
+        "range": 12,
+        "stats": {
+          "A": 1,
+          "S": 4,
+          "AP": 0,
+          "D": 1,
+          "BS": 5
+        },
+        "keywords": [
+          {
+            "keyword_id": "close-quarters"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "446c40e0-97d1-4e9f-8cb4-4053d4be8a87"
+      },
+      {
+        "namespace": "mfm",
+        "id": "46abf173-c1ce-4b29-a657-0ef30df3458a"
+      },
+      {
+        "namespace": "mfm",
+        "id": "5f71ec56-5cea-40c4-8bd5-00098e0f115e"
+      },
+      {
+        "namespace": "mfm",
+        "id": "66020b4b-5ca7-45e5-828e-52c62d9502be"
+      },
+      {
+        "namespace": "mfm",
+        "id": "6671a1f8-50ef-41fa-9022-b83bb8e3eed4"
+      },
+      {
+        "namespace": "mfm",
+        "id": "9278c5b2-c0c8-4d9d-afca-cc7ebbe46ce8"
+      },
+      {
+        "namespace": "mfm",
+        "id": "b31f3b9d-ec5f-4f8a-b14e-3bfdc64a9069"
+      },
+      {
+        "namespace": "mfm",
+        "id": "d1e09cd1-8d0b-4135-985a-1be08e6555f7"
+      },
+      {
+        "namespace": "mfm",
+        "id": "da5f3910-5452-40b2-86c4-2ad3827196bc"
+      },
+      {
+        "namespace": "mfm",
+        "id": "ed45541e-3d67-4614-8dee-9ef591caef78"
+      }
+    ],
+    "game_modes": [
+      "combat-patrol"
+    ]
   }
 ]

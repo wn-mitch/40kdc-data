@@ -32,7 +32,8 @@ export type StageLift = {
 
 /** A pipeline stage with its value decomposed across the toggleable buffs. */
 export type AttributedStage = {
-  name: Stage["name"];
+  /** A stage name, or a key of `opts.measures`. */
+  name: Stage["name"] | (string & {});
   /** Stage value with every buff on — identical to {@link crunch}'s stage. */
   expected: number;
   /** The engine's stage detail string, unchanged. */
@@ -78,6 +79,17 @@ function groupKey(source: BuffSource): string {
 }
 
 /**
+ * The measure name for {@link EngineOutput.damageDealt} when attributed alongside the stages:
+ * damage after Feel No Pain with each attack's damage past one model's Wounds lost.
+ */
+export const DAMAGE_DEALT = "damage-dealt";
+
+/** `opts.measures` for {@link attributeStages} that attributes {@link DAMAGE_DEALT}. */
+export const DAMAGE_DEALT_MEASURES: Readonly<Record<string, (output: EngineOutput) => number>> = {
+  [DAMAGE_DEALT]: (output) => output.damageDealt,
+};
+
+/**
  * Decompose each pipeline stage of `crunch(input)` into the marginal lift of
  * every toggleable buff group, via leave-one-out recompute.
  *
@@ -92,7 +104,14 @@ function groupKey(source: BuffSource): string {
 export function attributeStages(
   input: EngineInput,
   dataset?: Dataset,
-  opts?: { epsilon?: number },
+  opts?: {
+    epsilon?: number;
+    /**
+     * Further quantities of the crunch to attribute the same way, appended after the stages under
+     * their keys: e.g. `{ "damage-dealt": (output) => output.damageDealt }`.
+     */
+    measures?: Readonly<Record<string, (output: EngineOutput) => number>>;
+  },
 ): AttributedStage[] {
   const epsilon = opts?.epsilon ?? DEFAULT_EPSILON;
   const full = crunch(input, dataset);
@@ -129,13 +148,17 @@ export function attributeStages(
 
   // crunch always emits the same seven stages in the same order, so index
   // alignment across full / baseline / loo is sound.
-  return full.stages.map((s, i) => {
-    const expected = s.expected;
-    const baseExpected = baseline.stages[i].expected;
+  const measured: Array<{ name: string; detail: string; read: (output: EngineOutput) => number }> = [
+    ...full.stages.map((stage, i) => ({ name: stage.name, detail: stage.detail, read: (output: EngineOutput) => output.stages[i].expected })),
+    ...Object.entries(opts?.measures ?? {}).map(([name, read]) => ({ name, detail: "", read })),
+  ];
+  return measured.map((s) => {
+    const expected = s.read(full);
+    const baseExpected = s.read(baseline);
     let totalLift = 0;
     const lifts: StageLift[] = [];
     for (const key of order) {
-      const delta = expected - loo.get(key)!.stages[i].expected;
+      const delta = expected - s.read(loo.get(key)!);
       totalLift += delta;
       if (Math.abs(delta) > epsilon) {
         lifts.push({ source: repSource.get(key)!, delta });

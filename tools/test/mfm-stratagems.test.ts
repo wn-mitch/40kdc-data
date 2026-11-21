@@ -54,6 +54,7 @@ function fixture(): MfmDump {
           category: "epicDeed",
           cpCost: "2",
           detachmentId: "d1",
+          secondaryEffectAdditionalCPCost: 1,
           localisations: { en: { name: "Sudden Reprisal", whenRules: "Your opponent's Movement phase." } },
         },
       ],
@@ -104,6 +105,15 @@ describe("stratagem canon derivation (synthetic)", () => {
     const c = canon.get("sudden-reprisal-bastion-task-force-adeptus-astartes")!;
     expect(c.player_turn).toBe("opponent-turn");
     expect(c.type).toBe("epic-deed");
+  });
+
+  it("carries the secondary effect's extra CP, and null where the dump has none", () => {
+    expect(canon.get("sudden-reprisal-bastion-task-force-adeptus-astartes")!.secondary_effect_extra_cp).toBe(1);
+    expect(canon.get("insane-bravery")!.secondary_effect_extra_cp).toBeNull();
+    const zero = partialDump({
+      data: { ...fixture().tables, stratagem: [{ id: "s0", key: "yourTurn", category: null, cpCost: "1", detachmentId: "d1", secondaryEffectAdditionalCPCost: 0, localisations: { en: { name: "Fabricated Gambit" } } }] },
+    } as never);
+    expect([...buildStratCanon(zero).values()][0]!.secondary_effect_extra_cp).toBeNull();
   });
 
   it("derives review-only phases from whenRules prose (both phases of an 'or' idiom)", () => {
@@ -184,6 +194,22 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("stratagem reconcile over the
       (s: { id: string }) => s.id === "armour-of-contempt-assault-brethren-adeptus-astartes",
     ) as { player_turn: string };
     expect(rec.player_turn).toBe("either");
+  });
+
+  it("stores the secondary effect's extra CP on exactly the stratagems the dump charges for it", () => {
+    const charged = [...canon].filter(([, c]) => c.secondary_effect_extra_cp != null).map(([id]) => id).sort();
+    const stored: string[] = [];
+    for (const file of [path.join(CORE_DIR, "stratagems.json"), ...fs.readdirSync(CORE_DIR).map((d) => path.join(CORE_DIR, d, "stratagems.json"))]) {
+      if (!fs.existsSync(file)) continue;
+      for (const s of JSON.parse(fs.readFileSync(file, "utf8")) as { id: string; secondary_effect_extra_cp?: number }[]) {
+        if (s.secondary_effect_extra_cp != null) {
+          expect(s.secondary_effect_extra_cp).toBe(canon.get(s.id)?.secondary_effect_extra_cp);
+          stored.push(s.id);
+        }
+      }
+    }
+    expect(charged.length).toBeGreaterThan(0);
+    expect(stored.sort()).toEqual(charged);
   });
 
   it("never writes a type that conflicts with an authored one (fill-only contract)", () => {

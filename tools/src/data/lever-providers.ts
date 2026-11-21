@@ -8,7 +8,7 @@ import type { ActivatableBuff, EffectTranslation, StanceOptionRef, UnsupportedFr
 import type { ConditionNeed } from "../cruncher/condition-facts.js";
 import type { Enhancement } from "../generated.js";
 import type { Dataset, StackableBuff, StackableBuffGroup } from "./dataset.js";
-import { meetsEnhancementGroups, missingRequiredAbilities } from "./enhancement-eligibility.js";
+import { equipableByNonCharacter, meetsEnhancementGroups, missingRequiredAbilities } from "./enhancement-eligibility.js";
 import type { AbilityView, UnitView } from "./entities.js";
 
 /** Lower-cased union of the units' keywords and faction keywords. */
@@ -46,15 +46,16 @@ export function combinedToughness(units: readonly UnitView[], roles?: Readonly<R
 
 /**
  * Whether `bearer` can take `enhancement` under the Select Enhancements rules the roster validator
- * enforces: a CHARACTER (or an Upgrade), not an EPIC HERO, with a model that may take
+ * enforces: a CHARACTER (or an enhancement a non-CHARACTER may take), not an EPIC HERO unless the
+ * enhancement allows one, with a model that may take
  * Enhancements, meeting one eligibility group (its keywords, or its datasheet and keywords), with
  * every core ability it requires and carrying none of the exclusions.
  */
 export function canTakeEnhancement(ds: Dataset, enhancement: Enhancement, bearer: UnitView): boolean {
   const keywords = new Set(combinedKeywordsLower([bearer]));
   const has = (keyword: string) => keywords.has(keyword.toLowerCase());
-  if (!has("character") && enhancement.upgrade_tag !== true) return false;
-  if (bearer.raw.role === "epic-hero" || has("epic hero")) return false;
+  if (!has("character") && !equipableByNonCharacter(enhancement)) return false;
+  if ((bearer.raw.role === "epic-hero" || has("epic hero")) && enhancement.equipable_by_epic_hero !== true) return false;
   const rows = ds.unitCompositionOf(bearer.raw)?.models ?? [];
   if (rows.length > 0 && rows.every((model) => model.excluded_from_enhancements === true)) return false;
   const eligible = meetsEnhancementGroups(enhancement, bearer.id, has);
@@ -109,7 +110,8 @@ function optionGate(act: ActivatableBuff): OptionGate | undefined {
  *   carrying the cost, even when it applies no buff itself; its choices and the records it grants
  *   name it in `requiresLever`, so the cost is paid once.
  * - Its choices are opt-in levers in their own pools; a lever raising another pool's cap is
- *   returned in `capRaises` for {@link resolveCapRaises}.
+ *   returned in `capRaises` for {@link resolveCapRaises}. The option a choice marks as the
+ *   secondary effect also costs `gate.secondaryCost`, on top of the provider lever's cost.
  * - Each ability record it grants to the unit (not already among `held`) is translated as the
  *   unit's own ability, with the provider's default state.
  */
@@ -124,7 +126,8 @@ export function abilityLevers(
     idBase: string;
     label: string;
     enabled: boolean;
-    gate?: { cost: LeverCost; group?: string };
+    /** `secondaryCost`: what picking the option a choice marks as the secondary effect adds (a Stratagem's extra CP). */
+    gate?: { cost: LeverCost; group?: string; secondaryCost?: LeverCost };
     /** Record ids the unit already holds or was already granted; extended with each new grant. */
     held: Set<string>;
   },
@@ -138,7 +141,11 @@ export function abilityLevers(
   const requiresLever = gate ? idBase : undefined;
 
   for (const act of translation.activatable) {
-    const lever: StackableBuff = { ...leverFromActivatable(act, `${ability.name} — ${act.label}`, source), ...(requiresLever ? { requiresLever } : {}) };
+    const lever: StackableBuff = {
+      ...leverFromActivatable(act, `${ability.name} — ${act.label}`, source),
+      ...(requiresLever ? { requiresLever } : {}),
+      ...(act.secondary && gate?.secondaryCost ? { cost: gate.secondaryCost } : {}),
+    };
     for (const group of [...(act.group ? [act.group] : []), ...(act.groups ?? [])]) {
       if (!out.groups.some((existing) => existing.id === group.id)) {
         out.groups.push({ ...group, label: ability.name, abilityId: ability.id });
@@ -152,7 +159,7 @@ export function abilityLevers(
   for (const { abilityId, fragment } of grants) {
     args.held.add(abilityId);
     // A grant one option of a choice makes stands behind picking that option, in the choice's pool.
-    const choice = fragment.choice ? choiceOptionLever(fragment.choice, ability, source, requiresLever, levers, out.groups) : undefined;
+    const choice = fragment.choice ? choiceOptionLever(fragment.choice, ability, source, requiresLever, levers, out.groups, gate?.secondaryCost) : undefined;
     const granted = grantedRecordLevers(ds, abilityId, args.factionId, {
       abilityId: ability.id, source, enabled: gate || choice ? false : args.enabled, requiresLever: choice ?? requiresLever,
     }, ctx);
@@ -253,10 +260,13 @@ function choiceOptionLever(
   requiresLever: string | undefined,
   levers: StackableBuff[],
   groups: StackableBuffGroup[],
+  secondaryCost: LeverCost | undefined,
 ): string {
   if (!groups.some((existing) => existing.id === choice.group.id)) groups.push({ ...choice.group, label: ability.name, abilityId: ability.id });
   if (!levers.some((lever) => lever.id === choice.lever)) {
-    levers.push({ id: choice.lever, label: `${ability.name} — ${choice.label}`, buffs: [], enabled: false, source, group: choice.group.id, ...(requiresLever ? { requiresLever } : {}) });
+    // A buffless secondary option is priced here; one with buffs was priced with its own lever.
+    const cost = choice.secondary && secondaryCost ? { cost: secondaryCost } : {};
+    levers.push({ id: choice.lever, label: `${ability.name} — ${choice.label}`, buffs: [], enabled: false, source, group: choice.group.id, ...(requiresLever ? { requiresLever } : {}), ...cost });
   }
   return choice.lever;
 }

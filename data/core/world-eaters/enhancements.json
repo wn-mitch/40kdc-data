@@ -378,7 +378,8 @@
         "namespace": "mfm",
         "id": "39eeeb4f-b6ba-45a6-8d96-7a7036b58d88"
       }
-    ]
+    ],
+    "bearer_cannot_be_warlord": true
   },
   {
     "id": "blade-of-endless-bloodshed-khorne-daemonkin-world-eaters",
@@ -666,7 +667,8 @@
           "World Eaters"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "murder-forged-entity-upgrade-brazen-engines-world-eaters",
@@ -695,7 +697,8 @@
         "namespace": "mfm",
         "id": "ee328098-14cc-48ec-aaa0-0bc012746e78"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "sanctified-in-slaughter-upgrade-butchers-of-khorne-world-eaters",
@@ -723,7 +726,8 @@
         "namespace": "mfm",
         "id": "36ceb8f3-1be2-4dfb-8f56-3cd0b801b2cd"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "gore-stained-veterans-upgrade-butchers-of-khorne-world-eaters",
@@ -751,7 +755,8 @@
         "namespace": "mfm",
         "id": "3959a88d-7bdd-4c12-8e21-72050af167a2"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "bane-of-the-craven-frenzied-reavers-world-eaters",

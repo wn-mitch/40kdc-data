@@ -21,7 +21,7 @@ fn canonical_select_units_keeps_filter_count_limit_and_binding() {
     }));
     let rendered = describe_effect(&value);
     assert!(rendered.contains("enemy INFANTRY units"), "{rendered}");
-    assert!(rendered.contains("from one through 2"), "{rendered}");
+    assert!(rendered.contains("one to 2"), "{rendered}");
     assert!(rendered.contains("marked"));
     assert!(
         rendered.contains("at most 2 times per battle across your army"),
@@ -84,7 +84,7 @@ fn named_region_renders_supplied_region_fraction_and_trigger() {
     assert!(!rendered.contains("half of"), "{rendered}");
     assert!(!rendered.contains("Command phase"), "{rendered}");
     assert!(
-        rendered.contains("If the unit is Battle-shocked"),
+        rendered.contains("If this unit is Battle-shocked"),
         "{rendered}"
     );
     assert!(rendered.contains("you can"), "{rendered}");
@@ -105,8 +105,8 @@ fn keyword_range_changes_preserve_keyword_identity_without_regranting_rating() {
 #[test]
 fn duration_api_distinguishes_during_and_after_resolution() {
     for (duration, expected) in [
-        ("resolution", "Duration: when resolving this use."),
-        ("after-resolving", "Duration: after resolving this use."),
+        ("resolution", "Duration: for this activation."),
+        ("after-resolving", "Duration: after resolving this ability."),
         (
             "while-leading",
             "Duration: while this model is leading a unit.",
@@ -122,7 +122,7 @@ fn duration_api_distinguishes_during_and_after_resolution() {
 fn mortal_wound_model_roll_uses_its_typed_subject() {
     for (subject, phrase) in [
         (json!("selected-unit"), "the selected unit"),
-        (json!({"selection_var":"marked"}), "the bound marked"),
+        (json!({"selection_var":"marked"}), "the chosen marked"),
     ] {
         let value = effect(json!({"type":"mortal-wounds","target":"selected-unit",
             "modifier":{"count":1,"roll":{"dice":"D6","threshold":4,"per_model":subject}}}));
@@ -170,7 +170,7 @@ fn named_ability_exchange_and_suppression_keep_declaration_identity() {
         "rule_kind":"ability","rule":first,"direction":"suppressed","except_from":"this-ability"
     }}));
     assert_eq!(describe_effect_inline(&suppression),
-        "the unit loses the First Form (Example Host) ability and cannot gain it except from this ability");
+        "this unit loses the First Form (Example Host) ability and cannot gain it except from this ability");
     let grant = effect(
         json!({"type":"ability-grant","target":"this-unit","modifier":{
             "ability":first,"definition":{"type":"ability-part","effect":{
@@ -227,7 +227,7 @@ fn oath_reward_replacement_waits_for_completion_and_preserves_selection_method()
             }}),
         );
         let text = describe_effect_inline(&reward);
-        assert!(text.starts_with(&format!("for the unit, on completion of additional {qualifier}, replace their reward with: ")), "{text}");
+        assert!(text.starts_with(&format!("for this unit, on completion of additional {qualifier}, replace their reward with: ")), "{text}");
         assert!(text.contains('7'), "{text}");
     }
 }

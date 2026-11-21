@@ -1,6 +1,7 @@
-# MFM stratagems — DRY RUN
+# MFM stratagems — APPLIED
 
-APPLIED (first-class dump columns): `cp_cost` ← cpCost, `player_turn` ← key,
+APPLIED (first-class dump columns): `cp_cost` ← cpCost, `secondary_effect_extra_cp` ←
+secondaryEffectAdditionalCPCost, `player_turn` ← key,
 `type` ← category (fill-only), `category` ← detachmentId presence.
 REVIEW ONLY (not written): `phases`, prose-derived — the structured
 `stratagem_phase` table is a buggy index (Insane Bravery→charge, Holy
@@ -46,6 +47,11 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 | world-eaters | 42 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | **TOTAL** | **1313** | **0** | **0** | **0** | **0** | **0** | **0** | **0** |
 
+## (core)
+
+**Secondary-effect extra CP (applied):**
+- heroic-intervention: — → 1
+
 ## agents-of-the-imperium
 
 **Player-turn ← either over the key (the WHEN line names a phase in either turn):**
@@ -66,6 +72,11 @@ Avarice→command, Scriptural Prognosis→all-five), so authored phases win.
 
 **Player-turn ← either over the key (the WHEN line names a phase in either turn):**
 - territorial-infection-paragons-of-putrescence-death-guard: key said your-turn
+
+## orks
+
+**Secondary-effect extra CP (applied):**
+- hulking-brutes-bully-boyz-orks: — → 1
 
 Stratagems in dump with no repo match (author via faction-pack flow): 0
 

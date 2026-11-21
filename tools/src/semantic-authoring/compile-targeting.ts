@@ -10,7 +10,7 @@ type Node = Record<string, unknown>;
 const BY_IN_CONDITION: Record<string, string> = { "this-unit": "ability-unit", "this-model": "ability-unit" };
 
 /**
- * One history of the unit being targeted (families/targeting-history.ts), as a condition on the
+ * One history of the unit being targeted, as a condition on the
  * candidate: `this-unit` is the unit being checked as a target, `ability-unit` the unit that targets.
  */
 const HISTORY: Record<string, (by: string) => Node> = {
@@ -18,6 +18,7 @@ const HISTORY: Record<string, (by: string) => Node> = {
   "attacked-by-another-unit-this-phase": (by) => ({ type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: by }, object: "this-unit", filter: { kind: "attack" }, window: "phase" } }),
   "charged-by-another-unit-this-phase": (by) => ({ type: "happened", parameters: { event: "targets-selected", subject: { owner: "any", excluding: by }, object: "this-unit", filter: { kind: "charge" }, window: "phase" } }),
   "fell-back-this-phase": () => ({ type: "happened", parameters: { event: "move-ended", subject: "this-unit", filter: { move_types: ["fall-back"] }, window: "phase" } }),
+  "charged-this-phase": () => ({ type: "happened", parameters: { event: "move-ended", subject: "this-unit", filter: { move_types: ["charge"] }, window: "phase" } }),
 };
 
 /** The unit that targets, as a history condition names it; only the ability's own unit or model has one. */
@@ -30,9 +31,9 @@ function byInCondition(leaf: CompileLeaf): string {
 /**
  * A targeting-restriction leaf as targeting effects. enemy-units / friendly-units are every unit of
  * that side; "those X units" is the set an earlier unit-position of matching-unit introduced
- * (compile-matched-set.ts). Version 3 names both sides: the effect sits on the unit that targets
- * when the leaf says which, else on the unit being targeted. Version 6 adds the target's history
- * (`target_condition`), several kinds (one effect each) and a gate on the moves of the unit that targets.
+ * (compile-matched-set.ts). A leaf may name both sides: the effect sits on the unit that targets
+ * when the leaf says which, else on the unit being targeted. A leaf may also carry the target's
+ * history (`target_condition`), several kinds (one effect each) and a gate on the moves of the unit that targets.
  */
 export function targetingEffect(leaf: CompileLeaf, target: (value: unknown) => Node | string): Node {
   const unit = (value: unknown) => value === "matched-units" ? matchedPoolOf(leaf) : value === "enemy-units" ? { owner: "enemy" } : value === "friendly-units" ? { owner: "friendly" } : target(value);
@@ -45,7 +46,7 @@ export function targetingEffect(leaf: CompileLeaf, target: (value: unknown) => N
       may: closed(leaf, "may"), kind,
       ...weaponScope(leaf),
       ...(range != null ? { range: { inches: range } } : {}),
-      // Version 7: the targets count as outside this unit's Engagement Range while targets are selected.
+      // The targets count as outside this unit's Engagement Range while targets are selected.
       ...(leaf.parameters.not_engaged_with !== undefined ? { not_engaged_with: unit(closed(leaf, "not_engaged_with")) } : {}),
     };
     if (leaf.parameters.target === undefined) return { type: "targeting", target: unit(closed(leaf, "subject")), modifier };
@@ -53,7 +54,7 @@ export function targetingEffect(leaf: CompileLeaf, target: (value: unknown) => N
     const by = leaf.parameters.by === undefined ? undefined : unit(closed(leaf, "by"));
     const named: Node = {
       ...(leaf.parameters.stratagem !== undefined ? { stratagem: closed(leaf, "stratagem") } : {}),
-      // kind ability: the one ability whose selection this limits (families/targeting-ability.ts).
+      // kind ability: the one ability whose selection this limits.
       ...(leaf.parameters.ability !== undefined ? { ability: closed(leaf, "ability") } : {}),
       ...(leaf.parameters.except !== undefined ? { except: closed(leaf, "except") } : {}),
       ...(condition !== undefined ? { target_condition: structuredClone(condition) } : {}),

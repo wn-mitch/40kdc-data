@@ -1,11 +1,11 @@
-import { EVENT_SUBJECT } from "./family-extension-helpers.js";
+import { EVENT_SUBJECT } from "./families/vocabulary.js";
 import type { CompileLeaf } from "./compile-fragments.js";
 
 type Node = Record<string, unknown>;
 
 /**
  * A move-must-end restriction in one ability: the leaf's index and its conditions, by index.
- * replaces is set when the restriction replaces the usual end threshold (move-must-end version 4).
+ * replaces is set when the restriction replaces the usual end threshold.
  */
 export type MoveEndRule = { index: number; match: string; cannot: boolean; moveTypes: string[] | null; conditions: number[]; replaces: boolean };
 

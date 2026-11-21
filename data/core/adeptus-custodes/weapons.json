@@ -4680,5 +4680,49 @@
         "id": "965baf19-1d7f-476e-b50e-0f6ab9cbd90a"
       }
     ]
+  },
+  {
+    "id": "tarsus-buckler",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a8827e1d-92ab-482d-81fd-42f8bda370fd"
+      },
+      {
+        "namespace": "mfm",
+        "id": "bb8bf94c-faf5-4489-a78e-b09e31babdb1"
+      }
+    ],
+    "name": "Tarsus Buckler",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Tarsus Buckler",
+        "range": "Melee",
+        "stats": {
+          "A": 5,
+          "S": 6,
+          "AP": -2,
+          "D": 1,
+          "WS": 2
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "game_modes": [
+      "matched-play",
+      "combat-patrol"
+    ]
   }
 ]

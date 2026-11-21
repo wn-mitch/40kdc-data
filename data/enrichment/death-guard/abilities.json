@@ -1669,7 +1669,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "death-guard",
     "trigger": {
       "event": "phase-started",
@@ -1742,24 +1741,13 @@
     "source_digest": "e7c00ec9753f172491785ae9a392cec956e6691dcb5b82205f8685752d7dade7",
     "version": "2025-q3",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
-          }
-        }
-      },
-      "effect": {
-        "type": "cost-modifier",
-        "target": "this-unit",
-        "modifier": {
-          "of": "stratagem",
-          "operation": "decrease",
-          "amount": 1,
-          "applies_to": "the-triggering-use"
-        }
+      "type": "cost-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "of": "stratagem",
+        "operation": "decrease",
+        "amount": 1,
+        "applies_to": "the-triggering-use"
       }
     },
     "scope": {
@@ -1844,7 +1832,6 @@
     ],
     "ability_type": "unit",
     "behavior": "aura",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "death-guard"
   },
   {
@@ -2187,7 +2174,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "death-guard",
     "trigger": {
       "event": "phase-started",
@@ -4555,6 +4541,11 @@
       "poxwalkers",
       "tallyman",
       "typhus"
+    ],
+    "option_names": [
+      "Skullsquirm Blight",
+      "Rattlejoint Ague",
+      "Scabrous Soulrot"
     ]
   },
   {
@@ -6786,19 +6777,43 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "champions-of-contagion",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "aura",
+      "target": "enemy-within-aura",
+      "modifier": {
+        "range": {
+          "aura_of": "nurgles-gift-death-guard"
+        },
+        "effect": {
+          "type": "ability-activate",
+          "target": "recipient",
+          "modifier": {
+            "ability": "nurgles-gift-death-guard",
+            "select": {
+              "by": "player",
+              "option_var": "picked-option"
+            }
+          }
+        },
+        "eligible": {
+          "owner": "enemy"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "battle"
+    },
+    "behavior": "aura",
+    "trigger": {
+      "event": "battle-formations-declared"
+    },
+    "source_digest": "65da302fb9ea8ebe75923e6922d93895b200535407ec8e102d46cf9364cc4d37"
   },
   {
     "ability_id": "creeping-blight-virulent-vectorium-death-guard",
@@ -6935,19 +6950,70 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "champions-of-contagion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "none_of": [
+            "VEHICLE"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-unit",
+                    "range": {
+                      "inches": 8
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "visible": {
+                    "to": "this-unit"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "selected-unit",
+        "modifier": {
+          "ability": "nurgles-gift-death-guard",
+          "all_options": true
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-start-next-turn"
+    },
+    "behavior": "activated",
+    "source_digest": "c617eb3bacf5ea8207cdac26eb3e4a93d87f33c5452ac6b257572f8e6fdcbc13"
   },
   {
     "ability_id": "disgustingly-resilient-virulent-vectorium-death-guard",
@@ -7794,19 +7860,75 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "tallyband-summoners",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "engaged_with": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "test",
+            "target": "event-subject",
+            "modifier": {
+              "test": "leadership"
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "leadership",
+                "result": "failure"
+              }
+            },
+            "effect": {
+              "type": "permission",
+              "target": "event-subject",
+              "modifier": {
+                "activity": "fall-back",
+                "allow": false
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "selected",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ],
+        "to": "move"
+      },
+      "subject": {
+        "owner": "enemy",
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ]
+      }
+    },
+    "source_digest": "0d47875f22d13001b5c2d31e85a46ef9923dfdb8f077e364d974b1db94b9a715"
   },
   {
     "ability_id": "mobile-vector-champions-of-contagion-death-guard",
@@ -7869,19 +7991,33 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "champions-of-contagion",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "return-models",
+      "target": "this-unit",
+      "modifier": {
+        "count": "D3"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "ability",
+        "id": "tainted-narthecium-death-guard"
+      },
+      "subject": "this-model",
+      "optional": true
+    },
+    "source_digest": "e70fd8396d438db2955c17eef0aa5d36b05f57fc8e1da7f5414e6a3508ca3c25"
   },
   {
     "ability_id": "noisome-veil-maggot-lords-death-guard",
@@ -9250,19 +9386,136 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "tallyband-summoners",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 12
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "roll-modifier",
+              "target": "recipient",
+              "modifier": {
+                "roll": "battle-shock",
+                "operation": "add",
+                "value": 1
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "roll-result",
+                    "parameters": {
+                      "roll": "battle-shock",
+                      "result": "success"
+                    }
+                  },
+                  {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "operator": "and",
+                        "operands": [
+                          {
+                            "type": "matches",
+                            "parameters": {
+                              "subject": "recipient",
+                              "filter": {
+                                "all_of": [
+                                  "BATTLELINE"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "type": "roll-result",
+                            "parameters": {
+                              "roll": "battle-shock",
+                              "result": "success"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "effect": {
+                "type": "heal",
+                "target": "recipient",
+                "modifier": {
+                  "amount": "D3",
+                  "per": "one-model"
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "recipient",
+                      "filter": {
+                        "all_of": [
+                          "BATTLELINE"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "roll-result",
+                    "parameters": {
+                      "roll": "battle-shock",
+                      "result": "success"
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "return-models",
+                "target": "recipient",
+                "modifier": {
+                  "count": "D3"
+                }
+              }
+            }
+          ]
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "PLAGUE LEGIONS"
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "aura",
+    "trigger": {
+      "event": "before-roll",
+      "filter": {
+        "roll": "battle-shock"
+      }
+    },
+    "source_digest": "c68e9175dc69769e9806dc424a8162b6f8d7a28aaa2452291b506d7e551eca01"
   },
   {
     "ability_id": "undying-spite-death-lords-chosen-death-guard",

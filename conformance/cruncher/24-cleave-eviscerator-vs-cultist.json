@@ -1,0 +1,28 @@
+{
+  "name": "eviscerator (Cleave 1) x1 vs 10 cultists: one extra attack per five models",
+  "attacker": {
+    "weaponId": "eviscerator",
+    "profileIndex": 0
+  },
+  "modelsFiring": 1,
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0,
+    "modelCount": 10
+  },
+  "context": {
+    "phase": "fight"
+  },
+  "buffs": [],
+  "expected": {
+    "stages": {
+      "attacks": 5,
+      "hits": 3.3333,
+      "wounds": 2.7778,
+      "unsaved": 2.7778,
+      "damage": 5.5556,
+      "after-fnp": 5.5556,
+      "models-killed": 2.7778
+    }
+  }
+}

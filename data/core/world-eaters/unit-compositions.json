@@ -381,7 +381,8 @@
         "default_weapon_ids": [
           "bolt-pistol-khorne-berzerkers",
           "chainblade-khorne-berzerkers"
-        ]
+        ],
+        "profile_name": "Khorne Berzerker"
       },
       {
         "name": "Khorne Berzerker",
@@ -5204,7 +5205,11 @@
         "max": 1,
         "default_weapon_ids": [
           "skullsmasher-and-mangler"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 40
+        }
       },
       {
         "name": "Jakhal with Autopistol and Chainblade",
@@ -5213,7 +5218,11 @@
         "default_weapon_ids": [
           "autopistol-frenzied-reavers-jakhals",
           "chainblade-frenzied-reavers-jakhals"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Jakhal with Autopistol and Mauler Chainblade",
@@ -5222,7 +5231,11 @@
         "default_weapon_ids": [
           "autopistol-frenzied-reavers-jakhals",
           "mauler-chainblade"
-        ]
+        ],
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       },
       {
         "name": "Jakhal Pack Leader",
@@ -5232,7 +5245,11 @@
           "autopistol-frenzied-reavers-jakhals",
           "chainblade-frenzied-reavers-jakhals"
         ],
-        "is_leader_model": true
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 28.5
+        }
       }
     ],
     "game_version": {
@@ -5922,7 +5939,8 @@
           "shape": "oval",
           "width": 90,
           "length": 52.5
-        }
+        },
+        "profile_name": "Bloodcrusher"
       },
       {
         "name": "Bloodcrusher",
@@ -6182,7 +6200,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "profile_name": "Bloodletter"
       },
       {
         "name": "Bloodletter",
@@ -6393,7 +6412,8 @@
           "shape": "oval",
           "width": 60,
           "length": 35.5
-        }
+        },
+        "profile_name": "Flesh Hound"
       },
       {
         "name": "Flesh Hound",

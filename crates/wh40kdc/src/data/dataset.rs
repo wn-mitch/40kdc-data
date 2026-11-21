@@ -13,11 +13,11 @@ use std::sync::{Arc, Mutex, OnceLock};
 
 use crate::generated::{
     Ability, AbilityTrigger, AlliedRule, DeploymentPattern, Detachment, Enhancement, Faction,
-    ForceDisposition, GameVersion, HullShape, InteractionFlag, KeywordList, LeaderAttachment,
-    LeaderAttachmentConditionalGroupsItemRole, Mission, MissionMatchup, Phase, PhaseMapping,
-    ResourcePool, SecondaryCard, Stratagem, TargetProfile, TerrainLayout, TerrainTemplate, Trigger,
-    Unit, UnitAttachmentRole, UnitComposition, UnitKeyword, Wargear, WargearOption, Weapon,
-    WeaponKeyword,
+    ForceDisposition, GameVersion, HullShape, InteractionFlag, KeywordChoiceGroup, KeywordList,
+    LeaderAttachment, LeaderAttachmentConditionalGroupsItemRole, Mission, MissionMatchup, Phase,
+    PhaseMapping, ResourcePool, SecondaryCard, Stratagem, TargetProfile, TerrainLayout,
+    TerrainTemplate, Trigger, Unit, UnitAttachmentRole, UnitComposition, UnitKeyword, Wargear,
+    WargearOption, Weapon, WeaponKeyword,
 };
 
 use super::collection::Collection;
@@ -85,6 +85,9 @@ pub struct RawData {
     pub deployment_patterns: Vec<DeploymentPattern>,
     #[serde(default)]
     pub force_dispositions: Vec<ForceDisposition>,
+    /// Muster-time keyword choices (a Mark of Chaos); each option is a unit conditional keyword naming the group.
+    #[serde(default)]
+    pub keyword_choice_groups: Vec<KeywordChoiceGroup>,
     /// Reusable terrain catalog: standard areas and scenery features.
     #[serde(default)]
     pub terrain_templates: Vec<TerrainTemplate>,
@@ -175,6 +178,7 @@ pub struct Dataset {
     pub mission_cards: Collection<SecondaryCard>,
     pub deployment_patterns: Collection<DeploymentPattern>,
     pub force_dispositions: Collection<ForceDisposition>,
+    pub keyword_choice_groups: Collection<KeywordChoiceGroup>,
     pub terrain_templates: Collection<TerrainTemplate>,
     pub terrain_layouts: Collection<TerrainLayout>,
     pub hull_shapes: Collection<HullShape>,
@@ -427,6 +431,11 @@ impl Dataset {
             |f| f.id.to_string(),
             |f| Some(f.name.as_str()),
         );
+        let keyword_choice_groups = id_name_collection(
+            raw.keyword_choice_groups,
+            |g| g.id.to_string(),
+            |g| Some(g.name.as_str()),
+        );
         let terrain_templates = id_name_collection(
             raw.terrain_templates,
             |t| t.id.to_string(),
@@ -490,6 +499,7 @@ impl Dataset {
             mission_cards,
             deployment_patterns,
             force_dispositions,
+            keyword_choice_groups,
             terrain_templates,
             terrain_layouts,
             hull_shapes,
@@ -732,7 +742,8 @@ impl Dataset {
     }
 
     /// The allied-rules offered for an army of `faction_id` running the given
-    /// detachments. A rule applies when both gates pass: the army gate
+    /// detachments. A rule applies when all gates pass: the host gate
+    /// (`host_faction_ids` empty, or listing `faction_id`), the army gate
     /// (`army_keywords_any` empty, or intersecting the faction's keywords) and
     /// the detachment gate (`detachment_ids` empty, or at least one listed id
     /// among the selected detachments).
@@ -752,6 +763,11 @@ impl Dataset {
             .all()
             .iter()
             .filter(|rule| {
+                let host_gate = match &rule.host_faction_ids {
+                    None => true,
+                    Some(ids) if ids.is_empty() => true,
+                    Some(ids) => ids.iter().any(|id| id.as_str() == faction_id),
+                };
                 let army_gate = match &rule.army_keywords_any {
                     None => true,
                     Some(kws) if kws.0.is_empty() => true,
@@ -769,7 +785,7 @@ impl Dataset {
                         .collect();
                     gates.is_empty() || gates.iter().any(|id| detachment_ids.contains(id))
                 };
-                army_gate && detachment_gate
+                host_gate && army_gate && detachment_gate
             })
             .collect()
     }
@@ -952,6 +968,13 @@ impl Dataset {
             .iter()
             .filter(|la| la.leader_id.as_str() == leader_unit_id)
             .flat_map(|la| la.conditional_groups.iter())
+            // Only a group naming roster units sets a role: a detachment- or
+            // keyword-gated group carries its datasheet's own role, and a shared
+            // leader id would carry it across factions.
+            .filter(|group| {
+                !(group.required_roster_unit_ids.is_empty()
+                    && group.excluded_roster_unit_ids.is_empty())
+            })
             .filter(|group| conditional_group_applies(group, roster_unit_ids))
         {
             match group.role {
@@ -1057,7 +1080,7 @@ pub(super) fn unit_keyword_set(unit: &Unit) -> std::collections::HashSet<String>
 /// its keyword set (keywords ∪ faction_keywords, case-insensitive) contains ALL
 /// of `eligible_bodyguard_keywords`. Empty keywords never match (the entry then
 /// relies solely on `eligible_bodyguard_ids`).
-fn matches_bodyguard_keywords(la: &LeaderAttachment, unit: &Unit) -> bool {
+pub(super) fn matches_bodyguard_keywords(la: &LeaderAttachment, unit: &Unit) -> bool {
     if la.eligible_bodyguard_keywords.is_empty() {
         return false;
     }
@@ -1128,7 +1151,7 @@ fn attachment_bodyguard_ids<'a>(
         )
 }
 
-fn conditional_group_applies(
+pub(super) fn conditional_group_applies(
     group: &crate::generated::LeaderAttachmentConditionalGroupsItem,
     roster_unit_ids: &HashSet<String>,
 ) -> bool {

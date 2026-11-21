@@ -311,6 +311,8 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         );
         return;
     };
+    // The attacker's rule changing a characteristic of the unit its attacks target.
+    let debuffs_target = opts.perspective == Attacker && classify_target(node) == Side::Defender;
     match stat.and_then(Value::as_str) {
         Some("A") if opts.perspective == Attacker && on_buffed => emit(
             opts,
@@ -325,13 +327,16 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             json!({ "type": "strength-mod", "value": value }),
         ),
         Some("A" | "S") => {}
+        // Defender stat: the buffed unit's own under target perspective, or the attack's target
+        // when the attacker's rule changes it ("enemy units within Contagion Range get -1
+        // Toughness").
         Some("T") => {
-            if opts.perspective != Target {
+            if opts.perspective != Target && !debuffs_target {
                 out.unsupported(
                     "stat-modifier T: defender-side stat; applies when the buffed unit is the target",
                     node,
                 );
-            } else if on_buffed {
+            } else if on_buffed || debuffs_target {
                 emit(
                     opts,
                     out,
@@ -370,13 +375,14 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             }
         }
         // Improvement is a save-roll bonus; literal characteristic addition worsens the Save.
+        // Like T, the attacker's rule can change the attack's target's.
         Some("Sv") => {
-            if opts.perspective != Target {
+            if opts.perspective != Target && !debuffs_target {
                 out.unsupported(
                     "stat-modifier Sv: defender-side stat; applies when the buffed unit is the target",
                     node,
                 );
-            } else if on_buffed {
+            } else if on_buffed || debuffs_target {
                 let operation = m.get("operation").and_then(Value::as_str);
                 let cap = m.get("minimum").and_then(Value::as_f64);
                 let contribution = match (operation, cap) {

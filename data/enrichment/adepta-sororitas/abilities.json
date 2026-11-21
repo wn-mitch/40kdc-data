@@ -154,28 +154,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-unit",
-              "filter": {
-                "has_ability": [
-                  "sacred-command-adepta-sororitas"
-                ]
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "sacred-command-adepta-sororitas"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "cost-modifier",
@@ -1115,7 +1102,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "adepta-sororitas"
   },
   {
@@ -7124,26 +7110,13 @@
           "effect": {
             "type": "conditional",
             "condition": {
-              "operator": "and",
-              "operands": [
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "subject": "this-unit",
-                    "filter": {
-                      "designated": "righteous"
-                    }
-                  }
-                },
-                {
-                  "type": "matches",
-                  "parameters": {
-                    "filter": {
-                      "owner": "friendly"
-                    }
-                  }
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "righteous"
                 }
-              ]
+              }
             },
             "effect": {
               "type": "conditional",
@@ -10124,9 +10097,7 @@
       "dataslate": "pre-launch-provisional"
     },
     "stub": true,
-    "unit_ids": [
-      "sanctuary-guardians-battle-sisters-squad"
-    ],
+    "unit_ids": [],
     "faction_id": "adepta-sororitas",
     "detachment_id": null,
     "ability_type": "unit",

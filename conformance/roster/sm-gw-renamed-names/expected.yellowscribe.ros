@@ -17,45 +17,44 @@
             </profile>
             <profile name="Codex Adept" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains Assault Doctrine (Combat Doctrines).
-The unit gains Devastator Doctrine (Combat Doctrines).
-The unit gains Tactical Doctrine (Combat Doctrines).</characteristic>
+                <characteristic name="Description">This unit gains Assault Doctrine (Combat Doctrines).
+This unit gains Devastator Doctrine (Combat Doctrines).
+This unit gains Tactical Doctrine (Combat Doctrines).</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+                <characteristic name="Description">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Leader" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Leader ability.</characteristic>
+                <characteristic name="Description">This unit gains the Leader ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Master Tactician" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can: During the Movement phase, in your turn, until the start of your next Command phase:
-  -&gt; Select one friendly ADEPTUS ASTARTES unit visible to this model if the selected unit is within 9" of this model: select one option of Combat Doctrines for that unit, in place of any already active.</characteristic>
+                <characteristic name="Description">During your Movement phase, until the start of your next Command phase, you can use this ability:
+  - Select one friendly ADEPTUS ASTARTES unit visible to this model that is within 9" of this model. Select one option of Combat Doctrines for that unit, in place of any already active.</characteristic>
               </characteristics>
             </profile>
             <profile name="Thunderhawk Insertion" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When declaring Battle Formations, you may use this ability:
-  -&gt; Select one friendly unit with the GRAVIS, PHOBOS or TACTICUS keyword: that unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description">When declaring Battle Formations, you can use this ability, select one friendly unit with the GRAVIS, PHOBOS or TACTICUS keyword. That unit gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Combat Doctrines" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
-  -&gt; Select one (each may be chosen once per battle):
-    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.
-    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
-    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+                <characteristic name="Description">At the start of your Command phase, you can use this ability, until the start of your next Command phase:
+  - Select one (each can be chosen once per battle):
+    - Assault Doctrine: When this unit is selected to make an Advance move, this unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: Ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: When this unit is selected to make a Fall Back move, this unit is eligible to shoot even if it Fell Back this turn; this unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
             <profile name="Transhuman Strategist" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the battle round, while this model has the Transhuman Strategist ability, while this model is the Warlord, you gain 1CP.</characteristic>
+                <characteristic name="Description">At the start of the battle round, while this model has the Transhuman Strategist ability and this model is the Warlord, you gain 1 CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -119,7 +118,7 @@ The unit gains Tactical Doctrine (Combat Doctrines).</characteristic>
             <profile name="Death Company Marines with Jump Packs" typeName="Unit">
               <characteristics>
                 <characteristic name="M">12"</characteristic>
-                <characteristic name="T">4</characteristic>
+                <characteristic name="T">5</characteristic>
                 <characteristic name="SV">3+</characteristic>
                 <characteristic name="W">2</characteristic>
                 <characteristic name="LD">6+</characteristic>
@@ -128,33 +127,33 @@ The unit gains Tactical Doctrine (Combat Doctrines).</characteristic>
             </profile>
             <profile name="Black Rage" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can re-roll a Hit roll of 1 with melee weapons.
-While the unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit or while the unit is not within 12" of a friendly CHAPLAIN unit, the unit cannot Fall Back.
-While the unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit or while the unit is not within 12" of a friendly CHAPLAIN unit, set the unit's Objective Control characteristic to 0.</characteristic>
+                <characteristic name="Description">You can re-roll Hit rolls of 1 with melee weapons.
+While this unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit or while this unit is not within 12" of a friendly CHAPLAIN unit, this unit cannot Fall Back.
+While this unit is not within 6" of a friendly BLOOD ANGELS CHARACTER unit or while this unit is not within 12" of a friendly CHAPLAIN unit, set this unit's Objective Control characteristic to 0.</characteristic>
               </characteristics>
             </profile>
             <profile name="Savage Fury" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gets +1 to Charge rolls.</characteristic>
+                <characteristic name="Description">Add 1 to this unit's Charge rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+                <characteristic name="Description">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Feel No Pain" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit has Feel No Pain X+, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Combat Doctrines" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
-  -&gt; Select one (each may be chosen once per battle):
-    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.
-    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
-    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+                <characteristic name="Description">At the start of your Command phase, you can use this ability, until the start of your next Command phase:
+  - Select one (each can be chosen once per battle):
+    - Assault Doctrine: When this unit is selected to make an Advance move, this unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: Ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: When this unit is selected to make a Fall Back move, this unit is eligible to shoot even if it Fell Back this turn; this unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>

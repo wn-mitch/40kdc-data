@@ -19,39 +19,34 @@ function placed(text: string, ...items: Array<[string, string, Record<string, un
 const MELEE_SCOPE: [string, string, Record<string, unknown>] = ["Your unit's melee attacks can have", "weapon-property-scope", { subject: "this-unit", weapon_type: "melee" }];
 
 describe("wave-9 weapon-ability keywords", () => {
-  it("accepts Close-quarters, Cleave N and a slash-pair Anti target at the current version", () => {
-    expect(normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Close-quarters" }, 2)).toEqual({ keyword: "Close-quarters" });
-    expect(normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 2" }, 2)).toEqual({ keyword: "Cleave 2" });
-    expect(normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Anti-Monster/Vehicle 4+" }, 2)).toEqual({ keyword: "Anti-Monster/Vehicle 4+" });
-    expect(normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Anti-Non-Vehicle 4+" }, 2)).toEqual({ keyword: "Anti-Non-Vehicle 4+" });
+  it("accepts Close-quarters, Cleave N and a slash-pair Anti target", () => {
+    expect(normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Close-quarters" })).toEqual({ keyword: "Close-quarters" });
+    expect(normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 2" })).toEqual({ keyword: "Cleave 2" });
+    expect(normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Anti-Monster/Vehicle 4+" })).toEqual({ keyword: "Anti-Monster/Vehicle 4+" });
+    expect(normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Anti-Non-Vehicle 4+" })).toEqual({ keyword: "Anti-Non-Vehicle 4+" });
   });
 
-  it("keeps the new forms out of the earlier version, and rejects malformed values", () => {
-    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 1" }, 1)).toThrow();
-    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 0" }, 2)).toThrow();
-    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 10" }, 2)).toThrow();
-    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Anti-Monster/ 4+" }, 2)).toThrow();
-    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Anti-Monster/Vehicle 7+" }, 2)).toThrow();
-    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 1", threshold: 2 }, 2)).toThrow();
-    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Not A Keyword" }, 2)).toThrow();
+  it("rejects malformed values", () => {
+    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 0" })).toThrow();
+    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 10" })).toThrow();
+    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Anti-Monster/ 4+" })).toThrow();
+    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Anti-Monster/Vehicle 7+" })).toThrow();
+    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 1", threshold: 2 })).toThrow();
+    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Not A Keyword" })).toThrow();
   });
 
-  it("gives weapon-ability-grant the same keywords at its current version", () => {
-    const version = currentFamilyVersion("weapon-ability-grant");
-    expect(normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, version))
-      .toEqual({ subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" });
-    // The wave-9 vocabulary arrived at version 8; version 7 is the last that refuses these keywords.
-    // Both are fixed history: later grant versions build on 8, so they are pinned here rather than read from the registry.
-    const vocabularyVersion = 8;
-    const beforeVocabulary = 7;
-    expect(() => normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, beforeVocabulary)).toThrow();
-    expect(normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }, vocabularyVersion))
+  it("gives weapon-ability-grant the same keywords", () => {
+    expect(normalizeFingerprintParameters("weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }))
       .toEqual({ subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" });
   });
 
   it("accepts a bold-marked Anti keyword whose printed span carries the bold markers", () => {
     expect(() => validateFamilySource("weapon-ability-keyword", { keyword: "Anti-Non-Vehicle 4+" }, "[ANTI-**non-**VEHICLE 4+]")).not.toThrow();
     expect(() => validateFamilySource("weapon-ability-keyword", { keyword: "Anti-Vehicle 4+" }, "[ANTI-**non-**VEHICLE 4+]")).toThrow();
+    // A printed misspelling reads as the keyword it names, and only that keyword.
+    expect(() => validateFamilySource("weapon-ability-keyword", { keyword: "Ignores Cover" }, "Ignore Cover")).not.toThrow();
+    expect(() => validateFamilySource("weapon-ability-keyword", { keyword: "Lethal Hits" }, "Ignore Cover")).toThrow();
+    expect(() => validateFamilySource("weapon-ability-keyword", { keyword: "Ignores Cover" }, "Ignore Covering")).toThrow();
   });
 
   it("compiles a Cleave N grant under a melee scope", () => {
@@ -167,7 +162,7 @@ describe("wave-9 keyword shapes compile", () => {
       ["This unit's melee attacks have [Cleave 1]", "weapon-ability-grant", { subject: "this-unit", keyword: "Cleave 1", weapon_type: "melee" }]), text);
     expect(grant.ok ? [] : grant.errors).toEqual([]);
     expect(JSON.stringify(grant.ok ? grant.mechanics : {})).toContain('"keyword_id":"cleave","parameters":{"value":1}');
-    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 0" }, 2)).toThrow();
+    expect(() => normalizeFingerprintParameters("weapon-ability-keyword", { keyword: "Cleave 0" })).toThrow();
   });
 
   it("compiles a keyword-or-grant choice: [CLEAVE 1] or the +1 increment of an existing Cleave", () => {

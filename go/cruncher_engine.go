@@ -99,6 +99,48 @@ func manualWeaponKeywordBuffs(attacker map[string]any, ds *Dataset, ctx map[stri
 	return out
 }
 
+// grantedKeywordBuffs returns the catalog buffs of each resolved granted keyword the profile does
+// not print, with the grant's source. Engine-dispatched keywords have no catalog DSL and are read
+// from extraKeywords directly.
+func grantedKeywordBuffs(res *resolved, attacker map[string]any, ds *Dataset, ctx map[string]any) []any {
+	weapon, _ := getMap(attacker, "weapon")
+	profiles := getList(weapon, "profiles")
+	index := asInt(attacker["profileIndex"])
+	printed := map[string]bool{}
+	if index >= 0 && index < len(profiles) {
+		prof, _ := asMap(profiles[index])
+		for _, refAny := range getList(prof, "keywords") {
+			ref, _ := asMap(refAny)
+			printed[getStr(ref, "keyword_id")] = true
+		}
+	}
+	var out []any
+	for _, entry := range res.extraKeywords {
+		keywordID := getStr(entry.keywordRef, "keyword_id")
+		view, ok := ds.WeaponKeywords.Get(keywordID)
+		if printed[keywordID] || !ok || view.Raw["effect"] == nil {
+			continue
+		}
+		var params map[string]any
+		if p, ok := getMap(entry.keywordRef, "parameters"); ok {
+			params = p
+		}
+		for _, buffAny := range buffsFromKeyword(view.ID(), getStr(weapon, "id"), view.Raw["effect"], params, ctx) {
+			buff, ok := asMap(buffAny)
+			if !ok {
+				continue
+			}
+			copied := map[string]any{}
+			for key, value := range buff {
+				copied[key] = value
+			}
+			copied["source"] = entry.source
+			out = append(out, copied)
+		}
+	}
+	return out
+}
+
 func stage(name string, expected float64) map[string]any {
 	return map[string]any{"name": name, "expected": expected}
 }
@@ -184,6 +226,12 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	profBuffs := profileBuffsFor(attacker, ds, ctx)
 	allBuffs := append(append([]any{}, profBuffs...), getList(input, "buffs")...)
 	res := resolveBuffs(allBuffs, ctx)
+	// A granted keyword whose rule is catalog DSL ([HEAVY], [TWIN-LINKED], [LANCE]) applies that DSL,
+	// credited to the grant; resolving again keeps every grant's applicability and keyword removals.
+	if granted := grantedKeywordBuffs(res, attacker, ds, ctx); len(granted) > 0 {
+		allBuffs = append(allBuffs, granted...)
+		res = resolveBuffs(allBuffs, ctx)
+	}
 	// A buff gated on the attack's Strength against the target's Toughness needs both, which the
 	// buffs themselves modify: take them from the stack without the comparison-gated buffs, then
 	// resolve again with them known. No comparison-gated buff feeds any comparison, which keeps a
@@ -255,14 +303,30 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	}
 	blastExtra := 0.0
 	if blast != nil {
-		value, err := evalStatValue(paramValue(blast, "value"))
-		if err != nil {
-			value = 1
+		// Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
+		value := 1.0
+		if raw := paramValue(blast, "value"); raw != nil {
+			parsed, err := evalStatValue(raw)
+			if err != nil {
+				return nil, nil, nil, err
+			}
+			value = parsed
 		}
 		blastExtra = math.Floor(tmc/5) * value
 	}
+	// [CLEAVE X] adds X attacks per five target models when the weapon picks one target, as every crunch does.
+	cleaveExtra := 0.0
+	if cleave := res.findKeyword("cleave"); cleave != nil {
+		if raw := paramValue(cleave, "value"); raw != nil {
+			value, err := evalStatValue(raw)
+			if err != nil {
+				return nil, nil, nil, err
+			}
+			cleaveExtra = math.Floor(tmc/5) * value
+		}
+	}
 	modelsFiring, _ := num(input["modelsFiring"])
-	attacks := modelsFiring * (attacksPerModel + rapidFireExtra + blastExtra)
+	attacks := modelsFiring * (attacksPerModel + rapidFireExtra + blastExtra + cleaveExtra)
 	stages = append(stages, stage("attacks", attacks))
 
 	// 2. Hits
@@ -593,10 +657,36 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	stages = append(stages, stage("after-fnp", afterFnp))
 
 	// 7. Models killed
+	// One attack's damage goes to one model and what exceeds its Wounds is lost; Feel No Pain
+	// rolls for each wound before that. Devastating Wounds' mortal wounds are capped the same
+	// way; mortal wounds an ability inflicts on a roll carry over. Each stream keeps its share of
+	// the expected damage above (re-roll-one gains included), scaled by what the cap leaves of it.
 	woundsStat := numOr0(unitProfile["W"])
+	mainCapped := unsaved * cappedDamage(perAttack.distribution, pSurviveAll, woundsStat)
+	mainRaw := unsaved * damagePerHit * pSurviveAll
+	if critical != nil {
+		mainCapped = unsavedRegular*cappedDamage(perAttack.distribution, pSurviveAll, woundsStat) +
+			unsavedCritical*cappedDamage(perCritical.distribution, pSurviveAll, woundsStat)
+		mainRaw = (unsavedRegular*damagePerHit + unsavedCritical*perCritical.expected) * pSurviveAll
+	}
+	mortalSurvive := pSurviveAll * pSurviveMortal
+	devastatingRaw := mortalWoundsStream * perCritical.expected * mortalSurvive
+	devastatingCapped := mortalWoundsStream * cappedDamage(perCritical.distribution, mortalSurvive, woundsStat)
+	abilityMortals := rollMortals * mortalSurvive
+	share := func(capped, raw float64) float64 {
+		if raw > 0 {
+			return capped / raw
+		}
+		return 1
+	}
+	mainShare := share(mainCapped, mainRaw)
+	devastatingShare := share(devastatingCapped, devastatingRaw)
+	afterMortalDevastating := math.Max(0, afterMortal-abilityMortals)
+	damageDealt := 0.0
 	expectedModelsKilled := 0.0
 	if woundsStat > 0 {
-		expectedModelsKilled = math.Min(tmc, afterFnp/woundsStat)
+		damageDealt = afterMain*mainShare + afterMortalDevastating*devastatingShare + (afterMortal - afterMortalDevastating)
+		expectedModelsKilled = math.Min(tmc, damageDealt/woundsStat)
 	}
 	stages = append(stages, stage("models-killed", expectedModelsKilled))
 
@@ -611,7 +701,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		ModelsFiring:    modelsFiring,
 		AttacksStat:     res.setOr("A", stats["A"]),
 		AttacksReroll:   rerollIfUnset(attacksReroll, attacksSet),
-		AttacksBonus:    res.attacksMod + blastExtra,
+		AttacksBonus:    res.attacksMod + blastExtra + cleaveExtra,
 		RapidFireStat:   rapidFireStat,
 		Torrent:         torrent,
 		HitPass:         hitPass,
@@ -627,6 +717,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		MortalWoundLost: pSurviveAll * pSurviveMortal,
 		Wounds:          woundsStat,
 		ModelCount:      tmc,
+		DamageDealt:     damageDealt,
 	}
 	for _, priced := range []struct {
 		on   bool
@@ -909,6 +1000,33 @@ func evalStatValue(v any) (float64, error) {
 
 func clampF(n, lo, hi float64) float64 {
 	return math.Max(lo, math.Min(hi, n))
+}
+
+// cappedDamage is the expected wounds one unsaved attack removes from a model with `wounds`
+// Wounds: each point of its Damage is a wound lost with probability `lost` (Feel No Pain), and
+// wounds past the model's Wounds are lost. A fractional Damage value is capped in expectation.
+func cappedDamage(distribution []DamageOutcome, lost, wounds float64) float64 {
+	total := 0.0
+	for _, outcome := range distribution {
+		value, probability := outcome.Value, outcome.Probability
+		if probability == 0 || value <= 0 {
+			continue
+		}
+		if value != math.Trunc(value) {
+			total += probability * math.Min(value*lost, wounds)
+			continue
+		}
+		expected := 0.0
+		coefficient := 1.0
+		for removed := 0.0; removed <= value; removed++ {
+			if removed > 0 {
+				coefficient = coefficient * (value - removed + 1) / removed
+			}
+			expected += coefficient * math.Pow(lost, removed) * math.Pow(1-lost, value-removed) * math.Min(removed, wounds)
+		}
+		total += probability * expected
+	}
+	return total
 }
 
 func fnpSurvivalFraction(f *fnpState) float64 {

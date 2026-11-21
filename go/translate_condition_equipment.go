@@ -1,5 +1,7 @@
 package wh40kdc
 
+import "strings"
+
 // Go mirror of tools/src/translate/condition-equipment.ts: English for the named-equipment
 // predicates (named-weapon, unit-wargear). Negation is written here rather than through
 // negatePhrase, because a printed weapon name may contain " is " or " has ".
@@ -70,8 +72,17 @@ func equipmentModelsSubject(models map[string]any) string {
 }
 
 func equipmentUnitLevel(phrase string, negated bool) string {
-	if negated {
-		return "it is not the case that " + phrase
+	if !negated {
+		return phrase
 	}
-	return phrase
+	if rest, ok := strings.CutPrefix(phrase, "one or more models in this unit are "); ok {
+		return "no model in this unit is " + rest
+	}
+	if rest, ok := strings.CutPrefix(phrase, "one or more models in this unit have "); ok {
+		return "no model in this unit has " + rest
+	}
+	if rest, ok := strings.CutPrefix(phrase, "at least "); ok {
+		return "fewer than " + rest
+	}
+	return "it is not the case that " + phrase
 }

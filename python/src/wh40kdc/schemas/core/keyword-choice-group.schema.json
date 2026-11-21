@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://40kdc.dev/schemas/core/keyword-choice-group.schema.json",
+  "title": "Keyword Choice Group",
+  "description": "A keyword a unit takes from a set of alternatives when its army is mustered (a Mark of Chaos, a Daemonic Allegiance, a detachment's CHARACTER pick). Each option is a unit's conditional_keywords entry whose choice_group is this group's id; a unit takes at most one option of a group.",
+  "type": "object",
+  "properties": {
+    "id": { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "detachment_id": {
+      "description": "The detachment whose army makes the choice; null when any army that includes the unit makes it.",
+      "oneOf": [
+        { "$ref": "../defs/common.schema.json#/$defs/entity-id" },
+        { "type": "null" }
+      ]
+    },
+    "mandatory": {
+      "type": "boolean",
+      "description": "Whether every unit with options in this group must take one."
+    },
+    "min_units": {
+      "description": "The fewest units in the army that must take an option of this group; null for no minimum.",
+      "oneOf": [{ "type": "integer", "minimum": 0 }, { "type": "null" }]
+    },
+    "max_units": {
+      "description": "The most units in the army that can take an option of this group; null for no maximum.",
+      "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }]
+    },
+    "game_version": { "$ref": "../defs/game-version-ref.schema.json" }
+  },
+  "required": ["id", "name", "detachment_id", "mandatory", "min_units", "max_units", "game_version"],
+  "additionalProperties": false
+}

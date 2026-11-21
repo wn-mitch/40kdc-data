@@ -16,7 +16,7 @@ import { outsideContract } from "./leaf-contract.js";
 
 /**
  * Named ranges a record defines per battle round (named-ranges.ts, compile-named-range.ts) and
- * auras measured from matching models (aura-range@5). Every text here is fabricated wording, not
+ * auras measured from matching models (aura-range). Every text here is fabricated wording, not
  * rules text; the named range is the registered `contagion`, whose own aura is
  * nurgles-gift-death-guard.
  */
@@ -82,36 +82,36 @@ const table: Item[] = [
   round("From the third battle round", 3, 5), value("the Rot Range is eight inches", 8),
 ];
 
-describe("aura-range@5 parameters", () => {
-  const v5 = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("aura-range", parameters, 5);
+describe("aura-range parameters", () => {
+  const normalized = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("aura-range", parameters);
 
   it("takes a named range in place of inches, and matching models as the anchor", () => {
-    expect(v5({ range_ref: "contagion", of: "matching-models", of_keywords: ["plague"], of_side: "friendly" }))
+    expect(normalized({ range_ref: "contagion", of: "matching-models", of_keywords: ["plague"], of_side: "friendly" }))
       .toEqual({ range_ref: "contagion", of: "matching-models", of_keywords: ["PLAGUE"], of_side: "friendly" });
-    expect(v5({ range_ref: "synapse" })).toEqual({ range_ref: "synapse" });
-    expect(v5({ inches: 6, of: "matching-models", of_keywords: ["PLAGUE"] })).toEqual({ inches: 6, of: "matching-models", of_keywords: ["PLAGUE"] });
+    expect(normalized({ range_ref: "synapse" })).toEqual({ range_ref: "synapse" });
+    expect(normalized({ inches: 6, of: "matching-models", of_keywords: ["PLAGUE"] })).toEqual({ inches: 6, of: "matching-models", of_keywords: ["PLAGUE"] });
   });
 
-  it("keeps every earlier aura-range leaf as it was", () => {
+  it("keeps an inches aura with no named range as it was", () => {
     for (const parameters of [{ inches: 6 }, { inches: 6, of: "this-model", wholly: true }, { inches: 6, conditional_range: { inches: 9, keywords: ["TITANIC"] } }, { side: "enemy", inches: 3, range_cap_inches: 9 }]) {
-      expect(v5(parameters)).toEqual(normalizeFingerprintParameters("aura-range", parameters, 4));
+      expect(normalized(parameters)).toEqual(parameters);
     }
   });
 
   it("refuses a range given twice or not at all, and matching-model fields without matching models", () => {
-    expect(() => v5({ range_ref: "contagion", inches: 3 })).toThrow(/range_ref or inches/u);
-    expect(() => v5({ of: "matching-models", of_keywords: ["PLAGUE"] })).toThrow(/inches or range_ref/u);
-    expect(() => v5({ range_ref: "rot" })).toThrow();
-    expect(() => v5({ inches: 6, of_keywords: ["PLAGUE"] })).toThrow(/go with of matching-models/u);
-    expect(() => v5({ inches: 6, of: "matching-models" })).toThrow(/keyword/u);
-    expect(() => v5({ range_ref: "contagion", conditional_range: { inches: 9, keywords: ["TITANIC"] } })).toThrow(/named range has none/u);
+    expect(() => normalized({ range_ref: "contagion", inches: 3 })).toThrow(/range_ref or inches/u);
+    expect(() => normalized({ of: "matching-models", of_keywords: ["PLAGUE"] })).toThrow(/inches or range_ref/u);
+    expect(() => normalized({ range_ref: "rot" })).toThrow();
+    expect(() => normalized({ inches: 6, of_keywords: ["PLAGUE"] })).toThrow(/go with of matching-models/u);
+    expect(() => normalized({ inches: 6, of: "matching-models" })).toThrow(/keyword/u);
+    expect(() => normalized({ range_ref: "contagion", conditional_range: { inches: 9, keywords: ["TITANIC"] } })).toThrow(/named range has none/u);
   });
 
   it("validates the named-range definition leaves", () => {
-    expect(normalizeFingerprintParameters("named-range-value", { range: "contagion", inches: 3 }, 1)).toEqual({ range: "contagion", inches: 3 });
-    expect(normalizeFingerprintParameters("named-range-cap", { range: "synapse", inches: 12 }, 1)).toEqual({ range: "synapse", inches: 12 });
-    expect(() => normalizeFingerprintParameters("named-range-value", { range: "rot", inches: 3 }, 1)).toThrow();
-    expect(() => normalizeFingerprintParameters("named-range-cap", { range: "contagion" }, 1)).toThrow();
+    expect(normalizeFingerprintParameters("named-range-value", { range: "contagion", inches: 3 })).toEqual({ range: "contagion", inches: 3 });
+    expect(normalizeFingerprintParameters("named-range-cap", { range: "synapse", inches: 12 })).toEqual({ range: "synapse", inches: 12 });
+    expect(() => normalizeFingerprintParameters("named-range-value", { range: "rot", inches: 3 })).toThrow();
+    expect(() => normalizeFingerprintParameters("named-range-cap", { range: "contagion" })).toThrow();
   });
 });
 
@@ -397,9 +397,8 @@ describe("Semantic authoring named-range reference: unit-position range_ref", ()
     expect(errors.join(" ")).toMatch(/fixed inch count|placement/u);
   });
 
-  it("takes a named range on aura-range from version 5 only", () => {
+  it("takes a named range on aura-range", () => {
     const parameters = { side: "enemy", range_ref: "contagion", of: "this-unit" };
-    expect(() => normalizeFingerprintParameters("aura-range", parameters, 4)).toThrow();
     expect(normalizeRefuses("aura-range", parameters)).toBe(false);
   });
 });
@@ -420,6 +419,8 @@ describe("Semantic authoring named-range reference: counts-as range_ref", () => 
     expect(normalizeRefuses("counts-as", { ...leaf, subject: "event-subject" })).toBe(true);
     expect(normalizeRefuses("counts-as", { subject: "antecedent", of_side: "friendly", within: 6 })).toBe(true);
     expect(normalizeRefuses("counts-as", { ...leaf, range_ref: "contagion" })).toBe(true);
+    expect(normalizeRefuses("counts-as", { ...leaf, extra: 1 })).toBe(true);
+    expect(normalizeRefuses("counts-as", { subject: "antecedent", region: { region_id: "hallowed-ground", owner_faction: "fabricated-faction" }, extra: 1 })).toBe(true);
   });
 
   it("normalizes a Synapse Range grant to the antecedent with of_side friendly", () => {
@@ -441,7 +442,7 @@ describe("Semantic authoring named-range reference: describer and family version
     expect(describeEffect(effect)).not.toContain("Contagion Range");
   });
 
-  it("registers the named-range versions: unit-position past its prior current version and counts-as at version 3", () => {
+  it("registers the named-range versions: unit-position at 15 or later and counts-as at version 3", () => {
     expect(currentFamilyVersion("unit-position")).toBeGreaterThanOrEqual(15);
     expect(currentFamilyVersion("counts-as")).toBe(3);
   });

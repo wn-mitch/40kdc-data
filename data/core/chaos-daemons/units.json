@@ -86,6 +86,24 @@
         "namespace": "mfm",
         "id": "a324f74b-c9a6-484f-be7d-4ef101d368ad"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Khorne",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "daemonic-allegiance"
+      }
     ]
   },
   {
@@ -164,6 +182,24 @@
         "namespace": "mfm",
         "id": "fb1a301d-0a4b-46f3-9834-d08471088128"
       }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Khorne",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "daemonic-allegiance"
+      }
     ]
   },
   {
@@ -241,6 +277,24 @@
       {
         "namespace": "mfm",
         "id": "808c27e9-cd0e-4633-b323-1da36b732d3d"
+      }
+    ],
+    "conditional_keywords": [
+      {
+        "keyword": "Khorne",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Nurgle",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Slaanesh",
+        "choice_group": "daemonic-allegiance"
+      },
+      {
+        "keyword": "Tzeentch",
+        "choice_group": "daemonic-allegiance"
       }
     ]
   },
@@ -1837,7 +1891,7 @@
     "profiles": [
       {
         "name": "Feculent Gnarlmaw",
-        "M": 0,
+        "M": null,
         "T": 9,
         "W": 9,
         "Sv": 4,
@@ -3672,7 +3726,7 @@
     "profiles": [
       {
         "name": "Skull Altar",
-        "M": 0,
+        "M": null,
         "T": 12,
         "W": 10,
         "Sv": 3,

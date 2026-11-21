@@ -35,7 +35,7 @@ function gapBetween(previous: CompileLeaf, next: CompileLeaf, sourceText: string
   // "that unit's ranged attacks:\rDo not have [Heavy].\rHave +1 to hit rolls.": the lines under a colon are items of one list, so a
   // full stop that ends one item's line does not end the sentence the colon opened.
   const lineEnd = ends && /^[ \t]*[\r\n]+[ \t]*$/u.test(gap) && !colonListItem(sourceText, previous.start_byte);
-  return { sentence: closes || lineMoment || bandRow || lineEnd || (ends && /[\r\n]/u.test(gap) && !/^[ \t]*[\r\n]+[ \t]*$/u.test(gap)) || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(/iu.test(gap) };
+  return { sentence: closes || lineMoment || bandRow || lineEnd || (ends && /[\r\n]/u.test(gap) && !/^[ \t]*[\r\n]+[ \t]*$/u.test(gap)) || /[.;:]/u.test(gap), and: /\b(?:and|or)\b|\(|,\s*then\b/iu.test(gap) };
 }
 
 /** A printed table's result cell on a line of its own: "1‑2", "3", "5+". */
@@ -177,12 +177,23 @@ export function placements(leaves: readonly CompileLeaf[], sourceText: string | 
   // A sentence without an effect ("While this model is leading a unit.") only sets conditions
   // for what follows, so it joins the next sentence; the last one joins the one before.
   const effectful = new Set(leaves.flatMap((leaf, index) => leaf.role === "EFFECT" ? [sentenceOf[index]!] : []));
+  // "Select one of the following abilities. Until …, each X unit has that ability. At the start of each phase, …": an
+  // effect-less sentence before one that opens with a moment qualifies the effects before it, not the later part.
+  const opensWithMoment = new Set(leaves.flatMap((leaf, index) => leaf.role === "EVENT" && leaf.family_id === "event"
+    && (index === 0 || sentenceOf[index - 1] !== sentenceOf[index]) ? [sentenceOf[index]!] : []));
+  const grantsChosenOption = (sentence: number) => leaves.some((leaf, index) => sentenceOf[index] === sentence && leaf.family_id === "chosen-option-grant");
   const sentences = [...new Set(sentenceOf)];
   const merged = new Map<number, number>();
   let pending: number[] = [];
+  let lastEffectful: number | undefined;
   for (const sentence of sentences) {
+    if (pending.length > 0 && lastEffectful !== undefined && opensWithMoment.has(sentence) && pending.some((item) => grantsChosenOption(item))) {
+      for (const item of pending) merged.set(item, lastEffectful);
+      pending = [];
+    }
     pending.push(sentence);
     if (effectful.has(sentence)) {
+      lastEffectful = sentence;
       for (const item of pending) merged.set(item, sentence);
       pending = [];
     }

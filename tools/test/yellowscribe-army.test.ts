@@ -8,6 +8,7 @@ import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
 import { resolveRosterUnit } from "../src/data/roster-resolve.js";
 import { yellowscribeArmy, type YellowscribeUnit } from "../src/export/yellowscribe-army.js";
+import { fmtMove } from "../src/export/yellowscribe.js";
 import { tryImportRoster } from "../src/import/import-roster.js";
 import type { Roster, RosterUnit } from "../src/import/types.js";
 import { decodeShareToken, encodeShareToken, rosterToShareList } from "../src/share/index.js";
@@ -164,5 +165,21 @@ describe("share-token rosters", () => {
       const got = new Map(u.loadout);
       for (const [id, count] of want.loadout) expect(got.get(id), `${u.datasheetId}: ${id}`).toBe(count);
     });
+  });
+});
+
+describe("Yellowscribe Move", () => {
+  it("prints an aircraft's missing Move as a dash and adds the inch mark only to a number", () => {
+    expect(fmtMove(null)).toBe("-");
+    expect(fmtMove(8)).toBe('8"');
+    expect(fmtMove('20+"')).toBe('20+"');
+  });
+
+  it("keeps no Move for the aircraft whose datasheets print none", () => {
+    const aircraft = Dataset.embedded().units.all.filter((u) => (u.raw.keywords ?? []).includes("Aircraft"));
+    // The official data prints a Move for only the Avenger Strike Fighter (20+") and the Manta (40").
+    const moving = aircraft.filter((u) => u.raw.profiles.some((p) => p.M !== null)).map((u) => u.id).sort();
+    expect(moving).toEqual(["avenger-strike-fighter", "manta"]);
+    expect(aircraft.length).toBeGreaterThan(10);
   });
 });

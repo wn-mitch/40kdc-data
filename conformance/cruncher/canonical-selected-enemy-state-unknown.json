@@ -1,0 +1,47 @@
+{
+  "name": "Canonical selected enemy: state-unknown",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 0
+  },
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "modelsFiring": 5,
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": false,
+    "attackerStationary": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-selected-enemy",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "save-mod",
+        "value": -1
+      },
+      "applicableWhen": {
+        "targetFilter": {
+          "owner": "enemy",
+          "state": "battle-shocked"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 5,
+      "hits": 3.3333,
+      "wounds": 2.2222,
+      "unsaved": 1.1111,
+      "damage": 2.2222,
+      "after-fnp": 2.2222,
+      "models-killed": 1.1111
+    }
+  }
+}

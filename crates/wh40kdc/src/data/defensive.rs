@@ -40,6 +40,19 @@ pub struct DefensiveLever {
     /// DSL fragments the player vouches for when turning the lever on.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub requires: Option<Vec<Value>>,
+    /// What turning the lever on costs beyond its ability: an opted-in Stratagem's secondary
+    /// effect carries the Stratagem's `secondary_effect_extra_cp`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cost: Option<LeverCost>,
+}
+
+/// What a cost-bearing lever charges when it is on. Same shape as TS `LeverCost`.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+pub struct LeverCost {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cp: Option<u64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub points: Option<u64>,
 }
 
 /// A pool of [`DefensiveLever`]s limited to `max_activations` at once.
@@ -64,8 +77,15 @@ pub struct DefensiveLevers {
 impl DefensiveLevers {
     /// Append each of an ability's activatables as an opt-in lever (first id wins) with the
     /// pools it names. An activatable that raises a pool's cap or is gated on a stance option is
-    /// left out: nothing here resolves it against another lever.
-    fn push(&mut self, ability: &Ability, source: &BuffSource, activatable: Vec<ActivatableBuff>) {
+    /// left out: nothing here resolves it against another lever. `secondary_cost` is what the
+    /// option a choice marks as the secondary effect adds (an opted-in Stratagem's extra CP).
+    fn push(
+        &mut self,
+        ability: &Ability,
+        source: &BuffSource,
+        activatable: Vec<ActivatableBuff>,
+        secondary_cost: Option<&LeverCost>,
+    ) {
         for act in activatable {
             if act.cap_raise.is_some()
                 || act.requires_option.is_some()
@@ -82,7 +102,13 @@ impl DefensiveLevers {
                 .chain(act.groups.iter().flatten())
                 .cloned()
                 .collect();
+            // The caller pays an opted-in Stratagem's cost; its secondary effect's extra CP rides
+            // on that option.
+            let cost = secondary_cost
+                .filter(|_| act.secondary == Some(true))
+                .cloned();
             self.levers.push(DefensiveLever {
+                cost,
                 label: format!("{} — {}", ability.name, act.label),
                 id: act.id,
                 buffs: act.buffs,
@@ -150,7 +176,18 @@ impl Dataset {
                 TranslationPerspective::Target,
                 entry.rating.as_ref(),
             );
-            out.push(entry.ability, &source, translation.activatable);
+            let secondary_cost = match &entry.source {
+                EligibleAbilitySource::DetachmentStratagem { stratagem_id, .. } => {
+                    self.secondary_cost(stratagem_id)
+                }
+                _ => None,
+            };
+            out.push(
+                entry.ability,
+                &source,
+                translation.activatable,
+                secondary_cost.as_ref(),
+            );
         }
         for entry in self.historical_snapshot_abilities(input, &ctx, TranslationPerspective::Target)
         {
@@ -168,9 +205,21 @@ impl Dataset {
                 TranslationPerspective::Target,
                 None,
             );
-            out.push(entry.ability, entry.source, translation.activatable);
+            out.push(entry.ability, entry.source, translation.activatable, None);
         }
         out
+    }
+
+    /// The extra CP a Stratagem's secondary effect costs, as its secondary option's lever cost.
+    fn secondary_cost(&self, stratagem_id: &str) -> Option<LeverCost> {
+        let extra = self
+            .stratagems
+            .get(stratagem_id)?
+            .secondary_effect_extra_cp?;
+        Some(LeverCost {
+            cp: Some(extra.get()),
+            points: None,
+        })
     }
 
     /// The engine context the defensive walk translates under: `context` with the defending

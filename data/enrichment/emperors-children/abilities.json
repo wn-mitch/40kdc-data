@@ -214,7 +214,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "emperors-children"
   },
   {
@@ -5619,9 +5618,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "21fa8112a5f893cab504d463138dfe998b6a6e9ff217fb2fef0200ad6c71c2e1",
+    "source_digest": "d7ec472a55b4995942d8205992bbae39ea7bef1c4688c7ee1cd5d8f7203f0642",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -5686,7 +5685,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "applies_to": {
       "all_of": [

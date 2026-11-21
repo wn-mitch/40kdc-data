@@ -102,7 +102,7 @@
       {
         "name": "Chaos Terminator",
         "M": 6,
-        "T": 5,
+        "T": 6,
         "W": 3,
         "Sv": 2,
         "invuln_sv": 4,
@@ -211,7 +211,7 @@
       {
         "name": "Sorcerer",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 4,
         "Sv": 3,
         "invuln_sv": null,
@@ -287,7 +287,7 @@
       {
         "name": "Lord Exultant",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 5,
         "Sv": 3,
         "invuln_sv": 4,
@@ -376,7 +376,7 @@
       {
         "name": "Lord Kakophonist",
         "M": 6,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -612,7 +612,7 @@
         "name": "Noise Marine",
         "M": 6,
         "T": 5,
-        "W": 2,
+        "W": 3,
         "Sv": 3,
         "invuln_sv": null,
         "Ld": 6,
@@ -700,7 +700,7 @@
       {
         "name": "Tormentor",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,
@@ -1065,7 +1065,7 @@
       {
         "name": "Lucius the Eternal",
         "M": 8,
-        "T": 5,
+        "T": 6,
         "W": 6,
         "Sv": 2,
         "invuln_sv": 4,
@@ -1225,7 +1225,7 @@
       {
         "name": "Infractor",
         "M": 7,
-        "T": 4,
+        "T": 5,
         "W": 2,
         "Sv": 3,
         "invuln_sv": null,

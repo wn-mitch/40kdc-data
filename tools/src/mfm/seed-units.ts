@@ -36,6 +36,7 @@ import {
   type UnitCompositionMiniatureRow,
 } from "./loader.js";
 import { CORE_DIR, readJsonArray } from "./repo-files.js";
+import { chapterReprints, unitIdForDatasheet } from "./chapter-reprints.js";
 import {
   repoDirForFactionName,
   repoDirs,
@@ -298,12 +299,8 @@ export function buildSeedUnit(
 ): SeedUnit {
   const name = dump.enName(ds);
   if (!name) throw new SeedSkip(`<${ds.id}>: datasheet has no English name`);
-  let id: string;
-  try {
-    id = nameToId(name);
-  } catch {
-    throw new SeedSkip(`${name}: name does not slug to a valid entity-id`);
-  }
+  const id = unitIdForDatasheet(dump, ds);
+  if (!id) throw new SeedSkip(`${name}: name does not slug to a valid entity-id`);
   const profiles = buildProfiles(dump, ds.id!, name);
   const keywords = buildKeywords(dump, ds.id!, name);
   const faction_keywords = buildFactionKeywords(dump, ds.id!, dir);
@@ -320,7 +317,10 @@ export function buildSeedUnit(
   // from the dump, so those are left provisional and unpriced for a manual follow-up.
   const { native, allied, ambiguous } = deriveDatasheet(dump, ds.id!);
   const priced = native.length > 0 && !ambiguous;
-  const points = priced ? native.map(cleanTier) : undefined;
+  // A Combat Patrol datasheet prints no price: the repo prices it at 0 for each model count, the
+  // convention the points pass verifies.
+  const patrolPoints = cp && native.length === 0 && !ambiguous ? [...new Set([model_count.min, model_count.max])].map((models) => ({ models, cost: 0 })) : undefined;
+  const points = priced ? native.map(cleanTier) : patrolPoints;
   const allied_points =
     priced && allied.length ? allied.map(cleanTier) : undefined;
 
@@ -342,7 +342,7 @@ export function buildSeedUnit(
     game_version: currentGameVersion(dump),
     ...(cp ? { game_modes: [...COMBAT_PATROL_ONLY] } : {}),
     is_legend: false,
-    points_provisional: !priced,
+    points_provisional: !priced && !patrolPoints,
   };
   return unit;
 }
@@ -435,6 +435,7 @@ export function runSeedUnits(
   };
 
   const results: DirSeedResult[] = [];
+  const reprints = chapterReprints(dump);
 
   for (const dir of [...byDir.keys()].sort()) {
     if (onlyDir && dir !== onlyDir) continue;
@@ -456,14 +457,11 @@ export function runSeedUnits(
       { ds: DatasheetRow; name: string; cp: boolean }
     >();
     for (const ds of byDir.get(dir) ?? []) {
+      if (reprints.has(ds.id!)) continue; // chapter-scope creates a chapter reprint's unit
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = unitIdForDatasheet(dump, ds);
+      if (!id) continue;
       // Matched, or a shared-roster dup — except the host faction's own datasheet: a daemon
       // cult-legion view (chaos-daemons has the name) or one carrying the faction's home
       // keyword (Codex: Emperor's Children's Defiler, though chaos-space-marines has one).

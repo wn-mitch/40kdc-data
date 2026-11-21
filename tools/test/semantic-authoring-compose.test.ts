@@ -337,7 +337,7 @@ describe("Semantic authoring composition rules", () => {
       ]);
       expect(aura.mechanics.effect).toMatchObject({ type: "aura", modifier: { wholly: true, eligible: { owner: "friendly", state: "battle-shocked", any_of: ["INFANTRY", "VEHICLE"] } } });
       // Keywords keep accented capitals, as some factions print them.
-      expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", keywords: ["brôkhyr"] }, 1)).toEqual({ side: "friendly", keywords: ["BRÔKHYR"] });
+      expect(normalizeFingerprintParameters("unit-filter", { side: "friendly", keywords: ["brôkhyr"] })).toEqual({ side: "friendly", keywords: ["BRÔKHYR"] });
     });
   });
 

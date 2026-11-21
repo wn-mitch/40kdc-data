@@ -1096,7 +1096,8 @@
         "namespace": "mfm",
         "id": "df9c2882-bb85-422e-a0b9-bc4073a61dca"
       }
-    ]
+    ],
+    "equipable_by_epic_hero": true
   },
   {
     "id": "alacritous-assault-eldritch-raiders-aeldari",
@@ -1124,7 +1125,9 @@
         "namespace": "mfm",
         "id": "00eb75e2-21f5-445c-8fd4-431a1133ceb6"
       }
-    ]
+    ],
+    "equipable_by_non_character": true,
+    "equipable_by_epic_hero": true
   },
   {
     "id": "exotic-munitions-eldritch-raiders-aeldari",
@@ -1152,7 +1155,9 @@
         "namespace": "mfm",
         "id": "4ac38d29-d3a8-4299-b36d-adce59b94bb7"
       }
-    ]
+    ],
+    "equipable_by_non_character": true,
+    "equipable_by_epic_hero": true
   },
   {
     "id": "adrenal-infusions-eldritch-raiders-aeldari",
@@ -1181,7 +1186,9 @@
         "namespace": "mfm",
         "id": "077c4e3a-5f38-4e34-99c5-afaee553a5ee"
       }
-    ]
+    ],
+    "equipable_by_non_character": true,
+    "equipable_by_epic_hero": true
   },
   {
     "id": "infamy-aura-corsair-coterie-aeldari",
@@ -1209,7 +1216,9 @@
         "namespace": "mfm",
         "id": "558885b8-e1fc-4c9e-8100-f7402cbda111"
       }
-    ]
+    ],
+    "equipable_by_non_character": true,
+    "equipable_by_epic_hero": true
   },
   {
     "id": "webway-pathstone-corsair-coterie-aeldari",
@@ -1237,7 +1246,9 @@
         "namespace": "mfm",
         "id": "867996f1-aa68-4a1d-a57c-bc2ee1e0e36d"
       }
-    ]
+    ],
+    "equipable_by_non_character": true,
+    "equipable_by_epic_hero": true
   },
   {
     "id": "archraider-corsair-coterie-aeldari",
@@ -1266,7 +1277,9 @@
         "namespace": "mfm",
         "id": "ba1c51ea-71ba-47bc-8e62-298f4ad9f391"
       }
-    ]
+    ],
+    "equipable_by_non_character": true,
+    "equipable_by_epic_hero": true
   },
   {
     "id": "voidstone-corsair-coterie-aeldari",
@@ -1295,7 +1308,9 @@
         "namespace": "mfm",
         "id": "1b083a45-8703-43da-8966-0c3340d8c4e2"
       }
-    ]
+    ],
+    "equipable_by_non_character": true,
+    "equipable_by_epic_hero": true
   },
   {
     "id": "a-foot-in-the-future-fateful-performance-aeldari",
@@ -1394,7 +1409,8 @@
           "Asuryani"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "shadowfall-masks-upgrade-twilight-flickers-aeldari",
@@ -1427,7 +1443,8 @@
           "Harlequins"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "prelude-performer-twilight-flickers-aeldari",
@@ -1482,7 +1499,8 @@
       {
         "unit_id": "kygharils-protectors-warp-spiders"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "seers-hand-kygharils-protectors-aeldari",
@@ -1575,6 +1593,7 @@
           "Asuryani"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   }
 ]

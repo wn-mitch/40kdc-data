@@ -225,9 +225,9 @@ _AT_OR_BELOW_HALF = {
 def test_at_or_below_half_strength_renders_the_inclusive_boundary() -> None:
     from wh40kdc.translate import describe_condition
 
-    assert describe_condition(_AT_OR_BELOW_HALF) == "the unit is at or below half strength"
+    assert describe_condition(_AT_OR_BELOW_HALF) == "this unit is at or below Half-strength"
     below = {"type": "strength", "parameters": {"subject": "this-unit", "below": "half"}}
-    assert describe_condition(below) == "the unit is below half strength"
+    assert describe_condition(below) == "this unit is below Half-strength"
 
 
 @pytest.mark.parametrize(

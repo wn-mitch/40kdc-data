@@ -42,6 +42,13 @@ jobs:
       - name: Test DSL campaign graph and workflow contracts
         run: node --test .omp/skills/dsl-campaign/graph/*.test.js .omp/skills/dsl-campaign/workflows/*.test.js
       - run: cd tools && npm run validate
+      # The committed BSData export (bsdata/) apps load from raw.githubusercontent.com.
+      # `git status` also catches a file the export adds or no longer writes.
+      - run: cd tools && npm run export:bsdata:repo
+      - name: Check the committed BSData export is up to date
+        run: |
+          drift=$(git status --porcelain -- bsdata)
+          if [ -n "$drift" ]; then echo "bsdata/ is stale; run just regen and commit it:"; echo "$drift"; exit 1; fi
       # Catch malformed packages on PRs instead of at publish time on main.
       # `npm pack --dry-run` exercises the prepack pipeline and prints the
       # tarball file list, so a reviewer can eyeball what would ship.
@@ -414,13 +421,18 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # index.bsi names bsdata-latest as its update URL, so this release
-          # always carries the newest data index and data files.
+          # always carries the newest data index and data files. The zips go
+          # up under unversioned names so tools can fetch the newest export
+          # from one fixed URL.
           if ! gh release view bsdata-latest >/dev/null 2>&1; then
             gh release create bsdata-latest --latest=false \
               --title "BSData-compatible export (latest)" \
-              --notes "Add https://github.com/${{ github.repository }}/releases/download/bsdata-latest/index.bsi as a data index URL in BattleScribe. Refreshed on every BSData export release."
+              --notes "Add https://github.com/${{ github.repository }}/releases/download/bsdata-latest/index.bsi as a data index URL in BattleScribe. wh40k-11e-40kdc-newrecruit.zip (JSON) and wh40k-11e-40kdc-battlescribe.zip (XML) hold the newest export. Refreshed on every BSData export release."
           fi
-          gh release upload bsdata-latest --clobber dist/bsdata/battlescribe/*
+          cp "dist/bsdata/wh40k-11e-40kdc-${{ steps.ver.outputs.version }}-newrecruit.zip" dist/bsdata/wh40k-11e-40kdc-newrecruit.zip
+          cp "dist/bsdata/wh40k-11e-40kdc-${{ steps.ver.outputs.version }}-battlescribe.zip" dist/bsdata/wh40k-11e-40kdc-battlescribe.zip
+          gh release upload bsdata-latest --clobber dist/bsdata/battlescribe/* \
+            dist/bsdata/wh40k-11e-40kdc-newrecruit.zip dist/bsdata/wh40k-11e-40kdc-battlescribe.zip
 
   publish-pypi:
     # Auto-publish wh40kdc to PyPI once main is green, via trusted publishing

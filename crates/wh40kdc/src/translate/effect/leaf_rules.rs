@@ -5,7 +5,9 @@ use serde_json::{Map, Value};
 
 use super::placement::place_phrase;
 use super::words::*;
-use crate::translate::condition::{article, nn, obj, objective_phrase, or_list, range_phrase, P};
+use crate::translate::condition::{
+    article, nn, obj, objective_phrase, or_list, range_phrase, with_article, P,
+};
 use crate::translate::dekebab;
 use crate::translate::expiry::expiry_trail;
 
@@ -87,7 +89,7 @@ pub(super) fn test(m: &P, subj: &str) -> String {
     let one = n == 1.0;
     let name = test_name(m.get("test"));
     let tests = if one {
-        format!("a {name} test")
+        with_article(&format!("{name} test"))
     } else {
         format!("{} {name} tests", fnum(n))
     };
@@ -121,13 +123,13 @@ pub(super) fn cost_modifier(m: &P, subj: &str) -> String {
     if sv(m, "applies_to") == Some("the-triggering-use") {
         return match op {
             Some("decrease") => format!(
-                "reduce the CP cost of that use of the {noun} by {amount}CP (to a minimum of 0CP)"
+                "reduce the CP cost of that use of the {noun} by {amount} CP, to a minimum of 0 CP"
             ),
             Some("increase") => {
-                format!("increase the CP cost of that use of the {noun} by {amount}CP")
+                format!("increase the CP cost of that use of the {noun} by {amount} CP")
             }
-            Some("waive") => format!("that use of the {noun} costs no CP"),
-            _ => format!("that use of the {noun} costs {amount}CP"),
+            Some("waive") => format!("that use of the {noun} costs 0 CP (waiving its CP cost)"),
+            _ => format!("that use of the {noun} costs {amount} CP"),
         };
     }
     let named = nn(m, "id");
@@ -146,11 +148,8 @@ pub(super) fn cost_modifier(m: &P, subj: &str) -> String {
     };
     let verb = if named.is_some() { "costs" } else { "cost" };
     match op {
-        Some("waive") => format!(
-            "{which}{whose} can be used without paying {} CP cost",
-            if named.is_some() { "its" } else { "their" }
-        ),
-        Some("set") => format!("{which}{whose} {verb} {amount}CP"),
+        Some("waive") => format!("{which}{whose} can be used without spending CP"),
+        Some("set") => format!("{which}{whose} {verb} {amount} CP"),
         Some("multiply") => {
             let times = if is_num(m, "amount", 2.0) {
                 "twice".to_string()
@@ -165,7 +164,7 @@ pub(super) fn cost_modifier(m: &P, subj: &str) -> String {
             )
         }
         _ => format!(
-            "{which}{whose} {verb} {}CP {}",
+            "{which}{whose} {verb} {} CP {}",
             jstr(Some(nn(m, "amount").unwrap_or(&Value::from(1)))),
             if op == Some("decrease") {
                 "less"
@@ -182,8 +181,8 @@ pub(super) fn resource_die(m: &P) -> String {
         let rolls =
             map_arr(m, "rolls", |r| roll_name(Some(r))).unwrap_or_else(|| vec!["dice".to_string()]);
         return format!(
-            "discard a die from your {pool} and use its value in place of a {} roll",
-            rolls.join(" or ")
+            "discard a die from your {pool} and use its value in place of {}",
+            with_article(&format!("{} roll", or_list(&rolls)))
         );
     }
     let value = sv(m, "value");

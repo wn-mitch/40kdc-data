@@ -1,0 +1,936 @@
+[
+  {
+    "id": "reaver-gatling-blaster",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "347baea8-9b43-4d3f-8e24-2ad2693be2f0"
+      }
+    ],
+    "name": "Reaver gatling blaster",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Reaver gatling blaster",
+        "range": 72,
+        "stats": {
+          "A": 12,
+          "S": 8,
+          "AP": -2,
+          "D": 3,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "reaver-melta-cannon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9c7f5c9b-d955-4fd1-9c77-3f6759a69ad2"
+      }
+    ],
+    "name": "Reaver melta cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Reaver melta cannon",
+        "range": 48,
+        "stats": {
+          "A": "D6+2",
+          "S": 13,
+          "AP": -4,
+          "D": 6,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "melta",
+            "parameters": {
+              "value": 4
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "reaver-volcano-cannon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "5870b9e0-639b-406f-9f27-588298c3fbda"
+      }
+    ],
+    "name": "Reaver volcano cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Reaver volcano cannon",
+        "range": 120,
+        "stats": {
+          "A": "D3+1",
+          "S": 24,
+          "AP": -5,
+          "D": 14,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "heavy"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "anvillus-defence-battery",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8649c33e-5f1c-4d50-9941-0f42f46b6ad7"
+      }
+    ],
+    "name": "Anvillus defence battery",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Anvillus defence battery",
+        "range": 72,
+        "stats": {
+          "A": 8,
+          "S": 8,
+          "AP": -1,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "anti",
+            "parameters": {
+              "target_keyword": "Fly",
+              "threshold": 4
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "ardex-defensor-mauler",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "11c90f72-097b-4c4c-b9fb-b173510c223d"
+      }
+    ],
+    "name": "Ardex-defensor mauler",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Ardex-defensor mauler",
+        "range": 36,
+        "stats": {
+          "A": 6,
+          "S": 6,
+          "AP": -2,
+          "D": 2,
+          "BS": 3
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "reaver-laser-blaster",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "895aa29a-ca2e-4c2e-9ae2-920a73b1f7f8"
+      }
+    ],
+    "name": "Reaver laser blaster",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Reaver laser blaster",
+        "range": 72,
+        "stats": {
+          "A": 8,
+          "S": 20,
+          "AP": -3,
+          "D": "D6+2",
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "nemesis-feet",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "a86f34a6-8511-4a45-95be-218390eea8d2"
+      }
+    ],
+    "name": "Nemesis feet",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Nemesis feet",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 12,
+          "AP": -2,
+          "D": 4,
+          "WS": 4
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "nemesis-quake-cannon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "10163039-ddb5-4083-813f-00905ba1577a"
+      }
+    ],
+    "name": "Nemesis quake cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Nemesis quake cannon",
+        "range": 480,
+        "stats": {
+          "A": "D6+6",
+          "S": 16,
+          "AP": -4,
+          "D": 4,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "indirect-fire"
+          },
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "nemesis-volcano-cannon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "341f48b3-663f-48fe-9919-ebc460d00dee"
+      }
+    ],
+    "name": "Nemesis volcano cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Nemesis volcano cannon",
+        "range": 120,
+        "stats": {
+          "A": "D3+3",
+          "S": 24,
+          "AP": -5,
+          "D": 14,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "warhound-vulcan-mega-bolter",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b0604277-fac5-4f81-9974-89596bb4f1b0"
+      }
+    ],
+    "name": "Warhound vulcan mega-bolter",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Warhound vulcan mega-bolter",
+        "range": 48,
+        "stats": {
+          "A": 20,
+          "S": 6,
+          "AP": -1,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "warhound-inferno-gun",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6f2a7eee-ac32-46b7-8b56-e858a38dccb7"
+      }
+    ],
+    "name": "Warhound inferno gun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Warhound inferno gun",
+        "range": 24,
+        "stats": {
+          "A": "3D6",
+          "S": 7,
+          "AP": -2,
+          "D": 3,
+          "BS": null
+        },
+        "keywords": [
+          {
+            "keyword_id": "torrent"
+          },
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "warhound-turbo-laser-destructor",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "ec2ecfc0-7946-4090-a3bb-342d0ec27d7b"
+      }
+    ],
+    "name": "Warhound turbo-laser destructor",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Warhound turbo-laser destructor",
+        "range": 72,
+        "stats": {
+          "A": "D3+3",
+          "S": 20,
+          "AP": -3,
+          "D": "2D6",
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "warhound-plasma-blastgun",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "dc0016d8-09c9-46db-987e-dbbb3ef6d017"
+      }
+    ],
+    "name": "Warhound plasma blastgun",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "standard",
+        "range": 72,
+        "stats": {
+          "A": "2D6+3",
+          "S": 9,
+          "AP": -3,
+          "D": 4,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      },
+      {
+        "name": "supercharge",
+        "range": 72,
+        "stats": {
+          "A": "2D6+3",
+          "S": 10,
+          "AP": -3,
+          "D": 5,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "hazardous"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "warhound-feet",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e3d3b092-dd91-4707-bd5d-7f2e219579b3"
+      }
+    ],
+    "name": "Warhound feet",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Warhound feet",
+        "range": "Melee",
+        "stats": {
+          "A": 8,
+          "S": 10,
+          "AP": -1,
+          "D": 2,
+          "WS": 4
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "reaver-feet",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "c309e16c-8377-4749-bd29-69fc77448882"
+      }
+    ],
+    "name": "Reaver feet",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Reaver feet",
+        "range": "Melee",
+        "stats": {
+          "A": 8,
+          "S": 12,
+          "AP": -2,
+          "D": 4,
+          "WS": 4
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "reaver-apocalypse-launcher",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "70adeffe-2310-43f1-8d04-6b2455882b4c"
+      }
+    ],
+    "name": "Reaver apocalypse launcher",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Reaver apocalypse launcher",
+        "range": 200,
+        "stats": {
+          "A": "3D6",
+          "S": 7,
+          "AP": -1,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "indirect-fire"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "reaver-power-fist",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "bd253087-a583-454a-818f-33b2369ea408"
+      }
+    ],
+    "name": "Reaver power fist",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "strike",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 20,
+          "AP": -4,
+          "D": 14,
+          "WS": 4
+        }
+      },
+      {
+        "name": "sweep",
+        "range": "Melee",
+        "stats": {
+          "A": 12,
+          "S": 12,
+          "AP": -3,
+          "D": 6,
+          "WS": 4
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "belicosa-volcano-cannon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "6b4f11be-6d5c-43d7-a2a9-8f81e5eae2d3"
+      }
+    ],
+    "name": "Belicosa volcano cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Belicosa volcano cannon",
+        "range": 120,
+        "stats": {
+          "A": "D3+3",
+          "S": 32,
+          "AP": -5,
+          "D": 18,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "mori-quake-cannon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b507168c-6853-420e-90d5-b49101e34b8e"
+      }
+    ],
+    "name": "Mori quake cannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Mori quake cannon",
+        "range": 280,
+        "stats": {
+          "A": "3D6",
+          "S": 16,
+          "AP": -4,
+          "D": 6,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "ignores-cover"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "arioch-power-claw",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "0f76b6cf-a977-4128-b1c8-421c72b5378f"
+      }
+    ],
+    "name": "Arioch power claw",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "strike",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 20,
+          "AP": -4,
+          "D": 24,
+          "WS": 4
+        }
+      },
+      {
+        "name": "sweep",
+        "range": "Melee",
+        "stats": {
+          "A": 12,
+          "S": 12,
+          "AP": -3,
+          "D": 8,
+          "WS": 4
+        }
+      },
+      {
+        "name": "Arioch power claw",
+        "range": 48,
+        "stats": {
+          "A": 20,
+          "S": 6,
+          "AP": -1,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "sunfury-plasma-annihilator",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "9a0460f5-b5e5-471f-9567-0b402d178fbc"
+      }
+    ],
+    "name": "Sunfury plasma annihilator",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "standard",
+        "range": 72,
+        "stats": {
+          "A": "2D6+6",
+          "S": 10,
+          "AP": -3,
+          "D": 5,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      },
+      {
+        "name": "supercharge",
+        "range": 72,
+        "stats": {
+          "A": "2D6+6",
+          "S": 12,
+          "AP": -3,
+          "D": 8,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          },
+          {
+            "keyword_id": "hazardous"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "apocalypse-launcher",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "8eaec81e-19f8-40e2-a8ae-26b30e2f1bbf"
+      }
+    ],
+    "name": "Apocalypse launcher",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Apocalypse launcher",
+        "range": 200,
+        "stats": {
+          "A": 20,
+          "S": 8,
+          "AP": -2,
+          "D": 2,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "indirect-fire"
+          },
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "warlord-feet",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "b7419726-c004-405f-9e6f-e1b88466e6ef"
+      }
+    ],
+    "name": "Warlord feet",
+    "type": "melee",
+    "profiles": [
+      {
+        "name": "Warlord feet",
+        "range": "Melee",
+        "stats": {
+          "A": 6,
+          "S": 12,
+          "AP": -2,
+          "D": 4,
+          "WS": 4
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "ardex-defensor-lascannon",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "23861042-6349-4b82-ada1-a45af6bbcf3d"
+      }
+    ],
+    "name": "Ardex-defensor lascannon",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Ardex-defensor lascannon",
+        "range": 48,
+        "stats": {
+          "A": 1,
+          "S": 12,
+          "AP": -3,
+          "D": "D6+1",
+          "BS": 3
+        }
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "macro-gatling-blaster",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "e1810d06-a6e9-4449-8ae7-52596d861ec8"
+      }
+    ],
+    "name": "Macro gatling blaster",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Macro gatling blaster",
+        "range": 100,
+        "stats": {
+          "A": 30,
+          "S": 9,
+          "AP": -2,
+          "D": 3,
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "sustained-hits",
+            "parameters": {
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  },
+  {
+    "id": "laser-blaster",
+    "external_refs": [
+      {
+        "namespace": "mfm",
+        "id": "50ee8858-c720-4b58-9abb-0b3d90cad8c2"
+      }
+    ],
+    "name": "Laser blaster",
+    "type": "ranged",
+    "profiles": [
+      {
+        "name": "Laser blaster",
+        "range": 72,
+        "stats": {
+          "A": 6,
+          "S": 16,
+          "AP": -4,
+          "D": "D6+3",
+          "BS": 3
+        },
+        "keywords": [
+          {
+            "keyword_id": "blast"
+          }
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    }
+  }
+]

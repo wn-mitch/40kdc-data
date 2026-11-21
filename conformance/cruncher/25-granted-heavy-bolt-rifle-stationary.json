@@ -1,0 +1,43 @@
+{
+  "name": "bolt rifle Saturation x5 granted [HEAVY], stationary: +1 to hit from the granted keyword's catalog rule",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 5,
+  "target": {
+    "unitId": "intercessor-squad",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": true,
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-keyword-grant",
+        "abilityKind": "unit"
+      },
+      "contribution": {
+        "type": "extra-keyword",
+        "keywordRef": {
+          "keyword_id": "heavy"
+        }
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 10,
+      "hits": 8.3333,
+      "wounds": 4.1667,
+      "unsaved": 2.0833,
+      "damage": 2.0833,
+      "after-fnp": 2.0833,
+      "models-killed": 1.0417
+    }
+  }
+}

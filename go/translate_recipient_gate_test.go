@@ -28,7 +28,7 @@ func recipientOC(target map[string]any) map[string]any {
 func TestRecipientGateNamesTheUnitWithTheFilter(t *testing.T) {
 	e := map[string]any{"type": "conditional", "condition": recipientWithin("this-unit"),
 		"effect": recipientOC(map[string]any{"owner": "enemy"})}
-	want := "While an enemy unit is within 3\" of the unit, worsen that unit's Objective Control characteristic by 1."
+	want := "While an enemy unit is within 3\" of this unit, worsen that unit's Objective Control characteristic by 1."
 	if got := recipientGateRender(e); got != want {
 		t.Fatalf("got %q", got)
 	}
@@ -40,7 +40,7 @@ func TestRecipientGateModelLevelSaysThatModel(t *testing.T) {
 	both := map[string]any{"operator": "and", "operands": []any{recipientWithin("this-unit"), shocked}}
 	e := map[string]any{"type": "conditional", "condition": both,
 		"effect": recipientOC(map[string]any{"owner": "enemy", "level": "model"})}
-	want := "While an enemy model is within 3\" of the unit, while that model is Battle-shocked, worsen that model's Objective Control characteristic by 1."
+	want := "While an enemy model is within 3\" of this unit and that model is Battle-shocked, worsen that model's Objective Control characteristic by 1."
 	if got := recipientGateRender(e); got != want {
 		t.Fatalf("got %q", got)
 	}
@@ -52,7 +52,7 @@ func TestRecipientGateInsideASequence(t *testing.T) {
 	improve := map[string]any{"type": "stat-modifier", "target": "this-unit",
 		"modifier": map[string]any{"stat": "OC", "operation": "improve", "value": 1.0}}
 	got := recipientGateRender(map[string]any{"type": "sequence", "steps": []any{gated, improve}})
-	want := "While an enemy VEHICLE unit is within 3\" of the unit, worsen that unit's Objective Control characteristic by 1."
+	want := "While an enemy VEHICLE unit is within 3\" of this unit, worsen that unit's Objective Control characteristic by 1."
 	if !strings.Contains(got, want) {
 		t.Fatalf("got %q", got)
 	}
@@ -64,7 +64,7 @@ func TestRecipientGateLeavesOwnUnitCondition(t *testing.T) {
 		"filter":  map[string]any{"within": map[string]any{"of": "this-model", "range": map[string]any{"inches": 3.0}}},
 	}}
 	e := map[string]any{"type": "conditional", "condition": own, "effect": recipientOC(map[string]any{"owner": "enemy"})}
-	want := "While the unit is within 3\" of this model, worsen all enemy units' Objective Control characteristic by 1."
+	want := "While this unit is within 3\" of this model, worsen enemy units' Objective Control characteristic by 1."
 	if got := recipientGateRender(e); got != want {
 		t.Fatalf("got %q", got)
 	}

@@ -25,6 +25,8 @@ import { resolveAttackBackrefs } from "./compile-attack-backref.js";
 import { compileReactionParts } from "./compile-reaction-parts.js";
 import { compileOpposedDesignations } from "./compile-opposed-designations.js";
 import { hoistResolvedSelections } from "./compile-resolved-selection.js";
+import { dropOwnSideRestatements } from "./compile-owner-restatement.js";
+import { foldDesignationOnce } from "./compile-designation-once.js";
 import { bindArmyAntecedents, foldArmyAttachments, foldArmyPer, foldForwardComposition, resolveArmyGroups } from "./compile-army.js";
 import { bindPrecedingRolls } from "./compile-preceding-roll.js";
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
@@ -35,6 +37,7 @@ import { foldDisembarkMoment } from "./compile-disembark-moment.js";
 import { foldObjectiveCriteria } from "./compile-objective-criteria.js";
 import { foldDestroyedSelections } from "./compile-destroyed-selection.js";
 import { compileForEachPasses } from "./compile-for-each-passes.js";
+import { compileSelectionThenLoop } from "./compile-selection-then-loop.js";
 import { foldAllocatedAttackRolls, foldSelectedModelRolls } from "./compile-selected-model-roll.js";
 import { bindBareFilterHits, bindBeforeFormHits, foldDestroyFilters, foldLeadingHitFilters, foldMortalWoundSources, foldTargetingWeapons, refuseBeforeFormAnaphors } from "./compile-weapon-qualified.js";
 import { refuseUnmovedEventSubject } from "./compile-moved-subject.js";
@@ -236,7 +239,10 @@ function compileChecked(leaves: readonly CompileLeaf[], sourceText: string | und
   // A rolled distance or a start-of-move position that a lowering path read as plain inches would be lost, not refused.
   const lost = result.ok ? lostDistance(leaves, result.mechanics) : null;
   if (lost !== null) return { ok: false, signature: result.signature, errors: [lost] };
-  return result.ok && !enclosed ? withSelfGrantHolders(result, options.abilityId) : result;
+  if (!result.ok || enclosed) return result;
+  // An unclaimed "from your army" that only restates the holder's side gates nothing (compile-owner-restatement.ts).
+  const restated = { ...result, mechanics: { ...result.mechanics, effect: dropOwnSideRestatements(result.mechanics.effect) as typeof result.mechanics.effect } };
+  return withSelfGrantHolders(restated, options.abilityId);
 }
 
 /**
@@ -292,6 +298,9 @@ function compileUnchecked(record: readonly CompileLeaf[], sourceText?: string, o
   // Two for-each-unit-select passes in separate sentences: the second is a later part (compile-for-each-passes.ts).
   const passes = compileForEachPasses(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
   if (passes) return passes;
+  // A selection, then a loop opening a later sentence of the same moment: the loop's sentence onward is a later part (compile-selection-then-loop.ts).
+  const thenLoop = compileSelectionThenLoop(leaves, sourceText, options, compileLeaves, (list) => shapeSignature(ordered(list), sourceText));
+  if (thenLoop) return thenLoop;
   // Printed rule and ability names resolve to their records first (compile-rule-refs.ts). Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient and a floor after its change (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), an ignore-modifier list after its lead-in (compile-ignore-list.ts), a named range's defined values onto its aura (compile-named-range.ts), and a cost table's headings and rows onto its by-table spend (compile-cost-table.ts).
   let bound: CompileLeaf[];
   try {
@@ -463,7 +472,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldFightNext(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldTargetingWeapons(foldDestroyFilters(foldMortalWoundSources(bindEquippedCounts(bound)), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText)), sourceText));
-    const filtered = resolveArmyGroups(foldWeaponAlreadyHas(bindScopeAttacks(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText))));
+    const filtered = resolveArmyGroups(foldWeaponAlreadyHas(bindScopeAttacks(foldDesignationOnce(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText)))));
     // "For each X model you select, roll one D6": a plain roll inside the model selection (compile-selected-model-roll.ts);
     // "select one objective that: …": the criteria fold into the selection (compile-objective-criteria.ts).
     list = foldDestroyedSelections(foldObjectiveCriteria(foldAllocatedAttackRolls(foldSelectedModelRolls(withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(foldConditionExclusions(bindTargetedTarget(filtered), sourceText), sourceText)))])))));

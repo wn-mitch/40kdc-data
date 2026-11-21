@@ -1383,7 +1383,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-space-marines",
     "trigger": {
       "event": "phase-started",
@@ -2802,7 +2801,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-space-marines"
   },
   {
@@ -3252,7 +3250,6 @@
     ],
     "ability_type": "unit",
     "behavior": "passive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "chaos-space-marines"
   },
   {
@@ -5067,7 +5064,12 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "chaos-space-marines"
+    "faction_id": "chaos-space-marines",
+    "option_names": [
+      "Paragon of Hatred",
+      "Mark of Chaos Ascendant",
+      "Lord of the Traitor Legions"
+    ]
   },
   {
     "ability_id": "dark-destiny-chaos-space-marines",
@@ -7130,59 +7132,48 @@
     "ability_type": "detachment",
     "behavior": "reactive",
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "friendly"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "HERETIC ASTARTES"
+          ],
+          "any_of": [
+            "MUTILATORS",
+            "OBLITERATORS",
+            "TERMINATOR"
+          ]
+        },
+        "count": {
+          "min": 0,
+          "max": {
+            "incursion": 1,
+            "strike-force": 2,
+            "onslaught": 3
           }
+        },
+        "eligibility": {
+          "operator": "not",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "state": "engaged"
+                }
+              }
+            }
+          ]
         }
       },
       "effect": {
-        "type": "select-units",
-        "selector": {
-          "filter": {
-            "owner": "friendly",
-            "all_of": [
-              "HERETIC ASTARTES"
-            ],
-            "any_of": [
-              "MUTILATORS",
-              "OBLITERATORS",
-              "TERMINATOR"
-            ]
-          },
-          "count": {
-            "min": 0,
-            "max": {
-              "incursion": 1,
-              "strike-force": 2,
-              "onslaught": 3
-            }
-          },
-          "eligibility": {
-            "operator": "not",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "state": "engaged"
-                  }
-                }
-              }
-            ]
-          }
-        },
-        "effect": {
-          "type": "set-up",
-          "target": "selected-unit",
-          "modifier": {
-            "to": "strategic-reserves",
-            "from": "battlefield"
-          }
+        "type": "set-up",
+        "target": "selected-unit",
+        "modifier": {
+          "to": "strategic-reserves",
+          "from": "battlefield"
         }
       }
     },
@@ -8377,93 +8368,197 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "6d4ec149fd10763e1b1c2f6cbc5ce28f11e6129849e7a8deb5544f420fd2975f",
+    "source_digest": "d351c437630b9f649afd9b806fdf20e3b500feaf1ba45ecc7479adc9bcd8405f",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "hurons-marauders",
     "ability_type": "detachment",
-    "behavior": "passive",
+    "behavior": "reactive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "phase-started",
-        "condition": {
-          "operator": "and",
-          "operands": [
-            {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "command"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
               }
-            },
-            {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
-            }
-          ]
-        }
-      },
-      "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "options": [
-          {
-            "name": "Huron's Elite",
-            "effect": {
-              "type": "roll-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "roll": "hit",
-                "operation": "add",
-                "value": 1
-              }
-            },
-            "id": "huron-s-elite"
+            ]
           },
-          {
-            "name": "Mobile Marauders",
+          "effect": {
+            "type": "ability-part",
+            "duration": "until-next-command-phase",
             "effect": {
-              "type": "sequence",
-              "steps": [
+              "type": "choice",
+              "options": [
                 {
-                  "type": "permission",
-                  "target": "this-unit",
-                  "modifier": {
-                    "activity": "shoot",
-                    "allow": true,
-                    "after": [
-                      "fall-back"
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "HERETIC ASTARTES",
+                      "INFANTRY"
                     ]
+                  },
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "add",
+                    "value": 1
                   }
                 },
                 {
-                  "type": "permission",
-                  "target": "this-unit",
-                  "modifier": {
-                    "activity": "declare-charge",
-                    "allow": true,
-                    "after": [
-                      "fall-back"
-                    ]
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "permission",
+                      "target": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "HERETIC ASTARTES",
+                          "INFANTRY"
+                        ]
+                      },
+                      "modifier": {
+                        "activity": "shoot",
+                        "allow": true,
+                        "after": [
+                          "fall-back"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "permission",
+                      "target": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "HERETIC ASTARTES",
+                          "INFANTRY"
+                        ]
+                      },
+                      "modifier": {
+                        "activity": "declare-charge",
+                        "allow": true,
+                        "after": [
+                          "fall-back"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ],
+              "min_choices": 1,
+              "max_choices": 1
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-started"
+          },
+          "effect": {
+            "type": "for-each-unit",
+            "selector": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "HERETIC ASTARTES",
+                  "INFANTRY"
+                ]
+              }
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "recipient",
+                  "filter": {
+                    "visible": {
+                      "to": {
+                        "owner": "friendly",
+                        "all_of": [
+                          "HURON BLACKHEART"
+                        ],
+                        "level": "model"
+                      }
+                    }
                   }
                 }
-              ]
-            },
-            "id": "mobile-marauders"
+              },
+              "effect": {
+                "type": "ability-part",
+                "duration": "phase",
+                "effect": {
+                  "type": "sequence",
+                  "steps": [
+                    {
+                      "type": "roll-modifier",
+                      "target": "recipient",
+                      "modifier": {
+                        "roll": "hit",
+                        "operation": "add",
+                        "value": 1
+                      }
+                    },
+                    {
+                      "type": "sequence",
+                      "steps": [
+                        {
+                          "type": "permission",
+                          "target": "recipient",
+                          "modifier": {
+                            "activity": "shoot",
+                            "allow": true,
+                            "after": [
+                              "fall-back"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "permission",
+                          "target": "recipient",
+                          "modifier": {
+                            "activity": "declare-charge",
+                            "allow": true,
+                            "after": [
+                              "fall-back"
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
-      "duration": "until-next-command-phase"
+      "duration": "permanent"
     },
-    "community_notes": "[APPROX] Each Command phase, HERETIC ASTARTES INFANTRY units gain one selected ability — Huron's Elite (+1 to Hit rolls) or Mobile Marauders (eligible to shoot and declare a charge in a turn it Fell Back), modeled as a re-selectable menu. The clause granting BOTH abilities to units visible to Huron Blackheart is not modeled. Full rule in raw-text store."
+    "community_notes": "[APPROX] Each Command phase, HERETIC ASTARTES INFANTRY units gain one selected ability — Huron's Elite (+1 to Hit rolls) or Mobile Marauders (eligible to shoot and declare a charge in a turn it Fell Back), modeled as a re-selectable menu. The clause granting BOTH abilities to units visible to Huron Blackheart is not modeled. Full rule in raw-text store.",
+    "option_names": [
+      "Huron’s Elite",
+      "Mobile Marauders"
+    ]
   },
   {
     "ability_id": "raiders-and-reavers-chaos-space-marines",
@@ -9279,14 +9374,6 @@
                     "all_of": [
                       "HERETIC ASTARTES"
                     ]
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "filter": {
-                    "owner": "friendly"
                   }
                 }
               },
@@ -10783,19 +10870,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "fellhammer-siege-host",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "kind": "fight"
+        }
+      },
+      "effect": {
+        "type": "mortal-wounds",
+        "target": "event-subject",
+        "modifier": {
+          "count": 1,
+          "per": "success",
+          "roll": {
+            "dice": 1,
+            "threshold": 4,
+            "per_attack": {
+              "attack_type": "melee"
+            },
+            "max_dice": 6
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "ab55a941bd9ce4bd25764e0ecb8530511e61d6f56c90d24e810dc0b3b73c5fb9"
   },
   {
     "ability_id": "chaos-icon-zarkans-daemonkin-legionaries-chaos-space-marines",
@@ -13651,28 +13774,15 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "matches",
-            "parameters": {
-              "filter": {
-                "owner": "friendly"
-              }
-            }
-          },
-          {
-            "type": "matches",
-            "parameters": {
-              "subject": "this-unit",
-              "filter": {
-                "has_ability": [
-                  "lord-of-chaos-chaos-space-marines"
-                ]
-              }
-            }
+        "type": "matches",
+        "parameters": {
+          "subject": "this-unit",
+          "filter": {
+            "has_ability": [
+              "lord-of-chaos-chaos-space-marines"
+            ]
           }
-        ]
+        }
       },
       "effect": {
         "type": "cost-modifier",
@@ -14055,7 +14165,7 @@
       }
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {
@@ -14404,7 +14514,7 @@
       ]
     },
     "scope": {
-      "duration": "permanent"
+      "duration": "phase"
     },
     "behavior": "reactive",
     "trigger": {
@@ -14650,19 +14760,34 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "fellhammer-siege-host",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "weapon-ability-grant",
+      "target": "this-unit",
+      "modifier": {
+        "keywords": [
+          {
+            "keyword_id": "pistol"
+          }
+        ],
+        "weapons": {
+          "type": "ranged",
+          "exclude_keyword": {
+            "keyword_id": "blast"
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "5ab8174aeafd7b5a0498aac379086ba94b9a9f261284af5c4b9f164e6676487b"
   },
   {
     "ability_id": "predatory-pursuit-soulforged-warpack-chaos-space-marines",
@@ -14866,19 +14991,47 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "hurons-marauders",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "subject": "bearer-transport",
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "normal"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "despite": [
+            "disembarked-this-turn"
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "disembarked"
+    },
+    "source_digest": "88de8f08271778e4d761742a43c58755cc83cbc1af75ec9b492c84b98c61e64b"
   },
   {
     "ability_id": "reavers-flurry-hurons-marauders-chaos-space-marines",
@@ -17050,19 +17203,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "chaos-cult",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "attachment",
+            "parameters": {
+              "subject": "this-model",
+              "role": "leading"
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "has_ability": [
+                  "scouts"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "ability-grant",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "scouts",
+          "value": 6
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "903dd2ceacf220a4f5f6d7c211879b2a138ebba96d7f7f9288d108d173ea0749"
   },
   {
     "ability_id": "weaponised-hatred-renegade-warband-chaos-space-marines",

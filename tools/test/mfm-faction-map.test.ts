@@ -26,9 +26,9 @@ describe("repoDirForFactionName", () => {
     expect(repoDirForFactionName("Blood Legions")).toBe("chaos-daemons");
   });
 
-  it("returns null for titan factions with no repo dir", () => {
-    expect(repoDirForFactionName("Adeptus Titanicus")).toBeNull();
-    expect(repoDirForFactionName("Titanicus Traitoris")).toBeNull();
+  it("maps the titan legion keywords to their own dirs", () => {
+    expect(repoDirForFactionName("Adeptus Titanicus")).toBe("adeptus-titanicus");
+    expect(repoDirForFactionName("Titanicus Traitoris")).toBe("titanicus-traitoris");
   });
 
   it("returns null for undefined / unmappable names", () => {

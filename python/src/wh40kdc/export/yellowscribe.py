@@ -95,9 +95,16 @@ def _render(node: _El, depth: int) -> str:
 
 
 def _fmt_move(m: Any) -> str:
-    """Movement: append the inch mark unless the stored value already has one."""
+    """Movement: append the inch mark unless the stored value already has one; "-" for none."""
+    if m is None:
+        return "-"
     s = str(m)
     return s if s.endswith('"') else f'{s}"'
+
+
+def _dash(v: Any) -> str:
+    """A stat, or "-" where the datasheet prints none."""
+    return "-" if v is None else str(v)
 
 
 def _fmt_target(v: Any) -> str:
@@ -144,7 +151,7 @@ def _unit_stat_profiles(view: Any) -> list[_El]:
                             _leaf("characteristic", [("name", "SV")], _fmt_target(p["Sv"])),
                             _leaf("characteristic", [("name", "W")], str(p["W"])),
                             _leaf("characteristic", [("name", "LD")], _fmt_target(p["Ld"])),
-                            _leaf("characteristic", [("name", "OC")], str(p["OC"])),
+                            _leaf("characteristic", [("name", "OC")], _dash(p["OC"])),
                         ],
                     ),
                 ],

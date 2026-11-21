@@ -5,7 +5,7 @@
  */
 
 import { CompileError, type CompileLeaf } from "./compile-fragments.js";
-import { ARMY_MODELS } from "./families/characteristics.js";
+import { ARMY_MODELS } from "./families/vocabulary.js";
 
 const SELECT = "stance-select-open";
 const SENTENCE_END = /[.!?\n]/gu;

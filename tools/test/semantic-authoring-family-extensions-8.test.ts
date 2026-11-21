@@ -9,7 +9,7 @@ import { compileLeaves } from "../src/semantic-authoring/compile.js";
 import { targetRestrictions } from "../src/semantic-authoring/compile-conditions.js";
 import type { CompileLeaf } from "../src/semantic-authoring/compile-fragments.js";
 import { dslUnitFilter } from "../src/semantic-authoring/compile-unit-filter-dsl.js";
-import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, familyRole, normalizeFingerprintParameters, reviewedFamily } from "../src/semantic-authoring/contracts.js";
 import { coreCheckErrors } from "../src/semantic-authoring/core-checks.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { describeCondition } from "../src/translate/condition.js";
@@ -152,6 +152,12 @@ describe("triggering-target keyword prefix", () => {
     expect(restrictions.eligibility).toEqual({ type: "matches", parameters: { filter: { any_of: ["INFANTRY", "MOUNTED"] } } });
     expect(() => normalize("triggering-target", { selects: "unit", keywords: ["ADEPTUS ASTARTES"], match: "any", any_keywords: ["INFANTRY", "MOUNTED"] })).toThrow(/match must be all/u);
   });
+
+  it("spells any_keywords as printed, like keywords, and refuses one keyword spelled both ways", () => {
+    expect(normalize("triggering-target", { selects: "unit", keywords: ["SAMPLE"], match: "all", any_keywords: ["KÂHL", "OTHER"] }))
+      .toEqual({ selects: "unit", keywords: ["SAMPLE"], match: "all", any_keywords: ["KÂHL", "OTHER"] });
+    expect(() => normalize("triggering-target", { selects: "unit", keywords: ["KÂHL"], match: "all", any_keywords: ["KAHL", "OTHER"] })).toThrow(/both with and without accents/u);
+  });
 });
 
 describe("weapon ability for the attack being made", () => {
@@ -224,13 +230,13 @@ describe("a move starting", () => {
     ]));
     expect(mechanics.trigger).toEqual({ event: "move-started", filter: { move_types: ["normal"] } });
     expect(schemaErrors(mechanics)).toEqual([]);
-    expect(describeTrigger(mechanics.trigger as never)).toBe("when the unit starts a Normal move");
+    expect(describeTrigger(mechanics.trigger as never)).toBe("when this unit starts a Normal move");
     expect(describeTrigger({ event: "move-started", subject: { owner: "enemy" }, filter: { move_types: ["consolidation"] } })).toBe("each time an enemy unit starts a Consolidation move");
   });
 
   it("keeps move-ended's own reading", () => {
     expect(normalize("event", { kind: "move-started", move_types: ["advance"] })).toEqual({ kind: "move-started", move_types: ["advance"] });
-    expect(describeTrigger({ event: "move-ended", filter: { move_types: ["normal"] } })).toBe("when the unit ends a Normal move");
+    expect(describeTrigger({ event: "move-ended", filter: { move_types: ["normal"] } })).toBe("when this unit ends a Normal move");
   });
 });
 
@@ -242,7 +248,7 @@ describe("a mortal-wound cap", () => {
     expect(nodes(mechanics, (node) => node.type === "mortal-wounds")[0]!.modifier).toEqual({ count: "D6", max: 3 });
     expect(schemaErrors(mechanics)).toEqual([]);
     expect(describeAbility({ effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: "D6", max: 3 } }, scope: { duration: "resolution" } } as never))
-      .toContain("(to a maximum of 3 mortal wounds)");
+      .toContain(", to a maximum of 3 mortal wounds");
   });
 
   it("refuses a cap that is not a whole number from 1 to 20", () => {
@@ -265,7 +271,7 @@ describe("Reserves states", () => {
         .toMatchObject({ filter: { state: lowered } });
       expect(schemaErrors(mechanics)).toEqual([]);
     }
-    expect(describeCondition({ type: "matches", parameters: { filter: { state: "in-cult-ambush" } } } as never)).toBe("the unit is in Cult Ambush");
+    expect(describeCondition({ type: "matches", parameters: { filter: { state: "in-cult-ambush" } } } as never)).toBe("this unit is in Cult Ambush");
   });
 
   it("checks a Stratagem target held in Reserves as being in Strategic Reserves", () => {
@@ -375,7 +381,7 @@ describe("Reserves states", () => {
     expect(schemaErrors(mechanics)).toEqual([]);
     const [effect] = nodes(mechanics, (node) => node.type === "marker");
     expect(effect!.modifier).toEqual({ label: "beta-marker", operation: "place", near: [{ of: "this-unit", range: { inches: 1 } }], size_mm: 40 });
-    expect(describeAbility(mechanics as never)).toBe('Place a beta marker (40mm) within 1" of the unit.');
+    expect(describeAbility(mechanics as never)).toBe('Place a beta marker (40mm) within 1" of this unit.');
     expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "remove", size_mm: 40 })).toThrow(/sizes a placed marker/u);
     expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "relocate", distance: 6, size_mm: 40 })).toThrow(/sizes a placed marker/u);
     expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", size_mm: 0 })).toThrow(/at least 1/u);
@@ -405,7 +411,7 @@ describe("negated filter states and all-of exclusions", () => {
     ]));
     expect((mechanics.trigger as { subject: unknown }).subject).toEqual({ owner: "enemy", not_all_of: ["CHARACTER", "MONSTER"] });
     expect(schemaErrors(mechanics)).toEqual([]);
-    expect(describeTrigger(mechanics.trigger as never)).toBe("each time an enemy unit ends a move (the triggering unit must not have all of CHARACTER and MONSTER)");
+    expect(describeTrigger(mechanics.trigger as never)).toBe("each time an enemy unit (excluding CHARACTER MONSTER units) ends a move");
     expect(describeTrigger({ event: "move-ended", subject: { owner: "enemy", not_states: ["engaged", "battle-shocked"] } })).toBe("each time an enemy unit that is unengaged and not Battle-shocked ends a move");
   });
 
@@ -434,30 +440,30 @@ describe("disembarking from a named Transport", () => {
     const happened = nodes(mechanics, (node) => node.type === "happened")[0]!;
     expect(happened.parameters).toMatchObject({ event: "disembarked", filter: { transport: "this-unit" }, window: "turn" });
     expect(schemaErrors(mechanics)).toEqual([]);
-    expect(describeCondition(happened as never)).toBe("the unit disembarked from this Transport this turn");
-    expect(describeTrigger({ event: "disembarked", filter: { transport: "this-model" } })).toBe("when the unit disembarks from this Transport");
+    expect(describeCondition(happened as never)).toBe("this unit disembarked from this Transport this turn");
+    expect(describeTrigger({ event: "disembarked", filter: { transport: "this-model" } })).toBe("when this unit disembarks from this Transport");
   });
 });
 
 describe("describer readings the earlier rounds pinned as collisions", () => {
   it("tells whose roll and how it came out", () => {
-    expect(describeTrigger({ event: "after-roll", filter: { roll: "battle-shock", result: "failure" } })).toBe("when the unit fails a Battle-shock test");
-    expect(describeTrigger({ event: "after-roll", filter: { roll: "battle-shock", result: "success" } })).toBe("when the unit passes a Battle-shock test");
+    expect(describeTrigger({ event: "after-roll", filter: { roll: "battle-shock", result: "failure" } })).toBe("when this unit fails a Battle-shock test");
+    expect(describeTrigger({ event: "after-roll", filter: { roll: "battle-shock", result: "success" } })).toBe("when this unit passes a Battle-shock test");
     expect(describeTrigger({ event: "after-roll", subject: "this-model", filter: { roll: "save", result: "failure" } })).toBe("after a saving throw made for this model is failed");
     expect(describeTrigger({ event: "after-roll", filter: { roll: "charge", result: "success" } })).toBe("after a successful Charge roll");
     expect(describeTrigger({ event: "before-roll", filter: { roll: "deadly-demise" } })).toBe("before a Deadly Demise roll is made");
   });
 
   it("names the destroyer and the opponent", () => {
-    expect(describeTrigger({ event: "destroyed", subject: "this-unit", object: { owner: "enemy" } })).toBe("each time the unit destroys an enemy unit");
+    expect(describeTrigger({ event: "destroyed", subject: "this-unit", object: { owner: "enemy" } })).toBe("each time this unit destroys an enemy unit");
     expect(describeTrigger({ event: "used", subject: { owner: "enemy" }, filter: { kind: "stratagem" } })).toBe("each time your opponent uses a Stratagem");
     expect(describeTrigger({ event: "used", filter: { kind: "stratagem" } })).toBe("each time you use a Stratagem");
   });
 
   it("says how a unit was set up and what a unit is attached to", () => {
-    expect(describeCondition({ type: "happened", parameters: { event: "set-up", filter: { from: "deep-strike" }, window: "turn" } } as never)).toBe("the unit was set up using Deep Strike this turn");
-    expect(describeCondition({ type: "happened", parameters: { event: "set-up", window: "turn" } } as never)).toBe("the unit was set up this turn");
-    expect(describeCondition({ type: "attachment", parameters: { role: "attached", with: { all_of: ["ALPHA SQUAD"] } } } as never)).toBe("the unit is attached to an ALPHA SQUAD unit");
+    expect(describeCondition({ type: "happened", parameters: { event: "set-up", filter: { from: "deep-strike" }, window: "turn" } } as never)).toBe("this unit was set up using Deep Strike this turn");
+    expect(describeCondition({ type: "happened", parameters: { event: "set-up", window: "turn" } } as never)).toBe("this unit was set up this turn");
+    expect(describeCondition({ type: "attachment", parameters: { role: "attached", with: { all_of: ["ALPHA SQUAD"] } } } as never)).toBe("this unit is attached to an ALPHA SQUAD unit");
   });
 
   it("counts a two-dice table and names an allied faction", () => {
@@ -491,5 +497,56 @@ describe("describer readings the earlier rounds pinned as collisions", () => {
     ]))).toThrow(/DSL_GAP: a move cannot act as if it were the charge phase/u);
     expect(describeAbility({ effect: { type: "move", target: "this-unit", modifier: { move_type: "normal", distance: 6, as_if: "movement-phase" } }, scope: { duration: "resolution" } } as never))
       .toContain('make a Normal move of up to 6" as if it were your Movement phase');
+  });
+});
+
+describe("unit-subject input checks", () => {
+  const within = { kind: "within", subject: "this-unit", negated: false, of: "matching-unit", inches: 6, of_side: "friendly" };
+
+  it("refuses a repeated unit-state and keeps at-or-below-half-strength in canonical order", () => {
+    expect(() => normalize("unit-state", { states: ["hidden", "hidden"], subject: "this-unit", negated: false })).toThrow(/twice/u);
+    expect(() => normalize("unit-state", { states: ["at-or-below-half-strength", "hidden", "hidden"], subject: "this-unit", negated: false })).toThrow(/twice/u);
+    expect(normalize("unit-state", { states: ["battle-shocked", "at-or-below-half-strength"], subject: "this-unit", negated: false }))
+      .toEqual({ states: ["at-or-below-half-strength", "battle-shocked"], subject: "this-unit", negated: false });
+  });
+
+  it("keeps destruction, windowed and Stratagem-targeting activities apart from the subject activities", () => {
+    const destroyed = { negated: false, named: "after", container: "none", destroyer: "this-unit" };
+    expect(() => normalize("unit-activity", { activities: ["destroyed-models-by-triggering-attacks", "was-charged-this-turn"], ...destroyed })).toThrow(/not mixed/u);
+    expect(() => normalize("unit-activity", { activities: ["destroyed-units-in-window", "embarked-this-phase"], ...destroyed })).toThrow(/not mixed/u);
+    expect(() => normalize("unit-activity", { activities: ["targeted-with-stratagem-this-phase", "destroyed-stratagem-target"], subject: "this-unit", negated: false, stratagem_ids: ["alpha-gambit"] })).toThrow(/not mixed/u);
+    // A history value still stands beside other subject activities.
+    expect(normalize("unit-activity", { activities: ["was-charged-this-turn", "fought-this-phase"], subject: "this-unit", negated: false }).activities).toEqual(["fought-this-phase", "was-charged-this-turn"]);
+  });
+
+  it("sorts unit-activity lists of base activities alphabetically", () => {
+    expect(normalize("unit-activity", { activities: ["charged-this-turn", "advanced-this-turn"], subject: "this-unit", negated: false }).activities)
+      .toEqual(["advanced-this-turn", "charged-this-turn"]);
+  });
+
+  it("refuses keywords that are not strings", () => {
+    expect(() => normalize("unit-activity", { activities: ["destroyed-models-by-triggering-attacks"], negated: false, named: "after", container: "none", destroyer: "this-unit", keywords: [true] })).toThrow(/strings/u);
+    expect(() => normalize("unit-position", { ...within, of_keywords: [7] })).toThrow(/strings/u);
+  });
+
+  it("measures a named range only to a unit, not to an objective marker", () => {
+    expect(() => normalize("unit-position", { kind: "within", subject: "this-unit", negated: false, of: "objective", range_ref: "synapse", objective_tag: "afflicted" })).toThrow(/range_ref needs of/u);
+  });
+
+  it("takes exclusions and alternatives beside a designation without of_keywords", () => {
+    expect(normalize("unit-position", { ...within, of_designated: "afflicted", of_excluded_keywords: ["ORK"] })).toMatchObject({ of_designated: "afflicted", of_excluded_keywords: ["ORK"] });
+    expect(normalize("unit-position", { ...within, of_designated: "afflicted", of_alternatives: [{ keywords: ["ORK"] }, { keywords: ["GROT"] }] })).toMatchObject({ of_designated: "afflicted" });
+  });
+
+  it("keeps an accented keyword in of_excluded_keywords, as its schema allows", () => {
+    const pattern = new RegExp((reviewedFamily("unit-position").parameterSchema as any).properties.of_excluded_keywords.items.pattern, "u");
+    expect(pattern.test("ÉLITE")).toBe(true);
+    expect(normalize("unit-position", { ...within, of_excluded_keywords: ["ÉLITE"] })).toMatchObject({ of_excluded_keywords: ["ÉLITE"] });
+    expect(() => normalize("unit-position", { ...within, of_keywords: ["ÉLITE"], of_excluded_keywords: ["ELITE"] })).toThrow(/with and without accents/u);
+  });
+
+  it("refuses an accented keyword whose spacing the check rewrites", () => {
+    expect(() => normalize("unit-position", { ...within, of_keywords: ["KÂHL  X"] })).toThrow(/could not keep the accents/u);
+    expect(() => normalize("unit-keyword", { keywords: ["KÂHL  X"], subject: "this-unit", negated: false })).toThrow(/could not keep the accents/u);
   });
 });

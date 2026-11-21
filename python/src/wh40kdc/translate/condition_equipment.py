@@ -67,4 +67,12 @@ def _models_subject(models: P) -> str:
 
 
 def _unit_level(phrase: str, negated: bool) -> str:
-    return f"it is not the case that {phrase}" if negated else phrase
+    if not negated:
+        return phrase
+    if phrase.startswith("one or more models in this unit are "):
+        return f"no model in this unit is {phrase[len('one or more models in this unit are '):]}"
+    if phrase.startswith("one or more models in this unit have "):
+        return f"no model in this unit has {phrase[len('one or more models in this unit have '):]}"
+    if phrase.startswith("at least "):
+        return f"fewer than {phrase[len('at least '):]}"
+    return f"it is not the case that {phrase}"

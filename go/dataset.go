@@ -19,23 +19,24 @@ type Dataset struct {
 	Abilities      *Collection[*AbilityView]
 
 	// Id-bearing collections without bespoke views (records returned as-is).
-	TargetProfiles     *Collection[any]
-	Detachments        *Collection[any]
-	AlliedRules        *Collection[any]
-	Enhancements       *Collection[any]
-	Stratagems         *Collection[any]
-	WargearOptions     *Collection[any]
-	Wargear            *Collection[any]
-	Missions           *Collection[any]
-	MissionMatchups    *Collection[any]
-	MissionCards       *Collection[any]
-	DeploymentPatterns *Collection[any]
-	ForceDispositions  *Collection[any]
-	TerrainTemplates   *Collection[any]
-	TerrainLayouts     *Collection[any]
-	HullShapes         *Collection[any]
-	ResourcePools      *Collection[any]
-	UnitKeywords       *Collection[any]
+	TargetProfiles      *Collection[any]
+	Detachments         *Collection[any]
+	AlliedRules         *Collection[any]
+	Enhancements        *Collection[any]
+	Stratagems          *Collection[any]
+	WargearOptions      *Collection[any]
+	Wargear             *Collection[any]
+	Missions            *Collection[any]
+	MissionMatchups     *Collection[any]
+	MissionCards        *Collection[any]
+	DeploymentPatterns  *Collection[any]
+	ForceDispositions   *Collection[any]
+	KeywordChoiceGroups *Collection[any]
+	TerrainTemplates    *Collection[any]
+	TerrainLayouts      *Collection[any]
+	HullShapes          *Collection[any]
+	ResourcePools       *Collection[any]
+	UnitKeywords        *Collection[any]
 
 	// Id-less collections, exposed as plain lists. UnitCompositions is a
 	// listing, filtered by the view's game mode.
@@ -167,6 +168,7 @@ func buildDataset(raw rawData) *Dataset {
 	ds.MissionCards = idCollection(raw["mission_cards"], nil)
 	ds.DeploymentPatterns = idCollection(raw["deployment_patterns"], nil)
 	ds.ForceDispositions = idCollection(raw["force_dispositions"], nil)
+	ds.KeywordChoiceGroups = idCollection(raw["keyword_choice_groups"], nil)
 	ds.TerrainTemplates = idCollection(raw["terrain_templates"], nil)
 	ds.TerrainLayouts = idCollection(raw["terrain_layouts"], nil)
 	ds.HullShapes = idCollection(raw["hull_shapes"], nil)
@@ -261,7 +263,9 @@ func (ds *Dataset) unitLoadoutOf(unit map[string]any) any {
 }
 
 // alliesFor returns allied-rules offered for an army of factionID running the
-// given detachments.
+// given detachments: those whose host gate (host_faction_ids empty or listing
+// factionID), army gate (army_keywords_any empty or intersecting the faction's
+// keywords) and detachment gate (detachment_ids empty or one selected) pass.
 func (ds *Dataset) alliesFor(factionID string, detachmentIDs []string) []any {
 	faction, ok := ds.Factions.Get(factionID)
 	if !ok {
@@ -278,6 +282,14 @@ func (ds *Dataset) alliesFor(factionID string, detachmentIDs []string) []any {
 	var out []any
 	for _, ruleAny := range ds.AlliedRules.All() {
 		rule := ruleAny.(map[string]any)
+		hosts := getStrList(rule, "host_faction_ids")
+		hostGate := len(hosts) == 0
+		for _, h := range hosts {
+			if h == factionID {
+				hostGate = true
+				break
+			}
+		}
 		armyAny := getStrList(rule, "army_keywords_any")
 		armyGate := len(armyAny) == 0
 		for _, k := range armyAny {
@@ -294,7 +306,7 @@ func (ds *Dataset) alliesFor(factionID string, detachmentIDs []string) []any {
 				break
 			}
 		}
-		if armyGate && detachmentGate {
+		if hostGate && armyGate && detachmentGate {
 			out = append(out, rule)
 		}
 	}
@@ -445,7 +457,11 @@ func (ds *Dataset) attachmentRole(leaderUnitID, defaultRole string, presentUnitI
 		}
 		for _, groupAny := range getList(attachment, "conditional_groups") {
 			group, ok := asMap(groupAny)
-			if !ok || !conditionalAttachmentGroupApplies(group, presentUnitIDs) {
+			// Only a group naming roster units sets a role: a detachment- or
+			// keyword-gated group carries its datasheet's own role, and a shared
+			// leader id would carry it across factions.
+			if !ok || (len(getStrList(group, "required_roster_unit_ids")) == 0 && len(getStrList(group, "excluded_roster_unit_ids")) == 0) ||
+				!conditionalAttachmentGroupApplies(group, presentUnitIDs) {
 				continue
 			}
 			switch getStr(group, "role") {

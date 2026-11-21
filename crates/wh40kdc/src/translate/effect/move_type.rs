@@ -94,7 +94,7 @@ pub(super) fn move_type_inline(e: &P, ctx: &Ctx) -> String {
 
 pub(super) fn move_type_block(e: &P, depth: usize, ctx: &Ctx) -> String {
     let indent = "  ".repeat(depth);
-    let arrow = if depth > 0 { "-> " } else { "" };
+    let arrow = if depth > 0 { "- " } else { "" };
     let parts = clauses(e, ctx);
     if parts.is_empty() {
         return format!("{indent}{arrow}{}.", head(e));

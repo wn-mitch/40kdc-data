@@ -1,5 +1,5 @@
 {
-  "version": 39,
+  "version": 42,
   "kinds": {
     "faction": [
       "adepta-sororitas",
@@ -36,7 +36,9 @@
       "tyranids",
       "ultramarines",
       "white-scars",
-      "world-eaters"
+      "world-eaters",
+      "adeptus-titanicus",
+      "titanicus-traitoris"
     ],
     "detachment": [
       "1st-company-task-force",
@@ -1622,7 +1624,23 @@
       "venatari-with-kinetic-destroyers",
       "venatari-with-verutum-lances",
       "vigilator-squad",
-      "witchseeker-squad"
+      "witchseeker-squad",
+      "chaos-reaver-titan",
+      "chaos-warbringer-nemesis-titan",
+      "chaos-warhound-titan",
+      "chaos-warlord-titan",
+      "reaver-titan",
+      "warbringer-nemesis-titan",
+      "warhound-titan",
+      "warlord-titan",
+      "gladiator-lancer-black-templars",
+      "gladiator-reaper-black-templars",
+      "gladiator-valiant-black-templars",
+      "impulsor-black-templars",
+      "repulsor-black-templars",
+      "repulsor-executioner-black-templars",
+      "ardmob-boyz-2",
+      "coven-of-agonies-wracks-2"
     ],
     "wargear": [
       "a-bolt-rifle-can-be-equipped-with-1-astartes-grenade-launcher",
@@ -5519,7 +5537,43 @@
       "power-sabre-draydens-lance-attilan-rough-riders",
       "torturers-tool-coven-of-agonies-wracks",
       "twin-lascannon-corvus-blackstar",
-      "twin-torturers-tools-coven-of-agonies-wracks"
+      "twin-torturers-tools-coven-of-agonies-wracks",
+      "anvillus-defence-battery",
+      "apocalypse-launcher",
+      "ardex-defensor-lascannon",
+      "ardex-defensor-mauler",
+      "arioch-power-claw",
+      "belicosa-volcano-cannon",
+      "laser-blaster",
+      "macro-gatling-blaster",
+      "mori-quake-cannon",
+      "nemesis-feet",
+      "nemesis-quake-cannon",
+      "nemesis-volcano-cannon",
+      "reaver-apocalypse-launcher",
+      "reaver-feet",
+      "reaver-gatling-blaster",
+      "reaver-laser-blaster",
+      "reaver-melta-cannon",
+      "reaver-power-fist",
+      "reaver-volcano-cannon",
+      "sunfury-plasma-annihilator",
+      "warhound-feet",
+      "warhound-inferno-gun",
+      "warhound-plasma-blastgun",
+      "warhound-turbo-laser-destructor",
+      "warhound-vulcan-mega-bolter",
+      "warlord-feet",
+      "angelus-boltgun-sanguinary-spearhead-sanguinary-guard",
+      "autopistol-claw-of-ascension-hybrid-metamorphs",
+      "chitinous-claws-and-teeth-vardenghast-swarm-termagants",
+      "hand-flamer-claw-of-ascension-hybrid-metamorphs",
+      "kombi-rokkit-ardmob-boyz-2",
+      "metamorph-mutations-claw-of-ascension-hybrid-metamorphs",
+      "shoota-ardmob-boyz",
+      "slugga-ardmob-boyz",
+      "slugga-ardmob-boyz-2",
+      "webber-inquisitors-hand-vigilant-squad"
     ],
     "enhancement": [
       "a-chink-in-their-armour",
@@ -8567,7 +8621,9 @@
       "imperial-knights-allies",
       "imperial-knights-questor-forgepact",
       "adeptus-astartes-allies",
-      "adeptus-custodes-allies"
+      "adeptus-custodes-allies",
+      "adeptus-titanicus-allies",
+      "titanicus-traitoris-allies"
     ],
     "disposition": [
       "disruption",

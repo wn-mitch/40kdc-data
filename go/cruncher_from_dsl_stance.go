@@ -2,11 +2,11 @@ package wh40kdc
 
 // Player-opened gates, offered as levers when the context leaves them unknown:
 // stance-option gates (a `rule-active` condition naming one option of a
-// stance-select rule, without a declared activeRules list) and self-designation
-// gates (a `this-unit` designation the ability itself grants its holders,
-// without declared attackerDesignations). Mirror of splitStanceOption /
-// offerStanceGated / collectOptionBuffs / selfDesignations /
-// selfDesignationGate / offerSelfDesignated in tools/src/cruncher/from-dsl.ts.
+// stance-select rule, without a declared activeRules list) and own-designation
+// gates (a designation on the unit itself, without that side's declared
+// designations). Mirror of splitStanceOption / offerStanceGated /
+// collectOptionBuffs / ownDesignationGate / offerOwnDesignated in
+// tools/src/cruncher/from-dsl.ts.
 
 // stanceOptionRef is one option of a stance-select rule, as a rule-active
 // condition names it: {ability_id, option_id}.
@@ -230,70 +230,23 @@ func withStanceGate(lever map[string]any, gate *stanceGate) map[string]any {
 	return lever
 }
 
-// selfDesignations is the set of tags effect designates on the units holding
-// the ability (`this-unit`, `ability-unit`, or a friendly filter naming the
-// ability in `has_ability`): Martial Katah readies every such unit.
-func selfDesignations(effect any, abilityID string) map[string]bool {
-	tags := map[string]bool{}
-	var visit func(node any)
-	visit = func(node any) {
-		if list, ok := asList(node); ok {
-			for _, item := range list {
-				visit(item)
-			}
-			return
-		}
-		m, ok := asMap(node)
-		if !ok {
-			return
-		}
-		if m["type"] == "designate" {
-			if modifier, ok := asMap(m["modifier"]); ok && modifier["clear"] != true {
-				if tag, ok := modifier["tag"].(string); ok && designatesHolders(m["target"], abilityID) {
-					tags[tag] = true
-				}
-			}
-		}
-		for _, value := range m {
-			visit(value)
-		}
+// ownDesignationGate is the tag of a designation gate on the unit itself
+// (`this-unit`, the default subject), when the context does not declare that
+// unit's designations: the player's own rules put it there or not, so the gate
+// is the player's to open, like a stance option.
+func ownDesignationGate(condition map[string]any, opts dslOpts) (string, bool) {
+	side := "attackerDesignations"
+	if opts.perspective == "target" {
+		side = "targetDesignations"
 	}
-	visit(effect)
-	return tags
-}
-
-// designatesHolders reports whether a designate target is the units holding
-// abilityID.
-func designatesHolders(target any, abilityID string) bool {
-	if target == "this-unit" || target == "ability-unit" {
-		return true
-	}
-	filter, ok := asMap(target)
-	if !ok || filter["owner"] != "friendly" {
-		return false
-	}
-	abilities, ok := asList(filter["has_ability"])
-	if !ok {
-		return false
-	}
-	for _, id := range abilities {
-		if id == abilityID {
-			return true
-		}
-	}
-	return false
-}
-
-// selfDesignationGate is the tag of a `this-unit` designation gate the ability
-// itself grants its holders, when the context does not declare the unit's
-// designations: the player readies the unit, so the gate is the player's to
-// open.
-func selfDesignationGate(condition map[string]any, opts dslOpts) (string, bool) {
-	if opts.context["attackerDesignations"] != nil || opts.selfDesignations == nil {
+	if opts.context[side] != nil {
 		return "", false
 	}
 	params, ok := asMap(condition["parameters"])
-	if condition["type"] != "matches" || !ok || params["subject"] != "this-unit" {
+	if condition["type"] != "matches" || !ok {
+		return "", false
+	}
+	if subject := params["subject"]; subject != nil && subject != "this-unit" {
 		return "", false
 	}
 	filter, ok := asMap(params["filter"])
@@ -301,15 +254,12 @@ func selfDesignationGate(condition map[string]any, opts dslOpts) (string, bool) 
 		return "", false
 	}
 	tag, ok := filter["designated"].(string)
-	if !ok || !opts.selfDesignations[tag] {
-		return "", false
-	}
-	return tag, true
+	return tag, ok
 }
 
-// offerSelfDesignated turns what a self-designation gate opens into opt-in
+// offerOwnDesignated turns what an own-designation gate opens into opt-in
 // levers requiring that designation.
-func offerSelfDesignated(node map[string]any, tag string, source map[string]any, opts dslOpts, out *effectTranslation) {
+func offerOwnDesignated(node map[string]any, tag string, source map[string]any, opts dslOpts, out *effectTranslation) {
 	sub := &effectTranslation{applied: []any{}, unsupported: []any{}, activatable: []any{}}
 	dslWalk(node["effect"], source, opts, sub)
 	out.unsupported = append(out.unsupported, sub.unsupported...)

@@ -128,7 +128,7 @@ function gatedNode(item: Planned): Node {
   return { type: "conditional", condition: item.gate.length === 1 ? item.gate[0]! : { operator: "and", operands: item.gate }, effect: item.node };
 }
 
-/** Whose characteristic a dice count reads (dice-roll@10 count_stat.of), as the DSL's unit-ref. */
+/** Whose characteristic a dice count reads (dice-roll count_stat.of), as the DSL's unit-ref. */
 const COUNT_STAT_REFS: Record<string, string> = { selected: "selected-unit", "this-model": "this-model" };
 
 /**

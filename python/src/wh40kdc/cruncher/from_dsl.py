@@ -19,7 +19,8 @@ from __future__ import annotations
 
 import json
 import math
-from typing import Any, TypeGuard
+from collections.abc import Callable
+from typing import Any, TypeGuard, cast
 
 from wh40kdc.cruncher import from_dsl_levers as _levers
 from wh40kdc.cruncher import from_dsl_selection as _selection
@@ -31,10 +32,9 @@ from wh40kdc.cruncher.from_dsl_shapes import (
     StanceGate,
     enumerate_roll_allocation,
     own_definitions,
+    own_designation_gate,
     roll_label,
     scaled_to_cap,
-    self_designation_gate,
-    self_designations,
     stance_gate_fields,
     unsized_value_reason,
 )
@@ -127,7 +127,8 @@ def _scope_of(
 ) -> str:
     """The scope of a fragment. An undecided condition matters only as much as what it gates: its
     body is translated as if the condition held, and a body that yields no buff or lever takes the
-    widest scope of its own fragments; a body that could change the attack stays unresolved."""
+    widest scope of its own fragments; a body that could change the attack stays unresolved. An
+    undecided trigger moment is reported as the ability part it gates, whose body is its effect."""
     if not UNDECIDED_CONDITION.match(fragment["reason"]):
         return fragment_scope(
             fragment["reason"], fragment.get("effectFragment"), POST_ATTACK_MOMENT
@@ -136,7 +137,7 @@ def _scope_of(
     if (
         depth >= _SCOPE_DEPTH
         or not _is_object(node)
-        or node.get("type") != "conditional"
+        or node.get("type") not in ("conditional", "ability-part")
         or node.get("effect") is None
     ):
         return UNRESOLVED
@@ -170,6 +171,7 @@ def _translate_effect(
         out["unsupported"].extend(snapshot.get("scoped", []))
         effect = snapshot["effect"]
     effect = resolve_named_weapon_bindings(effect)
+    effect = _lasting_setup(effect, activation.get("duration") if activation else None)
     ability_id = source.get("abilityId", "effect") if source.get("kind") == "ability" else "effect"
     opts = {
         "context": context,
@@ -177,15 +179,13 @@ def _translate_effect(
         "abilityId": ability_id,
         "duration": activation.get("duration") if activation else None,
         "usage": activation.get("usage") if activation else None,
-        # Tags the owning ability designates on the units holding it.
-        "selfDesignations": self_designations(effect, ability_id),
         # The abilities the owning record prints, by definition id, for a grant naming one by
         # reference.
         "definitions": own_definitions(effect, ability_id),
     }
     # The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
     effect, opts = _on_attack_roll(activation.get("trigger") if activation else None, effect, opts)
-    _walk(effect, source, opts, out)
+    _walk(effect, source, {**opts, "selections": _selection.selection_order(effect)}, out)
     if activation and (
         activation.get("usage") is not None
         or activation.get("cost") is not None
@@ -613,8 +613,27 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
     elif node_type == "conditional":
         _translate_conditional(node, source, opts, out)
     elif node_type in ("rules-bundle", "sequence"):
-        for step in node.get("steps") or []:
-            _walk(step, source, opts, out)
+        steps = node.get("steps") or []
+        floors = _complementary_floors(steps, source, opts)
+        for index, step in enumerate(steps):
+            floor = floors.get(index)
+            if floor is None:
+                _walk(step, source, opts, out)
+            elif floor == "weaker":
+                _walk(step.get("effect"), source, opts, out)
+            else:
+                out["unsupported"].append(
+                    {
+                        "reason": complement_reason(step["condition"]),
+                        "effectFragment": step,
+                        "needs": _undecided_needs(
+                            step["condition"],
+                            opts["context"],
+                            opts["perspective"],
+                            None if opts.get("grantedHolder") else source,
+                        ),
+                    }
+                )
     elif node_type == "ability-part":
         # Orders are issued at their own moment and last for the part's duration: each Order is a
         # lever for the attacks made while it lasts, as a stance option is.
@@ -641,6 +660,9 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             "usage": opts.get("usage") if node.get("usage") is None else node["usage"],
         }
         step_effect, step_opts = _on_attack_roll(node.get("trigger"), node.get("effect"), part_opts)
+        # An untriggered part with its own duration is a record root of its own (_lasting_setup).
+        if node.get("trigger") is None and "duration" in node:
+            step_effect = _lasting_setup(step_effect, node["duration"])
         part = node if step_effect is node.get("effect") else {**node, "effect": step_effect}
         if (
             node.get("optional") is True
@@ -1260,6 +1282,8 @@ def _translate_stat_modifier(
             }
         )
         return
+    # The attacker's rule changing a characteristic of the unit its attacks target.
+    debuffs_target = opts["perspective"] == "attacker" and _classify_target(node) == "defender"
     if stat == "A":
         if opts["perspective"] != "attacker" or not is_on_buffed_unit:
             return
@@ -1269,8 +1293,10 @@ def _translate_stat_modifier(
             return
         emit({"type": "strength-mod", "value": value})
     elif stat == "T":
-        # Defender stat. Only relevant under target perspective.
-        if opts["perspective"] != "target":
+        # Defender stat: the buffed unit's own under target perspective, or the attack's target
+        # when the attacker's rule changes it ("enemy units within Contagion Range get -1
+        # Toughness").
+        if opts["perspective"] != "target" and not debuffs_target:
             out["unsupported"].append(
                 {
                     "reason": (
@@ -1281,7 +1307,7 @@ def _translate_stat_modifier(
                 }
             )
             return
-        if not is_on_buffed_unit:
+        if not is_on_buffed_unit and not debuffs_target:
             return
         emit({"type": "toughness-mod", "value": value})
     elif stat == "D":
@@ -1306,7 +1332,8 @@ def _translate_stat_modifier(
         emit({"type": "damage-mod", "value": value})
     elif stat == "Sv":
         # Improvement is a save-roll bonus; literal characteristic addition worsens the Save.
-        if opts["perspective"] != "target":
+        # Like T, the attacker's rule can change the attack's target's.
+        if opts["perspective"] != "target" and not debuffs_target:
             out["unsupported"].append(
                 {
                     "reason": (
@@ -1317,7 +1344,7 @@ def _translate_stat_modifier(
                 }
             )
             return
-        if not is_on_buffed_unit:
+        if not is_on_buffed_unit and not debuffs_target:
             return
         # A capped improvement ("cannot improve a Save to better than N+") changes the Save
         # characteristic itself, not the save roll.
@@ -1879,6 +1906,65 @@ def _is_weapon_scoped_condition(condition: dict[str, Any]) -> bool:
     )
 
 
+def _reduce_negated_conjunctions(
+    condition: dict[str, Any], evaluate: Callable[[dict[str, Any]], Any]
+) -> dict[str, Any] | bool:
+    """``condition`` with each negated conjunction decided as far as the context allows.
+
+    In ``not (A and B)`` the operands that are not attack-scoped are evaluated: one false makes
+    the negation hold, so it drops out of an enclosing ``and`` (and the whole condition holds when
+    nothing is left); all true leave ``not`` of the one attack-scoped operand, which gates per
+    attack. Any undecided operand, or more than one attack-scoped operand, leaves the negation as
+    authored. Returns ``True`` when the condition holds outright and ``condition`` itself when
+    nothing changes. Mirrors ``reduceNegatedConjunctions`` in ``tools/src/cruncher/from-dsl.ts``.
+    """
+    operator = condition.get("operator")
+    raw = condition.get("operands")
+    if operator == "not" and isinstance(raw, list) and len(raw) == 1:
+        inner = raw[0]
+        if not _is_object(inner) or inner.get("operator") != "and":
+            return condition
+        inner_raw = inner.get("operands")
+        if not isinstance(inner_raw, list):
+            return condition
+        operands = [operand for operand in inner_raw if _is_object(operand)]
+        if len(operands) != len(inner_raw):
+            return condition
+        scoped = [
+            operand
+            for operand in operands
+            if operand.get("operator") is None and _is_weapon_scoped_condition(operand)
+        ]
+        rest = [operand for operand in operands if not any(operand is s for s in scoped)]
+        if not scoped or not rest:
+            return condition
+        verdicts = [evaluate(operand) for operand in rest]
+        if any(verdict is False for verdict in verdicts):
+            return True
+        if any(verdict == "unknown" for verdict in verdicts) or len(scoped) != 1:
+            return condition
+        return {"operator": "not", "operands": [scoped[0]]}
+    if operator == "and" and isinstance(raw, list):
+        changed = False
+        kept: list[Any] = []
+        for operand in raw:
+            reduced = (
+                _reduce_negated_conjunctions(operand, evaluate) if _is_object(operand) else operand
+            )
+            if reduced is not operand:
+                changed = True
+            if reduced is not True:
+                kept.append(reduced)
+        if not changed:
+            return condition
+        if not kept:
+            return True
+        if len(kept) == 1 and _is_object(kept[0]):
+            return cast(dict[str, Any], kept[0])
+        return {**condition, "operands": kept}
+    return condition
+
+
 def _negated_weapon_applicability(operands: list[Any]) -> Any:
     """``not attack-is {weapons: {keyword}}`` as a weapon exclusion: the effect applies to attacks
     with none of those weapon keywords. Any other negation needs the attack context."""
@@ -1988,6 +2074,103 @@ def _without_selection_window(condition: dict[str, Any], effect: Any) -> dict[st
     return kept[0] if len(kept) == 1 else {"operator": "and", "operands": kept}
 
 
+def _outlasts_phase(duration: Any) -> bool:
+    """A record duration that outlasts the phase its top-level gate names ("until the end of the
+    turn"). Mirrors TS ``outlastsPhase``."""
+    return isinstance(duration, str) and (
+        duration in ("turn", "battle-round", "battle") or duration.startswith("until-")
+    )
+
+
+# Selections made in the gate's phase whose result lasts the record's duration.
+_LASTING_SELECTIONS = frozenset({"choice", "select-units", "designate-target", "designate"})
+
+
+def _has_phase_clock(condition: dict[str, Any]) -> bool:
+    if condition.get("type") == "phase-is":
+        return True
+    operands = condition.get("operands")
+    return (
+        condition.get("operator") == "and"
+        and isinstance(operands, list)
+        and any(_is_object(operand) and _has_phase_clock(operand) for operand in operands)
+    )
+
+
+def _lasting_activation_condition(condition: dict[str, Any], duration: Any) -> dict[str, Any]:
+    """A lasting activation's clock is historical; its other eligibility still applies. Mirrors
+    TS ``activationCondition``."""
+    expiry = duration if isinstance(duration, str) else ""
+    spans_phases = expiry in {
+        "turn",
+        "battle-round",
+        "battle",
+        "permanent",
+        "while-leading",
+        "one-use",
+        "control-lost",
+    } or expiry.startswith("until-")
+    clock = condition.get("type")
+    if spans_phases and (
+        clock == "phase-is"
+        or (clock == "player-turn-is" and expiry != "turn")
+        or (clock == "battle-round" and expiry not in ("turn", "battle-round"))
+    ):
+        return {"type": "timing-is", "parameters": {"timing": "activation"}}
+    operands = condition.get("operands")
+    if isinstance(condition.get("operator"), str) and isinstance(operands, list):
+        return {
+            **condition,
+            "operands": [
+                _lasting_activation_condition(operand, duration) if _is_object(operand) else operand
+                for operand in operands
+            ],
+        }
+    return condition
+
+
+def _lasting_setup(effect: Any, duration: Any) -> Any:
+    """A record's top-level phase gate under a duration that outlasts the phase says when the
+    effect is set up, not when it applies. Around a selection the window only times the pick, so
+    it is dropped; around any other effect the gate still holds in its own phase, and in a later
+    phase it is the player-timed activation clock. Mirrors TS ``lastingSetup``."""
+    if (
+        not _is_object(effect)
+        or effect.get("type") != "conditional"
+        or not _is_object(effect.get("condition"))
+        or not _outlasts_phase(duration)
+    ):
+        return effect
+    condition = effect["condition"]
+    if not _has_phase_clock(condition):
+        return effect
+    inner = effect.get("effect")
+    if _is_object(inner) and str(inner.get("type")) in _LASTING_SELECTIONS:
+
+        def operands(node: dict[str, Any]) -> list[dict[str, Any]]:
+            if node.get("operator") == "and" and isinstance(node.get("operands"), list):
+                items = [item for item in node["operands"] if _is_object(item)]
+                return [leaf for item in items for leaf in operands(item)]
+            return [node]
+
+        kept = [
+            operand
+            for operand in operands(condition)
+            if not (isinstance(operand.get("type"), str) and operand["type"] in _SELECTION_WINDOW)
+        ]
+        if not kept:
+            return inner
+        guard = kept[0] if len(kept) == 1 else {"operator": "and", "operands": kept}
+        return {**effect, "condition": guard}
+    return {
+        **effect,
+        "condition": {
+            "operator": "or",
+            "operands": [condition, _lasting_activation_condition(condition, duration)],
+        },
+    }
+
+
 _DICE_TABLE_REASON = 'effect type "dice-table" is not modelled by the buff layer'
 
 
@@ -2041,6 +2224,21 @@ def _translate_conditional(
     if guard is not condition:
         _translate_conditional({**node, "condition": guard}, source, opts, out)
         return
+    reduced = _reduce_negated_conjunctions(
+        condition,
+        lambda leaf: _evaluate_condition(
+            leaf,
+            opts["context"],
+            opts["perspective"],
+            None if opts.get("grantedHolder") else source,
+        ),
+    )
+    if reduced is not condition:
+        if reduced is True:
+            _walk(effect, source, opts, out)
+            return
+        _translate_conditional({**node, "condition": reduced}, source, opts, out)
+        return
     if _is_weapon_scoped_condition(condition):
         applicability = _condition_to_applicability(
             condition, opts["perspective"], opts["context"].get("attackerToughness")
@@ -2055,9 +2253,9 @@ def _translate_conditional(
             {"reason": POST_ATTACK_MOMENT, "effectFragment": node["_activation_source"]}
         )
         return
-    designation = self_designation_gate(condition, opts)
+    designation = own_designation_gate(condition, opts)
     if designation is not None:
-        _offer_self_designated(node, designation, source, opts, out)
+        _offer_own_designated(node, designation, source, opts, out)
         return
     stance = _split_stance_option(condition) if opts["context"].get("activeRules") is None else None
     if stance is not None:
@@ -2091,19 +2289,12 @@ def _translate_conditional(
         None if opts.get("grantedHolder") else source,
     )
     if verdict == "unknown":
-        # An operator condition (`not`, `and`, `or`) is named by its operator.
-        condition_name = condition.get("type")
-        if condition_name is None:
-            condition_name = condition.get("operator")
         if _condition_mentions_timing(evaluated):
             _enumerate_timing_gate({**node, "condition": evaluated}, source, opts, out)
         else:
             out["unsupported"].append(
                 {
-                    "reason": (
-                        "conditional: cannot evaluate condition "
-                        f'"{_js_str(condition_name)}" against current context'
-                    ),
+                    "reason": _undecided_condition_reason(condition),
                     "effectFragment": node.get("_activation_source", node),
                     "needs": _undecided_needs(
                         evaluated,
@@ -2116,6 +2307,116 @@ def _translate_conditional(
         return
     if verdict:
         _walk(effect, source, opts, out)
+
+
+def _undecided_condition_reason(condition: dict[str, Any]) -> str:
+    """The reason a conditional whose condition the context leaves undecided is reported under.
+
+    An operator condition (`not`, `and`, `or`) is named by its operator.
+    """
+    condition_name = condition.get("type")
+    if condition_name is None:
+        condition_name = condition.get("operator")
+    name = _js_str(condition_name)
+    return f'conditional: cannot evaluate condition "{name}" against current context'
+
+
+def complement_reason(condition: dict[str, Any]) -> str:
+    """The reason the stronger of a complementary re-roll pair is reported under while undecided.
+
+    It is an undecided conditional like any other, so callers decide it through its ``needs``; the
+    suffix notes that the weaker re-roll applies meanwhile.
+    """
+    suffix = "the weaker re-roll of its complementary pair applies"
+    return f"{_undecided_condition_reason(condition)}; {suffix}"
+
+
+_REROLL_SUBSET_RANK = {"ones": 1, "ones-and-twos": 2, "all-failures": 3}
+
+
+def _stable_json(value: Any) -> str:
+    """JSON with object keys sorted, so equal values compare equal whatever their key order."""
+    return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+
+def _reroll_rank(modifier: dict[str, Any]) -> int | None:
+    """How much of a roll a re-roll covers: a higher rank re-rolls every die a lower one does."""
+    if modifier.get("result_scope") == "any-result":
+        return 4
+    return _REROLL_SUBSET_RANK.get(str(modifier.get("subset")))
+
+
+def _reroll_identity(effect: Any) -> str | None:
+    """The re-roll effect's target and modifier without its coverage, which two comparable
+    re-rolls share."""
+    if not _is_object(effect) or effect.get("type") != "re-roll":
+        return None
+    modifier = effect.get("modifier")
+    if not _is_object(modifier) or _reroll_rank(modifier) is None:
+        return None
+    rest = {k: v for k, v in modifier.items() if k not in ("subset", "result_scope")}
+    identity: dict[str, Any] = {"modifier": rest}
+    if "target" in effect:
+        identity["target"] = effect["target"]
+    return _stable_json(identity)
+
+
+def _complementary_floors(
+    steps: list[Any], source: BuffSource, opts: dict[str, Any]
+) -> dict[int, str]:
+    """Steps of a sequence that form complementary conditionals ("C: A", "not C: B") whose
+    condition is undecided and whose effects are re-rolls of the same roll, one covering the
+    other. Exactly one of them applies, so the weaker always does: it is marked ``weaker``
+    (applied without its condition) and the stronger ``stronger`` (reported as needing it)."""
+    floors: dict[int, str] = {}
+    missing = object()
+
+    def negation_of(condition: Any) -> Any:
+        if (
+            _is_object(condition)
+            and condition.get("operator") == "not"
+            and isinstance(condition.get("operands"), list)
+            and len(condition["operands"]) == 1
+        ):
+            return condition["operands"][0]
+        return missing
+
+    def same(left: Any, right: Any) -> bool:
+        return left is not missing and _stable_json(left) == _stable_json(right)
+
+    for left in range(len(steps)):
+        for right in range(left + 1, len(steps)):
+            if left in floors or right in floors:
+                continue
+            a, b = steps[left], steps[right]
+            if not _is_object(a) or not _is_object(b):
+                continue
+            if a.get("type") != "conditional" or b.get("type") != "conditional":
+                continue
+            if same(negation_of(a.get("condition")), b.get("condition")):
+                positive = b.get("condition")
+            elif same(negation_of(b.get("condition")), a.get("condition")):
+                positive = a.get("condition")
+            else:
+                continue
+            if not _is_object(positive):
+                continue
+            verdict = _evaluate_condition(
+                positive,
+                opts["context"],
+                opts["perspective"],
+                None if opts.get("grantedHolder") else source,
+            )
+            if verdict != "unknown":
+                continue
+            identity = _reroll_identity(a.get("effect"))
+            if identity is None or identity != _reroll_identity(b.get("effect")):
+                continue
+            rank_a = _reroll_rank(a["effect"]["modifier"]) or 0
+            rank_b = _reroll_rank(b["effect"]["modifier"]) or 0
+            floors[left] = "weaker" if rank_a <= rank_b else "stronger"
+            floors[right] = "stronger" if rank_a <= rank_b else "weaker"
+    return floors
 
 
 def _stance_option_of(operand: Any) -> dict[str, str] | None:
@@ -2216,14 +2517,14 @@ def _offer_stance_gated(
     )
 
 
-def _offer_self_designated(
+def _offer_own_designated(
     node: dict[str, Any],
     tag: str,
     source: BuffSource,
     opts: dict[str, Any],
     out: EffectTranslation,
 ) -> None:
-    """What a self-designation gate opens becomes opt-in levers requiring that designation."""
+    """What an own-designation gate opens becomes opt-in levers requiring that designation."""
     sub: EffectTranslation = {"applied": [], "unsupported": [], "activatable": []}
     _walk(node.get("effect"), source, opts, sub)
     out["unsupported"].extend(sub["unsupported"])
@@ -2643,6 +2944,29 @@ def same_snapshot_value(left: Any, right: Any) -> bool:
     )
 
 
+def marks_only(node: Any) -> bool:
+    """Whether an effect only marks units: designations, possibly under selections, loops,
+    gates and sequences. It grants no buff, so a loop over it needs no trigger-time recipients;
+    the marks it leaves are scenario facts."""
+    if not _is_object(node):
+        return False
+    kind = node.get("type")
+    if kind == "designate":
+        return True
+    if kind in ("select-units", "for-each-unit"):
+        return marks_only(node.get("effect"))
+    if kind == "conditional":
+        return marks_only(node.get("effect")) and (
+            node.get("on_fail") is None or marks_only(node.get("on_fail"))
+        )
+    if kind == "sequence":
+        steps = node.get("steps")
+        return (
+            isinstance(steps, list) and len(steps) > 0 and all(marks_only(step) for step in steps)
+        )
+    return False
+
+
 def recipient_snapshot_reason(trigger: Any, effect: Any) -> str | None:
     """Detect trigger-time recipient sets that require caller-attested history."""
 
@@ -2657,6 +2981,9 @@ def recipient_snapshot_reason(trigger: Any, effect: Any) -> str | None:
             else active_trigger
         )
         triggers = inherited if isinstance(inherited, list) else [inherited]
+        # A loop that only marks units grants nothing to snapshot (marks_only).
+        if value.get("type") == "for-each-unit" and marks_only(value):
+            return False
         if value.get("type") == "for-each-unit" and any(
             _is_object(item) and isinstance(item.get("event"), str) and not is_attack_step(item)
             for item in triggers
@@ -2701,6 +3028,8 @@ def resolve_recipient_snapshots(
             and isinstance(item.get("event"), str)
             and not is_attack_step(item)
         ]
+        if node.get("type") == "for-each-unit" and historical and marks_only(node):
+            return {"type": "sequence", "steps": []}
         if node.get("type") == "for-each-unit" and historical:
             matches = [
                 snap
@@ -2813,7 +3142,10 @@ def _enumerate_choice(
             fragment = item.get("effectFragment")
             grant = _is_object(fragment) and fragment.get("type") == "ability-grant"
             if grant and "choice" not in item:
-                item = {**item, "choice": {"lever": lever, "label": label, "group": group}}
+                choice: dict[str, Any] = {"lever": lever, "label": label, "group": group}
+                if _is_index(node.get("secondary_option"), i):
+                    choice["secondary"] = True
+                item = {**item, "choice": choice}
             out["unsupported"].append(item)
         if not buffs:
             continue
@@ -2824,8 +3156,15 @@ def _enumerate_choice(
                 "buffs": buffs,
                 **stance_gate_fields(gate),
                 "group": group,
+                # The option a choice marks as a Stratagem's secondary effect (its extra CP).
+                **({"secondary": True} if _is_index(node.get("secondary_option"), i) else {}),
             }
         )
+
+
+def _is_index(value: Any, i: int) -> bool:
+    """Whether ``value`` is the integer index ``i`` (never a bool)."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and value == i
 
 
 def _enumerate_dice_pool(
@@ -3405,6 +3744,9 @@ def _combine_applicability(a: dict[str, Any], b: dict[str, Any]) -> dict[str, An
         out["rollType"] = b["rollType"]
     if b.get("onCritical"):
         out["onCritical"] = b["onCritical"]
+    for side_filter in ("attackerFilter", "targetFilter"):
+        if side_filter in b:
+            out[side_filter] = b[side_filter]
     if b.get("requiresTargetKeyword"):
         out["requiresTargetKeyword"] = b["requiresTargetKeyword"]
     if b.get("requiresAttackerKeyword"):
@@ -3750,7 +4092,25 @@ def _matches_unit_filter(
                 return False
             if verdict == "unknown":
                 unknown = True
+        elif (
+            key == "visible"
+            and side == "target"
+            and isinstance(value, dict)
+            and len(value) == 1
+            and value.get("to") == "attacker"
+        ):
+            # The attack's target as the attacking model sees it is a declared fact.
+            visible = ctx.get("targetVisible")
+            if visible is False:
+                return False
+            if not isinstance(visible, bool):
+                unknown = True
         elif key == "level" and value == "unit":
+            continue
+        elif (
+            key == "level" and value == "model" and all(name in ("level", "owner") for name in filt)
+        ):
+            # "Each model from your army": every model of a unit on that side, so the whole unit.
             continue
         elif (
             key == "level"
@@ -4179,10 +4539,11 @@ def _evaluate_condition_from_context(
     if ctype == "guided":
         # Guided is read for the attacking unit: a For the Greater Good unit, not an
         # Observer, targeting a Spotted unit.
+        # "attacker" names that unit in either perspective.
         subject = params.get("subject") if params else None
-        if (subject is not None and not _is_buffed_unit(subject)) or ctx.get(
-            "attackerGuided"
-        ) is None:
+        if (
+            subject is not None and subject != "attacker" and not _is_buffed_unit(subject)
+        ) or ctx.get("attackerGuided") is None:
             return "unknown"
         return ctx["attackerGuided"]
     if ctype == "attachment":
@@ -4465,15 +4826,6 @@ def _alternative_matches(alternative: Any, have: set[str]) -> bool | str:
     return "unknown" if other else True
 
 
-_SELECTOR_FIDELITY_FIELDS = (
-    "eligibility",
-    "reference",
-    "origin",
-    "limit",
-    "bind_as",
-)
-
-
 def _trigger_has_unresolved_source(trigger: Any) -> bool:
     if not _is_object(trigger):
         return False
@@ -4483,20 +4835,15 @@ def _trigger_has_unresolved_source(trigger: Any) -> bool:
 
 
 def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
-    selector = node.get("selector") or {}
     # A list of entries never binds a beneficiary or reference (bound-unit-attacks-reference).
     applies_raw = node.get("applies")
     applies: dict[str, Any] = applies_raw if isinstance(applies_raw, dict) else {}
     modifier = node.get("modifier") or {}
     consumer = modifier.get("consumer") or {}
     node_type = node.get("type")
-    selection_binding = node_type in ("select-units", "for-each-unit") and (
-        isinstance(selector.get("filter"), dict)
-        and (
-            selector["filter"].get("level") == "model"
-            or selector["filter"].get("model_names") is not None
-            or any(selector.get(key) is not None for key in _SELECTOR_FIDELITY_FIELDS)
-        )
+    # TS `hasUnresolvedFidelityBinding`: any selector names a binding the buff engine cannot hold.
+    selection_binding = node_type in ("select-units", "for-each-unit") and _is_object(
+        node.get("selector")
     )
     # A designation's own selection (range, visibility, eligibility) is what its
     # lever's player vouches for, so only the `applies` bindings are unresolved.

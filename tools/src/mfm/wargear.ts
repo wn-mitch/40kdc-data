@@ -30,6 +30,8 @@
 import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
+import { chapterReprints, unitIdForDatasheet, weaponOwnerId } from "./chapter-reprints.js";
+import { datasheetTwins } from "./datasheet-twins.js";
 import { MfmDump, type DatasheetRow,
 type PublicationRow,
 type FactionKeywordRow,
@@ -51,7 +53,7 @@ import { type GoldenMode, modeOfPublication, mergeMode } from "./game-mode.js";
 import { repoDirForFactionName, repoDirs, FACTION_ALIASES, SHARED_ROSTERS } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
 import { currentGameVersion } from "./dataslate.js";
-import { applyModelFlags, flaggedModelNames } from "./model-flags.js";
+import { applyModelFlags, applyStatlineSource, flaggedModelNames, statlineSources } from "./model-flags.js";
 import {
   mintWargear,
   mintWeapon,
@@ -105,14 +107,19 @@ interface UnitRecord {
 /**
  * Resolve the core record for a dump datasheet. Ordinary sheets retain their
  * stable name-derived ids; Combat Patrol sheets have mode-specific display names,
- * so their seeded MFM external reference is the authoritative join key.
+ * so their seeded MFM external reference is the authoritative join key. A chapter
+ * reprint resolves to its own unit (`chapter-reprints.ts`).
  */
 function datasheetUnitId(
+  dump: MfmDump,
   ds: DatasheetRow,
   name: string,
   byId: ReadonlyMap<string, UnitRecord>,
   byMfmId: ReadonlyMap<string, string>,
 ): string | null {
+  // A chapter reprint or a distinct same-named copy reads only into its own unit.
+  const routed = ds.id ? (chapterReprints(dump).get(ds.id) ?? datasheetTwins(dump).get(ds.id)) : undefined;
+  if (routed) return byId.has(routed.unitId) ? routed.unitId : null;
   try {
     const nameId = nameToId(name);
     if (byId.has(nameId)) return nameId;
@@ -194,10 +201,13 @@ export const WEAPON_ALIASES: Record<string, Record<string, string>> = {
  * fuzzy fallback in {@link makeResolver} must never bridge them. Keyed
  * `<dump-slug>|<repo-id>`. A Great Unclean One's `bilesword` (S9 AP-2) is not the
  * Plague Surgeon's `balesword`; bridging them rewrote the Plague Surgeon's weapon
- * name the first time a Death Guard Great Unclean One was projected.
+ * name the first time a Death Guard Great Unclean One was projected. The
+ * Venatari's `tarsus-buckler` is a melee weapon (S6); `tarsis-buckler` is a
+ * separate profile-less wargear record, so bridging them dropped the weapon.
  */
 export const NOT_SPELLING_DRIFT: ReadonlySet<string> = new Set([
   "bilesword|balesword",
+  "tarsus-buckler|tarsis-buckler",
 ]);
 
 /**
@@ -363,7 +373,9 @@ export function makeResolver(
  * plus `${baseId}-${unitId}` variants and rewires this unit's references to the
  * variant — so resolving a dump name back to the bare id on a wargear re-run would
  * silently undo that rewiring and orphan the variant. If the faction vocabulary
- * holds a variant of the resolved id for this unit, the variant wins.
+ * holds a variant of the resolved id for this unit, the variant wins. `variantOwner`
+ * names the unit whose variants and aliases apply (a chapter reprint uses its generic
+ * unit's, see `chapter-reprints.ts`).
  */
 export function unitScopedResolver(
   validIds: Set<string>,
@@ -371,14 +383,15 @@ export function unitScopedResolver(
   dir: string,
   unitId: string,
   factionResolve: (name: string) => string | null,
+  variantOwner: string = unitId,
 ): (name: string) => string | null {
-  const unitAliases = WEAPON_ALIASES_BY_UNIT[dir]?.[unitId];
+  const unitAliases = WEAPON_ALIASES_BY_UNIT[dir]?.[variantOwner];
   const base = unitAliases
     ? makeResolver(validIds, autoResolved, WEAPON_ALIASES[dir] ?? {}, unitAliases)
     : factionResolve;
   return (name: string) => {
     const id = base(name);
-    if (id && validIds.has(`${id}-${unitId}`)) return `${id}-${unitId}`;
+    if (id && validIds.has(`${id}-${variantOwner}`)) return `${id}-${variantOwner}`;
     return id;
   };
 }
@@ -2046,7 +2059,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      const id = datasheetUnitId(ds, name, byId, byMfmId);
+      const id = datasheetUnitId(dump, ds, name, byId, byMfmId);
       if (!id) {
         try {
           const sourceId = nameToId(name);
@@ -2063,7 +2076,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
       // A unit with reviewed per-unit overrides gets a resolver that layers them on
       // top of the faction aliases. Construct it before minting so an existing
       // reviewed alias wins over creating a duplicate source-name slug.
-      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve, weaponOwnerId(dump, id));
       // Mint source-owned weapons and non-weapon equipment before deriving the
       // loadout. The resolver can then retain every mechanically selectable item
       // instead of dropping names merely because a generated entity was absent.
@@ -2141,7 +2154,7 @@ export function runWargear(dump: MfmDump, write: boolean, onlyDir?: string): War
           for (const m of comp.models) {
             const ids = derived.defaultsByModel.get(m.name);
             if (!ids?.length) continue;
-            const manual = manualDefaults(dir, id, m.name, validIds);
+            const manual = manualDefaults(dir, weaponOwnerId(dump, id), m.name, validIds);
             const expected = [...ids, ...manual.filter((itemId) => !ids.includes(itemId))];
             const cur = Array.isArray(m.default_weapon_ids) ? m.default_weapon_ids : [];
             if (!sameMultiset(cur, expected)) {
@@ -2440,16 +2453,12 @@ export function forEachDirDatasheet(dump: MfmDump, cb: (ctx: DirDatasheetCtx) =>
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = unitIdForDatasheet(dump, ds);
+      if (!id) continue;
       if (!byId.has(id)) continue; // dump datasheet with no repo unit → caught by unitInventory
       if (matchedRepoIds.has(id)) continue; // first candidate dir wins
       matchedRepoIds.add(id);
-      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve, weaponOwnerId(dump, id));
       cb({ dir, ds, unitId: id, resolve: unitResolve });
     }
   }
@@ -2568,18 +2577,14 @@ export function runWargearBudgets(dump: MfmDump, onlyDir?: string): BudgetReport
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = unitIdForDatasheet(dump, ds);
+      if (!id) continue;
       const rec = byId.get(id);
       if (!rec || matchedRepoIds.has(id)) continue;
       matchedRepoIds.add(id);
       matched++;
 
-      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve, weaponOwnerId(dump, id));
       const budgets = limitedSetBudgets(
         dump,
         ds.id!,
@@ -2720,18 +2725,14 @@ export function runWargearCosts(dump: MfmDump, onlyDir?: string): WargearCostsRe
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = unitIdForDatasheet(dump, ds);
+      if (!id) continue;
       const rec = byId.get(id);
       if (!rec || matchedRepoIds.has(id)) continue;
       matchedRepoIds.add(id);
       matched++;
 
-      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve, weaponOwnerId(dump, id));
       const costs = pricedWargearItems(dump, ds.id!, unitResolve);
 
       const before = JSON.stringify(rec.wargear_costs ?? null);
@@ -2871,12 +2872,8 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      let id: string;
-      try {
-        id = nameToId(name);
-      } catch {
-        continue;
-      }
+      const id = unitIdForDatasheet(dump, ds);
+      if (!id) continue;
       // A unit with no composition yet (a freshly seeded datasheet) gets one built below.
       if (matchedRepoIds.has(id) || (!compsByUnit.has(id) && !unitById.has(id))) continue;
       matchedRepoIds.add(id);
@@ -2886,8 +2883,15 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
       // when the dump drops it. Runs before the composition rebuild, which skips
       // datasheets with no composition rows (Sir Hekhtur).
       const flagged = flaggedModelNames(dump, ds.id!);
+      // Which unit profile each row prints (`profile_name`), from the statlines the dump shows.
+      const sources = statlineSources(dump, ds.id!);
+      const unitProfiles = ((unitById.get(id) as { profiles?: { name?: string }[] } | undefined)?.profiles ?? []);
+      const profileNames = new Set(unitProfiles.map((p) => p.name).filter((n): n is string => !!n));
       for (const comp of compsByUnit.get(id) ?? []) {
-        for (const row of comp.models) if (applyModelFlags(row, flagged)) changed = true;
+        for (const row of comp.models) {
+          if (applyModelFlags(row, flagged)) changed = true;
+          if (applyStatlineSource(row as never, sources, profileNames)) changed = true;
+        }
       }
       const agg = aggregateComposition(dump, ds.id!);
       if (agg.skip === "duplicate-names") {
@@ -2899,12 +2903,12 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
         ...counts,
       }));
       if (!view.length) continue;
-      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve);
+      const unitResolve = unitScopedResolver(validIds, autoResolved, dir, id, resolve, weaponOwnerId(dump, id));
       const { byName: defaultsByModel, splitByName } = deriveDefaults(dump, ds.id!, unitResolve, [], []);
       // Reviewed always-on additions ride on top of the dump defaults, exactly
       // as runWargear applies them (a refresh must not drop a support turret).
       const withManual = (rowName: string, ids: string[] | undefined): string[] | undefined => {
-        const add = manualDefaults(dir, id, rowName, validIds);
+        const add = manualDefaults(dir, weaponOwnerId(dump, id), rowName, validIds);
         if (!ids?.length) return add.length ? [...add] : ids;
         return [...ids, ...add.filter((x) => !ids.includes(x))];
       };
@@ -3092,7 +3096,7 @@ export function runCompositionNames(dump: MfmDump, onlyDir?: string): CompNamesR
 }
 
 export interface CompTiersReport {
-  dirs: { dir: string; matched: number; unitsTiered: number; rowsAdjusted: number; modelCountResynced: number; modesStamped: number }[];
+  dirs: { dir: string; matched: number; unitsTiered: number; rowsAdjusted: number; modelCountResynced: number; maxModelCountSynced: number; modesStamped: number }[];
   skipped: { dir: string; id: string; reason: string }[];
   notes: { dir: string; id: string; note: string }[];
   staged: StagedWrite[];
@@ -3169,6 +3173,14 @@ export function stampCompositionGameModes(
   return stamped;
 }
 
+/** Set or clear a unit's `max_model_count` to the datasheet's `maxModelCount`; true when it changed. */
+export function syncMaxModelCount(unit: { max_model_count?: number }, maxModelCount: number | null): boolean {
+  if ((unit.max_model_count ?? null) === maxModelCount) return false;
+  if (maxModelCount === null) delete unit.max_model_count;
+  else unit.max_model_count = maxModelCount;
+  return true;
+}
+
 export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersReport {
   const dirs = repoDirs();
   const byDir = new Map<string, DatasheetRow[]>();
@@ -3193,7 +3205,7 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
     const compsByUnit = new Map<string, (CompRecord & { tiers?: { models: DumpTier }[] })[]>();
     for (const c of comps)
       (compsByUnit.get(c.unit_id) ?? compsByUnit.set(c.unit_id, []).get(c.unit_id)!).push(c);
-    const units = readJsonArray<UnitRecord & { model_count?: { min: number; max: number } }>(upath);
+    const units = readJsonArray<UnitRecord & { model_count?: { min: number; max: number }; max_model_count?: number }>(upath);
     const unitsById = new Map(units.map((u) => [u.id, u]));
     const byMfmId = new Map(
       units.flatMap((unit) =>
@@ -3215,17 +3227,23 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
     let unitsTiered = 0;
     let rowsAdjusted = 0;
     let modelCountResynced = 0;
+    let maxModelCountSynced = 0;
     let compsChanged = false;
     let unitsChanged = false;
     for (const ds of dsList) {
       const name = dump.enName(ds);
       if (!name) continue;
-      const id = datasheetUnitId(ds, name, unitsById, byMfmId);
+      const id = datasheetUnitId(dump, ds, name, unitsById, byMfmId);
       if (!id) continue;
       if (matchedRepoIds.has(id) || !compsByUnit.has(id)) continue;
       matchedRepoIds.add(id);
       matched++;
       const u = unitsById.get(id);
+      // The datasheet's own model cap, which a composition whose row maxima sum higher obeys.
+      if (u && syncMaxModelCount(u, ds.maxModelCount)) {
+        maxModelCountSynced++;
+        unitsChanged = true;
+      }
       const agg = aggregateComposition(dump, ds.id!);
       if (agg.skip) {
         skipped.push({ dir, id, reason: `dump composition has duplicate model names (kill-team shape)` });
@@ -3279,10 +3297,13 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
           unitsTiered++;
           compsChanged = true;
         }
-        // Re-sync the unit's model_count to the tier span.
+        // Re-sync the unit's model_count to the tier span, capped by the datasheet's model cap.
         const span = {
           min: Math.min(...agg.tiers.map((t) => t.reduce((s, r) => s + r.min, 0))),
-          max: Math.max(...agg.tiers.map((t) => t.reduce((s, r) => s + r.max, 0))),
+          max: Math.min(
+            Math.max(...agg.tiers.map((t) => t.reduce((s, r) => s + r.max, 0))),
+            ds.maxModelCount ?? Number.POSITIVE_INFINITY,
+          ),
         };
         if (u) {
           const before = JSON.stringify(u.model_count ?? null);
@@ -3299,7 +3320,7 @@ export function runCompositionTiers(dump: MfmDump, onlyDir?: string): CompTiersR
     if (modesStamped > 0) compsChanged = true;
     if (compsChanged) staged.push({ path: cpath, value: comps });
     if (unitsChanged) staged.push({ path: upath, value: units });
-    reportDirs.push({ dir, matched, unitsTiered, rowsAdjusted, modelCountResynced, modesStamped });
+    reportDirs.push({ dir, matched, unitsTiered, rowsAdjusted, modelCountResynced, maxModelCountSynced, modesStamped });
   }
   return { dirs: reportDirs, skipped, notes, staged };
 }

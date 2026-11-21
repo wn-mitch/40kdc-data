@@ -113,7 +113,8 @@
           "Adeptus Custodes"
         ]
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "shattering-charge-tristraens-gilded-blades-adeptus-custodes",
@@ -197,7 +198,8 @@
       {
         "unit_id": "aquilan-talon-contemptor-achillus-dreadnought"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "eagles-pinions-upgrade-aquilan-wing-adeptus-custodes",
@@ -225,7 +227,8 @@
       {
         "unit_id": "aquilan-wing-venatari-with-kinetic-destroyers"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "will-of-auramite-aquilan-wing-adeptus-custodes",
@@ -348,7 +351,8 @@
     "max_targets": 3,
     "keyword_restrictions": [
       "Grav-assault"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "flawless-bladework-dread-host-adeptus-custodes",
@@ -436,7 +440,8 @@
     ],
     "exclusion_keywords": [
       "Terminator"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "auric-exemplar-dread-host-adeptus-custodes",
@@ -558,7 +563,8 @@
     "max_targets": 3,
     "keyword_restrictions": [
       "Trusted Sentinel"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "lightning-descent-lions-of-the-emperor-adeptus-custodes",
@@ -635,7 +641,8 @@
     "keyword_restrictions": [
       "Adeptus Custodes",
       "Dreadnought"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "bane-of-abominations-guardians-of-the-throne-adeptus-custodes",
@@ -780,7 +787,8 @@
     "keyword_restrictions": [
       "Grav-assault",
       "Transport"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "shroud-of-the-hidden-blade-auric-champions-adeptus-custodes",
@@ -854,7 +862,8 @@
     "keyword_restrictions": [
       "Adeptus Custodes",
       "Dreadnought"
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "radiant-mantle-emperors-chosen-adeptus-custodes",

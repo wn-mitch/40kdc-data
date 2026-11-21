@@ -1,0 +1,200 @@
+[
+  {
+    "id": "chaos-reaver-titan-wgo-mfm-1",
+    "unit_id": "chaos-reaver-titan",
+    "faction_id": "titanicus-traitoris",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replaces": [
+      "reaver-gatling-blaster",
+      "reaver-laser-blaster"
+    ],
+    "replacement_choice": [
+      [
+        "reaver-volcano-cannon",
+        "reaver-volcano-cannon"
+      ],
+      [
+        "reaver-gatling-blaster",
+        "reaver-gatling-blaster"
+      ],
+      [
+        "reaver-gatling-blaster",
+        "reaver-volcano-cannon"
+      ],
+      [
+        "reaver-melta-cannon",
+        "reaver-melta-cannon"
+      ],
+      [
+        "reaver-laser-blaster",
+        "reaver-laser-blaster"
+      ],
+      [
+        "reaver-laser-blaster",
+        "reaver-melta-cannon"
+      ],
+      [
+        "reaver-melta-cannon",
+        "reaver-volcano-cannon"
+      ],
+      [
+        "reaver-power-fist",
+        "reaver-volcano-cannon"
+      ],
+      [
+        "reaver-volcano-cannon",
+        "reaver-laser-blaster"
+      ],
+      [
+        "reaver-melta-cannon",
+        "reaver-power-fist"
+      ],
+      [
+        "reaver-gatling-blaster",
+        "reaver-melta-cannon"
+      ],
+      [
+        "reaver-power-fist",
+        "reaver-gatling-blaster"
+      ],
+      [
+        "reaver-power-fist",
+        "reaver-laser-blaster"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "chaos-warbringer-nemesis-titan-wgo-mfm-1",
+    "unit_id": "chaos-warbringer-nemesis-titan",
+    "faction_id": "titanicus-traitoris",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replaces": [
+      "nemesis-quake-cannon"
+    ],
+    "replacement": [
+      "nemesis-volcano-cannon"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "chaos-warbringer-nemesis-titan-wgo-mfm-2",
+    "unit_id": "chaos-warbringer-nemesis-titan",
+    "faction_id": "titanicus-traitoris",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "reaver-gatling-blaster"
+      ],
+      [
+        "reaver-laser-blaster"
+      ],
+      [
+        "reaver-volcano-cannon"
+      ],
+      [
+        "reaver-melta-cannon"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true,
+      "max_count": 2
+    }
+  },
+  {
+    "id": "chaos-warhound-titan-wgo-mfm-1",
+    "unit_id": "chaos-warhound-titan",
+    "faction_id": "titanicus-traitoris",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "warhound-turbo-laser-destructor"
+      ],
+      [
+        "warhound-plasma-blastgun"
+      ],
+      [
+        "warhound-vulcan-mega-bolter"
+      ],
+      [
+        "warhound-inferno-gun"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true,
+      "max_count": 2
+    }
+  },
+  {
+    "id": "chaos-warlord-titan-wgo-mfm-1",
+    "unit_id": "chaos-warlord-titan",
+    "faction_id": "titanicus-traitoris",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replaces": [
+      "apocalypse-launcher",
+      "apocalypse-launcher"
+    ],
+    "replacement": [
+      "laser-blaster",
+      "laser-blaster"
+    ],
+    "model_constraint": {
+      "any_number": true
+    }
+  },
+  {
+    "id": "chaos-warlord-titan-wgo-mfm-2",
+    "unit_id": "chaos-warlord-titan",
+    "faction_id": "titanicus-traitoris",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replacement_choice": [
+      [
+        "sunfury-plasma-annihilator"
+      ],
+      [
+        "arioch-power-claw"
+      ],
+      [
+        "macro-gatling-blaster"
+      ],
+      [
+        "mori-quake-cannon"
+      ],
+      [
+        "belicosa-volcano-cannon"
+      ]
+    ],
+    "model_constraint": {
+      "any_number": true,
+      "max_count": 2
+    }
+  }
+]

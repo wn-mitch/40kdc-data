@@ -17,12 +17,12 @@
             </profile>
             <profile name="Divine Guidance (Once per turn per unit)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When a friendly unit is selected to shoot or fight (the triggering unit must have SANCTUARY GUARDIANS), you may use this ability, you can re-roll the Hit roll for attacks made by the triggering unit.</characteristic>
+                <characteristic name="Description">When a friendly SANCTUARY GUARDIANS unit is selected to shoot or fight, you can use this ability, you can re-roll Hit rolls for attacks made by that unit.</characteristic>
               </characteristics>
             </profile>
             <profile name="Null Rod" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit has the Feel No Pain 4+ ability against Psychic Attacks and mortal wounds.</characteristic>
+                <characteristic name="Description">This unit has Feel No Pain 4+ against Psychic Attacks and mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Acts of Faith" typeName="Abilities">
@@ -92,17 +92,12 @@
             </profile>
             <profile name="Cherub (Once per battle per unit)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When an Act of Faith is performed, you may use this ability, you gain 1 Miracle die.</characteristic>
+                <characteristic name="Description">When an Act of Faith is performed, you can use this ability, you gain 1 Miracle die.</characteristic>
               </characteristics>
             </profile>
             <profile name="Defenders of the Faith" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
-              </characteristics>
-            </profile>
-            <profile name="Simulacrum Imperialis" typeName="Abilities">
-              <characteristics>
-                <characteristic name="Description">Nothing happens.</characteristic>
+                <characteristic name="Description">At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
               </characteristics>
             </profile>
             <profile name="Simulacrum Imperialis" typeName="Abilities">

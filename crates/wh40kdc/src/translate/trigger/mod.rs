@@ -12,7 +12,6 @@ use super::condition::{
     cap_word, describe_condition_value, is, key_count, nn, obj, place_ref_phrase, range_phrase, st,
     truthy, unit_ref_phrase, P,
 };
-use super::dekebab;
 
 use event::{actor_keywords, allocated_attack_type, event_phrase, turn_owner};
 
@@ -229,6 +228,33 @@ fn destroy_attack_phrase(event: Option<&str>, f: &P) -> String {
     String::new()
 }
 
+/// "At the start of the first battle round": a round boundary narrowed to one battle round.
+fn round_boundary(t: &P) -> Option<String> {
+    let event = t.get("event").and_then(Value::as_str)?;
+    if event != "round-started" && event != "round-ended" {
+        return None;
+    }
+    let c = t.get("condition").filter(|c| truthy(Some(c)))?;
+    if truthy(c.get("operator")) || ctype(c) != Some("battle-round") {
+        return None;
+    }
+    let p = obj(c.get("parameters"));
+    let min = crate::translate::num_param(p, "min")?;
+    let max = crate::translate::num_param(p, "max")?;
+    if min == max {
+        return Some(format!(
+            "at the {} of the {} battle round",
+            if event == "round-started" {
+                "start"
+            } else {
+                "end"
+            },
+            crate::translate::battle_round_ordinal(min)
+        ));
+    }
+    None
+}
+
 /// Reactive trigger → front-of-sentence lead clause ("an enemy unit ends a move within 9\" of this model").
 pub fn describe_trigger_value(trigger: &Value) -> String {
     let t = obj(Some(trigger));
@@ -240,9 +266,12 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
         && !truthy(t.get("binds_selected_die_variable"))
         && (nn(t, "subject").is_none() || is(t, "subject", "this-unit"));
     if plain {
-        if let Some(boundary) = phase_boundary(t).or_else(|| turn_boundary(t)) {
+        if let Some(boundary) = phase_boundary(t)
+            .or_else(|| turn_boundary(t))
+            .or_else(|| round_boundary(t))
+        {
             return if optional {
-                format!("{boundary}, you may use this ability")
+                format!("{boundary}, you can use this ability")
             } else {
                 boundary
             };
@@ -291,7 +320,7 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
         let source = if by.as_str() == Some("this-unit") {
             "this unit".to_string()
         } else {
-            unit_ref_phrase(Some(by), "the unit")
+            unit_ref_phrase(Some(by), "this unit")
         };
         let kind = if truthy(f.get("attack_type")) && event != Some("destroyed") {
             format!("{} ", st(f.get("attack_type")))
@@ -327,7 +356,7 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
         s.push_str(&format!(" within {} of {of}", range_phrase(Some(range))));
     }
     if disembark_shock {
-        s.push_str(", if the unit disembarked from a Transport this turn and is Battle-shocked");
+        s.push_str(", if this unit disembarked from a Transport this turn and is Battle-shocked");
     } else if let Some(split) = &split {
         if edge.is_some() && split.phase.is_none() && split.owner.is_some() {
             s.push_str(&format!(" in {} turn", split.owner.unwrap_or_default()));
@@ -338,23 +367,8 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
             s.push_str(&format!(", if {}", describe_condition_value(rest)));
         }
     }
-    if let Some(v) = t.get("binds_die_variable").filter(|v| truthy(Some(v))) {
-        s.push_str(&format!(
-            " (binding the generated die as {})",
-            dekebab(&st(Some(v)).replace('_', "-"))
-        ));
-    }
-    if let Some(v) = t
-        .get("binds_selected_die_variable")
-        .filter(|v| truthy(Some(v)))
-    {
-        s.push_str(&format!(
-            " (binding one chosen die used in that Act of Faith as {})",
-            dekebab(&st(Some(v)).replace('_', "-"))
-        ));
-    }
     if optional {
-        s.push_str(", you may use this ability");
+        s.push_str(", you can use this ability");
     }
     s
 }

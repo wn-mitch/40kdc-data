@@ -39,13 +39,13 @@ function moveModifiers(node: unknown, found: Node[] = []): Node[] {
 describe("selected Advance move-end restrictions", () => {
   it("binds the strict endpoint to the selected Advance without creating a move", () => {
     const { leaves, sourceText } = inSentences([
-      [[leaf("event", { kind: "selected", move_types: ["advance"], to: "move" }, 29), "when this unit is selected to make an Advance move"]],
-      [[leaf("move-distance", { subject: "this-unit", move_types: ["advance"], maximum: "unlimited" }, 2), "that Advance has no maximum distance"]],
-      [[leaf("move-through", { subject: "this-unit", passthrough: "models" }, 4), "this unit can move through all types of model"]],
+      [[leaf("event", { kind: "selected", move_types: ["advance"], to: "move" }), "when this unit is selected to make an Advance move"]],
+      [[leaf("move-distance", { subject: "this-unit", move_types: ["advance"], maximum: "unlimited" }), "that Advance has no maximum distance"]],
+      [[leaf("move-through", { subject: "this-unit", passthrough: "models" }), "this unit can move through all types of model"]],
       [
-        [leaf("move-must-end", { match: "all" }, 4), "after moving this unit must be"],
+        [leaf("move-must-end", { match: "all" }), "after moving this unit must be"],
         [
-          leaf("unit-position", { kind: "beyond", inches: 8, of: "matching-unit", subject: "this-unit", negated: false, of_side: "enemy" }, 25),
+          leaf("unit-position", { kind: "beyond", inches: 8, of: "matching-unit", subject: "this-unit", negated: false, of_side: "enemy" }),
           "more than 8 inches horizontally from all enemy units",
         ],
       ],

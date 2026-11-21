@@ -1,0 +1,4 @@
+[
+  { "id": "oath-masque", "name": "Oath", "detachment_id": "masque", "mandatory": true, "min_units": null, "max_units": null, "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" } },
+  { "id": "oath-lost-revel", "name": "Oath", "detachment_id": "lost-revel", "mandatory": true, "min_units": null, "max_units": null, "game_version": { "edition": "11th", "dataslate": "pre-launch-provisional" } }
+]

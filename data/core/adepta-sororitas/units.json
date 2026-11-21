@@ -3167,9 +3167,8 @@
     "ability_ids": [
       "cherub-sanctuary-guardians-battle-sisters-squad-adepta-sororitas",
       "defenders-of-the-faith-sanctuary-guardians-battle-sisters-squad-adepta-sororitas",
-      "simulacrum-imperialis-sanctuary-guardians-adepta-sororitas",
       {
-        "id": "simulacrum-imperialis-wargear-adepta-sororitas",
+        "id": "simulacrum-imperialis-sanctuary-guardians-adepta-sororitas",
         "wargear": "simulacrum-imperialis"
       },
       "acts-of-faith-sanctuary-guardians-adepta-sororitas"

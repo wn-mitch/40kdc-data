@@ -361,3 +361,26 @@ describe("roster-conditional support inference", () => {
       .toBe("example-bodyguard-z");
   });
 });
+
+describe("resolve battle-size labels", () => {
+  const parsedWith = (battle_size_raw: string | null): ParsedRoster => ({
+    name: "Example", generated_by: null, faction_raw_name: null,
+    detachment_raw_names: [], battle_size_raw,
+    declared_limit: null, total_reported: 0, total_computed: 0, multi_force: false,
+    units: [],
+  });
+  const unmapped = (r: Roster) =>
+    r.diagnostics.warnings.filter((w) => w.code === "battle-size-unmapped");
+
+  it("does not warn on a Combat Patrol label, which names a game mode", () => {
+    const roster = resolve(parsedWith("Combat Patrol (500 Point limit)"), ds);
+    expect(roster.battle_size).toBeNull();
+    expect(unmapped(roster)).toEqual([]);
+  });
+
+  it("still warns on a label it cannot read", () => {
+    const roster = resolve(parsedWith("Apocalypse (3000 Point limit)"), ds);
+    expect(roster.battle_size).toBeNull();
+    expect(unmapped(roster).map((w) => w.raw_name)).toEqual(["Apocalypse (3000 Point limit)"]);
+  });
+});

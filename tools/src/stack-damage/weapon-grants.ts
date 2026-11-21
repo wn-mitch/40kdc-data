@@ -14,18 +14,27 @@ import type { Dataset } from "../data/dataset.js";
 import { abilityRefId, abilityRefWargear } from "../data/ability-refs.js";
 import type { AbilityView } from "../data/entities.js";
 import type { Unit } from "../generated.js";
+import { isMeleeProfile } from "../data/weapon-profile.js";
 import { resolveUnitWeapon } from "./unit-damage.js";
 
 /** The reason the translator gives a weapon grant it hands back to the caller. */
 export const WEAPON_GRANT_REASON = 'effect type "weapon-grant" is not modelled by the buff layer';
 
-/** One granted weapon: `perBearer` copies on each of the `wargearId` carriers. */
+/**
+ * One granted weapon: `perBearer` copies on each of the `wargearId` carriers, or, with `models`,
+ * on that many models whatever they carry (an Enhancement's bearer; `wargearId` then names the
+ * Enhancement lever).
+ */
 export interface WeaponGrant {
   abilityId: string;
   wargearId: string;
   weaponId: string;
   perBearer: number;
+  models?: number;
 }
+
+/** The models a grant equips among `carriers` of its wargear. */
+const grantedModels = (grant: WeaponGrant, carriers: number): number => grant.models ?? carriers;
 
 /** A grant for an item whose grants another rule owns. */
 export interface DuplicateGrant extends WeaponGrant {
@@ -256,27 +265,78 @@ export function loadoutWargearScoring(input: {
   };
 }
 
+const namedIdsByDataset = new WeakMap<Dataset, ReadonlySet<string>>();
+
+/** Every string some ability record's effect or condition names, so an id a rule reads is kept. */
+function abilityNamedIds(dataset: Dataset): ReadonlySet<string> {
+  const cached = namedIdsByDataset.get(dataset);
+  if (cached) return cached;
+  const named = new Set<string>();
+  const visit = (node: unknown): void => {
+    if (typeof node === "string") named.add(node);
+    else if (Array.isArray(node)) for (const item of node) visit(item);
+    else if (isObject(node)) for (const value of Object.values(node)) visit(value);
+  };
+  for (const ability of dataset.abilities.all) visit(ability.raw);
+  namedIdsByDataset.set(dataset, named);
+  return named;
+}
+
+/**
+ * Whether item `id` of `unit`'s loadout can change its damage in `phase`. Only a weapon of the
+ * unit with profiles, none of them usable in the phase, that no ability names and that is not the
+ * item of one of the unit's printed wargear rules is left out; wargear and everything else stays.
+ */
+export function phaseScoredItem(dataset: Dataset, unit: Unit, phase: "shooting" | "fight"): (id: string) => boolean {
+  const named = abilityNamedIds(dataset);
+  const printed = new Set(printedWargear(unit).values());
+  return (id) => {
+    const profiles = resolveUnitWeapon(dataset, unit, id)?.profiles ?? [];
+    if (profiles.length === 0 || named.has(id) || printed.has(id)) return true;
+    return profiles.some((profile) => isMeleeProfile(profile) === (phase === "fight"));
+  };
+}
+
 /** Equipment counts with each grant's weapons added for the carriers of its wargear. */
 export function withGrantedWeapons(counts: ReadonlyMap<string, number>, grants: readonly WeaponGrant[]): Map<string, number> {
   const next = new Map(counts);
   for (const grant of grants) {
-    const copies = (counts.get(grant.wargearId) ?? 0) * grant.perBearer;
+    const copies = grantedModels(grant, counts.get(grant.wargearId) ?? 0) * grant.perBearer;
     if (copies > 0) next.set(grant.weaponId, (next.get(grant.weaponId) ?? 0) + copies);
   }
   return next;
 }
 
-/** Per-model loadout groups with each grant's weapons added to the models carrying its wargear. */
+/**
+ * Per-model loadout groups with each grant's weapons added to the models carrying its wargear. A
+ * grant of a fixed model count goes to that many models of the first groups, splitting a group
+ * of identical models where it covers only part of one.
+ */
 export function groupsWithGrantedWeapons<G extends { count: number; weapons: readonly { id: string; count: number }[] }>(
   groups: readonly G[],
   grants: readonly WeaponGrant[],
 ): G[] {
-  return groups.map((group) => {
+  const carried = grants.filter((grant) => grant.models === undefined);
+  let split: G[] = groups.map((group) => {
     const weapons = new Map(group.weapons.map((weapon) => [weapon.id, weapon.count]));
-    for (const grant of grants) {
+    for (const grant of carried) {
       const copies = (weapons.get(grant.wargearId) ?? 0) * grant.perBearer;
       if (copies > 0) weapons.set(grant.weaponId, (weapons.get(grant.weaponId) ?? 0) + copies);
     }
     return { ...group, weapons: [...weapons].map(([id, count]) => ({ id, count })) };
   });
+  for (const grant of grants) {
+    if (grant.models === undefined) continue;
+    let remaining = grant.models;
+    split = split.flatMap((group) => {
+      if (remaining <= 0 || group.count <= 0) return [group];
+      const taking = Math.min(remaining, group.count);
+      remaining -= taking;
+      const weapons = new Map(group.weapons.map((weapon) => [weapon.id, weapon.count]));
+      weapons.set(grant.weaponId, (weapons.get(grant.weaponId) ?? 0) + grant.perBearer);
+      const armed = { ...group, count: taking, weapons: [...weapons].map(([id, count]) => ({ id, count })) };
+      return taking === group.count ? [armed] : [armed, { ...group, count: group.count - taking }];
+    });
+  }
+  return split;
 }

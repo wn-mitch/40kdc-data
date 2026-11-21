@@ -39,6 +39,102 @@ pub(super) fn is_weapon_scoped_condition(condition: &Obj) -> bool {
         })
 }
 
+/// What deciding a condition's negated conjunctions against the context leaves.
+pub(super) enum Reduced {
+    /// Nothing decided: the condition stays as authored.
+    Unchanged,
+    /// The condition holds outright.
+    Holds,
+    /// The condition with its decided negations rewritten.
+    Narrowed(Obj),
+}
+
+/// `condition` with each negated conjunction decided as far as the context allows. In `not (A
+/// and B)` the operands that are not attack-scoped are evaluated: one false makes the negation
+/// hold, so it drops out of an enclosing `and` (and the whole condition holds when nothing is
+/// left); all true leave `not` of the one attack-scoped operand, which gates per attack. Any
+/// undecided operand, or more than one attack-scoped operand, leaves the negation as authored.
+/// Mirrors `reduceNegatedConjunctions` in `tools/src/cruncher/from-dsl.ts`.
+pub(super) fn reduce_negated_conjunctions(
+    condition: &Obj,
+    evaluate: &dyn Fn(&Obj) -> Option<bool>,
+) -> Reduced {
+    if is_str(condition, "operator", "not") {
+        let Some([inner]) = condition
+            .get("operands")
+            .and_then(Value::as_array)
+            .map(Vec::as_slice)
+        else {
+            return Reduced::Unchanged;
+        };
+        let Some(inner) = inner
+            .as_object()
+            .filter(|inner| is_str(inner, "operator", "and"))
+        else {
+            return Reduced::Unchanged;
+        };
+        let Some(raw) = inner.get("operands").and_then(Value::as_array) else {
+            return Reduced::Unchanged;
+        };
+        let operands: Vec<&Obj> = raw.iter().filter_map(Value::as_object).collect();
+        if operands.len() != raw.len() {
+            return Reduced::Unchanged;
+        }
+        let is_scoped = |operand: &Obj| {
+            operand.get("operator").is_none() && is_weapon_scoped_condition(operand)
+        };
+        let scoped: Vec<&Obj> = operands.iter().copied().filter(|o| is_scoped(o)).collect();
+        let rest: Vec<&Obj> = operands.iter().copied().filter(|o| !is_scoped(o)).collect();
+        if scoped.is_empty() || rest.is_empty() {
+            return Reduced::Unchanged;
+        }
+        let verdicts: Vec<Option<bool>> = rest.iter().map(|operand| evaluate(operand)).collect();
+        if verdicts.contains(&Some(false)) {
+            return Reduced::Holds;
+        }
+        if verdicts.contains(&None) || scoped.len() != 1 {
+            return Reduced::Unchanged;
+        }
+        let narrowed = json!({ "operator": "not", "operands": [Value::Object(scoped[0].clone())] });
+        return Reduced::Narrowed(narrowed.as_object().cloned().unwrap_or_default());
+    }
+    if is_str(condition, "operator", "and") {
+        let Some(raw) = condition.get("operands").and_then(Value::as_array) else {
+            return Reduced::Unchanged;
+        };
+        let mut changed = false;
+        let mut kept: Vec<Value> = Vec::new();
+        for operand in raw {
+            match operand.as_object() {
+                Some(object) => match reduce_negated_conjunctions(object, evaluate) {
+                    Reduced::Unchanged => kept.push(operand.clone()),
+                    Reduced::Holds => changed = true,
+                    Reduced::Narrowed(next) => {
+                        changed = true;
+                        kept.push(Value::Object(next));
+                    }
+                },
+                None => kept.push(operand.clone()),
+            }
+        }
+        if !changed {
+            return Reduced::Unchanged;
+        }
+        if kept.is_empty() {
+            return Reduced::Holds;
+        }
+        if kept.len() == 1 {
+            if let Some(only) = kept[0].as_object() {
+                return Reduced::Narrowed(only.clone());
+            }
+        }
+        let mut next = condition.clone();
+        next.insert("operands".to_string(), Value::Array(kept));
+        return Reduced::Narrowed(next);
+    }
+    Reduced::Unchanged
+}
+
 /// An `and` whose operands mix attack-scoped predicates with predicates on the units: the
 /// attack-scoped operands as one buff gate, and the rest to evaluate. Nested `and`s flatten.
 /// `None` when no operand is attack-scoped, when every operand is, or when an attack-scoped

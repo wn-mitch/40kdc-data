@@ -27,14 +27,31 @@ def _aura_emitter(value: Any, origin: str) -> str:
     rest = dict(value)
     owner = rest.pop("owner")
     all_of = rest.pop("all_of", None)
+    any_of = rest.pop("any_of", None)
+    none_of = rest.pop("none_of", None)
+    all_list = [jstr(k) for k in all_of] if isinstance(all_of, list) else []
+    none_list = [jstr(k) for k in none_of] if isinstance(none_of, list) else []
+    any_list = [jstr(k) for k in any_of] if isinstance(any_of, list) else []
+    if any(k in all_list for k in any_list):
+        any_list = []
+    elif none_list:
+        any_list = [k for k in any_list if k not in none_list]
+    if len(any_list) == 1:
+        all_list.append(any_list[0])
+        any_list = []
     side = "" if owner == "any" else f" {owner}"
-    keywords = (
-        "".join(f" {jstr(keyword)}" for keyword in all_of) if isinstance(all_of, list) else ""
-    )
-    return _keyword_filter_clause(rest, f"one or more{side}{keywords} models")
+    keywords = "".join(f" {keyword}" for keyword in all_list)
+    remaining: dict[str, Any] = dict(rest)
+    if any_list:
+        remaining["any_of"] = any_list
+    if none_list:
+        remaining["none_of"] = none_list
+    return _keyword_filter_clause(remaining, f"one or more{side}{keywords} models", all_list)
 
 
-def _keyword_filter_clause(value: Any, noun: str) -> str:
+def _keyword_filter_clause(
+    value: Any, noun: str, already_all: list[str] | None = None
+) -> str:
     if not isinstance(value, dict):
         return noun
     relations = dict(value)
@@ -42,17 +59,20 @@ def _keyword_filter_clause(value: Any, noun: str) -> str:
     any_of = relations.pop("any_of", None)
     none_of = relations.pop("none_of", None)
     not_all = relations.pop("not_all_of", None)
-    all_text = f" with {' and '.join(map(jstr, all_of))}" if isinstance(all_of, list) else ""
-    any_text = (
-        f" with at least one of {or_list(list(map(jstr, any_of)))}"
-        if isinstance(any_of, list)
-        else ""
-    )
-    none_text = (
-        f" without {or_list(list(map(jstr, none_of)))}"
-        if isinstance(none_of, list)
-        else ""
-    )
+    extra_all = [jstr(k) for k in all_of] if isinstance(all_of, list) else []
+    all_list = [*(already_all or []), *extra_all]
+    none_list = [jstr(k) for k in none_of] if isinstance(none_of, list) else []
+    any_list = [jstr(k) for k in any_of] if isinstance(any_of, list) else []
+    if any(k in all_list for k in any_list):
+        any_list = []
+    elif none_list:
+        any_list = [k for k in any_list if k not in none_list]
+    if len(any_list) == 1:
+        extra_all.append(any_list[0])
+        any_list = []
+    all_text = f" with {' and '.join(extra_all)}" if extra_all else ""
+    any_text = f" with the {or_list(any_list)} keyword" if any_list else ""
+    none_text = f" (excluding {or_list(none_list)} models)" if none_list else ""
     not_all_text = (
         f" without all of {' and '.join(map(jstr, not_all))}"
         if isinstance(not_all, list)

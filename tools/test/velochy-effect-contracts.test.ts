@@ -364,7 +364,7 @@ describe("Velochy shared schema contracts", () => {
     expect(condition({ type: "designated", parameters: { tag: "spotted" } })).toBe(false);
     expect(condition({ type: "named-weapon", parameters: { subject: "this-unit", name: "Bolt Rifle", count: 1, models: { count: { min: 1 }, state: "carry" } } })).toBe(true);
     expect(condition({ type: "named-weapon", parameters: { subject: "this-unit", name: "Bolt Rifle", count: 1, models: { at_least: 1, state: "carry" } } })).toBe(false);
-    expect(condition({ type: "unit-wargear", parameters: { subject: "this-unit", wargear: "teleport-homer", models: { count: { min: 1 }, state: "carry" } } })).toBe(true);
+    expect(condition({ type: "unit-wargear", parameters: { subject: "this-unit", wargear: "teleport-homer-adeptus-astartes", models: { count: { min: 1 }, state: "carry" } } })).toBe(true);
 
   });
   it("uses typed control comparisons and marker proximity", () => {

@@ -12,13 +12,13 @@ def test_objective_check_names_every_model_of_the_subject() -> None:
     }
     assert (
         describe_condition(every)
-        == "every model in the unit is within range of an objective marker"
+        == "every model in this unit is within range of an objective marker"
     )
     plain = {
         "type": "within",
         "parameters": {"of": {"objective": {}}, "range": "objective-control"},
     }
-    assert describe_condition(plain) == "the unit is within range of an objective marker"
+    assert describe_condition(plain) == "this unit is within range of an objective marker"
 
 
 def test_selected_objective_check_names_every_model_of_the_subject() -> None:
@@ -32,5 +32,5 @@ def test_selected_objective_check_names_every_model_of_the_subject() -> None:
     }
     assert (
         describe_condition(selected)
-        == "every model in the unit is within range of that objective marker"
+        == "every model in this unit is within range of that objective marker"
     )

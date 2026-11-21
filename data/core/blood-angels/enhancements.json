@@ -282,7 +282,8 @@
       {
         "unit_id": "sanguinary-spearhead-assault-intercessor-squad"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "on-the-archtraitors-bridge-wrath-of-the-doomed-blood-angels",

@@ -217,7 +217,7 @@ export function stackableBuffsFor(
       // selection), so its levers are opt-in.
       enabled: entry.source.kind !== "support",
       // Stratagems cost CP — opt-in, not on by default.
-      gate: stratagem ? { cost: { cp: stratagem.cpCost } } : undefined,
+      gate: stratagem ? { cost: { cp: stratagem.cpCost }, ...secondaryCost(ds, stratagem.stratagemId) } : undefined,
       held,
     }));
   }
@@ -257,6 +257,12 @@ export function stackableBuffsFor(
   return { buffs: resolved, groups, needs };
 }
 
+/** The extra CP a Stratagem's secondary effect costs, as an ability lever gate's `secondaryCost`. */
+function secondaryCost(ds: Dataset, stratagemId: string): { secondaryCost?: LeverCost } {
+  const extra = ds.stratagems.get(stratagemId)?.secondary_effect_extra_cp;
+  return extra === undefined ? {} : { secondaryCost: { cp: extra } };
+}
+
 /** The input's selected unit, resolved within its faction when one is given. */
 function inputUnit(ds: Dataset, input: BuffInput): UnitView | undefined {
   if (input.unitId === undefined) return undefined;
@@ -291,7 +297,7 @@ export function collectBuffs(
   levers?: DefensiveLevers,
 ): Buff[] {
   const out: Buff[] = [];
-  const translate = (ability: AbilityView, source: BuffSource, rating?: string | number, at: EngineContext = ctx) => {
+  const translate = (ability: AbilityView, source: BuffSource, rating?: string | number, at: EngineContext = ctx, secondary: { secondaryCost?: LeverCost } = {}) => {
     const translation = ability.describeBuffs(source, at, perspective, rating);
     if (needs) {
       for (const need of abilityNeeds(translation.unsupported, ability.id, ability.name)) {
@@ -302,7 +308,9 @@ export function collectBuffs(
       for (const act of translation.activatable) {
         if (act.capRaise || act.requiresOption || act.excludesOption) continue;
         if (levers.buffs.some((lever) => lever.id === act.id)) continue;
-        levers.buffs.push(leverFromActivatable(act, `${ability.name} — ${act.label}`, source));
+        // The caller pays an opted-in Stratagem's cost; its secondary effect's extra CP rides on that option.
+        const cost = act.secondary ? secondary.secondaryCost : undefined;
+        levers.buffs.push({ ...leverFromActivatable(act, `${ability.name} — ${act.label}`, source), ...(cost ? { cost } : {}) });
         for (const group of [...(act.group ? [act.group] : []), ...(act.groups ?? [])]) {
           if (!levers.groups.some((existing) => existing.id === group.id)) {
             levers.groups.push({ id: group.id, abilityId: ability.id, label: ability.name, maxActivations: group.maxActivations });
@@ -342,7 +350,8 @@ export function collectBuffs(
     const source = bufferSourceFromEligible(entry);
     visited.push({ abilityId: entry.ability.id, source });
     const at = entry.source.kind === "detachment-stratagem" ? stratagemContext(ds, input, entry, ctx) : ctx;
-    out.push(...translate(entry.ability, source, entry.rating, at));
+    const secondary = entry.source.kind === "detachment-stratagem" ? secondaryCost(ds, entry.source.stratagemId) : {};
+    out.push(...translate(entry.ability, source, entry.rating, at, secondary));
   }
   for (const entry of historicalSnapshotAbilities(ds, input, ctx, perspective)) {
     if (visited.some((current) => current.abilityId === entry.ability.id && sameSnapshotValue(current.source, entry.source))) continue;

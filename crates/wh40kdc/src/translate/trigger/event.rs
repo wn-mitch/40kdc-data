@@ -4,8 +4,9 @@
 use serde_json::Value;
 
 use crate::translate::condition::{
-    alternative_filters, and_list, article, cap_word, is, key_count, move_kinds, nn, obj, or_list,
-    st, state_phrase, strs, truthy, unit_filter_phrase, P,
+    alternative_filters, and_list, article, cap_word, is, key_count, keyword_alternatives,
+    move_kinds, nn, obj, or_list, st, state_phrase, strs, truthy, unit_filter_phrase, with_article,
+    P,
 };
 use crate::translate::condition::{named_use_phrase, roll_word, used_ability_phrase};
 use crate::translate::dekebab;
@@ -86,12 +87,12 @@ fn transport_phrase(r: Option<&Value>) -> String {
     object_phrase(r)
 }
 
-/// The actor of a trigger: "the unit", "an enemy unit", "this model".
+/// The actor of a trigger: "this unit", "an enemy unit", "a friendly EXORCIST unit", "this model".
 pub(crate) fn actor(r: Option<&Value>) -> String {
     match r {
-        None | Some(Value::Null) => "the unit".to_string(),
+        None | Some(Value::Null) => "this unit".to_string(),
         Some(Value::String(s)) => match s.as_str() {
-            "this-unit" => "the unit".to_string(),
+            "this-unit" => "this unit".to_string(),
             "this-model" => "this model".to_string(),
             "model-in-this-unit" => "a model in this unit".to_string(),
             // A moment nested in an attack's: the unit making that attack.
@@ -99,6 +100,7 @@ pub(crate) fn actor(r: Option<&Value>) -> String {
             "selected-unit" => "the selected unit".to_string(),
             // A moment nested in a triggered effect: the unit that triggered it.
             "event-subject" => "the triggering unit".to_string(),
+            "event-subject-model" => "the triggering model".to_string(),
             other => dekebab(other),
         },
         Some(Value::Object(f)) => {
@@ -112,20 +114,58 @@ pub(crate) fn actor(r: Option<&Value>) -> String {
             if f.get("selection_var").is_some_and(Value::is_string)
                 || f.get("stratagem_target").is_some_and(Value::is_string)
             {
-                return super::unit_ref_phrase(Some(&Value::Object(f.clone())), "the unit");
+                return super::unit_ref_phrase(Some(&Value::Object(f.clone())), "this unit");
             }
             if has_complex_actor_filter(f) {
                 return unit_filter_phrase(f);
             }
-            // Keywords on the actor read as a trailing requirement; states read as a relative
-            // clause ("an enemy unit that is unengaged").
             let owner = if is(f, "owner", "friendly") {
-                "a friendly"
+                "friendly "
             } else if is(f, "owner", "enemy") {
-                "an enemy"
+                "enemy "
             } else {
-                "a"
+                ""
             };
+            let noun = if is(f, "level", "model") {
+                "model"
+            } else {
+                "unit"
+            };
+            let all = strs(f.get("all_of"))
+                .map(|k| format!("{} ", k.join(" ")))
+                .unwrap_or_default();
+            let compact = keyword_alternatives(f);
+            let any_multi = if all.is_empty() && compact.is_none() {
+                strs(f.get("any_of"))
+                    .filter(|a| a.len() > 1)
+                    .map(|a| format!("{} ", or_list(&a)))
+                    .unwrap_or_default()
+            } else {
+                String::new()
+            };
+            let base = match &compact {
+                Some(alts) => format!("{owner}{} {noun}", or_list(alts)),
+                None => format!("{owner}{all}{any_multi}{noun}"),
+            };
+            let mut s = with_article(&base);
+            if compact.is_none() && f.get("any_of_filters").is_some_and(Value::is_array) {
+                let alts: Vec<String> = alternative_filters(f)
+                    .iter()
+                    .map(unit_filter_phrase)
+                    .collect();
+                s.push_str(&format!(" that is {}", or_list(&alts)));
+            }
+            if any_multi.is_empty() {
+                if let Some(any) = strs(f.get("any_of")) {
+                    s.push_str(&format!(" with the {} keyword", or_list(&any)));
+                }
+            }
+            if let Some(none) = strs(f.get("none_of")) {
+                s.push_str(&format!(" (excluding {} {noun}s)", or_list(&none)));
+            }
+            if let Some(not_all) = strs(f.get("not_all_of")) {
+                s.push_str(&format!(" (excluding {} {noun}s)", not_all.join(" ")));
+            }
             let mut states = Vec::new();
             if nn(f, "state").is_some() {
                 states.push(state_phrase(&st(f.get("state")), false));
@@ -133,74 +173,18 @@ pub(crate) fn actor(r: Option<&Value>) -> String {
             if let Some(Value::Array(not)) = f.get("not_states") {
                 states.extend(not.iter().map(|x| state_phrase(&st(Some(x)), true)));
             }
-            format!(
-                "{owner} {}{}",
-                if is(f, "level", "model") {
-                    "model"
-                } else {
-                    "unit"
-                },
-                if states.is_empty() {
-                    String::new()
-                } else {
-                    format!(" that is {}", and_list(&states))
-                }
-            )
+            if !states.is_empty() {
+                s.push_str(&format!(" that is {}", and_list(&states)));
+            }
+            s
         }
         Some(other) => dekebab(&st(Some(other))),
     }
 }
 
-/// Keyword requirements on a filter actor: " (the triggering unit must have A and B)".
-pub(crate) fn actor_keywords(r: Option<&Value>) -> String {
-    let Some(f) = r.and_then(Value::as_object) else {
-        return String::new();
-    };
-    if has_complex_actor_filter(f) {
-        return String::new();
-    }
-    let noun = if is(f, "level", "model") {
-        "model"
-    } else {
-        "unit"
-    };
-    let mut s = String::new();
-    if let Some(all) = strs(f.get("all_of")) {
-        s.push_str(&format!(
-            " (the triggering {noun} must have {})",
-            and_list(&all)
-        ));
-    }
-    if let Some(any) = strs(f.get("any_of")) {
-        s.push_str(&format!(
-            " (the triggering {noun} must have {})",
-            or_list(&any)
-        ));
-    }
-    // Alternatives: "(the triggering model must be a LEGIO CYBERNETICA model or an ADEPTUS MECHANICUS VEHICLE model)".
-    if f.get("any_of_filters").is_some_and(Value::is_array) {
-        let alts: Vec<String> = alternative_filters(f)
-            .iter()
-            .map(unit_filter_phrase)
-            .collect();
-        s.push_str(&format!(
-            " (the triggering {noun} must be {})",
-            or_list(&alts)
-        ));
-    }
-    if let Some(none) = strs(f.get("none_of")) {
-        s.push_str(&format!(
-            " (the triggering {noun} must not have {})",
-            or_list(&none)
-        ));
-    }
-    if let Some(not_all) = strs(f.get("not_all_of")) {
-        s.push_str(&format!(
-            " (the triggering {noun} must not have all of {})",
-            and_list(&not_all)
-        ));
-    }
-    s
+/// Kept as a no-op helper for clarity; keyword requirements are now folded directly into `actor()`.
+pub(crate) fn actor_keywords(_r: Option<&Value>) -> String {
+    String::new()
 }
 
 /// An object phrase: "this unit", "an enemy unit".
@@ -214,17 +198,17 @@ pub(crate) fn object_phrase(r: Option<&Value>) -> String {
             other => dekebab(other),
         },
         Some(Value::Object(f)) => {
-            super::unit_ref_phrase(Some(&Value::Object(f.clone())), "the unit")
+            super::unit_ref_phrase(Some(&Value::Object(f.clone())), "this unit")
         }
         Some(other) => dekebab(&st(Some(other))),
     }
 }
 
-/// The unit a used Stratagem targets: "the unit" for the holder's own role, else the object filter.
+/// The unit a used Stratagem targets: "this unit" for the holder's own role, else the object filter.
 fn stratagem_target(r: Option<&Value>) -> String {
     match r {
         Some(Value::Object(_)) => object_phrase(r),
-        _ => "the unit".to_string(),
+        _ => "this unit".to_string(),
     }
 }
 
@@ -638,7 +622,7 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 return format!("each time {who} destroys {what}{melee}");
             }
             if nn(t, "object").is_none() || is(t, "object", "this-unit") {
-                return format!("when the unit is destroyed{melee}");
+                return format!("when this unit is destroyed{melee}");
             }
             if let Some(o) = object.and_then(Value::as_object) {
                 if nn(o, "designated").is_some() && key_count(o) == 1 {
@@ -668,9 +652,9 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 return format!("{}, after the units embarked within it have made their emergency disembark moves", event_phrase(&rest));
             }
             if f.get("first") == Some(&Value::Bool(true)) {
-                return "the first time a model in the unit is destroyed".to_string();
+                return "the first time a model in this unit is destroyed".to_string();
             }
-            // A subject names who destroyed the model: "each time the unit destroys an enemy CHARACTER model".
+            // A subject names who destroyed the model: "each time this unit destroys an enemy CHARACTER model".
             if nn(t, "subject").is_some() {
                 if is(t, "object", "this-model") {
                     return format!("when this model is destroyed by {who}");
@@ -679,7 +663,7 @@ pub(crate) fn event_phrase(t: &P) -> String {
                     || is(t, "object", "this-unit")
                     || nn(t, "object").is_none()
                 {
-                    return format!("when a model in the unit is destroyed by {who}");
+                    return format!("when a model in this unit is destroyed by {who}");
                 }
                 return format!("each time {who} destroys {}", object_phrase(object));
             }
@@ -691,7 +675,7 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 || is(t, "object", "this-unit")
                 || nn(t, "object").is_none()
             {
-                return "when a model in the unit is destroyed".to_string();
+                return "when a model in this unit is destroyed".to_string();
             }
             format!("when {} is destroyed", object_phrase(object))
         }

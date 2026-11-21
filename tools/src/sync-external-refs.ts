@@ -132,7 +132,7 @@ export function syncBsdataExternalRefs(
     if (classifyBsdataFact(fact) !== "unit") continue;
     const sourceDir = sourceDirForBsdataFile(fact.source_file);
     const dir = sourceDir ? effectiveDir(sourceDir) : null;
-    const unitId = safeId(fact.name);
+    const unitId = sourceDir && dir ? chapterUnitId(store, dir, sourceDir, safeId(fact.name)) : null;
     if (!dir || !unitId || !store.get("unit", dir, unitId)) continue;
     const roots = unitRoots.get(fact.source_file) ?? [];
     roots.push({ pointer: fact.pointer, dir, unitId });
@@ -202,8 +202,10 @@ export function syncBsdataExternalRefs(
       continue;
     }
 
+    const factDir = sourceDirForBsdataFile(fact.source_file);
     for (const owner of owners.values()) {
       let entityId = baseId;
+      if (entityType === "unit" && factDir) entityId = chapterUnitId(store, owner.dir, factDir, baseId) ?? baseId;
       if (entityType === "weapon") {
         if (!owner.unitId) continue;
         const variantId = `${baseId}-${owner.unitId}`;
@@ -223,6 +225,16 @@ export function syncBsdataExternalRefs(
     }
   }
   return stats;
+}
+
+/**
+ * The unit a chapter catalogue's entry names: the chapter's own reprint unit (`<slug>-<chapter>`,
+ * see `mfm/chapter-reprints.ts`) when the shared pool holds one, else the generic slug.
+ */
+function chapterUnitId(store: CoreExternalRefStore, dir: string, sourceDir: string, slug: string | null): string | null {
+  if (!slug) return null;
+  const reprint = `${slug}-${sourceDir}`;
+  return sourceDir !== dir && store.get("unit", dir, reprint) ? reprint : slug;
 }
 
 /** Backfill only game-datacards nodes carrying their own stable id. */

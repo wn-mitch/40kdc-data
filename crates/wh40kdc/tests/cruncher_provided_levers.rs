@@ -283,6 +283,7 @@ fn an_added_selection_to_the_units_own_ability_is_a_cap_raise_with_no_buffs() {
             requires: None,
             requires_option: None,
             excludes_option: None,
+            secondary: None,
         }]
     );
     let uses = translate(&modifier("uses"), &own(), &shooting());
@@ -436,7 +437,7 @@ fn contextual_keyword_ratings_are_reported_without_dropping_concrete_siblings() 
 }
 
 #[test]
-fn engine_keyword_ratings_require_concrete_values_and_blast_has_no_invented_rating() {
+fn engine_keyword_ratings_require_concrete_values_and_unrated_blast_is_one() {
     use wh40kdc::cruncher::{crunch, AttackProfileRef, EngineInput, TargetProfileRef};
     let weapon: wh40kdc::Weapon = serde_json::from_value(json!({
         "id":"example-weapon","name":"Example weapon","type":"ranged",
@@ -482,7 +483,8 @@ fn engine_keyword_ratings_require_concrete_values_and_blast_has_no_invented_rati
             Some(&dataset),
         )
     };
-    assert_eq!(run("blast", None).unwrap().stages[0].expected, 1.0);
+    // Bare [BLAST] adds one attack per five target models.
+    assert_eq!(run("blast", None).unwrap().stages[0].expected, 3.0);
     assert_eq!(
         run("blast", Some(json!(2))).unwrap().stages[0].expected,
         5.0

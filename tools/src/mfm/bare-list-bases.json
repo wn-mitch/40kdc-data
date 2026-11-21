@@ -1,0 +1,124 @@
+{
+  "$comment": "Reviewed per-model bases for datasheets whose MFM baseSize is a bare list sorted by size, which names a unit's sizes but not which model uses which. Each entry holds only while the dump prints exactly `list` for the unit; the pass then requires every model to be listed here and the models' sizes to be exactly the list's. `unit` is the representative (bulk model) base.",
+  "adeptus-astartes/crusader-squad": {
+    "list": "28.5mm, 32mm, 40mm",
+    "unit": "32mm",
+    "models": { "Sword Brother": "40mm", "Initiate": "32mm", "Neophyte": "28.5mm" }
+  },
+  "adeptus-astartes/vow-sworn-crusader-squad": {
+    "list": "28.5mm, 32mm, 40mm",
+    "unit": "32mm",
+    "models": {
+      "Sword Brother": "40mm",
+      "Initiate with Heavy Bolt Pistol and Chainsword": "32mm",
+      "Initiate with Bolt Pistol, Bolt Rifle and Knives and Fists": "32mm",
+      "Initiate with Pyreblaster, Bolt Pistol and Knives and Fists": "32mm",
+      "Neophyte with Neophyte Firearm and Knives and Fists": "28.5mm",
+      "Neophyte with Bolt Pistol and Chainsword": "28.5mm"
+    }
+  },
+  "adeptus-astartes/chaplain-grimaldus": {
+    "list": "28.5mm, 40mm",
+    "unit": "28.5mm",
+    "models": { "Chaplain Grimaldus": "40mm", "Cenobyte Servitor": "28.5mm" }
+  },
+  "adeptus-astartes/wardens-of-ultramar": {
+    "list": "28.5mm, 40mm",
+    "unit": "28.5mm",
+    "models": {
+      "Veteran Sergeant Metaurus": "40mm",
+      "Ancient Gadriel": "40mm",
+      "Gaius Silva": "28.5mm",
+      "Dainal Komelius": "28.5mm",
+      "Aemelia Minervas": "28.5mm",
+      "Lucia Vestha": "28.5mm"
+    }
+  },
+  "adeptus-astartes/wolf-guard-headtakers": {
+    "list": "40mm, 60x35.5mm Oval Base",
+    "unit": "40mm",
+    "models": { "Wolf Guard Headtaker": "40mm", "Hunting Wolf": "60x35.5mm Oval Base" }
+  },
+  "adeptus-astartes/wolf-scouts": {
+    "list": "32mm, 60x35.5mm Oval Base",
+    "unit": "32mm",
+    "models": { "Wolf Scout Pack Leader": "32mm", "Wolf Scout": "32mm", "Hunting Wolf": "60x35.5mm Oval Base" }
+  },
+  "adeptus-astartes/decimus-kill-team": {
+    "list": "32mm, 40mm",
+    "unit": "32mm",
+    "models": {
+      "Kill Team Sergeant": "32mm",
+      "Gravis Veteran": "40mm",
+      "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol": "32mm",
+      "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists": "32mm",
+      "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists": "32mm",
+      "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol": "32mm"
+    }
+  },
+  "agents-of-the-imperium/aquila-kill-team": {
+    "list": "32mm, 40mm",
+    "unit": "32mm",
+    "models": {
+      "Kill Team Sergeant": "32mm",
+      "Gravis Veteran": "40mm",
+      "Deathwatch Veteran with Heavy Thunder Hammer and Bolt Pistol": "32mm",
+      "Deathwatch Veteran with Deathwatch Marksman Bolt Carbine, Special-issue Bolt Pistol and Knives and Fists": "32mm",
+      "Deathwatch Veteran with Stalker Bolt Rifle, Bolt Pistol and Knives and Fists": "32mm",
+      "Deathwatch Veteran with Xenophase Blade and Special-issue Bolt Pistol": "32mm"
+    }
+  },
+  "adeptus-astartes/talonstrike-kill-team": {
+    "list": "32mm, 40mm",
+    "unit": "32mm",
+    "models": {
+      "Kill Team Sergeant with Jump Pack": "32mm",
+      "Kill Team Intercessor with Jump Pack": "32mm",
+      "Kill Team Heavy Intercessor with Jump Pack": "40mm"
+    }
+  },
+  "genestealer-cults/claw-of-ascension-atalan-jackals": {
+    "list": "60mm, 60x35.5mm Oval Base",
+    "unit": "60x35.5mm Oval Base",
+    "models": {
+      "Atalan Jackal": "60x35.5mm Oval Base",
+      "Atalan Jackal with Power Weapon": "60x35.5mm Oval Base",
+      "Atalan Wolfquad": "60mm"
+    }
+  },
+  "orks/boyz": {
+    "list": "32mm, 40mm",
+    "unit": "32mm",
+    "models": { "Boy": "32mm", "Nob": "40mm" }
+  },
+  "orks/ardmob-boyz": {
+    "list": "32mm, 40mm",
+    "unit": "32mm",
+    "models": { "Boyz": "32mm", "Boss Nob": "40mm" }
+  },
+  "orks/ardmob-boyz-2": {
+    "list": "32mm, 40mm",
+    "unit": "32mm",
+    "models": { "Boyz": "32mm", "Boss Nob": "40mm" }
+  },
+  "orks/breaka-boyz": {
+    "list": "32mm, 40mm",
+    "unit": "32mm",
+    "models": { "Breaka Boy": "32mm", "Nob": "40mm" }
+  },
+  "orks/tankbustas": {
+    "list": "32mm, 40mm",
+    "unit": "32mm",
+    "models": { "Tankbusta": "32mm", "Nob": "40mm" }
+  },
+  "world-eaters/frenzied-reavers-jakhals": {
+    "list": "28.5mm, 40mm",
+    "unit": "28.5mm",
+    "models": {
+      "Dishonoured": "40mm",
+      "Jakhal with Autopistol and Chainblade": "28.5mm",
+      "Jakhal with Autopistol and Mauler Chainblade": "28.5mm",
+      "Jakhal Pack Leader": "28.5mm"
+    }
+  }
+}

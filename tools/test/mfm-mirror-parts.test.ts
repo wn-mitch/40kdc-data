@@ -136,8 +136,8 @@ describe("rated core rules", () => {
   });
 
   it("describes the rating as X without a unit, and the printed value with one", () => {
-    expect(describeAbility({ effect: fnp as never })).toContain("Feel No Pain X+ ability, X being its rating");
-    expect(describeAbility({ effect: withRating(fnp, 5) as never })).toContain("Feel No Pain 5+ ability");
+    expect(describeAbility({ effect: fnp as never })).toContain("Feel No Pain X+, X being its rating");
+    expect(describeAbility({ effect: withRating(fnp, 5) as never })).toContain("Feel No Pain 5+");
     expect(describeAbility({ effect: scouts as never })).toContain('Scouts X" ability, X being its rating');
     expect(describeAbility({ effect: demise as never })).toContain("equal to its rating");
     expect(describeAbility({ effect: withRating(demise, "D3") as never })).toContain("D3 mortal wounds");
@@ -190,5 +190,35 @@ describe("mirror unit ability lists", () => {
     const projected = projectUnit(ctx, new Map([["ds-warden", rows]]), "alpha", { id: "warden", external_refs: [{ namespace: "mfm", id: "ds-warden" }], ability_ids: ["other-rule-alpha"] } as never);
     expect(projected.after).toEqual(["grim-resolve-alpha", "war-cry-alpha"]);
     expect(projected.dropped).toEqual([{ id: "other-rule-alpha", reason: "unresolved" }]);
+  });
+
+  // One rule printed twice: the datasheet's line and its item's rule, under one name and two texts.
+  it("keeps one record per printed name, the datasheet's line over the item's, with the item's gate", () => {
+    const item = (key: string, datasheetIds: string[]): AbilityRow => ({ ...line(key, "Ward Banner"), kind: "wargear", table: "wargear_item", datasheetIds });
+    const twin = [line("banner-line", "Ward Banner"), item("banner-item", ["ds-warden"])];
+    const identity = (name: string, kinds: string[], datasheetIds: string[]) => ({ name, kinds, datasheetIds });
+    const twinCtx = {
+      ...ctx,
+      ids: {
+        byRowKey: new Map([["banner-line", "ward-banner-alpha"], ["banner-item", "ward-banner-wargear-alpha"]]),
+        byId: new Map([["ward-banner-alpha", identity("Ward Banner", ["datasheet-ability"], ["ds-warden"])], ["ward-banner-wargear-alpha", identity("Ward Banner", ["wargear"], ["ds-warden"])]]),
+      },
+      resolve: (_dir: string, id: string) => id,
+      wargearOf: () => ["ward-banner"],
+    } as unknown as UnitContext;
+    const projected = projectUnit(twinCtx, new Map([["ds-warden", twin]]), "alpha", { id: "warden", external_refs: [{ namespace: "mfm", id: "ds-warden" }], ability_ids: ["ward-banner-alpha", { id: "ward-banner-wargear-alpha", wargear: "ward-banner" }] } as never);
+    expect(projected.after).toEqual([{ id: "ward-banner-alpha", wargear: "ward-banner" }]);
+    expect(projected.dropped).toEqual([{ id: "ward-banner-wargear-alpha", reason: "not-printed" }]);
+
+    // Two items of one name: the text more datasheets print stays.
+    const items = [item("banner-a", ["ds-warden"]), item("banner-b", ["ds-warden", "ds-other", "ds-third"])];
+    const itemsCtx = {
+      ...twinCtx,
+      ids: {
+        byRowKey: new Map([["banner-a", "ward-banner-a-alpha"], ["banner-b", "ward-banner-b-alpha"]]),
+        byId: new Map([["ward-banner-a-alpha", identity("Ward Banner", ["wargear"], ["ds-warden"])], ["ward-banner-b-alpha", identity("Ward Banner", ["wargear"], ["ds-warden", "ds-other", "ds-third"])]]),
+      },
+    } as unknown as UnitContext;
+    expect(projectUnit(itemsCtx, new Map([["ds-warden", items]]), "alpha", { id: "warden", external_refs: [{ namespace: "mfm", id: "ds-warden" }], ability_ids: [] } as never).after).toEqual([{ id: "ward-banner-b-alpha", wargear: "ward-banner" }]);
   });
 });

@@ -472,3 +472,41 @@ fn drops_a_removed_blast_only_from_the_weapons_the_removals_scope_names() {
     let torrent_only = removal(json!({ "type": "ranged", "keyword": { "keyword_id": "torrent" } }));
     assert_eq!(lobba_attacks(torrent_only.applied).0, 9.0);
 }
+
+/// Blight Bombardment's shape, "ranged, and not (ranged and Blast)": the negated conjunction's
+/// unit-level operand is decided by the phase, leaving the Blast exclusion as the per-weapon gate.
+/// Mirrors `tools/test/from-dsl-weapon-scope.test.ts`.
+#[test]
+fn a_negated_conjunctions_unit_operands_are_decided_and_the_attack_scoped_rest_gates_per_weapon() {
+    let ranged = json!({"type": "attack-is", "parameters": {"attack_type": "ranged"}});
+    let blast = json!({"type": "attack-is", "parameters": {"weapons": {"keyword": {"keyword_id": "blast"}}}});
+    let effect = json!({
+        "type": "conditional",
+        "condition": {"operator": "and", "operands": [ranged, {"operator": "not", "operands": [
+            {"operator": "and", "operands": [ranged, blast]}
+        ]}]},
+        "effect": {"type": "re-roll", "target": "this-unit", "modifier": {"roll": "hit", "subset": "ones"}}
+    });
+    let result = translate(effect, TranslationPerspective::Attacker);
+    assert!(result.unsupported.is_empty(), "{:?}", result.unsupported);
+    assert_eq!(result.applied.len(), 1);
+    let gate = result.applied[0]
+        .applicable_when
+        .clone()
+        .expect("the Blast exclusion gates the re-roll");
+    assert_eq!(
+        gate.excluded_weapon_keywords.as_ref().map(|refs| refs
+            .iter()
+            .map(|r| r.keyword_id.clone())
+            .collect::<Vec<_>>()),
+        Some(vec!["blast".to_string()])
+    );
+    let mut ctx = EngineContext::new(Phase::Shooting);
+    ctx.weapon_keyword_refs = Some(vec![]);
+    assert!(resolve_buffs(&result.applied, &ctx).rerolls.hit.is_some());
+    ctx.weapon_keyword_refs = Some(vec![WeaponKeywordRef {
+        keyword_id: "blast".into(),
+        parameters: None,
+    }]);
+    assert!(resolve_buffs(&result.applied, &ctx).rerolls.hit.is_none());
+}

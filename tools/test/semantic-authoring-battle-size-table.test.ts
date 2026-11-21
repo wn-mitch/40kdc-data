@@ -79,3 +79,26 @@ describe("a for-each with a cap on the units it affects", () => {
     expect(describeEffectInline(effect as never)).toMatch(/^for each enemy unit, up to 2\/3\/4 units \(Incursion\/Strike Force\/Onslaught\) of your choice: /u);
   });
 });
+
+describe("a selection of one or more capped by battle size", () => {
+  // Fabricated wording in the shape of "select one or more X units … the maximum number depends on the battle size".
+  const text = "In your Command phase, select one or more units from your army. The most units you pick depends on the battle size. Those units have the Stealth ability.";
+  const compile = (atLeast: boolean) => compileLeaves(placed(text,
+    ["In your Command phase", "phase-window", { phase: "command", turn: "your" }],
+    ["select one or more", "select-unit", { scope: "friendly", distance: "any", visible: false, ...(atLeast ? { at_least: true } : {}) }],
+    ["The most units you pick depends on the battle size", "count-by-battle-size", CAP],
+    ["Those units have the Stealth ability", "core-ability-grant", { subject: "antecedent", ability: "stealth" }],
+  ), text);
+
+  it("selects at least one unit, up to the table's count", () => {
+    const result = compile(true);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(JSON.stringify(result.mechanics.effect)).toContain(`"count":{"min":1,"max":${JSON.stringify(CAP)}}`);
+  });
+
+  it("keeps a minimum of none without at_least", () => {
+    const result = compile(false);
+    if (!result.ok) throw new Error(result.errors.join("; "));
+    expect(JSON.stringify(result.mechanics.effect)).toContain(`"count":{"min":0,"max":${JSON.stringify(CAP)}}`);
+  });
+});

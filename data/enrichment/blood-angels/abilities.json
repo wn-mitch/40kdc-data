@@ -454,6 +454,9 @@
     "behavior": "reactive",
     "trigger": {
       "event": "destroyed",
+      "subject": {
+        "owner": "enemy"
+      },
       "object": {
         "owner": "friendly",
         "all_of": [
@@ -462,53 +465,42 @@
       }
     },
     "effect": {
-      "type": "conditional",
-      "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "owner": "enemy"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "designate",
+          "target": "event-subject",
+          "modifier": {
+            "tag": "death-begets-vengeance-hated"
           }
-        }
-      },
-      "effect": {
-        "type": "sequence",
-        "steps": [
-          {
-            "type": "designate",
-            "target": "this-unit",
-            "modifier": {
-              "tag": "death-begets-vengeance-hated"
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "defender",
+              "filter": {
+                "designated": "death-begets-vengeance-hated"
+              }
             }
           },
-          {
-            "type": "conditional",
-            "condition": {
-              "type": "matches",
-              "parameters": {
-                "subject": "defender",
-                "filter": {
-                  "designated": "death-begets-vengeance-hated"
-                }
-              }
+          "effect": {
+            "type": "roll-modifier",
+            "target": {
+              "owner": "friendly",
+              "all_of": [
+                "DEATH COMPANY"
+              ]
             },
-            "effect": {
-              "type": "roll-modifier",
-              "target": {
-                "owner": "friendly",
-                "all_of": [
-                  "DEATH COMPANY"
-                ]
-              },
-              "modifier": {
-                "roll": "wound",
-                "operation": "add",
-                "value": 1
-              }
+            "modifier": {
+              "roll": "wound",
+              "operation": "add",
+              "value": 1
             }
           }
-        ]
-      }
+        }
+      ]
     },
     "scope": {
       "duration": "battle"
@@ -2450,7 +2442,8 @@
     "behavior": "passive",
     "unit_ids": [
       "captain-raldeo",
-      "sanguinary-spearhead-assault-intercessor-squad"
+      "sanguinary-spearhead-assault-intercessor-squad",
+      "sanguinary-spearhead-sanguinary-guard"
     ],
     "detachment_id": "sanguinary-spearhead"
   },

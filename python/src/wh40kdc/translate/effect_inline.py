@@ -11,7 +11,12 @@ from typing import Any
 
 from wh40kdc.translate.condition import dekebab, describe_condition
 from wh40kdc.translate.condition_leadin import condition_lead_in, is_defensive_effect
-from wh40kdc.translate.condition_refs import _or_list, range_phrase, unit_ref_phrase
+from wh40kdc.translate.condition_refs import (
+    _or_list,
+    model_event_refs,
+    range_phrase,
+    unit_ref_phrase,
+)
 from wh40kdc.translate.effect_aura import aura_reach, with_aura_recipient
 from wh40kdc.translate.effect_bind import roll_head, select_objective_inline
 from wh40kdc.translate.effect_leaf import LEAF_TYPES, describe_leaf
@@ -62,6 +67,7 @@ from wh40kdc.translate.effect_words import (
     signed,
     test_name,
     title_case,
+    with_article,
 )
 from wh40kdc.translate.timing import describe_timing
 from wh40kdc.translate.trigger import describe_trigger, normalize_triggers
@@ -85,7 +91,7 @@ def _select_units_inline(sel: Any, effect: Effect, ctx: Ctx) -> str:
     nested = describe_effect_inline(effect, selected_context(ctx, sel))
     if engagement:
         return f"select {subject}{binding}. {engagement} {capitalize(nested)}"
-    return f"select {subject}{binding}: {nested}"
+    return f"select {subject}{binding}; {nested}"
 
 
 
@@ -292,6 +298,45 @@ def designate_when(applies: dict[str, Any], block: bool) -> str:
     return designation_attacker_phrase(applies, block)
 
 
+def flatten_conditional(e: Effect, ctx: Ctx) -> tuple[dict[str, Any], Effect]:
+    """Flatten nested ``conditional(c1, conditional(c2, inner))`` unless recipient-gated."""
+    conds: list[dict[str, Any]] = []
+    cur = e
+    while (
+        cur.get("type") == "conditional"
+        and cur.get("condition") is not None
+        and cur.get("effect") is not None
+        and not recipient_gate(cur, ctx)
+    ):
+        conds.append(_obj(cur.get("condition")))
+        cur = _obj(cur.get("effect"))
+    if not conds:
+        return _obj(e.get("condition")), _obj(e.get("effect"))
+    condition: dict[str, Any] = (
+        conds[0] if len(conds) == 1 else {"operator": "and", "operands": conds}
+    )
+    return condition, cur
+
+
+def attack_type_from_condition(c: Any) -> str | None:
+    """Extract bare ``ranged`` / ``melee`` attack_type from a condition to avoid repetition."""
+    if not isinstance(c, dict):
+        return None
+    if c.get("operator") == "and" and isinstance(c.get("operands"), list):
+        for op in c["operands"]:
+            found = attack_type_from_condition(op)
+            if found:
+                return found
+        return None
+    if c.get("type") == "attack-is":
+        params = _obj(c.get("parameters"))
+        if params.get("weapons") is None:
+            t = params.get("attack_type")
+            if t in ("ranged", "melee"):
+                return str(t)
+    return None
+
+
 def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
     m = _obj(e.get("modifier"))
     t = e.get("type")
@@ -313,8 +358,11 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         gate = recipient_gate(e, ctx)
         if gate:
             return f"{gate[0]}, {describe_effect_inline(gate[1], gate[2])}"
-        lead = condition_lead_in(_obj(e.get("condition")), is_defensive_effect(inner))
-        return f"{lead}, {describe_effect_inline(inner, ctx)}"
+        flat_cond, flat_eff = flatten_conditional(e, ctx)
+        atk_type = attack_type_from_condition(flat_cond)
+        child_ctx = {**ctx, "suppress_weapon_type": atk_type} if atk_type else ctx
+        lead = condition_lead_in(flat_cond, is_defensive_effect(flat_eff))
+        return f"{lead}, {describe_effect_inline(flat_eff, child_ctx)}"
     if t in ("rules-bundle", "sequence"):
         steps = e.get("steps") or []
         rider = roll_with_rider(steps, ctx)
@@ -322,7 +370,9 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
     if t == "ability-part":
         return part_inline(e, ctx)
     if t == "choice":
-        return f"{choice_prompt(e)}: {' / '.join(inline(o, ctx) for o in (e.get('options') or []))}"
+        options = e.get("options") or []
+        rendered = [f"{secondary_lead(e, i)}{inline(o, ctx)}" for i, o in enumerate(options)]
+        return f"{choice_prompt(e)}: {' / '.join(rendered)}"
     if t == "dice-gated":
         if e.get("test"):
             return leadership_test(e, ctx)
@@ -385,7 +435,7 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
             for o in (e.get("options") or [])
         )
         initial = f"{stance_initial(e)}; " if stance_initial(e) else ""
-        consum = " (each may be chosen once per battle)" if e.get("mode") == "consumable" else ""
+        consum = " (each can be chosen once per battle)" if e.get("mode") == "consumable" else ""
         random = f"; {stance_random(e)}" if stance_random(e) else ""
         return f"{initial}{stance_pick(e)}{consum}{stance_additive(e)}: {opts}{random}"
     if t == "stance-selection-capacity":
@@ -404,7 +454,7 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         if m.get("allocation") == "fixed-option" and option:
             subject = title_case(jstr(option.get("option_id")))
         else:
-            subject = f"one option of {title_case(jstr(m.get('ability_id')))}"
+            subject = f"one option of {ability_label(m.get('ability_id'))}"
         return f"you can select {subject} {times} per battle"
     if t == "risk-reward":
         risk = _obj(e.get("risk"))
@@ -499,11 +549,21 @@ def stance_pick(e: Effect) -> str:
     return f"select up to {n(hi)}" if num(lo) <= 1 else f"select from {n(lo)} to {n(hi)}"
 
 
+def secondary_lead(e: Effect, index: int) -> str:
+    """The "secondary effect (extra CP): " lead before the option a choice marks as the
+    Stratagem's secondary effect."""
+    marked = e.get("secondary_option")
+    is_number = isinstance(marked, (int, float)) and not isinstance(marked, bool)
+    return "secondary effect (extra CP): " if is_number and marked == index else ""
+
+
 def choice_prompt(e: Effect) -> str:
     """The prompt of a choice, with the player who picks: the opponent when chosen_by says so."""
     own = _own_choice_prompt(e)
     if e.get("chosen_by") != "opponent":
         return own
+    if own.startswith("choose "):
+        return f"your opponent chooses {own[len('choose '):]}"
     if own.startswith("select "):
         return f"your opponent selects {own[len('select '):]}"
     return f"your opponent: {own}"
@@ -513,22 +573,25 @@ def _own_choice_prompt(e: Effect) -> str:
     prompt = e.get("choice_prompt")
     if isinstance(prompt, str) and prompt.strip():
         return prompt
-    label = f" ({title_case(e['choice_label'])})" if e.get("choice_label") else ""
+    raw_label = title_case(e["choice_label"]) if e.get("choice_label") else ""
+    label = f" ({raw_label})" if raw_label and raw_label.lower() != "one of the following" else ""
     lo, hi = e.get("min_choices"), e.get("max_choices")
     if lo is not None and hi is not None:
+        if lo == 1 and hi == 1:
+            return f"choose one of the following{label}"
         if lo == hi:
-            quantity = f"exactly {jstr(hi)}"
+            quantity = jstr(hi)
         elif lo == 0:
             quantity = f"up to {jstr(hi)}"
         else:
-            quantity = f"from {jstr(lo)} through {jstr(hi)}"
-        return f"select {quantity} distinct options{label}"
-    return f"select one of the following{label}"
+            quantity = f"{jstr(lo)} to {jstr(hi)}"
+        return f"choose {quantity} of the following{label}"
+    return f"choose one of the following{label}"
 
 
 def part_head(e: Effect) -> str:
-    """What leads a part: its moment, usage limit, name, the choice to use it and its cost."""
-    effect = e.get("effect") if isinstance(e.get("effect"), dict) else {}
+    """What leads a part: moment, usage limit, duration, name, optionality and cost."""
+    effect = _obj(e.get("effect"))
     moment = " or ".join(
         s
         for s in (
@@ -556,19 +619,53 @@ def part_head(e: Effect) -> str:
     )
     usage = usage_clause(e["usage"]) if e.get("usage") else ""
     _, trail = duration_clauses(e.get("duration"))
+    own_desig_dur = (
+        effect.get("type") in ("designate-target", "persistent-designation")
+        and effect.get("duration") == e.get("duration")
+    )
     # A part's own control-lost duration leads it, with no objective marker before it for "it"
     # to name.
-    trail = re.sub(r"control it$", "control that objective marker", trail)
-    return ", ".join(p for p in (label, moment, usage, named, cost, trail) if p)
+    trail = "" if own_desig_dur else re.sub(r"control it$", "control that objective marker", trail)
+    return ", ".join(p for p in (label, moment, usage, trail, named, cost) if p)
+
+
+def part_trigger_ctx(e: Effect, ctx: Ctx) -> Ctx:
+    """Whether an ability-part's own trigger already names a destruction or allocation event."""
+    ts = normalize_triggers(e.get("trigger"))
+    destroyed = any(t.get("event") in ("destroyed", "model-destroyed") for t in ts)
+    allocated = any(t.get("event") == "damage-allocated" for t in ts)
+    if not destroyed and not allocated:
+        return ctx
+    out = dict(ctx)
+    if destroyed:
+        out["destroyed_trigger"] = True
+    if allocated:
+        out["allocated_trigger"] = True
+    return out
+
+
+def part_with_model_refs(e: Effect) -> Effect:
+    """A part with its own trigger: its effect's event refs read as that trigger's model, if it
+    names one."""
+    triggers = normalize_triggers(e.get("trigger"))
+    if triggers and e.get("effect") is not None:
+        return {**e, "effect": model_event_refs(e["effect"], triggers)}
+    return e
 
 
 def part_inline(e: Effect, ctx: Ctx) -> str:
     """A part on one line: its head, then its effect."""
+    e = part_with_model_refs(e)
+    child_ctx = part_trigger_ctx(e, ctx)
     head = part_head(e)
-    body = inline(e.get("effect"), ctx)
+    body = inline(e.get("effect"), child_ctx)
     # An optional part whose effect already reads "you can ..." needs no "you can:" before it.
     if head == "you can" and body.startswith("you can "):
         return body
+    if head.endswith("you can use this ability"):
+        return f"{head}: {body}"
+    if head and not e.get("name") and not head.endswith("you can"):
+        return f"{head}, {body}"
     return f"{head}: {body}" if head else body
 
 
@@ -581,16 +678,18 @@ def leadership_test(e: Effect, ctx: Ctx) -> str:
         f"{describe_condition(_obj(_obj(md).get('condition')))}"
         for md in (test.get("modifiers") or [])
     )
-    success = inline(e["on_success"], ctx) if e.get("on_success") else "nothing happens"
+    has_success = (
+        e.get("on_success") is not None and _obj(e.get("on_success")).get("type") != "no-effect"
+    )
     failures = ([f"{who} becomes Battle-shocked"] if test.get("kind") == "battle-shock" else []) + (
         [inline(e["on_fail"], ctx)] if e.get("on_fail") else []
     )
+    base = f"{who} takes {with_article(f'{kind} test')}{f' ({modifiers})' if modifiers else ''}"
+    if not has_success and failures:
+        return f"{base}; if failed, {'; '.join(failures)}"
+    success = inline(e["on_success"], ctx) if has_success else "nothing happens"
     fail = f"; otherwise, {'; '.join(failures)}" if failures else ""
-    mods = f"; {modifiers}" if modifiers else ""
-    return (
-        f"{who} takes a {kind} test (2D6, passing on its current Leadership or higher{mods}); "
-        f"if passed, {success}{fail}"
-    )
+    return f"{base}; if passed, {success}{fail}"
 
 
 def order_recipient(e: dict[str, Any]) -> str:

@@ -674,7 +674,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "adeptus-mechanicus",
     "trigger": {
       "event": "battle-started"
@@ -909,7 +908,12 @@
           }
         ]
       }
-    }
+    },
+    "option_names": [
+      "Invocation of Machine Vengeance",
+      "Mantra of Discipline",
+      "Shroudpsalm"
+    ]
   },
   {
     "ability_id": "mechanicus-bodyguard-adeptus-mechanicus",
@@ -3507,7 +3511,6 @@
     ],
     "ability_type": "unit",
     "behavior": "reactive",
-    "community_notes": "defensive ability (skipped for damage calc)",
     "faction_id": "adeptus-mechanicus",
     "trigger": {
       "event": "targets-selected",
@@ -5864,9 +5867,9 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "source_digest": "51118827ed1b2f31636ff3bbcfd744aaaaf547de29f7fe43b5bd5e9af9bbe4a8",
+    "source_digest": "3faedd27abcd7882fb5ca5ad4d4488de617755634d5e4ec59b78ae9a6a8fe6b3",
     "version": "2025-q3",
     "supersedes": null,
     "unit_ids": [],
@@ -5875,89 +5878,132 @@
     "ability_type": "detachment",
     "behavior": "passive",
     "effect": {
-      "type": "ability-part",
-      "trigger": {
-        "event": "phase-started",
-        "condition": {
-          "operator": "and",
-          "operands": [
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "friendly",
+            "all_of": [
+              "ADEPTUS MECHANICUS"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": {
+              "incursion": 1,
+              "strike-force": 2,
+              "onslaught": 3
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
             {
-              "type": "phase-is",
-              "parameters": {
-                "phase": "command"
+              "type": "keyword-grant",
+              "target": "selected-unit",
+              "modifier": {
+                "keywords": [
+                  "HALO OVERRIDE"
+                ]
               }
             },
             {
-              "type": "player-turn-is",
-              "parameters": {
-                "turn": "your-turn"
-              }
+              "type": "choice",
+              "options": [
+                {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "HALO OVERRIDE"
+                    ]
+                  },
+                  "modifier": {
+                    "stat": "M",
+                    "operation": "add",
+                    "value": 2
+                  }
+                },
+                {
+                  "type": "stat-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "HALO OVERRIDE"
+                    ]
+                  },
+                  "modifier": {
+                    "stat": "T",
+                    "operation": "add",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "permission",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "HALO OVERRIDE"
+                    ]
+                  },
+                  "modifier": {
+                    "activity": "declare-charge",
+                    "allow": true,
+                    "after": [
+                      "advance"
+                    ]
+                  }
+                },
+                {
+                  "type": "ability-grant",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "HALO OVERRIDE"
+                    ]
+                  },
+                  "modifier": {
+                    "ability": "stealth"
+                  }
+                }
+              ],
+              "choice_label": "Override ability",
+              "min_choices": 1,
+              "max_choices": 1
             }
           ]
         }
-      },
-      "effect": {
-        "type": "stance-select",
-        "mode": "re-selectable",
-        "options": [
-          {
-            "name": "Electromotive Energisation",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "M",
-                "operation": "add",
-                "value": 2
-              }
-            },
-            "id": "electromotive-energisation"
-          },
-          {
-            "name": "Microactuator Bracing",
-            "effect": {
-              "type": "stat-modifier",
-              "target": "this-unit",
-              "modifier": {
-                "stat": "T",
-                "operation": "add",
-                "value": 1
-              }
-            },
-            "id": "microactuator-bracing"
-          },
-          {
-            "name": "Predation Protocols",
-            "effect": {
-              "type": "permission",
-              "target": "this-unit",
-              "modifier": {
-                "activity": "declare-charge",
-                "allow": true
-              }
-            },
-            "id": "predation-protocols"
-          },
-          {
-            "name": "Muted Servomotors",
-            "effect": {
-              "type": "roll-modifier",
-              "target": "attacker",
-              "modifier": {
-                "roll": "hit",
-                "operation": "subtract",
-                "value": 1
-              }
-            },
-            "id": "muted-servomotors"
-          }
-        ]
       }
     },
     "scope": {
       "duration": "until-next-command-phase"
     },
-    "community_notes": "[APPROX] In the Command phase, selected units gain the Halo Override keyword (max selectable scales with battle size: 1/2/3 for Incursion/Strike Force/Onslaught) and then one Override ability is chosen for them; only the chosen ability is modeled. Predation Protocols is expressed as a granted charge eligibility (rule is charge-after-Advance) and Muted Servomotors as the Stealth hit penalty. Full rule in raw-text store."
+    "community_notes": "[APPROX] In the Command phase, selected units gain the Halo Override keyword (max selectable scales with battle size: 1/2/3 for Incursion/Strike Force/Onslaught) and then one Override ability is chosen for them; only the chosen ability is modeled. Predation Protocols is expressed as a granted charge eligibility (rule is charge-after-Advance) and Muted Servomotors as the Stealth hit penalty. Full rule in raw-text store.",
+    "option_names": [
+      "Electromotive Energisation",
+      "Microactuator Bracing",
+      "Predation Protocols",
+      "Muted Servomotors"
+    ]
   },
   {
     "ability_id": "cyber-psalm-programming-adeptus-mechanicus",
@@ -6540,7 +6586,11 @@
     "scope": {
       "duration": "permanent"
     },
-    "community_notes": "[APPROX] Only the BOMBARDMENT 'standing firm' branch is modeled (3+ → D3 mortal wounds to each enemy unit in the opponent's deployment zone at the start of the first battle round). The opponent's cover/stand-firm choice, the 'taking cover' branch (Battle-shock plus 5+ → D3 mortal wounds), and the FALLOUT effect across battle rounds 2–5 are not encoded. Full rule in raw-text store."
+    "community_notes": "[APPROX] Only the BOMBARDMENT 'standing firm' branch is modeled (3+ → D3 mortal wounds to each enemy unit in the opponent's deployment zone at the start of the first battle round). The opponent's cover/stand-firm choice, the 'taking cover' branch (Battle-shock plus 5+ → D3 mortal wounds), and the FALLOUT effect across battle rounds 2–5 are not encoded. Full rule in raw-text store.",
+    "option_names": [
+      "Standing Firm",
+      "Taking Cover"
+    ]
   },
   {
     "ability_id": "broad-spectrum-targeting-augurs-adeptus-mechanicus",
@@ -6858,7 +6908,12 @@
     "ability_type": "unit",
     "behavior": "passive",
     "community_notes": "community-authored from 10e source (provisional 11e); see #21",
-    "faction_id": "adeptus-mechanicus"
+    "faction_id": "adeptus-mechanicus",
+    "option_names": [
+      "Fanatical Devotion",
+      "Adaptive Tactics",
+      "The Fires of Mars"
+    ]
   },
   {
     "ability_id": "secutor-of-olympus-adeptus-mechanicus",
@@ -7172,19 +7227,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "haloscreed-battle-clade",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "normal"
+            ]
+          },
+          "window": "turn"
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true,
+          "despite": [
+            "disembarked-this-turn"
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS MECHANICUS"
+        ]
+      },
+      "filter": {
+        "transport": "this-unit"
+      }
+    },
+    "source_digest": "25dd319fa0e72adbe1eb838313297373cc5c78c46d414c924f1e43c3b3ec988f"
   },
   {
     "ability_id": "aggressor-imperative-rad-zone-corps-adeptus-mechanicus",
@@ -7581,19 +7672,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "rad-zone-corps",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "or",
+        "operands": [
+          {
+            "type": "same-unit",
+            "parameters": {
+              "subject": "defender",
+              "as": {
+                "stratagem_target": "first"
+              }
+            }
+          },
+          {
+            "type": "same-unit",
+            "parameters": {
+              "subject": "defender",
+              "as": {
+                "stratagem_target": "second"
+              }
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "attacker",
+        "modifier": {
+          "roll": "wound",
+          "operation": "subtract",
+          "value": 1
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "stratagem_target": "first"
+      }
+    },
+    "source_digest": "7c45512e5bf4dc7335ea80944a9d926ee3ed5890941ceeeba043550431bfa9d3"
   },
   {
     "ability_id": "battle-sphere-uplink-skitarii-hunter-cohort-adeptus-mechanicus",
@@ -8485,19 +8621,70 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "cohort-cybernetica",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-object",
+          "filter": {
+            "within": {
+              "of": "this-model",
+              "range": {
+                "inches": 12
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "roll-result",
+        "target": "event-subject",
+        "modifier": {
+          "roll": "deadly-demise",
+          "result": "pass"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ADEPTUS MECHANICUS",
+              "VEHICLE"
+            ]
+          },
+          {
+            "all_of": [
+              "LEGIO CYBERNETICA"
+            ]
+          }
+        ],
+        "level": "model",
+        "has_ability": [
+          "deadly-demise"
+        ]
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    },
+    "source_digest": "1f00edf0bd1354cdf773dfc238dfef59d7539da97c588110001cb26194bee32e"
   },
   {
     "ability_id": "empowered-mechanisms-purge-corps-deltic-9-adeptus-mechanicus",
@@ -8635,19 +8822,88 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "rad-zone-corps",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "within": {
+            "range": {
+              "inches": 24
+            },
+            "of": "this-model"
+          }
+        },
+        "bind_as": "objective-marker",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "selection_var": "objective-marker"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 4,
+            "comparison": "gte",
+            "on_success": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "mortal-wounds",
+                  "target": "recipient",
+                  "modifier": {
+                    "count": 1
+                  }
+                },
+                {
+                  "type": "test",
+                  "target": "recipient",
+                  "modifier": {
+                    "test": "battle-shock"
+                  }
+                }
+              ]
+            },
+            "on_fail": null
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "fccce42bb678874b561a5f8ac5495d893baae27b581dbadbf0c068bdbc314c3d"
   },
   {
     "ability_id": "genetor-explorator-maniple-adeptus-mechanicus",
@@ -9795,19 +10051,70 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "cohort-cybernetica",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": "this-model",
+              "range": {
+                "inches": 12
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "damage-reduction",
+        "target": "event-subject",
+        "modifier": {
+          "reduction": "to-zero"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "save",
+        "result": "failure"
+      },
+      "subject": {
+        "owner": "friendly",
+        "any_of_filters": [
+          {
+            "all_of": [
+              "ADEPTUS MECHANICUS",
+              "VEHICLE"
+            ]
+          },
+          {
+            "all_of": [
+              "LEGIO CYBERNETICA"
+            ]
+          }
+        ],
+        "level": "model"
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "model"
+    },
+    "source_digest": "b28028c8a3fa0397806145b7a84fe9f666538445dde8c6bf393665c3e7a755d5"
   },
   {
     "ability_id": "neural-overload-haloscreed-battle-clade-adeptus-mechanicus",
@@ -10173,19 +10480,82 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "explorator-maniple",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "designated": "acquisition"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "filter": {
+                    "within": {
+                      "of": {
+                        "owner": "enemy"
+                      },
+                      "range": {
+                        "inches": 3
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-model",
+        "modifier": {
+          "move_type": "consolidation",
+          "distance": 6
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-started",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "ADEPTUS MECHANICUS"
+        ]
+      },
+      "filter": {
+        "move_types": [
+          "consolidation"
+        ]
+      }
+    },
+    "source_digest": "225bf66ea4d6afb3f820d8fe0802d5360ac24812654d6f92eb2f5375449b9754"
   },
   {
     "ability_id": "programmed-withdrawal-skitarii-hunter-cohort-adeptus-mechanicus",

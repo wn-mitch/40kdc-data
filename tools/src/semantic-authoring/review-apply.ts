@@ -7,7 +7,7 @@ import { confirmSurface, leafSurface, moveSurface, retireSurface } from "./leave
 import { confirmConnectiveSpan, confirmConnectiveSurface, relabelConnective } from "./connective-surfaces.js";
 import { confirmOperator, type OperatorSlot } from "./leaf-operators.js";
 import { NAME_FRAGMENT } from "./compile-name.js";
-import { approveShape, carryApprovals, compiledRecordsOf, rejectShapeMembers } from "./shapes.js";
+import { approveShape, compiledRecordsOf, rejectShapeMembers } from "./shapes.js";
 import { exactSpan } from "./contracts.js";
 import { withTransactionAsync } from "./db.js";
 import { staleGaps } from "./gap-sweep.js";
@@ -23,9 +23,7 @@ import { staleGaps } from "./gap-sweep.js";
  * `add` with `fragment: "NAME"` locates its wording in the record's name (a psyker level printed in the name).
  * `approve-shape` approves the compiled entries of the listed members of one shape (`signature`,
  * `ability_version_ids`) for publication, refusing any member publication would reject;
- * `reject-shape` refuses them until their leaves change. `carry-approvals` (optionally one
- * `faction_id`) keeps each approval a family-version migration staled when the recompiled entry is
- * byte-identical. `resolve-gap` closes the open gap `gap_id` names once the record no longer needs it;
+ * `reject-shape` refuses them until their leaves change. `resolve-gap` closes the open gap `gap_id` names once the record no longer needs it;
  * `close-covered-gaps` (optionally one `faction_id`) closes every gap `staleGaps` finds.
  */
 
@@ -51,12 +49,12 @@ export type ChatDecision = {
   allow_overlap?: boolean;
   /** For `correct` of an annotation: same-role leaves inside the new wording that it absorbs (one list, one leaf). */
   merges_annotation_ids?: number[];
-  action: "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface" | "approve-shape" | "reject-shape" | "carry-approvals" | "connective-relation" | "resolve-gap" | "close-covered-gaps";
+  action: "confirm" | "correct" | "retire" | "reject" | "novel" | "ambiguous" | "connective" | "add" | "gap" | "surface" | "retire-surface" | "connective-surface" | "add-connective" | "operator" | "move-surface" | "approve-shape" | "reject-shape" | "connective-relation" | "resolve-gap" | "close-covered-gaps";
   /** For `approve-shape` / `reject-shape`: the shape signature the members compile to. */
   signature?: string;
   /** For `approve-shape` / `reject-shape`: the source versions decided. */
   ability_version_ids?: number[];
-  /** For `carry-approvals` / `close-covered-gaps`: only this faction's members. */
+  /** For `close-covered-gaps`: only this faction's members. */
   faction_id?: string;
   /** For `add` with an explicit occurrence, the UTF-8 byte end (paired with `start_byte`). */
   end_byte?: number;
@@ -363,11 +361,6 @@ export async function applyChatReview(db: DatabaseSync, review: ChatReview): Pro
         const body = { reviewer: actor.reviewer, signature: item.signature, ability_version_ids: item.ability_version_ids };
         const report = item.action === "approve-shape" ? await approveShape(db, body, actor, coApproved()) : rejectShapeMembers(db, body, actor);
         applied.push({ batch_id: report.batch_id, shape: { signature: item.signature, recorded: report.recorded } } as never);
-        continue;
-      }
-      if (item.action === "carry-approvals") {
-        const report = carryApprovals(db, actor, item.faction_id ? { factionId: item.faction_id } : {});
-        applied.push({ batch_id: report.batch_id ?? "", carried: { checked: report.checked, carried: report.carried } } as never);
         continue;
       }
       if (item.action === "gap") {

@@ -222,6 +222,12 @@ def crunch_model(
     profile_buffs = _profile_buffs_for(attacker, ds, ctx)
     all_buffs = [*profile_buffs, *input.get("buffs", [])]
     resolved = resolve_buffs(all_buffs, ctx)
+    # A granted keyword whose rule is catalog DSL ([HEAVY], [TWIN-LINKED], [LANCE]) applies that
+    # DSL, credited to the grant; resolving again keeps every grant's applicability and removals.
+    granted = _granted_keyword_buffs(resolved, attacker, ds, ctx)
+    if granted:
+        all_buffs.extend(granted)
+        resolved = resolve_buffs(all_buffs, ctx)
     # A buff gated on the attack's Strength against the target's Toughness needs both, which the
     # buffs themselves modify: take them from the stack without the comparison-gated buffs, then
     # resolve again with them known. No comparison-gated buff feeds any comparison.
@@ -266,19 +272,35 @@ def crunch_model(
     if target_model_count is None:
         target_model_count = 1
     blast_params = (blast.get("parameters") or {}) if blast else {}
-    blast_value = blast_params.get("value") if "value" in blast_params else 0
+    # Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
+    blast_value = blast_params.get("value") if "value" in blast_params else 1
     blast_extra = (
         math.floor(target_model_count / 5) * eval_stat_value(blast_value)
         if blast
         else 0
     )
-    attacks = input["modelsFiring"] * (attacks_per_model + rapid_fire_extra + blast_extra)
+    # [CLEAVE X] adds X attacks per five target models when the weapon picks one target, as every
+    # crunch does.
+    cleave = _find_keyword(resolved, "cleave")
+    cleave_params = (cleave.get("parameters") or {}) if cleave else {}
+    cleave_extra = (
+        math.floor(target_model_count / 5) * eval_stat_value(cleave_params["value"])
+        if "value" in cleave_params
+        else 0
+    )
+    attacks = input["modelsFiring"] * (
+        attacks_per_model + rapid_fire_extra + blast_extra + cleave_extra
+    )
     stages.append(
         {
             "name": "attacks",
             "expected": attacks,
             "detail": _attacks_detail(
-                input["modelsFiring"], attacks_per_model, rapid_fire_extra, blast_extra
+                input["modelsFiring"],
+                attacks_per_model,
+                rapid_fire_extra,
+                blast_extra,
+                cleave_extra,
             )
             + (
                 f"; reroll {attacks_reroll} of A {stats['A']}"
@@ -735,19 +757,53 @@ def crunch_model(
     )
 
     # 7. Models killed
+    # One attack's damage goes to one model and what exceeds its Wounds is lost; Feel No Pain
+    # rolls for each wound before that. Devastating Wounds' mortal wounds are capped the same
+    # way; mortal wounds an ability inflicts on a roll carry over. Each stream keeps its share of
+    # the expected damage above (re-roll-one gains included), scaled by what the cap leaves of it.
     wounds_stat = unit_profile["W"]
-    expected_models_killed = (
-        min(target_model_count, after_fnp / wounds_stat) if wounds_stat > 0 else 0
+    if critical is not None:
+        main_capped = unsaved_regular * capped_damage(
+            per_attack["distribution"], p_survive_all, wounds_stat
+        ) + unsaved_critical * capped_damage(
+            per_critical["distribution"], p_survive_all, wounds_stat
+        )
+        main_raw = (
+            unsaved_regular * damage_per_hit + unsaved_critical * per_critical["expected"]
+        ) * p_survive_all
+    else:
+        main_capped = unsaved * capped_damage(
+            per_attack["distribution"], p_survive_all, wounds_stat
+        )
+        main_raw = unsaved * damage_per_hit * p_survive_all
+    mortal_survive = p_survive_all * p_survive_mortal
+    devastating_raw = mortal_wounds_stream * per_critical["expected"] * mortal_survive
+    devastating_capped = mortal_wounds_stream * capped_damage(
+        per_critical["distribution"], mortal_survive, wounds_stat
     )
-    per_model = after_fnp / wounds_stat if wounds_stat > 0 else 0.0
+    ability_mortals = roll_mortals * mortal_survive
+    main_share = main_capped / main_raw if main_raw > 0 else 1
+    devastating_share = devastating_capped / devastating_raw if devastating_raw > 0 else 1
+    after_mortal_devastating = max(0, after_mortal - ability_mortals)
+    damage_dealt = (
+        after_main * main_share
+        + after_mortal_devastating * devastating_share
+        + (after_mortal - after_mortal_devastating)
+        if wounds_stat > 0
+        else 0
+    )
+    expected_models_killed = (
+        min(target_model_count, damage_dealt / wounds_stat) if wounds_stat > 0 else 0
+    )
+    per_model = damage_dealt / wounds_stat if wounds_stat > 0 else 0.0
     stages.append(
         {
             "name": "models-killed",
             "expected": expected_models_killed,
             "detail": (
                 f"W{wounds_stat} per model, {target_model_count} models in target; "
-                f"{after_fnp:.4f} damage / {wounds_stat} = {per_model:.4f} "
-                f"(capped at {target_model_count})"
+                f"{damage_dealt:.4f} damage with overkill lost / {wounds_stat} = "
+                f"{per_model:.4f} (capped at {target_model_count})"
             ),
         }
     )
@@ -757,7 +813,7 @@ def crunch_model(
         "attacksStat": (
             resolved["statSet"]["A"]["value"] if "A" in resolved["statSet"] else stats.get("A")
         ),
-        "attacksBonus": resolved["attacksMod"]["value"] + blast_extra,
+        "attacksBonus": resolved["attacksMod"]["value"] + blast_extra + cleave_extra,
         "rapidFireStat": (
             (rapid_fire.get("parameters") or {}).get("value") if rapid_fire and half_range else None
         ),
@@ -805,7 +861,7 @@ def crunch_model(
             "unsaved": 1 - p_saved_critical,
             "damage": per_critical["distribution"],
         }
-    return {"stages": stages, "resolved": resolved}, model
+    return {"stages": stages, "resolved": resolved, "damageDealt": damage_dealt}, model
 
 
 # ---------------------------------------------------------------------------
@@ -845,6 +901,27 @@ def _manual_weapon_keyword_buffs(
         if view is None:
             continue
         out.extend(view.get_buffs(parameters, attacker["weapon"]["id"], ctx))
+    return out
+
+
+def _granted_keyword_buffs(
+    resolved: ResolvedModifiers, attacker: dict[str, Any], dataset: Dataset, ctx: EngineContext
+) -> list[Buff]:
+    """Catalog buffs of each resolved granted keyword the profile does not print, with the grant's
+    source. Engine-dispatched keywords have no catalog DSL and are read from extraKeywords."""
+    profiles = attacker["weapon"]["profiles"]
+    index = attacker["profileIndex"]
+    profile = profiles[index] if 0 <= index < len(profiles) else {}
+    printed = {ref["keyword_id"] for ref in profile.get("keywords") or []}
+    out: list[Buff] = []
+    for entry in resolved["extraKeywords"]:
+        keyword_id = entry["keywordRef"].get("keyword_id")
+        view = dataset.weapon_keywords.get(keyword_id)
+        if keyword_id in printed or view is None or view.raw.get("effect") is None:
+            continue
+        parameters = entry["keywordRef"].get("parameters")
+        for buff in view.get_buffs(parameters, attacker["weapon"]["id"], ctx):
+            out.append({**buff, "source": entry["source"]})
     return out
 
 
@@ -1003,6 +1080,32 @@ def _num_str(n: float) -> str:
     return str(n)
 
 
+def capped_damage(distribution: list[DamageOutcome], lost: float, wounds: float) -> float:
+    """Expected wounds one unsaved attack removes from a model with ``wounds`` Wounds.
+
+    Each point of its Damage is a wound lost with probability ``lost`` (Feel No Pain), and
+    wounds past the model's Wounds are lost. A fractional Damage value is capped in expectation.
+    """
+    total = 0.0
+    for entry in distribution:
+        value, probability = entry["value"], entry["probability"]
+        if probability == 0 or value <= 0:
+            continue
+        if value != int(value):
+            total += probability * min(value * lost, wounds)
+            continue
+        expected = 0.0
+        coefficient = 1.0
+        for removed in range(int(value) + 1):
+            if removed > 0:
+                coefficient = coefficient * (value - removed + 1) / removed
+            expected += (
+                coefficient * lost**removed * (1 - lost) ** (value - removed) * min(removed, wounds)
+            )
+        total += probability * expected
+    return total
+
+
 def _fnp_survival_fraction(fnp: dict[str, Any] | None) -> float:
     """Fraction of damage that survives a single FNP roll (1 if no FNP)."""
     if not fnp:
@@ -1024,12 +1127,16 @@ def _describe_fnp(all_fnp: dict[str, Any] | None, mortal_fnp: dict[str, Any] | N
     return ", ".join(parts)
 
 
-def _attacks_detail(models: float, per: float, rapid_fire: float, blast: float) -> str:
+def _attacks_detail(
+    models: float, per: float, rapid_fire: float, blast: float, cleave: float
+) -> str:
     parts = [f"{_num_str(models)} × {_num_str(per)}"]
     if rapid_fire:
         parts.append(f"+ Rapid Fire {_num_str(rapid_fire)} (half range)")
     if blast:
         parts.append(f"+ Blast {_num_str(blast)}/model")
+    if cleave:
+        parts.append(f"+ Cleave {_num_str(cleave)}/model")
     return " ".join(parts)
 
 

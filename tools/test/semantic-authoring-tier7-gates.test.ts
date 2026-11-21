@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { foldPassthroughUsed } from "../src/semantic-authoring/compile-passthrough-used.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { ROLL_KINDS } from "../src/semantic-authoring/dice-families.js";
+import { ROLL_KINDS } from "../src/semantic-authoring/families/vocabulary.js";
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { unresolvedOfAbilityRolls } from "../src/integrity-of-ability-roll.js";
 import { describeTrigger } from "../src/translate/trigger.js";
@@ -88,8 +88,7 @@ describe("the move-passthrough-used family", () => {
   });
 });
 
-describe("event@23 through (move-ended only)", () => {
-  const version = currentFamilyVersion("event");
+describe("event through (move-ended only)", () => {
   const sampled: Array<Record<string, unknown>> = [
     { kind: "move-ended", move_types: ["normal"] },
     { kind: "move-ended", subject: "this-model", move_types: ["normal"] },
@@ -97,39 +96,37 @@ describe("event@23 through (move-ended only)", () => {
     { kind: "move-ended", subject: "antecedent" },
   ];
 
-  it("accepts every event the previous version accepted, unchanged", () => {
-    expect(version).toBe(currentFamilyVersion("event"));
+  it("keeps a move-ended event with no through unchanged", () => {
     for (const parameters of sampled) {
-      expect(normalizeFingerprintParameters("event", parameters, version)).toEqual(normalizeFingerprintParameters("event", parameters, version - 1));
+      expect(normalizeFingerprintParameters("event", parameters)).toEqual(parameters);
     }
   });
 
   it("takes through on a move-ended moment, and only the tall-terrain value", () => {
-    const withThrough = normalizeFingerprintParameters("event", { kind: "move-ended", subject: "this-model", move_types: ["normal"], through: "tall-terrain" }, version);
+    const withThrough = normalizeFingerprintParameters("event", { kind: "move-ended", subject: "this-model", move_types: ["normal"], through: "tall-terrain" });
     expect(withThrough).toEqual({ kind: "move-ended", subject: "this-model", move_types: ["normal"], through: "tall-terrain" });
-    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", through: "terrain" }, version)).toThrow();
-    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", through: "all-terrain" }, version)).toThrow();
+    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", through: "terrain" })).toThrow();
+    expect(() => normalizeFingerprintParameters("event", { kind: "move-ended", through: "all-terrain" })).toThrow();
   });
 
   it("refuses through on any other moment kind", () => {
-    expect(() => normalizeFingerprintParameters("event", { kind: "selected", subject: "selected-unit", through: "tall-terrain" }, version)).toThrow();
-    expect(() => normalizeFingerprintParameters("event", { kind: "unit-destroyed", through: "tall-terrain" }, version)).toThrow();
+    expect(() => normalizeFingerprintParameters("event", { kind: "selected", subject: "selected-unit", through: "tall-terrain" })).toThrow();
+    expect(() => normalizeFingerprintParameters("event", { kind: "unit-destroyed", through: "tall-terrain" })).toThrow();
   });
 });
 
-describe("roll-prohibition@2 (a named ability's own roll)", () => {
-  it("accepts every roll the previous version accepted, unchanged", () => {
-    expect(currentFamilyVersion("roll-prohibition")).toBe(2);
+describe("roll-prohibition (a named ability's own roll)", () => {
+  it("keeps every roll kind unchanged", () => {
     for (const roll of ROLL_KINDS) {
-      expect(normalizeFingerprintParameters("roll-prohibition", { roll }, 2)).toEqual(normalizeFingerprintParameters("roll-prohibition", { roll }, 1));
+      expect(normalizeFingerprintParameters("roll-prohibition", { roll })).toEqual({ roll });
     }
   });
 
   it("takes {ability: id} as the roll, and refuses a malformed id or an extra key", () => {
-    expect(normalizeFingerprintParameters("roll-prohibition", { roll: { ability: "blood-tithe-world-eaters" } }, 2))
+    expect(normalizeFingerprintParameters("roll-prohibition", { roll: { ability: "blood-tithe-world-eaters" } }))
       .toEqual({ roll: { ability: "blood-tithe-world-eaters" } });
-    expect(() => normalizeFingerprintParameters("roll-prohibition", { roll: { ability: "Bad Id" } }, 2)).toThrow();
-    expect(() => normalizeFingerprintParameters("roll-prohibition", { roll: { ability: "x-y", extra: 1 } }, 2)).toThrow();
+    expect(() => normalizeFingerprintParameters("roll-prohibition", { roll: { ability: "Bad Id" } })).toThrow();
+    expect(() => normalizeFingerprintParameters("roll-prohibition", { roll: { ability: "x-y", extra: 1 } })).toThrow();
   });
 });
 

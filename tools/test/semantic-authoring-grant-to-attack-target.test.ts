@@ -60,15 +60,9 @@ describe("Attack-target recipients on grant and stat families", () => {
     ["characteristic-modifier", { subject: "target", characteristics: ["T"], operation: "subtract", value: 1 }, { subject: "this-unit", characteristics: ["T"], operation: "subtract", value: 1 }],
   ];
 
-  // The version before each family accepted subject target.
-  const BEFORE_TARGET: Record<string, number> = { "invulnerable-save": 5, "keyword-grant": 3, "characteristic-modifier": 17 };
-
-  it.each(cases)("%s accepts subject target at its current version and refuses it at the previous one", (family, targeted, own) => {
-    const current = currentFamilyVersion(family);
-    const before = BEFORE_TARGET[family]!;
-    expect(normalizeFingerprintParameters(family, targeted, current).subject).toBe("target");
-    expect(normalizeFingerprintParameters(family, own, before).subject).toBe("this-unit");
-    expect(() => normalizeFingerprintParameters(family, targeted, before)).toThrow(/subject must be one of/);
+  it.each(cases)("%s accepts subject target beside this unit", (family, targeted, own) => {
+    expect(normalizeFingerprintParameters(family, targeted).subject).toBe("target");
+    expect(normalizeFingerprintParameters(family, own).subject).toBe("this-unit");
   });
 
   it("names the defender in the DSL for each family", () => {

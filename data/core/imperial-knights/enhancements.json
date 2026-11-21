@@ -587,7 +587,8 @@
         "namespace": "mfm",
         "id": "649d8237-fd55-4663-a10e-7846287e5368"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "ancestral-overbleed-upgrade-throne-bonded-outriders-imperial-knights",
@@ -615,7 +616,8 @@
         "namespace": "mfm",
         "id": "bf648f70-ce48-47e4-a700-47e06887b2bb"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "mysterious-guardian-freeblade-company-imperial-knights",

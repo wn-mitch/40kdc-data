@@ -486,7 +486,8 @@
       {
         "unit_id": "inquisitors-hand-eversor-assassin"
       }
-    ]
+    ],
+    "equipable_by_epic_hero": true
   },
   {
     "id": "sanctic-slayers-inquisitors-hand-agents-of-the-imperium",
@@ -540,7 +541,8 @@
         "namespace": "mfm",
         "id": "ea10f5dc-1d31-407c-ab87-a424386a0f59"
       }
-    ]
+    ],
+    "counts_toward_enhancement_limit": false
   },
   {
     "id": "decoy-targets-veiled-blade-elimination-force-agents-of-the-imperium",
@@ -569,7 +571,8 @@
         "namespace": "mfm",
         "id": "6824ee93-bf62-402f-a38b-f2b8e3a3795d"
       }
-    ]
+    ],
+    "counts_toward_enhancement_limit": false
   },
   {
     "id": "esoteric-explosives-veiled-blade-elimination-force-agents-of-the-imperium",
@@ -598,7 +601,8 @@
         "namespace": "mfm",
         "id": "136a11c1-b96b-4cbd-b5e4-49595d54f88d"
       }
-    ]
+    ],
+    "counts_toward_enhancement_limit": false
   },
   {
     "id": "micromelta-rounds-veiled-blade-elimination-force-agents-of-the-imperium",
@@ -627,6 +631,7 @@
         "namespace": "mfm",
         "id": "aa4924d4-a606-4e06-9da3-b1467cd20ebb"
       }
-    ]
+    ],
+    "counts_toward_enhancement_limit": false
   }
 ]

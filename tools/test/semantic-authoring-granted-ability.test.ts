@@ -420,7 +420,7 @@ describe("ability-grant definition in the DSL", () => {
     const result = compiled(placed(AURA_TEXT, WARDENS, header("have the following ability", "one"), label("Shade Ward (Aura", "Shade Ward"), ...auraBody), AURA_TEXT);
     expect(validate(result.mechanics.effect)).toBe(true);
     const text = describeAbility({ effect: result.mechanics.effect as never, scope: { duration: "permanent" } });
-    expect(text.split("\n")[0]).toBe("All friendly GLOOM WARDENS units gain the Shade Ward ability:");
+    expect(text.split("\n")[0]).toBe("Friendly GLOOM WARDENS units gain the Shade Ward ability:");
     expect(text).toContain("GLOOM HOUND");
     expect(text).not.toMatch(/use Shade Ward/iu);
     const rally = compiled(rallyLeaves(), RALLY_TEXT);

@@ -38,9 +38,8 @@ describe("an attack allocated to the selected unit", () => {
     expect(part.trigger.object).toBeUndefined();
   });
 
-  it("names the selected unit as an object on a damage-allocated moment only, from version 38", () => {
-    expect(normalizeFingerprintParameters("event", { kind: "damage-allocated", object: "selected-unit" }, 38)).toEqual({ kind: "damage-allocated", object: "selected-unit" });
-    expect(() => normalizeFingerprintParameters("event", { kind: "damage-allocated", object: "selected-unit" }, 37)).toThrow();
-    expect(() => normalizeFingerprintParameters("event", { kind: "model-destroyed", object: "selected-unit" }, 38)).toThrow(/damage-allocated/u);
+  it("names the selected unit as an object on a damage-allocated moment only", () => {
+    expect(normalizeFingerprintParameters("event", { kind: "damage-allocated", object: "selected-unit" })).toEqual({ kind: "damage-allocated", object: "selected-unit" });
+    expect(() => normalizeFingerprintParameters("event", { kind: "model-destroyed", object: "selected-unit" })).toThrow(/event.object does not apply to kind model-destroyed/u);
   });
 });

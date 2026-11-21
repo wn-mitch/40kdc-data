@@ -2,12 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { compileLeaves, type CompileLeaf } from "../src/semantic-authoring/compile.js";
 import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
-import { familyExtension } from "../src/semantic-authoring/families/index.js";
 import { mergedFilter } from "../src/semantic-authoring/compile-unit-filter-merge.js";
 import { createValidator } from "../src/schema-loader.js";
-
-/** The family versions the extensions under test create. */
-const DICE_COUNT_CAP_AND_TABLES_VERSIONS: ReadonlySet<string> = new Set(["dice-roll@6", "reroll@7", "roll-modifier@9", "roll-auto-result@4", "characteristic-set@9"]);
 
 type Item = [string, string, Record<string, unknown>, string?, string?];
 
@@ -43,111 +39,91 @@ function errorsOf(text: string, items: Item[]): string[] {
   return result.ok ? [] : result.errors;
 }
 
-/** The version just before this bundle's extension of `family`; later extensions may sit above it. */
-const PREVIOUS = (family: string) => {
-  for (let version = currentFamilyVersion(family); version > 1; version -= 1) {
-    const extension = familyExtension(family, version);
-    if (extension !== undefined && DICE_COUNT_CAP_AND_TABLES_VERSIONS.has(`${extension.family}@${extension.version}`)) return version - 1;
-  }
-  throw new Error(`The dice bundle does not extend ${family}.`);
-};
-/** The version this bundle's extension of `family` defines. */
-const OWN = (family: string) => PREVIOUS(family) + 1;
-const normalize = (family: string, parameters: Record<string, unknown>, version = currentFamilyVersion(family)) => normalizeFingerprintParameters(family, parameters, version);
+const normalize = (family: string, parameters: Record<string, unknown>) => normalizeFingerprintParameters(family, parameters);
 
 function validates(effect: unknown): void {
   const validate = createValidator().compile({ $ref: "https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json#/$defs/effect-node" });
   expect(validate(effect), JSON.stringify(validate.errors?.slice(0, 2))).toBe(true);
 }
 
-describe("family versions (each widens only)", () => {
+describe("dice family parameter ranges", () => {
   it("characteristic-set takes a dice value for A, S and D only", () => {
     const leaf = { subject: "this-unit", characteristic: "A", value: "D3+3", weapon_type: "ranged" };
-    expect(normalize("characteristic-set", leaf, OWN("characteristic-set"))).toEqual(leaf);
-    expect(normalize("characteristic-set", { ...leaf, characteristic: "S", value: "D6" }, OWN("characteristic-set"))).toMatchObject({ value: "D6" });
-    expect(() => normalize("characteristic-set", leaf, PREVIOUS("characteristic-set"))).toThrow();
-    expect(() => normalize("characteristic-set", { ...leaf, characteristic: "M", weapon_type: undefined }, OWN("characteristic-set"))).toThrow(/only A, S and D/u);
-    expect(() => normalize("characteristic-set", { ...leaf, value: "D4" }, OWN("characteristic-set"))).toThrow();
-    expect(() => normalize("characteristic-set", { ...leaf, value: "fast" }, OWN("characteristic-set"))).toThrow();
+    expect(normalize("characteristic-set", leaf)).toEqual(leaf);
+    expect(normalize("characteristic-set", { ...leaf, characteristic: "S", value: "D6" })).toMatchObject({ value: "D6" });
+    expect(() => normalize("characteristic-set", { ...leaf, characteristic: "M", weapon_type: undefined })).toThrow(/only A, S and D/u);
+    expect(() => normalize("characteristic-set", { ...leaf, value: "D4" })).toThrow();
+    expect(() => normalize("characteristic-set", { ...leaf, value: "fast" })).toThrow();
   });
 
-  it("characteristic-set still takes every value the previous version took", () => {
+  it("characteristic-set takes a fixed value and a sourced value", () => {
     for (const value of [3, { source: "the unit's rating" }]) {
       const leaf = { subject: "this-unit", characteristic: "A", value, weapon_type: "all" };
-      expect(normalize("characteristic-set", leaf, PREVIOUS("characteristic-set"))).toEqual(leaf);
-      expect(normalize("characteristic-set", leaf, OWN("characteristic-set"))).toEqual(leaf);
+      expect(normalize("characteristic-set", leaf)).toEqual(leaf);
     }
   });
 
   it("reroll counts up to 12 and refuses 13 and 0", () => {
     const leaf = { roll: "hit", subset: "all", weapon_type: "all" };
-    expect(normalize("reroll", { ...leaf, count: 6 }, OWN("reroll"))).toEqual({ ...leaf, count: 6 });
-    expect(normalize("reroll", { ...leaf, count: 12 }, OWN("reroll"))).toMatchObject({ count: 12 });
-    expect(() => normalize("reroll", { ...leaf, count: 6 }, PREVIOUS("reroll"))).toThrow();
-    expect(() => normalize("reroll", { ...leaf, count: 13 }, OWN("reroll"))).toThrow();
-    expect(() => normalize("reroll", { ...leaf, count: 0 }, OWN("reroll"))).toThrow();
-    expect(() => normalize("reroll", { ...leaf, count: 2.5 }, OWN("reroll"))).toThrow();
+    expect(normalize("reroll", { ...leaf, count: 6 })).toEqual({ ...leaf, count: 6 });
+    expect(normalize("reroll", { ...leaf, count: 12 })).toMatchObject({ count: 12 });
+    expect(() => normalize("reroll", { ...leaf, count: 13 })).toThrow();
+    expect(() => normalize("reroll", { ...leaf, count: 0 })).toThrow();
+    expect(() => normalize("reroll", { ...leaf, count: 2.5 })).toThrow();
   });
 
-  it("reroll still takes counts 1 to 3 and no count", () => {
+  it("reroll takes counts 1 to 3 and no count", () => {
     const leaf = { roll: "hit", subset: "failed", weapon_type: "all" };
     for (const count of [1, 2, 3, undefined]) {
       const input = count === undefined ? leaf : { ...leaf, count };
-      expect(normalize("reroll", input, PREVIOUS("reroll"))).toEqual(input);
-      expect(normalize("reroll", input, OWN("reroll"))).toEqual(input);
+      expect(normalize("reroll", input)).toEqual(input);
     }
   });
 
   it("roll-modifier cap needs a numeric added value on one roll", () => {
     const leaf = { roll: "psychic", operation: "add", value: 1, cap: 2 };
-    expect(normalize("roll-modifier", leaf, OWN("roll-modifier"))).toEqual(leaf);
-    expect(() => normalize("roll-modifier", leaf, PREVIOUS("roll-modifier"))).toThrow();
-    expect(() => normalize("roll-modifier", { ...leaf, value: { source: "a count" } }, OWN("roll-modifier"))).toThrow(/numeric value/u);
-    expect(() => normalize("roll-modifier", { ...leaf, operation: "subtract" }, OWN("roll-modifier"))).toThrow(/operation add/u);
-    expect(() => normalize("roll-modifier", { operation: "add", value: 1, rolls: ["hit", "wound"], cap: 2 }, OWN("roll-modifier"))).toThrow(/single roll/u);
-    expect(() => normalize("roll-modifier", { ...leaf, cap: 0 }, OWN("roll-modifier"))).toThrow();
-    expect(() => normalize("roll-modifier", { ...leaf, cap: 13 }, OWN("roll-modifier"))).toThrow();
+    expect(normalize("roll-modifier", leaf)).toEqual(leaf);
+    expect(() => normalize("roll-modifier", { ...leaf, value: { source: "a count" } })).toThrow(/numeric value/u);
+    expect(() => normalize("roll-modifier", { ...leaf, operation: "subtract" })).toThrow(/operation add/u);
+    expect(() => normalize("roll-modifier", { operation: "add", value: 1, rolls: ["hit", "wound"], cap: 2 })).toThrow(/single roll/u);
+    expect(() => normalize("roll-modifier", { ...leaf, cap: 0 })).toThrow();
+    expect(() => normalize("roll-modifier", { ...leaf, cap: 13 })).toThrow();
   });
 
-  it("roll-modifier still takes a leaf without a cap", () => {
+  it("roll-modifier takes a leaf without a cap", () => {
     for (const leaf of [{ roll: "hit", operation: "add", value: 1 }, { roll: "wound", operation: "subtract", value: { source: "the count" } }]) {
-      expect(normalize("roll-modifier", leaf, PREVIOUS("roll-modifier"))).toEqual(leaf);
-      expect(normalize("roll-modifier", leaf, OWN("roll-modifier"))).toEqual(leaf);
+      expect(normalize("roll-modifier", leaf)).toEqual(leaf);
     }
   });
 
   it("roll-auto-result fails-on takes a value from 1 to 5 and one roll", () => {
     const leaf = { roll: "hit", outcome: "fails-on", value: 3 };
-    expect(normalize("roll-auto-result", leaf, OWN("roll-auto-result"))).toEqual(leaf);
-    expect(normalize("roll-auto-result", { ...leaf, value: 1 }, OWN("roll-auto-result"))).toMatchObject({ value: 1 });
-    expect(() => normalize("roll-auto-result", leaf, PREVIOUS("roll-auto-result"))).toThrow();
-    expect(() => normalize("roll-auto-result", { ...leaf, value: 6 }, OWN("roll-auto-result"))).toThrow();
-    expect(() => normalize("roll-auto-result", { ...leaf, value: 0 }, OWN("roll-auto-result"))).toThrow();
-    expect(() => normalize("roll-auto-result", { roll: "hit", outcome: "fails-on" }, OWN("roll-auto-result"))).toThrow();
-    expect(() => normalize("roll-auto-result", { rolls: ["hit", "wound"], outcome: "fails-on", value: 3, count: 1 }, OWN("roll-auto-result"))).toThrow();
+    expect(normalize("roll-auto-result", leaf)).toEqual(leaf);
+    expect(normalize("roll-auto-result", { ...leaf, value: 1 })).toMatchObject({ value: 1 });
+    expect(() => normalize("roll-auto-result", { ...leaf, value: 6 })).toThrow();
+    expect(() => normalize("roll-auto-result", { ...leaf, value: 0 })).toThrow();
+    expect(() => normalize("roll-auto-result", { roll: "hit", outcome: "fails-on" })).toThrow();
+    expect(() => normalize("roll-auto-result", { rolls: ["hit", "wound"], outcome: "fails-on", value: 3, count: 1 })).toThrow();
   });
 
-  it("roll-auto-result still takes every outcome the previous version took", () => {
+  it("roll-auto-result takes auto-pass, counts-as-6 and succeeds-on, and no value on auto-pass", () => {
     for (const leaf of [{ roll: "hit", outcome: "auto-pass" }, { roll: "hit", outcome: "counts-as-6" }, { roll: "save", outcome: "succeeds-on", value: 4 }]) {
-      expect(normalize("roll-auto-result", leaf, PREVIOUS("roll-auto-result"))).toEqual(leaf);
-      expect(normalize("roll-auto-result", leaf, OWN("roll-auto-result"))).toEqual(leaf);
+      expect(normalize("roll-auto-result", leaf)).toEqual(leaf);
     }
-    expect(() => normalize("roll-auto-result", { roll: "hit", outcome: "auto-pass", value: 3 }, OWN("roll-auto-result"))).toThrow();
+    expect(() => normalize("roll-auto-result", { roll: "hit", outcome: "auto-pass", value: 3 })).toThrow();
   });
 
   it("dice-roll alternative is true with a count or per model, never with a roll_var", () => {
-    expect(normalize("dice-roll", { dice: "D6", count: 4, alternative: true }, OWN("dice-roll"))).toEqual({ dice: "D6", count: 4, alternative: true });
-    expect(normalize("dice-roll", { dice: "D6", per_model: "this-unit", alternative: true }, OWN("dice-roll"))).toMatchObject({ alternative: true });
-    expect(() => normalize("dice-roll", { dice: "D6", count: 4, alternative: true }, PREVIOUS("dice-roll"))).toThrow();
-    expect(() => normalize("dice-roll", { dice: "D6", alternative: false }, OWN("dice-roll"))).toThrow();
-    expect(() => normalize("dice-roll", { dice: "D6", alternative: true, roll_var: "pool" }, OWN("dice-roll"))).toThrow();
-    expect(() => normalize("dice-roll", { dice: "D6", count: 1, alternative: true }, OWN("dice-roll"))).toThrow();
+    expect(normalize("dice-roll", { dice: "D6", count: 4, alternative: true })).toEqual({ dice: "D6", count: 4, alternative: true });
+    expect(normalize("dice-roll", { dice: "D6", per_model: "this-unit", alternative: true })).toMatchObject({ alternative: true });
+    expect(() => normalize("dice-roll", { dice: "D6", alternative: false })).toThrow();
+    expect(() => normalize("dice-roll", { dice: "D6", alternative: true, roll_var: "pool" })).toThrow();
+    expect(() => normalize("dice-roll", { dice: "D6", count: 1, alternative: true })).toThrow();
   });
 
-  it("dice-roll still takes every shape the previous version took", () => {
+  it("dice-roll takes a plain, counted, per-model and bound roll", () => {
     for (const leaf of [{ dice: "D6" }, { dice: "D3", count: 3 }, { dice: "D6", per_model: "target" }, { dice: "D6", roll_var: "pool" }]) {
-      expect(normalize("dice-roll", leaf, PREVIOUS("dice-roll"))).toEqual(leaf);
-      expect(normalize("dice-roll", leaf, OWN("dice-roll"))).toEqual(leaf);
+      expect(normalize("dice-roll", leaf)).toEqual(leaf);
     }
   });
 });

@@ -27,7 +27,7 @@ pub(super) fn roll_head(e: &P) -> String {
             "roll a number of {} equal to the {} characteristic of {}{extra}{kind}",
             dice_case(e.get("dice")),
             sv(stat, "stat").unwrap_or("?"),
-            unit_ref_phrase(stat.get("of"), "the unit")
+            unit_ref_phrase(stat.get("of"), "this unit")
         );
     }
     format!("roll {}{extra}{kind}", dice_case(e.get("dice")))
@@ -66,7 +66,7 @@ pub(super) fn select_objective_inline(e: &P, ctx: &Ctx) -> String {
 /// select-objective as a block: a header line and the nested effect one level deeper.
 pub(super) fn select_objective_block(e: &P, depth: usize, ctx: &Ctx) -> String {
     let indent = "  ".repeat(depth);
-    let arrow = if depth > 0 { "-> " } else { "" };
+    let arrow = if depth > 0 { "- " } else { "" };
     let head = format!(
         "{indent}{arrow}{}",
         capitalize(&lead(obj(nn(e, "selector"))))
@@ -81,7 +81,7 @@ pub(super) fn select_objective_block(e: &P, depth: usize, ctx: &Ctx) -> String {
 /// A roll step as a block: the roll, then the nested effect one level deeper.
 pub(super) fn roll_block(e: &P, depth: usize, ctx: &Ctx) -> String {
     let indent = "  ".repeat(depth);
-    let arrow = if depth > 0 { "-> " } else { "" };
+    let arrow = if depth > 0 { "- " } else { "" };
     let head = format!("{indent}{arrow}{}", capitalize(&roll_head(e)));
     let inner = child(e, "effect");
     if is_container(obj(Some(inner))) {

@@ -726,7 +726,8 @@
         "namespace": "mfm",
         "id": "911e7488-e48a-45e0-9925-4e7c58fbe13f"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "soul-shattering-charge-upgrade-cavalcade-of-chaos-chaos-daemons",
@@ -755,7 +756,8 @@
         "namespace": "mfm",
         "id": "9426241c-c9fe-4144-b04d-1ee742ca9444"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "swollen-with-power-upgrade-lords-of-the-warp-chaos-daemons",
@@ -787,7 +789,8 @@
         "namespace": "mfm",
         "id": "533bc4ea-3d36-4fb0-95c2-8169ccd52859"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "bane-forged-weapons-upgrade-warptide-chaos-daemons",
@@ -816,7 +819,8 @@
         "namespace": "mfm",
         "id": "202cf6aa-5832-4f39-8d1f-555088d46b27"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   },
   {
     "id": "soul-hungry-slaughterers-upgrade-warptide-chaos-daemons",
@@ -845,6 +849,7 @@
         "namespace": "mfm",
         "id": "ee5a9dbc-92ae-4248-9ee8-ef299de7a478"
       }
-    ]
+    ],
+    "equipable_by_non_character": true
   }
 ]

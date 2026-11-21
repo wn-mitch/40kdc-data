@@ -123,7 +123,7 @@ describe("wounds-remaining, starting-strength and leaves-attached-unit leaves", 
     expect(mechanics.effect).toEqual({ type: "split-unit", target: "this-unit", modifier: { equal_units: 2 } });
     const check = checkEntry(entryWithMechanics(authoredBase(), mechanics as never));
     expect(check.errors).toEqual([]);
-    expect(check.rendered_text).toContain("Split the unit into 2 units with as equal a number of models as possible");
+    expect(check.rendered_text).toContain("Split this unit into 2 units with as equal a number of models as possible");
     const norm = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("split-unit", parameters, currentFamilyVersion("split-unit"));
     expect(() => norm({ mode: "equal" })).toThrow();
     expect(() => norm({ mode: "equal", units: 1 })).toThrow();

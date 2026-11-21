@@ -4,12 +4,15 @@
  * single-army roster specs for `validateRosterCore`.
  */
 import { Dataset } from "../src/data/dataset.js";
+import type { UnitView } from "../src/data/entities.js";
 import { validateRosterCore, type NormRoster, type RosterViolationCode } from "../src/data/roster-resolve.js";
 import type { Detachment } from "../src/generated.js";
 import { evaluateField, type EvalContext } from "../src/bsdata-export/evaluate.js";
 import { buildExport } from "../src/bsdata-export/export.js";
 import { BSDATA_IDS } from "../src/bsdata-export/ids.js";
+import { libraryNameFor } from "../src/bsdata-export/libraries.js";
 import { children, str, type BsNode } from "../src/bsdata-export/source.js";
+import { bsName } from "../src/bsdata-export/export.js";
 
 export const dataset = Dataset.embedded();
 export const FACTIONS = Object.keys(BSDATA_IDS.catalogues);
@@ -40,7 +43,7 @@ export function factionCatalogue(documents: readonly { file: string; document: B
   const byId = new Map(documents.map((d) => Object.values(d.document)[0] as BsNode).map((c) => [str(c, "id")!, c]));
   const library = children(army, "catalogueLinks")
     .map((l) => byId.get(str(l, "targetId")!))
-    .find((c) => c?.library === true && c.name === `${String(army.name)} Library`);
+    .find((c) => c?.library === true && c.name === libraryNameFor(String(army.name)));
   if (!library) return army;
   const merged: BsNode = { ...army };
   for (const key of ["categoryEntries", "sharedSelectionEntries", "sharedSelectionEntryGroups", "sharedProfiles", "sharedRules", "sharedInfoGroups"]) {
@@ -50,8 +53,18 @@ export function factionCatalogue(documents: readonly { file: string; document: B
   return merged;
 }
 
-export function loadExportFixture(): ExportFixture {
-  const documents = buildExport({ version: "1.5.1", dataset });
+/**
+ * The unit a catalogue's shared unit entry exports: the faction's unit of that name. A chapter's
+ * reprint shares its generic unit's name, so a repeated name is told apart by the BSData id.
+ */
+export function unitForEntry(ds: Dataset, factionId: string, node: BsNode): UnitView | undefined {
+  const named = ds.units.byFaction(factionId).filter((u) => bsName(u.raw.is_legend ? `${u.name} [Legends]` : u.name) === node.name);
+  return named.length > 1 ? named.find((u) => BSDATA_IDS.units[factionId]?.[u.id] === str(node, "id")) : named[0];
+}
+
+/** The export of `ds` (the embedded dataset by default), indexed for the tests. */
+export function loadExportFixture(ds: Dataset = dataset): ExportFixture {
+  const documents = buildExport({ version: "1.5.1", dataset: ds });
   const gst = Object.values(documents[0].document)[0] as BsNode;
   const catalogues = new Map<string, BsNode>();
   const entries = new Map<string, UnitEntry>();
@@ -61,7 +74,7 @@ export function loadExportFixture(): ExportFixture {
     catalogues.set(factionId, catalogue);
     for (const node of children(catalogue, "sharedSelectionEntries")) {
       if (node.type !== "unit" && node.type !== "model") continue;
-      const view = dataset.units.byFaction(factionId).find((u) => (u.raw.is_legend ? `${u.name} [Legends]` : u.name) === node.name);
+      const view = unitForEntry(ds, factionId, node);
       if (view) entries.set(str(node, "id")!, { factionId, unitId: view.id, node });
     }
   }
@@ -81,10 +94,16 @@ export function battleSizeId(fx: ExportFixture, size: Size): string {
   return str(children(group, "selectionEntries").find((o) => String(o.name).includes(size === "incursion" ? "Incursion" : "Strike Force"))!, "id")!;
 }
 
+/** The detachment options a family root's Detachment selection holds inline. */
+export function detachmentOptions(catalogue: BsNode): BsNode[] {
+  return children(catalogue, "sharedSelectionEntries")
+    .filter((e) => e.name === "Detachment")
+    .flatMap((container) => children(container, "selectionEntryGroups").flatMap((g) => children(g, "selectionEntries")))
+    .filter((e) => children(e, "costs").some((c) => str(c, "typeId") === DP));
+}
+
 export function detachmentOption(fx: ExportFixture, detachment: Detachment): BsNode {
-  return children(fx.catalogues.get(rootFaction(detachment.faction_id))!, "sharedSelectionEntries").find(
-    (e) => e.name === detachment.name && children(e, "costs").some((c) => str(c, "typeId") === DP),
-  )!;
+  return detachmentOptions(fx.catalogues.get(rootFaction(detachment.faction_id))!).find((e) => e.name === bsName(detachment.name))!;
 }
 
 /** Unit links an army built from `host` offers: its own root list and, for a child faction, its parent's. */
@@ -132,8 +151,8 @@ export function roster(
   };
 }
 
-export function codes(spec: NormRoster): Set<RosterViolationCode> {
-  return new Set(validateRosterCore(spec, dataset).army.map((v) => v.code));
+export function codes(spec: NormRoster, ds: Dataset = dataset): Set<RosterViolationCode> {
+  return new Set(validateRosterCore(spec, ds).army.map((v) => v.code));
 }
 
 /** Whether validation resolves `unitId` in `host`'s army to the record from `factionId`. */

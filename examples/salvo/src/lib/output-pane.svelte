@@ -443,7 +443,7 @@
           <td></td>
           {#each STAGE_COLUMNS as col, idx (col.name)}
             {@render numCell(
-              col.name === "damage" || col.name === "after-fnp" ? stageOf(mortalSourceStages(mortalLine), col.name) : undefined,
+              col.name === "damage" || col.name === "after-fnp" || col.name === "damage-dealt" ? stageOf(mortalSourceStages(mortalLine), col.name) : undefined,
               false,
               idx >= 4,
             )}
@@ -455,7 +455,7 @@
         <td>Combined</td>
         <td></td>
         {#each STAGE_COLUMNS as col, idx (col.name)}
-          {@render numCell(stageOf(aggregate, col.name), false, idx >= 4, col.name === "after-fnp" || col.name === "models-killed")}
+          {@render numCell(stageOf(aggregate, col.name), false, idx >= 4, col.name === "damage-dealt" || col.name === "models-killed")}
         {/each}
       </tr>
     </tbody>

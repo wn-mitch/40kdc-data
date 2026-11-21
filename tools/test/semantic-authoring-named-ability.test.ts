@@ -9,7 +9,6 @@ import { currentFamilyVersion, familyRole, normalizeFingerprintParameters } from
 import { checkEntry, entryWithMechanics } from "../src/semantic-authoring/entries.js";
 import { coreCheckErrors } from "../src/semantic-authoring/core-checks.js";
 import { bindNamedAbilityRecipients, guardNamedAbilityPayments, localizeNamedAbilityGrantDuration, namedAbilityStateEffect, orderResourceBeforeAbilities } from "../src/semantic-authoring/compile-named-ability-states.js";
-import { normalizeNamedAbilityStateParameters } from "../src/semantic-authoring/named-ability-state-families.js";
 
 const dataRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../data");
 const base = (): Record<string, unknown> => (JSON.parse(readFileSync(join(dataRoot, "enrichment", "adeptus-mechanicus", "abilities.json"), "utf8")) as Array<Record<string, unknown>>)
@@ -317,13 +316,12 @@ describe("reviewed named ability definitions", () => {
     });
   });
 
-  it("widens suppression to an explicitly named set without reinterpreting version 1", () => {
+  it("widens suppression to an explicitly named set", () => {
     const parameters = { subject: "this-unit", ...ember, except_from: "this-ability", additional_definitions: ["frost"] };
     expect(namedAbilityStateEffect(leaf("named-ability-suppression", parameters))).toEqual({ type: "sequence", steps: [ember, frost].map((rule) => ({
       type: "rule-state", target: "this-unit", modifier: { direction: "suppressed", rule_kind: "ability", rule, except_from: "this-ability" },
     })) });
-    expect(() => normalizeNamedAbilityStateParameters("named-ability-suppression", parameters, 1)).toThrow("exactly");
-    expect(() => normalizeNamedAbilityStateParameters("named-ability-suppression", { ...parameters, additional_definitions: ["ember"] }, 2)).toThrow("twice");
+    expect(() => normalizeFingerprintParameters("named-ability-suppression", { ...parameters, additional_definitions: ["ember"] })).toThrow("twice");
   });
 
   it("binds one reviewed army recipient filter across host grants without filtering resource income", () => {
@@ -385,8 +383,8 @@ describe("reviewed named ability definitions", () => {
     expect(duplicate).toMatchObject({ ok: false, errors: [expect.stringContaining("Duplicate named ability")] });
     const empty = compileLeaves([leaf("named-ability-definition", { definition_id: "ember", label: "Ember" })], undefined, { abilityId: owner });
     expect(empty).toMatchObject({ ok: false, errors: [expect.stringContaining("no reviewed effect")] });
-    expect(() => normalizeNamedAbilityStateParameters("named-ability-exchange", { subject: "this-unit", ...ember, exchange_with: "ember" })).toThrow("distinct");
-    expect(() => normalizeNamedAbilityStateParameters("named-ability-grant", { subject: "this-unit", ...ember, option_id: "ember" })).toThrow("exactly");
+    expect(() => normalizeFingerprintParameters("named-ability-exchange", { subject: "this-unit", ...ember, exchange_with: "ember" })).toThrow("distinct");
+    expect(() => normalizeFingerprintParameters("named-ability-grant", { subject: "this-unit", ...ember, option_id: "ember" })).toThrow("exactly");
   });
 });
 

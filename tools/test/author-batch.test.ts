@@ -318,6 +318,14 @@ describe("lintCanonical", () => {
     expect(flagged.issues.join()).toContain("operator");
   });
 
+  it("rejects a choice whose secondary_option names no option", () => {
+    const hit = { type: "roll-modifier", target: "this-unit", modifier: { roll: "hit", operation: "add", value: 1 } };
+    expect(lintCanonical({ type: "choice", secondary_option: 1, options: [hit, hit] }).canonical).toBe(true);
+    const bad = lintCanonical({ type: "choice", secondary_option: 2, options: [hit, hit] });
+    expect(bad.canonical).toBe(false);
+    expect(bad.issues.join()).toContain("secondary_option 2");
+  });
+
   it("rejects non-canonical phase condition values", () => {
     const effect = (phase: string) => ({
       type: "conditional",

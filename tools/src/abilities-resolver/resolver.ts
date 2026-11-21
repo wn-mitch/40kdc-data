@@ -60,6 +60,8 @@ export type EligibilityInput = {
   attachmentRoles?: Readonly<Record<string, "leader" | "bodyguard">>;
   /** Friendly units whose auras could apply (M2 walks only their aura-ranged abilities). */
   supportingUnitIds?: string[];
+  /** The keyword-choice options each member took at muster (a Mark of Chaos), keyed by unit id; an option not listed is not the unit's. */
+  keywordChoices?: Readonly<Record<string, readonly string[]>>;
 };
 
 export type EligibleAbility = {
@@ -115,7 +117,7 @@ function resolveWithSuppressions(
   const replaced = replacedArmyRuleIds(dataset, factionId, [input.detachmentId]);
   // Each member's keywords (lower-cased); a unit target reads them as one combined unit.
   const members = [unit, ...(input.attachedUnitIds ?? []).map((id) => resolveUnit(id, factionId))]
-    .map((member) => memberKeywords(member, input.detachmentId));
+    .map((member) => memberKeywords(member, input.detachmentId, member ? input.keywordChoices?.[member.id] ?? [] : []));
   const printed = printedKeyword(dataset);
   const applies = (ability: AbilityView) => appliesToUnit(ability.raw.applies_to, members, printed);
   for (const ability of dataset.abilities.byFaction(factionId)) {
@@ -398,12 +400,14 @@ function keywordListsHold(target: TargetRestriction, required: (keyword: string)
 
 /**
  * A member's keywords, lower-cased: its datasheet and faction keywords, plus each conditional
- * keyword whose detachment is the one selected.
+ * keyword whose detachment is the one selected. A keyword-choice option is the member's only when
+ * `chosen` lists it.
  */
-function memberKeywords(member: { keywords?: readonly string[]; factionKeywords?: readonly string[]; raw: { conditional_keywords?: readonly { keyword: string; required_detachment_id?: string | null }[] | null } } | undefined, detachmentId: string | undefined): Set<string> {
+function memberKeywords(member: { keywords?: readonly string[]; factionKeywords?: readonly string[]; raw: { conditional_keywords?: readonly { keyword: string; required_detachment_id?: string | null; choice_group?: string }[] | null } } | undefined, detachmentId: string | undefined, chosen: readonly string[]): Set<string> {
   if (!member) return new Set();
+  const taken = new Set(chosen.map((keyword) => keyword.toLowerCase()));
   const conditional = (member.raw.conditional_keywords ?? [])
-    .filter((entry) => entry.required_detachment_id == null || entry.required_detachment_id === detachmentId)
+    .filter((entry) => entry.choice_group === undefined ? entry.required_detachment_id == null || entry.required_detachment_id === detachmentId : taken.has(entry.keyword.toLowerCase()))
     .map((entry) => entry.keyword);
   return new Set([...(member.keywords ?? []), ...(member.factionKeywords ?? []), ...conditional].map((keyword) => keyword.toLowerCase()));
 }

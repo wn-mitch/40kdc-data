@@ -16,7 +16,7 @@
  *      the same coverage pass that writes `data/core/_reports/mfm-coverage.md`.
  *
  * By-design exclusions (GW prose → out-of-repo store, artwork, Legends/Forge-World
- * cull, unmapped Titanicus factions, Combat-Patrol hold-back) are listed as
+ * cull, Combat-Patrol hold-back) are listed as
  * resolved, not gaps. The output carries only ids / field-names / counts /
  * reasons — never GW prose — so it is IP-safe to commit.
  *
@@ -528,7 +528,7 @@ export function renderReport(input: AuditInput): string {
     L.push(`| Force dispositions | ${presence.whole.forceDispositions.repo} | ${presence.whole.forceDispositions.dump} |`);
     L.push("");
     if (presence.unmappedFactions.length) {
-      L.push("Unmapped faction keywords owning live datasheets (no repo dir — Titanicus etc.):");
+      L.push("Unmapped faction keywords owning live datasheets (no repo dir):");
       L.push("");
       for (const f of presence.unmappedFactions) L.push(`- ${f}`);
       L.push("");
@@ -547,9 +547,6 @@ export function renderReport(input: AuditInput): string {
   L.push("- **Artwork references** (`bannerImage`, `rowImage`) are excluded from published data.");
   L.push(
     "- **Legends / Forge-World tail.** Datasheets the live dump omits are dropped, never backfilled (see `ingest-mfm cull-legends`)."
-  );
-  L.push(
-    "- **Unmapped Titanicus factions.** Adeptus Titanicus / Titanicus Traitoris own live datasheets but have no repo faction dir; surfaced separately, not ingested."
   );
   L.push(
     "- **Combat-Patrol hold-back.** CP-only datasheets/detachments/enhancements are held back unless `--include-combat-patrol` is passed."

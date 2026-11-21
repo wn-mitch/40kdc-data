@@ -42,7 +42,7 @@ describe("an Order to the unit that disembarked, outside the officer's limit", (
     });
     expect(validate()(result.mechanics.effect)).toBe(true);
     expect(describeAbility({ ability_id: "fabricated-hop", ...(result.mechanics as object) } as never)).toContain(
-      "When a friendly unit disembarks from a Transport within 6\" of this model, after it has been set up");
+      "When a friendly REGIMENT unit disembarks from a Transport within 6\" of this model, after it has been set up");
     expect(describeAbility({ ability_id: "fabricated-hop", ...(result.mechanics as object) } as never)).toContain(
       "to the triggering unit (if it is one of the eligible friendly REGIMENT units), not counting toward the Orders it can issue this turn.");
   });

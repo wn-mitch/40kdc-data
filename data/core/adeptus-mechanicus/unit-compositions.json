@@ -1294,7 +1294,8 @@
           "heavy-arc-rifle",
           "heavy-bolter",
           "servo-claw"
-        ]
+        ],
+        "profile_name": "Combat Servitor"
       },
       {
         "name": "Combat Servitor",
@@ -2061,7 +2062,8 @@
         "default_weapon_ids": [
           "stubcarbine",
           "power-weapon"
-        ]
+        ],
+        "profile_name": "Sicarian Infiltrator"
       },
       {
         "name": "Sicarian Infiltrator",
@@ -3064,7 +3066,8 @@
         "default_weapon_ids": [
           "flechette-blaster",
           "taser-goad-pteraxii-skystalkers"
-        ]
+        ],
+        "profile_name": "Pteraxii Skystalker"
       },
       {
         "name": "Pteraxii Skystalker",
@@ -3404,7 +3407,8 @@
         },
         "default_weapon_ids": [
           "transonic-razor-and-chordclaw"
-        ]
+        ],
+        "profile_name": "Sicarian Ruststalker"
       },
       {
         "name": "Sicarian Ruststalker",
@@ -3785,7 +3789,8 @@
           "mechanicus-pistol-serberys-raiders",
           "galvanic-carbine",
           "cavalry-sabre-and-clawed-limbs"
-        ]
+        ],
+        "profile_name": "Serberys Raider"
       },
       {
         "name": "Serberys Raider",
@@ -4193,7 +4198,8 @@
           "sulphur-breath",
           "cavalry-arc-maul",
           "clawed-limbs"
-        ]
+        ],
+        "profile_name": "Serberys Sulphurhound"
       },
       {
         "name": "Serberys Sulphurhound",
@@ -5013,7 +5019,8 @@
           "flechette-blaster",
           "pteraxii-talons",
           "taser-goad-pteraxii-sterylizors"
-        ]
+        ],
+        "profile_name": "Pteraxii Sterylizor"
       },
       {
         "name": "Pteraxii Sterylizor",
@@ -5823,7 +5830,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "profile_name": "Hastarii Exterminator"
       },
       {
         "name": "Hastarii Exterminator",
@@ -6039,7 +6047,8 @@
         "base_size_mm": {
           "shape": "round",
           "diameter": 32
-        }
+        },
+        "profile_name": "Hastarii Fusilier"
       },
       {
         "name": "Hastarii Fusilier",

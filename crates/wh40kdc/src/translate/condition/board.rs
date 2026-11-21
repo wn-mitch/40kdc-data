@@ -63,7 +63,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             let who = if every {
                 format!(
                     "every model in {}{}",
-                    subject_of(p, "the unit"),
+                    subject_of(p, "this unit"),
                     if counted {
                         format!(" ({} models)", count_phrase(p.get("count")))
                     } else {
@@ -74,10 +74,10 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 format!(
                     "{} models in {}",
                     count_phrase(p.get("count")),
-                    subject_of(p, "the unit")
+                    subject_of(p, "this unit")
                 )
             } else {
-                subject_of(p, "the unit")
+                subject_of(p, "this unit")
             };
             let wholly = if p.get("wholly").and_then(Value::as_bool) == Some(true) {
                 "wholly "
@@ -91,6 +91,16 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 String::new()
             } else {
                 format!(" of {}", place_ref_phrase(p.get("of")))
+            };
+            let zero = p
+                .get("range")
+                .and_then(Value::as_object)
+                .is_some_and(|r| r.get("inches").and_then(Value::as_f64) == Some(0.0))
+                && nn(p, "of").is_some();
+            let dist = if zero {
+                format!("in contact with {}", place_ref_phrase(p.get("of")))
+            } else {
+                format!("{wholly}within {}{target}", range_phrase(p.get("range")))
             };
             // An earlier position: the start of the phase, or of the move that triggered the ability.
             let at = if is(p, "at", "phase-start") {
@@ -111,11 +121,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             } else {
                 "is"
             };
-            format!(
-                "{who} {verb} {not_}{wholly}within {}{target}{}",
-                range_phrase(p.get("range")),
-                at
-            )
+            format!("{who} {verb} {not_}{dist}{at}")
         }
         "in-region" => {
             let r = obj(p.get("region"));
@@ -125,9 +131,9 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 ""
             };
             let who = if is(p, "models", "every") {
-                format!("every model in {}", subject_of(p, "the unit"))
+                format!("every model in {}", subject_of(p, "this unit"))
             } else {
-                subject_of(p, "the unit")
+                subject_of(p, "this unit")
             };
             let where_ = if truthy(r.get("rule_region")) {
                 title_case(&st(obj(r.get("rule_region")).get("region_id")))
@@ -150,7 +156,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             let who = if is(p, "subject", "defender") {
                 "the target".to_string()
             } else {
-                subject_of(p, "the unit")
+                subject_of(p, "this unit")
             };
             let within = nn(p, "range")
                 .map(|r| format!(" within {}", range_phrase(Some(r))))
@@ -170,7 +176,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                         if to.as_str() == Some("defender") {
                             "the target".to_string()
                         } else {
-                            unit_ref_phrase(Some(to), "the unit")
+                            unit_ref_phrase(Some(to), "this unit")
                         }
                     )
                 })
@@ -198,7 +204,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 let other = if is(compare, "owner", "friendly") {
                     "you"
                 } else {
-                    "the opponent"
+                    "your opponent"
                 };
                 let holder = if is(p, "by", "enemy") {
                     "your opponent holds"
@@ -214,7 +220,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                         if is(compare, "owner", "friendly") {
                             "you control"
                         } else {
-                            "the opponent controls"
+                            "your opponent controls"
                         }
                     ));
                 }
@@ -357,12 +363,12 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             let who = if is(p, "subject", "defender") {
                 "the target".to_string()
             } else {
-                subject_of(p, "the unit")
+                subject_of(p, "this unit")
             };
             let to = if nn(p, "to").is_none() || is(p, "to", "attacker") {
                 "the attacking model".to_string()
             } else {
-                unit_ref_phrase(p.get("to"), "the unit")
+                unit_ref_phrase(p.get("to"), "this unit")
             };
             let fully = if p.get("fully") == Some(&Value::Bool(true)) {
                 "fully "
@@ -397,10 +403,10 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             if nn(p, "count").is_some() {
                 let subject = pluralize_first_noun(&strip_article(&unit_ref_phrase(
                     p.get("subject"),
-                    "the unit",
+                    "this unit",
                 )));
                 let by = nn(p, "by")
-                    .map(|by| format!(" by {}", unit_ref_phrase(Some(by), "the unit")))
+                    .map(|by| format!(" by {}", unit_ref_phrase(Some(by), "this unit")))
                     .unwrap_or_default();
                 return format!(
                     "{neg}{} {subject} {}{by}",
@@ -422,7 +428,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             };
             format!(
                 "{} is {not_}{}{by}",
-                subject_of(p, "the unit"),
+                subject_of(p, "this unit"),
                 designation_phrase(&st(p.get("tag")), false)
             )
         }
@@ -430,7 +436,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             if p.get("below_max") == Some(&Value::Bool(true)) {
                 let source = obj(p.get("source_ability")).get("ability_id");
                 return format!(
-                    "{neg}the {} ability had unused selection capacity at the end of the opponent's previous turn",
+                    "{neg}the {} ability had unused selection capacity at the end of your opponent's previous turn",
                     dekebab(&st(source))
                 );
             }
@@ -567,14 +573,14 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             };
             format!(
                 "{} {} moved over by {} {window}",
-                subject_of(p, "the unit"),
+                subject_of(p, "this unit"),
                 if negated { "was not" } else { "was" },
                 unit_ref_phrase(p.get("by"), "this model")
             )
         }
         "guided" => format!(
             "{} is {not_}{}",
-            subject_of(p, "the unit"),
+            subject_of(p, "this unit"),
             designation_phrase("guided", false)
         ),
         other => format!(

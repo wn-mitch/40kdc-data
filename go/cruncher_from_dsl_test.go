@@ -207,7 +207,7 @@ func TestCanonicalSelectorRenderingKeepsModelAndMultiUnitScope(t *testing.T) {
 		"type": "select-units", "selector": multiSelector,
 		"effect": map[string]any{"type": "stat-modifier", "target": "selected-unit", "modifier": map[string]any{"stat": "T", "operation": "improve", "value": 1.0}},
 	}, effCtx{})
-	if !strings.Contains(multiText, "up to 2") || !strings.Contains(multiText, "units") || !strings.Contains(multiText, "that unit") {
+	if !strings.Contains(multiText, "up to 2") || !strings.Contains(multiText, "units") || !strings.Contains(multiText, "those units") {
 		t.Fatalf("multi-unit selector lost scope: %q", multiText)
 	}
 }
@@ -227,7 +227,7 @@ func TestUnitIDFilterTargetsExactBuffedSide(t *testing.T) {
 		}
 	}
 	rendered := describeEffectInline(effect, effCtx{})
-	if !strings.Contains(rendered, "with unit ID target-1") {
+	if !strings.Contains(rendered, "Target 1 units") {
 		t.Fatalf("unit ID missing from render: %q", rendered)
 	}
 }

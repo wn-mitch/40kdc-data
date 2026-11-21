@@ -271,16 +271,16 @@ describe("Semantic authoring holder abilities: what still does not fold", () => 
 });
 
 describe("Semantic authoring unit-has-ability own", () => {
-  const normalize = (parameters: Record<string, unknown>, version = currentFamilyVersion("unit-has-ability")) => normalizeFingerprintParameters("unit-has-ability", parameters, version);
+  const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("unit-has-ability", parameters);
 
-  it("accepts own: true in place of an ability id, and every previous leaf unchanged", () => {
+  it("accepts own: true in place of an ability id, and an ability id as it is", () => {
     expect(normalize({ subject: "antecedent", own: true })).toEqual({ subject: "antecedent", own: true });
-    expect(normalize({ subject: "antecedent", ability: "gloom-veil" })).toEqual(normalize({ subject: "antecedent", ability: "gloom-veil" }, currentFamilyVersion("unit-has-ability") - 1));
+    expect(normalize({ subject: "antecedent", ability: "gloom-veil" })).toEqual({ subject: "antecedent", ability: "gloom-veil" });
   });
 
   it("previews as \"this ability\", and refuses to lower before its record binds it", () => {
     expect(previewLeaf({ family_id: "unit-has-ability", parameters: { subject: "this-unit", own: true, negated: true } }))
-      .toEqual({ text: "the unit does not have this ability", problem: null });
+      .toEqual({ text: "this unit does not have this ability", problem: null });
     const version = currentFamilyVersion("unit-has-ability");
     expect(() => leafFragment({ role: familyRole("unit-has-ability", version), family_id: "unit-has-ability", family_version: version, parameters: { subject: "this-unit", own: true }, start_byte: 0 }))
       .toThrow(/binds to an id only when its record compiles/u);
@@ -290,8 +290,6 @@ describe("Semantic authoring unit-has-ability own", () => {
     expect(() => normalize({ subject: "antecedent", own: true, ability: "gloom-veil" })).toThrow(/not both/u);
     expect(() => normalize({ subject: "antecedent" })).toThrow(/names an ability/u);
     expect(() => normalize({ subject: "antecedent", own: false })).toThrow(/own is true/u);
-    // own arrived at version 3.
-    expect(() => normalize({ subject: "antecedent", own: true }, 2)).toThrow();
   });
 });
 
@@ -320,7 +318,7 @@ describe("Semantic authoring unit-has-ability per model", () => {
     const filter = { has_ability: ["gloom-veil"], has_ability_models: { none_of: ["WARDEN"] } };
     expect(unitFilterPhrase(filter)).toContain("in which every model (excluding WARDEN models) has the Gloom Veil ability");
     expect(describeCondition({ operator: "not", operands: [{ type: "matches", parameters: { subject: "this-unit", filter } }] } as never))
-      .toContain("not every model in the unit (excluding WARDEN models) has the Gloom Veil ability");
+      .toContain("not every model in this unit (excluding WARDEN models) has the Gloom Veil ability");
   });
 });
 

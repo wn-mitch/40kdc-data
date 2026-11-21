@@ -8,13 +8,14 @@ import { describeAbility, type Effect } from "../src/translate/index.js";
 
 /**
  * The move-end follow-up: a move-end nearest the enemy unit the trigger names (move-end-nearest
- * version 3, to: event-subject), an engaged condition on a this-model subject (unit-state version
- * 15), and the glue word "but". Every leaf is fabricated wording; each case pins one binding, one
- * version boundary, or one refusal.
+ * to: event-subject), an engaged condition on a this-model subject (unit-state), and the glue word
+ * "but". Every leaf is fabricated wording; each case pins one binding, one accepted form, or one
+ * refusal.
  */
 
-/** A leaf of the family at the given version; its bytes are set by inSentences. */
-function leaf(familyId: string, parameters: Record<string, unknown>, familyVersion = currentFamilyVersion(familyId)): CompileLeaf {
+/** A leaf of the family at its current version; its bytes are set by inSentences. */
+function leaf(familyId: string, parameters: Record<string, unknown>): CompileLeaf {
+  const familyVersion = currentFamilyVersion(familyId);
   return { role: familyRole(familyId, familyVersion), family_id: familyId, family_version: familyVersion, parameters: normalizeFingerprintParameters(familyId, parameters, familyVersion), start_byte: 0 };
 }
 
@@ -52,13 +53,11 @@ function refused(sentences: Array<Array<[CompileLeaf, string]>>): string {
   return result.errors.join("; ");
 }
 
-describe("move-end-nearest version 3: the enemy unit the trigger names", () => {
-  const current = () => currentFamilyVersion("move-end-nearest");
-  const mustEndAtEnemy = () => leaf("move-end-nearest", { to: "event-subject" }, 3);
+describe("move-end-nearest: the enemy unit the trigger names", () => {
+  const mustEndAtEnemy = () => leaf("move-end-nearest", { to: "event-subject" });
   const move = () => leaf("make-move", { subject: "this-unit", move_type: "normal", distance: 6 });
 
-  it("is version 3 and widens version 2 without changing what version 2 accepted", () => {
-    expect(current()).toBe(3);
+  it("keeps every other destination as it is", () => {
     const accepted: Array<Record<string, unknown>> = [
       { to: "following-filter" },
       { to: "following-filter", instead_of: "closest-enemy-unit" },
@@ -67,19 +66,18 @@ describe("move-end-nearest version 3: the enemy unit the trigger names", () => {
       { to: "selected-objective", per: "model", instead_of: "closest-enemy-unit" },
     ];
     for (const parameters of accepted) {
-      expect(normalizeFingerprintParameters("move-end-nearest", parameters, current())).toEqual(normalizeFingerprintParameters("move-end-nearest", parameters, 2));
+      expect(normalizeFingerprintParameters("move-end-nearest", parameters)).toEqual(parameters);
     }
   });
 
-  it("accepts to: event-subject alone, and version 2 still refuses it", () => {
-    expect(normalizeFingerprintParameters("move-end-nearest", { to: "event-subject" }, current())).toEqual({ to: "event-subject" });
-    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "event-subject" }, 2)).toThrow();
+  it("accepts to: event-subject alone", () => {
+    expect(normalizeFingerprintParameters("move-end-nearest", { to: "event-subject" })).toEqual({ to: "event-subject" });
   });
 
   it("refuses a per-model form and an instead_of with the enemy unit the trigger names", () => {
-    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "event-subject", per: "model" }, current())).toThrow(/no per-model form/u);
-    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "event-subject", per: "unit" }, current())).toThrow(/no per-model form/u);
-    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "event-subject", instead_of: "closest-enemy-unit" }, current())).toThrow(/instead_of/u);
+    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "event-subject", per: "model" })).toThrow(/no per-model form/u);
+    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "event-subject", per: "unit" })).toThrow(/no per-model form/u);
+    expect(() => normalizeFingerprintParameters("move-end-nearest", { to: "event-subject", instead_of: "closest-enemy-unit" })).toThrow(/instead_of/u);
   });
 
   it("ends a make-move as ends_nearest of the event subject, with no unit-filter", () => {
@@ -93,34 +91,30 @@ describe("move-end-nearest version 3: the enemy unit the trigger names", () => {
     expect(refused([[[move(), "this unit can make a Normal move"], [mustEndAtEnemy(), "it must end that move as close as possible to that enemy unit"], [mustEndAtEnemy(), "it must end that move as close as possible to that enemy unit"]]])).toMatch(/second one has no DSL form/u);
   });
 
-  it("keeps the version 2 following-filter binding: the filter after the leaf names the unit", () => {
+  it("binds following-filter to the filter after the leaf, which names the unit", () => {
     const text = compiled([[
       [move(), "this unit can make a Normal move"],
-      [leaf("move-end-nearest", { to: "following-filter" }, 2), "it must end that move as close as possible to the closest enemy unit"],
+      [leaf("move-end-nearest", { to: "following-filter" }), "it must end that move as close as possible to the closest enemy unit"],
       [leaf("unit-filter", { side: "enemy", excluded_keywords: ["AIRCRAFT"] }), "enemy unit that is not an AIRCRAFT"],
-      [leaf("eligibility-permission", { subject: "this-unit", activity: "move", allow: true, despite: ["engaged"], engaged_with_move_end: true }, 4), "and can move while engaged"],
+      [leaf("eligibility-permission", { subject: "this-unit", activity: "move", allow: true, despite: ["engaged"], engaged_with_move_end: true }), "and can move while engaged"],
     ]]);
     expect(text).toContain('"ends_nearest":{"of":{"owner":"enemy","none_of":["AIRCRAFT"]}}');
     expect(text).toContain('"engaged_with":"nearest-move-end"');
   });
 
-  it("keeps the version 2 refusal of a following-filter nearest with no unit-filter after it", () => {
-    expect(refused([[[move(), "this unit can make a Normal move"], [leaf("move-end-nearest", { to: "following-filter" }, 2), "it must end that move as close as possible to the closest enemy unit"]]])).toMatch(/needs a unit-filter right after it/u);
+  it("refuses a following-filter nearest with no unit-filter after it", () => {
+    expect(refused([[[move(), "this unit can make a Normal move"], [leaf("move-end-nearest", { to: "following-filter" }), "it must end that move as close as possible to the closest enemy unit"]]])).toMatch(/needs a unit-filter right after it/u);
   });
 });
 
-describe("unit-state version 15: a this-model subject can be engaged", () => {
-  const current = () => 15;
+describe("unit-state: a this-model subject can be engaged", () => {
   const engagedThisModel = { states: ["engaged"], subject: "this-model", negated: false };
 
-  it("accepts an engaged this-model condition only from version 15", () => {
-    expect(current()).toBeGreaterThanOrEqual(15);
-    expect(normalizeFingerprintParameters("unit-state", engagedThisModel, 15)).toEqual(engagedThisModel);
-    expect(normalizeFingerprintParameters("unit-state", engagedThisModel, current())).toEqual(engagedThisModel);
-    expect(() => normalizeFingerprintParameters("unit-state", engagedThisModel, 14)).toThrow(/only being on the battlefield/u);
+  it("accepts an engaged this-model condition", () => {
+    expect(normalizeFingerprintParameters("unit-state", engagedThisModel)).toEqual(engagedThisModel);
   });
 
-  it("returns the version 14 result for every input that version 15 does not change", () => {
+  it("keeps every other unit-state as it is", () => {
     const accepted: Array<Record<string, unknown>> = [
       { states: ["engaged"], subject: "this-unit", negated: false },
       { states: ["engaged"], subject: "this-unit", negated: true },
@@ -132,31 +126,32 @@ describe("unit-state version 15: a this-model subject can be engaged", () => {
       { states: ["embarked"], subject: "this-model", negated: false },
     ];
     for (const parameters of accepted) {
-      expect(normalizeFingerprintParameters("unit-state", parameters, current())).toEqual(normalizeFingerprintParameters("unit-state", parameters, 14));
+      expect(normalizeFingerprintParameters("unit-state", parameters)).toEqual(parameters);
     }
   });
 
-  it("refuses, at version 15, every other this-model state and a negated, qualified or dated this-model engagement", () => {
-    expect(() => normalizeFingerprintParameters("unit-state", { states: ["battle-shocked"], subject: "this-model", negated: false }, current())).toThrow(/only being on the battlefield/u);
-    expect(() => normalizeFingerprintParameters("unit-state", { states: ["engaged", "on-battlefield"], subject: "this-model", negated: false }, current())).toThrow(/only being on the battlefield/u);
-    expect(() => normalizeFingerprintParameters("unit-state", { ...engagedThisModel, negated: true }, current())).toThrow(/not negated/u);
-    expect(() => normalizeFingerprintParameters("unit-state", { ...engagedThisModel, with: "event-subject" }, current())).toThrow(/takes no with/u);
-    expect(() => normalizeFingerprintParameters("unit-state", { ...engagedThisModel, at: "phase-start" }, current())).toThrow(/takes no at/u);
+  it("refuses every other this-model state, and reads a negated, qualified or dated this-model engagement as its unit's", () => {
+    expect(() => normalizeFingerprintParameters("unit-state", { states: ["battle-shocked"], subject: "this-model", negated: false })).toThrow(/only being on the battlefield/u);
+    expect(() => normalizeFingerprintParameters("unit-state", { states: ["engaged", "on-battlefield"], subject: "this-model", negated: false })).toThrow(/only being on the battlefield/u);
+    for (const qualified of [{ negated: true }, { with: "event-subject" }, { at: "phase-start" }]) {
+      expect(normalizeFingerprintParameters("unit-state", { ...engagedThisModel, ...qualified })).toEqual({ ...engagedThisModel, ...qualified });
+    }
+    expect(() => normalizeFingerprintParameters("unit-state", { ...engagedThisModel, with: "this-model" })).toThrow(/cannot be engaged with itself/u);
   });
 });
 
 describe("the engaged cannot-end (2301, 4041 shape): a model subject", () => {
   const selection = () => leaf("event", { kind: "selected", move_types: ["normal", "advance", "fall-back"] });
-  const throughTerrain = (passthrough: string) => leaf("move-through", { subject: "this-model", passthrough }, 3);
-  const engagedModel = () => leaf("unit-state", { states: ["engaged"], subject: "this-model", negated: false }, 15);
-  const cannotEnd = () => leaf("move-must-end", { match: "all", polarity: "cannot" }, 4);
+  const throughTerrain = (passthrough: string) => leaf("move-through", { subject: "this-model", passthrough });
+  const engagedModel = () => leaf("unit-state", { states: ["engaged"], subject: "this-model", negated: false });
+  const cannotEnd = () => leaf("move-must-end", { match: "all", polarity: "cannot" });
 
   it("compiles the restriction as no_end_in_engagement on the passthrough's model", () => {
     const text = compiled([[
       [selection(), "when this model is selected to make a Normal, Advance or Fall Back move"],
       [throughTerrain("non-titanic-models"), "this model can move over non-Titanic models"],
       [throughTerrain("terrain-le-4"), "and terrain features 4 inches or lower"],
-      [leaf("eligibility-permission", { subject: "this-model", activity: "move", allow: true, despite: ["engaged"] }, 4), "and can move while engaged"],
+      [leaf("eligibility-permission", { subject: "this-model", activity: "move", allow: true, despite: ["engaged"] }), "and can move while engaged"],
       [cannotEnd(), "but this model cannot end that move"],
       [engagedModel(), "within Engagement Range of them"],
     ]]);
@@ -202,7 +197,7 @@ describe("the mandatory end at the enemy unit the trigger names (2511 shape)", (
   const within8OfEnemy = () => leaf("unit-position", { kind: "within", inches: 8, of: "event-subject", subject: "this-unit", negated: false });
   const notEngaged = () => leaf("unit-state", { states: ["engaged"], subject: "this-unit", negated: true });
   const move = () => leaf("make-move", { subject: "this-unit", move_type: "normal", distance: 6 });
-  const endAtEnemy = () => leaf("move-end-nearest", { to: "event-subject" }, 3);
+  const endAtEnemy = () => leaf("move-end-nearest", { to: "event-subject" });
 
   it("compiles with the unit-filter's two alternatives and the end on the make-move", () => {
     const text = compiled([
@@ -233,7 +228,7 @@ describe("the start-of-phase engaged condition on the mortal-wound roll (4339 sh
   const band = (from: number, to: number) => leaf("roll-result", { from, to });
   const wounds = (count: string) => leaf("mortal-wounds", { recipient: "event-subject", count });
   const move = () => leaf("make-move", { subject: "this-unit", move_type: "normal" });
-  const endAtEnemy = () => leaf("move-end-nearest", { to: "event-subject" }, 3);
+  const endAtEnemy = () => leaf("move-end-nearest", { to: "event-subject" });
 
   it("keeps the phase-start qualifier on the condition and ends the move at the enemy unit", () => {
     const text = compiled([

@@ -4224,7 +4224,8 @@
         "default_weapon_ids": [
           "splinter-rifle",
           "close-combat-weapon"
-        ]
+        ],
+        "profile_name": "Kabalite Agents"
       },
       {
         "name": "Kabalite Agents",
@@ -5805,6 +5806,210 @@
           "id": "stinger-pistol-xatrophos-nuul",
           "input": "checkbox",
           "default": 1
+        }
+      ],
+      "uniform": []
+    }
+  },
+  {
+    "unit_id": "coven-of-agonies-wracks-2",
+    "faction_id": "drukhari",
+    "models": [
+      {
+        "name": "Wrack",
+        "min": 3,
+        "max": 3,
+        "is_leader_model": false,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "twin-torturers-tools"
+        ]
+      },
+      {
+        "name": "Wrack with Ossefactor",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "ossefactor",
+          "torturers-tool"
+        ]
+      },
+      {
+        "name": "Acothyst",
+        "min": 1,
+        "max": 1,
+        "is_leader_model": true,
+        "base_size_mm": {
+          "shape": "round",
+          "diameter": 25
+        },
+        "default_weapon_ids": [
+          "hexrifle",
+          "torturers-tool"
+        ]
+      }
+    ],
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "game_modes": [
+      "combat-patrol"
+    ],
+    "tiers": [
+      {
+        "models": [
+          {
+            "name": "Wrack",
+            "min": 3,
+            "max": 3
+          },
+          {
+            "name": "Wrack with Ossefactor",
+            "min": 1,
+            "max": 1
+          },
+          {
+            "name": "Acothyst",
+            "min": 1,
+            "max": 1
+          }
+        ]
+      }
+    ],
+    "loadout": {
+      "stock": [
+        {
+          "model": "Acothyst",
+          "models": 1,
+          "items": [
+            {
+              "id": "hexrifle",
+              "count": 1
+            },
+            {
+              "id": "torturers-tool",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Wrack with Ossefactor",
+          "models": 1,
+          "items": [
+            {
+              "id": "ossefactor",
+              "count": 1
+            },
+            {
+              "id": "torturers-tool",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "model": "Wrack",
+          "models": 3,
+          "items": [
+            {
+              "id": "twin-torturers-tools",
+              "count": 3
+            }
+          ]
+        }
+      ],
+      "templates": [],
+      "slots": [
+        {
+          "model": "Acothyst",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "hexrifle",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Wrack with Ossefactor",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "ossefactor",
+                "count": 1
+              },
+              {
+                "id": "torturers-tool",
+                "count": 1
+              }
+            ]
+          ]
+        },
+        {
+          "model": "Wrack",
+          "picks": 1,
+          "repeats": false,
+          "alternate": false,
+          "choices": [
+            [
+              {
+                "id": "twin-torturers-tools",
+                "count": 1
+              }
+            ]
+          ]
+        }
+      ],
+      "limits": [],
+      "options": [
+        {
+          "model": "Acothyst",
+          "id": "hexrifle",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Acothyst",
+          "id": "torturers-tool",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wrack with Ossefactor",
+          "id": "ossefactor",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wrack with Ossefactor",
+          "id": "torturers-tool",
+          "input": "checkbox",
+          "default": 1
+        },
+        {
+          "model": "Wrack",
+          "id": "twin-torturers-tools",
+          "input": "stepper",
+          "default": 3
         }
       ],
       "uniform": []

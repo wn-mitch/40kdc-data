@@ -222,8 +222,10 @@ describe.skipIf(!fs.existsSync(DEFAULT_DUMP_PATH))("per-model Warlord flags over
     expect(supreme).toEqual(dumpNames(dump, "isSupremeCommander"));
     expect(cannot.length).toBe(29);
     expect(supreme).toContain("Szarekh");
-    // Only Titan datasheets carry canBeNonCharacterWarlord, and the repo seeds none.
-    expect(rowsWith("can_be_non_character_warlord")).toEqual([]);
+    // Only Titan datasheets carry canBeNonCharacterWarlord.
+    const nonCharacter = rowsWith("can_be_non_character_warlord");
+    expect(nonCharacter).toEqual(dumpNames(dump, "canBeNonCharacterWarlord"));
+    expect(nonCharacter).toContain("Chaos Warlord Titan");
     expect(runCompositionNames(dump).staged).toEqual([]);
   });
 });

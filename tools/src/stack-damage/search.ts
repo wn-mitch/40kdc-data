@@ -2,18 +2,19 @@ import type { Dataset } from "../data/dataset.js";
 import type { Detachment, Unit } from "../generated.js";
 import type { EngineContext } from "../cruncher/index.js";
 import type { ResolvedTarget, ComparePhase } from "../compare.js";
-import { assessDetachmentSelection, summarizeSupportCosts, type LegalityIssue } from "./legality.js";
+import { assessDetachmentSelection, type LegalityIssue } from "./legality.js";
 import type { MatrixConfig, Scenario } from "./config.js";
 import { fullModelCount, preferFactionCopies, type FactionContext, unitInFaction } from "./factions.js";
 import { DamageScoringSession, type DamageScoringInvariants } from "./scoring.js";
 import { isCombatPatrolDetachment } from "../abilities-resolver/resolver.js";
 import { buildLedger, unscoreableEntries } from "./ledger.js";
 import { baseWargear } from "./weapon-grants.js";
-import { assumedEligibility, unitLookup } from "./stratagem-eligibility.js";
-import { combinedKeywords, issuesOrders, orderIssuingUnits } from "./orders.js";
 import type { DamageCellState, StackMember, StackResult, StackSpec } from "./model.js";
-import type { StackableBuff } from "../data/dataset.js";
-import { damageCellKey, type DamageCellReport, type LeverReport, type WinnerReport } from "./report.js";
+import { damageCellKey, type DamageCellReport } from "./report.js";
+import { winnerReport } from "./winner-report.js";
+import { choiceVariants, ownKeywords } from "./keyword-choices.js";
+
+export { addOrderIssuers } from "./winner-report.js";
 
 interface SearchCounts {
   bodyguards: number;
@@ -29,7 +30,7 @@ export function emptySpec(factionId: string, members: StackMember[], detachmentI
 function unitKeywords(members: readonly StackMember[]): string[] {
   const values = new Set<string>();
   for (const member of members) {
-    for (const keyword of [...member.unit.keywords, ...member.unit.factionKeywords]) values.add(keyword.toLowerCase());
+    for (const keyword of ownKeywords(member)) values.add(keyword.toLowerCase());
   }
   return [...values].sort();
 }
@@ -54,15 +55,74 @@ function attackerToughness(spec: StackSpec): { attackerToughness?: number } {
   return toughness.length > 0 ? { attackerToughness: Math.max(...toughness) } : {};
 }
 
+/** The battle round a cell assumes when the scenario names none: inside both Kauyon's (3–5) and Mont'ka's (1–3) windows. */
+export const DEFAULT_BATTLE_ROUND = 3;
+
+/**
+ * The designations the faction's own rules put on enemy units with a `designate` effect (Afflicted
+ * from Nurgle's Gift's aura): on enemies an aura reaches, on an enemy filter, or on the defender. A
+ * designation a Stratagem or another lever chooses (`designate-target`) is the search's to price,
+ * not an assumption.
+ */
+export function enemyDesignations(dataset: Dataset, lineage: readonly string[]): string[] {
+  const tags = new Set<string>();
+  const visit = (node: unknown, onEnemies: boolean): void => {
+    if (Array.isArray(node)) {
+      for (const item of node) visit(item, onEnemies);
+      return;
+    }
+    if (typeof node !== "object" || node === null) return;
+    const record = node as Record<string, unknown>;
+    const modifier = typeof record.modifier === "object" && record.modifier !== null ? record.modifier as Record<string, unknown> : undefined;
+    const eligible = typeof modifier?.eligible === "object" && modifier.eligible !== null ? modifier.eligible as Record<string, unknown> : undefined;
+    const enemies = onEnemies || (record.type === "aura" && eligible?.owner === "enemy");
+    if (record.type === "designate" && modifier && typeof modifier.tag === "string" && modifier.clear !== true) {
+      const target = record.target;
+      const enemyTarget = target === "defender" ||
+        (typeof target === "object" && target !== null && (target as Record<string, unknown>).owner === "enemy") ||
+        (target === "recipient" && enemies);
+      if (enemyTarget) tags.add(modifier.tag.toLowerCase());
+    }
+    for (const value of Object.values(record)) visit(value, enemies);
+  };
+  for (const factionId of lineage) for (const ability of dataset.abilities.byFaction(factionId)) visit(ability.raw.effect, false);
+  return [...tags].sort();
+}
+
+/**
+ * The board and game state a cell assumes where the scenario is silent: battle round
+ * {@link DEFAULT_BATTLE_ROUND}, the target in its own deployment zone and territory, and the target
+ * carrying exactly the designations the faction's own rules apply ({@link enemyDesignations}), when
+ * they apply any. Each declared list is complete, so a rule wanting another region or designation
+ * does not apply.
+ */
+export function defaultScenario(dataset: Dataset, lineage: readonly string[]): Scenario {
+  const designations = enemyDesignations(dataset, lineage);
+  return {
+    battleRound: DEFAULT_BATTLE_ROUND,
+    targetRegions: [{ territory: "target", deploymentZone: "target" }],
+    // A faction whose rules apply none leaves designations undecided, so its designation-gated
+    // rules stay listed as unsupported rather than read as absent.
+    ...(designations.length > 0 ? { targetDesignations: designations } : {}),
+  };
+}
+
+/** The scenario a cell runs under: the matrix's declared facts over {@link defaultScenario}. */
+export function cellScenario(dataset: Dataset, faction: FactionContext, config: MatrixConfig): Scenario {
+  return { ...defaultScenario(dataset, faction.lineage), ...config.scenario };
+}
+
 /**
  * The engine context of one stack member in a cell. The crunch fires every model at a full-strength
- * target in the attacker's own turn, so those facts are stated; the scenario declares the rest.
+ * target it can see, in the attacker's own turn, so those facts are stated (Indirect Fire's
+ * penalties for an unseen target are never applied); the scenario declares the rest.
  */
 function contextForCell(dataset: Dataset, factionId: string, target: ResolvedTarget, phase: ComparePhase, scenario: Scenario, targetWargear: Record<string, number>) {
   const targetKeywords = [...(target.unitRaw.keywords ?? []), ...(target.unitRaw.faction_keywords ?? [])].map((keyword) => keyword.toLowerCase());
   const targetWounds = freshWounds(target.unitRaw);
   return (spec: StackSpec, member?: StackMember): EngineContext => ({
     attackerTurn: true,
+    targetVisible: true,
     attackerStrength: "full",
     targetStrength: "full",
     ...(targetWounds ? { targetWounds } : {}),
@@ -202,19 +262,46 @@ export function legalDetachmentSpec(
   return { ...spec, detachmentIssues: issues };
 }
 
-function deepOptimise(
+/**
+ * The members' best result over `combinations`; ties keep the fewer detachment points, then the
+ * earlier combination. A detachment that is legal alone and scores no higher alone than no
+ * detachment is idle: combinations with it are skipped, as it adds nothing to them but points.
+ */
+export function deepOptimise(
   session: DamageScoringSession,
   factionId: string,
   members: StackMember[],
   combinations: readonly Detachment[][],
 ): StackResult {
-  let best = session.optimiseLevers(emptySpec(factionId, members));
+  // Each way the members can take their keyword-choice options (a Mark of Chaos) in the spec's
+  // detachments is priced, and the best kept; ties keep the earlier variant.
+  const optimise = (spec: StackSpec): StackResult => {
+    let top: StackResult | undefined;
+    for (const variant of choiceVariants(session.dataset, spec.members, spec.detachmentIds)) {
+      const result = session.optimiseLevers({ ...spec, members: variant });
+      if (!top || result.total > top.total + 1e-9) top = result;
+    }
+    return top!;
+  };
+  let best = optimise(emptySpec(factionId, members));
   let bestPoints = 0;
+  const single = new Map<string, StackResult | null>();
+  for (const combination of combinations) {
+    if (combination.length !== 1) continue;
+    const spec = legalDetachmentSpec(session, factionId, members, combination);
+    single.set(combination[0].id, spec ? optimise(spec) : null);
+  }
+  const idle = new Set([...single].flatMap(([id, result]) => result && result.total <= best.total + 1e-9 ? [id] : []));
   for (const combination of combinations) {
     if (combination.length === 0) continue;
-    const spec = legalDetachmentSpec(session, factionId, members, combination);
-    if (!spec) continue;
-    const result = session.optimiseLevers(spec);
+    let result: StackResult | null | undefined;
+    if (combination.length === 1) result = single.get(combination[0].id);
+    else if (combination.some((detachment) => idle.has(detachment.id))) continue;
+    else {
+      const spec = legalDetachmentSpec(session, factionId, members, combination);
+      result = spec ? optimise(spec) : null;
+    }
+    if (!result) continue;
     const points = combination.reduce((sum, detachment) => sum + (detachment.detachment_points ?? 0), 0);
     if (result.total > best.total + 1e-9 || (Math.abs(result.total - best.total) <= 1e-9 && points < bestPoints)) {
       best = result;
@@ -222,135 +309,6 @@ function deepOptimise(
     }
   }
   return best;
-}
-
-function parseEnhancementLever(id: string): { id: string; bearerUnitId: string } | null {
-  if (!id.startsWith("enhancement:")) return null;
-  const at = id.indexOf("@");
-  return at < 0 ? null : { id: id.slice("enhancement:".length, at), bearerUnitId: id.slice(at + 1) };
-}
-
-/**
- * Records, for each selected Orders lever no stack member can issue, the supporting Officer that
- * issues it: one already supporting the stack if it can, else the first by id. The Officer is
- * costed like any other supporting unit.
- */
-export function addOrderIssuers(
-  dataset: Dataset,
-  faction: FactionContext,
-  session: DamageScoringSession,
-  result: StackResult,
-  selected: readonly StackableBuff[],
-  supportAbilityIds: Map<string, Set<string>>,
-): void {
-  const memberIds = result.spec.members.map((member) => member.unit.id);
-  const units = unitLookup(dataset, faction.id);
-  const passes = result.spec.detachmentIds.length > 0 ? result.spec.detachmentIds : [undefined];
-  const receiver = new Set(passes.flatMap((detachmentId) => [...combinedKeywords(memberIds, units, detachmentId)]));
-  for (const ruleId of new Set(selected.flatMap((lever) =>
-    lever.source.kind === "ability" && lever.source.abilityKind === "army" && issuesOrders(dataset, lever.source.abilityId) ? [lever.source.abilityId] : []))) {
-    if (orderIssuingUnits(dataset, ruleId, memberIds, receiver).length > 0) continue;
-    const candidates = session.orderIssuerCandidates.filter((id) => !memberIds.includes(id));
-    const issuers = orderIssuingUnits(dataset, ruleId, candidates, receiver);
-    const issuer = issuers.find((id) => supportAbilityIds.has(id)) ?? issuers[0];
-    if (!issuer) continue;
-    const abilities = supportAbilityIds.get(issuer) ?? new Set<string>();
-    abilities.add(ruleId);
-    supportAbilityIds.set(issuer, abilities);
-  }
-}
-
-function winnerReport(dataset: Dataset, faction: FactionContext, session: DamageScoringSession, result: StackResult): WinnerReport {
-  const selected = session.selectedPoolLevers(result);
-  const enhancements = selected.flatMap((lever) => {
-    if (lever.cost?.points === undefined) return [];
-    const identity = parseEnhancementLever(lever.id);
-    const enhancement = identity ? dataset.enhancements.get(identity.id) : undefined;
-    return identity && enhancement ? [{ ...identity, points: enhancement.cost }] : [];
-  });
-  const cpLever = selected.find((lever) => lever.cost?.cp !== undefined);
-  const cpAbilityId = cpLever?.source.kind === "ability" ? cpLever.source.abilityId : undefined;
-  const stratagem = cpAbilityId ? dataset.stratagems.all.find((candidate) => candidate.ability_id === cpAbilityId) : undefined;
-  const supportAbilityIds = new Map<string, Set<string>>();
-  for (const lever of selected) {
-    if (lever.source.kind !== "ability" || lever.source.abilityKind !== "support" || !lever.source.sourceUnitId) continue;
-    const abilities = supportAbilityIds.get(lever.source.sourceUnitId) ?? new Set<string>();
-    abilities.add(lever.source.abilityId);
-    supportAbilityIds.set(lever.source.sourceUnitId, abilities);
-  }
-  addOrderIssuers(dataset, faction, session, result, selected, supportAbilityIds);
-  const supportMembers = [...supportAbilityIds].flatMap(([unitId]) => {
-    const unit = unitInFaction(faction, unitId);
-    if (!unit) return [];
-    const modelCount = fullModelCount(dataset, unit.raw);
-    return [{ unit: unit.raw, modelCount, loadout: dataset.loadoutOf(unit.raw).base(modelCount) ?? new Map<string, number>() }];
-  });
-  const supportCosts = summarizeSupportCosts({
-    members: supportMembers,
-    hostFaction: dataset.factions.get(faction.id)?.raw,
-    detachmentIds: result.spec.detachmentIds,
-  });
-  const costByUnit = new Map(supportCosts.entries.map((entry) => [entry.unitId, entry.totalPoints]));
-  const leverReports: LeverReport[] = selected.map((lever) => ({
-    id: lever.id,
-    label: lever.label,
-    source: lever.source,
-    ...(lever.cost ? { cost: lever.cost } : {}),
-    requires: lever.requires ?? [],
-    ...(lever.source.kind === "ability" && lever.source.abilityKind === "support" && lever.source.sourceUnitId
-      ? { supportUnitId: lever.source.sourceUnitId }
-      : {}),
-  }));
-  const chosen = new Map(result.members.map(({ member, loadout }) => [member.unit.id, loadout.counts]));
-  return {
-    expectedDamage: result.total,
-    members: result.members.map(({ member, loadout }) => ({
-      unitId: member.unit.id,
-      unitName: member.unit.name,
-      role: member.role,
-      modelCount: loadout.modelCount,
-      expectedDamage: loadout.total,
-      loadout: [...loadout.counts].map(([weaponId, count]) => ({ weaponId, count })).sort((left, right) => left.weaponId.localeCompare(right.weaponId)),
-      weapons: loadout.selectedWeapons.map((weapon) => {
-        const raw = dataset.weapons.getInFaction(weapon.weaponId, member.unit.raw.faction_id)?.raw ?? dataset.weapons.getAny(weapon.weaponId)?.raw;
-        return {
-          id: weapon.weaponId,
-          name: raw?.name ?? weapon.weaponId,
-          profileIndex: weapon.profileIndex,
-          profileName: weapon.profileName,
-          count: weapon.count,
-          stages: Object.fromEntries(weapon.stages.map((stage) => [stage.name, stage.expected * weapon.count])),
-          attribution: session.attributeWeapon(result.spec, member, weapon, loadout.counts, chosen),
-        };
-      }),
-      pistolChoice: loadout.pistolChoice,
-      legalityErrors: loadout.legalityErrors,
-    })),
-    detachments: result.spec.detachmentIds.map((id) => {
-      const detachment = dataset.detachments.getInFaction(id, faction.id) ?? dataset.detachments.getAny(id);
-      return { id, detachmentPoints: detachment?.detachment_points ?? 0 };
-    }),
-    enhancements,
-    stratagem: stratagem ? { id: stratagem.id, cp: stratagem.cp_cost } : null,
-    selectedLevers: leverReports,
-    supportingUnits: [...supportAbilityIds].map(([unitId, abilityIds]) => ({
-      unitId,
-      points: costByUnit.get(unitId) ?? null,
-      selectedAbilityIds: [...abilityIds].sort(),
-    })),
-    assumptions: [
-      "Favourable state: 1 inch, within half range, stationary when shooting, charged when fighting.",
-      "Each selected support ability is assumed in range and otherwise activatable; support units are costed but are not an army roster.",
-      "At most one Stratagem is selected; CP across a full game is not simulated.",
-      "Loadouts and levers use coordinate ascent; outer bodyguard, attachment, finalist and detachment pools are exhaustive when their limits are Infinity.",
-      ...(result.spec.members.some((member) => member.role === "support")
-        ? ["Support-attached characters count as leading their unit for rules that apply while a model is leading."] : []),
-      ...(stratagem ? assumedEligibility(dataset, stratagem.id).map((condition) => `Stratagem ${stratagem.id} target condition assumed met: ${condition}.`) : []),
-      ...result.spec.detachmentIssues.map((issue) => `Unproven local-stack detachment condition: ${issue.code} (${issue.id}).`),
-      ...selected.flatMap((lever) => (lever.requires ?? []).map(() => `Selected lever ${lever.id} requires caller-attested activation context recorded in selectedLevers.requires.`)),
-      ...(supportCosts.status === "incomplete" ? supportCosts.issues.map((issue) => `Support cost incomplete: ${issue.code} (${issue.id}).`) : []),
-    ],
-  };
 }
 
 /** The scoring session one damage cell searches with. */
@@ -368,10 +326,19 @@ export function damageScoringSession(input: {
     factionId: input.faction.id,
     target: input.target,
     phase: input.phase,
-    contextFor: contextForCell(input.dataset, input.faction.id, input.target, input.phase, input.config.scenario,
+    contextFor: contextForCell(input.dataset, input.faction.id, input.target, input.phase, cellScenario(input.dataset, input.faction, input.config),
       input.targetWargear ?? baseWargear(input.dataset, input.target.unitRaw, input.target.modelCount)),
   };
   return new DamageScoringSession(input.dataset, state, input.config, input.faction.units, input.invariants);
+}
+
+/** Orders results best first; ties go to the members' ids in order. */
+function byTotal(left: StackResult, right: StackResult): number {
+  return right.total - left.total || memberIds(left).localeCompare(memberIds(right));
+}
+
+function memberIds(result: StackResult): string {
+  return result.spec.members.map((member) => member.unit.id).join("+");
 }
 
 export function runDamageCell(input: {
@@ -384,6 +351,7 @@ export function runDamageCell(input: {
 }): DamageCellReport {
   const started = Date.now();
   const session = damageScoringSession(input);
+  const scenario = cellScenario(input.dataset, input.faction, input.config);
   const bodyguards = input.faction.units.filter((unit) => unit.weapons.length > 0).slice(0, input.config.bodyguardLimit);
   const counts: SearchCounts = { bodyguards: bodyguards.length, memberStacks: 0, broadResults: 0, deepFinalists: 0 };
   const broad: StackResult[] = [];
@@ -393,19 +361,47 @@ export function runDamageCell(input: {
     for (const members of choices) broad.push(session.optimiseLevers(emptySpec(input.faction.id, members)));
   }
   counts.broadResults = broad.length;
-  broad.sort((left, right) => right.total - left.total || left.spec.members.map((member) => member.unit.id).join("+").localeCompare(right.spec.members.map((member) => member.unit.id).join("+")));
+  broad.sort(byTotal);
   const finalists = broad.slice(0, input.config.finalistLimit);
   counts.deepFinalists = finalists.length;
   const combinations = detachmentCombos(detachmentsForFaction(input.dataset, input.faction), input.config);
-  const deep = finalists.map((result) => deepOptimise(session, input.faction.id, result.spec.members, combinations));
-  deep.sort((left, right) => right.total - left.total || left.spec.members.map((member) => member.unit.id).join("+").localeCompare(right.spec.members.map((member) => member.unit.id).join("+")));
+  // Deep results by member stack, so per-unit mode reuses the overall finalists' searches.
+  const deepened = new Map<StackResult, StackResult>();
+  const deepen = (result: StackResult): StackResult => {
+    let deepResult = deepened.get(result);
+    if (!deepResult) {
+      deepResult = deepOptimise(session, input.faction.id, result.spec.members, combinations);
+      deepened.set(result, deepResult);
+    }
+    return deepResult;
+  };
+  const deep = finalists.map(deepen);
+  deep.sort(byTotal);
   const winner = deep[0] ?? broad[0] ?? null;
-  const offensiveWarnings = winner ? session.relevantWarnings(winner) : [];
-  const unsupported = offensiveWarnings.map(({ sourceKind: _sourceKind, ...warning }) => warning);
+  const outcome = (stack: StackResult) => {
+    const report = winnerReport(input.dataset, input.faction, session, stack, input.target.modelCount, scenario);
+    const ledger = [...buildLedger(session, stack), ...unscoreableEntries(session)];
+    const incomplete = ledger.some((entry) => entry.relevant) || stack.spec.detachmentIssues.length > 0 || report.members.some((member) => member.legalityErrors.length > 0);
+    const unsupported = session.relevantWarnings(stack).map(({ sourceKind: _sourceKind, ...warning }) => warning);
+    return { report, ledger, unsupported, status: incomplete ? "incomplete" as const : "complete" as const };
+  };
+  const cell = winner ? outcome(winner) : null;
+  const unscoreable = unscoreableEntries(session);
   const defensiveWarnings = session.defensiveWarnings.map(({ sourceKind: _sourceKind, ...warning }) => warning);
-  const result = winner ? winnerReport(input.dataset, input.faction, session, winner) : null;
-  const ledger = [...(winner ? buildLedger(session, winner) : []), ...unscoreableEntries(session)];
-  const incomplete = ledger.some((entry) => entry.relevant) || (winner?.spec.detachmentIssues.length ?? 0) > 0 || result?.members.some((member) => member.legalityErrors.length > 0);
+  const units = input.config.perUnitFinalists === null ? undefined
+    : bestPerUnit(broad, input.config.perUnitFinalists, deepen).map(({ stack, deepFinalists }) => {
+      const unitOutcome = outcome(stack);
+      const host = stack.spec.members[0].unit;
+      return {
+        unitId: host.id,
+        unitName: host.name,
+        status: unitOutcome.status,
+        deepFinalists,
+        winner: unitOutcome.report,
+        ledger: unitOutcome.ledger,
+        unsupported: unitOutcome.unsupported,
+      };
+    });
   return {
     key: damageCellKey(input.faction.id, input.target.profileId, input.phase),
     factionId: input.faction.id,
@@ -417,13 +413,36 @@ export function runDamageCell(input: {
       modelCount: input.target.modelCount,
     },
     phase: input.phase,
-    status: incomplete ? "incomplete" : "complete",
-    winner: result,
-    ledger,
-    unsupported,
+    status: cell?.status ?? (unscoreable.some((entry) => entry.relevant) ? "incomplete" : "complete"),
+    winner: cell?.report ?? null,
+    ledger: cell?.ledger ?? unscoreable,
+    unsupported: cell?.unsupported ?? [],
     defensiveWarnings,
     candidateCounts: { ...counts, illegalLoadoutsRejected: session.illegalLoadoutsRejected },
     evaluations: { stack: session.stackEvaluations, crunch: session.crunchCount },
     runtimeMs: Date.now() - started,
+    ...(units ? { units } : {}),
   };
+}
+
+/**
+ * Each bodyguard unit's best stack: its `limit` best broad results (sorted best first, the
+ * bodyguard as each result's first member) are deep-optimised and the best kept. Units come back
+ * best first.
+ */
+export function bestPerUnit(
+  broad: readonly StackResult[],
+  limit: number,
+  deepen: (result: StackResult) => StackResult,
+): { stack: StackResult; deepFinalists: number }[] {
+  const byUnit = new Map<string, StackResult[]>();
+  for (const result of broad) {
+    const hostId = result.spec.members[0].unit.id;
+    const list = byUnit.get(hostId) ?? [];
+    if (list.length < limit) list.push(result);
+    byUnit.set(hostId, list);
+  }
+  return [...byUnit.values()]
+    .map((results) => ({ stack: results.map(deepen).sort(byTotal)[0], deepFinalists: results.length }))
+    .sort((left, right) => byTotal(left.stack, right.stack));
 }

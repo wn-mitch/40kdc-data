@@ -25,18 +25,25 @@ export interface MatrixConfig {
   bodyguardLimit: number;
   attachmentLimit: number;
   finalistLimit: number;
+  /**
+   * Per-unit mode (`HC_PER_UNIT`): each bodyguard unit's best `n` attached stacks from the broad
+   * pass are deep-optimised and the best kept as that unit's own result; null when off.
+   */
+  perUnitFinalists: number | null;
   detail: boolean;
   perFiveSensitivity: boolean;
   droppedArmyRules: string[];
   dpBudget: number;
   maxDetachments: number;
+  /** Cells run at once, each in its own process (`HC_WORKERS`); results do not depend on it. */
+  workers: number;
   /** Board and game state every cell assumes, from the `HC_SCENARIO` JSON file. */
   scenario: Scenario;
 }
 
 /** The scenario facts a matrix may declare; each is an {@link EngineContext} field. */
 export type Scenario = Pick<EngineContext,
-  | "battleRound" | "attackerTurn" | "attackerStrength" | "targetStrength" | "attackerDesignations"
+  | "battleRound" | "attackerTurn" | "targetVisible" | "attackerStrength" | "targetStrength" | "attackerDesignations"
   | "targetDesignations" | "attackerStates" | "targetStates" | "targetClosest" | "attackerObjectives"
   | "targetObjectives" | "attackerGuided" | "attackerNeighbours" | "targetNeighbours" | "activeRules"
   | "attackerRegions" | "targetRegions" | "objectivesControlled" | "attackerWounds" | "targetWounds"
@@ -93,6 +100,7 @@ const testResults = (value: unknown) => isRecord(value) && Object.entries(value)
 const SCENARIO_FIELDS: Record<keyof Scenario, (value: unknown) => boolean> = {
   battleRound: (value) => Number.isInteger(value) && (value as number) >= 1,
   attackerTurn: (value) => typeof value === "boolean",
+  targetVisible: (value) => typeof value === "boolean",
   attackerStrength: (value) => STRENGTHS.includes(value as string),
   targetStrength: (value) => STRENGTHS.includes(value as string),
   attackerDesignations: strings,
@@ -147,6 +155,20 @@ function limit(value: string | undefined, name: string): number {
   return parsed;
 }
 
+function workers(value: string | undefined): number {
+  if (value === undefined) return 1;
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 1) throw new Error("HC_WORKERS must be a positive integer");
+  return parsed;
+}
+
+function perUnit(value: string | undefined): number | null {
+  if (value === undefined || value === "") return null;
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 1) throw new Error("HC_PER_UNIT must be a positive integer");
+  return parsed;
+}
+
 export function parseMatrixConfig(
   env: Readonly<Record<string, string | undefined>>,
   catalog: MatrixCatalog,
@@ -183,11 +205,13 @@ export function parseMatrixConfig(
     bodyguardLimit: limit(env.HC_BODYGUARDS, "HC_BODYGUARDS"),
     attachmentLimit: limit(env.HC_TOP, "HC_TOP"),
     finalistLimit: limit(env.HC_DEEP, "HC_DEEP"),
+    perUnitFinalists: perUnit(env.HC_PER_UNIT),
     detail: env.HC_DETAIL === "1",
     perFiveSensitivity: env.HC_PER5 === "1",
     droppedArmyRules: env.HC_DROP_RULE ? list(env.HC_DROP_RULE, [], "HC_DROP_RULE") : [],
     dpBudget: 3,
     maxDetachments: 3,
+    workers: workers(env.HC_WORKERS),
     scenario: env.HC_SCENARIO ? parseScenario(JSON.parse(readFileSync(resolve(cwd, env.HC_SCENARIO), "utf8"))) : {},
   };
 }
@@ -202,6 +226,7 @@ export function serializableConfig(config: MatrixConfig): Record<string, unknown
     bodyguardLimit: finite(config.bodyguardLimit),
     attachmentLimit: finite(config.attachmentLimit),
     finalistLimit: finite(config.finalistLimit),
+    ...(config.perUnitFinalists !== null ? { perUnitFinalists: config.perUnitFinalists } : {}),
     perFiveSensitivity: config.perFiveSensitivity,
     droppedArmyRules: config.droppedArmyRules,
     dpBudget: config.dpBudget,

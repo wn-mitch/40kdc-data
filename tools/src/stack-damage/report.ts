@@ -32,6 +32,8 @@ export interface MemberReport {
   unitId: string;
   unitName: string;
   role: "bodyguard" | "leader" | "support";
+  /** The keyword-choice options the member took (a Mark of Chaos); absent when it took none. */
+  chosen?: string[];
   modelCount: number;
   expectedDamage: number;
   loadout: { weaponId: string; count: number }[];
@@ -51,11 +53,15 @@ export interface LeverReport {
 }
 
 export interface WinnerReport {
+  /** Expected wounds dealt after Feel No Pain, with each attack's damage past one model's Wounds lost. */
   expectedDamage: number;
+  /** Expected target models destroyed: the members' kills summed, capped at the target unit's size. */
+  expectedModelsKilled: number;
   members: MemberReport[];
   detachments: { id: string; detachmentPoints: number }[];
   enhancements: { id: string; bearerUnitId: string; points: number }[];
-  stratagem: { id: string; cp: number } | null;
+  /** The selected Stratagem at its cost on this stack; `printedCp` and `modifiedBy` when a member's rule changed it. */
+  stratagem: { id: string; cp: number; printedCp?: number; modifiedBy?: string[] } | null;
   selectedLevers: LeverReport[];
   supportingUnits: { unitId: string; points: number | null; selectedAbilityIds: string[] }[];
   assumptions: string[];
@@ -88,6 +94,21 @@ export interface DamageCellReport {
   };
   evaluations: { stack: number; crunch: number };
   runtimeMs: number;
+  /** Per-unit mode only: each bodyguard unit's best stack in this cell, best first. */
+  units?: UnitBestReport[];
+}
+
+/** One bodyguard unit's best stack in a cell, found by per-unit mode (`HC_PER_UNIT`). */
+export interface UnitBestReport {
+  unitId: string;
+  unitName: string;
+  /** As for the cell: `incomplete` when this stack's ledger holds a relevant unresolved provider, or it has detachment or legality issues. */
+  status: "complete" | "incomplete";
+  /** How many of the unit's attached stacks were deep-optimised. */
+  deepFinalists: number;
+  winner: WinnerReport;
+  ledger: LedgerEntry[];
+  unsupported: UnsupportedWarning[];
 }
 
 export interface DamageMatrixReport {
@@ -144,7 +165,8 @@ export function reportCompleteness(
  * declared scenario, and a fingerprint of the code and embedded data that score it.
  */
 export function matrixScope(
-  config: Pick<MatrixConfig, "factionIds" | "targetIds" | "phases" | "bodyguardLimit" | "attachmentLimit" | "finalistLimit" | "perFiveSensitivity" | "droppedArmyRules" | "scenario">,
+  config: Pick<MatrixConfig, "factionIds" | "targetIds" | "phases" | "bodyguardLimit" | "attachmentLimit" | "finalistLimit" | "perFiveSensitivity" | "droppedArmyRules" | "scenario"> &
+    Partial<Pick<MatrixConfig, "perUnitFinalists">>,
   sourceFingerprint: string,
 ): string {
   return JSON.stringify({
@@ -152,6 +174,7 @@ export function matrixScope(
     targets: config.targetIds,
     phases: config.phases,
     limits: [config.bodyguardLimit, config.attachmentLimit, config.finalistLimit].map((value) => Number.isFinite(value) ? value : "Infinity"),
+    ...(config.perUnitFinalists != null ? { perUnitFinalists: config.perUnitFinalists } : {}),
     perFiveSensitivity: config.perFiveSensitivity,
     droppedArmyRules: config.droppedArmyRules,
     scenario: config.scenario,
