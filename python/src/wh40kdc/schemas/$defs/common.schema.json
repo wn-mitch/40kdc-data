@@ -1230,6 +1230,10 @@
           "const": "previous-phase-end",
           "description": "When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one (\"an objective your unit was controlling at the end of the previous phase\"). Only with controlled_by_unit."
         },
+        "occupied_by": {
+          "$ref": "#/$defs/unit-filter",
+          "description": "Only objective markers with one or more units matching this filter within range of them (\"that has a friendly unit with this ability within range of it\")."
+        },
         "clear_of": {
           "$ref": "#/$defs/unit-filter",
           "description": "Only objective markers with no unit matching this filter within range of them (\"has no enemy units (excluding AIRCRAFT units) within range of it\")."

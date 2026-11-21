@@ -124,6 +124,9 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       const ownPool = typeof amount === "object" && amount !== null && "characteristic" in amount;
       return { type: "resource-gain", target: ownPool ? target(leaf.parameters.subject ?? "this-unit") : "this-model", modifier };
     }
+    // "You cannot gain more than 3 Pain tokens as a result of failed Battle-shock tests caused by this Stratagem".
+    case "resource-gain-cap":
+      return { type: "resource-gain-cap", target: "this-model", modifier: { pool: closed(leaf, "pool"), max: closed(leaf, "max"), source: closed(leaf, "source") } };
     case "resource-spend": {
       const modifier: Node = { pool: closed(leaf, "pool"), amount: closed(leaf, "amount") };
       // A by-table spend carries the rows compile-cost-table.ts folded onto it.

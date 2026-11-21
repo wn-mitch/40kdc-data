@@ -5503,5 +5503,177 @@
       },
       "binds_event_variable": "pact"
     }
+  },
+  {
+    "caseId": "pain/spend-range",
+    "effect": {
+      "type": "resource-spend",
+      "target": "this-model",
+      "modifier": {
+        "pool": "pain-token-pool",
+        "amount": {
+          "up_to": 3,
+          "at_least": 1
+        },
+        "bind_as": "pain"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "pain/set-up-spent-wounds",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "pain-token-pool",
+            "amount": {
+              "up_to": 3,
+              "at_least": 1
+            },
+            "bind_as": "pain"
+          }
+        },
+        {
+          "type": "set-up",
+          "target": "this-model",
+          "modifier": {
+            "to": "battlefield",
+            "wounds_remaining": {
+              "spent": "pain"
+            },
+            "starting_strength": 1,
+            "detach": true
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "pain/empower-trigger",
+    "effect": {
+      "type": "designate",
+      "target": "event-object",
+      "modifier": {
+        "tag": "empowered"
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "resource-spent",
+      "filter": {
+        "pool": "pain-token-pool",
+        "tag": "empowered"
+      },
+      "object": {
+        "owner": "friendly"
+      }
+    }
+  },
+  {
+    "caseId": "pain/empower-trigger-in-range",
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "pain-token-pool",
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "resource-spent",
+      "filter": {
+        "pool": "pain-token-pool",
+        "tag": "empowered"
+      },
+      "object": {
+        "owner": "friendly",
+        "within": {
+          "of": "this-unit",
+          "range": {
+            "inches": 9
+          }
+        }
+      }
+    }
+  },
+  {
+    "caseId": "pain/gain-cap",
+    "effect": {
+      "type": "resource-gain-cap",
+      "target": "this-model",
+      "modifier": {
+        "pool": "pain-token-pool",
+        "max": 3,
+        "source": "failed-battle-shock"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "miracle/die-at-roll-result",
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 4,
+      "comparison": "gte",
+      "on_success": {
+        "type": "resource-die",
+        "target": "this-model",
+        "modifier": {
+          "pool": "miracle-dice-pool",
+          "operation": "add",
+          "value": "roll-result"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "miracle/each-occupied-objective",
+    "effect": {
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "controlled_by": "friendly",
+          "occupied_by": {
+            "owner": "friendly",
+            "has_ability": [
+              "example-relic"
+            ]
+          }
+        },
+        "bind_as": "held"
+      },
+      "effect": {
+        "type": "resource-die",
+        "target": "this-model",
+        "modifier": {
+          "pool": "miracle-dice-pool",
+          "operation": "add",
+          "value": "rolled"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
   }
 ]

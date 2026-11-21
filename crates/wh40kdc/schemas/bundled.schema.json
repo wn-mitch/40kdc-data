@@ -1143,6 +1143,10 @@
           "const": "previous-phase-end",
           "description": "When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one (\"an objective your unit was controlling at the end of the previous phase\"). Only with controlled_by_unit."
         },
+        "occupied_by": {
+          "$ref": "#/$defs/unit-filter",
+          "description": "Only objective markers with one or more units matching this filter within range of them (\"that has a friendly unit with this ability within range of it\")."
+        },
         "clear_of": {
           "$ref": "#/$defs/unit-filter",
           "description": "Only objective markers with no unit matching this filter within range of them (\"has no enemy units (excluding AIRCRAFT units) within range of it\")."
@@ -11774,6 +11778,49 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "title": "resource-gain-cap effect",
+          "description": "[resource] You cannot gain more than max of a pool from one source this ability causes (source failed-battle-shock: the failed Battle-shock tests it causes).",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "resource-gain-cap"
+            },
+            "target": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "pool": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "max": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "source": {
+                  "enum": [
+                    "failed-battle-shock"
+                  ]
+                }
+              },
+              "required": [
+                "pool",
+                "max",
+                "source"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "title": "resource-spend effect",
           "description": "[resource] Spend from a resource pool only when it has sufficient balance; the spend fails as a whole rather than producing a negative or clamped pool. face: spend dice showing this value; requirement: spend dice forming this pair, triple or run.",
           "required": [
@@ -11819,9 +11866,14 @@
                         "up_to": {
                           "type": "integer",
                           "minimum": 1
+                        },
+                        "at_least": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "description": "The least the player can choose, if not 0 (\"spend 1-3 Pain tokens\")."
                         }
                       },
-                      "description": "Any amount from 0 to up_to, as the player chooses (\"spend up to 2YP\")."
+                      "description": "Any amount from 0 (or at_least) to up_to, as the player chooses (\"spend up to 2YP\", \"spend 1-3 Pain tokens\")."
                     }
                   ],
                   "description": "A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table."
@@ -11936,7 +11988,8 @@
                     {
                       "enum": [
                         "rolled",
-                        "highest"
+                        "highest",
+                        "roll-result"
                       ]
                     }
                   ]
@@ -14688,7 +14741,7 @@
     "select-objective-effect": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "Select objective markers matching the selector and bind each as bind_as; the nested effect refers to it as {objective: {selection_var}} (designate subject, within of).",
+      "$comment": "Select objective markers matching the selector and bind each as bind_as; the nested effect refers to it as {objective: {selection_var}} (designate subject, within of). A selector without count is no choice: the nested effect resolves once for each matching marker (\"for each objective you control that ...\").",
       "properties": {
         "type": {
           "const": "select-objective"

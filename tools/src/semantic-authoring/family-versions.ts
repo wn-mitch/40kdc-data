@@ -30,7 +30,7 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // event v41 adds passed and a Dark Pact or contract bind_as on a used moment; unit-activity v26 passed on
   // made-dark-pact-this-phase; roll-total v2 roll_var dark-pact-test; ability-modifier v9 aspect mortal-wounds.
   // Every earlier leaf keeps its meaning.
-  { family: "event", from: 40, to: 41, map: (parameters) => ({ ...parameters }) },
+  { family: "event", from: 40, to: 42, map: (parameters) => ({ ...parameters }) },
   { family: "unit-activity", from: 25, to: 26, map: (parameters) => ({ ...parameters }) },
   { family: "roll-total", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
   { family: "ability-modifier", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
@@ -67,7 +67,7 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // resource v2 gained_this_turn; characteristic-modifier v22, characteristic-amount v2 and
   // return-models v8 a {spent} amount; dice-roll v11 plus_if; bearer-eligibility v9 wargear.
   // Every earlier leaf keeps its meaning.
-  { family: "resource-spend", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
+  { family: "resource-spend", from: 4, to: 6, map: (parameters) => ({ ...parameters }) },
   { family: "resource", from: 1, to: 3, map: (parameters) => ({ ...parameters }) },
   { family: "characteristic-modifier", from: 21, to: 22, map: (parameters) => ({ ...parameters }) },
   { family: "characteristic-amount", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
@@ -92,6 +92,16 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "ability-modifier", from: 7, to: 9, map: (parameters) => ({ ...parameters }) },
   // return-models v9 adds exclude_model_keyword ("(excluding CHARACTERS)"); every earlier leaf keeps its meaning.
   { family: "return-models", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
+  // Miracle dice + Pain: wounds-remaining v2 takes a spent amount ({spent}); every earlier leaf keeps its meaning.
+  { family: "wounds-remaining", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
+  // event v42: a resource-spent moment takes object_owner ("Empower units from your army").
+  { family: "event", from: 41, to: 42, map: (parameters) => ({ ...parameters }) },
+  // objective-criterion v3: occupied-by ("that has a friendly unit with this ability within range of it").
+  { family: "objective-criterion", from: 2, to: 3, map: (parameters) => ({ ...parameters }) },
+  // resource-die v2: value roll-result ("with a value equal to that result").
+  { family: "resource-die", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
+  // resource-spend v6: {up_to} takes at_least ("spend 1-3 Pain tokens").
+  { family: "resource-spend", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
 ];
 
 export type FamilyVersionReport = {

@@ -821,6 +821,19 @@ pub(crate) fn event_phrase(t: &P) -> String {
             if is(f, "pool", "yield-points") {
                 return "each time you spend Yield points".to_string();
             }
+            // "When you spend 1 Pain token to Empower that friendly unit": the unit the spend Empowers.
+            if is(f, "tag", "empowered") {
+                let object = if t.get("object").is_some_and(|o| !o.is_null()) {
+                    object_phrase(t.get("object"))
+                } else {
+                    "a unit".to_string()
+                };
+                return format!(
+                    "each time you spend {} to Empower {}",
+                    crate::translate::effect::words::resource_noun(f.get("pool"), None, None),
+                    object
+                );
+            }
             format!("each time {} is spent", dekebab(&st(f.get("pool"))))
         }
         _ => format!("when {}", dekebab(&st(t.get("event")))),

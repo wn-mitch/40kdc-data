@@ -118,7 +118,7 @@ const KIND_KEYS: Readonly<Record<string, { required?: readonly string[]; optiona
   "designation-resolved": { required: ["tag"] },
   "marker-removed": { required: ["marker"] },
   "resource-gained": { required: ["pool"], optional: ["caused_by_destruction"] },
-  "resource-spent": { required: ["pool"], optional: ["activity", "tag", "object"] },
+  "resource-spent": { required: ["pool"], optional: ["activity", "tag", "object", "object_owner"] },
   "move-ended": { optional: ["owner", "subject", "move_types", "also", "through"] },
   "move-started": { optional: ["owner", "subject", "move_types", "also"] },
   selected: { optional: ["owner", "subject", "move_types", "to", "mode"] },
@@ -287,6 +287,7 @@ function normalizeEvent(input: Record<string, unknown>): Record<string, unknown>
   if (has("subject") && has("owner")) throw new TypeError("event names its unit by subject or by owner, not both.");
   if (has("id") && has("ids")) throw new TypeError("event.ids lists the rules instead of id; name one or the other.");
   if (kind === "resource-spent" && has("activity") && has("tag")) throw new TypeError("event resource-spent names what the spend is for by activity or by tag, not both.");
+  if (kind === "resource-spent" && has("object") && has("object_owner")) throw new TypeError("event resource-spent names the unit it serves by object or by object_owner, not both.");
 
   // The moment's own filter fields.
   if (has("phase")) result.phase = enumValue(input.phase, PHASES, "event.phase");
@@ -405,7 +406,7 @@ function normalizeEvent(input: Record<string, unknown>): Record<string, unknown>
 
 const EVENT: FlatFamily = {
   id: "event",
-  version: 41,
+  version: 42,
   role: "EVENT",
   label: "At an event",
   description: [
@@ -417,7 +418,7 @@ const EVENT: FlatFamily = {
     "A disembarkation takes transport this-unit (the Transport left). damage-allocated takes object (this unit, this model or the selected unit: the attack is allocated to a model in it) and attack_type.",
     "Rolls: before-roll and after-roll name roll, or rolls (two or more roll kinds a DSL trigger can name, lowered to one trigger per kind). after-roll also takes subject (who made the roll), result (success or failure), and, after a Psychic test (roll psychic), channelled and before_resolving_activity ritual.",
     "used names the activity used (ability, Stratagem, action, manoeuvre, order, ritual, Dark Pact, Act of Faith, doctrine or contract), with owner (whose army) or subject (who used it); id names which ability, manoeuvre, Stratagem or action, or ids lists two or more rules any one of which was used; object is the unit the rule is aimed at (this unit, this model, the selected unit, or filtered-units: the unit-filter right before names it). A used ability also takes source (unit or enhancement definitions), usage (once per battle), ability_keyword and targets_level unit. passed, on a used Dark Pact, is the outcome of its Leadership test (true: \"does not fail the resulting Leadership test\"); a later roll-total dark-pact-test reads that test's result. A used Dark Pact or contract also takes bind_as, for a later change to that same use.",
-    "state-changed names the core-rules state that changed, or strength: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting). designation-changed and designation-resolved name the designation (tag). marker-removed names the marker. resource-gained and resource-spent name the pool; a spend can name what it is for, by activity or by tag (not both), and object (this unit, the selected unit, or antecedent), the unit it serves.",
+    "state-changed names the core-rules state that changed, or strength: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting). designation-changed and designation-resolved name the designation (tag). marker-removed names the marker. resource-gained and resource-spent name the pool; a spend can name what it is for, by activity or by tag (not both), and the unit it serves: object (this unit, the selected unit, or antecedent) or object_owner (any unit of that side: \"Empower units from your army … by spending Pain tokens\").",
     "bind_as names the exact event for a later leaf to refer to; an exact destruction relation needs it: caused_by_destruction on resource-gained, causes_destruction on attacks-resolved, each naming unit and/or model destruction by owner, keywords and distance. A keyword can start with an apostrophe as the rules print it ('ARDMOB).",
   ].join(" "),
   starter: { kind: "" },
@@ -442,7 +443,7 @@ const EVENT: FlatFamily = {
       subject: { enum: SUBJECTS, "x-only-when": { kind: ["move-ended", "move-started", "selected", "targets-selected", "attacks-resolved", "set-up", "after-roll", "used"] }, "x-optional": true },
       result: { enum: ["success", "failure"], "x-only-when": { kind: ["after-roll"] }, "x-optional": true },
       by: { enum: DESTROYERS, "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed"] }, "x-optional": true },
-      object_owner: { enum: OBJECT_OWNERS, "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed"] }, "x-optional": true },
+      object_owner: { enum: OBJECT_OWNERS, "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed", "resource-spent"] }, "x-optional": true },
       also: { enum: ["move-started", "move-ended"], "x-only-when": { kind: ["move-started", "move-ended"] }, "x-optional": true },
       object: { enum: ["this-unit", "this-model", ANTECEDENT, FILTERED_UNITS, "selected-unit"], "x-only-when": { kind: ["targets-selected", "damage-allocated", "resource-spent", "used"] }, "x-optional": true },
       from: { enum: ["strategic-reserves"], "x-only-when": { kind: ["set-up"] }, "x-optional": true },

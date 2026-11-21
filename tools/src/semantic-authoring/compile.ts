@@ -36,6 +36,7 @@ import { bindDesignationSubjects, foldHitFilters } from "./compile-conditions.js
 import { foldDestructionAfterAttacks, foldEffectAfterAttacks } from "./compile-destruction-after-attacks.js";
 import { foldDisembarkMoment } from "./compile-disembark-moment.js";
 import { foldObjectiveCriteria } from "./compile-objective-criteria.js";
+import { foldBulletTrailingMoments } from "./compile-bullet-moments.js";
 import { foldDestroyedSelections } from "./compile-destroyed-selection.js";
 import { compileForEachPasses } from "./compile-for-each-passes.js";
 import { compileSelectionThenLoop } from "./compile-selection-then-loop.js";
@@ -490,7 +491,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     const filtered = resolveArmyGroups(foldWeaponAlreadyHas(bindScopeAttacks(foldDesignationOnce(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText)))));
     // "For each X model you select, roll one D6": a plain roll inside the model selection (compile-selected-model-roll.ts);
     // "select one objective that: …": the criteria fold into the selection (compile-objective-criteria.ts).
-    list = foldDestroyedSelections(foldObjectiveCriteria(foldAllocatedAttackRolls(foldSelectedModelRolls(withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(foldConditionExclusions(bindTargetedTarget(filtered), sourceText), sourceText)))])))));
+    list = foldBulletTrailingMoments(foldDestroyedSelections(foldObjectiveCriteria(foldAllocatedAttackRolls(foldSelectedModelRolls(withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(foldConditionExclusions(bindTargetedTarget(filtered), sourceText), sourceText)))]))), options.abilityId)), sourceText);
     // A moment a reviewed "if" makes a condition is a history condition from here on (compile-connective-history.ts).
     list = lowerHistoryMoments(list, conditionOf.flatMap((plan) => plan.kind === "history" ? [plan] : []));
     refuseUnboundWeaponScope(list);

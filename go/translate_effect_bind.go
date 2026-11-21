@@ -60,8 +60,9 @@ func objectiveSelectionLimit(sel map[string]any) string {
 }
 
 func selectObjectiveLead(sel map[string]any) string {
+	// "for each objective marker …" when the selector has no count (every matching marker), else "select …".
 	verb := "select"
-	if sel["count"] == "each" {
+	if sel["count"] == nil {
 		verb = "for"
 	}
 	return verb + " " + objectiveSelectorPhrase(sel) + objectiveSelectionLimit(sel)

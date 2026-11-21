@@ -35,7 +35,7 @@ export const DAMAGE_STATS: ReadonlySet<string> = new Set(["A", "S", "T", "Sv", "
  */
 export const NON_DAMAGE_EFFECT_TYPES: ReadonlySet<string> = new Set([
   "heal", "move", "mortal-wounds", "set-up", "permission", "cost-modifier", "stance-selection-capacity",
-  "move-modifier", "army-rule", "keyword-grant", "act-on-death", "cp-gain", "resource-gain", "add-unit", "split-unit",
+  "move-modifier", "army-rule", "keyword-grant", "act-on-death", "cp-gain", "resource-gain", "resource-gain-cap", "add-unit", "split-unit",
   "transport-capacity", "destroy-models", "designate", "test", "targeting", "state-change", "no-effect",
   "oath-modifier", "objective-sticky", "region-extend", "counts-as", "marker", "test-exemption", "return-models",
 ]);

@@ -186,8 +186,11 @@ pub(super) fn resource_die(m: &P) -> String {
         );
     }
     let value = sv(m, "value");
+    // roll-result: "with a value equal to that result", the roll that gated the gain.
     let shown = if value == Some("highest") {
         "the highest result".to_string()
+    } else if value == Some("roll-result") {
+        "that result".to_string()
     } else {
         jstr(m.get("value"))
     };

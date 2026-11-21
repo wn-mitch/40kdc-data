@@ -828,6 +828,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return "you gain " + ejstr(m["amount"]) + " CP"
 	case "cost-modifier":
 		return costModifierLeaf(m, subj)
+	// "You cannot gain more than 3 Pain tokens as a result of failed Battle-shock tests caused by this Stratagem".
+	case "resource-gain-cap":
+		return "you cannot gain more than " + ejstr(m["max"]) + " " + resourceNoun(m["pool"], nil, m["max"]) + " from failed Battle-shock tests this ability causes"
 	case "resource-gain":
 		// "you must pledge a number": the pool becomes the number picked, not one more.
 		if m["set"] == true {
@@ -873,6 +876,10 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 				effectSubject(m["table_of"], ctx) + " (" + costTable(m["amount_table"]) + ")"
 		}
 		if a, ok := m["amount"].(map[string]any); ok && a["up_to"] != nil {
+			// "Spend 1-3 Pain tokens": at_least is the least the player can choose.
+			if a["at_least"] != nil {
+				return "spend " + ejstr(a["at_least"]) + "-" + ejstr(a["up_to"]) + " " + resourceNoun(m["pool"], m["label"], a["up_to"])
+			}
 			return "spend up to " + ejstr(a["up_to"]) + " " + resourceNoun(m["pool"], m["label"], a["up_to"])
 		}
 		amount := diceCase(m["amount"])

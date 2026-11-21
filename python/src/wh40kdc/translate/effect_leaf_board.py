@@ -51,6 +51,7 @@ from wh40kdc.translate.effect_words import (
     pronoun,
     range_phrase,
     region_phrase,
+    resource_noun,
     signed,
     test_name,
     title_case,
@@ -945,6 +946,14 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
         return cp_gain(m)
     if t == "cost-modifier":
         return cost_modifier(m, subj)
+    # "You cannot gain more than 3 Pain tokens as a result of failed Battle-shock tests caused by
+    # this Stratagem".
+    if t == "resource-gain-cap":
+        noun = resource_noun(m.get("pool"), None, m.get("max"))
+        return (
+            f"you cannot gain more than {jstr(m.get('max'))} {noun} from failed Battle-shock tests "
+            "this ability causes"
+        )
     if t == "resource-gain":
         return resource_gain(m, subj)
     if t == "resource-spend":

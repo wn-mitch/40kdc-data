@@ -785,6 +785,7 @@ export type SingleEffect =
   | CpGainEffect
   | CostModifierEffect
   | ResourceGainEffect
+  | ResourceGainCapEffect
   | ResourceSpendEffect
   | ResourceDieEffect
   | ObjectiveStickyEffect
@@ -1721,12 +1722,289 @@ export interface ObjectiveFilter {
    * When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one ("an objective your unit was controlling at the end of the previous phase"). Only with controlled_by_unit.
    */
   controlled_at?: "previous-phase-end";
-  clear_of?: UnitFilter1;
+  occupied_by?: UnitFilter1;
+  clear_of?: UnitFilter2;
+}
+/**
+ * Only objective markers with one or more units matching this filter within range of them ("that has a friendly unit with this ability within range of it").
+ */
+export interface UnitFilter1 {
+  owner?: Owner;
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList1;
+  shares_any_of?: KeywordList2;
+  /**
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
+   */
+  designated?: string;
+  state?: UnitState;
+  /**
+   * Only units in none of these states ("unengaged", "not Battle-shocked").
+   *
+   * @minItems 1
+   */
+  not_states?: [UnitState, ...UnitState[]];
+  /**
+   * model: the filter matches individual models. Default unit.
+   */
+  level?: "unit" | "model";
+  /**
+   * Exact model-profile names; alternatives. This predicate applies only to individual models.
+   *
+   * @minItems 1
+   */
+  model_names?: [string, ...string[]];
+  /**
+   * Exact owning-faction unit identities; this predicate applies only to whole units.
+   *
+   * @minItems 1
+   */
+  unit_ids?: [EntityId, ...EntityId[]];
+  /**
+   * Actual attachment membership role, not a capability keyword.
+   */
+  attachment_role?: "bodyguard" | "leader";
+  /**
+   * Only units visible to the named observer.
+   */
+  visible?: {
+    to: UnitRef;
+  };
+  /**
+   * Only units within (wholly within, if set) this range of `of` (default the unit with the ability): aura recipients.
+   */
+  within?: {
+    range: RangeRef;
+    of?: PlaceRef;
+    wholly?: true;
+  };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  excluding?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  designated_by?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
+   */
+  not_designated?: string;
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  embarked_in?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  member_of?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  engaged_with?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  not_engaged_with?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Units with every listed ability.
+   *
+   * @minItems 1
+   */
+  has_ability?: [EntityId, ...EntityId[]];
+  /**
+   * has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
+   */
+  has_ability_models?: {
+    none_of: KeywordList3;
+  };
+  /**
+   * Units with none of the listed abilities.
+   *
+   * @minItems 1
+   */
+  lacks_ability?: [EntityId, ...EntityId[]];
 }
 /**
  * Only objective markers with no unit matching this filter within range of them ("has no enemy units (excluding AIRCRAFT units) within range of it").
  */
-export interface UnitFilter1 {
+export interface UnitFilter2 {
   owner?: Owner;
   all_of?: KeywordList;
   any_of?: KeywordList;
@@ -6581,6 +6859,18 @@ export interface ResourceGainEffect {
   scaling?: Scaling;
 }
 /**
+ * [resource] You cannot gain more than max of a pool from one source this ability causes (source failed-battle-shock: the failed Battle-shock tests it causes).
+ */
+export interface ResourceGainCapEffect {
+  type: "resource-gain-cap";
+  target: UnitRef;
+  modifier: {
+    pool: string;
+    max: number;
+    source: "failed-battle-shock";
+  };
+}
+/**
  * [resource] Spend from a resource pool only when it has sufficient balance; the spend fails as a whole rather than producing a negative or clamped pool. face: spend dice showing this value; requirement: spend dice forming this pair, triple or run.
  */
 export interface ResourceSpendEffect {
@@ -6596,6 +6886,10 @@ export interface ResourceSpendEffect {
       | ("all" | "one-or-more" | "by-table" | "any")
       | {
           up_to: number;
+          /**
+           * The least the player can choose, if not 0 ("spend 1-3 Pain tokens").
+           */
+          at_least?: number;
         };
     label?: string;
     face?: number;
@@ -6671,7 +6965,7 @@ export interface ResourceDieEffect {
   modifier: {
     pool: string;
     operation: "add" | "substitute";
-    value?: number | ("rolled" | "highest");
+    value?: number | ("rolled" | "highest" | "roll-result");
     count?: Quantity;
     count_per_pool?: string;
     consumes_pool?: true;
@@ -6765,7 +7059,8 @@ export interface ObjectiveFilter1 {
    * When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one ("an objective your unit was controlling at the end of the previous phase"). Only with controlled_by_unit.
    */
   controlled_at?: "previous-phase-end";
-  clear_of?: UnitFilter1;
+  occupied_by?: UnitFilter1;
+  clear_of?: UnitFilter2;
 }
 /**
  * [board] An area of the battlefield is within a region an army rule defines ("the selected areas of the battlefield are within your army's Shadow of Chaos") for the effect's duration: one territory, several territories, or the area within a range of the objective markers a filter names.
@@ -6898,7 +7193,7 @@ export interface ArmyRuleEffect {
      * What max counts (default units).
      */
     measure?: "units" | "models" | "points";
-    per?: UnitFilter2;
+    per?: UnitFilter3;
     /**
      * Limits the rule's units are left out of: retinue-limit (composition: the Retinue cap), enhancement-limit (limit-exemption: the army's Enhancement cap), strategic-reserves-points (limit-exemption: the points cap for Strategic Reserves).
      *
@@ -6908,8 +7203,8 @@ export interface ArmyRuleEffect {
       "retinue-limit" | "enhancement-limit" | "strategic-reserves-points",
       ...("retinue-limit" | "enhancement-limit" | "strategic-reserves-points")[]
     ];
-    attach_as?: UnitFilter3;
-    can_lead?: UnitFilter4;
+    attach_as?: UnitFilter4;
+    can_lead?: UnitFilter5;
     detachment?: EntityId;
     tag?: string;
     led_by?: string;
@@ -6918,282 +7213,6 @@ export interface ArmyRuleEffect {
     enhancement_kind?: string;
   };
   scaling?: Scaling;
-}
-/**
- * Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
- */
-export interface UnitFilter2 {
-  owner?: Owner;
-  all_of?: KeywordList;
-  any_of?: KeywordList;
-  none_of?: KeywordList;
-  not_all_of?: KeywordList1;
-  shares_any_of?: KeywordList2;
-  /**
-   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
-   *
-   * @minItems 2
-   */
-  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
-  /**
-   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
-   */
-  designated?: string;
-  state?: UnitState;
-  /**
-   * Only units in none of these states ("unengaged", "not Battle-shocked").
-   *
-   * @minItems 1
-   */
-  not_states?: [UnitState, ...UnitState[]];
-  /**
-   * model: the filter matches individual models. Default unit.
-   */
-  level?: "unit" | "model";
-  /**
-   * Exact model-profile names; alternatives. This predicate applies only to individual models.
-   *
-   * @minItems 1
-   */
-  model_names?: [string, ...string[]];
-  /**
-   * Exact owning-faction unit identities; this predicate applies only to whole units.
-   *
-   * @minItems 1
-   */
-  unit_ids?: [EntityId, ...EntityId[]];
-  /**
-   * Actual attachment membership role, not a capability keyword.
-   */
-  attachment_role?: "bodyguard" | "leader";
-  /**
-   * Only units visible to the named observer.
-   */
-  visible?: {
-    to: UnitRef;
-  };
-  /**
-   * Only units within (wholly within, if set) this range of `of` (default the unit with the ability): aura recipients.
-   */
-  within?: {
-    range: RangeRef;
-    of?: PlaceRef;
-    wholly?: true;
-  };
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  excluding?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  designated_by?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
-   */
-  not_designated?: string;
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  embarked_in?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  member_of?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  engaged_with?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  not_engaged_with?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * Units with every listed ability.
-   *
-   * @minItems 1
-   */
-  has_ability?: [EntityId, ...EntityId[]];
-  /**
-   * has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
-   */
-  has_ability_models?: {
-    none_of: KeywordList3;
-  };
-  /**
-   * Units with none of the listed abilities.
-   *
-   * @minItems 1
-   */
-  lacks_ability?: [EntityId, ...EntityId[]];
 }
 /**
  * Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
@@ -7475,6 +7494,282 @@ export interface UnitFilter3 {
  * Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
  */
 export interface UnitFilter4 {
+  owner?: Owner;
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList1;
+  shares_any_of?: KeywordList2;
+  /**
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
+   */
+  designated?: string;
+  state?: UnitState;
+  /**
+   * Only units in none of these states ("unengaged", "not Battle-shocked").
+   *
+   * @minItems 1
+   */
+  not_states?: [UnitState, ...UnitState[]];
+  /**
+   * model: the filter matches individual models. Default unit.
+   */
+  level?: "unit" | "model";
+  /**
+   * Exact model-profile names; alternatives. This predicate applies only to individual models.
+   *
+   * @minItems 1
+   */
+  model_names?: [string, ...string[]];
+  /**
+   * Exact owning-faction unit identities; this predicate applies only to whole units.
+   *
+   * @minItems 1
+   */
+  unit_ids?: [EntityId, ...EntityId[]];
+  /**
+   * Actual attachment membership role, not a capability keyword.
+   */
+  attachment_role?: "bodyguard" | "leader";
+  /**
+   * Only units visible to the named observer.
+   */
+  visible?: {
+    to: UnitRef;
+  };
+  /**
+   * Only units within (wholly within, if set) this range of `of` (default the unit with the ability): aura recipients.
+   */
+  within?: {
+    range: RangeRef;
+    of?: PlaceRef;
+    wholly?: true;
+  };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  excluding?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  designated_by?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
+   */
+  not_designated?: string;
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  embarked_in?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  member_of?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  engaged_with?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  not_engaged_with?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Units with every listed ability.
+   *
+   * @minItems 1
+   */
+  has_ability?: [EntityId, ...EntityId[]];
+  /**
+   * has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
+   */
+  has_ability_models?: {
+    none_of: KeywordList3;
+  };
+  /**
+   * Units with none of the listed abilities.
+   *
+   * @minItems 1
+   */
+  lacks_ability?: [EntityId, ...EntityId[]];
+}
+/**
+ * Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
+ */
+export interface UnitFilter5 {
   owner?: Owner;
   all_of?: KeywordList;
   any_of?: KeywordList;

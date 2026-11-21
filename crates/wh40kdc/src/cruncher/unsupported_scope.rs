@@ -65,6 +65,7 @@ const NON_DAMAGE_EFFECT_TYPES: &[&str] = &[
     "act-on-death",
     "cp-gain",
     "resource-gain",
+    "resource-gain-cap",
     "add-unit",
     "split-unit",
     "transport-capacity",

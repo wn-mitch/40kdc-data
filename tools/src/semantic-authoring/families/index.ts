@@ -82,7 +82,7 @@ const FAMILY_ORDER: readonly string[] = [
   "choice-open", "stance-select-open", "history-compare", "named-option", "unit-filter",
   "core-ability-grant", "reroll", "unit-activity", "move-distance", "transport-capacity",
   "weapon-property-scope", "equipped-weapon-count", "bearer-eligibility", "split-unit", "set-up",
-  "targeting-restriction", "in-region", "resource-gain", "army-construction",
+  "targeting-restriction", "in-region", "resource-gain", "resource-gain-cap", "army-construction",
   "ability-record-grant", "characteristic-set", "usage-limit", "attack-filter",
   "characteristic-modifier", "event", "turn-start", "add-unit", "target-is-selected",
   "regain-wounds", "return-models", "for-each-unit-select", "apply-mark", "designated-filter",

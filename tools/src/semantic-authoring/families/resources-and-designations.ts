@@ -1,7 +1,7 @@
 import { DESIGNATION_IDS, LIST_BUILDING_DESIGNATIONS, designationId, refuseListBuildingTag } from "../../translate/designations.js";
 import { ANTECEDENT } from "../antecedent-families.js";
 import {
-  booleanValue, boundedInteger, enumOrSource, enumSet, enumValue, integerOrSource, keySet, sourceQualified, spentName,
+  booleanValue, boundedInteger, enumOrSource, enumSet, enumValue, exactKeys, integerOrSource, keySet, sourceQualified, spentName,
   type SourceQualifiedValue,
 } from "../family-validation.js";
 import type { FlatFamily } from "./types.js";
@@ -49,6 +49,15 @@ const RESOURCE_DIE_ROLLS = [
   "normal-move", "surge", "dark-pact", "blessings-of-khorne", "manoeuvre", "channelling", "any", "all",
 ] as const;
 
+function normalizeResourceGainCap(input: Params): Params {
+  exactKeys(input, ["pool", "max", "source"], "resource-gain-cap");
+  return {
+    pool: poolId(input.pool, "resource-gain-cap.pool"),
+    max: boundedInteger(input.max, 1, 20, "resource-gain-cap.max"),
+    source: enumValue(input.source, ["failed-battle-shock"], "resource-gain-cap.source"),
+  };
+}
+
 function normalizeResourceDie(input: Params): Params {
   keySet(input, ["pool", "operation"], ["value", "rolls"], "resource-die");
   const result: Params = {
@@ -58,7 +67,7 @@ function normalizeResourceDie(input: Params): Params {
   if (input.value !== undefined) {
     result.value = typeof input.value === "number"
       ? boundedInteger(input.value, 1, 6, "resource-die.value")
-      : enumValue(input.value, ["rolled", "highest"], "resource-die.value");
+      : enumValue(input.value, ["rolled", "highest", "roll-result"], "resource-die.value");
   }
   if (input.rolls !== undefined) result.rolls = enumSet(input.rolls, RESOURCE_DIE_ROLLS, "resource-die.rolls");
   return result;
@@ -92,8 +101,12 @@ const TABLE_OF = [ANTECEDENT, "event-subject", "event-object"] as const;
 /** A fixed spend, an exact source snippet, or "up to N" ({up_to}: none up to N, as the player chooses). */
 function spendAmount(amount: unknown): unknown {
   if (isObject(amount) && "up_to" in amount) {
-    keySet(amount, ["up_to"], [], "resource-spend.amount");
-    return { up_to: boundedInteger(amount.up_to, 1, 20, "resource-spend.amount.up_to") };
+    keySet(amount, ["up_to"], ["at_least"], "resource-spend.amount");
+    const upTo = boundedInteger(amount.up_to, 1, 20, "resource-spend.amount.up_to");
+    // "Spend 1-3 Pain tokens": the least the player can choose.
+    if (amount.at_least === undefined) return { up_to: upTo };
+    const atLeast = boundedInteger(amount.at_least, 1, upTo - 1, "resource-spend.amount.at_least");
+    return { up_to: upTo, at_least: atLeast };
   }
   return integerOrSource(amount, "resource-spend.amount");
 }
@@ -358,17 +371,17 @@ function normalizeOptionalCostPaid(input: Params): Params {
 export const RESOURCES_AND_DESIGNATIONS_FAMILIES: readonly FlatFamily[] = [
   {
     id: "resource-die",
-    version: 1,
+    version: 2,
     role: "EFFECT",
     label: "Add or substitute a pool die",
-    description: "Adds a die to a resource pool, or discards one from it to replace a named roll.",
+    description: "Adds a die to a resource pool, or discards one from it to replace a named roll. value: a face (1-6), rolled (a fresh D6 is its value), highest, or roll-result (the result of the roll that gated the gain: \"on a 4+, you gain 1 Miracle dice with a value equal to that result\").",
     starter: { pool: "", operation: "" },
     parameterSchema: {
       type: "object", required: ["pool", "operation"], additionalProperties: false,
       properties: {
         pool: { anyOf: [{ enum: [...KNOWN_POOL_IDS] }, SOURCE_QUALIFIED_SCHEMA] },
         operation: { enum: ["add", "substitute"] },
-        value: { anyOf: [{ type: "integer", minimum: 1, maximum: 6 }, { enum: ["rolled", "highest"] }] },
+        value: { anyOf: [{ type: "integer", minimum: 1, maximum: 6 }, { enum: ["rolled", "highest", "roll-result"] }] },
         rolls: { type: "array", items: { enum: ["hit", "wound", "save", "damage", "charge", "advance", "battle-shock", "leadership", "hazard", "psychic", "normal-move", "surge", "dark-pact", "blessings-of-khorne", "manoeuvre", "channelling", "any", "all"] }, minItems: 1, uniqueItems: true },
       },
     },
@@ -395,16 +408,16 @@ export const RESOURCES_AND_DESIGNATIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "resource-spend",
-    version: 5,
+    version: 6,
     role: "EFFECT",
     label: "Spend a resource",
-    description: "Spends an amount from a named resource pool (any kebab-case pool id, or an exact source snippet): a fixed amount, all of it, one-or-more (the player chooses how many, at least one: \"spend one or more BTP you have\"), or by-table with table_of (antecedent: the unit an earlier leaf named, event-subject or event-object): the cost is the row of the table after it that matches that unit. any: any number the player chooses, none included (\"you can spend any number of YP\"); {up_to: N}: none up to N (\"spend up to 2YP\"). bind_as names the amount spent (a kebab-case name) for a later {spent} amount in the same ability (\"add the number of YP you just spent\"); it goes with an amount the player chooses (any, one-or-more, all or up_to). starting_strength on a row with a fixed amount is the cost for a unit of that Starting Strength. spend_gate optionally requires the spent dice to show a named face, or to form a pair/triple/single/run at or above a minimum value (face and the requirement are mutually exclusive, so spend_gate says which — or neither — applies). label is the player-facing singular noun for one unit of the pool (Aeldari's \"Battle Focus token\"), only when the rules give the pool one.",
+    description: "Spends an amount from a named resource pool (any kebab-case pool id, or an exact source snippet): a fixed amount, all of it, one-or-more (the player chooses how many, at least one: \"spend one or more BTP you have\"), or by-table with table_of (antecedent: the unit an earlier leaf named, event-subject or event-object): the cost is the row of the table after it that matches that unit. any: any number the player chooses, none included (\"you can spend any number of YP\"); {up_to: N}: none up to N (\"spend up to 2YP\"), or at_least up to N with at_least (\"spend 1-3 Pain tokens\" is {up_to: 3, at_least: 1}). bind_as names the amount spent (a kebab-case name) for a later {spent} amount in the same ability (\"add the number of YP you just spent\"); it goes with an amount the player chooses (any, one-or-more, all or up_to). starting_strength on a row with a fixed amount is the cost for a unit of that Starting Strength. spend_gate optionally requires the spent dice to show a named face, or to form a pair/triple/single/run at or above a minimum value (face and the requirement are mutually exclusive, so spend_gate says which — or neither — applies). label is the player-facing singular noun for one unit of the pool (Aeldari's \"Battle Focus token\"), only when the rules give the pool one.",
     starter: { pool: "", amount: null },
     parameterSchema: {
       type: "object", required: ["pool", "amount"], additionalProperties: false,
       properties: {
         pool: { anyOf: [{ enum: [...KNOWN_POOL_IDS] }, SOURCE_QUALIFIED_SCHEMA, { type: "string", pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" }] },
-        amount: { anyOf: [{ type: "integer" }, SOURCE_QUALIFIED_SCHEMA, { const: "all" }, { const: "one-or-more" }, { const: "by-table" }, { const: "any" }, { type: "object", required: ["up_to"], properties: { up_to: { type: "integer", minimum: 1, maximum: 20 } }, additionalProperties: false }] },
+        amount: { anyOf: [{ type: "integer" }, SOURCE_QUALIFIED_SCHEMA, { const: "all" }, { const: "one-or-more" }, { const: "by-table" }, { const: "any" }, { type: "object", required: ["up_to"], properties: { up_to: { type: "integer", minimum: 1, maximum: 20 }, at_least: { type: "integer", minimum: 1, maximum: 19, "x-optional": true } }, additionalProperties: false }] },
         label: { type: "string", minLength: 1 },
         bind_as: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-optional": true },
         spend_gate: { enum: ["none", "face", "requirement"] },
@@ -435,6 +448,23 @@ export const RESOURCES_AND_DESIGNATIONS_FAMILIES: readonly FlatFamily[] = [
       },
     },
     normalize: normalizeResourceGain,
+  },
+  {
+    id: "resource-gain-cap",
+    version: 1,
+    role: "EFFECT",
+    label: "Cap a resource gain from one source",
+    description: "You cannot gain more than max of a pool from one source this ability causes. source failed-battle-shock: the failed Battle-shock tests the ability causes (\"You cannot gain more than 3 Pain tokens as a result of failed Battle-shock tests caused by this Stratagem\").",
+    starter: { pool: "", max: 1, source: "" },
+    parameterSchema: {
+      type: "object", required: ["pool", "max", "source"], additionalProperties: false,
+      properties: {
+        pool: { anyOf: [{ enum: [...KNOWN_POOL_IDS] }, { type: "string", pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" }] },
+        max: { type: "integer", minimum: 1, maximum: 20 },
+        source: { enum: ["failed-battle-shock"] },
+      },
+    },
+    normalize: normalizeResourceGainCap,
   },
   {
     id: "army-construction",

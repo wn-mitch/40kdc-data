@@ -170,6 +170,8 @@ function spentTrigger(leaf: CompileLeaf): Node {
       ...(leaf.parameters.tag !== undefined ? { tag: closed(leaf, "tag") } : {}),
     },
     ...(object !== undefined ? { object: closed(leaf, "object") } : {}),
+    // "Empower units from your army … by spending Pain tokens": whose unit the spend serves.
+    ...(leaf.parameters.object_owner !== undefined ? { object: { owner: closed(leaf, "object_owner") } } : {}),
   };
 }
 

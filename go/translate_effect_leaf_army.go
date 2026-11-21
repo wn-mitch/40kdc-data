@@ -122,6 +122,10 @@ func resourceDieLeaf(m map[string]any) string {
 	if m["value"] == "highest" {
 		shown = "the highest result"
 	}
+	// roll-result: "with a value equal to that result", the roll that gated the gain.
+	if m["value"] == "roll-result" {
+		shown = "that result"
+	}
 	if m["count_per_pool"] != nil {
 		per := resourceNoun(m["count_per_pool"], nil, nil)
 		die := "one die showing " + shown

@@ -711,6 +711,16 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
         let phrase = first_unit_plural(phrase);
         s.push_str(&format!(", with no {phrase} within range of it"));
     }
+    // "that has a friendly unit with this ability within range of it".
+    if let Some(c) = nn(f, "occupied_by") {
+        let phrase = unit_filter_phrase(obj(Some(c)));
+        let phrase = phrase
+            .strip_prefix("an ")
+            .or_else(|| phrase.strip_prefix("a "))
+            .unwrap_or(&phrase);
+        let phrase = first_unit_plural(phrase);
+        s.push_str(&format!(", with one or more {phrase} within range of it"));
+    }
     s
 }
 

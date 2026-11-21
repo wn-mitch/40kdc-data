@@ -379,7 +379,8 @@ function resourceDie(m: Record<string, unknown>): string {
     const rolls = Array.isArray(m.rolls) ? (m.rolls as unknown[]).map(rollName) : ["dice"];
     return `discard a die from your ${pool} and use its value in place of ${withArticle(`${orList(rolls)} roll`)}`;
   }
-  const shown = m.value === "highest" ? "the highest result" : jstr(m.value);
+  // roll-result: "with a value equal to that result", the roll that gated the gain.
+  const shown = m.value === "highest" ? "the highest result" : m.value === "roll-result" ? "that result" : jstr(m.value);
   if (m.count_per_pool != null) {
     const per = resourceNoun(m.count_per_pool, null);
     const die = m.value === "rolled" ? "one rolled D6" : `one die showing ${shown}`;
@@ -594,6 +595,8 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       return n < 0 ? `you lose ${Math.abs(n)} CP` : `you gain ${jstr(m.amount)} CP`;
     }
     case "cost-modifier": return costModifier(m, subj);
+    // "You cannot gain more than 3 Pain tokens as a result of failed Battle-shock tests caused by this Stratagem".
+    case "resource-gain-cap": return `you cannot gain more than ${jstr(m.max)} ${resourceNoun(m.pool, null, m.max)} from failed Battle-shock tests this ability causes`;
     case "resource-gain": {
       // "you must pledge a number": the pool becomes the number picked, not one more.
       // "whose total psychic level does not exceed that unit's psyker level": the unit's own pool becomes its characteristic.
@@ -614,6 +617,9 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "resource-spend": {
       if (m.amount === "by-table") return `spend the ${resourceNoun(m.pool, m.label, 2)} the cost table gives for the datasheet and Starting Strength of ${effectSubject(m.table_of, ctx)} (${costTable(m.amount_table)})`;
       const upTo = m.amount != null && typeof m.amount === "object" ? (m.amount as P).up_to : undefined;
+      // "Spend 1-3 Pain tokens": at_least is the least the player can choose.
+      const atLeast = upTo != null ? (m.amount as P).at_least : undefined;
+      if (upTo != null && atLeast != null) return `spend ${jstr(atLeast)}-${jstr(upTo)} ${resourceNoun(m.pool, m.label, upTo)}`;
       if (upTo != null) return `spend up to ${jstr(upTo)} ${resourceNoun(m.pool, m.label, upTo)}`;
       const amount = m.amount === "all" ? "all your" : m.amount === "one-or-more" ? "one or more" : m.amount === "any" ? "any number of" : diceCase(m.amount);
       const showing = m.face != null ? ` showing a ${jstr(m.face)}` : m.requirement != null ? ` forming a ${requirementPhrase(m.requirement)}` : "";

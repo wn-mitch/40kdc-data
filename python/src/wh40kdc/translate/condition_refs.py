@@ -618,6 +618,11 @@ def _objective_phrase(f: Any, plural: bool = False, noun: str = "objective") -> 
         bare = re.sub(r"^an? ", "", unit_filter_phrase(f["clear_of"]))
         clear = re.sub(r"\bunit\b", "units", bare, count=1)
         s += f", with no {clear} within range of it"
+    # "that has a friendly unit with this ability within range of it".
+    if f.get("occupied_by") is not None:
+        bare = re.sub(r"^an? ", "", unit_filter_phrase(f["occupied_by"]))
+        held = re.sub(r"\bunit\b", "units", bare, count=1)
+        s += f", with one or more {held} within range of it"
     return s
 
 

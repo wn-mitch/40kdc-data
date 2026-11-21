@@ -20,7 +20,7 @@ func init() {
 		"keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "oath-modifier", "orders-modifier", "order-share", "reserves-schedule", "permission", "targeting",
 		"counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
 		"destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
-		"transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
+		"transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-gain-cap", "resource-spend", "resource-die",
 		"objective-sticky", "region-extend", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons",
 		"select-weapon",
 	} {

@@ -40,6 +40,7 @@ from wh40kdc.translate.condition_refs import (
     used_ability_phrase,
     with_article,
 )
+from wh40kdc.translate.effect_words import resource_noun
 
 AbilityTrigger = dict[str, Any]
 
@@ -555,6 +556,11 @@ def _event_phrase(t: AbilityTrigger) -> str:
             return "each time a Flux token is spent"
         if pool == "yield-points":
             return "each time you spend Yield points"
+        # "When you spend 1 Pain token to Empower that friendly unit": the unit the spend Empowers.
+        if f.get("tag") == "empowered":
+            obj = t.get("object")
+            target = _object_phrase(obj) if obj is not None else "a unit"
+            return f"each time you spend {resource_noun(pool, None)} to Empower {target}"
         return f"each time {dekebab(_str(pool))} is spent"
     return f"when {dekebab(_str(event))}"
 

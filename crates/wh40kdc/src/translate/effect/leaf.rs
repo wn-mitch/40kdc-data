@@ -54,6 +54,7 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
     "cp-gain",
     "cost-modifier",
     "resource-gain",
+    "resource-gain-cap",
     "resource-spend",
     "resource-die",
     "objective-sticky",

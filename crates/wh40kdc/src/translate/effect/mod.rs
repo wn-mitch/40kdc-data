@@ -32,7 +32,7 @@ mod region;
 mod ritual;
 mod select;
 mod subject;
-mod words;
+pub(crate) mod words;
 
 pub use ability::{
     describe_ability, describe_ability_parts, describe_ability_parts_with_optional,

@@ -28,6 +28,8 @@ const WOUNDS_REMAINING_WORDS = ["full", "half-starting", "D3", "D6"] as const;
 
 function woundsRemaining(input: Params): Params {
   exactKeys(input, ["value"], "wounds-remaining");
+  // "a number of wounds remaining equal to the number of Pain tokens you just spent".
+  if (isSpentReference(input.value)) return { value: spentReference(input.value, "wounds-remaining.value") };
   const value = typeof input.value === "string" && /^\d+$/u.test(input.value) ? Number(input.value) : input.value;
   if (typeof value === "number") return { value: boundedInteger(value, 1, 30, "wounds-remaining.value") };
   return { value: enumValue(value, WOUNDS_REMAINING_WORDS, "wounds-remaining.value") };
@@ -105,10 +107,10 @@ function battleShockState(input: Params): Params {
 export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
   {
     id: "wounds-remaining",
-    version: 1,
+    version: 2,
     role: "CONDITION",
     label: "Wounds remaining on a returned model",
-    description: "How many wounds a model set back up or returned has: its full wounds, half of its starting number of wounds, a whole number, or D3/D6 (\"with 3 wounds remaining\"). It qualifies the set-up or return-models effect before it and gates nothing.",
+    description: "How many wounds a model set back up or returned has: its full wounds, half of its starting number of wounds, a whole number, D3/D6 (\"with 3 wounds remaining\"), or a spent amount {spent: the bind_as of an earlier resource-spend} (\"a number of wounds remaining equal to the number of Pain tokens you just spent\"). It qualifies the set-up or return-models effect before it and gates nothing.",
     starter: {"value":""},
     parameterSchema: {
       "type": "object",
@@ -130,7 +132,8 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
               "type": "integer",
               "minimum": 1,
               "maximum": 30
-            }
+            },
+            spentReferenceSchema
           ]
         }
       },

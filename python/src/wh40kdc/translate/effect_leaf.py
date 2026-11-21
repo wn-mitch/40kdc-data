@@ -106,6 +106,7 @@ LEAF_TYPES = frozenset(
         "cp-gain",
         "cost-modifier",
         "resource-gain",
+        "resource-gain-cap",
         "resource-spend",
         "resource-die",
         "objective-sticky",

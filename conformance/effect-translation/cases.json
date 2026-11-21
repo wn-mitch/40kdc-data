@@ -22654,7 +22654,7 @@
       }
     },
     "expected": {
-      "text": "Each time pain token pool is spent:\n  - If one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6+1: on a 5+, you gain 1 Pain token.\n  - Unless one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6: on a 5+, you gain 1 Pain token."
+      "text": "Each time you spend Pain tokens to Empower a friendly unit within 9\" of this unit:\n  - If one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6+1: on a 5+, you gain 1 Pain token.\n  - Unless one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6: on a 5+, you gain 1 Pain token."
     }
   },
   {
@@ -52291,6 +52291,199 @@
     },
     "expected": {
       "text": "Each time this unit makes a Dark Pact, if that ability inflicts one or more mortal wounds on the triggering unit, subtract 2 from the number of mortal wounds it suffers."
+    }
+  },
+  {
+    "caseId": "pain/spend-range",
+    "effect": {
+      "type": "resource-spend",
+      "target": "this-model",
+      "modifier": {
+        "pool": "pain-token-pool",
+        "amount": {
+          "up_to": 3,
+          "at_least": 1
+        },
+        "bind_as": "pain"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Spend 1-3 Pain tokens."
+    }
+  },
+  {
+    "caseId": "pain/set-up-spent-wounds",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "pain-token-pool",
+            "amount": {
+              "up_to": 3,
+              "at_least": 1
+            },
+            "bind_as": "pain"
+          }
+        },
+        {
+          "type": "set-up",
+          "target": "this-model",
+          "modifier": {
+            "to": "battlefield",
+            "wounds_remaining": {
+              "spent": "pain"
+            },
+            "starting_strength": 1,
+            "detach": true
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Spend 1-3 Pain tokens.\nThis model can be set up on the battlefield, with a number of wounds equal to the amount you spent remaining, as a separate unit with a Starting Strength of 1 (it is no longer part of its attached unit)."
+    }
+  },
+  {
+    "caseId": "pain/empower-trigger",
+    "effect": {
+      "type": "designate",
+      "target": "event-object",
+      "modifier": {
+        "tag": "empowered"
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "resource-spent",
+      "filter": {
+        "pool": "pain-token-pool",
+        "tag": "empowered"
+      },
+      "object": {
+        "owner": "friendly"
+      }
+    },
+    "expected": {
+      "text": "Each time you spend Pain tokens to Empower a friendly unit, until the end of the phase, that unit is Empowered."
+    }
+  },
+  {
+    "caseId": "pain/empower-trigger-in-range",
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "pain-token-pool",
+        "amount": 1
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "resource-spent",
+      "filter": {
+        "pool": "pain-token-pool",
+        "tag": "empowered"
+      },
+      "object": {
+        "owner": "friendly",
+        "within": {
+          "of": "this-unit",
+          "range": {
+            "inches": 9
+          }
+        }
+      }
+    },
+    "expected": {
+      "text": "Each time you spend Pain tokens to Empower a friendly unit within 9\" of this unit, you gain 1 Pain token."
+    }
+  },
+  {
+    "caseId": "pain/gain-cap",
+    "effect": {
+      "type": "resource-gain-cap",
+      "target": "this-model",
+      "modifier": {
+        "pool": "pain-token-pool",
+        "max": 3,
+        "source": "failed-battle-shock"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "You cannot gain more than 3 Pain tokens from failed Battle-shock tests this ability causes."
+    }
+  },
+  {
+    "caseId": "miracle/die-at-roll-result",
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 4,
+      "comparison": "gte",
+      "on_success": {
+        "type": "resource-die",
+        "target": "this-model",
+        "modifier": {
+          "pool": "miracle-dice-pool",
+          "operation": "add",
+          "value": "roll-result"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Roll one D6: on a 4+, add a die showing that result to your Miracle dice."
+    }
+  },
+  {
+    "caseId": "miracle/each-occupied-objective",
+    "effect": {
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "controlled_by": "friendly",
+          "occupied_by": {
+            "owner": "friendly",
+            "has_ability": [
+              "example-relic"
+            ]
+          }
+        },
+        "bind_as": "held"
+      },
+      "effect": {
+        "type": "resource-die",
+        "target": "this-model",
+        "modifier": {
+          "pool": "miracle-dice-pool",
+          "operation": "add",
+          "value": "rolled"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "For each objective marker you control, with one or more friendly units with the Example Relic ability within range of it (referred to below as the held): add a rolled D6 to your Miracle dice."
     }
   },
   {

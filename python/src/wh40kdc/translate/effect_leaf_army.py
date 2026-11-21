@@ -87,7 +87,14 @@ def resource_die(m: dict[str, Any]) -> str:
             f"discard a die from your {pool} and use its value in place of "
             f"{with_article(f'{or_list(rolls)} roll')}"
         )
-    shown = "the highest result" if m.get("value") == "highest" else jstr(m.get("value"))
+    # roll-result: "with a value equal to that result", the roll that gated the gain.
+    shown = (
+        "the highest result"
+        if m.get("value") == "highest"
+        else "that result"
+        if m.get("value") == "roll-result"
+        else jstr(m.get("value"))
+    )
     if m.get("count_per_pool") is not None:
         per = resource_noun(m["count_per_pool"], None)
         die = "one rolled D6" if m.get("value") == "rolled" else f"one die showing {shown}"
@@ -396,6 +403,9 @@ def resource_spend(m: dict[str, Any], ctx: Any = None) -> str:
         )
     if isinstance(a, dict) and a.get("up_to") is not None:
         noun = resource_noun(m.get("pool"), m.get("label"), a["up_to"])
+        # "Spend 1-3 Pain tokens": at_least is the least the player can choose.
+        if a.get("at_least") is not None:
+            return f"spend {jstr(a['at_least'])}-{jstr(a['up_to'])} {noun}"
         return f"spend up to {jstr(a['up_to'])} {noun}"
     amount = (
         "all your"

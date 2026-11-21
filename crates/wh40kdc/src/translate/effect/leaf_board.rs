@@ -627,6 +627,12 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             }
         }
         Some("cost-modifier") => cost_modifier(m, subj),
+        // "You cannot gain more than 3 Pain tokens as a result of failed Battle-shock tests caused by this Stratagem".
+        Some("resource-gain-cap") => format!(
+            "you cannot gain more than {} {} from failed Battle-shock tests this ability causes",
+            jstr(m.get("max")),
+            resource_noun(m.get("pool"), None, m.get("max"))
+        ),
         Some("resource-gain") => {
             // "you must pledge a number": the pool becomes the number picked, not one more.
             if is_true(m, "set") {
@@ -710,6 +716,15 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
                 .filter(|a| a.is_object())
                 .and_then(|a| nn(obj(Some(a)), "up_to"))
             {
+                // "Spend 1-3 Pain tokens": at_least is the least the player can choose.
+                if let Some(at_least) = nn(obj(nn(m, "amount")), "at_least") {
+                    return format!(
+                        "spend {}-{} {}",
+                        jstr(Some(at_least)),
+                        jstr(Some(up_to)),
+                        resource_noun(m.get("pool"), m.get("label"), Some(up_to))
+                    );
+                }
                 return format!(
                     "spend up to {} {}",
                     jstr(Some(up_to)),

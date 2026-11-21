@@ -5,7 +5,7 @@
  */
 import { dekebab, describeCondition, moveKinds, rangePhrase, stepWindow, titleCase, unitFilterPhrase, type Condition } from "./condition.js";
 import { alternativeFilters, eventRelationPhrase, keywordAlternatives, namedUsePhrase, ord, placeRefPhrase, rollWord, statePhrase, unitRefPhrase, usedAbilityPhrase, withArticle } from "./condition-refs.js";
-import { bracketKeyword, weaponNoun } from "./effect-words.js";
+import { bracketKeyword, resourceNoun, weaponNoun } from "./effect-words.js";
 
 type P = Record<string, unknown>;
 
@@ -352,6 +352,8 @@ function eventPhrase(t: AbilityTrigger): string {
     case "resource-spent":
       if (f.pool === "flux") return "each time a Flux token is spent";
       if (f.pool === "yield-points") return "each time you spend Yield points";
+      // "When you spend 1 Pain token to Empower that friendly unit": the unit the spend Empowers.
+      if (f.tag === "empowered") return `each time you spend ${resourceNoun(f.pool, undefined)} to Empower ${t.object != null ? objectPhrase(t.object) : "a unit"}`;
       return `each time ${dekebab(str(f.pool))} is spent`;
     default:
       return `when ${dekebab(str(t.event))}`;

@@ -45,7 +45,7 @@ export function leafFragment(leaf: CompileLeaf): LeafFragment {
   if (leaf.family_id === "returned-model-exclusion") return { kind: "implicit", note: `Exclude individual returned models with any of these keywords: ${(leaf.parameters.keywords as string[]).join(", ")}; do not exclude their whole unit.` };
   if (leaf.family_id === "wounds-remaining") {
     const value = leaf.parameters.value;
-    const wounds = value === "full" ? "its full wounds" : value === "half-starting" ? "half of its starting number of wounds" : `${String(value)} ${value === 1 ? "wound" : "wounds"}`;
+    const wounds = typeof value === "object" && value !== null ? `as many wounds as the amount ${String((value as { spent: string }).spent)} spent` : value === "full" ? "its full wounds" : value === "half-starting" ? "half of its starting number of wounds" : `${String(value)} ${value === 1 ? "wound" : "wounds"}`;
     return { kind: "implicit", note: `No separate text: the set-up or returned model before it has ${wounds} remaining.` };
   }
   if (leaf.family_id === "counts-as-moved") {

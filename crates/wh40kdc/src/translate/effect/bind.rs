@@ -50,8 +50,14 @@ pub(super) fn objective_selector_phrase(sel: &P) -> String {
     )
 }
 
+/// "for each objective marker …" when the selector has no count (every matching marker), else "select …".
 fn lead(sel: &P) -> String {
-    format!("select {}", objective_selector_phrase(sel))
+    let verb = if sel.get("count").is_none_or(serde_json::Value::is_null) {
+        "for"
+    } else {
+        "select"
+    };
+    format!("{verb} {}", objective_selector_phrase(sel))
 }
 
 /// select-objective on one line: "select one objective marker …: <effect>".

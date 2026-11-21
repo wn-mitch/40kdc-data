@@ -1709,6 +1709,14 @@
         "code": "REQUIRED_MISSING"
       },
       {
+        "path": "/effect/modifier/max",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/source",
+        "code": "REQUIRED_MISSING"
+      },
+      {
         "path": "/effect/modifier/producer",
         "code": "REQUIRED_MISSING"
       },
@@ -2498,6 +2506,14 @@
       },
       {
         "path": "/effect/modifier/pool",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/max",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/source",
         "code": "REQUIRED_MISSING"
       },
       {

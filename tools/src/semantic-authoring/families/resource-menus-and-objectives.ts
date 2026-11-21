@@ -21,7 +21,7 @@ const POOL_LIFECYCLE_TRIGGERS = ["round-started", "round-ended"] as const;
 const POOL_LIFECYCLE_AMOUNTS = ["all", "variable"] as const;
 const OBJECTIVE_ORIGINS = ["this-model", "this-unit"] as const;
 const OBJECTIVE_CONTROLLERS = ["your-army", "opponent"] as const;
-const OBJECTIVE_CRITERIA = ["controlled-by-unit", "clear-of"] as const;
+const OBJECTIVE_CRITERIA = ["controlled-by-unit", "clear-of", "occupied-by"] as const;
 const OBJECTIVE_CRITERION_UNITS = ["this-unit", "event-subject"] as const;
 const DESTROYED_SELECTION_DESTROYERS = ["this-unit", "this-model", "event-subject"] as const;
 const MARKED_OBJECTIVES = ["controlled-by-unit", "tagged"] as const;
@@ -127,9 +127,12 @@ function objectiveCriterion(input: Params): Params {
       ...("at" in input ? { at: enumValue(input.at, ["previous-phase-end"], `${family}.at`) } : {}),
     };
   }
-  exactKeys(input, ["criterion", "side", ...present(input, ["keywords", "excluded_keywords"])], family);
+  const own = criterion === "occupied-by" ? present(input, ["own_ability"]) : [];
+  exactKeys(input, ["criterion", "side", ...present(input, ["keywords", "excluded_keywords"]), ...own], family);
+  if ("own_ability" in input && input.own_ability !== true) throw new TypeError(`${family}.own_ability must be true when present.`);
   return {
     criterion,
+    ...("own_ability" in input ? { own_ability: true } : {}),
     side: enumValue(input.side, ["friendly", "enemy", "any"], `${family}.side`),
     ...("keywords" in input ? { keywords: keywordArray(input.keywords, `${family}.keywords`) } : {}),
     ...("excluded_keywords" in input ? { excluded_keywords: keywordArray(input.excluded_keywords, `${family}.excluded_keywords`) } : {}),
@@ -241,12 +244,12 @@ export const RESOURCE_MENUS_AND_OBJECTIVES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "objective-criterion",
-    version: 2,
+    version: 3,
     role: "CONDITION",
     label: "Which objective markers a selection can take",
-    description: "A qualifier on the objective markers a select-objective-open right before it can select. controlled-by-unit: the marker that unit was controlling when the rule was triggered (\"that: your unit was controlling when it was destroyed\"), or, with at previous-phase-end, at the end of the previous phase (\"that your unit was controlling at the end of the previous phase\"). clear-of: no unit of side (with every keywords, none of excluded_keywords) within range of the marker (\"has no enemy units (excluding AIRCRAFT units) within range of it\").",
+    description: "A qualifier on the objective markers a select-objective-open right before it can select. controlled-by-unit: the marker that unit was controlling when the rule was triggered (\"that: your unit was controlling when it was destroyed\"), or, with at previous-phase-end, at the end of the previous phase (\"that your unit was controlling at the end of the previous phase\"). clear-of: no unit of side (with every keywords, none of excluded_keywords) within range of the marker (\"has no enemy units (excluding AIRCRAFT units) within range of it\"). occupied-by: one or more such units within range of it; own_ability (true) keeps only units with this record's ability (\"that has a friendly unit with this ability within range of it\").",
     starter: {criterion: ""},
-    parameterSchema: {type: "object", required: ["criterion"], properties: {criterion: {enum: ["controlled-by-unit", "clear-of"]}, unit: {enum: ["this-unit", "event-subject"], "x-only-when": {criterion: ["controlled-by-unit"]}}, at: {enum: ["previous-phase-end"], "x-only-when": {criterion: ["controlled-by-unit"]}, "x-optional": true}, side: {enum: ["friendly", "enemy", "any"], "x-only-when": {criterion: ["clear-of"]}}, keywords: {type: "array", items: {type: "string", minLength: 1}, minItems: 1, uniqueItems: true, "x-only-when": {criterion: ["clear-of"]}, "x-optional": true}, excluded_keywords: {type: "array", items: {type: "string", minLength: 1}, minItems: 1, uniqueItems: true, "x-only-when": {criterion: ["clear-of"]}, "x-optional": true}}, additionalProperties: false},
+    parameterSchema: {type: "object", required: ["criterion"], properties: {criterion: {enum: ["controlled-by-unit", "clear-of", "occupied-by"]}, unit: {enum: ["this-unit", "event-subject"], "x-only-when": {criterion: ["controlled-by-unit"]}}, at: {enum: ["previous-phase-end"], "x-only-when": {criterion: ["controlled-by-unit"]}, "x-optional": true}, side: {enum: ["friendly", "enemy", "any"], "x-only-when": {criterion: ["clear-of", "occupied-by"]}}, keywords: {type: "array", items: {type: "string", minLength: 1}, minItems: 1, uniqueItems: true, "x-only-when": {criterion: ["clear-of", "occupied-by"]}, "x-optional": true}, excluded_keywords: {type: "array", items: {type: "string", minLength: 1}, minItems: 1, uniqueItems: true, "x-only-when": {criterion: ["clear-of", "occupied-by"]}, "x-optional": true}, own_ability: {const: true, "x-only-when": {criterion: ["occupied-by"]}, "x-optional": true}}, additionalProperties: false},
     normalize: objectiveCriterion,
   },
   {

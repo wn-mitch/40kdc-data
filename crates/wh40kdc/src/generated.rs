@@ -30224,6 +30224,10 @@ pub struct OathStateConditionParameters {
 ///      "description": "A mission-specific named objective.",
 ///      "$ref": "#/$defs/entity-id"
 ///    },
+///    "occupied_by": {
+///      "description": "Only objective markers with one or more units matching this filter within range of them (\"that has a friendly unit with this ability within range of it\").",
+///      "$ref": "#/$defs/unit-filter"
+///    },
 ///    "outside_territory": {
 ///      "description": "The objective is not in this territory (\"not in your opponent's deployment zone\").",
 ///      "enum": [
@@ -30299,6 +30303,9 @@ pub struct ObjectiveFilter {
     ///A mission-specific named objective.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<EntityId>,
+    ///Only objective markers with one or more units matching this filter within range of them ("that has a friendly unit with this ability within range of it").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub occupied_by: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     ///The objective is not in this territory ("not in your opponent's deployment zone").
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub outside_territory: ::std::option::Option<ObjectiveFilterOutsideTerritory>,
@@ -30322,6 +30329,7 @@ impl ::std::default::Default for ObjectiveFilter {
             designated: Default::default(),
             home_of: Default::default(),
             name: Default::default(),
+            occupied_by: Default::default(),
             outside_territory: Default::default(),
             role: Default::default(),
             selection_var: Default::default(),
@@ -38311,7 +38319,8 @@ pub struct ResourceConditionParametersSourceAbility {
 ///        {
 ///          "enum": [
 ///            "rolled",
-///            "highest"
+///            "highest",
+///            "roll-result"
 ///          ]
 ///        }
 ///      ]
@@ -38576,7 +38585,8 @@ impl<'de> ::serde::Deserialize<'de> for ResourceDieEffectModifierPool {
 ///    {
 ///      "enum": [
 ///        "rolled",
-///        "highest"
+///        "highest",
+///        "roll-result"
 ///      ]
 ///    }
 ///  ]
@@ -38654,7 +38664,8 @@ for ResourceDieEffectModifierValue {
 ///{
 ///  "enum": [
 ///    "rolled",
-///    "highest"
+///    "highest",
+///    "roll-result"
 ///  ]
 ///}
 /// ```
@@ -38676,12 +38687,15 @@ pub enum ResourceDieEffectModifierValueVariant1 {
     Rolled,
     #[serde(rename = "highest")]
     Highest,
+    #[serde(rename = "roll-result")]
+    RollResult,
 }
 impl ::std::fmt::Display for ResourceDieEffectModifierValueVariant1 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Rolled => f.write_str("rolled"),
             Self::Highest => f.write_str("highest"),
+            Self::RollResult => f.write_str("roll-result"),
         }
     }
 }
@@ -38693,6 +38707,7 @@ impl ::std::str::FromStr for ResourceDieEffectModifierValueVariant1 {
         match value {
             "rolled" => Ok(Self::Rolled),
             "highest" => Ok(Self::Highest),
+            "roll-result" => Ok(Self::RollResult),
             _ => Err("invalid value".into()),
         }
     }
@@ -38716,6 +38731,190 @@ for ResourceDieEffectModifierValueVariant1 {
 }
 impl ::std::convert::TryFrom<::std::string::String>
 for ResourceDieEffectModifierValueVariant1 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`ResourceGainCapEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "max",
+///    "pool",
+///    "source"
+///  ],
+///  "properties": {
+///    "max": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "pool": {
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "source": {
+///      "enum": [
+///        "failed-battle-shock"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ResourceGainCapEffectModifier {
+    pub max: ::std::num::NonZeroU64,
+    pub pool: ResourceGainCapEffectModifierPool,
+    pub source: ResourceGainCapEffectModifierSource,
+}
+///`ResourceGainCapEffectModifierPool`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct ResourceGainCapEffectModifierPool(::std::string::String);
+impl ::std::ops::Deref for ResourceGainCapEffectModifierPool {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<ResourceGainCapEffectModifierPool> for ::std::string::String {
+    fn from(value: ResourceGainCapEffectModifierPool) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for ResourceGainCapEffectModifierPool {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for ResourceGainCapEffectModifierPool {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ResourceGainCapEffectModifierPool {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ResourceGainCapEffectModifierPool {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for ResourceGainCapEffectModifierPool {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`ResourceGainCapEffectModifierSource`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "failed-battle-shock"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ResourceGainCapEffectModifierSource {
+    #[serde(rename = "failed-battle-shock")]
+    FailedBattleShock,
+}
+impl ::std::fmt::Display for ResourceGainCapEffectModifierSource {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::FailedBattleShock => f.write_str("failed-battle-shock"),
+        }
+    }
+}
+impl ::std::str::FromStr for ResourceGainCapEffectModifierSource {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "failed-battle-shock" => Ok(Self::FailedBattleShock),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ResourceGainCapEffectModifierSource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ResourceGainCapEffectModifierSource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ResourceGainCapEffectModifierSource {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -39465,12 +39664,17 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 ///          ]
 ///        },
 ///        {
-///          "description": "Any amount from 0 to up_to, as the player chooses (\"spend up to 2YP\").",
+///          "description": "Any amount from 0 (or at_least) to up_to, as the player chooses (\"spend up to 2YP\", \"spend 1-3 Pain tokens\").",
 ///          "type": "object",
 ///          "required": [
 ///            "up_to"
 ///          ],
 ///          "properties": {
+///            "at_least": {
+///              "description": "The least the player can choose, if not 0 (\"spend 1-3 Pain tokens\").",
+///              "type": "integer",
+///              "minimum": 1.0
+///            },
 ///            "up_to": {
 ///              "type": "integer",
 ///              "minimum": 1.0
@@ -39583,12 +39787,17 @@ pub struct ResourceSpendEffectModifier {
 ///      ]
 ///    },
 ///    {
-///      "description": "Any amount from 0 to up_to, as the player chooses (\"spend up to 2YP\").",
+///      "description": "Any amount from 0 (or at_least) to up_to, as the player chooses (\"spend up to 2YP\", \"spend 1-3 Pain tokens\").",
 ///      "type": "object",
 ///      "required": [
 ///        "up_to"
 ///      ],
 ///      "properties": {
+///        "at_least": {
+///          "description": "The least the player can choose, if not 0 (\"spend 1-3 Pain tokens\").",
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
 ///        "up_to": {
 ///          "type": "integer",
 ///          "minimum": 1.0
@@ -39605,7 +39814,12 @@ pub struct ResourceSpendEffectModifier {
 pub enum ResourceSpendEffectModifierAmount {
     Variant0(Quantity),
     Variant1(ResourceSpendEffectModifierAmountVariant1),
-    Variant2 { up_to: ::std::num::NonZeroU64 },
+    Variant2 {
+        ///The least the player can choose, if not 0 ("spend 1-3 Pain tokens").
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        at_least: ::std::option::Option<::std::num::NonZeroU64>,
+        up_to: ::std::num::NonZeroU64,
+    },
 }
 impl ::std::convert::From<Quantity> for ResourceSpendEffectModifierAmount {
     fn from(value: Quantity) -> Self {
@@ -46348,7 +46562,7 @@ impl ::std::convert::TryFrom<::std::string::String> for SecondaryCardWhenDrawnOp
 ///    }
 ///  },
 ///  "additionalProperties": false,
-///  "$comment": "Select objective markers matching the selector and bind each as bind_as; the nested effect refers to it as {objective: {selection_var}} (designate subject, within of)."
+///  "$comment": "Select objective markers matching the selector and bind each as bind_as; the nested effect refers to it as {objective: {selection_var}} (designate subject, within of). A selector without count is no choice: the nested effect resolves once for each matching marker (\"for each objective you control that ...\")."
 ///}
 /// ```
 /// </details>
@@ -49865,6 +50079,28 @@ pub enum SimpleCondition {
 ///      "additionalProperties": false
 ///    },
 ///    {
+///      "title": "resource-gain-cap effect",
+///      "description": "[resource] You cannot gain more than max of a pool from one source this ability causes (source failed-battle-shock: the failed Battle-shock tests it causes).",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/resource-gain-cap-effect-modifier"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "resource-gain-cap"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
 ///      "title": "resource-spend effect",
 ///      "description": "[resource] Spend from a resource pool only when it has sufficient balance; the spend fails as a whole rather than producing a negative or clamped pool. face: spend dice showing this value; requirement: spend dice forming this pair, triple or run.",
 ///      "type": "object",
@@ -50604,6 +50840,11 @@ pub enum SingleEffect {
         scaling: ::std::option::Option<Scaling>,
         target: UnitRef,
     },
+    /**resource-gain-cap effect
+
+[resource] You cannot gain more than max of a pool from one source this ability causes (source failed-battle-shock: the failed Battle-shock tests it causes).*/
+    #[serde(rename = "resource-gain-cap")]
+    ResourceGainCap { modifier: ResourceGainCapEffectModifier, target: UnitRef },
     /**resource-spend effect
 
 [resource] Spend from a resource pool only when it has sufficient balance; the spend fails as a whole rather than producing a negative or clamped pool. face: spend dice showing this value; requirement: spend dice forming this pair, triple or run.*/
@@ -67094,11 +67335,11 @@ fn effect_node_from_value(
             | "act-on-death" | "split-unit" | "add-unit" | "destruction-rule" | "move"
             | "move-modifier" | "set-up" | "marker" | "transport-capacity" | "test"
             | "state-change" | "cp-gain" | "cost-modifier" | "resource-gain"
-            | "resource-spend" | "resource-die" | "objective-sticky" | "region-extend"
-            | "designate" | "army-rule" | "test-exemption" | "datasheet-swap"
-            | "characteristic-resolution" | "borrow-weapons" | "select-weapon"
-            | "weapon-ability-range" | "orders-modifier" | "order-share"
-            | "reserves-schedule",
+            | "resource-gain-cap" | "resource-spend" | "resource-die"
+            | "objective-sticky" | "region-extend" | "designate" | "army-rule"
+            | "test-exemption" | "datasheet-swap" | "characteristic-resolution"
+            | "borrow-weapons" | "select-weapon" | "weapon-ability-range"
+            | "orders-modifier" | "order-share" | "reserves-schedule",
         ) => |v| ::serde_json::from_value(v).map(EffectNode::SingleEffect),
         Some("stance-select") => {
             |v| ::serde_json::from_value(v).map(EffectNode::StanceSelectEffect)

@@ -690,6 +690,14 @@ func triggerEventPhrase(t map[string]any) string {
 		if f["pool"] == "yield-points" {
 			return "each time you spend Yield points"
 		}
+		// "When you spend 1 Pain token to Empower that friendly unit": the unit the spend Empowers.
+		if f["tag"] == "empowered" {
+			target := "a unit"
+			if obj, ok := t["object"]; ok && obj != nil {
+				target = triggerObjectPhrase(obj)
+			}
+			return "each time you spend " + resourceNoun(f["pool"], nil, nil) + " to Empower " + target
+		}
 		return "each time " + dekebab(cstr(f["pool"])) + " is spent"
 	}
 	return "when " + dekebab(cstr(t["event"]))

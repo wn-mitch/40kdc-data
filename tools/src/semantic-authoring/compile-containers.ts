@@ -360,6 +360,7 @@ function buildSelectObjective(head: CompileLeaf, groups: CompileLeaf[][]): Node 
   if (head.parameters.controlled_by_unit !== undefined) filter.controlled_by_unit = head.parameters.controlled_by_unit;
   if (head.parameters.controlled_at !== undefined) filter.controlled_at = head.parameters.controlled_at;
   if (head.parameters.clear_of !== undefined) filter.clear_of = head.parameters.clear_of;
+  if (head.parameters.occupied_by !== undefined) filter.occupied_by = head.parameters.occupied_by;
   // Folded from a territory in-region right after the selection (compile-objective-criteria.ts).
   if (head.parameters.territory !== undefined) filter.territory = head.parameters.territory;
   if (head.parameters.outside_territory !== undefined) filter.outside_territory = head.parameters.outside_territory;

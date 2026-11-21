@@ -671,6 +671,14 @@ func objectivePhrase(f map[string]any, plural bool, noun string) string {
 		}
 		s += ", with no " + phrase + " within range of it"
 	}
+	// "that has a friendly unit with this ability within range of it".
+	if held, ok := asMap(f["occupied_by"]); ok && held != nil {
+		phrase := leadingArticleRe.ReplaceAllString(unitFilterPhrase(held), "")
+		if loc := unitWordRe.FindStringIndex(phrase); loc != nil {
+			phrase = phrase[:loc[0]] + "units" + phrase[loc[1]:]
+		}
+		s += ", with one or more " + phrase + " within range of it"
+	}
 	return s
 }
 

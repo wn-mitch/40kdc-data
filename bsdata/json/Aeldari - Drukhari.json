@@ -5038,7 +5038,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time pain token pool is spent:\n  - If one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6+1: on a 5+, you gain 1 Pain token.\n  - Unless one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6: on a 5+, you gain 1 Pain token.",
+                "$text": "Each time you spend Pain tokens to Empower a friendly unit within 9\" of this unit:\n  - If one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6+1: on a 5+, you gain 1 Pain token.\n  - Unless one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6: on a 5+, you gain 1 Pain token.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
