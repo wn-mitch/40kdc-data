@@ -8643,7 +8643,8 @@ Applies to: IMPERIAL KNIGHTS units.</characteristic>
   - Choose one of the following (Quality: Legacy Unsullied): add 2 to this unit's Objective Control characteristic / add 1 to this unit's Leadership characteristic; if you destroyed at least 0 enemy units this turn, friendly units are designated as Oath Fulfilled.</description>
     </rule>
     <rule name="Bondsman" id="5a02-96fa-cd86-e47a" hidden="false">
-      <description>Nothing happens.</description>
+      <description>Each time a friendly unit uses a Bondsman ability, during your Command phase, until the start of your next Command phase:
+  - Select one friendly ARMIGER model that is within 12" of the triggering unit and not Bondsman-affected. That model is Bondsman-affected by the triggering unit until the start of your next Command phase.</description>
     </rule>
     <rule name="Super-heavy Walker" id="8789-fe15-fdef-1305" hidden="false">
       <description>When this model ends a Normal, Advance or Fall Back move:

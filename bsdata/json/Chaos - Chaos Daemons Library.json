@@ -38091,7 +38091,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "When an enemy unit (excluding MONSTER or VEHICLE units) fails a Battle-shock test, you can use this ability, while the triggering unit is within 6\" of this model, for this activation:\n  - Destroy 1 model in the triggering unit (chosen by its controlling player).\n  - Your army's Daemonic Terror rule inflicts no mortal wounds on the triggering unit.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -38201,7 +38201,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "During your Shooting phase, for this activation:\n  - Select one enemy unit that is within 6\" of this model:\n    - That unit must take a Battle-shock test.\n    - Roll one D6: on a 3+, that unit suffers D3 mortal wounds.\n    - Your army's Daemonic Terror rule inflicts no mortal wounds on that unit.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -39329,7 +39329,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "During your Command phase, while this model is on the battlefield, if your opponent has one or more Flux tokens, you gain 1 Flux token.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

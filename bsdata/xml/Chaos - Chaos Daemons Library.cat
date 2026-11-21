@@ -11378,7 +11378,9 @@ While the The Shadow of Chaos is active, add 6" to the Range characteristic of r
           <profiles>
             <profile name="Cankerblight (Aura)" id="fb74-8afb-df0f-8fc5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit (excluding MONSTER or VEHICLE units) fails a Battle-shock test, you can use this ability, while the triggering unit is within 6" of this model, for this activation:
+  - Destroy 1 model in the triggering unit (chosen by its controlling player).
+  - Your army's Daemonic Terror rule inflicts no mortal wounds on the triggering unit.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11413,7 +11415,11 @@ While the The Shadow of Chaos is active, add 6" to the Range characteristic of r
           <profiles>
             <profile name="Maggot Maws" id="845f-d376-60c8-c7f5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase, for this activation:
+  - Select one enemy unit that is within 6" of this model:
+    - That unit must take a Battle-shock test.
+    - Roll one D6: on a 3+, that unit suffers D3 mortal wounds.
+    - Your army's Daemonic Terror rule inflicts no mortal wounds on that unit.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11701,7 +11707,7 @@ While the The Shadow of Chaos is active, add 6" to the Range characteristic of r
           <profiles>
             <profile name="Inescapable Eye" id="83fa-22d0-77b4-ddc8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, while this model is on the battlefield, if your opponent has one or more Flux tokens, you gain 1 Flux token.</characteristic>
               </characteristics>
             </profile>
           </profiles>

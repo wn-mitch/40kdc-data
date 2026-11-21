@@ -1452,7 +1452,7 @@
       {
         "name": "Bondsman",
         "id": "5a02-96fa-cd86-e47a",
-        "description": "Nothing happens.",
+        "description": "Each time a friendly unit uses a Bondsman ability, during your Command phase, until the start of your next Command phase:\n  - Select one friendly ARMIGER model that is within 12\" of the triggering unit and not Bondsman-affected. That model is Bondsman-affected by the triggering unit until the start of your next Command phase.",
         "hidden": false
       },
       {

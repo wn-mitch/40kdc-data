@@ -22249,7 +22249,9 @@ This model gains the Lone Operative ability.</characteristic>
           <profiles>
             <profile name="Tempting Addendum" id="d8d5-be87-5bbb-bad3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time a friendly DAEMON HERETIC ASTARTES VEHICLE unit invokes its contract, while the triggering unit is within 3" of this model, until the end of the phase:
+  - If that ability inflicts one or more mortal wounds on that unit, add 1 to the number of mortal wounds it suffers.
+  - You can re-roll Hit rolls for attacks made by that unit.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -23172,7 +23174,7 @@ This model can also be attached to friendly WARP TALONS units.</characteristic>
           <profiles>
             <profile name="Eye of Tzeentch" id="33d3-0fa1-8f27-7a04" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit makes a Dark Pact and passes its Leadership test, if the Dark Pact test result is 8+, you gain 1 CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -23195,7 +23197,12 @@ This model can also be attached to friendly WARP TALONS units.</characteristic>
           <profiles>
             <profile name="Orbs of Unlife" id="8d49-4dc1-483b-1c11" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase:
+  For each enemy unit within 3" of this model:
+    - If this unit made a Dark Pact and passed its Leadership test this phase:
+      - Roll one D6+1: on a 4+, that unit suffers D3 mortal wounds.
+    - Unless this unit made a Dark Pact and passed its Leadership test this phase:
+      - Roll one D6: on a 4+, that unit suffers D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>

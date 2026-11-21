@@ -9320,19 +9320,73 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "plague-legion",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": "this-model",
+              "range": {
+                "inches": 6
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "destroy-models",
+            "target": "event-subject",
+            "modifier": {
+              "count": 1,
+              "chosen_by": "controlling-player"
+            }
+          },
+          {
+            "type": "rule-state",
+            "target": "event-subject",
+            "modifier": {
+              "direction": "suppressed",
+              "rule_kind": "faction-rule",
+              "rule": "the-shadow-of-chaos-chaos-daemons",
+              "sub_rule": "daemonic-terror",
+              "aspect": "mortal-wounds"
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "resolution"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "battle-shock",
+        "result": "failure"
+      },
+      "subject": {
+        "owner": "enemy",
+        "none_of": [
+          "MONSTER",
+          "VEHICLE"
+        ]
+      },
+      "optional": true
+    },
+    "source_digest": "40211e269d7e8a66adb468d52dad2a071a7c1667fdca1a2ac729e20972f9cca4"
   },
   {
     "ability_id": "cavalcade-of-blades-legion-of-excess-chaos-daemons",
@@ -9531,19 +9585,73 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "daemonic-incursion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "objective-sticky",
+              "target": "this-unit"
+            },
+            {
+              "type": "designate",
+              "target": "this-unit",
+              "modifier": {
+                "subject": {
+                  "objective": {
+                    "controlled_by_unit": "this-unit"
+                  }
+                },
+                "tag": "corrupted"
+              }
+            }
+          ]
+        },
+        {
+          "type": "region-extend",
+          "target": {
+            "owner": "friendly"
+          },
+          "modifier": {
+            "region": {
+              "region_id": "the-shadow-of-chaos",
+              "owner_faction": "chaos-daemons"
+            },
+            "area": {
+              "objective_range": {
+                "objective": {
+                  "designated": "corrupted",
+                  "controlled_by": "friendly"
+                },
+                "inches": 6
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "control-lost"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "command"
+        }
+      }
+    },
+    "source_digest": "510d5819a352a1be6e944f487405de4c637270362e0657cf3124d715fa700486"
   },
   {
     "ability_id": "daemonic-allegiance-chaos-daemons",
@@ -10670,19 +10778,83 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "scintillating-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "choice",
+      "options": [
+        {
+          "type": "region-extend",
+          "target": {
+            "owner": "friendly"
+          },
+          "modifier": {
+            "region": {
+              "region_id": "the-shadow-of-chaos",
+              "owner_faction": "chaos-daemons"
+            },
+            "area": {
+              "territory": "no-mans-land"
+            }
+          }
+        },
+        {
+          "type": "region-extend",
+          "target": {
+            "owner": "friendly"
+          },
+          "modifier": {
+            "region": {
+              "region_id": "the-shadow-of-chaos",
+              "owner_faction": "chaos-daemons"
+            },
+            "area": {
+              "territory": "enemy-deployment-zone"
+            }
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "resource-spend",
+              "target": "this-model",
+              "modifier": {
+                "pool": "flux-token-pool",
+                "amount": 1
+              }
+            },
+            {
+              "type": "region-extend",
+              "target": {
+                "owner": "friendly"
+              },
+              "modifier": {
+                "region": {
+                  "region_id": "the-shadow-of-chaos",
+                  "owner_faction": "chaos-daemons"
+                },
+                "area": {
+                  "territories": [
+                    "no-mans-land",
+                    "enemy-deployment-zone"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "9434d6272c89b587f3c1b2a292798cd04f7bc39ea74c0d5a092db27f41908b80"
   },
   {
     "ability_id": "improbable-shield-aura-scintillating-legion-chaos-daemons",
@@ -10732,19 +10904,69 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "scintillating-legion",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
+            ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-model",
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          },
+          {
+            "type": "resource",
+            "parameters": {
+              "pool": "flux-token-pool",
+              "count": {
+                "min": 1
+              },
+              "holder": "opponent"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "flux-token-pool",
+          "amount": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "acfdb6a593a234b785a5693280b34edb3304e921bb3cf274163f606b3998724d"
   },
   {
     "ability_id": "infernal-puppeteer-scintillating-legion-chaos-daemons",
@@ -10859,19 +11081,100 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "plague-legion",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "shooting"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "select-units",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "within": {
+                  "of": "this-model",
+                  "range": {
+                    "inches": 6
+                  }
+                }
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "test",
+              "target": "selected-unit",
+              "modifier": {
+                "test": "battle-shock"
+              }
+            },
+            {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 3,
+              "comparison": "gte",
+              "on_success": {
+                "type": "mortal-wounds",
+                "target": "selected-unit",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              "on_fail": null
+            },
+            {
+              "type": "rule-state",
+              "target": "selected-unit",
+              "modifier": {
+                "direction": "suppressed",
+                "rule_kind": "faction-rule",
+                "rule": "the-shadow-of-chaos-chaos-daemons",
+                "sub_rule": "daemonic-terror",
+                "aspect": "mortal-wounds"
+              }
+            }
+          ]
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "resolution"
+    },
+    "behavior": "passive",
+    "source_digest": "24c8a5394f56a1da8b00d2cc36f277f863117767711b581199f4a9fc95f8d42b"
   },
   {
     "ability_id": "malice-made-manifest-shadow-legion-chaos-daemons",
@@ -11262,19 +11565,132 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "scintillating-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "optional": true,
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "filter": {
+                      "designated": "pyrogenesis-flux-spent"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "resource-spend",
+                  "target": "this-model",
+                  "modifier": {
+                    "pool": "flux-token-pool",
+                    "amount": 1
+                  }
+                },
+                {
+                  "type": "designate",
+                  "target": "this-unit",
+                  "modifier": {
+                    "tag": "pyrogenesis-flux-spent",
+                    "clears_on": "phase"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "this-unit",
+                  "filter": {
+                    "designated": "pyrogenesis-flux-spent"
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "S",
+              "operation": "add",
+              "value": 2
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "pyrogenesis-flux-spent"
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "S",
+              "operation": "add",
+              "value": 3
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "this-unit",
+              "filter": {
+                "designated": "pyrogenesis-flux-spent"
+              }
+            }
+          },
+          "effect": {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "AP",
+              "operation": "improve",
+              "value": 1
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "5d214d1d3e6d571bc48cab183a86ae312c83a74aede02362114df1f1a6a8e215"
   },
   {
     "ability_id": "rot-and-renewal-plague-legion-chaos-daemons",
