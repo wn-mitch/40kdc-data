@@ -1399,6 +1399,8 @@ class Modifier21(TypedDict):
     except_from: NotRequired[Literal["this-ability"]]
     any_army_faction: NotRequired[Literal[True]]
     attacks: NotRequired[EventBoundReference]
+    sub_rule: NotRequired[EntityId]
+    aspect: NotRequired[Literal["mortal-wounds"]]
 
 
 class PerAttack(TypedDict):
@@ -1515,20 +1517,42 @@ class AmountTableItem(TypedDict):
     amount: int
 
 
+class Area(TypedDict):
+    territory: Literal[
+        "no-mans-land",
+        "enemy-deployment-zone",
+        "your-deployment-zone",
+        "enemy-territory",
+        "your-territory",
+    ]
+
+
+class Area1(TypedDict):
+    territories: list[
+        Literal[
+            "no-mans-land",
+            "enemy-deployment-zone",
+            "your-deployment-zone",
+            "enemy-territory",
+            "your-territory",
+        ]
+    ]
+
+
 class Subject3(TypedDict):
     terrain_area: dict[str, Any]
 
 
-class Modifier56(TypedDict):
+class Modifier57(TypedDict):
     test: TestKind
     window: Literal["phase", "turn", "battle-round"]
 
 
-class Modifier57(TypedDict):
+class Modifier58(TypedDict):
     datasheet: EntityId
 
 
-class Modifier58(TypedDict):
+class Modifier59(TypedDict):
     stat: Stat
     rule: Literal["majority", "highest", "lowest"]
     tie: NotRequired[Literal["highest", "lowest"]]
@@ -1546,7 +1570,7 @@ class RangeProxy(TypedDict):
     inches: int
 
 
-class Modifier62(TypedDict):
+class Modifier63(TypedDict):
     only_options: NotRequired[list[OnlyOption]]
     recipients: NotRequired[KeywordPredicate]
     adds_recipients: NotRequired[Literal[True]]
@@ -1561,7 +1585,7 @@ class Entry(TypedDict):
     battle_round: int
 
 
-class Modifier64(TypedDict):
+class Modifier65(TypedDict):
     entries: list[Entry]
     set_up: NotRequired[Literal["wholly-within-deployment-zone"]]
 
@@ -1588,7 +1612,7 @@ class Option4(TypedDict):
     option_id: EntityId
 
 
-class Modifier67(TypedDict):
+class Modifier68(TypedDict):
     option: NotRequired[Option4]
     options: NotRequired[list[Option4]]
     additional_selections: int
@@ -1598,7 +1622,7 @@ class Modifier67(TypedDict):
 
 class StanceSelectionCapacityEffect(TypedDict):
     type: Literal["stance-selection-capacity"]
-    modifier: Modifier67
+    modifier: Modifier68
 
 
 TransportOccupancySubjectKind: TypeAlias = Literal["unit-models", "single-model"]
@@ -1871,6 +1895,7 @@ class Modifier28(TypedDict):
     count: Quantity | Literal["all"]
     remove_from_play: NotRequired[Literal[True]]
     ignore_death_triggers: NotRequired[Literal[True]]
+    chosen_by: NotRequired[Literal["controlling-player"]]
 
 
 class Modifier41(TypedDict):
@@ -2008,6 +2033,7 @@ class Parameters39(TypedDict):
     source_ability: NotRequired[SourceAbility1]
     at: NotRequired[Snapshot]
     gained: NotRequired[Literal["turn"]]
+    holder: NotRequired[Literal["opponent"]]
 
 
 class SimpleCondition31(TypedDict):
@@ -2183,13 +2209,13 @@ class Modifier25(TypedDict):
     weapons: NotRequired[WeaponScope]
 
 
-class Modifier60(TypedDict):
+class Modifier61(TypedDict):
     count: NotRequired[int]
     bind_as: str
     weapons: NotRequired[WeaponScope]
 
 
-class Modifier61(TypedDict):
+class Modifier62(TypedDict):
     keyword: WeaponKeywordSelector
     range: RangeRef
 
@@ -3977,7 +4003,28 @@ class SingleEffect40(TypedDict):
     scaling: NotRequired[Scaling]
 
 
+class ObjectiveRange(TypedDict):
+    objective: ObjectiveFilter
+    inches: int
+
+
+class Area2(TypedDict):
+    objective_range: ObjectiveRange
+
+
 class Modifier54(TypedDict):
+    region: NamedRegionRef
+    area: Area | Area1 | Area2
+
+
+class SingleEffect41(TypedDict):
+    type: Literal["region-extend"]
+    target: UnitRef
+    modifier: Modifier54
+    scaling: NotRequired[Scaling]
+
+
+class Modifier55(TypedDict):
     subject: NotRequired[UnitRef | Subject | Subject3]
     tag: DesignationId
     clear: NotRequired[Literal[True]]
@@ -3985,15 +4032,15 @@ class Modifier54(TypedDict):
     clears_on: NotRequired[ScopeDuration]
 
 
-class SingleEffect41(TypedDict):
+class SingleEffect42(TypedDict):
     type: Literal["designate"]
     target: UnitRef
-    modifier: Modifier54
+    modifier: Modifier55
     scaling: NotRequired[Scaling]
 
 
-Modifier55 = TypedDict(
-    "Modifier55",
+Modifier56 = TypedDict(
+    "Modifier56",
     {
         "rule": Literal[
             "warlord-required",
@@ -4031,36 +4078,36 @@ Modifier55 = TypedDict(
 )
 
 
-class SingleEffect42(TypedDict):
-    type: Literal["army-rule"]
-    target: UnitRef
-    modifier: Modifier55
-    scaling: NotRequired[Scaling]
-
-
 class SingleEffect43(TypedDict):
-    type: Literal["test-exemption"]
+    type: Literal["army-rule"]
     target: UnitRef
     modifier: Modifier56
     scaling: NotRequired[Scaling]
 
 
 class SingleEffect44(TypedDict):
-    type: Literal["datasheet-swap"]
+    type: Literal["test-exemption"]
     target: UnitRef
     modifier: Modifier57
     scaling: NotRequired[Scaling]
 
 
 class SingleEffect45(TypedDict):
-    type: Literal["characteristic-resolution"]
+    type: Literal["datasheet-swap"]
     target: UnitRef
     modifier: Modifier58
     scaling: NotRequired[Scaling]
 
 
-Modifier59 = TypedDict(
-    "Modifier59",
+class SingleEffect46(TypedDict):
+    type: Literal["characteristic-resolution"]
+    target: UnitRef
+    modifier: Modifier59
+    scaling: NotRequired[Scaling]
+
+
+Modifier60 = TypedDict(
+    "Modifier60",
     {
         "from": NotRequired[UnitRef],
         "max_models": Quantity,
@@ -4070,34 +4117,34 @@ Modifier59 = TypedDict(
 )
 
 
-class SingleEffect46(TypedDict):
-    type: Literal["borrow-weapons"]
-    target: UnitRef
-    modifier: Modifier59
-    scaling: NotRequired[Scaling]
-
-
 class SingleEffect47(TypedDict):
-    type: Literal["select-weapon"]
+    type: Literal["borrow-weapons"]
     target: UnitRef
     modifier: Modifier60
     scaling: NotRequired[Scaling]
 
 
 class SingleEffect48(TypedDict):
-    type: Literal["weapon-ability-range"]
+    type: Literal["select-weapon"]
     target: UnitRef
     modifier: Modifier61
+    scaling: NotRequired[Scaling]
 
 
 class SingleEffect49(TypedDict):
-    type: Literal["orders-modifier"]
+    type: Literal["weapon-ability-range"]
     target: UnitRef
     modifier: Modifier62
 
 
-Modifier63 = TypedDict(
-    "Modifier63",
+class SingleEffect50(TypedDict):
+    type: Literal["orders-modifier"]
+    target: UnitRef
+    modifier: Modifier63
+
+
+Modifier64 = TypedDict(
+    "Modifier64",
     {
         "with": UnitRef,
         "mutual": NotRequired[Literal[True]],
@@ -4105,16 +4152,16 @@ Modifier63 = TypedDict(
 )
 
 
-class SingleEffect50(TypedDict):
+class SingleEffect51(TypedDict):
     type: Literal["order-share"]
     target: UnitRef
-    modifier: Modifier63
+    modifier: Modifier64
 
 
-class SingleEffect51(TypedDict):
+class SingleEffect52(TypedDict):
     type: Literal["reserves-schedule"]
     target: UnitRef
-    modifier: Modifier64
+    modifier: Modifier65
 
 
 SingleEffect: TypeAlias = (
@@ -4169,6 +4216,7 @@ SingleEffect: TypeAlias = (
     | SingleEffect49
     | SingleEffect50
     | SingleEffect51
+    | SingleEffect52
 )
 
 
@@ -4206,7 +4254,7 @@ class AbilityPart(TypedDict):
     usage: NotRequired[AbilityUsage]
 
 
-class Modifier65(TypedDict):
+class Modifier66(TypedDict):
     condition: Condition
     value: int
 
@@ -4214,7 +4262,7 @@ class Modifier65(TypedDict):
 class Test(TypedDict):
     kind: TestKind
     subject: UnitRef
-    modifiers: NotRequired[list[Modifier65]]
+    modifiers: NotRequired[list[Modifier66]]
 
 
 DiceGatedEffect = TypedDict(
@@ -4281,7 +4329,7 @@ class ForEachUnitEffect(TypedDict):
     max_affected: NotRequired[Quantity]
 
 
-class Modifier66(TypedDict):
+class Modifier67(TypedDict):
     range: NotRequired[RangeRef]
     range_bonus: NotRequired[RangeRef]
     of: NotRequired[str]
@@ -4296,7 +4344,7 @@ class Modifier66(TypedDict):
 class AuraEffect(TypedDict):
     type: Literal["aura"]
     target: Literal["enemy-within-aura", "friendly-within-aura"]
-    modifier: Modifier66
+    modifier: Modifier67
 
 
 class Select1(TypedDict):
@@ -4535,7 +4583,7 @@ class RitualMenuEffect(TypedDict):
     rituals: list[Ritual]
 
 
-class Modifier68(TypedDict):
+class Modifier69(TypedDict):
     condition: Condition
     value: Quantity
 
@@ -4544,7 +4592,7 @@ class DeathGate(TypedDict):
     dice: DiceExpression
     comparison: Comparison
     threshold: Quantity
-    modifiers: list[Modifier68]
+    modifiers: list[Modifier69]
 
 
 class DesignationApplies(TypedDict):

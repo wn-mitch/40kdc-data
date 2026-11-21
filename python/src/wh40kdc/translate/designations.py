@@ -151,6 +151,7 @@ DESIGNATION_IDS: frozenset[str] = frozenset(
         "protector-imperative-active",
         "pulsa-rokkit-target",
         "pulse-onslaught-shaken",
+        "pyrogenesis-flux-spent",
         "quarry",
         "readied",
         "remains-under-your-control",

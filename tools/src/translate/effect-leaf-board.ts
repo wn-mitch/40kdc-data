@@ -87,6 +87,17 @@ function returnModels(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ct
   return `return ${what} to ${subj}${where}, each with ${w} remaining${detach}`;
 }
 
+/** "No Man's Land is within your army's Shadow of Chaos": an area joins a region an army rule defines. */
+function regionExtend(m: Record<string, unknown>): string {
+  const region = (m.region ?? {}) as P;
+  const area = (m.area ?? {}) as P;
+  const within = `within your army's ${titleCase(jstr(region.region_id).replace(/^the-/u, ""))}`;
+  if (Array.isArray(area.territories)) return `${andList(area.territories.map((territory) => regionPhrase({ territory })))} are ${within}`;
+  if (area.territory != null) return `${regionPhrase({ territory: area.territory })} is ${within}`;
+  const range = (area.objective_range ?? {}) as P;
+  return `the area of the battlefield within ${jstr(range.inches)}" of each ${objectivePhrase((range.objective ?? {}) as P)} is ${within}`;
+}
+
 function destroyModels(e: Leaf, m: Record<string, unknown>, subj: string): string {
   const modelTarget = e.target != null && typeof e.target === "object" && (e.target as P).level === "model";
   const what = modelTarget
@@ -98,7 +109,9 @@ function destroyModels(e: Leaf, m: Record<string, unknown>, subj: string): strin
   const verb = m.remove_from_play === true ? "remove" : "destroy";
   const tail = m.remove_from_play === true ? " from play" : "";
   const triggers = m.ignore_death_triggers === true ? ", ignoring any rules triggered by their destruction" : "";
-  return `${verb} ${what}${tail}${triggers}`;
+  // "(chosen by its controlling player)": the destroyed unit's owner picks which models.
+  const chooser = m.chosen_by === "controlling-player" ? " (chosen by its controlling player)" : "";
+  return `${verb} ${what}${tail}${chooser}${triggers}`;
 }
 
 function actOnDeath(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
@@ -614,6 +627,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       // "That objective is secured": one marker, the one a select-objective bound.
       if (m.objective != null) return `${placeRefPhrase({ objective: m.objective })} remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase`;
       return `objective markers ${subj} ${v(subj, "controls")} remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase`;
+    case "region-extend": return regionExtend(m);
     case "designate": return designate(m, subj, ctx);
     case "army-rule": return armyRule(m, subj, ctx, e.target);
     case "reserves-schedule": return reservesSchedule(m);

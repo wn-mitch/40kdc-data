@@ -107,15 +107,22 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
     // sentence's effects as a group, so each effect under the same condition in the instead sentence is a replacement
     // and each effect of the sentence before is a default that holds only when the condition does not.
     const sameGate = (item: PlannedEffect) => JSON.stringify(item.gate) === JSON.stringify(replacement.gate);
-    const siblings = planned.filter((item) => item !== replacement && item.index < replacement.index && !item.replaces && !(abilityProhibition && item.leaf.family_id === "roll-prohibition")
-      && places[item.index]!.sentence === places[replacement.index]!.sentence && sameGate(item) && !optionalSpends.has(item.leaf));
+    // "Add 2 to S, or spend one Flux token and add 3 to S and improve AP by 1 instead": an optional spend inside the
+    // instead's sentence splits it. The effects after the spend replace the effects before it, in the same sentence.
+    const sentenceOfReplacement = places[replacement.index]!.sentence;
+    const spendIn = list.findIndex((leaf, at) => optionalSpends.has(leaf) && at < replacement.index && places[at]!.sentence === sentenceOfReplacement);
+    // Only a spend with effects before it in the sentence splits it; "If you spend 1YP, … instead" replaces the sentence before.
+    const spendAt = spendIn > -1 && planned.some((item) => item.index < spendIn && !item.replaces && !optionalSpends.has(item.leaf)
+      && places[item.index]!.sentence === sentenceOfReplacement) ? spendIn : -1;
+    const siblings = planned.filter((item) => item !== replacement && item.index < replacement.index && item.index > spendAt && !item.replaces && !(abilityProhibition && item.leaf.family_id === "roll-prohibition")
+      && places[item.index]!.sentence === sentenceOfReplacement && sameGate(item) && !optionalSpends.has(item.leaf));
     // "…, instead of up to two" names the default it replaces after the word, so there is no earlier group to find.
     const namesDefault = sourceText !== undefined && /^\s*of\b/u.test(Buffer.from(sourceText, "utf8").subarray(list[combinator]!.end_byte).toString("utf8"));
-    if (siblings.length > 0 && list[combinator]!.parameters.choice !== true && !namesDefault) {
+    if ((siblings.length > 0 || spendAt > -1) && list[combinator]!.parameters.choice !== true && !namesDefault) {
       const group = [...siblings, replacement];
-      const sentence = places[replacement.index]!.sentence;
+      const sentence = sentenceOfReplacement;
       const before = planned.filter((item) => item.index < group[0]!.index && !item.replaces && !optionalSpends.has(item.leaf)
-        && places[item.index]!.sentence < sentence);
+        && (spendAt > -1 ? item.index < spendAt && places[item.index]!.sentence === sentence : places[item.index]!.sentence < sentence));
       const defaultSentence = before.length > 0 ? Math.max(...before.map((item) => places[item.index]!.sentence)) : null;
       const defaults = before.filter((item) => places[item.index]!.sentence === defaultSentence);
       const families = new Set(group.map((item) => item.leaf.family_id));

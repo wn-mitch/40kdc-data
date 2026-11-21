@@ -1911,6 +1911,14 @@
       {
         "path": "/effect/modifier/entries",
         "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/region",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/area",
+        "code": "REQUIRED_MISSING"
       }
     ]
   },

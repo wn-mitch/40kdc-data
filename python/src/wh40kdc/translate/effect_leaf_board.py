@@ -237,7 +237,30 @@ def _destroy_models(e: Leaf, m: dict[str, Any], subj: str) -> str:
         if m.get("ignore_death_triggers") is True
         else ""
     )
-    return f"{verb} {what}{tail}{triggers}"
+    # "(chosen by its controlling player)": the destroyed unit's owner picks which models.
+    chooser = (
+        " (chosen by its controlling player)" if m.get("chosen_by") == "controlling-player" else ""
+    )
+    return f"{verb} {what}{tail}{chooser}{triggers}"
+
+
+def _region_extend(m: dict[str, Any]) -> str:
+    """An area joins a region an army rule defines ("No Man's Land is within your army's ...")."""
+    region = m.get("region") or {}
+    area = m.get("area") or {}
+    region_id = jstr(region.get("region_id"))
+    if region_id.startswith("the-"):
+        region_id = region_id[len("the-") :]
+    within = f"within your army's {title_case(region_id)}"
+    if isinstance(area.get("territories"), list):
+        names = [region_phrase({"territory": t}) for t in area["territories"]]
+        return f"{and_list(names)} are {within}"
+    if area.get("territory") is not None:
+        return f"{region_phrase({'territory': area['territory']})} is {within}"
+    rng = area.get("objective_range") or {}
+    marker = _objective_phrase(rng.get("objective") or {}, False)
+    inches = jstr(rng.get("inches"))
+    return f'the area of the battlefield within {inches}" of each {marker} is {within}'
 
 
 def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
@@ -941,6 +964,8 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
             "your opponent's "
             "Level of Control over them is greater than yours at the end of a phase"
         )
+    if t == "region-extend":
+        return _region_extend(m)
     if t == "designate":
         return _designate(m, subj, ctx)
     if t == "army-rule":

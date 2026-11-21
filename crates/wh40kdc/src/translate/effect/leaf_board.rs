@@ -10,8 +10,8 @@ use super::placement::{placement_limits, placement_phrase};
 use super::select::for_each_unit_subject;
 use super::words::*;
 use crate::translate::condition::{
-    and_list, condition_lead_in_value, describe_condition_value, nn, obj, or_list,
-    place_ref_phrase, range_phrase, P,
+    and_list, condition_lead_in_value, describe_condition_value, nn, obj, objective_phrase,
+    or_list, place_ref_phrase, range_phrase, P,
 };
 
 /// A Combat Patrol arrival schedule: "the following friendly units must start the battle in
@@ -222,6 +222,35 @@ fn singular_first_models(phrase: &str) -> String {
     phrase.to_string()
 }
 
+/// "No Man's Land is within your army's Shadow of Chaos": an area joins a region an army rule defines.
+fn region_extend(m: &P) -> String {
+    let region = obj(m.get("region"));
+    let area = obj(m.get("area"));
+    let id = jstr(region.get("region_id"));
+    let within = format!(
+        "within your army's {}",
+        title_case(id.strip_prefix("the-").unwrap_or(&id))
+    );
+    let territory = |t: &Value| {
+        let mut r = Map::new();
+        r.insert("territory".to_string(), t.clone());
+        region_phrase(&r)
+    };
+    if let Some(list) = area.get("territories").and_then(Value::as_array) {
+        let names: Vec<String> = list.iter().map(territory).collect();
+        return format!("{} are {within}", and_list(&names));
+    }
+    if let Some(t) = nn(area, "territory") {
+        return format!("{} is {within}", territory(t));
+    }
+    let range = obj(area.get("objective_range"));
+    format!(
+        "the area of the battlefield within {}\" of each {} is {within}",
+        jstr(range.get("inches")),
+        objective_phrase(obj(range.get("objective")), false, "objective")
+    )
+}
+
 fn destroy_models(target: Option<&Value>, m: &P, subj: &str) -> String {
     let model_target = target
         .and_then(Value::as_object)
@@ -254,7 +283,13 @@ fn destroy_models(target: Option<&Value>, m: &P, subj: &str) -> String {
     } else {
         ""
     };
-    format!("{verb} {what}{tail}{triggers}")
+    // "(chosen by its controlling player)": the destroyed unit's owner picks which models.
+    let chooser = if sv(m, "chosen_by") == Some("controlling-player") {
+        " (chosen by its controlling player)"
+    } else {
+        ""
+    };
+    format!("{verb} {what}{tail}{chooser}{triggers}")
 }
 
 fn empty_condition() -> Value {
@@ -721,6 +756,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             "objective markers {subj} {} remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase",
             v(subj, "controls")
         ),
+        Some("region-extend") => region_extend(m),
         Some("designate") => designate(m, subj, ctx),
         Some("army-rule") => army_rule(m, subj, ctx, e.get("target")),
         Some("reserves-schedule") => reserves_schedule(m),

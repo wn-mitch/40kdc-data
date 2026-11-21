@@ -21,7 +21,7 @@ func init() {
 		"counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
 		"destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
 		"transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
-		"objective-sticky", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons",
+		"objective-sticky", "region-extend", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons",
 		"select-weapon",
 	} {
 		leafTypes[t] = true
@@ -846,6 +846,10 @@ func ruleStateLeaf(m map[string]any, subj string) string {
 	}
 	if m["direction"] == "suppressed" && m["except_from"] == "this-ability" && m["rule_kind"] == "ability" {
 		return subj + " " + ev(subj, "loses") + " the " + abilityReferenceLabel(m["rule"]) + " ability and cannot gain it except from this ability"
+	}
+	// "no mortal wounds are inflicted by your army's Daemonic Terror rule": one aspect of a section of the rule is off.
+	if m["sub_rule"] != nil {
+		return "your army's " + titleCase(ejstr(m["sub_rule"])) + " rule inflicts no mortal wounds on " + subj
 	}
 	if m["rule_kind"] == "faction-rule" {
 		// any_army_faction: the granted faction rule works whatever the army's faction is.

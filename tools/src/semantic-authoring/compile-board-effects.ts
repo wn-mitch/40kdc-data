@@ -7,6 +7,7 @@
 import { LIST_BUILDING_DESIGNATIONS } from "../translate/designations.js";
 import { armyRuleEffect } from "./compile-army.js";
 import { closed, CompileError, type CompileLeaf, unitOf } from "./compile-fragments.js";
+import { regionExtendEffect } from "./compile-region-extend.js";
 
 type Node = Record<string, unknown>;
 
@@ -202,11 +203,18 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       }
       return { type: "return-models", target: affectedModels(leaf, target(leaf.parameters.subject)), modifier };
     }
+    case "region-extend":
+      return regionExtendEffect(leaf, (spend) => {
+        const lowered = boardEffect(spend, target);
+        if (!lowered) throw new CompileError(`${spend.family_id} cannot pay for a selected area.`);
+        return lowered;
+      });
     case "destroy-models": {
       const recipient = String(closed(leaf, "recipient"));
       const modifier: Node = { count: countValue(closed(leaf, "count")) };
       if (leaf.parameters.remove_from_play === true) modifier.remove_from_play = true;
       if (leaf.parameters.ignore_death_triggers === true) modifier.ignore_death_triggers = true;
+      if (leaf.parameters.chosen_by !== undefined) modifier.chosen_by = closed(leaf, "chosen_by");
       const target_ = recipient === "this-unit" || recipient === "this-model" ? target(recipient) : recipient;
       return { type: "destroy-models", target: affectedModels(leaf, target_), modifier };
     }

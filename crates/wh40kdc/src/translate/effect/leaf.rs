@@ -57,6 +57,7 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
     "resource-spend",
     "resource-die",
     "objective-sticky",
+    "region-extend",
     "designate",
     "army-rule",
     "test-exemption",

@@ -354,7 +354,13 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
             return f"when {_describe_happened(p, False)}"
         return f"if {_describe_happened(p, False)}"
     if ctype == "resource":
-        word = "if" if p.get("below_max") is True or p.get("gained") == "turn" else "while"
+        word = (
+            "if"
+            if p.get("below_max") is True
+            or p.get("gained") == "turn"
+            or p.get("holder") == "opponent"
+            else "while"
+        )
         return f"{word} {_describe_predicate(c, False)}"
     if ctype == "strength":
         phrase = re.sub(

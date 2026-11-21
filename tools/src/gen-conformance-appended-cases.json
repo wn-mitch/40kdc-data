@@ -4971,5 +4971,215 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "caseId": "flux-tokens/opponent-holds-pool",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "resource",
+        "parameters": {
+          "pool": "flux-token-pool",
+          "count": {
+            "min": 1
+          },
+          "holder": "opponent"
+        }
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "flux-token-pool",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "flux-tokens/opponent-holds-none",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "resource",
+            "parameters": {
+              "pool": "flux-token-pool",
+              "count": {
+                "min": 1
+              },
+              "holder": "opponent"
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "resource-gain",
+        "target": "this-model",
+        "modifier": {
+          "pool": "flux-token-pool",
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "flux-tokens/destroy-chosen-by-controlling-player",
+    "effect": {
+      "type": "destroy-models",
+      "target": "selected-unit",
+      "modifier": {
+        "count": 1,
+        "chosen_by": "controlling-player"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "flux-tokens/rule-state-sub-rule-mortal-wounds",
+    "effect": {
+      "type": "rule-state",
+      "target": "selected-unit",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "faction-rule",
+        "rule": "example-army-rule",
+        "sub_rule": "example-terror",
+        "aspect": "mortal-wounds"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "flux-tokens/region-extend-territory",
+    "effect": {
+      "type": "region-extend",
+      "target": {
+        "owner": "friendly"
+      },
+      "modifier": {
+        "region": {
+          "region_id": "the-example-region",
+          "owner_faction": "example-faction"
+        },
+        "area": {
+          "territory": "no-mans-land"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    }
+  },
+  {
+    "caseId": "flux-tokens/region-extend-objective-range",
+    "effect": {
+      "type": "region-extend",
+      "target": {
+        "owner": "friendly"
+      },
+      "modifier": {
+        "region": {
+          "region_id": "the-example-region",
+          "owner_faction": "example-faction"
+        },
+        "area": {
+          "objective_range": {
+            "objective": {
+              "designated": "corrupted",
+              "controlled_by": "friendly"
+            },
+            "inches": 6
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "flux-tokens/region-extend-choice-or-spend-all",
+    "effect": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "region-extend",
+          "target": {
+            "owner": "friendly"
+          },
+          "modifier": {
+            "region": {
+              "region_id": "the-example-region",
+              "owner_faction": "example-faction"
+            },
+            "area": {
+              "territory": "no-mans-land"
+            }
+          }
+        },
+        {
+          "type": "region-extend",
+          "target": {
+            "owner": "friendly"
+          },
+          "modifier": {
+            "region": {
+              "region_id": "the-example-region",
+              "owner_faction": "example-faction"
+            },
+            "area": {
+              "territory": "enemy-deployment-zone"
+            }
+          }
+        },
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "resource-spend",
+              "target": "this-model",
+              "modifier": {
+                "pool": "flux-token-pool",
+                "amount": 1
+              }
+            },
+            {
+              "type": "region-extend",
+              "target": {
+                "owner": "friendly"
+              },
+              "modifier": {
+                "region": {
+                  "region_id": "the-example-region",
+                  "owner_faction": "example-faction"
+                },
+                "area": {
+                  "territories": [
+                    "no-mans-land",
+                    "enemy-deployment-zone"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    }
   }
 ]

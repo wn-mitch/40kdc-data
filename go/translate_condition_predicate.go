@@ -810,6 +810,14 @@ func describePredicate(c map[string]any, negated bool) string {
 			}
 			return "you " + verb + " " + controlCountPhrase(p["count"]) + " " + resourceNoun(p["pool"], nil, 2.0) + " this turn"
 		}
+		// "if your opponent has one or more Flux tokens": the opponent's holding of a pool both players hold.
+		if p["holder"] == "opponent" {
+			verb := "has"
+			if negated {
+				verb = "does not have"
+			}
+			return "your opponent " + verb + " " + controlCountPhrase(p["count"]) + " " + resourceNoun(p["pool"], nil, 2.0)
+		}
 		// A pool is the player's ("If you have 3 or more Pact points").
 		return "you have " + controlCountPhrase(p["count"]) + " " + dekebab(cstr(p["pool"]))
 	// -- Mission-card predicates --

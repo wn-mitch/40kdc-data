@@ -8142,7 +8142,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "resource condition",
-          "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held.",
+          "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held. holder opponent: count bounds what the opponent holds.",
           "required": [
             "type",
             "parameters"
@@ -8186,6 +8186,10 @@
                 "gained": {
                   "const": "turn",
                   "description": "count bounds how much of the pool you gained this turn (\"you gained fewer than 3YP this turn\"), not how much it holds."
+                },
+                "holder": {
+                  "const": "opponent",
+                  "description": "count bounds what your opponent holds of a pool both players hold (\"if your opponent has one or more Flux tokens\"). Absent, the pool is yours."
                 }
               },
               "required": [
@@ -8193,6 +8197,9 @@
               ],
               "dependentRequired": {
                 "gained": [
+                  "count"
+                ],
+                "holder": [
                   "count"
                 ]
               }
@@ -11023,6 +11030,16 @@
                 "attacks": {
                   "$ref": "#/$defs/event-bound-reference",
                   "description": "Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this."
+                },
+                "sub_rule": {
+                  "$ref": "#/$defs/entity-id",
+                  "description": "A named section of the suppressed faction rule (\"your army's Daemonic Terror rule\"); only its aspect is off for the target."
+                },
+                "aspect": {
+                  "enum": [
+                    "mortal-wounds"
+                  ],
+                  "description": "What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it."
                 }
               },
               "required": [
@@ -11125,8 +11142,33 @@
                       }
                     }
                   }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "sub_rule"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "direction": {
+                        "const": "suppressed"
+                      },
+                      "rule_kind": {
+                        "const": "faction-rule"
+                      }
+                    }
+                  }
                 }
-              ]
+              ],
+              "dependentRequired": {
+                "sub_rule": [
+                  "aspect"
+                ],
+                "aspect": [
+                  "sub_rule"
+                ]
+              }
             },
             "scaling": {
               "$ref": "#/$defs/scaling"
@@ -11700,6 +11742,10 @@
                 },
                 "ignore_death_triggers": {
                   "const": true
+                },
+                "chosen_by": {
+                  "const": "controlling-player",
+                  "description": "The destroyed unit's controlling player picks which models (\"one model in that unit is destroyed (chosen by its controlling player)\"). Absent, the player using the ability picks."
                 }
               },
               "required": [
@@ -13602,6 +13648,115 @@
                 "objective": {
                   "$ref": "#/$defs/objective-filter",
                   "description": "The one objective marker that stays under your control (\"that objective is secured\", the marker a select-objective bound as {selection_var}); without it, the objectives the target controls."
+                }
+              }
+            },
+            "scaling": {
+              "$ref": "#/$defs/scaling"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "region-extend effect",
+          "description": "[board] An area of the battlefield is within a region an army rule defines (\"the selected areas of the battlefield are within your army's Shadow of Chaos\") for the effect's duration: one territory, several territories, or the area within a range of the objective markers a filter names.",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "region-extend"
+            },
+            "target": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "region",
+                "area"
+              ],
+              "properties": {
+                "region": {
+                  "$ref": "#/$defs/named-region-ref"
+                },
+                "area": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "territory"
+                      ],
+                      "properties": {
+                        "territory": {
+                          "enum": [
+                            "no-mans-land",
+                            "enemy-deployment-zone",
+                            "your-deployment-zone",
+                            "enemy-territory",
+                            "your-territory"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "territories"
+                      ],
+                      "properties": {
+                        "territories": {
+                          "type": "array",
+                          "minItems": 2,
+                          "uniqueItems": true,
+                          "items": {
+                            "enum": [
+                              "no-mans-land",
+                              "enemy-deployment-zone",
+                              "your-deployment-zone",
+                              "enemy-territory",
+                              "your-territory"
+                            ]
+                          }
+                        }
+                      },
+                      "description": "Every listed territory."
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "objective_range"
+                      ],
+                      "properties": {
+                        "objective_range": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "objective",
+                            "inches"
+                          ],
+                          "properties": {
+                            "objective": {
+                              "$ref": "#/$defs/objective-filter"
+                            },
+                            "inches": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 24
+                            }
+                          }
+                        }
+                      },
+                      "description": "The area within inches of each objective marker the filter names (\"within 6\\\" of that objective marker\")."
+                    }
+                  ]
                 }
               }
             },

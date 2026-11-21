@@ -87,7 +87,7 @@ const FAMILY_ORDER: readonly string[] = [
   "characteristic-modifier", "event", "turn-start", "add-unit", "target-is-selected",
   "regain-wounds", "return-models", "for-each-unit-select", "apply-mark", "designated-filter",
   "orders-modifier", "order-share",
-  "game-mode", "reserves-schedule",
+  "game-mode", "reserves-schedule", "region-extend", "area-select",
 ];
 
 const ALL: readonly FlatFamily[] = [

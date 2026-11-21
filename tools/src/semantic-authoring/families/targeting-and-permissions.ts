@@ -285,9 +285,18 @@ function ruleStateCore(input: Params): Params {
   };
 }
 
+/** "no mortal wounds are inflicted by your army's Daemonic Terror rule": one aspect of a named section of a faction rule is switched off. */
+function ruleStateSection(result: Params, section: unknown, aspect: unknown): Params {
+  if (section === undefined && aspect === undefined) return result;
+  if (section === undefined || aspect === undefined) throw new TypeError("rule-state.sub_rule and rule-state.aspect are given together.");
+  if (result.direction !== "suppressed" || result.rule_kind !== "faction-rule") throw new TypeError("rule-state.sub_rule names a section of a suppressed faction rule.");
+  if (typeof section !== "string" || !KEBAB_ID.test(section)) throw new TypeError("rule-state.sub_rule must be a kebab-case id.");
+  return { ...result, sub_rule: section, aspect: enumValue(aspect, ["mortal-wounds"], "rule-state.aspect") };
+}
+
 function normalizeRuleState(input: Params): Params {
-  const { any_army_faction: any, ...rest } = input;
-  const result = withLeadingApostrophes("rule-state", rest, ruleStateCore);
+  const { any_army_faction: any, sub_rule: section, aspect, ...rest } = input;
+  const result = ruleStateSection(withLeadingApostrophes("rule-state", rest, ruleStateCore), section, aspect);
   if (any === undefined) return result;
   if (any !== true) throw new TypeError("rule-state.any_army_faction is true or omitted.");
   if (result.direction !== "granted" || result.rule_kind !== "faction-rule") throw new TypeError("rule-state.any_army_faction goes with a granted faction rule.");
@@ -346,10 +355,10 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "rule-state",
-    version: 4,
+    version: 5,
     role: "EFFECT",
     label: "Grant or suppress a named rule",
-    description: "A unit or model gains or loses a core rule, keyword, ability, or faction rule (a core-rule slug such as the -1 to Hit for shooting in Engagement Range, or a keyword or ability by its own id). The subject is this unit or model, a selected unit, the triggering unit, the attack's target, or an earlier leaf's unit (antecedent): \"that enemy unit cannot have the Benefit of Cover\". A keyword can start with an apostrophe as the rules print it ('ARDMOB). any_army_faction: a granted faction rule the subject can use whatever your Army Faction is (\"even though your Army Faction is not X\").",
+    description: "A unit or model gains or loses a core rule, keyword, ability, or faction rule (a core-rule slug such as the -1 to Hit for shooting in Engagement Range, or a keyword or ability by its own id). The subject is this unit or model, a selected unit, the triggering unit, the attack's target, or an earlier leaf's unit (antecedent): \"that enemy unit cannot have the Benefit of Cover\". A keyword can start with an apostrophe as the rules print it ('ARDMOB). any_army_faction: a granted faction rule the subject can use whatever your Army Faction is (\"even though your Army Faction is not X\"). sub_rule and aspect (together, with a suppressed faction rule): only that aspect of the named section of the rule is off for the subject (\"no mortal wounds are inflicted by your army's Daemonic Terror rule\" is sub_rule daemonic-terror, aspect mortal-wounds, on the unit it would inflict them on).",
     starter: { subject: "", direction: "", rule_kind: "", rule: "" },
     parameterSchema: {
       type: "object",
@@ -360,6 +369,8 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
         rule_kind: { enum: ["core-rule", "keyword", "ability", "faction-rule"] },
         rule: { type: "string", minLength: 1 },
         any_army_faction: { const: true, "x-optional": true },
+        sub_rule: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-optional": true },
+        aspect: { enum: ["mortal-wounds"], "x-optional": true },
       },
       additionalProperties: false,
     },

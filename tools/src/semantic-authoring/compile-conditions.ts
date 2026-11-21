@@ -794,6 +794,7 @@ export function condition(leaf: CompileLeaf): Node {
       }
       if (leaf.parameters.at !== undefined) parameters.at = closed(leaf, "at");
       if (leaf.parameters.gained_this_turn === true) parameters.gained = "turn";
+      if (leaf.parameters.holder === "opponent") parameters.holder = "opponent";
       return polarity(leaf, { type: "resource", parameters });
     }
     case "operation-markers": {

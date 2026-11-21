@@ -1,3 +1,4 @@
+import { DESIGNATION_IDS } from "../../translate/designations.js";
 import { boundedInteger, enumSet, enumValue, exactKeys } from "../family-validation.js";
 import type { FlatFamily } from "./types.js";
 import {
@@ -157,12 +158,16 @@ function normalizeCoreAbilityGrant(input: Params): Params {
 const STICKY_SUBJECTS = ["this-unit", "this-model", "selected-unit", "recipient", "selected-objective"];
 
 function normalizeStickyObjective(input: Params): Params {
-  if (!("subject" in input)) {
-    exactKeys(input, [], "sticky-objective");
-    return {};
+  exactKeys(input, ["subject", "tag"].filter((key) => key in input), "sticky-objective");
+  const result: Params = {};
+  if ("subject" in input) result.subject = enumValue(input.subject, STICKY_SUBJECTS, "sticky-objective.subject");
+  // "That objective marker is said to be Corrupted": the secured marker also carries a registered designation.
+  if ("tag" in input) {
+    if (typeof input.tag !== "string" || !DESIGNATION_IDS.has(input.tag)) throw new TypeError(`sticky-objective.tag ${JSON.stringify(input.tag)} is not a registered designation.`);
+    if (result.subject === "selected-objective") throw new TypeError("sticky-objective.tag names the markers a unit controls; the selected objective marker takes no tag.");
+    result.tag = input.tag;
   }
-  exactKeys(input, ["subject"], "sticky-objective");
-  return { subject: enumValue(input.subject, STICKY_SUBJECTS, "sticky-objective.subject") };
+  return result;
 }
 
 function normalizeActAfterMove(input: Params): Params {
@@ -323,12 +328,12 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "sticky-objective",
-    version: 4,
+    version: 5,
     role: "EFFECT",
     label: "Sticky objective",
-    description: "\"That objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase.\" Being within range of it is a separate condition. subject names whose objectives (default this-unit): a selected unit, or each unit a for-each loop reaches (recipient); selected-objective is the one marker this record's select-objective chose (\"that objective is secured\").",
+    description: "\"That objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase.\" Being within range of it is a separate condition. subject names whose objectives (default this-unit): a selected unit, or each unit a for-each loop reaches (recipient); selected-objective is the one marker this record's select-objective chose (\"that objective is secured\"). tag: a registered designation the secured markers also carry (\"That objective marker is said to be Corrupted\"), read later by an objective filter; not with selected-objective.",
     starter: {},
-    parameterSchema: { type: "object", properties: { subject: { enum: STICKY_SUBJECTS } }, additionalProperties: false },
+    parameterSchema: { type: "object", properties: { subject: { enum: STICKY_SUBJECTS }, tag: { type: "string", pattern: "^[a-z][a-z0-9-]*$", "x-optional": true } }, additionalProperties: false },
     normalize: normalizeStickyObjective,
   },
   {

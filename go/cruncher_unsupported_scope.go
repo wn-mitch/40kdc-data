@@ -36,7 +36,7 @@ var nonDamageEffectTypes = map[string]bool{
 	"stance-selection-capacity": true, "move-modifier": true, "army-rule": true, "keyword-grant": true,
 	"act-on-death": true, "cp-gain": true, "resource-gain": true, "add-unit": true, "split-unit": true,
 	"transport-capacity": true, "destroy-models": true, "designate": true, "test": true, "targeting": true,
-	"state-change": true, "no-effect": true, "oath-modifier": true, "objective-sticky": true, "counts-as": true,
+	"state-change": true, "no-effect": true, "oath-modifier": true, "objective-sticky": true, "region-extend": true, "counts-as": true,
 	"marker": true, "test-exemption": true, "return-models": true,
 }
 

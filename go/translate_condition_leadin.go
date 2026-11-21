@@ -254,7 +254,7 @@ func conditionLeadInFor(c map[string]any, defending bool) string {
 		}
 		return "if " + describeHappened(p, false)
 	case "resource":
-		if p["below_max"] == true || p["gained"] == "turn" {
+		if p["below_max"] == true || p["gained"] == "turn" || p["holder"] == "opponent" {
 			return "if " + describePredicate(c, false)
 		}
 		return "while " + describePredicate(c, false)

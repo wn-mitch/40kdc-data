@@ -139,7 +139,31 @@ func destroyModelsLeaf(e, m map[string]any, subj string) string {
 	if m["ignore_death_triggers"] == true {
 		triggers = ", ignoring any rules triggered by their destruction"
 	}
-	return verb + " " + what + tail + triggers
+	// "(chosen by its controlling player)": the destroyed unit's owner picks which models.
+	chooser := ""
+	if m["chosen_by"] == "controlling-player" {
+		chooser = " (chosen by its controlling player)"
+	}
+	return verb + " " + what + tail + chooser + triggers
+}
+
+// regionExtendLeaf: "No Man's Land is within your army's Shadow of Chaos": an area joins a region an army rule defines.
+func regionExtendLeaf(m map[string]any) string {
+	region := mapOr(m["region"])
+	area := mapOr(m["area"])
+	within := "within your army's " + titleCase(strings.TrimPrefix(ejstr(region["region_id"]), "the-"))
+	if list, ok := area["territories"].([]any); ok {
+		names := make([]string, 0, len(list))
+		for _, t := range list {
+			names = append(names, regionPhrase(map[string]any{"territory": t}))
+		}
+		return andList(names) + " are " + within
+	}
+	if area["territory"] != nil {
+		return regionPhrase(map[string]any{"territory": area["territory"]}) + " is " + within
+	}
+	rng := mapOr(area["objective_range"])
+	return "the area of the battlefield within " + ejstr(rng["inches"]) + "\" of each " + objectivePhrase(mapOr(rng["objective"]), false, "objective") + " is " + within
 }
 
 func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
@@ -885,6 +909,8 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 			return placeRefPhrase(map[string]any{"objective": m["objective"]}) + " remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase"
 		}
 		return "objective markers " + subj + " " + ev(subj, "controls") + " remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase"
+	case "region-extend":
+		return regionExtendLeaf(m)
 	case "designate":
 		return designateLeaf(m, subj, ctx)
 	case "army-rule":

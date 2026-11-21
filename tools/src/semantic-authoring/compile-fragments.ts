@@ -285,8 +285,15 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
         if (typeof leaf.parameters.selection_var !== "string") throw new CompileError("sticky-objective names the selected objective marker, but this record selects no objective marker.");
         return { type: "objective-sticky", target: "this-unit", modifier: { objective: { selection_var: leaf.parameters.selection_var } } };
       }
-      // A leaf with no subject secures for this unit.
-      return { type: "objective-sticky", target: leaf.parameters.subject !== undefined ? closed(leaf, "subject") : "this-unit" };
+      {
+        // A leaf with no subject secures for this unit.
+        const holder = leaf.parameters.subject !== undefined ? closed(leaf, "subject") : "this-unit";
+        const sticky: Node = { type: "objective-sticky", target: holder };
+        if (leaf.parameters.tag === undefined) return sticky;
+        // "said to be Corrupted": the markers the holder controls also carry the tag an objective filter reads later.
+        const designate: Node = { type: "designate", target: holder, modifier: { subject: { objective: { controlled_by_unit: holder } }, tag: closed(leaf, "tag") } };
+        return { type: "sequence", steps: [sticky, designate] };
+      }
     case "no-advance-roll":
       return { type: "move-modifier", target: target(leaf.parameters.subject), modifier: { advance: "fixed-6" } };
     // A transient planning node (compile.ts): the instead loop removes it, and a left-over one is refused.
@@ -391,6 +398,7 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
           // The attacks a shooting moment bound ("those attacks"), folded by compile-bound-attacks.ts.
           ...(leaf.parameters.attacks_var !== undefined ? { attacks: { event_var: closed(leaf, "attacks_var") } } : {}),
           ...(leaf.parameters.any_army_faction === true ? { any_army_faction: true } : {}),
+          ...(leaf.parameters.sub_rule !== undefined ? { sub_rule: closed(leaf, "sub_rule"), aspect: closed(leaf, "aspect") } : {}),
         },
       };
     default: {

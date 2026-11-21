@@ -35,7 +35,7 @@ export const LEAF_TYPES = new Set([
   "counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
   "destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
   "transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
-  "objective-sticky", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons", "select-weapon",
+  "objective-sticky", "region-extend", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons", "select-weapon",
   "oath-modifier", "orders-modifier", "order-share", "reserves-schedule",
 ]);
 
@@ -546,6 +546,8 @@ function ruleState(m: Record<string, unknown>, subj: string): string {
   const granted = m.direction === "granted";
   const rule = jstr(m.rule);
   // any_army_faction: the granted faction rule works whatever the army's faction is.
+  // "no mortal wounds are inflicted by your army's Daemonic Terror rule": one aspect of a section of the rule is off.
+  if (m.sub_rule != null) return `your army's ${titleCase(jstr(m.sub_rule))} rule inflicts no mortal wounds on ${subj}`;
   if (m.rule_kind === "faction-rule") return granted ? `${subj} ${v(subj, "gains")} ${abilityLabel(m.rule)}${m.any_army_faction === true ? ", whatever your Army Faction is" : ""}` : `${subj} cannot use ${abilityLabel(m.rule)}`;
   if (rule === "overwatch-against-bearer") return `your opponent ${granted ? "can" : "cannot"} target ${subj} with Overwatch`;
   // The attacks of a bound shooting event never count against Hidden (schema: suppressed only).

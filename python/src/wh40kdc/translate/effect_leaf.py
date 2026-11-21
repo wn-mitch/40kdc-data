@@ -109,6 +109,7 @@ LEAF_TYPES = frozenset(
         "resource-spend",
         "resource-die",
         "objective-sticky",
+        "region-extend",
         "designate",
         "army-rule",
         "test-exemption",
@@ -721,6 +722,11 @@ def _rule_state(m: dict[str, Any], subj: str) -> str:
         )
     granted = direction == "granted"
     rule = jstr(rule)
+    # "no mortal wounds are inflicted by your army's Daemonic Terror rule": one aspect of a
+    # section of the rule is off.
+    if m.get("sub_rule") is not None:
+        section = title_case(jstr(m["sub_rule"]))
+        return f"your army's {section} rule inflicts no mortal wounds on {subj}"
     if m.get("rule_kind") == "faction-rule":
         # any_army_faction: the granted faction rule works whatever the army's faction is.
         any_faction = ", whatever your Army Faction is" if m.get("any_army_faction") is True else ""

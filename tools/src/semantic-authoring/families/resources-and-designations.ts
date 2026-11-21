@@ -321,7 +321,7 @@ function normalizeApplyMark(input: Params): Params {
   return result;
 }
 
-const OPTIONAL_COST_POOLS = ["yp-pool", "pain-token-pool"] as const;
+const OPTIONAL_COST_POOLS = ["yp-pool", "pain-token-pool", "flux-token-pool"] as const;
 const OPTIONAL_COST_WINDOWS = ["use", "trigger", "turn"] as const;
 const OPTIONAL_COST_HOLDERS = ["this-unit", "selected-unit"] as const;
 
@@ -338,7 +338,7 @@ function normalizeOptionalCostPaid(input: Params): Params {
   for (const key of Object.keys(input)) {
     if (!allowed.includes(key)) throw new TypeError(`${family} window ${window} does not take ${key}.`);
   }
-  if (window === "use" && pool === "pain-token-pool") throw new TypeError(`${family} window use reads a YP spend; a Pain token spend is read as window trigger.`);
+  if (window === "use" && pool !== "yp-pool") throw new TypeError(`${family} window use reads a YP spend; a Pain token or Flux token spend is read as window trigger.`);
   if (window === "turn") {
     const negated = "negated" in input ? booleanValue(input.negated, `${family}.negated`) : false;
     return { pool, window, ...(negated ? { negated: true } : {}) };
@@ -464,7 +464,7 @@ export const RESOURCES_AND_DESIGNATIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "apply-mark",
-    version: 9,
+    version: 10,
     role: "EFFECT",
     label: "Tag a unit",
     description: "Applies (or clears) a designation tag on the subject: this unit, this model, the selected unit, antecedent (the unit an earlier leaf of the record introduced, \"that enemy unit\", \"it\", bound when the record compiles), selected-objective (the objective marker a select leaf of this record bound), or visible-terrain (one terrain feature visible to the rule's unit, which the rule picks: \"select one visible terrain feature. That terrain feature is identified\"). tag is any registered designation id (tools/src/translate/designations.ts) or a source-qualified value. by names the unit that applied the designation: this-unit, this-model, selected-unit, event-subject, or recipient (the unit of the current for-each-unit pass: \"for each Observer unit …, select one enemy unit … to be marked as their Spotted unit\"); a terrain subject takes no by. The designation ends at the record's printed duration (compile-designation-expiry.ts), so a by with no printed duration is refused at compile time.",
@@ -482,15 +482,15 @@ export const RESOURCES_AND_DESIGNATIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "optional-cost-paid",
-    version: 2,
+    version: 3,
     role: "CONDITION",
     label: "A resource was spent this use or this turn",
-    description: "Requires that the optional spend of a pool was paid during this use of the ability (window use, a YP spend, with the subject that spent it), that a spend the ability's own moment offers was paid and is read later (window trigger), or that the pool was not spent at all in the turn (window turn, negated for \"you spent no YP in that turn\"). pool is yp-pool or pain-token-pool. tag is the designation the spend sets and the read tests (a use leaf without one reads yp-spent-this-use); holder is the unit that designation is set on (trigger only; this-unit when omitted).",
+    description: "Requires that the optional spend of a pool was paid during this use of the ability (window use, a YP spend, with the subject that spent it), that a spend the ability's own moment offers was paid and is read later (window trigger), or that the pool was not spent at all in the turn (window turn, negated for \"you spent no YP in that turn\"). pool is yp-pool, pain-token-pool or flux-token-pool (\"or spend one Flux token and … instead\" is a trigger read). tag is the designation the spend sets and the read tests (a use leaf without one reads yp-spent-this-use); holder is the unit that designation is set on (trigger only; this-unit when omitted).",
     starter: { pool: "yp-pool", window: "use", subject: "this-unit" },
     parameterSchema: {
       type: "object", required: ["pool", "window"], additionalProperties: false,
       properties: {
-        pool: { enum: ["yp-pool", "pain-token-pool"] },
+        pool: { enum: ["yp-pool", "pain-token-pool", "flux-token-pool"] },
         window: { enum: ["use", "turn", "trigger"] },
         subject: { enum: [...SUBJECT_REF] },
         negated: { type: "boolean" },

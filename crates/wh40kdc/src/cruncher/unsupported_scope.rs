@@ -76,6 +76,7 @@ const NON_DAMAGE_EFFECT_TYPES: &[&str] = &[
     "no-effect",
     "oath-modifier",
     "objective-sticky",
+    "region-extend",
     "counts-as",
     "marker",
     "test-exemption",

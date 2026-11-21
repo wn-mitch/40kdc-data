@@ -768,6 +768,13 @@ pub(super) fn rule_state(m: &P, subj: &str) -> String {
     let granted = sv(m, "direction") == Some("granted");
     let rule = jstr(m.get("rule"));
     let kind = sv(m, "rule_kind");
+    // "no mortal wounds are inflicted by your army's Daemonic Terror rule": one aspect of a section of the rule is off.
+    if nn(m, "sub_rule").is_some() {
+        return format!(
+            "your army's {} rule inflicts no mortal wounds on {subj}",
+            title_case(&jstr(m.get("sub_rule")))
+        );
+    }
     if kind == Some("faction-rule") {
         // any_army_faction: the granted faction rule works whatever the army's faction is.
         let any_faction = if m.get("any_army_faction") == Some(&Value::Bool(true)) {

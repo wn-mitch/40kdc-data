@@ -788,6 +788,7 @@ export type SingleEffect =
   | ResourceSpendEffect
   | ResourceDieEffect
   | ObjectiveStickyEffect
+  | RegionExtendEffect
   | DesignateEffect
   | ArmyRuleEffect
   | TestExemptionEffect
@@ -2695,7 +2696,7 @@ export interface DesignatedCondition {
       };
 }
 /**
- * [resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held.
+ * [resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held. holder opponent: count bounds what the opponent holds.
  */
 export interface ResourceCondition {
   type: "resource";
@@ -2715,6 +2716,10 @@ export interface ResourceCondition {
      * count bounds how much of the pool you gained this turn ("you gained fewer than 3YP this turn"), not how much it holds.
      */
     gained?: "turn";
+    /**
+     * count bounds what your opponent holds of a pool both players hold ("if your opponent has one or more Flux tokens"). Absent, the pool is yours.
+     */
+    holder?: "opponent";
   };
 }
 /**
@@ -5755,6 +5760,14 @@ export interface RuleStateEffect {
      */
     any_army_faction?: true;
     attacks?: EventBoundReference3;
+    /**
+     * Kebab-case identifier
+     */
+    sub_rule?: string;
+    /**
+     * What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it.
+     */
+    aspect?: "mortal-wounds";
   };
   scaling?: Scaling;
 }
@@ -5918,6 +5931,10 @@ export interface DestroyModelsEffect {
     count: Quantity | "all";
     remove_from_play?: true;
     ignore_death_triggers?: true;
+    /**
+     * The destroyed unit's controlling player picks which models ("one model in that unit is destroyed (chosen by its controlling player)"). Absent, the player using the ability picks.
+     */
+    chosen_by?: "controlling-player";
   };
   scaling?: Scaling;
 }
@@ -6730,6 +6747,48 @@ export interface ObjectiveFilter1 {
    */
   controlled_at?: "previous-phase-end";
   clear_of?: UnitFilter1;
+}
+/**
+ * [board] An area of the battlefield is within a region an army rule defines ("the selected areas of the battlefield are within your army's Shadow of Chaos") for the effect's duration: one territory, several territories, or the area within a range of the objective markers a filter names.
+ */
+export interface RegionExtendEffect {
+  type: "region-extend";
+  target: UnitRef;
+  modifier: {
+    region: NamedRegionRef;
+    area:
+      | {
+          territory:
+            | "no-mans-land"
+            | "enemy-deployment-zone"
+            | "your-deployment-zone"
+            | "enemy-territory"
+            | "your-territory";
+        }
+      | {
+          /**
+           * @minItems 2
+           */
+          territories: [
+            "no-mans-land" | "enemy-deployment-zone" | "your-deployment-zone" | "enemy-territory" | "your-territory",
+            "no-mans-land" | "enemy-deployment-zone" | "your-deployment-zone" | "enemy-territory" | "your-territory",
+            ...(
+              | "no-mans-land"
+              | "enemy-deployment-zone"
+              | "your-deployment-zone"
+              | "enemy-territory"
+              | "your-territory"
+            )[]
+          ];
+        }
+      | {
+          objective_range: {
+            objective: ObjectiveFilter;
+            inches: number;
+          };
+        };
+  };
+  scaling?: Scaling;
 }
 /**
  * [designation] Tag a unit, objective or terrain area (or clear the tag).

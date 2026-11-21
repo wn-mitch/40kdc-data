@@ -43,11 +43,11 @@ const returnedModelExclusion = (input: Params) => withApostrophes("returned-mode
   return { keywords: unitKeywords(checked.keywords, "returned-model-exclusion.keywords") };
 });
 
-const DESTROY_RECIPIENTS = ["this-unit", "this-model", "defender", "selected-unit", ANTECEDENT] as const;
+const DESTROY_RECIPIENTS = ["this-unit", "this-model", "defender", "selected-unit", ANTECEDENT, "event-subject"] as const;
 const DESTROY_COUNTS = ["1", "2", "3", "D3", "D6", "all"] as const;
 
 function destroyModelsChecked(input: Params): Params {
-  exactKeys(input, ["recipient", "count", ...(["model_keyword", "remove_from_play", "ignore_death_triggers"] as const).filter((key) => key in input)], "destroy-models");
+  exactKeys(input, ["recipient", "count", ...(["model_keyword", "remove_from_play", "ignore_death_triggers", "chosen_by"] as const).filter((key) => key in input)], "destroy-models");
   const result: Params = {
     recipient: enumValue(input.recipient, DESTROY_RECIPIENTS, "destroy-models.recipient"),
     count: enumValue(input.count, DESTROY_COUNTS, "destroy-models.count"),
@@ -55,6 +55,11 @@ function destroyModelsChecked(input: Params): Params {
   if ("model_keyword" in input) result.model_keyword = modelKeyword(input.model_keyword, "destroy-models.model_keyword");
   if ("remove_from_play" in input) result.remove_from_play = booleanValue(input.remove_from_play, "destroy-models.remove_from_play");
   if ("ignore_death_triggers" in input) result.ignore_death_triggers = booleanValue(input.ignore_death_triggers, "destroy-models.ignore_death_triggers");
+  // "one model in that unit is destroyed (chosen by its controlling player)": the unit's owner picks which models.
+  if ("chosen_by" in input) {
+    result.chosen_by = enumValue(input.chosen_by, ["controlling-player"], "destroy-models.chosen_by");
+    if (result.count === "all") throw new TypeError("destroy-models.chosen_by names who picks some of the models; all of them leaves nothing to choose.");
+  }
   return result;
 }
 
@@ -157,10 +162,10 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "destroy-models",
-    version: 4,
+    version: 5,
     role: "EFFECT",
     label: "Destroy models",
-    description: "Destroy a number of models (all of them, a fixed or rolled count, optionally only of a named model keyword) in this unit, the attack's target, the unit selected earlier, or the unit an earlier leaf of the record introduced (antecedent, bound when the record compiles), optionally removing them from play or ignoring rules their destruction would trigger. A keyword can carry accented capitals or start with an apostrophe as the rules print it (KÂHL, 'ARDMOB).",
+    description: "Destroy a number of models (all of them, a fixed or rolled count, optionally only of a named model keyword) in this unit, the attack's target, the unit selected earlier, the unit whose moment triggered the ability (event-subject: \"each time an enemy unit fails a Battle-shock test, … one model in that unit is destroyed\"), or the unit an earlier leaf of the record introduced (antecedent, bound when the record compiles), optionally removing them from play or ignoring rules their destruction would trigger. chosen_by controlling-player: the destroyed unit's controlling player picks which models (\"(chosen by its controlling player)\"); it takes a count other than all. A keyword can carry accented capitals or start with an apostrophe as the rules print it (KÂHL, 'ARDMOB).",
     starter: {"recipient":"","count":""},
     parameterSchema: {
       "type": "object",
@@ -175,7 +180,8 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
             "this-model",
             "defender",
             "selected-unit",
-            "antecedent"
+            "antecedent",
+            "event-subject"
           ]
         },
         "count": {
@@ -197,6 +203,10 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
         },
         "ignore_death_triggers": {
           "type": "boolean"
+        },
+        "chosen_by": {
+          "const": "controlling-player",
+          "x-optional": true
         }
       },
       "additionalProperties": false

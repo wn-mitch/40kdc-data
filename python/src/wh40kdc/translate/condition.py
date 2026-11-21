@@ -665,6 +665,11 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         if p.get("gained") == "turn":
             verb = "did not gain" if negated else "gained"
             return f"you {verb} {amount} {resource_noun(p.get('pool'), None, 2)} this turn"
+        # "if your opponent has one or more Flux tokens": the opponent's holding of a pool
+        # both players hold.
+        if p.get("holder") == "opponent":
+            verb = "does not have" if negated else "has"
+            return f"your opponent {verb} {amount} {resource_noun(p.get('pool'), None, 2)}"
         # A pool is the player's ("If you have 3 or more Pact points").
         return f"you have {amount} {dekebab(_str(p.get('pool')))}"
     if ctype == "roll-total":

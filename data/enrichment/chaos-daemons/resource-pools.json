@@ -1,0 +1,68 @@
+[
+  {
+    "id": "flux-token-pool",
+    "name": "Flux Token Pool",
+    "faction_id": "chaos-daemons",
+    "pool_type": "token",
+    "generation": [
+      {
+        "condition": {
+          "type": "happened",
+          "parameters": {
+            "event": "resource-spent",
+            "window": "event",
+            "subject": {
+              "owner": "enemy"
+            },
+            "filter": {
+              "pool": "flux-token-pool"
+            }
+          }
+        },
+        "amount": 1
+      },
+      {
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "happened",
+              "parameters": {
+                "event": "phase-started",
+                "window": "event"
+              }
+            },
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "command"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            },
+            {
+              "type": "resource",
+              "parameters": {
+                "pool": "flux-token-pool",
+                "count": {
+                  "min": 1
+                },
+                "holder": "opponent"
+              }
+            }
+          ]
+        },
+        "amount": 1
+      }
+    ],
+    "max_size": null,
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "pre-launch-provisional"
+    }
+  }
+]

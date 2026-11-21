@@ -142,6 +142,7 @@ pub const DESIGNATION_IDS: &[&str] = &[
     "protector-imperative-active",
     "pulsa-rokkit-target",
     "pulse-onslaught-shaken",
+    "pyrogenesis-flux-spent",
     "quarry",
     "readied",
     "remains-under-your-control",

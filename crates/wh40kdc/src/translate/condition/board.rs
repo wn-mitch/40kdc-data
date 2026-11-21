@@ -449,6 +449,15 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                     resource_noun(p.get("pool"), None, Some(&Value::from(2)))
                 );
             }
+            // "if your opponent has one or more Flux tokens": the opponent's holding of a pool both players hold.
+            if p.get("holder").and_then(Value::as_str) == Some("opponent") {
+                return format!(
+                    "your opponent {} {} {}",
+                    if negated { "does not have" } else { "has" },
+                    count_phrase(p.get("count")),
+                    resource_noun(p.get("pool"), None, Some(&Value::from(2)))
+                );
+            }
             // A pool is the player's ("If you have 3 or more Pact points").
             format!(
                 "you have {} {}",

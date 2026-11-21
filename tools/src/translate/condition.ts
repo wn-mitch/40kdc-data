@@ -285,6 +285,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const amount = countPhrase(p.count);
       // "you gained fewer than 3YP this turn": this turn's gains, not what the pool holds.
       if (p.gained === "turn") return `you ${negated ? "did not gain" : "gained"} ${amount} ${resourceNoun(p.pool, undefined, 2)} this turn`;
+      // "if your opponent has one or more Flux tokens": the opponent's holding of a pool both players hold.
+      if (p.holder === "opponent") return `your opponent ${negated ? "does not have" : "has"} ${amount} ${resourceNoun(p.pool, undefined, 2)}`;
       // A pool is the player's ("If you have 3 or more Pact points").
       return `you have ${amount} ${dekebab(str(p.pool))}`;
     }

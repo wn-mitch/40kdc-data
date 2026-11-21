@@ -39,7 +39,8 @@ NON_DAMAGE_EFFECT_TYPES = frozenset(
         "stance-selection-capacity", "move-modifier", "army-rule", "keyword-grant", "act-on-death",
         "cp-gain", "resource-gain", "add-unit", "split-unit", "transport-capacity",
         "destroy-models", "designate", "test", "targeting", "state-change", "no-effect",
-        "oath-modifier", "objective-sticky", "counts-as", "marker", "test-exemption",
+        "oath-modifier", "objective-sticky", "region-extend", "counts-as", "marker",
+        "test-exemption",
         "return-models",
     ]
 )

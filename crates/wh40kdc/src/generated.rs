@@ -13583,6 +13583,10 @@ impl<'de> ::serde::Deserialize<'de> for DesignationId {
 ///    "count"
 ///  ],
 ///  "properties": {
+///    "chosen_by": {
+///      "description": "The destroyed unit's controlling player picks which models (\"one model in that unit is destroyed (chosen by its controlling player)\"). Absent, the player using the ability picks.",
+///      "const": "controlling-player"
+///    },
 ///    "count": {
 ///      "oneOf": [
 ///        {
@@ -13607,6 +13611,9 @@ impl<'de> ::serde::Deserialize<'de> for DesignationId {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DestroyModelsEffectModifier {
+    ///The destroyed unit's controlling player picks which models ("one model in that unit is destroyed (chosen by its controlling player)"). Absent, the player using the ability picks.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub chosen_by: ::std::option::Option<::serde_json::Value>,
     pub count: DestroyModelsEffectModifierCount,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_death_triggers: ::std::option::Option<::serde_json::Value>,
@@ -35870,6 +35877,395 @@ impl<'de> ::serde::Deserialize<'de> for ReRollEffectModifierVariant1Pool {
             })
     }
 }
+///`RegionExtendEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "area",
+///    "region"
+///  ],
+///  "properties": {
+///    "area": {
+///      "oneOf": [
+///        {
+///          "type": "object",
+///          "required": [
+///            "territory"
+///          ],
+///          "properties": {
+///            "territory": {
+///              "enum": [
+///                "no-mans-land",
+///                "enemy-deployment-zone",
+///                "your-deployment-zone",
+///                "enemy-territory",
+///                "your-territory"
+///              ]
+///            }
+///          },
+///          "additionalProperties": false
+///        },
+///        {
+///          "description": "Every listed territory.",
+///          "type": "object",
+///          "required": [
+///            "territories"
+///          ],
+///          "properties": {
+///            "territories": {
+///              "type": "array",
+///              "items": {
+///                "enum": [
+///                  "no-mans-land",
+///                  "enemy-deployment-zone",
+///                  "your-deployment-zone",
+///                  "enemy-territory",
+///                  "your-territory"
+///                ]
+///              },
+///              "minItems": 2,
+///              "uniqueItems": true
+///            }
+///          },
+///          "additionalProperties": false
+///        },
+///        {
+///          "description": "The area within inches of each objective marker the filter names (\"within 6\\\" of that objective marker\").",
+///          "type": "object",
+///          "required": [
+///            "objective_range"
+///          ],
+///          "properties": {
+///            "objective_range": {
+///              "type": "object",
+///              "required": [
+///                "inches",
+///                "objective"
+///              ],
+///              "properties": {
+///                "inches": {
+///                  "type": "integer",
+///                  "maximum": 24.0,
+///                  "minimum": 1.0
+///                },
+///                "objective": {
+///                  "$ref": "#/$defs/objective-filter"
+///                }
+///              },
+///              "additionalProperties": false
+///            }
+///          },
+///          "additionalProperties": false
+///        }
+///      ]
+///    },
+///    "region": {
+///      "$ref": "#/$defs/named-region-ref"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RegionExtendEffectModifier {
+    pub area: RegionExtendEffectModifierArea,
+    pub region: NamedRegionRef,
+}
+///`RegionExtendEffectModifierArea`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "object",
+///      "required": [
+///        "territory"
+///      ],
+///      "properties": {
+///        "territory": {
+///          "enum": [
+///            "no-mans-land",
+///            "enemy-deployment-zone",
+///            "your-deployment-zone",
+///            "enemy-territory",
+///            "your-territory"
+///          ]
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "description": "Every listed territory.",
+///      "type": "object",
+///      "required": [
+///        "territories"
+///      ],
+///      "properties": {
+///        "territories": {
+///          "type": "array",
+///          "items": {
+///            "enum": [
+///              "no-mans-land",
+///              "enemy-deployment-zone",
+///              "your-deployment-zone",
+///              "enemy-territory",
+///              "your-territory"
+///            ]
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "description": "The area within inches of each objective marker the filter names (\"within 6\\\" of that objective marker\").",
+///      "type": "object",
+///      "required": [
+///        "objective_range"
+///      ],
+///      "properties": {
+///        "objective_range": {
+///          "type": "object",
+///          "required": [
+///            "inches",
+///            "objective"
+///          ],
+///          "properties": {
+///            "inches": {
+///              "type": "integer",
+///              "maximum": 24.0,
+///              "minimum": 1.0
+///            },
+///            "objective": {
+///              "$ref": "#/$defs/objective-filter"
+///            }
+///          },
+///          "additionalProperties": false
+///        }
+///      },
+///      "additionalProperties": false
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub enum RegionExtendEffectModifierArea {
+    #[serde(rename = "territory")]
+    Territory(RegionExtendEffectModifierAreaTerritory),
+    ///Every listed territory.
+    #[serde(rename = "territories")]
+    Territories(Vec<RegionExtendEffectModifierAreaTerritoriesItem>),
+    ///The area within inches of each objective marker the filter names ("within 6\" of that objective marker").
+    #[serde(rename = "objective_range")]
+    ObjectiveRange { inches: ::std::num::NonZeroU64, objective: ObjectiveFilter },
+}
+impl ::std::convert::From<RegionExtendEffectModifierAreaTerritory>
+for RegionExtendEffectModifierArea {
+    fn from(value: RegionExtendEffectModifierAreaTerritory) -> Self {
+        Self::Territory(value)
+    }
+}
+impl ::std::convert::From<Vec<RegionExtendEffectModifierAreaTerritoriesItem>>
+for RegionExtendEffectModifierArea {
+    fn from(value: Vec<RegionExtendEffectModifierAreaTerritoriesItem>) -> Self {
+        Self::Territories(value)
+    }
+}
+///`RegionExtendEffectModifierAreaTerritoriesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "no-mans-land",
+///    "enemy-deployment-zone",
+///    "your-deployment-zone",
+///    "enemy-territory",
+///    "your-territory"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RegionExtendEffectModifierAreaTerritoriesItem {
+    #[serde(rename = "no-mans-land")]
+    NoMansLand,
+    #[serde(rename = "enemy-deployment-zone")]
+    EnemyDeploymentZone,
+    #[serde(rename = "your-deployment-zone")]
+    YourDeploymentZone,
+    #[serde(rename = "enemy-territory")]
+    EnemyTerritory,
+    #[serde(rename = "your-territory")]
+    YourTerritory,
+}
+impl ::std::fmt::Display for RegionExtendEffectModifierAreaTerritoriesItem {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::NoMansLand => f.write_str("no-mans-land"),
+            Self::EnemyDeploymentZone => f.write_str("enemy-deployment-zone"),
+            Self::YourDeploymentZone => f.write_str("your-deployment-zone"),
+            Self::EnemyTerritory => f.write_str("enemy-territory"),
+            Self::YourTerritory => f.write_str("your-territory"),
+        }
+    }
+}
+impl ::std::str::FromStr for RegionExtendEffectModifierAreaTerritoriesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "no-mans-land" => Ok(Self::NoMansLand),
+            "enemy-deployment-zone" => Ok(Self::EnemyDeploymentZone),
+            "your-deployment-zone" => Ok(Self::YourDeploymentZone),
+            "enemy-territory" => Ok(Self::EnemyTerritory),
+            "your-territory" => Ok(Self::YourTerritory),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RegionExtendEffectModifierAreaTerritoriesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for RegionExtendEffectModifierAreaTerritoriesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for RegionExtendEffectModifierAreaTerritoriesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`RegionExtendEffectModifierAreaTerritory`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "no-mans-land",
+///    "enemy-deployment-zone",
+///    "your-deployment-zone",
+///    "enemy-territory",
+///    "your-territory"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RegionExtendEffectModifierAreaTerritory {
+    #[serde(rename = "no-mans-land")]
+    NoMansLand,
+    #[serde(rename = "enemy-deployment-zone")]
+    EnemyDeploymentZone,
+    #[serde(rename = "your-deployment-zone")]
+    YourDeploymentZone,
+    #[serde(rename = "enemy-territory")]
+    EnemyTerritory,
+    #[serde(rename = "your-territory")]
+    YourTerritory,
+}
+impl ::std::fmt::Display for RegionExtendEffectModifierAreaTerritory {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::NoMansLand => f.write_str("no-mans-land"),
+            Self::EnemyDeploymentZone => f.write_str("enemy-deployment-zone"),
+            Self::YourDeploymentZone => f.write_str("your-deployment-zone"),
+            Self::EnemyTerritory => f.write_str("enemy-territory"),
+            Self::YourTerritory => f.write_str("your-territory"),
+        }
+    }
+}
+impl ::std::str::FromStr for RegionExtendEffectModifierAreaTerritory {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "no-mans-land" => Ok(Self::NoMansLand),
+            "enemy-deployment-zone" => Ok(Self::EnemyDeploymentZone),
+            "your-deployment-zone" => Ok(Self::YourDeploymentZone),
+            "enemy-territory" => Ok(Self::EnemyTerritory),
+            "your-territory" => Ok(Self::YourTerritory),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RegionExtendEffectModifierAreaTerritory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for RegionExtendEffectModifierAreaTerritory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for RegionExtendEffectModifierAreaTerritory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///A region of the battlefield.
 ///
 /// <details><summary>JSON schema</summary>
@@ -37677,6 +38073,10 @@ impl ::std::convert::From<Trigger> for ResourceActionMenuTrigger {
 ///      "description": "count bounds how much of the pool you gained this turn (\"you gained fewer than 3YP this turn\"), not how much it holds.",
 ///      "const": "turn"
 ///    },
+///    "holder": {
+///      "description": "count bounds what your opponent holds of a pool both players hold (\"if your opponent has one or more Flux tokens\"). Absent, the pool is yours.",
+///      "const": "opponent"
+///    },
 ///    "pool": {
 ///      "type": "string",
 ///      "minLength": 1
@@ -37701,6 +38101,9 @@ impl ::std::convert::From<Trigger> for ResourceActionMenuTrigger {
 ///  "dependentRequired": {
 ///    "gained": [
 ///      "count"
+///    ],
+///    "holder": [
+///      "count"
 ///    ]
 ///  }
 ///}
@@ -37718,6 +38121,9 @@ pub struct ResourceConditionParameters {
     ///count bounds how much of the pool you gained this turn ("you gained fewer than 3YP this turn"), not how much it holds.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub gained: ::std::option::Option<::serde_json::Value>,
+    ///count bounds what your opponent holds of a pool both players hold ("if your opponent has one or more Flux tokens"). Absent, the pool is yours.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub holder: ::std::option::Option<::serde_json::Value>,
     pub pool: ResourceConditionParametersPool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub source_ability: ::std::option::Option<ResourceConditionParametersSourceAbility>,
@@ -42608,6 +43014,12 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 ///      "description": "A granted faction rule the holder can use whatever your Army Faction is (\"even though your Army Faction is not X\"): the rule's own Army Faction requirement does not apply to it.",
 ///      "const": true
 ///    },
+///    "aspect": {
+///      "description": "What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it.",
+///      "enum": [
+///        "mortal-wounds"
+///      ]
+///    },
 ///    "attacks": {
 ///      "description": "Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this.",
 ///      "$ref": "#/$defs/event-bound-reference"
@@ -42646,9 +43058,21 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 ///        "ability",
 ///        "faction-rule"
 ///      ]
+///    },
+///    "sub_rule": {
+///      "description": "A named section of the suppressed faction rule (\"your army's Daemonic Terror rule\"); only its aspect is off for the target.",
+///      "$ref": "#/$defs/entity-id"
 ///    }
 ///  },
-///  "additionalProperties": false
+///  "additionalProperties": false,
+///  "dependentRequired": {
+///    "aspect": [
+///      "sub_rule"
+///    ],
+///    "sub_rule": [
+///      "aspect"
+///    ]
+///  }
 ///}
 /// ```
 /// </details>
@@ -42658,6 +43082,9 @@ pub struct RuleStateEffectModifier {
     ///A granted faction rule the holder can use whatever your Army Faction is ("even though your Army Faction is not X"): the rule's own Army Faction requirement does not apply to it.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub any_army_faction: ::std::option::Option<::serde_json::Value>,
+    ///What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub aspect: ::std::option::Option<RuleStateEffectModifierAspect>,
     ///Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attacks: ::std::option::Option<EventBoundReference>,
@@ -42668,6 +43095,80 @@ pub struct RuleStateEffectModifier {
     pub exchange_with: ::std::option::Option<NamedAbilityRef>,
     pub rule: RuleStateEffectModifierRule,
     pub rule_kind: RuleStateEffectModifierRuleKind,
+    ///A named section of the suppressed faction rule ("your army's Daemonic Terror rule"); only its aspect is off for the target.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub sub_rule: ::std::option::Option<EntityId>,
+}
+///What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it.",
+///  "enum": [
+///    "mortal-wounds"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RuleStateEffectModifierAspect {
+    #[serde(rename = "mortal-wounds")]
+    MortalWounds,
+}
+impl ::std::fmt::Display for RuleStateEffectModifierAspect {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::MortalWounds => f.write_str("mortal-wounds"),
+        }
+    }
+}
+impl ::std::str::FromStr for RuleStateEffectModifierAspect {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "mortal-wounds" => Ok(Self::MortalWounds),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RuleStateEffectModifierAspect {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RuleStateEffectModifierAspect {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RuleStateEffectModifierAspect {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`RuleStateEffectModifierDirection`
 ///
@@ -47912,7 +48413,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///    },
 ///    {
 ///      "title": "resource condition",
-///      "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held.",
+///      "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held. holder opponent: count bounds what the opponent holds.",
 ///      "type": "object",
 ///      "required": [
 ///        "parameters",
@@ -48321,7 +48822,7 @@ pub enum SimpleCondition {
     Designated { parameters: DesignatedConditionParameters },
     /**resource condition
 
-[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held.*/
+[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held. holder opponent: count bounds what the opponent holds.*/
     #[serde(rename = "resource")]
     Resource { parameters: ResourceConditionParameters },
     /**operation-markers condition
@@ -49406,6 +49907,31 @@ pub enum SimpleCondition {
 ///      "additionalProperties": false
 ///    },
 ///    {
+///      "title": "region-extend effect",
+///      "description": "[board] An area of the battlefield is within a region an army rule defines (\"the selected areas of the battlefield are within your army's Shadow of Chaos\") for the effect's duration: one territory, several territories, or the area within a range of the objective markers a filter names.",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/region-extend-effect-modifier"
+///        },
+///        "scaling": {
+///          "$ref": "#/$defs/scaling"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "region-extend"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
 ///      "title": "designate effect",
 ///      "description": "[designation] Tag a unit, objective or terrain area (or clear the tag).",
 ///      "type": "object",
@@ -50073,6 +50599,16 @@ pub enum SingleEffect {
     ObjectiveSticky {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         modifier: ::std::option::Option<ObjectiveStickyEffectModifier>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        scaling: ::std::option::Option<Scaling>,
+        target: UnitRef,
+    },
+    /**region-extend effect
+
+[board] An area of the battlefield is within a region an army rule defines ("the selected areas of the battlefield are within your army's Shadow of Chaos") for the effect's duration: one territory, several territories, or the area within a range of the objective markers a filter names.*/
+    #[serde(rename = "region-extend")]
+    RegionExtend {
+        modifier: RegionExtendEffectModifier,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         scaling: ::std::option::Option<Scaling>,
         target: UnitRef,
@@ -66445,8 +66981,8 @@ fn effect_node_from_value(
             | "act-on-death" | "split-unit" | "add-unit" | "destruction-rule" | "move"
             | "move-modifier" | "set-up" | "marker" | "transport-capacity" | "test"
             | "state-change" | "cp-gain" | "cost-modifier" | "resource-gain"
-            | "resource-spend" | "resource-die" | "objective-sticky" | "designate"
-            | "army-rule" | "test-exemption" | "datasheet-swap"
+            | "resource-spend" | "resource-die" | "objective-sticky" | "region-extend"
+            | "designate" | "army-rule" | "test-exemption" | "datasheet-swap"
             | "characteristic-resolution" | "borrow-weapons" | "select-weapon"
             | "weapon-ability-range" | "orders-modifier" | "order-share"
             | "reserves-schedule",
