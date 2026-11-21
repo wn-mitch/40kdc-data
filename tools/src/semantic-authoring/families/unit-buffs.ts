@@ -97,7 +97,7 @@ function chooseValue(value: unknown): { count: number; from?: string[] } {
   return { count: picked, from: listed };
 }
 
-const ACTIVATE_KEYS = ["subject", "ability", "option", "options", "all_options", "chosen", "choose", "additive", "ignore_consumed", "from_event"];
+const ACTIVATE_KEYS = ["subject", "ability", "option", "options", "all_options", "chosen", "choose", "additive", "ignore_consumed", "from_event", "immediate"];
 const OPTION_FORMS = ["option", "options", "all_options", "chosen", "choose"] as const;
 
 function normalizeAbilityActivate(input: Params): Params {
@@ -130,6 +130,12 @@ function normalizeAbilityActivate(input: Params): Params {
     const others = ["option", "options", "all_options", "chosen", "choose", "additive", "ignore_consumed"].filter((key) => result[key] !== undefined);
     if (others.length) throw new TypeError(`ability-activate.from_event names the triggering use's option; it takes no ${others.join(" or ")}.`);
     result.from_event = true;
+  }
+  if ("immediate" in input) {
+    if (input.immediate !== true) throw new TypeError("ability-activate.immediate is true or omitted.");
+    const others = ["options", "all_options", "chosen", "choose", "additive", "ignore_consumed", "from_event"].filter((key) => result[key] !== undefined);
+    if (result.option === undefined || others.length) throw new TypeError("ability-activate.immediate resolves one named option once, now: it takes option and no other option form.");
+    result.immediate = true;
   }
   return result;
 }
@@ -264,7 +270,7 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "ability-activate",
-    version: 5,
+    version: 6,
     role: "EFFECT",
     label: "Activate an ability now",
     description: "Makes a named ability resolve at once, or activates some of its options, for this unit or model, an earlier leaf's unit (antecedent), a selected unit, the unit an aura reaches (recipient), or the units a unit-filter names before the activation (filtered-units: \"active for friendly K units in addition to\"). "
@@ -273,7 +279,8 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
       + "or choose {count, from?} (the player picks count options at once, from the listed ones or from all: \"the assault doctrine or tactical doctrine is active\"). With no option form the ability resolves at once. "
       + "additive: the activated options join the ones already active (\"in addition to any other combat doctrine\"); without it an activation replaces the unit's active option. "
       + "ignore_consumed goes with chosen: the option picked earlier may be one a once-per-battle selection already used (\"even if you have already selected that Vow this battle\"); a pick that says so itself is a choice-open's ignore_consumed. "
-      + "from_event: the option active is the one the triggering use of another ability selected (\"the selected combat doctrine is active for this unit\" after a Strategic Acumen use); it takes no other option form, and replaces the unit's active option.",
+      + "from_event: the option active is the one the triggering use of another ability selected (\"the selected combat doctrine is active for this unit\" after a Strategic Acumen use); it takes no other option form, and replaces the unit's active option."
+      + " immediate, with option: that option resolves once, now, for the subject instead of becoming active (\"Your unit immediately Regenerates (See Feed the Swarm)\", the Regenerate choice of Feed the Swarm).",
     starter: { subject: "this-unit", ability: "" },
     parameterSchema: {
       type: "object",
@@ -295,6 +302,7 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
         additive: { const: true, "x-optional": true },
         ignore_consumed: { const: true, "x-optional": true },
         from_event: { const: true, "x-optional": true },
+        immediate: { const: true, "x-optional": true },
       },
       additionalProperties: false,
     },

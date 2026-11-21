@@ -128,7 +128,9 @@ export function activationModifier(leaf: CompileLeaf): Node {
     (modifier.select as Node).excluding = p[EXCLUDING];
   }
   const hasOptions = p.option !== undefined || p.options !== undefined || pick !== undefined || p.from_event === true;
-  const exclusive = hasOptions && p.additive !== true;
+  // "Your unit immediately Regenerates": the option resolves once, now; nothing stays active to replace.
+  if (p.immediate === true) modifier.immediate = true;
+  const exclusive = hasOptions && p.additive !== true && p.immediate !== true;
   if (exclusive) modifier.exclusive = true;
   if (picked?.ignore_consumed === true || p.ignore_consumed === true) modifier.ignore_consumed = true;
   return modifier;

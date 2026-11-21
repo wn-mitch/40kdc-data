@@ -1291,7 +1291,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "ability-modifier effect",
-          "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options.",
+          "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, or how many times one unit can be affected by it (received).",
           "required": [
             "type",
             "target",
@@ -1381,7 +1381,9 @@
                     "start-round",
                     "end-round",
                     "threshold",
-                    "options"
+                    "options",
+                    "amount",
+                    "received"
                   ]
                 },
                 "operation": {
@@ -1572,7 +1574,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "ability-activate effect",
-          "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, \"the selected combat doctrine is active for this unit\" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
+          "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, \"the selected combat doctrine is active for this unit\" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. immediate: the one option resolves once, now, instead of becoming active. override: the activation resolves with this amount instead of its own.",
           "required": [
             "type",
             "target",
@@ -1598,6 +1600,10 @@
                 "option": {
                   "type": "string",
                   "minLength": 1
+                },
+                "immediate": {
+                  "const": true,
+                  "description": "The named option resolves once, now, for the target (\"Your unit immediately Regenerates\"), instead of becoming active. Requires option."
                 },
                 "options": {
                   "type": "array",
@@ -1767,6 +1773,32 @@
                         {
                           "required": [
                             "all_options"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "select"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "immediate"
+                    ]
+                  },
+                  "then": {
+                    "required": [
+                      "option"
+                    ],
+                    "not": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "exclusive"
                           ]
                         },
                         {
@@ -5849,6 +5881,10 @@
             "$ref": "#/$defs/effect-node"
           },
           "minItems": 2
+        },
+        "id": {
+          "$ref": "../../defs/common.schema.json#/$defs/entity-id",
+          "description": "A stable id for the whole choice: other rules make it happen again as an option of this record (ability-activate option, or an ability-modifier naming {ability_id, option_id}), such as Feed the Swarm's Regenerate."
         },
         "choice_label": {
           "type": "string"

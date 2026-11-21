@@ -388,6 +388,10 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityAbilityType {
 ///    "ignore_consumed": {
 ///      "const": true
 ///    },
+///    "immediate": {
+///      "description": "The named option resolves once, now, for the target (\"Your unit immediately Regenerates\"), instead of becoming active. Requires option.",
+///      "const": true
+///    },
 ///    "option": {
 ///      "type": "string",
 ///      "minLength": 1
@@ -468,6 +472,9 @@ pub struct AbilityActivateEffectModifier {
     pub exclusive: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_consumed: ::std::option::Option<::serde_json::Value>,
+    ///The named option resolves once, now, for the target ("Your unit immediately Regenerates"), instead of becoming active. Requires option.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub immediate: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub option: ::std::option::Option<AbilityActivateEffectModifierOption>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -1419,7 +1426,9 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityInteractionsItemT
 ///        "start-round",
 ///        "end-round",
 ///        "threshold",
-///        "options"
+///        "options",
+///        "amount",
+///        "received"
 ///      ]
 ///    },
 ///    "cap": {
@@ -1904,7 +1913,9 @@ impl<'de> ::serde::Deserialize<'de> for AbilityModifierEffectModifierAddOptionNa
 ///    "start-round",
 ///    "end-round",
 ///    "threshold",
-///    "options"
+///    "options",
+///    "amount",
+///    "received"
 ///  ]
 ///}
 /// ```
@@ -1946,6 +1957,10 @@ pub enum AbilityModifierEffectModifierAspect {
     Threshold,
     #[serde(rename = "options")]
     Options,
+    #[serde(rename = "amount")]
+    Amount,
+    #[serde(rename = "received")]
+    Received,
 }
 impl ::std::fmt::Display for AbilityModifierEffectModifierAspect {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -1962,6 +1977,8 @@ impl ::std::fmt::Display for AbilityModifierEffectModifierAspect {
             Self::EndRound => f.write_str("end-round"),
             Self::Threshold => f.write_str("threshold"),
             Self::Options => f.write_str("options"),
+            Self::Amount => f.write_str("amount"),
+            Self::Received => f.write_str("received"),
         }
     }
 }
@@ -1983,6 +2000,8 @@ impl ::std::str::FromStr for AbilityModifierEffectModifierAspect {
             "end-round" => Ok(Self::EndRound),
             "threshold" => Ok(Self::Threshold),
             "options" => Ok(Self::Options),
+            "amount" => Ok(Self::Amount),
+            "received" => Ok(Self::Received),
             _ => Err("invalid value".into()),
         }
     }
@@ -8220,6 +8239,10 @@ for CharacteristicResolutionEffectModifierTie {
 ///        "opponent"
 ///      ]
 ///    },
+///    "id": {
+///      "description": "A stable id for the whole choice: other rules make it happen again as an option of this record (ability-activate option, or an ability-modifier naming {ability_id, option_id}), such as Feed the Swarm's Regenerate.",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "max_choices": {
 ///      "description": "Maximum number of distinct options selected at this activation; defaults to one.",
 ///      "type": "integer",
@@ -8263,6 +8286,9 @@ pub struct ChoiceEffect {
     ///Who picks the option: the opponent ("your opponent must decide whether that unit will take cover or stand firm"). Absent, the player using the ability picks.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub chosen_by: ::std::option::Option<ChoiceEffectChosenBy>,
+    ///A stable id for the whole choice: other rules make it happen again as an option of this record (ability-activate option, or an ability-modifier naming {ability_id, option_id}), such as Feed the Swarm's Regenerate.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<EntityId>,
     ///Maximum number of distinct options selected at this activation; defaults to one.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_choices: ::std::option::Option<::std::num::NonZeroU64>,
@@ -49159,7 +49185,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "ability-modifier effect",
-///      "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options.",
+///      "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, or how many times one unit can be affected by it (received).",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -49184,7 +49210,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "ability-activate effect",
-///      "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, \"the selected combat doctrine is active for this unit\" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
+///      "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, \"the selected combat doctrine is active for this unit\" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. immediate: the one option resolves once, now, instead of becoming active. override: the activation resolves with this amount instead of its own.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -50304,7 +50330,7 @@ pub enum SingleEffect {
     },
     /**ability-modifier effect
 
-[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options.*/
+[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, or how many times one unit can be affected by it (received).*/
     #[serde(rename = "ability-modifier")]
     AbilityModifier {
         modifier: AbilityModifierEffectModifier,
@@ -50314,7 +50340,7 @@ pub enum SingleEffect {
     },
     /**ability-activate effect
 
-[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, "the selected combat doctrine is active for this unit" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.*/
+[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, "the selected combat doctrine is active for this unit" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. immediate: the one option resolves once, now, instead of becoming active. override: the activation resolves with this amount instead of its own.*/
     #[serde(rename = "ability-activate")]
     AbilityActivate {
         modifier: AbilityActivateEffectModifier,

@@ -174,7 +174,7 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   if (selections.length === 1 && selected.length > 0 && (selected.filter(unlimitedItem).length + direct.length !== planned.filter(unlimitedItem).length
     || planned.some((item) => optionalSpends.has(item.leaf) && !designatedSpends.includes(item)))) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
   if (selections.length === 0 && selected.length > 0) errors.push("An attack targets \"that unit\", but no select-unit leaf says which unit.");
-  if (selections.length === 0 && planned.some((item) => namesSelected(item.node))) errors.push("An effect names \"that unit\", but no select-unit leaf says which unit.");
+  if (selections.length === 0 && options.outerSelection !== true && planned.some((item) => namesSelected(item.node))) errors.push("An effect names \"that unit\", but no select-unit leaf says which unit.");
   // "Select one enemy X unit" with the bearer's attacks not aimed at it: the filter would narrow the
   // selection while the attacks stay unrestricted. An attack by the selected unit itself is the
   // selection's own attacks, and a persistent designation's attacks name its mark, so only an attack

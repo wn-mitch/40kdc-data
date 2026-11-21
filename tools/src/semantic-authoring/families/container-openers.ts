@@ -141,9 +141,14 @@ function issueOrdersOpen(input: Params): Params {
 
 function choiceOpen(input: Params): Params {
   const family = "choice-open";
-  exactKeys(input, present(input, ["choice_label", "min_choices", "max_choices", "or_random", "ignore_consumed", "chosen_by"]), family);
+  exactKeys(input, present(input, ["choice_label", "id", "min_choices", "max_choices", "or_random", "ignore_consumed", "chosen_by"]), family);
   const result: Params = {};
   if ("choice_label" in input) result.choice_label = String(input.choice_label);
+  if ("id" in input) {
+    if (typeof input.id !== "string" || !/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(input.id)) throw new TypeError(`${family}.id must be a kebab-case option id.`);
+    if ("ignore_consumed" in input) throw new TypeError(`${family}.id names a menu other rules make happen again; an activation's pick takes none.`);
+    result.id = input.id;
+  }
   if ("min_choices" in input) result.min_choices = boundedInteger(input.min_choices, 0, 99, `${family}.min_choices`);
   if ("max_choices" in input) result.max_choices = boundedInteger(input.max_choices, 1, 99, `${family}.max_choices`);
   if ("or_random" in input) result.or_random = randomPick(input.or_random, family);
@@ -315,12 +320,12 @@ export const CONTAINER_OPENERS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "choice-open",
-    version: 4,
+    version: 5,
     role: "EFFECT",
     label: "Choose one of the following",
-    description: "Opens a choice: every later sentence's effect becomes one option (min/max default to one). Composes with an earlier select-unit/for-each-unit-select, an earlier roll, and ability parts the same way any other effect leaf does. or_random says the options may instead be picked at random: {dice, count} rolls count dice (D3 or D6) and applies the option numbered by each result, the options being numbered in order from 1 to the die's faces. ignore_consumed lets the pick take an option a once-per-battle selection already used (\"even if you have already selected that imperative this battle\"); only an optionless pick an ability-activate names takes it, and never with or_random. chosen_by opponent: the opponent picks the option, not the player using the ability; such a pick takes no or_random or ignore_consumed.",
+    description: "Opens a choice: every later sentence's effect becomes one option (min/max default to one). Composes with an earlier select-unit/for-each-unit-select, an earlier roll, and ability parts the same way any other effect leaf does. or_random says the options may instead be picked at random: {dice, count} rolls count dice (D3 or D6) and applies the option numbered by each result, the options being numbered in order from 1 to the die's faces. ignore_consumed lets the pick take an option a once-per-battle selection already used (\"even if you have already selected that imperative this battle\"); only an optionless pick an ability-activate names takes it, and never with or_random. chosen_by opponent: the opponent picks the option, not the player using the ability; such a pick takes no or_random or ignore_consumed. id: the whole choice is an option of this record that other rules make happen again by that id (Feed the Swarm's \"Regenerate\": an ability-activate option, or an ability-modifier naming {ability_id, option_id}).",
     starter: {},
-    parameterSchema: {type: "object", properties: {choice_label: {type: "string", minLength: 1}, min_choices: {type: "integer", minimum: 0}, max_choices: {type: "integer", minimum: 1}, or_random: {type: "object", required: ["dice", "count"], properties: {dice: {enum: ["D3", "D6"]}, count: {type: "integer", minimum: 1, maximum: 3}}, additionalProperties: false, "x-optional": true}, ignore_consumed: {const: true, "x-optional": true}, chosen_by: {enum: ["opponent"], "x-optional": true}}, additionalProperties: false},
+    parameterSchema: {type: "object", properties: {choice_label: {type: "string", minLength: 1}, id: {type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-optional": true}, min_choices: {type: "integer", minimum: 0}, max_choices: {type: "integer", minimum: 1}, or_random: {type: "object", required: ["dice", "count"], properties: {dice: {enum: ["D3", "D6"]}, count: {type: "integer", minimum: 1, maximum: 3}}, additionalProperties: false, "x-optional": true}, ignore_consumed: {const: true, "x-optional": true}, chosen_by: {enum: ["opponent"], "x-optional": true}}, additionalProperties: false},
     normalize: choiceOpen,
   },
   {

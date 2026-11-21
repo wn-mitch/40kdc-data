@@ -71,7 +71,7 @@ const RETURN_COUNTS = ["1", "2", "3", "D3", "D3+1", "D3+2", "D3+3", "D6", "all"]
 const RETURN_WOUNDS = ["full", "1", "3", "half-starting", "D3", "D6"] as const;
 
 function returnModelsChecked(input: Params): Params {
-  exactKeys(input, ["subject", "count", ...(["wounds_remaining", "model_keyword", "bodyguard_only"] as const).filter((key) => key in input)], "return-models");
+  exactKeys(input, ["subject", "count", ...(["wounds_remaining", "model_keyword", "exclude_model_keyword", "bodyguard_only"] as const).filter((key) => key in input)], "return-models");
   const result: Params = {
     subject: enumValue(input.subject, RETURN_SUBJECTS, "return-models.subject"),
     // "for every 2YP you just spent, return up to one additional destroyed model": the amount a resource-spend bound.
@@ -79,6 +79,7 @@ function returnModelsChecked(input: Params): Params {
   };
   if ("wounds_remaining" in input) result.wounds_remaining = enumValue(input.wounds_remaining, RETURN_WOUNDS, "return-models.wounds_remaining");
   if ("model_keyword" in input) result.model_keyword = modelKeyword(input.model_keyword, "return-models.model_keyword");
+  if ("exclude_model_keyword" in input) result.exclude_model_keyword = modelKeyword(input.exclude_model_keyword, "return-models.exclude_model_keyword");
   if ("bodyguard_only" in input) result.bodyguard_only = booleanValue(input.bodyguard_only, "return-models.bodyguard_only");
   return result;
 }
@@ -273,10 +274,10 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "return-models",
-    version: 8,
+    version: 9,
     role: "EFFECT",
     label: "Return destroyed models",
-    description: "Return a number of destroyed models (all of them, a fixed or rolled count up to D3+3, or a spent amount {spent: the bind_as of an earlier resource-spend, per?: one for every N} (\"for every 2YP you just spent, return one additional model\"), optionally only of a named model keyword, or only models with the profile name model_name as the datasheet prints it: \"1 destroyed Geminae Superia model\") to this unit, this model or the unit an earlier leaf introduced (antecedent), each with its full wounds, 1, 3, D3 or D6 wounds, or half of its starting number of wounds remaining. model_name needs a unit subject. A keyword can carry accented capitals or start with an apostrophe as the rules print it (KÂHL, 'ARDMOB).",
+    description: "Return a number of destroyed models (all of them, a fixed or rolled count up to D3+3, or a spent amount {spent: the bind_as of an earlier resource-spend, per?: one for every N} (\"for every 2YP you just spent, return one additional model\"), optionally only of a named model keyword (and not of exclude_model_keyword: \"(excluding CHARACTERS)\"), or only models with the profile name model_name as the datasheet prints it: \"1 destroyed Geminae Superia model\") to this unit, this model or the unit an earlier leaf introduced (antecedent), each with its full wounds, 1, 3, D3 or D6 wounds, or half of its starting number of wounds remaining. model_name needs a unit subject. A keyword can carry accented capitals or start with an apostrophe as the rules print it (KÂHL, 'ARDMOB).",
     starter: {"subject":"","count":""},
     parameterSchema: {
       "type": "object",
@@ -320,6 +321,11 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
         "model_keyword": {
           "type": "string",
           "pattern": "^'?[A-ZÀ-ÖØ-Þ][A-ZÀ-ÖØ-Þ0-9' -]*[A-ZÀ-ÖØ-Þ0-9]$"
+        },
+        "exclude_model_keyword": {
+          "type": "string",
+          "pattern": "^'?[A-ZÀ-ÖØ-Þ][A-ZÀ-ÖØ-Þ0-9' -]*[A-ZÀ-ÖØ-Þ0-9]$",
+          "x-optional": true
         },
         "bodyguard_only": {
           "type": "boolean"

@@ -168,6 +168,7 @@ function buildChoice(head: CompileLeaf, groups: CompileLeaf[][]): Node {
   if (secondary.length > 1) throw new CompileError("A choice-open menu can mark only one option as the secondary effect.");
   if (secondary.length === 1) node.secondary_option = secondary[0];
   if (head.parameters.choice_label !== undefined) node.choice_label = closed(head, "choice_label");
+  if (head.parameters.id !== undefined) node.id = closed(head, "id");
   if (head.parameters.chosen_by !== undefined) node.chosen_by = closed(head, "chosen_by");
   const min = head.parameters.min_choices;
   const max = head.parameters.max_choices;

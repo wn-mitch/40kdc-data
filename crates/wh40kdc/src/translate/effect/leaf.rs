@@ -766,6 +766,11 @@ fn ability_activate(m: &P, subj: &str) -> String {
             "{subj} {} the {label} ability now{instead}",
             v(subj, "resolves")
         ),
+        // "Your unit immediately Regenerates": the option resolves once, now, rather than becoming active.
+        Some(opt) if m.get("immediate") == Some(&Value::Bool(true)) => format!(
+            "the {} option of {label} resolves now for {subj}{instead}",
+            title_case(&jv(opt))
+        ),
         Some(opt) => format!(
             "the {} option of {label} is active for {subj}{exclusive}{consumed}",
             title_case(&jv(opt))

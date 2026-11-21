@@ -64,7 +64,7 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "resource", from: 1, to: 3, map: (parameters) => ({ ...parameters }) },
   { family: "characteristic-modifier", from: 21, to: 22, map: (parameters) => ({ ...parameters }) },
   { family: "characteristic-amount", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
-  { family: "return-models", from: 7, to: 8, map: (parameters) => ({ ...parameters }) },
+  { family: "return-models", from: 7, to: 9, map: (parameters) => ({ ...parameters }) },
   { family: "dice-roll", from: 10, to: 11, map: (parameters) => ({ ...parameters }) },
   { family: "bearer-eligibility", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
   // Chaos Daemons: resource v3 holder opponent; optional-cost-paid v3 a Flux token spend; destroy-models v5
@@ -77,6 +77,14 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "sticky-objective", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
   // apply-mark v10: the registry gains pyrogenesis-flux-spent.
   { family: "apply-mark", from: 9, to: 10, map: (parameters) => ({ ...parameters }) },
+  // choice-open v5 adds id (Feed the Swarm's Regenerate); ability-activate v6 adds immediate; ability-modifier
+  // v8 names a record's option ({ability_id, option_id}) and adds the amount and received aspects. Every
+  // earlier leaf keeps its meaning.
+  { family: "choice-open", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
+  { family: "ability-activate", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
+  { family: "ability-modifier", from: 7, to: 8, map: (parameters) => ({ ...parameters }) },
+  // return-models v9 adds exclude_model_keyword ("(excluding CHARACTERS)"); every earlier leaf keeps its meaning.
+  { family: "return-models", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
 ];
 
 export type FamilyVersionReport = {

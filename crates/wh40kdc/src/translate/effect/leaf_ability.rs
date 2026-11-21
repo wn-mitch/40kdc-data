@@ -173,6 +173,7 @@ pub(super) fn aspect_name(aspect: &str) -> String {
         "end-round" => "last battle round",
         "threshold" => "threshold",
         "options" => "options",
+        "amount" => "amount",
         other => return other.to_string(),
     }
     .to_string()
@@ -206,6 +207,14 @@ pub(super) fn ability_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
         return format!("replace that ability's selection with {}{}; those recipients are affected by that same ability{}",
             super::select::select_units_subject(selector), super::select::selection_binding(selector),
             if duration.is_empty() { String::new() } else { format!(" {duration}") });
+    }
+    // "The bearer's unit can be regenerated up to twice per phase": how many times one unit can be affected by it.
+    if sv(m, "aspect") == Some("received") {
+        return format!(
+            "{subj} can be affected by {} up to {}, in place of its usual limit",
+            ability_label(m.get("ability")),
+            times_word(m.get("value"))
+        );
     }
     let whose = modified_ability(m.get("ability"), subj, ctx);
     let aspect_key = sv(m, "aspect");
@@ -262,6 +271,15 @@ pub(super) fn ability_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
         s.push_str(&format!("; add {o}"));
     }
     s + &cap + &ability_limits(m)
+}
+
+/// "once", "twice", "3 times".
+fn times_word(value: Option<&Value>) -> String {
+    match num(value) {
+        n if n == 1.0 => "once".to_string(),
+        n if n == 2.0 => "twice".to_string(),
+        _ => format!("{} times", jstr(value)),
+    }
 }
 
 /// The limits on a changed allowance: once per battle round, never in the same phase, outside

@@ -310,7 +310,7 @@ function weaponAbilityGrant(e: Leaf, m: Record<string, unknown>, subj: string, c
 const ASPECTS: Record<string, string> = {
   uses: "number of uses", range: "range", targets: "number of targets", recipients: "recipients", selections: "number of selections",
   concurrent: "number that can apply at once", duration: "duration", "start-round": "first battle round", "end-round": "last battle round",
-  threshold: "threshold", options: "options",
+  threshold: "threshold", options: "options", amount: "amount",
 };
 
 /** The ability an ability-modifier changes: a named one, the one a trigger used, or those reaching an audience. */
@@ -331,6 +331,8 @@ function abilityModifier(m: Record<string, unknown>, subj: string, ctx: Ctx, inl
     const duration = expiryTrail(m.recipient_duration);
     return `replace that ability's selection with ${selectUnitsSubject(selector)}${selectionBinding(selector)}; those recipients are affected by that same ability${duration ? ` ${duration}` : ""}`;
   }
+  // "The bearer's unit can be regenerated up to twice per phase": how many times one unit can be affected by it.
+  if (m.aspect === "received") return `${subj} can be affected by ${abilityLabel(m.ability)} up to ${timesWord(m.value)}, in place of its usual limit`;
   const whose = modifiedAbility(m.ability, subj, ctx);
   const aspect = ASPECTS[jstr(m.aspect)] ?? jstr(m.aspect);
   const value = m.aspect === "range" && typeof m.value === "number" ? `${jstr(m.value)}"` : typeof m.value === "string" ? dekebab(m.value) : jstr(m.value);
@@ -353,6 +355,12 @@ function abilityModifier(m: Record<string, unknown>, subj: string, ctx: Ctx, inl
   if (recipients) s += `; it can also affect ${recipients}`;
   if (option) s += `; add ${option}`;
   return s + cap + abilityLimits(m);
+}
+
+/** "once", "twice", "3 times". */
+function timesWord(value: unknown): string {
+  const n = Number(value);
+  return n === 1 ? "once" : n === 2 ? "twice" : `${jstr(value)} times`;
 }
 
 /** The limits on a changed allowance: once per battle round, never in the same phase, outside the shared limit. */
@@ -588,6 +596,8 @@ function abilityActivate(m: Record<string, unknown>, subj: string): string {
   if (m.all_options === true) return `every option of ${label} is active for ${subj}${consumed}`;
   if (Array.isArray(m.options)) return `the ${andList(optionNames(m.options))} options of ${label} are active for ${subj}${exclusive}${consumed}`;
   if (m.option == null) return `${subj} ${v(subj, "resolves")} the ${label} ability now${instead}`;
+  // "Your unit immediately Regenerates": the option resolves once, now, rather than becoming active.
+  if (m.immediate === true) return `the ${titleCase(jstr(m.option))} option of ${label} resolves now for ${subj}${instead}`;
   return `the ${titleCase(jstr(m.option))} option of ${label} is active for ${subj}${exclusive}${consumed}`;
 }
 

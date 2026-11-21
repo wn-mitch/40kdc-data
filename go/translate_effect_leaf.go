@@ -635,7 +635,18 @@ func weaponAbilityGrantLeaf(e, m map[string]any, subj string, ctx effCtx) string
 var abilityAspects = map[string]string{
 	"uses": "number of uses", "range": "range", "targets": "number of targets", "recipients": "recipients", "selections": "number of selections",
 	"concurrent": "number that can apply at once", "duration": "duration", "start-round": "first battle round", "end-round": "last battle round",
-	"threshold": "threshold", "options": "options",
+	"threshold": "threshold", "options": "options", "amount": "amount",
+}
+
+// timesWord renders "once", "twice", "3 times".
+func timesWord(value any) string {
+	if n, ok := value.(float64); ok && n == 1 {
+		return "once"
+	}
+	if n, ok := value.(float64); ok && n == 2 {
+		return "twice"
+	}
+	return ejstr(value) + " times"
 }
 
 var leadingAllRe = regexp.MustCompile(`^all `)
@@ -668,6 +679,10 @@ func abilityModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 			}
 			return s
 		}
+	}
+	// "The bearer's unit can be regenerated up to twice per phase": how many times one unit can be affected by it.
+	if m["aspect"] == "received" {
+		return subj + " can be affected by " + abilityLabel(m["ability"]) + " up to " + timesWord(m["value"]) + ", in place of its usual limit"
 	}
 	whose := modifiedAbility(m["ability"], subj, ctx)
 	aspect, ok := abilityAspects[ejstr(m["aspect"])]

@@ -171,6 +171,12 @@ export { shapeSignature } from "./compile-placement.js";
  * A container option that carries its own moment or conditions, compiled as a whole ability and
  * returned as one ability-part: its trigger, usage and duration go on the part, its effect inside.
  */
+/** Whether a select-unit leaf comes before an option group's leaves: the option's "that unit" is that selection. */
+function outerSelected(list: readonly CompileLeaf[], group: readonly CompileLeaf[]): boolean {
+  const first = group[0];
+  return first !== undefined && list.some((leaf) => leaf.family_id === "select-unit" && leaf.start_byte < first.start_byte);
+}
+
 function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions, objective?: string, name?: string): Node {
   const own = name === undefined ? options : { ...options, name };
   const compiled = compileChecked(group, sourceText, objective === undefined ? own : { ...own, selectedObjective: objective }, true);
@@ -212,6 +218,11 @@ export type CompileOptions = {
   units?: UnitNameContext;
   /** Set by the compiler: the record printed "in any phase", the phase its lasting effects end with (compile-part-assemble.ts). */
   anyPhaseWindow?: boolean;
+  /**
+   * Set by the compiler: this is one option of a container inside a record that selects a unit before it ("Regenerate
+   * one friendly unit … do one of the following"), so the option's "that unit" is that outer selection.
+   */
+  outerSelection?: boolean;
 };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
@@ -534,7 +545,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let containerNodes: Map<number, Node>;
   let consumedByContainer: Set<number>;
   try {
-    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group, objective, name) => nestedPart(group, sourceText, options, objective, name), bulletBreaks(list, sourceText), commaItems(list, sourceText), plainLineBreaks(list, sourceText), orLineBreaks(list, sourceText)));
+    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group, objective, name) => nestedPart(group, sourceText, outerSelected(list, group) ? { ...options, outerSelection: true } : options, objective, name), bulletBreaks(list, sourceText), commaItems(list, sourceText), plainLineBreaks(list, sourceText), orLineBreaks(list, sourceText)));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };

@@ -51777,6 +51777,205 @@
     }
   },
   {
+    "caseId": "named-choice/activate-option-immediately",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "the-example-rite",
+        "option": "renew",
+        "immediate": true
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, the Renew option of The Example Rite resolves now for this unit."
+    }
+  },
+  {
+    "caseId": "named-choice/activate-option-immediately-with-override",
+    "effect": {
+      "type": "ability-activate",
+      "target": "selected-unit",
+      "modifier": {
+        "ability": "the-example-rite",
+        "option": "renew",
+        "immediate": true,
+        "override": {
+          "amount": "D3"
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, the Renew option of The Example Rite resolves now for the selected unit, using D3 in place of its usual amount."
+    }
+  },
+  {
+    "caseId": "named-choice/option-without-immediate-stays-active",
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "the-example-rite",
+        "option": "renew"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The Renew option of The Example Rite is active for this unit."
+    }
+  },
+  {
+    "caseId": "named-choice/modifier-sets-option-amount",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "all_of": [
+              "EXAMPLE"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "ability": {
+            "ability_id": "the-example-rite",
+            "option_id": "renew"
+          },
+          "aspect": "amount",
+          "operation": "set",
+          "value": 3
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If this unit has the EXAMPLE keyword, for this activation, the amount of this unit's Renew (The Example Rite) ability is 3."
+    }
+  },
+  {
+    "caseId": "named-choice/modifier-sets-option-range-for-filtered-models",
+    "effect": {
+      "type": "ability-modifier",
+      "target": {
+        "owner": "friendly",
+        "all_of": [
+          "EXAMPLE"
+        ],
+        "level": "model",
+        "within": {
+          "range": {
+            "inches": 12
+          },
+          "of": "this-model"
+        }
+      },
+      "modifier": {
+        "ability": {
+          "ability_id": "the-example-rite",
+          "option_id": "renew"
+        },
+        "aspect": "range",
+        "operation": "set",
+        "value": 9
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "The range of the Renew (The Example Rite) ability of friendly EXAMPLE models within 12\" of this model is 9\"."
+    }
+  },
+  {
+    "caseId": "named-choice/modifier-received-twice",
+    "effect": {
+      "type": "ability-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "ability": {
+          "ability_id": "the-example-rite",
+          "option_id": "renew"
+        },
+        "aspect": "received",
+        "operation": "set",
+        "value": 2
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "This unit can be affected by Renew (The Example Rite) up to twice, in place of its usual limit."
+    }
+  },
+  {
+    "caseId": "named-choice/modifier-received-three-times",
+    "effect": {
+      "type": "ability-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "ability": {
+          "ability_id": "the-example-rite",
+          "option_id": "renew"
+        },
+        "aspect": "received",
+        "operation": "set",
+        "value": 3
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "This unit can be affected by Renew (The Example Rite) up to 3 times, in place of its usual limit."
+    }
+  },
+  {
+    "caseId": "named-choice/choice-id-is-not-rendered",
+    "effect": {
+      "type": "choice",
+      "id": "renew",
+      "choice_label": "renew",
+      "options": [
+        {
+          "type": "heal",
+          "target": "selected-unit",
+          "modifier": {
+            "amount": "D3"
+          }
+        },
+        {
+          "type": "return-models",
+          "target": "selected-unit",
+          "modifier": {
+            "count": 1
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Choose one of the following (Renew):\n  - The selected unit regains up to D3 lost wounds.\n  - Return 1 destroyed model to the selected unit, each with its full wounds remaining."
+    }
+  },
+  {
     "caseId": "model-refs/event-subject-model-matches",
     "effect": {
       "type": "conditional",

@@ -1878,6 +1878,7 @@ class Modifier16(TypedDict):
     ability: EntityId
     procedure: NotRequired[Literal["oath"]]
     option: NotRequired[str]
+    immediate: NotRequired[Literal[True]]
     options: NotRequired[list[Option1]]
     all_options: NotRequired[Literal[True]]
     exclusive: NotRequired[Literal[True]]
@@ -3252,6 +3253,8 @@ class Modifier15(TypedDict):
         "end-round",
         "threshold",
         "options",
+        "amount",
+        "received",
     ]
     operation: Literal["add", "subtract", "set", "lift-limit"]
     value: NotRequired[float | str]
@@ -4223,6 +4226,7 @@ SingleEffect: TypeAlias = (
 class ChoiceEffect(TypedDict):
     type: Literal["choice"]
     options: list[EffectNode]
+    id: NotRequired[EntityId]
     choice_label: NotRequired[str]
     choice_prompt: NotRequired[str]
     min_choices: NotRequired[int]

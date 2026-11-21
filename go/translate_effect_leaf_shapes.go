@@ -170,6 +170,10 @@ func abilityActivateLeaf(m map[string]any, subj string) string {
 	if m["option"] == nil {
 		return subj + " " + ev(subj, "resolves") + " the " + label + " ability now" + instead
 	}
+	// "Your unit immediately Regenerates": the option resolves once, now, rather than becoming active.
+	if m["immediate"] == true {
+		return "the " + titleCase(ejstr(m["option"])) + " option of " + label + " resolves now for " + subj + instead
+	}
 	return "the " + titleCase(ejstr(m["option"])) + " option of " + label + " is active for " + subj + excl + consumed
 }
 

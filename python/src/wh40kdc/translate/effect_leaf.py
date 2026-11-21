@@ -570,7 +570,17 @@ _ASPECTS = {
     "end-round": "last battle round",
     "threshold": "threshold",
     "options": "options",
+    "amount": "amount",
 }
+
+
+def _times_word(value: Any) -> str:
+    """"once", "twice", "3 times"."""
+    if is_num(value) and value == 1:
+        return "once"
+    if is_num(value) and value == 2:
+        return "twice"
+    return f"{jstr(value)} times"
 
 
 def _modified_ability(ref: Any, subj: str, ctx: Ctx) -> str:
@@ -587,6 +597,11 @@ def _modified_ability(ref: Any, subj: str, ctx: Ctx) -> str:
 
 
 def _ability_modifier(m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) -> str:
+    # "The bearer's unit can be regenerated up to twice per phase": times one unit can be affected.
+    if m.get("aspect") == "received":
+        label = ability_label(m.get("ability"))
+        times = _times_word(m.get("value"))
+        return f"{subj} can be affected by {label} up to {times}, in place of its usual limit"
     whose = _modified_ability(m.get("ability"), subj, ctx)
     aspect = _ASPECTS.get(jstr(m.get("aspect")), jstr(m.get("aspect")))
     raw = m.get("value")

@@ -4037,7 +4037,7 @@ export interface WeaponGrantEffect {
   scaling?: Scaling;
 }
 /**
- * [ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options.
+ * [ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, or how many times one unit can be affected by it (received).
  */
 export interface AbilityModifierEffect {
   type: "ability-modifier";
@@ -4069,7 +4069,9 @@ export interface AbilityModifierEffect {
       | "start-round"
       | "end-round"
       | "threshold"
-      | "options";
+      | "options"
+      | "amount"
+      | "received";
     operation: "add" | "subtract" | "set" | "lift-limit";
     value?: number | string;
     cap?: number;
@@ -4216,6 +4218,10 @@ export interface ChoiceEffect {
    * @minItems 2
    */
   options: [EffectNode, EffectNode, ...EffectNode[]];
+  /**
+   * Kebab-case identifier
+   */
+  id?: string;
   choice_label?: string;
   choice_prompt?: string;
   /**
@@ -5448,7 +5454,7 @@ export interface AbilityUsageLimit {
   per?: "army" | "unit" | "model";
 }
 /**
- * [ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, "the selected combat doctrine is active for this unit" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.
+ * [ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, "the selected combat doctrine is active for this unit" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. immediate: the one option resolves once, now, instead of becoming active. override: the activation resolves with this amount instead of its own.
  */
 export interface AbilityActivateEffect {
   type: "ability-activate";
@@ -5457,6 +5463,10 @@ export interface AbilityActivateEffect {
     ability: EntityId;
     procedure?: "oath";
     option?: string;
+    /**
+     * The named option resolves once, now, for the target ("Your unit immediately Regenerates"), instead of becoming active. Requires option.
+     */
+    immediate?: true;
     /**
      * @minItems 2
      */

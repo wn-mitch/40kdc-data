@@ -169,6 +169,10 @@ def ability_activate(m: dict[str, Any], subj: str) -> str:
         return f"the {active} options of {label} are active for {subj}{exclusive}{consumed}"
     if m.get("option") is None:
         return f"{subj} {v(subj, 'resolves')} the {label} ability now{instead}"
+    # "Your unit immediately Regenerates": the option resolves once, now, not becoming active.
+    if m.get("immediate") is True:
+        option = title_case(jstr(m["option"]))
+        return f"the {option} option of {label} resolves now for {subj}{instead}"
     return (
         f"the {title_case(jstr(m['option']))} option of {label} is active for {subj}"
         f"{exclusive}{consumed}"
