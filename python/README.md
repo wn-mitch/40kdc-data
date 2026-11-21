@@ -1,15 +1,16 @@
 # wh40kdc
 
-The 40kdc Warhammer 40K dataset behind a linked, typed API — find units, follow
-them to their weapons, abilities, phases, and factions. The Python counterpart
-to [`@alpaca-software/40kdc-data`](https://www.npmjs.com/package/@alpaca-software/40kdc-data)
-(npm) and [`wh40kdc`](https://crates.io/crates/wh40kdc) (crates.io), held in
-behavioral lockstep with both, and with the Go module, by the shared conformance corpus in the
-[40kdc-data repository](https://github.com/wn-mitch/40kdc-data).
+Python library for the [40kdc-data](https://github.com/wn-mitch/40kdc-data) Warhammer 40,000 dataset. It mirrors the TypeScript (`@alpaca-software/40kdc-data`), Rust (`wh40kdc`), and Go implementations, held in behavioral parity by the shared conformance corpus.
+
+## Installation
 
 ```bash
 pip install wh40kdc
 ```
+
+The only runtime dependency is `jsonschema`.
+
+## Quick Start
 
 ```python
 from wh40kdc import Dataset
@@ -20,50 +21,30 @@ for weapon in unit.weapons:
     print(weapon.name)
 ```
 
-What ships:
+Records are plain dicts behind linked view objects, with generated `TypedDict` definitions in `wh40kdc._types` for static type checking.
 
-- **Linked dataset API** — `Dataset` with id/name lookups (diacritic- and
-  punctuation-insensitive), reverse indexes, and join queries across units,
-  weapons, abilities, phases, and factions. `Dataset.embedded()` is the
-  matched-play view: listings and name searches skip Combat Patrol-only
-  records, and id lookups resolve every record.
-  `ds.for_game_mode("combat-patrol")` or `ds.for_game_mode("all")` opens
-  another view.
-- **Importers** — ListForge, NewRecruit (JSON / WTC-compact / WTC-full /
-  simple), GW app export, Rosterizer, and canonical Roster JSON, all resolving
-  to one `Roster` shape.
-- **Exporters** — NewRecruit (JSON / WTC-compact / WTC-full / simple),
-  canonical Roster JSON, Rosterizer, ATC 2026, and Yellowscribe, byte-identical
-  to the TypeScript, Rust, and Go implementations.
-- **Cruncher** — the damage-projection engine (attacks → hits → wounds →
-  unsaved → damage → after-FNP → models-killed) with buff resolution and
-  per-buff attribution. Undecided leaf conditions are reported as needs with
-  stable keys and answered through the engine context's `conditionFacts` dict;
-  `Dataset.mortal_wound_sources_for` lists mortal wounds inflicted outside the
-  attack.
-- **Scoring, terrain, translation** — secondary-mission scoring, terrain
-  layout resolution and keystone measurements, and the ability-DSL /
-  scoring-card describers.
-- **Validator** — `validate(target, value)` against the canonical JSON
-  Schemas, emitting the closed error-code enum shared by all implementations.
+## Features
 
-The conformance runner (used by the cross-implementation parity differ) is
-invoked as `python -m wh40kdc.runner` — see `conformance/RUNNER_PROTOCOL.md`
-in the repository.
+- **Linked dataset API:** `Dataset` provides exact ID lookups, diacritic- and punctuation-insensitive name searches (`find`, `find_all`), reverse indexes, and joins across units, weapons, abilities, phases, and factions. `Dataset.embedded()` opens the **matched-play** view (skipping Combat Patrol-only records in listings and searches while resolving every ID); call `ds.for_game_mode("combat-patrol")` or `ds.for_game_mode("all")` for other views.
+- **Roster importers:** ListForge, NewRecruit (JSON, `wtc-compact`, `wtc-full`, `simple`), GW app export, Rosterizer, and canonical Roster JSON, all normalizing to one `Roster` structure.
+- **Roster exporters:** NewRecruit (JSON, `wtc-compact`, `wtc-full`, `simple`), canonical Roster JSON, Rosterizer, ATC 2026, and Yellowscribe — byte-identical to TypeScript, Rust, and Go.
+- **Damage cruncher and attribution:** Deterministic expected-value pipeline (`attacks -> hits -> wounds -> unsaved -> damage -> after-fnp -> models-killed`) with buff resolution and leave-one-out attribution. Undecided leaf conditions are returned as needs with stable keys and answered via `conditionFacts` on the engine context. `Dataset.mortal_wound_sources_for` lists mortal wounds inflicted outside the attack sequence.
+- **Scoring, terrain, and translation:** Mission scoring engine, terrain layout geometry and keystone measurements, and Ability-DSL / scoring-card English describers.
+- **Schema validator:** `validate(target, value)` validates records against the canonical JSON Schemas and emits the shared closed-enum error codes.
+
+The conformance runner used by the cross-implementation parity differ is invoked as `python -m wh40kdc.runner` (see `conformance/RUNNER_PROTOCOL.md`).
 
 ## Development
 
 ```bash
 cd python
 uv venv && uv pip install -e ".[dev]"
-pytest          # includes the conformance suite when run inside the repo
+pytest          # unit tests + conformance suite when run inside the repo
 ruff check .
 mypy src
 ```
 
-Generated artifacts (`_bundle.json`, `_spec.py`, `_types.py`,
-`src/wh40kdc/schemas/`) are produced by the scripts in `codegen/` and checked
-for drift in CI — regenerate with:
+Generated artifacts (`_bundle.json`, `_spec.py`, `_types.py`, `src/wh40kdc/schemas/`) are checked in and verified for drift in CI. Regenerate them after schema or data changes:
 
 ```bash
 python3 codegen/sync_bundle.py && python3 codegen/sync_spec.py && python3 codegen/gen_typeddicts.py
@@ -71,5 +52,6 @@ python3 codegen/sync_bundle.py && python3 codegen/sync_spec.py && python3 codege
 
 ## License
 
-MIT. The schema content the dataset describes is CC0; enrichment data is
-CC BY 4.0 — see the repository's licensing table.
+- **Package code:** MIT.
+- **Schemas:** CC0 (public domain).
+- **Enrichment data:** CC BY 4.0 — see the repository's [licensing table](../README.md#licensing).

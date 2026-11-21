@@ -1,23 +1,12 @@
 # wh40kdc
 
-The Warhammer 40K dataset for the
-[40kdc-data](https://github.com/wn-mitch/40kdc-data) schema
-layer — the canonical community schema for 40K game entities. This crate is the
-Rust counterpart of the `@alpaca-software/40kdc-data` npm package: it ships the
-generated entity types, the **whole dataset embedded** behind a linked, typed
-API, roster **importers and exporters**, share tokens, the damage cruncher, the
-DSL/scoring describers, and a schema validator.
+Rust library for the [40kdc-data](https://github.com/wn-mitch/40kdc-data) Warhammer 40,000 schema layer and dataset. It mirrors the `@alpaca-software/40kdc-data` npm package: generated serde types, the embedded dataset behind a linked `Dataset` API, roster importers and exporters, share tokens, the damage cruncher, the DSL/scoring describers, and a schema validator.
 
-Every type is generated from the project's JSON Schemas (JSON Schema draft
-2020-12) via [`typify`](https://crates.io/crates/typify), so the Rust structs
-stay in lockstep with the schemas that other 40kdc tools validate against.
+All entity types are generated from the project's JSON Schemas (draft 2020-12) via [`typify`](https://crates.io/crates/typify), keeping the Rust structs aligned with the validation schemas.
 
-## Data API (the headline)
+## Dataset API
 
-With the default features, the entire dataset is embedded at build time behind a
-linked accessor. Find an entity and follow it to its faction, weapons, abilities,
-and the phases each ability acts in. Lookup is diacritic- and
-punctuation-insensitive, so `"Kharn"` resolves "Khârn the Betrayer":
+With default features enabled, the full dataset is embedded at compile time behind a linked `Dataset` accessor. Name lookups ignore case, diacritics, and punctuation (`"Kharn"` matches `"Khârn the Betrayer"`):
 
 ```rust
 use wh40kdc::{Dataset, Phase};
@@ -36,46 +25,31 @@ assert_eq!(shooting, ["berzerker-frenzy-world-eaters"]);
 assert_eq!(ds.faction_of(kharn).unwrap().id.as_str(), "world-eaters");
 ```
 
-An ability's phases are **not** stored on the ability — they come from
-phase-mappings, joined for you by [`Dataset::phases_of`]. Name matching is shared
-with the npm package via the exported [`normalize_name`] (NFD diacritic strip,
-casefold, quote/whitespace normalization).
+Ability phases are stored in phase mappings and joined by `Dataset::phases_of`. Name normalization is exported as `normalize_name` (NFD diacritic stripping, ASCII casefolding, and quote/dash/whitespace normalization).
 
-`Dataset::embedded()` is the matched-play view. Listings and name lookups skip
-units, weapons, detachments, enhancements, Stratagems, wargear options and unit
-compositions whose `game_modes` lack the view's mode; lookups by id resolve
-every record. `ds.for_game_mode("combat-patrol")` or `ds.for_game_mode("all")`
-returns another cached view, and errors with `UnknownGameMode` on an unknown
-mode.
+`Dataset::embedded()` opens the **matched-play** view: listings and name lookups exclude records whose `game_modes` lack matched play (units, weapons, detachments, enhancements, stratagems, wargear options, and unit compositions), while exact ID lookups resolve every record. Call `ds.for_game_mode("combat-patrol")` or `ds.for_game_mode("all")` for another cached view (returns `Err(UnknownGameMode)` on unknown modes).
 
-## Army-list importer
+## Roster Import and Export
 
-The `import` feature turns a roster export into a resolved 40kdc `Roster`, keyed
-on entity ids and validatable against `roster.schema.json`. It reads ListForge
-(share URL, base64 segment, JSON or text), NewRecruit (JSON, wtc-compact,
-wtc-full, simple), the GW app export, Rosterizer and canonical Roster JSON. It
-reads only an allowlist of structural fields, so it never carries reproduced
-rules text into its output. A list whose detachment is a Combat Patrol
-detachment resolves against the Combat Patrol view.
+The `import` feature parses army lists into a resolved `Roster` keyed by entity IDs and validatable against `roster.schema.json`. Supported import formats: ListForge (share URL, base64 segment, JSON, or text), NewRecruit (JSON, `wtc-compact`, `wtc-full`, `simple`), GW app text export, Rosterizer, and canonical Roster JSON. Importers read only structural fields and never copy rules prose into the output. Lists using a Combat Patrol detachment resolve against the Combat Patrol view.
 
 ```rust
 use wh40kdc::Dataset;
 use wh40kdc::import::import_listforge;
 
 let roster = import_listforge(share_url, Dataset::embedded()).unwrap();
-println!("{} of {} units resolved",
-    roster.diagnostics.resolved_units, roster.units.len());
+println!(
+    "{} of {} units resolved",
+    roster.diagnostics.resolved_units,
+    roster.units.len(),
+);
 ```
 
-`try_import_roster` detects the format and returns a typed failure instead of
-an error when no adapter matches. `decode` and `resolve` are written once, and
-each source format is a small `FormatAdapter` that lowers a payload to the
-shared `ParsedRoster`.
+`try_import_roster` detects the input format automatically and returns a typed failure if no adapter matches.
 
-## Types-only usage
+## Types-Only Usage
 
-To consume just the generated types (no embedded data, no extra dependencies),
-disable default features:
+Disable default features to depend only on the generated types with no embedded data or extra dependencies:
 
 ```toml
 [dependencies]
@@ -90,19 +64,15 @@ let units: Vec<Unit> = serde_json::from_str(&units_json)?;
 let weapons: Vec<Weapon> = serde_json::from_str(&weapons_json)?;
 ```
 
-The full schema, conditional rules included, is available as a string for
-downstream validation (`BUNDLED_SCHEMA` is the codegen copy without them):
+The complete validation schema (including conditional rules) is embedded as `wh40kdc::VALIDATION_SCHEMA` (`BUNDLED_SCHEMA` is the codegen copy without conditional rules):
 
 ```rust
 let schema: serde_json::Value = serde_json::from_str(wh40kdc::VALIDATION_SCHEMA)?;
 ```
 
-## Damage projection
+## Damage Projection
 
-The `cruncher` feature ships the Rust mirror of the npm package's expected-value
-damage engine. Closed-form math over a flat `Buff` stack — no sampling, no I/O.
-The cross-implementation [conformance corpus](../../conformance/cruncher/) pins
-both engines to within `5e-4` per stage.
+The `cruncher` feature provides a deterministic, closed-form expected-value damage engine over a flat `Buff` stack (no Monte Carlo sampling, no I/O), pinned to within `5e-4` per stage against the TypeScript, Python, and Go ports via [`conformance/cruncher/`](../../conformance/cruncher/).
 
 ```rust
 use wh40kdc::{Dataset, Phase};
@@ -122,57 +92,30 @@ let out = crunch(&EngineInput {
     buffs: Vec::new(),
     context: ctx,
 }, None).unwrap();
-// out.stages: attacks → hits → wounds → unsaved → damage → after-fnp → models-killed
+// Stages: attacks -> hits -> wounds -> unsaved -> damage -> after-fnp -> models-killed
 ```
 
-`EngineContext.condition_facts` answers leaf conditions the rest of the context
-leaves undecided, keyed by the stable `key` of each `ConditionNeed` an
-unsupported fragment reports.
-`Dataset::mortal_wound_sources_for` lists the mortal wounds a unit's abilities
-inflict outside its attacks, each with its moment and expected value before
-Feel No Pain.
+- **Undecided conditions:** Populate `EngineContext.condition_facts` keyed by each `ConditionNeed::key` reported on unsupported fragments.
+- **Out-of-attack mortal wounds:** `Dataset::mortal_wound_sources_for` returns mortal wounds inflicted outside the attack sequence with their timing moment and expected value before Feel No Pain.
+- **Historical recipients and unit IDs:** Persistent event-selected recipients require caller-supplied `EngineContext.recipient_snapshots` along with `attacker_unit_id` or `target_unit_id`. Each `RecipientSnapshot` identifies the source ability, source unit, canonical trigger, selector/selection JSON pointer, perspective/unit, and selection verdict. Missing or conflicting evidence remains unsupported rather than inferred from current attachments. `unit_ids` filters match exact perspective-specific unit IDs.
+- **Detached historical sources:** `Dataset::historical_snapshot_abilities` locates attested sources after detachment (verifying intrinsic ownership or legal enhancement eligibility) for passing to `Dataset::describe_buffs`.
 
-Persistent event-selected recipients require caller-supplied
-`EngineContext.recipient_snapshots`, plus `attacker_unit_id` or `target_unit_id`.
-Each typed `RecipientSnapshot` identifies the source ability and source unit,
-the exact canonical trigger (including its condition), selector and selection
-JSON pointer, the recipient perspective/unit, and whether it was selected.
-Current attachment roles never establish historical membership. Missing,
-mismatched or conflicting evidence remains explicitly unsupported.
-Current `unit_ids` filters use those same perspective-specific context identities,
-matching IDs exactly rather than matching names or keywords. Missing identity
-remains unknown.
+## Cargo Features
 
-`Dataset.historical_snapshot_abilities` rediscovers an attested source after
-detachment, checking that its source unit owns the ability intrinsically or can
-legally carry its enhancement in the selected detachment. Pass those entries
-to `Dataset.describe_buffs` with the same context. Snapshot evidence binds only
-the original recipient pool; independent conditions, melee/ranged restrictions
-and model-only effects retain their normal evaluation.
+| Feature | Default | Description |
+|---------|---------|-------------|
+| `bundled-data` | Yes | Embedded dataset and linked API (`Dataset`, `Collection`, `normalize_name`) |
+| `import` | Yes | Army-list importers (implies `bundled-data`) |
+| `export` | Yes | Roster exporters (NewRecruit JSON/`wtc-compact`/`wtc-full`/`simple`, Roster JSON, Rosterizer, ATC 2026 compact/full; dataset-free). Yellowscribe export requires `bundled-data` via `export_roster_with_dataset` |
+| `cruncher` | Yes | Expected-value damage engine (implies `bundled-data`) |
+| `share` | Yes | `share-v1` list token codec (`encode_share_token`, `decode_share_token`; embeds its own ID registry, no dataset) |
+| `validate` | Yes | Schema validator (`validate_target`) over `VALIDATION_SCHEMA` emitting shared closed-enum error codes |
 
-## Cargo features
+With `default-features = false`, the generated types, `translate` describers, `applies-to` scope matcher, terrain resolver, and scoring engine remain available.
 
-- `bundled-data` *(default)* — the embedded dataset and the linked data API
-  (`Dataset`, `Collection`, `normalize_name`).
-- `import` *(default)* — the army-list importers (implies `bundled-data`).
-- `export` *(default)* — the roster exporters (NewRecruit JSON / wtc-compact /
-  wtc-full / simple, canonical Roster JSON, Rosterizer, ATC 2026 compact/full).
-  Dataset-free. The Yellowscribe export also needs `bundled-data` and goes
-  through `export_roster_with_dataset`.
-- `cruncher` *(default)* — the expected-value damage engine (implies
-  `bundled-data`).
-- `share` *(default)* — `share-v1` list tokens (`encode_share_token` /
-  `decode_share_token`). Embeds its own id registry; no dataset.
-- `validate` *(default)* — the schema validator (`validate_target`) over
-  `VALIDATION_SCHEMA`, emitting the shared closed-enum error codes.
+## Regenerating Checked-In Artifacts
 
-Disable all six with `default-features = false` for a types-only build. The
-describers (`translate`), applies-to scope, terrain and scoring modules depend
-only on the generated types and stay available in that build.
-
-## Regenerating
-
-The generated artifacts are checked in. To regenerate after a change:
+Generated files are committed and verified in CI. Regenerate them after schema or data edits:
 
 ```sh
 cd tools && npm run bundle:schemas   # rebuild schemas/bundled.schema.json and schemas/validation.schema.json
@@ -180,21 +123,10 @@ cargo run -p xtask -- codegen        # rewrite src/generated.rs from the schema
 cargo run -p xtask -- bundle-data    # rewrite src/data/bundle.generated.json and src/share/registry.generated.json
 ```
 
-CI fails if the committed artifacts drift from the schemas or the data.
-
 ## Licensing
 
-- The crate **code** is [MIT](../../LICENSE-TOOLS).
-- The **schema** content these types describe is [CC0](../../LICENSE-SCHEMAS)
-  (public domain).
-- The **embedded dataset** mixes two licenses: the structural core data is CC0,
-  and the community-authored enrichment data (abilities, phase-mappings, and the
-  ability mechanics they encode) is **[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)**.
-  If you redistribute the embedded data (e.g. by depending on this crate with the
-  default `bundled-data` feature), attribute **Alpaca Software and the 40kdc
-  community**. The types-only build
-  (`default-features = false`) carries no data and so no attribution obligation.
+- **Crate code:** [MIT](../../LICENSE-TOOLS).
+- **Schemas:** [CC0](../../LICENSE-SCHEMAS) (public domain).
+- **Embedded dataset:** Structural core data is CC0; community-authored enrichment data (abilities, phase mappings, and structured mechanics) is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Redistributions including the `bundled-data` feature must attribute **Alpaca Software and the 40kdc community**. Types-only builds (`default-features = false`) carry no data and require no attribution.
 
-This dataset is community-created and mirrors Games Workshop's datasheet
-structure. Stat lines and points are numerical facts; no rules text or ability
-prose is reproduced.
+Stat lines and points are numerical facts; no Games Workshop rules text or ability prose is included.
