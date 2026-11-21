@@ -7336,19 +7336,114 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "crowes-sanctifiers",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "charge"
+              ]
+            },
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "CROWE'S SANCTIFIERS"
+              ]
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "subject": "event-subject",
+                "event": "move-ended",
+                "filter": {
+                  "move_types": [
+                    "ingress"
+                  ]
+                },
+                "window": "turn"
+              }
+            },
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "engaged_with": "event-subject"
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "test",
+                "target": "selected-unit",
+                "modifier": {
+                  "test": "battle-shock"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "game-mode",
+            "parameters": {
+              "modes": [
+                "combat-patrol"
+              ]
+            }
+          },
+          "effect": {
+            "type": "reserves-schedule",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "entries": [
+                {
+                  "unit_id": "crowes-sanctifiers-brotherhood-terminator-squad",
+                  "battle_round": 2
+                },
+                {
+                  "unit_id": "crowes-sanctifiers-venerable-dreadnought",
+                  "battle_round": 3
+                }
+              ],
+              "set_up": "wholly-within-deployment-zone"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "b4c4271a15897d6b99769fe88f9c9f19dd5b01230d8a3cf778ec9261899b4b37"
   },
   {
     "ability_id": "tome-of-forbidden-ways-brotherhood-strike-grey-knights",

@@ -9774,19 +9774,109 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adepta-sororitas",
     "detachment_id": "sanctuary-guardians",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "attack-is",
+                "parameters": {
+                  "attack_type": "melee"
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "defender",
+                  "filter": {
+                    "all_of": [
+                      "SANCTUARY GUARDIANS"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "effect": {
+            "type": "roll-modifier",
+            "target": "attacker",
+            "modifier": {
+              "roll": "hit",
+              "operation": "subtract",
+              "value": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "game-mode",
+                "parameters": {
+                  "modes": [
+                    "combat-patrol"
+                  ]
+                }
+              },
+              {
+                "operator": "and",
+                "operands": [
+                  {
+                    "type": "phase-is",
+                    "parameters": {
+                      "phase": "command"
+                    }
+                  },
+                  {
+                    "type": "player-turn-is",
+                    "parameters": {
+                      "turn": "your-turn"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "resource-spend",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "miracle-dice-pool",
+                  "amount": 1
+                }
+              },
+              {
+                "type": "cp-gain",
+                "target": "this-model",
+                "modifier": {
+                  "amount": 1
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "activated",
+    "source_digest": "663889a9fb54f8efed98170eda9efd6ba805cf1b3fd88c52bfd96fce2771d97f"
   },
   {
     "ability_id": "cherub-sanctuary-guardians-battle-sisters-squad-adepta-sororitas",

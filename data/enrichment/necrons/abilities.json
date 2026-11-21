@@ -13117,19 +13117,97 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "amonhotekhs-guard",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "command"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            },
+            "optional": true
+          },
+          "duration": "until-next-command-phase",
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "AMONHOTEKH'S GUARD"
+                ]
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "stat": "OC",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "game-mode",
+            "parameters": {
+              "modes": [
+                "combat-patrol"
+              ]
+            }
+          },
+          "effect": {
+            "type": "reserves-schedule",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "entries": [
+                {
+                  "unit_id": "amonhotekhs-guard-canoptek-doomstalker",
+                  "battle_round": 3
+                }
+              ],
+              "set_up": "wholly-within-deployment-zone"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "a81f1654abfa773db907dad1c6e6bfedb2c25e077463b6d1f9f88d82dea8d3ea"
   },
   {
     "ability_id": "territorial-obsession-obeisance-phalanx-necrons",

@@ -27015,7 +27015,10 @@ This unit is eligible to declare a charge in a turn in which it Fell Back.</char
       <profiles>
         <profile name="Vox-relay Beacon" id="bc66-aa16-0e1d-8a30" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle, you can use this ability:
+  - Unless this unit is within enemy deployment zone, place a Vox‑relay Beacon marker.
+  - While a friendly ASTRA MILITARUM REGIMENT unit is within 6" of a vox relay beacon marker, friendly OFFICER units can issue Orders to eligible friendly ASTRA MILITARUM REGIMENT units within 6" of the Vox Relay Beacon token, as if within 6" of them.
+At the end of each phase, while an enemy unit is within 1" of a vox relay beacon marker, remove that Vox‑relay Beacon marker from the battlefield.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -27679,7 +27682,7 @@ Applies to: ASTRA MILITARUM units.</description>
 Applies to: ASTRA MILITARUM units.</description>
                 </rule>
                 <rule name="Order" id="1be1-8e35-20fb-7f8b" hidden="false">
-                  <description>Nothing happens.</description>
+                  <description>Friendly units' Voice of Command ability gains the option On My Signal (only to friendly ARMOURED SKIRMISHER units: each time an enemy unit ends a Normal or Advance move, once per turn per unit, while the triggering unit is within 8" of this unit, this unit can make a Normal move of up to D6").</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -27891,7 +27894,8 @@ Applies to: ASTRA MILITARUM units.</description>
           <profiles>
             <profile name="Calm Under Fire" id="c3bc-39c3-75e8-0a1c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this model issues an Order to a friendly SQUADRON unit, once per turn per model:
+  - Issue the same Order to one other of the eligible friendly SQUADRON units.</characteristic>
               </characteristics>
             </profile>
           </profiles>

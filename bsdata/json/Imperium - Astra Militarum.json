@@ -96863,7 +96863,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Nothing happens.",
+                "$text": "At the start of the battle, you can use this ability:\n  - Unless this unit is within enemy deployment zone, place a Vox‑relay Beacon marker.\n  - While a friendly ASTRA MILITARUM REGIMENT unit is within 6\" of a vox relay beacon marker, friendly OFFICER units can issue Orders to eligible friendly ASTRA MILITARUM REGIMENT units within 6\" of the Vox Relay Beacon token, as if within 6\" of them.\nAt the end of each phase, while an enemy unit is within 1\" of a vox relay beacon marker, remove that Vox‑relay Beacon marker from the battlefield.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -98910,7 +98910,7 @@
                   {
                     "name": "Order",
                     "id": "1be1-8e35-20fb-7f8b",
-                    "description": "Nothing happens.",
+                    "description": "Friendly units' Voice of Command ability gains the option On My Signal (only to friendly ARMOURED SKIRMISHER units: each time an enemy unit ends a Normal or Advance move, once per turn per unit, while the triggering unit is within 8\" of this unit, this unit can make a Normal move of up to D6\").",
                     "hidden": false
                   }
                 ]
@@ -99599,7 +99599,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "Each time this model issues an Order to a friendly SQUADRON unit, once per turn per model:\n  - Issue the same Order to one other of the eligible friendly SQUADRON units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

@@ -7139,7 +7139,7 @@ You cannot select this Detachment together with another HEARTHGUARD Detachment.<
           <profiles>
             <profile name="Writ of Acquisition" id="af90-6b6f-3f29-df3e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, you gain 1 YP for each assailed enemy unit hit by those attacks (to a maximum of 3).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7328,7 +7328,9 @@ When this unit is selected to shoot, you can use this ability or when this unit 
           <profiles>
             <profile name="Iron Ambassador" id="a8f8-d631-bc4f-31aa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability, once per battle per model, until the end of the phase:
+  - Spend up to 3 YP.
+  - Add the amount you spent to the Damage characteristic of ranged weapons equipped by this model.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7404,7 +7406,11 @@ When this unit is selected to shoot, you can use this ability or when this unit 
           <profiles>
             <profile name="Dêlvewerke Navigator" id="edd3-5ca8-c7cd-5a08" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Reinforcements step, you can use this ability:
+  - Select one friendly BESERKS CTHONIAN unit that is visible to this model:
+    - Spend any number of YP.
+    - Return 1 destroyed model (excluding CHARACTER models) to that unit, each with its full wounds remaining.
+    - Return 1 destroyed model (excluding CHARACTER models) for every 2 you spent to that unit, each with its full wounds remaining.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7518,7 +7524,9 @@ When this unit is selected to shoot, you can use this ability or when this unit 
           <profiles>
             <profile name="Piledriver" id="1a72-f160-5ae9-d47f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, until the end of the phase:
+  - Spend up to 2 YP.
+  - Add the amount you spent to the Damage characteristic of melee weapons equipped by this model.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7710,7 +7718,7 @@ When this unit is selected to shoot, you can use this ability or when this unit 
           <profiles>
             <profile name="Metaphysical Brokerage" id="6f36-bf25-0896-a8e1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your turn, while this model is on the battlefield, if you gained at most 2 YP this turn, you gain a number of YP equal to the difference between 3 and the YP you gained this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>

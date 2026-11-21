@@ -12196,19 +12196,45 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "hammer-of-the-emperor",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "issue-orders",
+      "same_order": true,
+      "exclude": "event-object",
+      "count": 1,
+      "eligible": {
+        "all_of": [
+          "SQUADRON"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "order"
+      },
+      "subject": "this-model",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "SQUADRON"
+        ]
+      }
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "model"
+    },
+    "source_digest": "a5b999560ca391d0b71a2bfbf6db503c30c6ea42517019fbc32e1739aee1a07b"
   },
   {
     "ability_id": "clear-and-secure-mechanised-assault-astra-militarum",
@@ -12272,19 +12298,32 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "combined-arms",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "order-share",
+      "target": {
+        "stratagem_target": "first"
+      },
+      "modifier": {
+        "with": {
+          "stratagem_target": "second"
+        },
+        "mutual": true
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started"
+    },
+    "source_digest": "c9c654e1cd6390c8ec5e1e53e694d28aac6ab2c79e149f03b273de2078d745fa"
   },
   {
     "ability_id": "courageous-diversion-recon-element-astra-militarum",
@@ -12700,7 +12739,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "2026-10-14"
+      "dataslate": "pre-launch-provisional"
     },
     "unit_ids": [],
     "faction_id": "astra-militarum",
@@ -13755,19 +13794,82 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "armoured-infantry",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-modifier",
+      "target": {
+        "owner": "friendly"
+      },
+      "modifier": {
+        "ability": "voice-of-command-astra-militarum",
+        "aspect": "options",
+        "operation": "add",
+        "add_option": {
+          "id": "on-my-signal",
+          "name": "On My Signal",
+          "eligible": {
+            "all_of": [
+              "ARMOURED",
+              "SKIRMISHER"
+            ]
+          },
+          "effect": {
+            "type": "ability-part",
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-subject",
+                  "filter": {
+                    "within": {
+                      "of": "this-unit",
+                      "range": {
+                        "inches": 8
+                      }
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "move",
+                "target": "this-unit",
+                "modifier": {
+                  "move_type": "normal",
+                  "distance": "D6"
+                }
+              }
+            },
+            "trigger": {
+              "event": "move-ended",
+              "filter": {
+                "move_types": [
+                  "normal",
+                  "advance"
+                ]
+              },
+              "subject": {
+                "owner": "enemy"
+              }
+            },
+            "usage": {
+              "frequency": "once-per-turn",
+              "per": "unit"
+            }
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "b16025a5a178a9b79c787047cbc8a1ee8bdb5e4cd59a801e2fb7c8476f319e39"
   },
   {
     "ability_id": "orders-astra-militarum",
@@ -14070,19 +14172,57 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "siege-regiment",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "orders-modifier",
+      "target": "this-model",
+      "modifier": {
+        "only_options": [
+          {
+            "ability_id": "voice-of-command-astra-militarum",
+            "option_id": "move-move-move"
+          }
+        ],
+        "recipients": {
+          "all_of": [
+            "INFANTRY",
+            "REGIMENT"
+          ]
+        },
+        "count": "any",
+        "range": "unlimited"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "command"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "899376873be119b05b0591066080c5cc0d0052edc9ca727943cd5df2a5e03e96"
   },
   {
     "ability_id": "purging-fire-grizzled-company-astra-militarum",
@@ -14565,19 +14705,31 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "grizzled-company",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "issue-orders",
+      "menu_from": "voice-of-command-astra-militarum",
+      "count": 1,
+      "as_if_phase": "command",
+      "issuer": {
+        "all_of": [
+          "OFFICER"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started"
+    },
+    "source_digest": "7d4f42516d4dd3a3d08cbba27ad5f68f5a1df3955cd1c8b6b0a1e8bc2a1457de"
   },
   {
     "ability_id": "spec-ops-veteran-grizzled-company-astra-militarum",
@@ -15382,9 +15534,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "cadian-recon-squad"
     ],
@@ -15392,11 +15543,132 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "battle-started",
+            "optional": true
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "in-region",
+                      "parameters": {
+                        "region": {
+                          "territory": "enemy-deployment-zone"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "marker",
+                  "target": "this-unit",
+                  "modifier": {
+                    "label": "Vox‑relay Beacon",
+                    "operation": "place"
+                  }
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": {
+                      "owner": "friendly",
+                      "all_of": [
+                        "ASTRA MILITARUM",
+                        "REGIMENT"
+                      ]
+                    },
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "marker": "vox-relay-beacon"
+                        },
+                        "range": {
+                          "inches": 6
+                        }
+                      }
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "orders-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "OFFICER"
+                    ]
+                  },
+                  "modifier": {
+                    "recipients": {
+                      "all_of": [
+                        "ASTRA MILITARUM",
+                        "REGIMENT"
+                      ]
+                    },
+                    "range_proxy": {
+                      "marker": "vox-relay-beacon",
+                      "inches": 6
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended"
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "matches",
+              "parameters": {
+                "subject": {
+                  "owner": "enemy"
+                },
+                "filter": {
+                  "within": {
+                    "of": {
+                      "marker": "vox-relay-beacon"
+                    },
+                    "range": {
+                      "inches": 1
+                    }
+                  }
+                }
+              }
+            },
+            "effect": {
+              "type": "marker",
+              "target": "this-unit",
+              "modifier": {
+                "label": "Vox‑relay Beacon",
+                "operation": "remove"
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "0065f88c30cd57170f42be8bee370bc845a75147987a4bc9e63d570acb2c5d5f"
   },
   {
     "ability_id": "vox-relay-mechanised-assault-astra-militarum",
@@ -15404,18 +15676,56 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "astra-militarum",
     "detachment_id": "mechanised-assault",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "embarked"
+            ]
+          }
+        },
+        {
+          "type": "orders-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "off_battlefield": true
+          }
+        },
+        {
+          "type": "orders-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "recipients": {
+              "all_of": [
+                "ASTRA MILITARUM",
+                "TRANSPORT"
+              ],
+              "none_of": [
+                "TITANIC"
+              ]
+            },
+            "adds_recipients": true,
+            "range": "unlimited"
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "e521272cbc7b349f25aeef3fe0f8b620c9afa72389045a33f0dd8fc7754e94ff"
   }
 ]

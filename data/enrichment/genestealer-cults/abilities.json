@@ -5994,9 +5994,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "claw-of-ascension-achilles-ridgerunner",
       "claw-of-ascension-atalan-jackals",
@@ -6007,7 +6006,279 @@
     "detachment_id": "claw-of-ascension",
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "army-faction",
+                "parameters": {
+                  "faction": "genestealer-cults"
+                }
+              },
+              "effect": {
+                "type": "resource-gain",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "resurgence-points",
+                  "amount": {
+                    "combat-patrol": 2,
+                    "incursion": 6,
+                    "strike-force": 10,
+                    "onslaught": 14
+                  }
+                }
+              }
+            },
+            {
+              "type": "ability-part",
+              "trigger": {
+                "event": "destroyed",
+                "object": {
+                  "owner": "friendly"
+                },
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "event-object",
+                    "filter": {
+                      "has_ability": [
+                        "cult-ambush-claw-of-ascension-genestealer-cults"
+                      ]
+                    }
+                  }
+                },
+                "optional": true
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "resource-spend",
+                    "target": "this-model",
+                    "modifier": {
+                      "pool": "resurgence-points",
+                      "amount": "by-table",
+                      "amount_table": [
+                        {
+                          "unit_ids": [
+                            "claw-of-ascension-hybrid-metamorphs"
+                          ],
+                          "starting_strength": 5,
+                          "amount": 2
+                        },
+                        {
+                          "unit_ids": [
+                            "claw-of-ascension-atalan-jackals"
+                          ],
+                          "starting_strength": 5,
+                          "amount": 2
+                        }
+                      ],
+                      "table_of": "event-object"
+                    }
+                  },
+                  {
+                    "type": "add-unit",
+                    "target": "this-unit",
+                    "modifier": {
+                      "copy_of": "event-object",
+                      "count": 1,
+                      "at_starting_strength": true,
+                      "reset_one_shot": true,
+                      "placement": "cult-ambush"
+                    }
+                  },
+                  {
+                    "type": "marker",
+                    "target": "this-unit",
+                    "modifier": {
+                      "label": "cult-ambush-marker",
+                      "operation": "place",
+                      "min_enemy_distance": {
+                        "inches": 9
+                      },
+                      "size_mm": 32
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "genestealer-cults"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "targeting",
+                "target": {
+                  "owner": "friendly",
+                  "state": "in-cult-ambush"
+                },
+                "modifier": {
+                  "may": "cannot-target",
+                  "kind": "stratagem",
+                  "target": {
+                    "owner": "friendly",
+                    "state": "in-cult-ambush"
+                  },
+                  "stratagem": "rapid-ingress"
+                }
+              },
+              {
+                "type": "rule-state",
+                "target": {
+                  "owner": "friendly",
+                  "state": "in-cult-ambush"
+                },
+                "modifier": {
+                  "direction": "suppressed",
+                  "rule_kind": "core-rule",
+                  "rule": "reserves-destruction"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "subject": {
+              "owner": "enemy",
+              "none_of": [
+                "AIRCRAFT"
+              ],
+              "level": "model"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "army-faction",
+                  "parameters": {
+                    "faction": "genestealer-cults"
+                  }
+                },
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "event-subject",
+                    "filter": {
+                      "within": {
+                        "of": {
+                          "marker": "cult-ambush-marker"
+                        },
+                        "range": {
+                          "inches": 8
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "marker",
+              "target": "this-unit",
+              "modifier": {
+                "label": "cult-ambush-marker",
+                "operation": "remove"
+              }
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "movement"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "opponent-turn"
+                  }
+                }
+              ]
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "army-faction",
+              "parameters": {
+                "faction": "genestealer-cults"
+              }
+            },
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "friendly",
+                  "state": "in-cult-ambush"
+                },
+                "count": {
+                  "min": 0,
+                  "max": {
+                    "count_of": "markers",
+                    "marker": "cult-ambush-marker"
+                  }
+                }
+              },
+              "effect": {
+                "type": "sequence",
+                "steps": [
+                  {
+                    "type": "move",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "move_type": "ingress"
+                    }
+                  },
+                  {
+                    "type": "set-up",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "to": "battlefield",
+                      "via": "cult-ambush",
+                      "marker_range": {
+                        "range": {
+                          "inches": 3
+                        },
+                        "wholly": true
+                      },
+                      "allow_first_round": true
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
@@ -6017,7 +6288,9 @@
         "ability_ref": "cult-ambush-genestealer-cults",
         "type": "replaces"
       }
-    ]
+    ],
+    "behavior": "reactive",
+    "source_digest": "6dfc5c3abbf5eb689f4e13337b82e9c7f40674f7ddd86299eb42fcb7edf90f04"
   },
   {
     "ability_id": "cult-icon-genestealer-cults",

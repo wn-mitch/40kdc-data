@@ -50,7 +50,7 @@
     "ability_id": "aggressive-impulse-haloscreed-battle-clade-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1366,7 +1366,7 @@
     "ability_id": "extinction-order-rad-zone-corps-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -2408,7 +2408,7 @@
     "ability_id": "priority-reclamation-explorator-maniple-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -3151,7 +3151,7 @@
     "ability_id": "verse-of-vengeance-data-psalm-conclave-adeptus-mechanicus",
     "game_version": {
       "edition": "11th",
-      "dataslate": "2026-10-14"
+      "dataslate": "pre-launch-provisional"
     },
     "external_refs": [
       {
