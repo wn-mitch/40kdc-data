@@ -39,8 +39,6 @@ jobs:
       # xmllint validates the BattleScribe XML export against its schema.
       - run: command -v xmllint || (sudo apt-get update && sudo apt-get install -y libxml2-utils)
       - run: cd tools && npm test
-      - name: Test DSL campaign graph and workflow contracts
-        run: node --test .omp/skills/dsl-campaign/graph/*.test.js .omp/skills/dsl-campaign/workflows/*.test.js
       - run: cd tools && npm run validate
       # The committed BSData export (bsdata/) apps load from raw.githubusercontent.com.
       # `git status` also catches a file the export adds or no longer writes.

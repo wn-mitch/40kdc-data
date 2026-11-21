@@ -501,8 +501,8 @@ function coverageDigest(r: CoverageReport): string {
     "",
     "`stub*` = empty-modifier placeholder nodes (highest need first) · `notes-stub` = flagged in " +
       "`community_notes` · `gw-leak` = suspected verbatim GW text · `def-skipped` = defensive abilities " +
-      "skipped by the buff walk. Enumerated stub ids: [`data/_audit/worklist.md`](data/_audit/worklist.md). " +
-      "Full total+repair breakdown: [`data/_audit/summary.md`](data/_audit/summary.md).",
+      "skipped by the buff walk. Run `cd tools && npm run audit:coverage` to generate full local " +
+      "breakdowns (`data/_audit/worklist.md` and `data/_audit/summary.md`).",
     COVERAGE_END,
   );
   return lines.join("\n");

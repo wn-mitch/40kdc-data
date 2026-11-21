@@ -24,19 +24,24 @@ PAPERCUTS.md
 # Local secrets — never commit (e.g. Patreon OAuth client/creator credentials).
 .env
 
-# _audit/ is the DSL-authoring worklist (#21). Keep the human-readable summaries
-# (coverage.json, summary.md, proposed/*.md) but ignore the bulky, churn-prone
-# machine-generated proposal/input JSON — it regenerates from the author-* tools.
-/data/_audit/author-input/
-/data/_audit/proposed/*.json
-/data/_audit/worklist.json
+# Local agent instructions & internal architecture notes (kept locally, not committed).
+/AGENTS.md
+/CLAUDE.md
+/examples/CLAUDE.md
+/SEMANTIC_AUTHORING.md
 
-# Public/source boundary: raw authoring corpora and unresolved source prose
-# belong under /_private/.
-/data/_audit/reauthor-input/
+# Generated scratch reports & audit outputs.
+# Under data/_audit/, keep only the CI/test-pinned goldens (external-refs, mfm-golden, mfm-gaps).
+/gap_analysis.md
+/data/core/_reports/
+/data/_port-audit/
+/data/_audit/*
+!/data/_audit/external-refs.json
+!/data/_audit/mfm-golden.json
+!/data/_audit/mfm-gaps.json
+
+# Public/source boundary: unresolved source prose belongs under /_private/.
 /data/core/*/_wargear-options.unparsed.json
-/data/_audit/blessings-of-khorne-three-way.md
-/data/_audit/proposed/REVIEW-DETAIL.md
 
 # Fuzz-mode regression repros from the cross-impl parity differ. The directory
 # itself is kept (via .gitkeep) so the differ has somewhere to write; the JSON
