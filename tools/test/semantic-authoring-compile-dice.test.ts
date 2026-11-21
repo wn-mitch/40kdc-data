@@ -73,7 +73,7 @@ describe("Semantic authoring dice-family compiler", () => {
     expect(previewLeaf({ family_id: "ignore-modifiers", parameters: { subject: "this-model", what: ["characteristics"], stats: ["M"] } }).text)
       .toBe("This model ignores any modifiers to its Move characteristics.");
     expect(previewLeaf({ family_id: "ignore-modifiers", parameters: { subject: "this-unit", what: ["rolls"], rolls: ["hit", "wound"] } }).text)
-      .toBe("The unit ignores any modifiers to its Hit and Wound rolls.");
+      .toBe("This unit ignores any modifiers to its Hit and Wound rolls.");
   });
 
   it("lowers one list of characteristics and rolls to one ignore-modifiers effect per kind, each with only its own list", () => {

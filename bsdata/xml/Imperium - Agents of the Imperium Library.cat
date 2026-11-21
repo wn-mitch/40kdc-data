@@ -229,26 +229,26 @@
       <profiles>
         <profile name="Cherub" id="0f5b-bf6f-dbf1-1527" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per battle per unit:
-  -&gt; The Command Re Roll Stratagem that targets the unit costs 0CP.
-  -&gt; The unit's Command Re Roll ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.
-  -&gt; Place a Cherub marker.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per battle per unit, you can use this ability:
+  - The Command Re Roll Stratagem that targets this unit costs 0 CP.
+  - This unit's Command Re Roll ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.
+  - Place a Cherub marker.</characteristic>
           </characteristics>
         </profile>
         <profile name="Ministorum Sermon" id="6fe4-730c-b440-ecd4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit has the MINISTORUM PRIEST keyword, while making melee attacks, the unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit has the MINISTORUM PRIEST keyword, while making melee attacks, add 1 to this unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="db3d-bf79-6ce4-9206" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Atttached Unit" id="76e0-43a7-8bcb-a445" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">A friendly model with the INQUISITOR or MINISTORUM PRIEST keyword with the Leader ability that can be attached to friendly SISTERS OF BATTLE SQUAD units can also be attached to the unit.
--&gt; When declaring Battle Formations (the triggering model must have INQUISITOR or MINISTORUM PRIEST): Leader models in the unit gain the following rules (while this model is leading a unit: this model gains the Scouts 6" ability).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">A friendly model with the INQUISITOR or MINISTORUM PRIEST keyword with the Leader ability that can be attached to friendly SISTERS OF BATTLE SQUAD units can also be attached to this unit.
+When declaring Battle Formations, Leader models in this unit gain the following rules (while this model is leading a unit, this model gains the Scouts 6" ability).</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1123,23 +1123,22 @@
         </profile>
         <profile name="Feel No Pain" id="ffa5-f8c5-5682-ece0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="8189-9620-efc5-f206" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tactical Instinct" id="c35d-d96e-7f21-aad6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit's weapons gain [SUSTAINED HITS 1].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit's weapons gain [SUSTAINED HITS 1].</characteristic>
           </characteristics>
         </profile>
         <profile name="Unstoppable Champion" id="be1b-57fb-2052-ff39" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if this model was destroyed this phase (1+ times):
-  -&gt; Roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1" away from all enemy models, with 3 wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if this model was destroyed this phase (one or more times), roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1" away from all enemy models, with 3 wounds remaining.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1285,18 +1284,17 @@
         </profile>
         <profile name="Deadly Demise" id="0a6d-2647-262b-7d70" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="8deb-76e0-41f5-f7ce" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Rapid Deployment" id="cc64-95b9-ca89-35ca" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Friendly units embarked within the unit are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Friendly units embarked within this unit are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1784,23 +1782,23 @@
         </profile>
         <profile name="Acrobatic Escape" id="6991-5328-6f5f-5ad2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the end of the Fight phase: while the unit is engaged, the unit can Fall Back up to D6".
--&gt; At the end of your opponent's turn, you may use this ability: while the unit is not within 3" of an enemy unit, the unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, while this unit is engaged, this unit can Fall Back up to D6".
+At the end of your opponent's turn, you can use this ability: while this unit is not within 3" of an enemy unit, this unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="e9da-70ae-0061-d8cc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fights First" id="a4ae-7ff9-efc3-f9a5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Fights First ability, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="9bc6-fd5f-aa7d-c055" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="4bc1-4f71-c9ed-e4d9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1816,7 +1814,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Reign of Confusion" id="31f3-08e8-788d-38f1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit within 12" of this model is targeted with a Stratagem, you may use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit within 12" of this model is targeted with a Stratagem, you can use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1916,17 +1914,17 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Authority of the Inquisition" id="c5b8-32fa-8ec6-4391" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit is eligible to embark.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit is eligible to embark.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="8a80-e2ca-85a2-288b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="No Mercy" id="c6a0-7b7a-5900-7d52" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while the target unit is below half strength, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit and the target unit is Below Half-strength, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Psyoculum" id="675b-39ae-2a74-01ed" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2089,14 +2087,12 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Purge and Cleanse" id="9784-2b0c-1317-2c43" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit cannot benefit from Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, until the end of the phase, select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit cannot benefit from Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="42d8-ee41-ceea-c2de" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2355,12 +2351,12 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Inquisitorial Henchmen" id="f10d-b287-0f83-946e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Unless your Army Faction is AGENTS OF THE IMPERIUM, your army can include at most 1 friendly INQUISITORIAL AGENTS unit for each friendly INQUISITOR unit in your army; they do not count toward the Retinue limit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: Unless your Army Faction is AGENTS OF THE IMPERIUM, your army can include at most 1 friendly INQUISITORIAL AGENTS unit for each friendly INQUISITOR unit in your army; they do not count toward the Retinue limit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Loyal Henchmen" id="45dd-ee29-e07a-607e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is being led by an INQUISITOR model, the attacking unit gets -1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is being led by an INQUISITOR model, subtract 1 from the attacking unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2806,18 +2802,17 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Leader" id="e3cb-b9d8-766d-8834" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Power of the Rosette" id="bb8b-4458-e0d2-41a8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem:
-  -&gt; Roll one D6: on a 3+, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, roll one D6: on a 3+, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Authority of the Inquisition" id="c340-c154-6b90-3597" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit is eligible to embark.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit is eligible to embark.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3156,7 +3151,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Hammerhand (Psychic)" id="0f29-23c7-1778-ca76" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, until the end of the turn, melee weapons equipped by models in this unit gain [LETHAL HITS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move, until the end of the turn, melee weapons equipped by models in this unit gain [LETHAL HITS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Rites of Teleportation" id="b2b1-ddb6-1f53-0327" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3166,7 +3161,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Deep Strike" id="7c8a-b2d1-aa4f-d1a4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3562,7 +3557,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Navy Bodyguard" id="1e29-1328-0885-e8ec" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Unless your Army Faction is AGENTS OF THE IMPERIUM, your army can include at most 1 friendly VOIDSMEN-AT-ARMS unit for each friendly CHARACTER VOIDFARERS unit in your army; they do not count toward the Retinue limit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: Unless your Army Faction is AGENTS OF THE IMPERIUM, your army can include at most 1 friendly VOIDSMEN-AT-ARMS unit for each friendly CHARACTER VOIDFARERS unit in your army; they do not count toward the Retinue limit.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3906,9 +3901,9 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Death to the Alien" id="fe1c-f2e6-f5eb-70dc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Select one of the following:
-  - You can re-roll a Hit roll of 1.
-  - Against a unit that is not a CHAOS or IMPERIUM, you can re-roll the Hit roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Choose one of the following:
+  - You can re-roll Hit rolls of 1.
+  - Against a unit that is not a CHAOS or IMPERIUM, you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4512,20 +4507,19 @@ This model is eligible to declare a charge in a turn in which it Advanced.</char
         </profile>
         <profile name="Overkill" id="61bb-bb5d-90ab-0322" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model starts a Normal move, you may use this ability, once per battle per unit, during the Movement phase, in your turn, until the end of the turn:
-  -&gt; Add 6 to this model's Move characteristic.
-  -&gt; Add 3 to the Attacks characteristic of melee weapons equipped by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model starts a Normal move, you can use this ability, once per battle per unit, during your Movement phase, until the end of the turn:
+  - Add 6" to this model's Move characteristic.
+  - Add 3 to the Attacks characteristic of melee weapons equipped by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="0db6-bf60-1ef9-fe1c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="a40f-5661-69d0-639f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="f3ad-6124-fddf-4d88" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4647,13 +4641,12 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="4c5b-e35e-09c8-16fc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="cb4c-3feb-bfe6-7b5f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4818,9 +4811,9 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Death to the Alien" id="f524-0d9b-ccdf-f8cf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Select one of the following:
-  - You can re-roll a Hit roll of 1.
-  - Against a unit that is not a CHAOS or IMPERIUM, you can re-roll the Hit roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Choose one of the following:
+  - You can re-roll Hit rolls of 1.
+  - Against a unit that is not a CHAOS or IMPERIUM, you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5473,17 +5466,17 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Shieldbreaker" id="dbae-f369-d8ad-7094" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the phase, the unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the phase, add 1 to this unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="051f-ef13-0729-7597" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="8bff-7ea4-60e0-20e7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="8bca-6384-a04b-ad4b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5598,7 +5591,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         <profile name="Imperial Law" id="8af9-0c37-2905-6c73" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle:
-  -&gt; Select one enemy unit (your Imperial Law Target). Each time a friendly unit makes an attack against it, the unit's weapons gain [LETHAL HITS] and [PRECISION].</characteristic>
+  - Select one enemy unit (your Imperial Law Target). Each time a friendly unit makes an attack against it, this unit's weapons gain [LETHAL HITS] and [PRECISION].</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6172,18 +6165,18 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Breaching Team" id="1bb7-5b8d-c281-ac54" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is not within range of an objective marker, you can re-roll a Wound roll of 1.
-While the target is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is not within range of an objective marker, you can re-roll Wound rolls of 1.
+While the target is within range of an objective marker, you can re-roll Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="CAT Unit" id="40e0-0f20-2606-1ed0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, once per battle per unit, until the end of the phase, ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, once per battle per unit, until the end of the phase, ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteristic>
           </characteristics>
         </profile>
         <profile name="Gheistskull" id="8bf7-1430-009a-2698" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit can target enemy units within 18" of the unit visible to the unit with the Explosives Stratagem within 18".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit can target enemy units within 18" of this unit visible to this unit with the Explosives Stratagem.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7780,33 +7773,33 @@ While the target is within range of an objective marker, you can re-roll the Wou
         </profile>
         <profile name="Abomination" id="73e2-ff50-db83-efec" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has the Feel No Pain 2+ ability against Psychic Attacks.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has Feel No Pain 2+ against Psychic Attacks.</characteristic>
           </characteristics>
         </profile>
         <profile name="Etheric Emergence" id="d583-7dfd-2ea1-7283" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is set up, if the unit is using Deep Strike, you may use this ability, during the Movement phase, in your turn, until the end of the turn:
-  -&gt; This model resolves the Etheric Emergence ability now.
-  -&gt; This model can be set up on the battlefield more than 6" away from all enemy models.
-  -&gt; The triggering unit cannot declare a charge.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is set up, if this unit is using Deep Strike, you can use this ability, during your Movement phase, until the end of the turn:
+  - This model resolves the Etheric Emergence ability now.
+  - This model can be set up on the battlefield more than 6" away from all enemy models.
+  - The triggering unit cannot declare a charge.</characteristic>
           </characteristics>
         </profile>
         <profile name="Soulless Horror (Aura)" id="c8ba-6228-fa66-e511" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Command phase, you may use this ability, once per battle per unit, until the end of the phase:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Command phase, you can use this ability, once per battle per unit, until the end of the phase:
   For each enemy unit within 9" of this model:
-    -&gt; Unless the unit has the PSYKER keyword, the unit must take a Battle-shock test, applying -1 to that test.
-    -&gt; Unless the unit does not have the PSYKER keyword, if the unit has the PSYKER keyword, the unit must take a Battle-shock test, applying -2 to that test.</characteristic>
+    - Unless this unit has the PSYKER keyword, that unit must take a Battle-shock test, applying -1 to that test.
+    - Unless this unit does not have the PSYKER keyword, if this unit has the PSYKER keyword, that unit must take a Battle-shock test, applying -2 to that test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="94b3-b4fb-2474-8f8a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="0af8-0b27-a958-daaa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="49e9-a7c7-35d7-1c32" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7914,7 +7907,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Merciless Judgement" id="8a2b-f7fd-5789-2fa7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while the target unit is below half strength, the unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while the target unit is Below Half-strength, add 1 to this unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8417,7 +8410,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Dedication to Duty" id="1c1f-db3f-89b8-7989" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a model in the unit is destroyed, unless the triggering unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a model in this unit is destroyed, unless the triggering unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8731,16 +8724,16 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Leader" id="7689-516c-d2b2-4cca" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Third Eye (Psychic)" id="156e-5339-b76b-556b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, until the end of the phase:
-  -&gt; Select one enemy unit if the selected unit is within 12" of this model and the selected unit is visible to this model:
-    -&gt; If the selected unit has the INFANTRY keyword, that unit must take a Battle-shock test, applying -2 to that test.
-    -&gt; Unless the selected unit has the INFANTRY keyword, that unit must take a Battle-shock test.
-    -&gt; If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds.</characteristic>
+  - Select one enemy unit that is within 12" of this model and visible to this model:
+    - If the selected unit has the INFANTRY keyword, that unit must take a Battle-shock test, applying -2 to that test.
+    - Unless the selected unit has the INFANTRY keyword, that unit must take a Battle-shock test.
+    - If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8914,25 +8907,25 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Leader" id="a250-fdde-cd6e-22bb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Psychic Veil (Psychic)" id="866f-cfe9-e93c-45c9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, until the start of your next Command phase:
-  -&gt; Roll one D6:
-    - On 1: The unit suffers D3 mortal wounds.
-    - On 2-6: While the attacking unit is within 18" of the unit, enemy units can target the unit with ranged weapons.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, until the start of your next Command phase, you can use this ability:
+  - Roll one D6:
+    - On 1: This unit suffers D3 mortal wounds.
+    - On 2-6: While the attacking unit is within 18" of this unit, enemy units can target this unit with ranged weapons.</characteristic>
           </characteristics>
         </profile>
         <profile name="Xenos Hunter" id="8b98-3588-3f4b-2f98" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit against a unit that is not a CHAOS or IMPERIUM, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit against a unit that is not a CHAOS or IMPERIUM, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Authority of the Inquisition" id="25da-4b8a-0c9f-e51d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit is eligible to embark.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit is eligible to embark.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9090,25 +9083,25 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Leader" id="d06a-5e00-172f-1a3b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Strategic Acumen" id="cc15-333f-4b77-53e2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, until the start of your next Command phase, select one option of Combat Doctrines for the unit, in place of any already active.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: During your Command phase, until the start of your next Command phase, select one option of Combat Doctrines for this unit, in place of any already active.</characteristic>
           </characteristics>
         </profile>
         <profile name="Watch Master" id="5bda-54ce-890d-146d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against CHARACTER targets:
-  -&gt; You can re-roll a Hit roll of 1 for attacks made by this model.
-  -&gt; You can re-roll a Wound roll of 1 for attacks made by this model.</characteristic>
+  - You can re-roll Hit rolls of 1 for attacks made by this model.
+  - You can re-roll Wound rolls of 1 for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Purgatus Quarry" id="7e4d-9917-938d-7507" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the battle round, if during the first battle round, you can:
-  -&gt; Select up to one enemy unit, binding it as hunted selection (your Hunted target). When your Hunted target is destroyed, you may select up to one enemy unit, binding it as hunted selection to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time a model in this unit makes an attack against it, while the unit is tagged hunted, you can re-roll a Wound roll of 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the first battle round, you can:
+  - Select up to one enemy unit (referred to below as the hunted selection) (your Hunted target). When your Hunted target is destroyed, you may select up to one enemy unit (referred to below as the hunted selection) to replace it. Only one such designation can be active for this unit. For the rest of the battle, each time a model in this unit makes an attack against it, while this unit is Hunted, you can re-roll Wound rolls of 1.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9271,24 +9264,24 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Leader" id="3ad4-6ba1-1a94-fea7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Malefic Wardings (Psychic)" id="3b3c-eed3-d3bb-b8a2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit:
-  -&gt; The unit has a 6+ invulnerable save.
-  -&gt; Against psychic attacks or if the attacking unit has the DAEMON keyword, the unit has a 4+ invulnerable save.</characteristic>
+  - This unit has a 6+ invulnerable save.
+  - Against psychic attacks or if the attacking unit has the DAEMON keyword, this unit has a 4+ invulnerable save.</characteristic>
           </characteristics>
         </profile>
         <profile name="Spy Network" id="7110-7bc4-8dff-19f0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You gain 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Authority of the Inquisition" id="ea0f-2e89-58d5-ac79" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit is eligible to embark.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit is eligible to embark.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9442,14 +9435,14 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Defenders of the Faith" id="52b4-2621-82d9-0cc0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
           </characteristics>
         </profile>
         <profile name="Incensor Cherub" id="27a5-f327-8083-68ed" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per battle per unit:
-  -&gt; The Command Re Roll Stratagem that targets the unit costs 0CP.
-  -&gt; The unit is eligible to be targeted with the Command Re Roll Stratagem even if it has already been targeted with that Stratagem this phase.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per battle per unit, you can use this ability:
+  - The Command Re Roll Stratagem that targets this unit costs 0 CP.
+  - This unit is eligible to be targeted with the Command Re Roll Stratagem even if it has already been targeted with that Stratagem this phase.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10020,29 +10013,28 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Blackstar Cluster Launcher" id="4783-bb90-8356-05c2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, during the Movement phase, in your turn:
-  -&gt; Select up to one enemy unit if the selected unit was moved over by the unit during that move: roll 6 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, during your Movement phase:
+  - Select up to one enemy unit that was moved over by this unit during that move. Roll 6 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="9d44-2dc5-9d4f-4e9a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Hover" id="f02d-bf09-04f1-27d5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit uses ability, the unit's Takes to the Skies ability has no limit on its range.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit uses ability, this unit's Takes to the Skies ability has no limit on its range.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="f321-2ffe-08d2-772e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="824b-d2e0-1eba-8f43" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10231,9 +10223,9 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="Zealot" id="38f4-7991-8ed1-00d3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per battle per unit, during the Fight phase, until the end of the phase:
-  -&gt; Improve the Attacks characteristic of melee weapons equipped by this model by 3.
-  -&gt; Improve the Strength characteristic of melee weapons equipped by this model by 3.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per battle per unit, during the Fight phase, until the end of the phase, you can use this ability:
+  - Improve the Attacks characteristic of melee weapons equipped by this model by 3.
+  - Improve the Strength characteristic of melee weapons equipped by this model by 3.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="1901-dcaa-c7ce-1426" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -10420,17 +10412,17 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Backroom Deals" id="85ea-3fea-2512-4ac8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="d1ca-b53b-b26d-648d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Warrant of Trade" id="2928-36ae-1ef1-86f7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Select up to 3 friendly IMPERIUM BATTLELINE units: that unit can be removed from the battlefield and set up again.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Select up to 3 friendly IMPERIUM BATTLELINE units. Those units can be removed from the battlefield and set up again.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10853,20 +10845,20 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
         </profile>
         <profile name="On My Signal, Fire!" id="8764-91ee-a10a-d3d3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, you may use this ability:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your On My Signal Fire Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll the Hit roll for attacks made by all friendly AGENTS OF THE IMPERIUM or BATTLELINE IMPERIUM INFANTRY models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, you can use this ability:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your On My Signal Fire Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll Hit rolls for attacks made by friendly AGENTS OF THE IMPERIUM or BATTLELINE IMPERIUM INFANTRY models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="ab07-e375-09d8-a497" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tox-cycler" id="3a65-430e-1b22-14e4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the target was hit by an attack by Jindarii Tox Cycler this phase, for the rest of the battle:
-  -&gt; Add 2 to the Strength characteristic of Jindarii Tox Cycler weapons equipped by models in this unit.
-  -&gt; Add 2 to the Damage characteristic of Jindarii Tox Cycler weapons equipped by models in this unit.</characteristic>
+  - Add 2 to the Strength characteristic of Jindarii Tox Cycler weapons equipped by models in this unit.
+  - Add 2 to the Damage characteristic of Jindarii Tox Cycler weapons equipped by models in this unit.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11116,7 +11108,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Salvationist Medikit" id="e5b5-1c21-a51d-1d55" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, while this model is on the battlefield, return D3 destroyed models (excluding CHARACTER models) to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, while this model is on the battlefield, you can return D3 destroyed models (excluding CHARACTER models) to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11164,7 +11156,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Simulacrum Imperialis" id="2c0a-65cf-9c63-0e3a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve the unit's Leadership characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve this unit's Leadership characteristic by 1.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11714,7 +11706,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Blessed Wardings" id="83bc-24cd-710e-a40f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit has a 6+ invulnerable save.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit has a 6+ invulnerable save.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11864,7 +11856,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Ancient's Banner" id="ded2-25a4-1a0a-5ad0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to the unit's Objective Control characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Objective Control characteristic.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11894,7 +11886,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Narthecium" id="a820-a975-649a-fed6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, return 1 destroyed model (excluding CHARACTER models) to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, you can return 1 destroyed model (excluding CHARACTER models) to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -12661,7 +12653,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Nuncio-acquila" id="73de-d893-99a8-18bc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">All enemy units (excluding MONSTER or VEHICLE units) must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Enemy units (excluding MONSTER or VEHICLE units) must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -12727,7 +12719,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Arbites Medi-kit" id="8566-3bed-bd22-0cca" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, you may use this ability, while the unit is below its starting strength, return D3 destroyed EXACTION VIGILANTS models to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, you can use this ability, while this unit is below its Starting Strength, return D3 destroyed EXACTION VIGILANTS models to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -13246,8 +13238,8 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Glovodan Psyber-eagle" id="e4d6-a3db-0337-6b9e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, until the start of your next Command phase:
-  -&gt; Select one enemy unit within 18" of this model: that unit cannot benefit from Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, until the start of your next Command phase, you can use this ability:
+  - Select one enemy unit within 18" of this model. That unit cannot benefit from Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -13797,7 +13789,7 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
       <profiles>
         <profile name="Healing serum" id="25cd-105e-a7ee-a411" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, you may use this ability, while the unit is below its starting strength, return D3 destroyed models (excluding CHARACTER models) to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, you can use this ability, while this unit is below its Starting Strength, return D3 destroyed models (excluding CHARACTER models) to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -13909,10 +13901,10 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
               <rules>
                 <rule name="At All Costs" id="af42-c658-e913-7ce6" hidden="false">
                   <description>Until the start of your next Command phase:
-  -&gt; At the start of your Command phase:
-    -&gt; Select one:
-      - Eliminate At All Costs: at the start of your Command phase: select one enemy unit (your Eliminate At All Costs target); until the start of your next Command phase, each time a friendly unit attacks it, the unit gets +1 to Hit rolls.
-      - Acquire At All Costs: while the unit is within range of an objective marker, add 1 to the unit's Leadership characteristic; add 1 to the unit's Objective Control characteristic; the unit has a 5+ invulnerable save.</description>
+  - At the start of your Command phase:
+    - Select one:
+      - Eliminate At All Costs: At the start of your Command phase, select one enemy unit (your Eliminate At All Costs target); until the start of your next Command phase, each time a friendly unit attacks it, add 1 to this unit's Hit rolls.
+      - Acquire At All Costs: While this unit is within range of an objective marker, add 1 to this unit's Leadership characteristic; add 1 to this unit's Objective Control characteristic; this unit has a 5+ invulnerable save.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13929,8 +13921,8 @@ Your army can include only one OFFICIO ASSASSINORUM unit.</characteristic>
               </constraints>
               <rules>
                 <rule name="Root out Heresy" id="d719-9723-36ff-ce11" hidden="false">
-                  <description>Ranged weapons equipped by all friendly models with the ADEPTUS ARBITES, INQUISITOR, INQUISITORIAL AGENTS or ORDO HERETICUS keyword gain [IGNORES COVER].
-Against CHAOS targets, if the target unit contains 5+ models, the weapons of all friendly models with the ADEPTUS ARBITES, INQUISITOR, INQUISITORIAL AGENTS or ORDO HERETICUS keyword gain [SUSTAINED HITS 1].</description>
+                  <description>Ranged weapons equipped by friendly models with the ADEPTUS ARBITES, INQUISITOR, INQUISITORIAL AGENTS or ORDO HERETICUS keyword gain [IGNORES COVER].
+Against CHAOS targets, if the target unit contains 5 or more models, the weapons of friendly models with the ADEPTUS ARBITES, INQUISITOR, INQUISITORIAL AGENTS or ORDO HERETICUS keyword gain [SUSTAINED HITS 1].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13947,9 +13939,9 @@ Against CHAOS targets, if the target unit contains 5+ models, the weapons of all
               </constraints>
               <rules>
                 <rule name="Extremis Sanction" id="0610-3524-ed78-eb73" hidden="false">
-                  <description>The number of uses of all friendly OFFICIO ASSASSINORUM units' Overkill ability is 2.
-The number of uses of all friendly OFFICIO ASSASSINORUM units' Soulless Horror ability is 2.
-The number of uses of all friendly OFFICIO ASSASSINORUM units' Shieldbreaker ability is 2.</description>
+                  <description>The number of uses of friendly OFFICIO ASSASSINORUM units' Overkill ability is 2.
+The number of uses of friendly OFFICIO ASSASSINORUM units' Soulless Horror ability is 2.
+The number of uses of friendly OFFICIO ASSASSINORUM units' Shieldbreaker ability is 2.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13967,11 +13959,11 @@ The number of uses of all friendly OFFICIO ASSASSINORUM units' Shieldbreaker abi
               <rules>
                 <rule name="Deathwatch Mission Tactics" id="58e2-027b-5ffc-c27b" hidden="false">
                   <description>Until the start of your next Command phase:
-  -&gt; At the start of your Command phase:
-    -&gt; Select one (each may be chosen once per battle):
-      - Furor Tactics: the unit's weapons gain [SUSTAINED HITS 1].
-      - Malleus Tactics: the unit's weapons gain [LETHAL HITS].
-      - Purgatus Tactics: the unit's weapons gain [PRECISION].</description>
+  - At the start of your Command phase:
+    - Select one (each can be chosen once per battle):
+      - Furor Tactics: This unit's weapons gain [SUSTAINED HITS 1].
+      - Malleus Tactics: This unit's weapons gain [LETHAL HITS].
+      - Purgatus Tactics: This unit's weapons gain [PRECISION].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13988,8 +13980,8 @@ The number of uses of all friendly OFFICIO ASSASSINORUM units' Shieldbreaker abi
               </constraints>
               <rules>
                 <rule name="Destroy the Daemonic" id="f477-e68b-33cf-c50a" hidden="false">
-                  <description>You can re-roll a Hit roll of 1 for attacks made by all friendly models with the INQUISITOR, INQUISITORIAL AGENTS or ORDO MALLEUS keyword.
-Against DAEMON targets, you can re-roll a Wound roll of 1 for attacks made by all friendly models with the INQUISITOR, INQUISITORIAL AGENTS or ORDO MALLEUS keyword.</description>
+                  <description>You can re-roll Hit rolls of 1 for attacks made by friendly models with the INQUISITOR, INQUISITORIAL AGENTS or ORDO MALLEUS keyword.
+Against DAEMON targets, you can re-roll Wound rolls of 1 for attacks made by friendly models with the INQUISITOR, INQUISITORIAL AGENTS or ORDO MALLEUS keyword.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -14077,8 +14069,7 @@ Against DAEMON targets, you can re-roll a Wound roll of 1 for attacks made by al
           <profiles>
             <profile name="Clandestine Operation" id="0a7d-350e-99c0-4272" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, you may use this ability:
-  -&gt; Select up to 3 friendly AGENTS OF THE IMPERIUM INFANTRY units (excluding GREY KNIGHTS TERMINATOR SQUAD units): that unit gains the Infiltrators ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, you can use this ability, select up to 3 friendly AGENTS OF THE IMPERIUM INFANTRY units (excluding GREY KNIGHTS TERMINATOR SQUAD units). Those units gain the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14111,7 +14102,7 @@ Against DAEMON targets, you can re-roll a Wound roll of 1 for attacks made by al
           <profiles>
             <profile name="Fleetmaster" id="8ca8-2359-5868-e211" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per battle round per model, Stratagems that target the unit cost 0CP.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: Once per battle round per model, Stratagems that target this unit cost 0 CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14144,8 +14135,7 @@ Against DAEMON targets, you can re-roll a Wound roll of 1 for attacks made by al
           <profiles>
             <profile name="Combat Landers" id="bf2a-d434-2ba9-9780" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, you may use this ability:
-  -&gt; Select up to 3 friendly VOIDFARERS units: that unit gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, you can use this ability, select up to 3 friendly VOIDFARERS units. Those units gain the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14178,11 +14168,11 @@ Against DAEMON targets, you can re-roll a Wound roll of 1 for attacks made by al
           <profiles>
             <profile name="Liber Heresius" id="af3d-875e-6c87-702c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you may use this ability:
-  -&gt; Select up to 3 friendly AGENTS OF THE IMPERIUM units:
-    -&gt; For each selected unit:
-      -&gt; That unit can be set up on the battlefield.
-      -&gt; That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you can use this ability:
+  - Select up to 3 friendly AGENTS OF THE IMPERIUM units:
+    - For each selected unit:
+      - That unit can be set up on the battlefield.
+      - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14243,7 +14233,7 @@ Against DAEMON targets, you can re-roll a Wound roll of 1 for attacks made by al
           <profiles>
             <profile name="Witch Hunter" id="bee8-989c-6522-6673" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit against PSYKER targets, you can re-roll the Hit roll.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit against PSYKER targets, you can re-roll Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14299,10 +14289,10 @@ Against DAEMON targets, you can re-roll a Wound roll of 1 for attacks made by al
           <profiles>
             <profile name="Decoy Targets" id="936c-4efd-3766-1505" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Twice per battle, during the Movement phase, in your turn, for the rest of the battle:
-  -&gt; Select up to one friendly INFANTRY unit:
-    -&gt; Destroy 1 model in that unit.
-    -&gt; This model can be removed from the battlefield and set up again.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Twice per battle, during your Movement phase, for the rest of the battle:
+  - Select up to one friendly INFANTRY unit:
+    - Destroy 1 model in that unit.
+    - This model can be removed from the battlefield and set up again.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14325,7 +14315,7 @@ Against DAEMON targets, you can re-roll a Wound roll of 1 for attacks made by al
           <profiles>
             <profile name="Esoteric Explosives" id="72a2-88ac-165a-55f7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target the unit with the Explosives Stratagem, the threshold of this model's Explosives ability is 3.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target this unit with the Explosives Stratagem, the threshold of this model's Explosives ability is 3.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14348,8 +14338,8 @@ Against DAEMON targets, you can re-roll a Wound roll of 1 for attacks made by al
           <profiles>
             <profile name="Intraneural Biotech" id="e6c2-8953-7ade-2ce2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The Heroic Intervention Stratagem that targets this model can be used without paying its CP cost.
-The Counter Offensive Stratagem that targets this model can be used without paying its CP cost.
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The Heroic Intervention Stratagem that targets this model can be used without spending CP.
+The Counter Offensive Stratagem that targets this model can be used without spending CP.
 This model is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
 This model is eligible to be targeted with the Counteroffensive Stratagem even if it has already been targeted with that Stratagem this phase.</characteristic>
               </characteristics>
@@ -14446,7 +14436,7 @@ This model is eligible to be targeted with the Counteroffensive Stratagem even i
           <profiles>
             <profile name="Blackweave Shroud" id="24e9-220f-4619-cdf1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has the Feel No Pain 4+ ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has Feel No Pain 4+.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14474,8 +14464,8 @@ This model is eligible to be targeted with the Counteroffensive Stratagem even i
           <profiles>
             <profile name="Beacon Angelis" id="9858-a0be-46a0-d66b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Deep Strike ability.
-The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Deep Strike ability.
+The Rapid Ingress Stratagem that targets this unit costs 0 CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14504,10 +14494,10 @@ The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
             <profile name="Amulet of Auto-chastisement" id="1d39-57a6-8251-e43b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Shooting phase, until the end of the phase:
-  -&gt; Select one enemy VEHICLE unit (excluding TITANIC units) if the selected unit is within 12" of this model and the selected unit is visible to this model:
-    -&gt; That unit must take a Leadership test.
-    -&gt; If the triggering leadership roll succeeded, that unit gets -1 to Hit rolls.
-    -&gt; If the triggering leadership roll was a failure, that unit cannot shoot.</characteristic>
+  - Select one enemy VEHICLE unit (excluding TITANIC units) that is within 12" of this model and visible to this model:
+    - That unit must take a Leadership test.
+    - If the triggering leadership roll succeeded, subtract 1 from that unit's Hit rolls.
+    - If the triggering leadership roll was a failure, that unit cannot shoot.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14537,8 +14527,8 @@ The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve this model's Wounds characteristic by 1.
 Improve this model's Leadership characteristic by 1.
--&gt; At the start of each phase, you may use this ability, once per battle per model:
-  -&gt; Select one friendly unit that is Battle-shocked if the selected unit is within 12" of this model: that unit is no longer Battle-shocked.</characteristic>
+At the start of each phase, you can use this ability, once per battle per model:
+  - Select one friendly unit that is Battle-shocked and within 12" of this model. That unit is no longer Battle-shocked.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14596,7 +14586,7 @@ Melee weapons equipped by this model gain [ANTI-DAEMON 3+].</characteristic>
             <profile name="Grimoire of True Names (Aura)" id="946a-44ef-8828-cb24" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
-While an enemy DAEMON unit is within 9" of this model, that unit gets -1 to Hit rolls; that unit gets -1 to Wound rolls.</characteristic>
+While an enemy DAEMON unit is within 9" of this model, subtract 1 from that unit's Hit rolls; subtract 1 from that unit's Wound rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>

@@ -51,11 +51,11 @@ func transportPhrase(ref any) string {
 func triggerActor(ref any) string {
 	switch r := ref.(type) {
 	case nil:
-		return "the unit"
+		return "this unit"
 	case string:
 		switch r {
 		case "this-unit":
-			return "the unit"
+			return "this unit"
 		case "this-model":
 			return "this model"
 		case "model-in-this-unit":
@@ -81,7 +81,7 @@ func triggerActor(ref any) string {
 			return "that unit"
 		}
 		if r["selection_var"] != nil || r["stratagem_target"] != nil {
-			return unitRefPhrase(r, "the unit")
+			return unitRefPhrase(r, "this unit")
 		}
 		for key := range r {
 			switch key {
@@ -90,16 +90,50 @@ func triggerActor(ref any) string {
 				return unitFilterPhrase(r)
 			}
 		}
-		owner := "a"
+		owner := ""
 		switch r["owner"] {
 		case "friendly":
-			owner = "a friendly"
+			owner = "friendly "
 		case "enemy":
-			owner = "an enemy"
+			owner = "enemy "
 		}
 		noun := "unit"
 		if r["level"] == "model" {
 			noun = "model"
+		}
+		all := ""
+		if isList(r["all_of"]) {
+			all = strings.Join(cstrList(r["all_of"]), " ") + " "
+		}
+		compact, isCompact := keywordAlternatives(r)
+		anyMulti := ""
+		if all == "" && !isCompact {
+			if anyList, ok := asList(r["any_of"]); ok && len(anyList) > 1 {
+				anyMulti = orList(cstrList(anyList)) + " "
+			}
+		}
+		var base string
+		if isCompact {
+			base = owner + orList(compact) + " " + noun
+		} else {
+			base = owner + all + anyMulti + noun
+		}
+		s := withArticle(base)
+		if isList(r["any_of_filters"]) && !isCompact {
+			alts := []string{}
+			for _, a := range alternativeFilters(r) {
+				alts = append(alts, unitFilterPhrase(a))
+			}
+			s += " that is " + orList(alts)
+		}
+		if isList(r["any_of"]) && anyMulti == "" {
+			s += " with the " + orList(cstrList(r["any_of"])) + " keyword"
+		}
+		if isList(r["none_of"]) {
+			s += " (excluding " + orList(cstrList(r["none_of"])) + " " + noun + "s)"
+		}
+		if isList(r["not_all_of"]) {
+			s += " (excluding " + strings.Join(cstrList(r["not_all_of"]), " ") + " " + noun + "s)"
 		}
 		states := []string{}
 		if r["state"] != nil {
@@ -111,63 +145,27 @@ func triggerActor(ref any) string {
 			}
 		}
 		if len(states) > 0 {
-			return owner + " " + noun + " that is " + andList(states)
+			s += " that is " + andList(states)
 		}
-		return owner + " " + noun
+		return s
 	case []any:
 		return "a unit"
 	}
 	return dekebab(cstr(ref))
 }
 
-// actorKeywords renders keyword requirements on a filter actor:
-// " (the triggering unit must have A and B)".
-func actorKeywords(ref any) string {
-	f, ok := asMap(ref)
-	if !ok || f == nil {
-		return ""
-	}
-	for key := range f {
-		switch key {
-		case "owner", "level", "state", "not_states", "all_of", "any_of", "none_of", "not_all_of", "any_of_filters":
-		default:
-			return ""
-		}
-	}
-	noun := "unit"
-	if f["level"] == "model" {
-		noun = "model"
-	}
-	s := ""
-	if isList(f["all_of"]) {
-		s += " (the triggering " + noun + " must have " + andList(cstrList(f["all_of"])) + ")"
-	}
-	if isList(f["any_of"]) {
-		s += " (the triggering " + noun + " must have " + orList(cstrList(f["any_of"])) + ")"
-	}
-	if isList(f["any_of_filters"]) {
-		alts := []string{}
-		for _, a := range alternativeFilters(f) {
-			alts = append(alts, unitFilterPhrase(a))
-		}
-		s += " (the triggering " + noun + " must be " + orList(alts) + ")"
-	}
-	if isList(f["none_of"]) {
-		s += " (the triggering " + noun + " must not have " + orList(cstrList(f["none_of"])) + ")"
-	}
-	if isList(f["not_all_of"]) {
-		s += " (the triggering " + noun + " must not have all of " + andList(cstrList(f["not_all_of"])) + ")"
-	}
-	return s
+// actorKeywords is kept as a no-op helper; keyword requirements are now folded directly into triggerActor.
+func actorKeywords(_ any) string {
+	return ""
 }
 
-// stratagemTarget renders the unit a used Stratagem targets: "the unit" for the holder's own
+// stratagemTarget renders the unit a used Stratagem targets: "this unit" for the holder's own
 // role, else the object filter.
 func stratagemTarget(ref any) string {
 	if _, ok := ref.(map[string]any); ok {
 		return triggerObjectPhrase(ref)
 	}
-	return "the unit"
+	return "this unit"
 }
 
 // triggerObjectPhrase renders an object phrase: "this unit", "an enemy unit".
@@ -186,7 +184,7 @@ func triggerObjectPhrase(ref any) string {
 		}
 		return dekebab(r)
 	case map[string]any:
-		return unitRefPhrase(r, "the unit")
+		return unitRefPhrase(r, "this unit")
 	case []any:
 		return unitFilterPhrase(map[string]any{})
 	}
@@ -534,7 +532,7 @@ func triggerEventPhrase(t map[string]any) string {
 			return "each time " + who + " destroys " + obj + melee
 		}
 		if object == nil || object == "this-unit" {
-			return "when the unit is destroyed" + melee
+			return "when this unit is destroyed" + melee
 		}
 		if om, ok := asMap(object); ok && om != nil && om["designated"] != nil && len(om) == 1 {
 			return "each time your quarry is destroyed"
@@ -564,15 +562,15 @@ func triggerEventPhrase(t map[string]any) string {
 			return triggerEventPhrase(rest) + ", after the units embarked within it have made their emergency disembark moves"
 		}
 		if f["first"] == true {
-			return "the first time a model in the unit is destroyed"
+			return "the first time a model in this unit is destroyed"
 		}
-		// A subject names who destroyed the model: "each time the unit destroys an enemy CHARACTER model".
+		// A subject names who destroyed the model: "each time this unit destroys an enemy CHARACTER model".
 		if t["subject"] != nil {
 			if object == "this-model" {
 				return "when this model is destroyed by " + who
 			}
 			if object == "model-in-this-unit" || object == "this-unit" || object == nil {
-				return "when a model in the unit is destroyed by " + who
+				return "when a model in this unit is destroyed by " + who
 			}
 			return "each time " + who + " destroys " + triggerObjectPhrase(object)
 		}
@@ -581,7 +579,7 @@ func triggerEventPhrase(t map[string]any) string {
 		}
 		// A model of this unit dying: the object names the model's unit, never the whole unit's destruction.
 		if object == "model-in-this-unit" || object == "this-unit" || object == nil {
-			return "when a model in the unit is destroyed"
+			return "when a model in this unit is destroyed"
 		}
 		return "when " + triggerObjectPhrase(object) + " is destroyed"
 	case "used":
@@ -879,6 +877,30 @@ func destroyAttackPhrase(event any, f map[string]any) string {
 	return ""
 }
 
+// roundBoundary renders "at the start of the first battle round": a round boundary narrowed to one battle round.
+func roundBoundary(t map[string]any) (string, bool) {
+	if t["event"] != "round-started" && t["event"] != "round-ended" {
+		return "", false
+	}
+	c, ok := asMap(t["condition"])
+	if !ok || c == nil || jsTruthy(c["operator"]) || c["type"] != "battle-round" {
+		return "", false
+	}
+	p := paramsOf(c)
+	if p["min"] != nil && p["max"] != nil {
+		minV, minS := jsNumberStr(p["min"])
+		maxV, maxS := jsNumberStr(p["max"])
+		if minS != "NaN" && maxS != "NaN" && minV == maxV {
+			edge := "end"
+			if t["event"] == "round-started" {
+				edge = "start"
+			}
+			return "at the " + edge + " of the " + conditionOrd(minV) + " battle round", true
+		}
+	}
+	return "", false
+}
+
 // describeReactiveTrigger renders a reactive trigger as a front-of-sentence
 // lead clause ("an enemy unit ends a move within 9\" of this model").
 func describeReactiveTrigger(t map[string]any) string {
@@ -892,9 +914,12 @@ func describeReactiveTrigger(t map[string]any) string {
 		if !ok {
 			boundary, ok = turnBoundary(t)
 		}
+		if !ok {
+			boundary, ok = roundBoundary(t)
+		}
 		if ok && boundary != "" {
 			if jsTruthy(t["optional"]) {
-				return boundary + ", you may use this ability"
+				return boundary + ", you can use this ability"
 			}
 			return boundary
 		}
@@ -959,13 +984,13 @@ func describeReactiveTrigger(t map[string]any) string {
 	}
 	if prox, ok := asMap(t["proximity"]); ok && prox != nil && prox["range"] != nil {
 		of := "this unit"
-		if prox["of"] == "this-model" {
-			of = "this model"
+		if prox["of"] != nil && prox["of"] != "this-unit" {
+			of = placeRefPhrase(prox["of"])
 		}
 		s += " within " + rangePhrase(prox["range"]) + " of " + of
 	}
 	if disembarkShock {
-		s += ", if the unit disembarked from a Transport this turn and is Battle-shocked"
+		s += ", if this unit disembarked from a Transport this turn and is Battle-shocked"
 	} else if hasSplit {
 		if edge != "" && phase == "" && owner != "" {
 			s += " in " + owner + " turn"
@@ -976,14 +1001,8 @@ func describeReactiveTrigger(t map[string]any) string {
 			s += ", if " + describeCondition(rest)
 		}
 	}
-	if v := t["binds_die_variable"]; jsTruthy(v) {
-		s += " (binding the generated die as " + dekebab(strings.ReplaceAll(cstr(v), "_", "-")) + ")"
-	}
-	if v := t["binds_selected_die_variable"]; jsTruthy(v) {
-		s += " (binding one chosen die used in that Act of Faith as " + dekebab(strings.ReplaceAll(cstr(v), "_", "-")) + ")"
-	}
 	if jsTruthy(t["optional"]) {
-		s += ", you may use this ability"
+		s += ", you can use this ability"
 	}
 	return s
 }

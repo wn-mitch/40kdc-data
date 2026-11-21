@@ -51,7 +51,7 @@ describe("event object on a used Stratagem (the unit the Stratagem targets)", ()
     const mechanics = result.mechanics as Record<string, any>;
     expect(mechanics.trigger).toMatchObject({ event: "used", filter: { kind: "stratagem" }, object: "this-unit" });
     const prose = describeAbility({ ability_id: "fabricated", name: "Fabricated", ...mechanics } as never);
-    expect(prose).toMatch(/^Each time you target the unit with a Stratagem, /);
+    expect(prose).toMatch(/^Each time you target this unit with a Stratagem, /);
     expect(prose).not.toMatch(/use a Stratagem/i);
   });
 
@@ -60,7 +60,7 @@ describe("event object on a used Stratagem (the unit the Stratagem targets)", ()
     if (!result.ok) throw new Error(result.errors.join("; "));
     const mechanics = result.mechanics as Record<string, any>;
     expect(mechanics.trigger).toMatchObject({ filter: { kind: "stratagem", id: "heroic-intervention" }, object: "this-unit" });
-    expect(describeAbility({ ability_id: "fabricated", name: "Fabricated", ...mechanics } as never)).toMatch(/^When you target the unit with the Heroic Intervention Stratagem, /);
+    expect(describeAbility({ ability_id: "fabricated", name: "Fabricated", ...mechanics } as never)).toMatch(/^When you target this unit with the Heroic Intervention Stratagem, /);
   });
 
   it("still reads any Stratagem use when no object is named", () => {

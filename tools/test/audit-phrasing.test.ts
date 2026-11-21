@@ -117,9 +117,9 @@ describe("auditPhrasing over the real enrichment corpus", () => {
     expect(summed).toBe(report.total);
   });
 
-  it("produces a real worklist — there are phrasing defects to fix on main today", () => {
-    expect(report.flagged).toBeGreaterThan(0);
-    expect(report.byFlag.length).toBeGreaterThan(0);
+  it("reports zero phrasing defects across the real enrichment corpus", () => {
+    expect(report.flagged).toBe(0);
+    expect(report.byFlag.length).toBe(0);
     // every row carries the full identity + text the CSV/JSON artifacts depend on
     for (const r of report.rows.slice(0, 50)) {
       expect(typeof r.text).toBe("string");

@@ -474,13 +474,12 @@
         </profile>
         <profile name="Deadly Demise" id="b526-5f37-5b61-a2c5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Strafing Run" id="ff8c-265a-67a7-06e0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against a unit that is not a FLY, this model gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against a unit that is not a FLY, add 1 to this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -615,21 +614,20 @@
         </profile>
         <profile name="Scuttling Walker" id="0922-f382-6d65-c703" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over friendly Monster models as though they were not there.
-  -&gt; The triggering unit can move over friendly Vehicle models as though they were not there.
-  -&gt; The triggering unit can move over terrain features 4" or lower as though they were not there.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over friendly Monster models as though they were not there.
+  - The triggering unit can move over friendly Vehicle models as though they were not there.
+  - The triggering unit can move over terrain features 4" or lower as though they were not there.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="b763-5345-cda7-92ed" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="fa6d-7851-4382-8265" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -904,7 +902,7 @@
       <profiles>
         <profile name="Sentinel Directives" id="8556-b027-7b89-1ab9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target the unit with the Fire Overwatch Stratagem, when resolving this use, the unit's Hit rolls succeed only on an unmodified 5+.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target this unit with the Fire Overwatch Stratagem, for this activation, this unit's Hit rolls succeed only on an unmodified 5+.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1114,34 +1112,34 @@
         </profile>
         <profile name="Battle Protocols" id="5f4a-0648-a0ee-a080" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, while this model is leading a KASTELAN ROBOTS unit, for the rest of the battle:
-  -&gt; At the start of the battle, Aegis Protocol is active.
-  -&gt; Select one:
-    - Protector Protocol: add 2 to the Attacks characteristic of ranged weapons equipped by KASTELAN ROBOTS models in the unit.
-    - Conqueror Protocol: add 2 to the Attacks characteristic of melee weapons equipped by KASTELAN ROBOTS models in the unit.
-    - Aegis Protocol: add 1 to KASTELAN ROBOTS models in the unit's Toughness characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, while this model is leading a KASTELAN ROBOTS unit, for the rest of the battle, you can use this ability:
+  - At the start of the battle, Aegis Protocol is active.
+  - Select one:
+    - Protector Protocol: Add 2 to the Attacks characteristic of ranged weapons equipped by KASTELAN ROBOTS models in this unit.
+    - Conqueror Protocol: Add 2 to the Attacks characteristic of melee weapons equipped by KASTELAN ROBOTS models in this unit.
+    - Aegis Protocol: Add 1 to KASTELAN ROBOTS models in this unit's Toughness characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Protector Protocol" id="33fb-25b0-c3b5-c193" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, while this model is leading a KASTELAN ROBOTS unit, for the rest of the battle, add 2 to the Attacks characteristic of ranged weapons equipped by KASTELAN ROBOTS models in the unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, while this model is leading a KASTELAN ROBOTS unit, for the rest of the battle, you can add 2 to the Attacks characteristic of ranged weapons equipped by KASTELAN ROBOTS models in this unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Conqueror Protocol" id="c541-ff58-9f52-1095" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, while this model is leading a KASTELAN ROBOTS unit, for the rest of the battle, add 2 to the Attacks characteristic of melee weapons equipped by KASTELAN ROBOTS models in the unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, while this model is leading a KASTELAN ROBOTS unit, for the rest of the battle, you can add 2 to the Attacks characteristic of melee weapons equipped by KASTELAN ROBOTS models in this unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Aegis Protocol" id="5748-52e7-2b8f-60e0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, while this model is leading a KASTELAN ROBOTS unit, for the rest of the battle, add 1 to KASTELAN ROBOTS models in the unit's Toughness characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, while this model is leading a KASTELAN ROBOTS unit, for the rest of the battle, you can add 1 to KASTELAN ROBOTS models in this unit's Toughness characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Data-severed" id="6b1b-de15-b759-bbcf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit contains at most 0 KASTELAN ROBOT models:
-  -&gt; The unit loses the VEHICLE keyword.
-  -&gt; The unit gains the INFANTRY keyword.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit contains at most 0 KASTELAN ROBOT models:
+  - This unit loses the VEHICLE keyword.
+  - This unit gains the INFANTRY keyword.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="4448-700f-c6e7-c01e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1235,21 +1233,19 @@
       <profiles>
         <profile name="Deadly Demise" id="3eb6-0c1f-740d-c623" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Elevated Strider" id="cd08-3a8f-4c0c-0941" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Ranged weapons equipped by models in this unit gain [ASSAULT].
-The unit is eligible to shoot in a turn in which it Fell Back.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: Ranged weapons equipped by models in this unit gain [ASSAULT].
+This unit is eligible to shoot in a turn in which it Fell Back.
 You can re-roll the Desperate Escape roll.</characteristic>
           </characteristics>
         </profile>
         <profile name="Broad Spectrum Data-tether" id="1728-6b92-3620-cd63" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem:
-  -&gt; Roll one D6: on a 5+, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, roll one D6: on a 5+, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1428,17 +1424,17 @@ You can re-roll the Desperate Escape roll.</characteristic>
         </profile>
         <profile name="Defend the Divine Work" id="f041-2ea2-a45f-4d6e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per unit, until the end of the phase, the unit has a 4+ invulnerable save.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per unit, until the end of the phase, this unit has a 4+ invulnerable save.</characteristic>
           </characteristics>
         </profile>
         <profile name="Galvanic Field" id="3a70-7535-5ead-a503" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit's weapons gain [LETHAL HITS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit's weapons gain [LETHAL HITS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="5c05-9991-c358-06bc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1576,24 +1572,22 @@ You can re-roll the Desperate Escape roll.</characteristic>
         <profile name="Focused Hunters" id="078d-8ed7-a5a6-1273" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle:
-  -&gt; Select one enemy unit (your Focused Hunters Target). For the rest of the battle, each time a friendly unit makes an attack against it, you can re-roll the Hit roll.</characteristic>
+  - Select one enemy unit (your Focused Hunters Target). For the rest of the battle, each time a friendly unit makes an attack against it, you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="beb6-4218-8853-6e63" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="dae5-72fc-5282-e033" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Broad Spectrum Data-tether" id="2c84-bef1-e6bc-a29b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem:
-  -&gt; Roll one D6: on a 5+, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, roll one D6: on a 5+, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1737,30 +1731,30 @@ You can re-roll the Desperate Escape roll.</characteristic>
         <profile name="Canticles of the Omnissiah" id="30e2-7ab5-16a6-c9fa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, until the start of your next Command phase:
-  Select exactly 1 distinct options (Canticles of the Omnissiah Ability):
-    - At the start of your Command phase, until the start of your next Command phase: select one enemy unit: that unit is marked as machine vengeance target; while the target is tagged machine vengeance target, you can re-roll the Hit roll for attacks made by all friendly ADEPTUS MECHANICUS units.
-    - This model gains the BATTLELINE keyword; Binharic Courage: while a friendly ADEPTUS MECHANICUS unit is within 6" of this model, add 1 to that unit's Objective Control characteristic; when the unit takes a Battle-shock test or when the unit takes a Leadership test: the unit gets +1 to Battle-shock rolls; the unit gets +1 to Leadership rolls.
+  Choose one of the following (Canticles of the Omnissiah Ability):
+    - At the start of your Command phase, until the start of your next Command phase, select one enemy unit; that unit is designated as Machine Vengeance Target; while the target is designated as Machine Vengeance Target, you can re-roll Hit rolls for attacks made by friendly ADEPTUS MECHANICUS units.
+    - This model gains the BATTLELINE keyword; Binharic Courage: while a friendly ADEPTUS MECHANICUS unit is within 6" of this model, add 1 to that unit's Objective Control characteristic; when this unit takes a Battle-shock test or when this unit takes a Leadership test, add 1 to this unit's Battle-shock rolls; add 1 to this unit's Leadership rolls.
     - While a friendly ADEPTUS MECHANICUS unit is within 6" of this model, that unit gains the Stealth ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Invocation of Machine Vengeance" id="5265-0b3b-b424-882c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, until the start of your next Command phase:
-  -&gt; At the start of your Command phase, until the start of your next Command phase:
-    -&gt; Select one enemy unit:
-      -&gt; That unit is marked as machine vengeance target.
-      -&gt; While the target is tagged machine vengeance target, you can re-roll the Hit roll for attacks made by all friendly ADEPTUS MECHANICUS units.</characteristic>
+  - At the start of your Command phase, until the start of your next Command phase:
+    - Select one enemy unit:
+      - That unit is designated as Machine Vengeance Target.
+      - While the target is designated as Machine Vengeance Target, you can re-roll Hit rolls for attacks made by friendly ADEPTUS MECHANICUS units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Mantra of Discipline" id="1dbd-d3d5-2bc1-0cae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, until the start of your next Command phase:
-  -&gt; This model gains the BATTLELINE keyword.
-  -&gt; Binharic Courage:
-    -&gt; While a friendly ADEPTUS MECHANICUS unit is within 6" of this model, add 1 to that unit's Objective Control characteristic.
-    -&gt; When the unit takes a Battle-shock test or when the unit takes a Leadership test:
-      -&gt; The unit gets +1 to Battle-shock rolls.
-      -&gt; The unit gets +1 to Leadership rolls.</characteristic>
+  - This model gains the BATTLELINE keyword.
+  - Binharic Courage:
+    - While a friendly ADEPTUS MECHANICUS unit is within 6" of this model, add 1 to that unit's Objective Control characteristic.
+    - When this unit takes a Battle-shock test or when this unit takes a Leadership test:
+      - Add 1 to this unit's Battle-shock rolls.
+      - Add 1 to this unit's Leadership rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Shroudpsalm" id="2ce3-dc5d-df64-dd2c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1780,7 +1774,7 @@ You can re-roll the Desperate Escape roll.</characteristic>
         </profile>
         <profile name="Supreme Commander" id="da46-4cd4-0e13-7e5d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, the unit must be your Warlord.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, this unit must be your Warlord.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1864,14 +1858,14 @@ You can re-roll the Desperate Escape roll.</characteristic>
       <profiles>
         <profile name="ATTACHED UNIT" id="00e6-c371-7f6a-ef1a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">A friendly CHARACTER unit with the Leader ability that can be attached to friendly BREACHERS KATAPHRON units can also be attached to the unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">A friendly CHARACTER unit with the Leader ability that can be attached to friendly BREACHERS KATAPHRON units can also be attached to this unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Network Override" id="8290-943b-1a21-8239" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit contains 1+ TECH-PRIEST models:
-  -&gt; The unit is eligible to start an Action even if it Advanced this turn.
-  -&gt; The unit is eligible to shoot even if it is performing an Action.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit contains one or more TECH-PRIEST models:
+  - This unit is eligible to start an Action even if it Advanced this turn.
+  - This unit is eligible to shoot even if it is performing an Action.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2304,12 +2298,12 @@ You can re-roll the Desperate Escape roll.</characteristic>
       <profiles>
         <profile name="Electro-infusion" id="9898-bdfb-2eb4-2b1d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is being led by a CHARACTER model, the attacking unit gets -1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is being led by a CHARACTER model, subtract 1 from the attacking unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="55b0-8466-f0d0-068f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2439,25 +2433,23 @@ You can re-roll the Desperate Escape roll.</characteristic>
         </profile>
         <profile name="Blistering Salvoes" id="acc2-0fac-5dbb-78be" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making attacks made with belleros energy cannon against INFANTRY targets, this model gets +1 to Hit rolls.
-While making attacks made with ferrumite cannon against MONSTER or VEHICLE targets, this model gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making attacks made with belleros energy cannon against INFANTRY targets, add 1 to this model's Hit rolls.
+While making attacks made with ferrumite cannon against MONSTER or VEHICLE targets, add 1 to this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="9c87-fb77-5833-21c0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Broad Spectrum Data-tether" id="7342-035e-3de7-340d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem:
-  -&gt; Roll one D6: on a 5+, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, roll one D6: on a 5+, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="46a9-81ae-eae6-5546" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2584,14 +2576,14 @@ While making attacks made with ferrumite cannon against MONSTER or VEHICLE targe
         </profile>
         <profile name="Achillan Eye" id="f083-1776-c970-5811" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making attacks made with radium jezzail against INFANTRY targets, you can re-roll the Wound roll for attacks made by this model.
-While making attacks made with Skatros transuranic arquebus against MONSTER or VEHICLE targets, you can re-roll the Wound roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making attacks made with radium jezzail against INFANTRY targets, you can re-roll Wound rolls for attacks made by this model.
+While making attacks made with Skatros transuranic arquebus against MONSTER or VEHICLE targets, you can re-roll Wound rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Dread Snipers" id="5683-88ea-8461-e42f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="04aa-6e2b-9b15-88c6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2601,12 +2593,12 @@ While making attacks made with Skatros transuranic arquebus against MONSTER or V
         </profile>
         <profile name="Sydonian Sentinel" id="f8d8-84ea-44ee-a87a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit cannot be your Warlord.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit cannot be your Warlord.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="941e-1b3c-eba1-0ea5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2721,23 +2713,23 @@ While making attacks made with Skatros transuranic arquebus against MONSTER or V
       <profiles>
         <profile name="Infiltrators" id="c548-3fa8-f72b-ae7a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Neurostatic Interference (Aura)" id="82fe-7981-fc11-3bb0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit takes a Battle-shock test or when the unit takes a Leadership test, while an enemy unit is within 6" of this unit, while the unit is not within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, that unit gets -1 to Battle-shock rolls; that unit gets -1 to Leadership rolls; while the unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, that unit gets -2 to Battle-shock rolls; that unit gets -2 to Leadership rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit takes a Battle-shock test or when this unit takes a Leadership test, while an enemy unit is within 6" of this unit, while this unit is not within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, subtract 1 from that unit's Battle-shock rolls; subtract 1 from that unit's Leadership rolls; while this unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, subtract 2 from that unit's Battle-shock rolls; subtract 2 from that unit's Leadership rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Voices in the Code" id="af4e-c8d6-b269-76c2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army:
-  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Voices in the Code ability, the unit must take a Battle-shock test.</characteristic>
+  For each enemy unit: While this unit is within Engagement Range of a friendly unit with the Voices in the Code ability, that unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="cc76-1ccc-eba0-9432" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2977,23 +2969,22 @@ While making attacks made with Skatros transuranic arquebus against MONSTER or V
         </profile>
         <profile name="Aerial Deployment" id="3226-f527-8bb1-7478" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the first battle round, during the Movement phase, in your turn, the unit can make an Ingress move.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the first battle round, during your Movement phase, this unit can make an Ingress move.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="deca-5dce-ae63-3b3c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="1e44-8adf-5382-fd93" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Hover" id="7f64-ed8b-4f3f-acff" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit uses ability, the unit's Takes to the Skies ability has no limit on its range.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit uses ability, this unit's Takes to the Skies ability has no limit on its range.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3481,21 +3472,21 @@ While making attacks made with Skatros transuranic arquebus against MONSTER or V
         </profile>
         <profile name="Dataspike" id="5831-8403-7bc9-4fac" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, until the end of the phase:
-  -&gt; Select one enemy VEHICLE unit if the selected unit is within Engagement Range of the unit:
-    -&gt; Roll one D6: on a 4+, that unit suffers D6 mortal wounds; worsen the Weapon Skill characteristic of melee weapons equipped by models in that unit by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability, until the end of the phase:
+  - Select one enemy VEHICLE unit that is within Engagement Range of this unit:
+    - Roll one D6: on a 4+, that unit suffers D6 mortal wounds; worsen the Weapon Skill characteristic of melee weapons equipped by models in that unit by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="03cc-1e2e-eb02-8f76" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lord of the Machine Cult" id="664b-f4c0-0b11-2e30" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit:
-  -&gt; Unless the unit has the ELECTRO-PRIESTS keyword, the unit has the Feel No Pain 5+ ability.
-  -&gt; If the unit has the ELECTRO-PRIESTS keyword, the unit has the Feel No Pain 4+ ability.</characteristic>
+  - Unless this unit has the ELECTRO-PRIESTS keyword, this unit has Feel No Pain 5+.
+  - If this unit has the ELECTRO-PRIESTS keyword, this unit has Feel No Pain 4+.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3667,16 +3658,16 @@ While making attacks made with Skatros transuranic arquebus against MONSTER or V
       <profiles>
         <profile name="Ride the Thermals" id="86f3-9255-994f-7d9d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:
-  Select exactly 1 distinct options:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:
+  Choose one of the following:
     - The triggering unit can make a Normal move of up to 6".
-    - The triggering unit can make a Normal move of up to 12"; it must end that move where the unit is wholly within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit.
-  -&gt; The unit cannot declare a charge.</characteristic>
+    - The triggering unit can make a Normal move of up to 12"; it must end that move where this unit is wholly within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit.
+  - This unit cannot declare a charge.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="32f5-2837-49c2-1ba9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3868,8 +3859,8 @@ While making attacks made with Skatros transuranic arquebus against MONSTER or V
       <profiles>
         <profile name="Breaching Command" id="b61d-c7f7-d343-3013" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is not within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, you can re-roll a Hit roll of 1.
-While the unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, you can re-roll the Hit roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is not within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, you can re-roll Hit rolls of 1.
+While this unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4048,17 +4039,17 @@ While the unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, yo
       <profiles>
         <profile name="Optimised Gait" id="9b7b-25f8-0743-87c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is not within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit:
-  -&gt; The unit gets +1 to Advance rolls.
-  -&gt; The unit gets +1 to Charge rolls.
-While the unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit:
-  -&gt; The unit gets +2 to Advance rolls.
-  -&gt; The unit gets +2 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is not within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit:
+  - Add 1 to this unit's Advance rolls.
+  - Add 1 to this unit's Charge rolls.
+While this unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit:
+  - Add 2 to this unit's Advance rolls.
+  - Add 2 to this unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="1659-bfda-685b-2017" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4279,7 +4270,7 @@ While the unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit:
         </profile>
         <profile name="Seekers of Divine Arcana" id="42e3-aeb0-1d29-5340" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, add 1 to the unit's Objective Control characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, add 1 to this unit's Objective Control characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="eb0a-0f61-82c7-e579" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4368,18 +4359,18 @@ While the unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit:
       <profiles>
         <profile name="Electro-shock" id="2f49-dca5-05a9-11b1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of your opponent's next turn:
-  -&gt; Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; That unit is marked as shocked.
-    -&gt; While the selected unit is tagged shocked, subtract 2 from that unit's Move characteristic.
-    While the selected unit is tagged shocked:
-      -&gt; This unit gets -2 to Advance rolls.
-      -&gt; This unit gets -2 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of your opponent's next turn:
+  - Select one enemy unit without the MONSTER or VEHICLE keyword and that was hit by an attack made by the triggering unit during that shooting sequence:
+    - That unit is Shocked.
+    - While the selected unit is Shocked, subtract 2" from that unit's Move characteristic.
+    - While the selected unit is Shocked:
+      - Subtract 2 from this unit's Advance rolls.
+      - Subtract 2 from this unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="2ef4-8f01-a55e-29b7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4502,15 +4493,15 @@ While the unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit:
       <profiles>
         <profile name="Scouts" id="234a-2aab-a98a-91bf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tactica Obliqua" id="7872-d911-2e06-1940" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, you may use this ability, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of the unit, while the unit is unengaged:
-  Select exactly 1 distinct options:
-    - The unit can make a Normal move of up to D6".
-    - The unit can make a Normal move of up to 6"; it must end that move where the unit is wholly within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, you can use this ability, during your opponent's Movement phase, while the triggering unit is within 8" of this unit and this unit is unengaged:
+  Choose one of the following:
+    - This unit can make a Normal move of up to D6".
+    - This unit can make a Normal move of up to 6"; it must end that move where this unit is wholly within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4745,26 +4736,24 @@ While the unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit:
       <profiles>
         <profile name="Dynamic Efficiency" id="b153-6f1d-452d-e2d6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The unit is eligible to declare a charge in a turn in which it Advanced.
-The unit is eligible to declare a charge in a turn in which it Fell Back.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: This unit is eligible to declare a charge in a turn in which it Advanced.
+This unit is eligible to declare a charge in a turn in which it Fell Back.
 You can re-roll the Desperate Escape roll.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="5359-9c4c-842b-bb30" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="d578-4d58-660c-c3d3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Broad Spectrum Data-tether" id="27d5-a3c9-5262-2f1c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem:
-  -&gt; Roll one D6: on a 5+, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, roll one D6: on a 5+, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4901,10 +4890,10 @@ You can re-roll the Desperate Escape roll.</characteristic>
       <profiles>
         <profile name="Line-breakers" id="b1d4-67c3-4dfb-f226" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit:
-    -&gt; While the unit was within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 2+, that unit suffers 1 mortal wound.
-    -&gt; Unless the unit was within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move:
+  - Select one enemy unit that is within Engagement Range of this unit:
+    - While this unit was within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in this unit that is within Engagement Range of the selected unit: for each 2+, that unit suffers 1 mortal wound.
+    - Unless this unit was within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit at the start of that move, roll one D6 for each friendly model in this unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5164,20 +5153,20 @@ You can re-roll the Desperate Escape roll.</characteristic>
         </profile>
         <profile name="Enginseer" id="a3d1-9600-d242-4644" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is within 3" of a friendly ADEPTUS MECHANICUS VEHICLE unit, unless this model is leading a unit, the unit gains the Lone Operative ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is within 3" of a friendly ADEPTUS MECHANICUS VEHICLE unit, unless this model is leading a unit, this unit gains the Lone Operative ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="5a8f-3a30-0e8d-fa5d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Omnissiah's Blessing" id="a0d1-fda7-4347-01d1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the start of your next Command phase:
-  -&gt; Select one friendly ADEPTUS MECHANICUS model within 3" of this model (each model can be selected for this ability at most once per phase across your army):
-    -&gt; That model regains up to D3 lost wounds.
-    -&gt; If the selected unit has the VEHICLE keyword, that model has the Feel No Pain 5+ ability.</characteristic>
+  - Select one friendly ADEPTUS MECHANICUS model within 3" of this model (each model can be selected for this ability at most once per phase across your army):
+    - That model regains up to D3 lost wounds.
+    - If the selected unit has the VEHICLE keyword, that model has Feel No Pain 5+.</characteristic>
           </characteristics>
         </profile>
         <profile name="Vengeance for the Omnissiah" id="2ca4-f52c-2f39-a6b8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5280,13 +5269,12 @@ You can re-roll the Desperate Escape roll.</characteristic>
         </profile>
         <profile name="Control Edict" id="d4e3-e0a9-ccc6-72cf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, you can re-roll the Hit roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Servo-skull Uplink" id="0a82-3d77-ef35-3d8b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per unit:
-  -&gt; Select one friendly SKITARII unit if the selected unit is Battle-shocked and the selected unit is within 6" of this model: that unit is no longer Battle-shocked.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per unit, select one friendly SKITARII unit that is Battle-shocked and within 6" of this model. That unit is no longer Battle-shocked.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="268f-0168-71c2-b1b0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5395,25 +5383,23 @@ You can re-roll the Desperate Escape roll.</characteristic>
         </profile>
         <profile name="Fire Support" id="a91f-ab75-0421-4423" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit this phase (your Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll the Wound roll for attacks made by all friendly models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit this phase (your Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll Wound rolls for attacks made by friendly models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="be91-3aa5-18cc-512e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="8360-2ab7-9a8d-1d89" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Broad Spectrum Data-tether" id="2d4b-3626-806e-575c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem:
-  -&gt; Roll one D6: on a 5+, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, roll one D6: on a 5+, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5486,21 +5472,20 @@ You can re-roll the Desperate Escape roll.</characteristic>
       <profiles>
         <profile name="Repulsor Grid" id="0986-8be1-afe5-b84f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit targets this unit, until that unit finishes resolving its attacks:
-  -&gt; After a saving throw is made, on an unmodified 6:
-    -&gt; After that unit shoots, until the end of the phase: the triggering unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit targets this unit, until the attacking unit finishes resolving its attacks:
+  - After a saving throw is made, on an unmodified 6:
+    - After that unit shoots, until the end of the phase, the triggering unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Robotic Bodyguard" id="e2d7-18cd-e482-c766" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">CYBERNETICA DATASMITH Leader models in the unit gain the following rules:
-  -&gt; While this model is leading a unit: this model has the Feel No Pain 4+ ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">CYBERNETICA DATASMITH Leader models in this unit gain the following rules:
+  - While this model is leading a unit, this model has Feel No Pain 4+.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="9f0b-177f-3b4a-7fdb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5707,13 +5692,13 @@ You can re-roll the Desperate Escape roll.</characteristic>
         <profile name="Searing Conflagration" id="3741-95cc-bb6c-45fd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making attacks made with phosphor torch, while the target is within range of an objective marker:
-  -&gt; While the unit is not within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, you can re-roll a Wound roll of 1.
-  -&gt; While the unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, you can re-roll the Wound roll.</characteristic>
+  - While this unit is not within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, you can re-roll Wound rolls of 1.
+  - While this unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, you can re-roll Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="6a38-60e0-c697-a927" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5917,14 +5902,12 @@ You can re-roll the Desperate Escape roll.</characteristic>
         </profile>
         <profile name="Bomb Rack" id="ec2e-1a97-fa00-8458" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase:
-  -&gt; Select one enemy unit without the Lone Operative ability visible to this model if the selected unit is within 24" of the unit: roll 6 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase, select one enemy unit without the Lone Operative ability visible to this model that is within 24" of this unit. Roll 6 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="c898-4433-3841-fb18" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6030,12 +6013,12 @@ You can re-roll the Desperate Escape roll.</characteristic>
       <profiles>
         <profile name="Objective Scouted" id="122c-81ac-1caf-41bc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="3e12-00fd-3de6-1f9e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6405,7 +6388,7 @@ You can re-roll the Desperate Escape roll.</characteristic>
       <profiles>
         <profile name="Broad-spectrum Targeting Augurs" id="1a5b-30fe-0f31-1b56" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making attacks made with eradication caster, while the target does not have the MONSTER or VEHICLE keyword, the unit's weapons gain [SUSTAINED HITS 1].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making attacks made with eradication caster, while the target does not have the MONSTER or VEHICLE keyword, this unit's weapons gain [SUSTAINED HITS 1].</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6571,7 +6554,7 @@ You can re-roll the Desperate Escape roll.</characteristic>
       <profiles>
         <profile name="Monocular Targeting Helms" id="ae0d-7a1d-7400-fa7a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making attacks made with neutron fusil against MONSTER or VEHICLE targets, the unit's weapons gain [IGNORES COVER].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making attacks made with neutron fusil against MONSTER or VEHICLE targets, this unit's weapons gain [IGNORES COVER].</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6747,48 +6730,48 @@ You can re-roll the Desperate Escape roll.</characteristic>
         </profile>
         <profile name="Rod of the War Forge" id="c94d-135e-0f55-d6e6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, in your turn, until the start of your next Command phase:
-  Select exactly 1 distinct options:
-    - Until the start of your next Command phase: select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model: ranged weapons equipped by models in that unit gain [ASSAULT]; that unit is eligible to declare a charge in a turn in which it Advanced.
-    - Until the start of your next Command phase: select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model: that unit is eligible to shoot in a turn in which it Fell Back; that unit is eligible to declare a charge in a turn in which it Fell Back.
-    - Until the start of your next Command phase: select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model: the Conqueror Imperative and Protector Imperative options of Doctrina Imperatives are active for that unit (and no other option is).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, until the start of your next Command phase:
+  Choose one of the following:
+    - Until the start of your next Command phase, select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model; ranged weapons equipped by models in that unit gain [ASSAULT]; that unit is eligible to declare a charge in a turn in which it Advanced.
+    - Until the start of your next Command phase, select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model; that unit is eligible to shoot in a turn in which it Fell Back; that unit is eligible to declare a charge in a turn in which it Fell Back.
+    - Until the start of your next Command phase, select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model; the Conqueror Imperative and Protector Imperative options of Doctrina Imperatives are active for that unit (and no other option is).</characteristic>
           </characteristics>
         </profile>
         <profile name="Fanatical Devotion" id="2e2d-5538-8d0b-6fe2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, in your turn, until the start of your next Command phase:
-  -&gt; Until the start of your next Command phase:
-    -&gt; Select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model:
-      -&gt; Ranged weapons equipped by models in that unit gain [ASSAULT].
-      -&gt; That unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, until the start of your next Command phase:
+  - Until the start of your next Command phase:
+    - Select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model:
+      - Ranged weapons equipped by models in that unit gain [ASSAULT].
+      - That unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
           </characteristics>
         </profile>
         <profile name="Adaptive Tactics" id="6d73-4416-ab54-b44d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, in your turn, until the start of your next Command phase:
-  -&gt; Until the start of your next Command phase:
-    -&gt; Select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model:
-      -&gt; That unit is eligible to shoot in a turn in which it Fell Back.
-      -&gt; That unit is eligible to declare a charge in a turn in which it Fell Back.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, until the start of your next Command phase:
+  - Until the start of your next Command phase:
+    - Select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model:
+      - That unit is eligible to shoot in a turn in which it Fell Back.
+      - That unit is eligible to declare a charge in a turn in which it Fell Back.</characteristic>
           </characteristics>
         </profile>
         <profile name="The Fires of Mars" id="b99a-88f7-2eaa-c090" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, in your turn, until the start of your next Command phase:
-  -&gt; Until the start of your next Command phase:
-    -&gt; Select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model: the Conqueror Imperative and Protector Imperative options of Doctrina Imperatives are active for that unit (and no other option is).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, until the start of your next Command phase:
+  - Until the start of your next Command phase:
+    - Select one friendly unit with the SKITARII or THULIA GHULD keyword within 6" of this model. The Conqueror Imperative and Protector Imperative options of Doctrina Imperatives are active for that unit (and no other option is).</characteristic>
           </characteristics>
         </profile>
         <profile name="Secutor of Olympus" id="61a6-fd85-1798-652c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase:
-  -&gt; Select one enemy VEHICLE unit within 12" of this model:
-    -&gt; Roll one D6: on a 2+, that unit suffers D3+1 mortal wounds.</characteristic>
+  - Select one enemy VEHICLE unit within 12" of this model:
+    - Roll one D6: on a 2+, that unit suffers D3+1 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Supreme Commander" id="5fdd-9e5d-728f-13dd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, the unit must be your Warlord.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, this unit must be your Warlord.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6934,8 +6917,7 @@ You can re-roll the Desperate Escape roll.</characteristic>
       <profiles>
         <profile name="Command Uplink" id="6d29-8c36-8f51-b445" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem:
-  -&gt; Roll one D6: on a 5+, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, roll one D6: on a 5+, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6948,8 +6930,8 @@ You can re-roll the Desperate Escape roll.</characteristic>
         <profile name="Broad spectrum data-tether" id="6582-845f-26b1-386b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model loses the SMOKE keyword.
--&gt; When this model's unit is targeted with a Stratagem:
-  -&gt; Roll one D6: on a 5+, you gain 1CP.</characteristic>
+When this model's unit is targeted with a Stratagem:
+  - Roll one D6: on a 5+, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7883,8 +7865,7 @@ You can re-roll the Desperate Escape roll.</characteristic>
       <profiles>
         <profile name="Enhanced data-tether" id="25d8-e85b-00ee-f305" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem:
-  -&gt; Roll one D6: on a 5+, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, roll one D6: on a 5+, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8973,15 +8954,15 @@ You can re-roll the Desperate Escape roll.</characteristic>
               </constraints>
               <rules>
                 <rule name="Noospheric Transference" id="adfc-5e64-fc6f-e649" hidden="false">
-                  <description>During the Command phase, in your turn, until the start of your next Command phase:
-  -&gt; Select from one through 1/2/3 (Incursion/Strike Force/Onslaught) friendly ADEPTUS MECHANICUS units:
-    -&gt; For each selected unit:
-      -&gt; That unit gains the HALO OVERRIDE keyword.
-      Select exactly 1 distinct options (Override Ability):
-        - Add 2 to all friendly HALO OVERRIDE units' Move characteristic.
-        - Add 1 to all friendly HALO OVERRIDE units' Toughness characteristic.
-        - All friendly HALO OVERRIDE units are eligible to declare a charge in a turn in which they Advanced.
-        - All friendly HALO OVERRIDE units gain the Stealth ability.</description>
+                  <description>During your Command phase, until the start of your next Command phase:
+  - Select one to 1/2/3 (Incursion/Strike Force/Onslaught) friendly ADEPTUS MECHANICUS units:
+    - For each selected unit:
+      - That unit gains the HALO OVERRIDE keyword.
+      Choose one of the following (Override Ability):
+        - Add 2" to friendly HALO OVERRIDE units' Move characteristic.
+        - Add 1 to friendly HALO OVERRIDE units' Toughness characteristic.
+        - Friendly HALO OVERRIDE units are eligible to declare a charge in a turn in which they Advanced.
+        - Friendly HALO OVERRIDE units gain the Stealth ability.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8998,7 +8979,7 @@ You can re-roll the Desperate Escape roll.</characteristic>
               </constraints>
               <rules>
                 <rule name="Cyber-psalm Programming" id="a464-1db7-2442-8fd3" hidden="false">
-                  <description>Add 2 to all friendly LEGIO CYBERNETICA units' Move characteristic.
+                  <description>Add 2" to friendly LEGIO CYBERNETICA units' Move characteristic.
 While a friendly LEGIO CYBERNETICA unit is not Battle-shocked, add 1 to that unit's Objective Control characteristic.</description>
                 </rule>
               </rules>
@@ -9016,7 +8997,7 @@ While a friendly LEGIO CYBERNETICA unit is not Battle-shocked, add 1 to that uni
               </constraints>
               <rules>
                 <rule name="Stealth Optimisation" id="4456-35bc-a8c6-e152" hidden="false">
-                  <description>All friendly INFANTRY SKITARII, IRONSTRIDER BALLISTARII or MOUNTED SKITARII units gain the Stealth ability.</description>
+                  <description>Friendly INFANTRY SKITARII, IRONSTRIDER BALLISTARII or MOUNTED SKITARII units gain the Stealth ability.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9034,9 +9015,9 @@ While a friendly LEGIO CYBERNETICA unit is not Battle-shocked, add 1 to that uni
               <rules>
                 <rule name="Benedictions of the Omnissiah" id="715a-5391-9800-dc9e" hidden="false">
                   <description>At the start of the battle round, during the first battle round, for the rest of the battle:
-  -&gt; Select one (each may be chosen once per battle):
-    - Panegyric Procession: while making ranged attacks, while the attacking unit is a friendly CULT MECHANICUS unit, while the target is within half the attacking weapon's range, improve all friendly CULT MECHANICUS models' Armour Penetration characteristic by 1.
-    - Citation in Savagery: when a friendly unit is selected to fight (the triggering unit must have CULT MECHANICUS), until the end of the phase: if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by the triggering unit; add 1 to the Strength characteristic of melee weapons equipped by the triggering unit.</description>
+  - Select one (each can be chosen once per battle):
+    - Panegyric Procession: While making ranged attacks, while the attacking unit is a friendly CULT MECHANICUS unit and the target is within half the attacking weapon's range, improve friendly CULT MECHANICUS models' Armour Penetration characteristic by 1.
+    - Citation in Savagery: When a friendly CULT MECHANICUS unit is selected to fight, until the end of the phase, if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by the triggering unit; add 1 to the Strength characteristic of melee weapons equipped by the triggering unit.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9054,7 +9035,7 @@ While a friendly LEGIO CYBERNETICA unit is not Battle-shocked, add 1 to that uni
               </constraints>
               <rules>
                 <rule name="Acquisition at any Cost" id="3eed-da3c-05dd-d540" hidden="false">
-                  <description>While the unit is within range of an objective marker tagged acquisition or while the target is within range of an objective marker tagged acquisition, until the start of your next Command phase, you can re-roll a Wound roll of 1.</description>
+                  <description>While this unit is within range of an objective marker tagged acquisition or while the target is within range of an objective marker tagged acquisition, until the start of your next Command phase, you can re-roll Wound rolls of 1.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9071,10 +9052,10 @@ While a friendly LEGIO CYBERNETICA unit is not Battle-shocked, add 1 to that uni
               </constraints>
               <rules>
                 <rule name="Rad-Bombardment" id="69ed-ec04-8369-af47" hidden="false">
-                  <description>-&gt; At the start of the battle round: during the first battle round, for each enemy unit: while the unit is within enemy deployment zone, your opponent selects one of the following: roll one D6: on a 3+, the unit suffers D3 mortal wounds / the unit is Battle-shocked; roll one D6: on a 5+, the unit suffers D3 mortal wounds.
--&gt; At the start of your Command phase:
+                  <description>At the start of the battle round, during the first battle round, for each enemy unit: while this unit is within enemy deployment zone, your opponent chooses one of the following: roll one D6: on a 3+, that unit suffers D3 mortal wounds / that unit is Battle-shocked; roll one D6: on a 5+, that unit suffers D3 mortal wounds.
+At the start of your Command phase:
   For each enemy unit:
-    -&gt; Roll one D6: on a 3+, from the second battle round onward, during battle rounds 2-5, while the unit is within enemy deployment zone, the unit suffers 1 mortal wound; from the second battle round onward, during battle rounds 2-5, while the unit is within enemy deployment zone, the unit must take a Battle-shock test.</description>
+    - Roll one D6: on a 3+, from the second battle round onward, during battle rounds 2-5, while this unit is within enemy deployment zone, that unit suffers 1 mortal wound; from the second battle round onward, during battle rounds 2-5, while this unit is within enemy deployment zone, that unit must take a Battle-shock test.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9091,10 +9072,10 @@ While a friendly LEGIO CYBERNETICA unit is not Battle-shocked, add 1 to that uni
               </constraints>
               <rules>
                 <rule name="Noospheric Recon" id="cf4e-35db-33bf-5862" hidden="false">
-                  <description>All friendly units with the INFILTRATORS, PTERAXII, RANGERS, SERBERYS RAIDERS or SERBERYS SULPHURHOUNDS keyword gain the RECON AUGURY keyword.
-All friendly RECON AUGURY units gain the Enhanced Augurs ability:
-  -&gt; You can, until the end of the phase: during the Shooting phase, in your turn, select one enemy unit visible to this model if the selected unit is within 12" of the unit: that unit is marked as analysed; while the selected unit is tagged analysed, add 3 to that unit's detection range characteristic.
-Applies to: units with ADEPTUS MECHANICUS.</description>
+                  <description>Friendly units with the INFILTRATORS, PTERAXII, RANGERS, SERBERYS RAIDERS or SERBERYS SULPHURHOUNDS keyword gain the RECON AUGURY keyword.
+Friendly RECON AUGURY units gain the Enhanced Augurs ability:
+  - Until the end of the phase, you can: during your Shooting phase, select one enemy unit visible to this model that is within 12" of this unit; that unit is Analysed; while the selected unit is Analysed, add 3" to that unit's detection range.
+Applies to: ADEPTUS MECHANICUS units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9112,9 +9093,9 @@ Applies to: units with ADEPTUS MECHANICUS.</description>
               <rules>
                 <rule name="War-form Mantles" id="0867-deb9-5f2e-a8b9" hidden="false">
                   <description>For the rest of the battle:
-  -&gt; All friendly units have a 4+ invulnerable save.
-  -&gt; All friendly units have the Feel No Pain 5+ ability.
-Applies to: units with TECH-PRIEST.</description>
+  - Friendly units have a 4+ invulnerable save.
+  - Friendly units have Feel No Pain 5+.
+Applies to: TECH-PRIEST units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9132,10 +9113,10 @@ Applies to: units with TECH-PRIEST.</description>
               <rules>
                 <rule name="Cyber-static Canticles" id="15c8-d651-ad18-1762" hidden="false">
                   <description>For the rest of the battle:
-  -&gt; Against CORPUSCARII targets, ranged weapons equipped by all friendly units gain [LETHAL HITS].
-  Against FULGURITE targets:
-    -&gt; After a friendly unit fights (the triggering unit must have FULGURITE): the triggering unit regains up to D3 lost wounds.
-Applies to: units with ADEPTUS MECHANICUS.</description>
+  - Against CORPUSCARII targets, ranged weapons equipped by friendly units gain [LETHAL HITS].
+  - Against FULGURITE targets:
+    - After a friendly FULGURITE unit fights, the triggering unit regains up to D3 lost wounds.
+Applies to: ADEPTUS MECHANICUS units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9153,9 +9134,9 @@ Applies to: units with ADEPTUS MECHANICUS.</description>
               </constraints>
               <rules>
                 <rule name="Murderous Imperative" id="4121-77ae-e349-3537" hidden="false">
-                  <description>While the Protector Imperative option of Doctrina Imperatives is active, you can re-roll a Hit roll of 1 for attacks made by all friendly SKITARII units.
-While the Conqueror Imperative option of Doctrina Imperatives is active, you can re-roll a Wound roll of 1 for attacks made by all friendly SKITARII units.
-Applies to: units with SKITARII.</description>
+                  <description>While the Protector Imperative option of Doctrina Imperatives is active, you can re-roll Hit rolls of 1 for attacks made by friendly SKITARII units.
+While the Conqueror Imperative option of Doctrina Imperatives is active, you can re-roll Wound rolls of 1 for attacks made by friendly SKITARII units.
+Applies to: SKITARII units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9200,8 +9181,8 @@ Applies to: units with SKITARII.</description>
             <profile name="Transoracular Dyad Wafers" id="3b40-a1d8-f592-45e6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is attached to a KASTELAN ROBOTS unit, for the rest of the battle:
-  -&gt; The unit gains the HALO OVERRIDE keyword.
-  -&gt; The unit cannot be selected by the Noospheric Transference ability.</characteristic>
+  - This unit gains the HALO OVERRIDE keyword.
+  - This unit cannot be selected by the Noospheric Transference ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9238,7 +9219,7 @@ Applies to: units with SKITARII.</description>
           <profiles>
             <profile name="Cognitive Reinforcement" id="b167-4fc0-ac7e-6638" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The Conqueror Imperative and Protector Imperative options of Doctrina Imperatives are active for the unit (and no other option is).</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The Conqueror Imperative and Protector Imperative options of Doctrina Imperatives are active for this unit (and no other option is).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9276,8 +9257,8 @@ Applies to: units with SKITARII.</description>
           <profiles>
             <profile name="Sanctified Ordnance" id="6f09-d64c-ac77-c0e6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 6 to the Range characteristic of ranged weapons equipped by models in this unit.
--&gt; After a Hazard roll is made, you may use this ability: you can re-roll the Hazard roll.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 6" to the Range characteristic of ranged weapons equipped by models in this unit.
+After a Hazard roll is made, you can use this ability: you can re-roll the Hazard roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9347,7 +9328,7 @@ Add 1 to the Damage characteristic of melee weapons equipped by this model.</cha
           <profiles>
             <profile name="Necromechanic" id="5a5a-e047-1961-e69f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a saving throw made for a friendly ADEPTUS MECHANICUS VEHICLE or LEGIO CYBERNETICA model is failed, you can use this ability, once per battle round per model, while the triggering model is within 12" of this model, each time an attack is allocated to the triggering model, change the Damage of that attack to 0.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9384,10 +9365,10 @@ Add 1 to the Damage characteristic of melee weapons equipped by this model.</cha
             <profile name="Lord of Machines" id="9cc3-6add-99be-d447" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Shooting phase, once per turn per model, until the end of the phase:
-  -&gt; Select one enemy VEHICLE unit if the selected unit is within 12" of this model and the selected unit is visible to this model:
-    -&gt; That unit must take a Leadership test.
-    -&gt; If the triggering leadership roll succeeded, that unit gets -1 to Hit rolls.
-    -&gt; If the triggering leadership roll was a failure, that unit cannot shoot.</characteristic>
+  - Select one enemy VEHICLE unit that is within 12" of this model and visible to this model:
+    - That unit must take a Leadership test.
+    - If the triggering leadership roll succeeded, subtract 1 from that unit's Hit rolls.
+    - If the triggering leadership roll was a failure, that unit cannot shoot.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9423,7 +9404,7 @@ Add 1 to the Damage characteristic of melee weapons equipped by this model.</cha
           <profiles>
             <profile name="Emotionless Clarity" id="8fe2-19ae-2489-07bc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly ADEPTUS MECHANICUS VEHICLE or LEGIO CYBERNETICA model with the Deadly Demise ability is destroyed, you can use this ability, once per turn per model, while that model is within 12" of this model, the triggering unit's Deadly Demise rolls automatically succeed.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9487,8 +9468,7 @@ Add 1 to the Damage characteristic of melee weapons equipped by this model.</cha
           <profiles>
             <profile name="Cantic Thrallnet" id="7265-2b0e-f41c-b939" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, you may use this ability, until the start of the next battle round:
-  -&gt; Select one friendly SKITARII unit if the selected unit is within 12" of this model: the Conqueror Imperative and Protector Imperative options of Doctrina Imperatives are active for that unit (and no other option is).</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, you can use this ability, until the start of the next battle round, select one friendly SKITARII unit that is within 12" of this model. The Conqueror Imperative and Protector Imperative options of Doctrina Imperatives are active for that unit (and no other option is).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9521,8 +9501,8 @@ Add 1 to the Damage characteristic of melee weapons equipped by this model.</cha
           <profiles>
             <profile name="Clandestine Infiltrator" id="8672-b418-2706-6ae6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.
-The unit gains the Scouts 6" ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.
+This unit gains the Scouts 6" ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9550,10 +9530,10 @@ The unit gains the Scouts 6" ability.</characteristic>
           <profiles>
             <profile name="Veiled Hunter" id="41bf-0473-9197-f83d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you may use this ability:
-  -&gt; Select up to 3 friendly INFANTRY SKITARII units:
-    -&gt; For each selected unit:
-      Select one of the following:
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you can use this ability:
+  - Select up to 3 friendly INFANTRY SKITARII units:
+    - For each selected unit:
+      Choose one of the following:
         - That unit can be set up on the battlefield.
         - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.</characteristic>
               </characteristics>
@@ -9588,9 +9568,9 @@ The unit gains the Scouts 6" ability.</characteristic>
           <profiles>
             <profile name="Battle-sphere Uplink" id="0d28-dad7-fde4-c9e3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:
-  -&gt; The triggering unit can make a Normal move of up to 6".
-  -&gt; The triggering unit cannot declare a charge.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:
+  - The triggering unit can make a Normal move of up to 6".
+  - The triggering unit cannot declare a charge.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9626,9 +9606,9 @@ The unit gains the Scouts 6" ability.</characteristic>
           <profiles>
             <profile name="Mechanicus Locum" id="71f9-42b0-0d6a-6576" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Leadership characteristic to 6.
--&gt; At the start of each phase, you may use this ability, once per battle per model:
-  -&gt; Select one friendly CULT MECHANICUS unit if the selected unit is Battle-shocked and the selected unit is within 12" of this model: that unit is no longer Battle-shocked.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Leadership characteristic to 6+.
+At the start of each phase, you can use this ability, once per battle per model:
+  - Select one friendly CULT MECHANICUS unit that is Battle-shocked and within 12" of this model. That unit is no longer Battle-shocked.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9736,7 +9716,7 @@ The unit gains the Scouts 6" ability.</characteristic>
           <profiles>
             <profile name="Temporcopia" id="c474-7758-0c21-209e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Fights First ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Fights First ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9773,7 +9753,7 @@ The unit gains the Scouts 6" ability.</characteristic>
             <profile name="Magos" id="b4e8-55b6-7436-d2f2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this model is within range of an objective marker tagged acquisition:
-  -&gt; Roll one D6: on a 4+, you gain 1CP.</characteristic>
+  - Roll one D6: on a 4+, you gain 1 CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9809,7 +9789,7 @@ The unit gains the Scouts 6" ability.</characteristic>
           <profiles>
             <profile name="Genetor" id="82c4-5600-f47a-7904" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while the unit is within range of an objective marker tagged acquisition, the unit has a 4+ invulnerable save.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit and this unit is within range of an objective marker tagged acquisition, this unit has a 4+ invulnerable save.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9845,7 +9825,7 @@ The unit gains the Scouts 6" ability.</characteristic>
           <profiles>
             <profile name="Logis" id="5874-db5c-5c84-8241" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while the target is within range of an objective marker tagged acquisition, the unit gets +1 to Hit rolls.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit and the target is within range of an objective marker tagged acquisition, add 1 to this unit's Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9881,11 +9861,11 @@ The unit gains the Scouts 6" ability.</characteristic>
           <profiles>
             <profile name="Artisan" id="d937-86fb-d774-ed01" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per phase per model, while this model is leading a unit, while the unit is within range of an objective marker tagged acquisition:
-  Select one of the following:
-    - One of the unit's Hit rolls counts as 6.
-    - One of the unit's Wound rolls counts as 6.
-    - One of the unit's saving throw rolls counts as 6.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per phase per model, while this model is leading a unit and this unit is within range of an objective marker tagged acquisition, you can use this ability:
+  Choose one of the following:
+    - One of this unit's Hit rolls counts as 6.
+    - One of this unit's Wound rolls counts as 6.
+    - One of this unit's saving throw rolls counts as 6.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9961,7 +9941,7 @@ The unit gains the Scouts 6" ability.</characteristic>
           <profiles>
             <profile name="Malphonic Susurrus" id="6ef7-dd86-df1f-ec90" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit gains the Stealth ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit gains the Stealth ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10066,8 +10046,8 @@ Ranged weapons equipped by this model gain [ANTI-MONSTER 4+].</characteristic>
           <profiles>
             <profile name="Explorator Dispensation" id="efd4-dad1-d5cb-0c8b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.
-Applies to: units with SKITARII, MARSHAL.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.
+Applies to: SKITARII MARSHAL units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10095,8 +10075,8 @@ Applies to: units with SKITARII, MARSHAL.</characteristic>
           <profiles>
             <profile name="Stealth-screened Cybercanids (Upgrade)" id="c361-870b-eafc-17a5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Lone Operative ability.
-Applies to: units with SERBERYS RAIDERS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Lone Operative ability.
+Applies to: SERBERYS RAIDERS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10124,8 +10104,8 @@ Applies to: units with SERBERYS RAIDERS.</characteristic>
           <profiles>
             <profile name="Vingh's Wafers of Dynamism" id="7450-4f75-0b5c-6027" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, during the first battle round, while the unit is an attached unit, for the rest of the battle, the unit gains the MOBILE keyword.
-Applies to: units with CYBERNETICA DATASMITH.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, during the first battle round, while this unit is an attached unit, for the rest of the battle, this unit gains the MOBILE keyword.
+Applies to: CYBERNETICA DATASMITH units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10162,7 +10142,7 @@ Applies to: units with CYBERNETICA DATASMITH.</characteristic>
             <profile name="TL-4ø9" id="3aad-5eb5-f133-c9ce" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model gains 1 TL-4ø9 weapon.
-Applies to: units with TECH-PRIEST.</characteristic>
+Applies to: TECH-PRIEST units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10198,8 +10178,8 @@ Applies to: units with TECH-PRIEST.</characteristic>
           <profiles>
             <profile name="Voltagheist Reliquary" id="a98d-fea1-62a3-7c2f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Your opponent cannot target the unit with Overwatch.
-Applies to: units with TECH-PRIEST.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Your opponent cannot target this unit with Overwatch.
+Applies to: TECH-PRIEST units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10235,8 +10215,8 @@ Applies to: units with TECH-PRIEST.</characteristic>
           <profiles>
             <profile name="Electromiasmic Brazier" id="17b3-8a39-981a-89f8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Stealth ability.
-Applies to: units with TECH-PRIEST.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Stealth ability.
+Applies to: TECH-PRIEST units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10264,8 +10244,8 @@ Applies to: units with TECH-PRIEST.</characteristic>
           <profiles>
             <profile name="Omnicogitator" id="ea5e-8107-86e6-fb49" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The Conqueror Imperative and Protector Imperative options of Doctrina Imperatives are active for the unit (and no other option is).
-Applies to: units with SKITARII, MARSHAL.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The Conqueror Imperative and Protector Imperative options of Doctrina Imperatives are active for this unit (and no other option is).
+Applies to: SKITARII MARSHAL units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10301,8 +10281,8 @@ Applies to: units with SKITARII, MARSHAL.</characteristic>
           <profiles>
             <profile name="Martial Signatum Amplificator" id="6235-2bfd-70f9-a0c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the SKITARII keyword.
-Applies to: units with TECH-PRIEST.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the SKITARII keyword.
+Applies to: TECH-PRIEST units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10340,9 +10320,9 @@ Applies to: units with TECH-PRIEST.</characteristic>
           <profiles>
             <profile name="Belicosa-class Capacitor Vanes" id="9e89-9ce1-4711-5f64" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 6 to the Range characteristic of ranged weapons equipped by models in this unit.
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 6" to the Range characteristic of ranged weapons equipped by models in this unit.
 Add 1 to the Strength characteristic of ranged weapons equipped by models in this unit.
-Applies to: units with ADEPTUS MECHANICUS.</characteristic>
+Applies to: ADEPTUS MECHANICUS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10373,7 +10353,7 @@ Applies to: units with ADEPTUS MECHANICUS.</characteristic>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 2 to the Attacks characteristic of melee weapons equipped by this model.
 Improve the Armour Penetration characteristic of melee weapons equipped by this model by 1.
 Improve the Damage characteristic of melee weapons equipped by this model by 1.
-Applies to: units with SKITARII, MARSHAL.</characteristic>
+Applies to: SKITARII MARSHAL units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10387,10 +10367,10 @@ Applies to: units with SKITARII, MARSHAL.</characteristic>
   </sharedSelectionEntryGroups>
   <sharedRules>
     <rule name="Doctrina Imperatives" id="01d3-b088-6c56-897a" hidden="false">
-      <description>At the start of the battle round, you may use this ability, until the end of the battle round:
-  -&gt; Select one:
-    - PROTECTOR IMPERATIVE: ranged weapons equipped by models in this unit gain [HEAVY]; improve the Ballistic Skill characteristic of ranged weapons equipped by models in this unit by 1; against melee attacks, if the unit has the BATTLELINE keyword or while the unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, the attacking unit gets -1 to Hit rolls.
-    - CONQUEROR IMPERATIVE: ranged weapons equipped by models in this unit gain [ASSAULT]; improve the Weapon Skill characteristic of melee weapons equipped by models in this unit by 1; if the unit has the BATTLELINE keyword or while the unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, improve the unit's Armour Penetration characteristic by 1.</description>
+      <description>At the start of the battle round, you can use this ability, until the end of the battle round:
+  - Select one:
+    - PROTECTOR IMPERATIVE: Ranged weapons equipped by models in this unit gain [HEAVY]; improve the Ballistic Skill characteristic of ranged weapons equipped by models in this unit by 1; against melee attacks, if this unit has the BATTLELINE keyword or while this unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, subtract 1 from the attacking unit's Hit rolls.
+    - CONQUEROR IMPERATIVE: Ranged weapons equipped by models in this unit gain [ASSAULT]; improve the Weapon Skill characteristic of melee weapons equipped by models in this unit by 1; if this unit has the BATTLELINE keyword or while this unit is within 6" of a friendly ADEPTUS MECHANICUS BATTLELINE unit, improve this unit's Armour Penetration characteristic by 1.</description>
     </rule>
   </sharedRules>
 </catalogue>

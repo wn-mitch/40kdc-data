@@ -1427,25 +1427,25 @@
       <profiles>
         <profile name="Demolition Run" id="2187-09eb-e3fe-3db8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal, Advance or Fall Back move, you may use this ability, once per turn per unit, during the Movement phase, in your turn:
-  -&gt; Select one enemy unit if the selected unit is within 6" of the unit and the selected unit is visible to the unit: roll one D6 for each friendly ATALAN JACKALS model in the unit: for each 4+, that unit suffers 1 mortal wound (to a maximum of 6 mortal wounds).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal, Advance or Fall Back move, you can use this ability, once per turn per unit, during your Movement phase:
+  - Select one enemy unit that is within 6" of this unit and visible to this unit. Roll one D6 for each friendly ATALAN JACKALS model in this unit: for each 4+, that unit suffers 1 mortal wound, to a maximum of 6 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Outrider Gangs" id="12a5-5e2d-a4ac-450f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit arrives from Strategic Reserves, while the unit is within 0" of a cult ambush marker, for the rest of the battle:
-  -&gt; This model can be removed from the battlefield and set up again.
-  -&gt; Spend 1 Cult Ambush marker.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit arrives from Strategic Reserves, while this unit is in contact with a cult ambush marker, for the rest of the battle:
+  - This model can be removed from the battlefield and set up again.
+  - Spend 1 Cult Ambush marker.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="5e83-4ce6-43d1-7896" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="9755-d135-eb85-a7f6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1769,21 +1769,20 @@
         </profile>
         <profile name="Deep Strike" id="4857-9a0b-24fa-109d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Heroic Fusillade" id="39a4-097a-2f5e-39d6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a friendly model with the Heroic Fusillade ability shoots, you may use this ability, once per turn per army:
-  -&gt; Select one enemy INFANTRY unit that was hit by an attack made by the triggering model during its just-finished shooting sequence: that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a friendly model with the Heroic Fusillade ability shoots, you can use this ability, once per turn per army, select one enemy INFANTRY unit that was hit by an attack made by the triggering model during that shooting sequence. That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Hypersensory Abilities" id="e4c0-51e3-cdc7-04e8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, you may use this ability, once per turn, while the triggering unit is within 8" of this model, while the unit is unengaged:
-  -&gt; This model is eligible to shoot as if it were your Shooting phase.
-  -&gt; This model must target the triggering unit with ranged attacks.
-  -&gt; This model can make a Normal move of up to D6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, you can use this ability, once per turn, while the triggering unit is within 8" of this model and this unit is unengaged:
+  - This model is eligible to shoot as if it were your Shooting phase.
+  - This model must target the triggering unit with ranged attacks.
+  - This model can make a Normal move of up to D6".</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="ea52-1de8-3ba0-8e73" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1866,12 +1865,12 @@
       <profiles>
         <profile name="A Plan Generations in the Making" id="748a-9e4a-9335-c732" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="54f1-8c20-4463-a3e0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2525,7 +2524,7 @@
         </profile>
         <profile name="Deep Strike" id="baeb-7bcd-9c22-a06d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="fc01-9cf7-7739-f7e4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2616,24 +2615,24 @@
         </profile>
         <profile name="Infiltrators" id="3236-9aa7-ecc0-bd66" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Planted Explosives" id="dbc4-d599-e0dd-b130" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a Normal, Advance or Fall Back move, you may use this ability, once per battle per unit and once per battle round per army, while the triggering unit is within 8" of this model:
-  -&gt; Roll one D6: on a 2+, the triggering unit suffers D3+3 mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a Normal, Advance or Fall Back move, you can use this ability, once per battle per unit and once per battle round per army, while the triggering unit is within 8" of this model:
+  - Roll one D6: on a 2+, the triggering unit suffers D3+3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Primed and Ready" id="68c7-a105-58be-92c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per phase per model, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one friendly unit if the selected unit has the Primed and Ready ability: the Grenade Stratagem costs 0CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per phase per model, during your Shooting phase, until the end of the phase, you can use this ability:
+  - Select one friendly unit with the Primed and Ready ability. The Grenade Stratagem costs 0 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="65a7-b397-cdd4-b014" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="33c4-3ca0-adea-b38a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2643,7 +2642,7 @@
         </profile>
         <profile name="Stealth" id="4e53-234f-2919-d5b4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2742,12 +2741,12 @@
         <profile name="Cosmic Horror (Psychic)" id="5d74-5f1f-67d2-1e21" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase:
-  For each enemy unit within 6" of this model: The unit must take a Battle-shock test.</characteristic>
+  For each enemy unit within 6" of this model: That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="7df8-6ae8-84cf-1b49" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Might From Beyond" id="04d5-8cde-f4a5-3c31" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2757,25 +2756,25 @@
         </profile>
         <profile name="Psychic Familiar" id="603b-3298-57ca-250f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, once per battle per unit, until the end of the phase:
-  -&gt; This model resolves the Psychic Familiar ability now.
-  -&gt; Increase the range of this model's Cosmic Horror ability by 6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability, once per battle per unit, until the end of the phase:
+  - This model resolves the Psychic Familiar ability now.
+  - Increase the range of this model's Cosmic Horror ability by 6".</characteristic>
           </characteristics>
         </profile>
         <profile name="Supreme Commander" id="61f1-767d-e406-8514" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Your army can include only one friendly PATRIARCH model.
-While this model is friendly, the unit must be your Warlord.</characteristic>
+While this model is friendly, this unit must be your Warlord.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="ff2a-a39a-bf4f-0387" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="e196-fb0b-5a65-50ce" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2849,19 +2848,18 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="e093-dd89-9cf3-b342" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fire Support" id="f86c-b8a1-5b6c-e22a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit this phase (your Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll the Wound roll for attacks made by all friendly models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit this phase (your Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll Wound rolls for attacks made by friendly models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="7e2a-5a12-5404-c2df" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2948,9 +2946,9 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         </profile>
         <profile name="Biological Warfare" id="8dd9-5a1e-c51d-ea53" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, once per battle per unit, until the end of the phase:
-  -&gt; Add 3 to the Attacks characteristic of melee injector goad weapons equipped by this model.
-  -&gt; Add 3 to the Damage characteristic of melee injector goad weapons equipped by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, once per battle per unit, until the end of the phase:
+  - Add 3 to the Attacks characteristic of melee injector goad weapons equipped by this model.
+  - Add 3 to the Damage characteristic of melee injector goad weapons equipped by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Twisted Science" id="060b-3981-46a0-406e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2960,7 +2958,7 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         </profile>
         <profile name="Deep Strike" id="662c-d279-aa3f-660c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="a4ca-66da-dd7a-f313" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3063,19 +3061,19 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         </profile>
         <profile name="Leader" id="1170-8da5-197e-e53c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Nexus of Devotion" id="9045-5ca6-fb76-7772" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit:
-  -&gt; Unless the unit has the HYBRID METAMORPHS keyword, the unit has the Feel No Pain 5+ ability.
-  -&gt; If the unit has the HYBRID METAMORPHS keyword, the unit has the Feel No Pain 4+ ability.</characteristic>
+  - Unless this unit has the HYBRID METAMORPHS keyword, this unit has Feel No Pain 5+.
+  - If this unit has the HYBRID METAMORPHS keyword, this unit has Feel No Pain 4+.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="e035-7070-b060-4314" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Summon the Cult" id="d48e-5fd3-4a05-6a40" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3085,7 +3083,7 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         </profile>
         <profile name="Deep Strike" id="221e-7bed-c2a7-7e19" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3165,19 +3163,18 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
       <profiles>
         <profile name="Crossfire" id="dc17-2966-3410-a7d5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Crossfire Target). Until the end of the turn, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly GENESTEALER CULTS unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, once per turn per unit, during your Shooting phase, until the end of the turn:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Crossfire Target). Until the end of the turn, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly GENESTEALER CULTS unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="0c69-38dd-b88d-8c3a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="526a-a0b3-f967-59fb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3422,27 +3419,27 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         </profile>
         <profile name="Cult Demagogue" id="6b8d-1695-4f5a-0fe4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Decoys and Misdirection" id="5942-7de3-725c-0733" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you may use this ability, once per battle per army:
-  -&gt; Select up to 3 friendly GENESTEALER CULTS units:
-    -&gt; For each selected unit:
-      Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you can use this ability, once per battle per army:
+  - Select up to 3 friendly GENESTEALER CULTS units:
+    - For each selected unit:
+      Choose one of the following:
         - That unit can be set up on the battlefield.
         - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="7868-876e-76a1-bc29" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="8e6d-0109-f8b4-f813" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3534,28 +3531,27 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         </profile>
         <profile name="Feel No Pain" id="9b6b-0145-b8cb-2059" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="fb7e-a7fb-3a30-a90e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Regenerating Gene-mass" id="439c-0e40-a65f-b5c4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if this model was destroyed this phase (1+ times), the first time this battle per model:
-  -&gt; Roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if this model was destroyed this phase (one or more times), the first time this battle per model, roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
         <profile name="The Chosen One" id="0e63-deda-2613-7203" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a model in the unit is destroyed, while this model is leading a unit, while making melee attacks, unless the triggering unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a model in this unit is destroyed, while this model is leading a unit, while making melee attacks, unless the triggering unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="6744-cfa3-3815-4de4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3635,17 +3631,17 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         </profile>
         <profile name="Battlefield Analysis" id="5c84-8ad7-8d76-fec5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, you may use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, you can use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Cult Infiltration" id="888e-d190-dc56-f557" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Command phase, you may use this ability, while this model is on the battlefield, move the cult ambush marker that has not been moved this turn up to 6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Command phase, you can use this ability, while this model is on the battlefield, move the cult ambush marker that has not been moved this turn up to 6".</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="0db5-3ec8-2565-68fa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="e36c-8116-875d-e716" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3736,28 +3732,28 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         </profile>
         <profile name="Cloaked Assassin" id="00ad-92d6-5b43-c0c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Your opponent cannot target the unit with Overwatch.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Your opponent cannot target this unit with Overwatch.</characteristic>
           </characteristics>
         </profile>
         <profile name="Creeping Shadow" id="e026-0a45-c925-a7ae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, you may use this ability, if this model is equipped with one weapon named "Cult sniper rifle", during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the unit can make a Normal move of up to 6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, you can use this ability, if this model is equipped with one weapon named "Cult sniper rifle", during your opponent's Movement phase, while the triggering unit is within 8" of this unit and this unit is unengaged, this unit can make a Normal move of up to 6".</characteristic>
           </characteristics>
         </profile>
         <profile name="Psychic Spoor" id="843f-523b-732d-7e64" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the battle round, if during the first battle round:
-  -&gt; Select one enemy unit, binding it as prey selection (your Prey target). For the rest of the battle, each time this model makes an attack against it, while the target is a prey, you can re-roll the Hit roll for attacks made by this model; you can re-roll the Wound roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the first battle round:
+  - Select one enemy unit (referred to below as the prey selection) (your Prey target). For the rest of the battle, each time this model makes an attack against it, while the target is a prey, you can re-roll Hit rolls for attacks made by this model; you can re-roll Wound rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="3b0c-1b76-91be-4829" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="3f15-7262-2745-9b22" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="0641-d4cb-d5ec-02d9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3767,7 +3763,7 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         </profile>
         <profile name="Stealth" id="63f3-f9c7-b213-9641" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3868,30 +3864,30 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
         </profile>
         <profile name="Leader" id="8c8a-a430-94e1-f3e6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Master Outrider" id="7193-946a-8d5c-aac6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:
-  -&gt; The triggering unit can make a Normal move of up to 6" as if it were your Movement phase.
-  -&gt; The triggering unit cannot declare a charge.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:
+  - The triggering unit can make a Normal move of up to 6" as if it were your Movement phase.
+  - The triggering unit cannot declare a charge.</characteristic>
           </characteristics>
         </profile>
         <profile name="Priority Target" id="fd21-b273-75c2-9552" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit by cult sniper rifle during its just-finished shooting sequence (your Priority Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll a Hit roll of 1 for attacks made by all friendly GENESTEALER CULTS models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit by cult sniper rifle during that shooting sequence (your Priority Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll Hit rolls of 1 for attacks made by friendly GENESTEALER CULTS models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="905b-213b-74e7-ba34" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="668c-9901-a901-cc31" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3977,17 +3973,17 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
       <profiles>
         <profile name="Hulking Bodyguards" id="5858-121e-8ec4-bc64" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is being led by a CHARACTER model, when the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is being led by a CHARACTER model, when the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="4a0e-0f64-6ea9-925f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="19a0-48cb-700e-0731" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4161,12 +4157,12 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
       <profiles>
         <profile name="Claimed for the Cult" id="6c36-bf73-1bb3-5e49" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You gain 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="7512-f5b3-59b4-89a8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4425,22 +4421,22 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
       <profiles>
         <profile name="Brood Surge" id="4def-2cc3-bf19-c9e6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After an enemy unit shoots, during the Shooting phase, in the opponent's turn, if the triggering unit has destroyed 1+ models with its just-resolved attacks, the unit can make a Surge move of up to D6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After an enemy unit shoots, during your opponent's Shooting phase, if the triggering unit has destroyed one or more models with those attacks, this unit can make a Surge move of up to D6".</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="13f8-863c-2122-90da" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="ac89-94a1-6023-340e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="b430-6ccd-a252-b2d6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4695,13 +4691,13 @@ While this model is friendly, the unit must be your Warlord.</characteristic>
       <profiles>
         <profile name="Industrialised Destruction" id="4cc9-3276-f902-3d70" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll a Wound roll of 1.
-While the target is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll Wound rolls of 1.
+While the target is within range of an objective marker, you can re-roll Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="9e99-39c1-869e-7ec8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4973,22 +4969,22 @@ While the target is within range of an objective marker, you can re-roll the Wou
         </profile>
         <profile name="Bodyguard" id="5e12-f1fa-3e09-de43" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit has the Feel No Pain 4+ ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit has Feel No Pain 4+.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fights First" id="a1b5-5857-5db3-ae39" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Fights First ability, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sudden Assault" id="3b5f-f76d-7e3f-2c83" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="9432-2bcd-3629-61c0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="8cf3-498f-e304-f168" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5073,25 +5069,24 @@ While the target is within range of an objective marker, you can re-roll the Wou
         </profile>
         <profile name="Grinding Line-breaker" id="31b0-49d7-5604-ff5e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of this model:
-  -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
-  -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit (excluding MONSTER or VEHICLE units) starts a Fall Back move, while the triggering unit is within Engagement Range of this model:
+  - While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
+  - While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="3a74-246e-cdca-2762" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="efb6-791c-3a19-c2ea" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="f343-f3a5-f3a6-bbb1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5232,17 +5227,17 @@ While the target is within range of an objective marker, you can re-roll the Wou
         </profile>
         <profile name="Leader" id="2f6a-3d2d-2b76-4375" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Psionic Shield (Psychic)" id="9bdb-5fa4-2d0d-b537" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per unit, until the end of the phase, this model has a 4+ invulnerable save.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per unit, until the end of the phase, this model has a 4+ invulnerable save.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="5076-fab0-1f3d-73c6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5322,17 +5317,17 @@ While the target is within range of an objective marker, you can re-roll the Wou
       <profiles>
         <profile name="Swift and Deadly" id="0e61-6a12-0677-a942" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="ba9e-a923-932f-5ada" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="c22e-fef0-bb21-cf83" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5462,35 +5457,34 @@ While the target is within range of an objective marker, you can re-roll the Wou
         </profile>
         <profile name="Leader" id="4643-4ca5-fc65-de93" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Mind Control (Psychic)" id="5fee-a4a3-461c-ec0e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Shooting phase, you may use this ability, once per turn per army, if this model has the PSYKER keyword, until the end of the phase:
-  -&gt; Select one enemy unit if the selected unit is within 18" of this model:
-    -&gt; Roll one D6:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Shooting phase, you can use this ability, once per turn per army, if this model has the PSYKER keyword, until the end of the phase:
+  - Select one enemy unit that is within 18" of this model:
+    - Roll one D6:
       - On 1: This model suffers D3 mortal wounds.
-      - On 2-5: That unit gets -1 to Hit rolls.
-      - On 6: That unit gets -1 to Hit rolls; that unit gets -1 to Wound rolls.</characteristic>
+      - On 2-5: Subtract 1 from that unit's Hit rolls.
+      - On 6: Subtract 1 from that unit's Hit rolls; subtract 1 from that unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Spiritual Leader" id="08e7-9880-c60c-ca8a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per unit:
-  -&gt; Select one friendly GENESTEALER CULTS unit if the selected unit is Battle-shocked and the selected unit is within 12" of this model: that unit is no longer Battle-shocked.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per unit, select one friendly GENESTEALER CULTS unit that is Battle-shocked and within 12" of this model. That unit is no longer Battle-shocked.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="7ed7-d7ce-a01d-5053" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Psychic Familiar" id="ee84-b06e-324e-c71a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Shooting phase, you may use this ability, once per battle per unit, until the end of the phase:
-  -&gt; This model resolves the Psychic Familiar ability now.
-  -&gt; Increase the range of this model's Mind Control ability by 6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Shooting phase, you can use this ability, once per battle per unit, until the end of the phase:
+  - This model resolves the Psychic Familiar ability now.
+  - Increase the range of this model's Mind Control ability by 6".</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5836,7 +5830,7 @@ While the target is within range of an objective marker, you can re-roll the Wou
       <profiles>
         <profile name="Cult Icon" id="ffdf-40be-4f0b-ccd6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Return 3 destroyed models to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Return 3 destroyed models to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6136,7 +6130,7 @@ While the target is within range of an objective marker, you can re-roll the Wou
       <profiles>
         <profile name="Alchemicus Familiar" id="850e-2388-ed48-0136" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, once per battle per unit, against INFANTRY targets, until the end of the phase, the unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, once per battle per unit, against INFANTRY targets, until the end of the phase, add 1 to this unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6328,8 +6322,8 @@ While the target is within range of an objective marker, you can re-roll the Wou
       <profiles>
         <profile name="Flare launcher" id="a908-b2ee-4c91-cc5d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The unit gains the SMOKE keyword.
-The Smokescreen Stratagem that targets the unit costs 0CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: This unit gains the SMOKE keyword.
+The Smokescreen Stratagem that targets this unit costs 0 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6341,7 +6335,7 @@ The Smokescreen Stratagem that targets the unit costs 0CP.</characteristic>
       <profiles>
         <profile name="Spotter" id="8916-2759-0229-dc9b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set the Ballistic Skill characteristic of ranged weapons equipped by this model to 3.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set the Ballistic Skill characteristic of ranged weapons equipped by this model to 3+.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6353,8 +6347,8 @@ The Smokescreen Stratagem that targets the unit costs 0CP.</characteristic>
       <profiles>
         <profile name="Survey Augur" id="c129-dcd6-bbdc-c7b2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Survey Augur Target). Until the end of the phase, each time a friendly unit makes an attack against it, all friendly GENESTEALER CULTS models' weapons gain [IGNORES COVER].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Survey Augur Target). Until the end of the phase, each time a friendly unit makes an attack against it, friendly GENESTEALER CULTS models' weapons gain [IGNORES COVER].</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6967,16 +6961,16 @@ The Smokescreen Stratagem that targets the unit costs 0CP.</characteristic>
               </constraints>
               <rules>
                 <rule name="Integrated Tactics" id="9b1d-7ab7-e0fe-b511" hidden="false">
-                  <description>When a friendly unit is selected to shoot (the triggering unit must have ASTRA MILITARUM), you may use this ability, until the end of the phase:
-  -&gt; Select one enemy unit if the selected unit is within 18" of the triggering unit and the selected unit is visible to the triggering unit:
-    -&gt; The triggering unit must target that unit with ranged weapons.
-    -&gt; That unit is caught in overlapping fire.
-    -&gt; While the target is caught in overlapping fire, while making ranged attacks, all friendly GENESTEALER CULTS models get +1 to Hit rolls.</description>
+                  <description>When a friendly ASTRA MILITARUM unit is selected to shoot, you can use this ability, until the end of the phase:
+  - Select one enemy unit that is within 18" of the triggering unit and visible to the triggering unit:
+    - The triggering unit must target that unit with ranged weapons.
+    - That unit is caught in overlapping fire.
+    - While the target is caught in overlapping fire, while making ranged attacks, add 1 to friendly GENESTEALER CULTS models' Hit rolls.</description>
                 </rule>
                 <rule name="Brood Brothers" id="8475-3762-f8ab-287d" hidden="false">
                   <description>Your army can include ASTRA MILITARUM units (excluding AIRCRAFT, COMMISSAR, EPIC HERO, MILITARUM TEMPESTUS, OGRYN, RATLING, TECH-PRIEST ENGINSEER or MINISTORUM PRIEST units).
-The unit must be your Warlord.
-All friendly ASTRA MILITARUM units lose the Voice of Command ability.</description>
+This unit must be your Warlord.
+Friendly ASTRA MILITARUM units lose the Voice of Command ability.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -6993,8 +6987,8 @@ All friendly ASTRA MILITARUM units lose the Voice of Command ability.</descripti
               </constraints>
               <rules>
                 <rule name="Hypermorphic Fury" id="41b4-fe22-3b28-b6a2" hidden="false">
-                  <description>The unit gets +1 to Charge rolls.
--&gt; When a friendly unit is selected to fight (the triggering unit must have ABERRANTS, BIOPHAGUS or PURESTRAIN GENESTEALERS), until the end of the phase: if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by the triggering unit.</description>
+                  <description>Add 1 to this unit's Charge rolls.
+When a friendly ABERRANTS, BIOPHAGUS or PURESTRAIN GENESTEALERS unit is selected to fight, until the end of the phase, if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by the triggering unit.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7011,8 +7005,8 @@ All friendly ASTRA MILITARUM units lose the Voice of Command ability.</descripti
               </constraints>
               <rules>
                 <rule name="Rapid Takeover" id="e963-4dc5-867b-4cfe" hidden="false">
-                  <description>While the unit is not Battle-shocked, add 1 to this model's Objective Control characteristic.
--&gt; At the end of the Command phase: if you control 1+ objectives, while a friendly ATALAN JACKALS unit is within range of an objective marker you control, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</description>
+                  <description>While this unit is not Battle-shocked, add 1 to this model's Objective Control characteristic.
+At the end of the Command phase, if you control one or more objectives, while a friendly ATALAN JACKALS unit is within range of an objective marker you control, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7029,17 +7023,17 @@ All friendly ASTRA MILITARUM units lose the Voice of Command ability.</descripti
               </constraints>
               <rules>
                 <rule name="Psionic Parasitism" id="61ff-d3d0-513b-8fc3" hidden="false">
-                  <description>-&gt; At the end of your Movement phase, until the start of your next Movement phase:
+                  <description>At the end of your Movement phase, until the start of your next Movement phase:
   For each friendly SYNAPSE TYRANIDS unit:
-    -&gt; You can:
-      -&gt; Select one friendly GENESTEALER CULTS unit (excluding PATRIARCH or PURESTRAIN GENESTEALERS units) if the selected unit is within 9" of the unit and the selected unit is visible to the unit, binding it as cult:
-        -&gt; Select one friendly TYRANIDS unit if the selected unit is within 9" of the unit and the selected unit is visible to the unit, binding it as brood:
-          -&gt; Roll D3+1, then:
-            -&gt; The bound cult suffers a number of mortal wounds equal to the result of that roll.
-            -&gt; One model in the bound brood regains up to a number of lost wounds equal to the result of that roll.
-          -&gt; The bound brood gets +1 to Hit rolls.
-All friendly TYRANIDS units gain the Catalyst ability:
-  -&gt; While an enemy unit is within 6" of this unit, if the attack targets that unit, all friendly GENESTEALER CULTS units get +1 to Hit rolls.</description>
+    - You can:
+      - Select one friendly GENESTEALER CULTS unit (excluding PATRIARCH or PURESTRAIN GENESTEALERS units) that is within 9" of this unit and visible to this unit (referred to below as the cult):
+        - Select one friendly TYRANIDS unit that is within 9" of this unit and visible to this unit (referred to below as the brood):
+          - Roll D3+1, then:
+            - The chosen cult suffers a number of mortal wounds equal to the result of that roll.
+            - One model in the chosen brood regains up to a number of lost wounds equal to the result of that roll.
+          - Add 1 to the chosen brood's Hit rolls.
+Friendly TYRANIDS units gain the Catalyst ability:
+  - While an enemy unit is within 6" of this unit, if the attack targets that unit, add 1 to friendly GENESTEALER CULTS units' Hit rolls.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7057,9 +7051,9 @@ All friendly TYRANIDS units gain the Catalyst ability:
               <rules>
                 <rule name="Unquestioning Fanaticism" id="97e2-3699-42af-d3d0" hidden="false">
                   <description>While this model is leading a unit:
-  -&gt; You can re-roll a failed Advance roll.
-  -&gt; You can re-roll a failed Charge roll.
-  -&gt; If the unit has the MAGUS, PRIMUS or ACOLYTE ICONWARD keywords, this model has the Feel No Pain 3+ ability.</description>
+  - You can re-roll a failed Advance roll.
+  - You can re-roll a failed Charge roll.
+  - If this unit has the MAGUS, PRIMUS or ACOLYTE ICONWARD keywords, this model has Feel No Pain 3+.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7076,7 +7070,7 @@ All friendly TYRANIDS units gain the Catalyst ability:
               </constraints>
               <rules>
                 <rule name="A Perfect Ambush" id="d7b1-737f-8e74-b4b6" hidden="false">
-                  <description>Each time a friendly unit ends an ingress move (the triggering unit must have GENESTEALER CULTS), until the end of your next Fight phase, the triggering unit's weapons gain [SUSTAINED HITS 1] and [IGNORES COVER].</description>
+                  <description>Each time a friendly GENESTEALER CULTS unit ends an Ingress move, until the end of your next Fight phase, that unit's weapons gain [SUSTAINED HITS 1] and [IGNORES COVER].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7094,9 +7088,9 @@ All friendly TYRANIDS units gain the Catalyst ability:
               </constraints>
               <rules>
                 <rule name="Killer Reputation" id="8f01-bd5d-87f8-70c3" hidden="false">
-                  <description>All friendly models with the KELERMORPH, LOCUS, REDUCTUS SABOTEUR or SANCTUS keyword gain the KILLER keyword.
-You can re-roll a Hit roll of 1 for attacks made by all friendly KILLER models.
-You can re-roll a Wound roll of 1 for attacks made by all friendly KILLER models.</description>
+                  <description>Friendly models with the KELERMORPH, LOCUS, REDUCTUS SABOTEUR or SANCTUS keyword gain the KILLER keyword.
+You can re-roll Hit rolls of 1 for attacks made by friendly KILLER models.
+You can re-roll Wound rolls of 1 for attacks made by friendly KILLER models.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7113,7 +7107,7 @@ You can re-roll a Wound roll of 1 for attacks made by all friendly KILLER models
               </constraints>
               <rules>
                 <rule name="Enemy Within" id="1f68-6185-f829-7497" hidden="false">
-                  <description>-&gt; At the end of your opponent's Fight phase: friendly PURESTRAIN GENESTEALERS units that are unengaged can be placed into Strategic Reserves.
+                  <description>At the end of your opponent's Fight phase, friendly PURESTRAIN GENESTEALERS units that are unengaged can be placed into Strategic Reserves.
 You cannot select this Detachment together with another PURESTRAIN Detachment.</description>
                 </rule>
               </rules>
@@ -7131,7 +7125,7 @@ You cannot select this Detachment together with another PURESTRAIN Detachment.</
               </constraints>
               <rules>
                 <rule name="Hordes of the Faithful" id="15e0-cf4d-32a0-8ce3" hidden="false">
-                  <description>During the Command phase, in your turn, while a friendly NEOPHYTE HYBRIDS unit is within the terrain area terrain area, that unit regains up to 3 lost wounds.
+                  <description>During your Command phase, while a friendly NEOPHYTE HYBRIDS unit is within the terrain area terrain area, that unit regains up to 3 lost wounds.
 You cannot select this Detachment together with another HOSTS Detachment.</description>
                 </rule>
               </rules>
@@ -7193,7 +7187,7 @@ You cannot select this Detachment together with another HOSTS Detachment.</descr
           <profiles>
             <profile name="Martial Espionage" id="d91f-0a14-2e10-ba7e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly ASTRA MILITARUM unit with the INFANTRY or MOUNTED keyword within 9" of this model is selected to shoot, you may use this ability, once per turn per model, until the end of the phase, while a friendly ASTRA MILITARUM unit with the INFANTRY or MOUNTED keyword is within 9" of this model, improve the Armour Penetration characteristic of ranged weapons equipped by the triggering unit by 1.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly ASTRA MILITARUM unit with the INFANTRY or MOUNTED keyword within 9" of this model is selected to shoot, you can use this ability, once per turn per model, until the end of the phase, while a friendly ASTRA MILITARUM unit with the INFANTRY or MOUNTED keyword is within 9" of this model, improve the Armour Penetration characteristic of ranged weapons equipped by the triggering unit by 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7237,7 +7231,7 @@ You cannot select this Detachment together with another HOSTS Detachment.</descr
           <profiles>
             <profile name="Adaptive Reprisal" id="3a86-22f5-16a1-28f7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target the unit with the Heroic Intervention Stratagem, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target this unit with the Heroic Intervention Stratagem, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7281,8 +7275,8 @@ You cannot select this Detachment together with another HOSTS Detachment.</descr
           <profiles>
             <profile name="The Hero Returned" id="674f-05af-1b81-8b26" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve the unit's Leadership characteristic by 1.
-Improve the unit's Objective Control characteristic by 1.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve this unit's Leadership characteristic by 1.
+Improve this unit's Objective Control characteristic by 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7326,7 +7320,7 @@ Improve the unit's Objective Control characteristic by 1.</characteristic>
           <profiles>
             <profile name="Fire-point Commander" id="e400-2d8c-370d-a70f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target the unit with the Fire Overwatch Stratagem, when resolving this use, the unit's Hit rolls succeed only on an unmodified 5+.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target this unit with the Fire Overwatch Stratagem, for this activation, this unit's Hit rolls succeed only on an unmodified 5+.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7360,10 +7354,10 @@ Improve the unit's Objective Control characteristic by 1.</characteristic>
           <profiles>
             <profile name="Predatory Instincts" id="544e-a306-517d-8cb1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The unit gains the Infiltrators ability.
-The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
-Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-The unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: This unit gains the Infiltrators ability.
+This unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
+Reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+This unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7431,7 +7425,7 @@ Improve the Damage characteristic of melee weapons equipped by this model by 1.<
           <profiles>
             <profile name="Mutagenic Regeneration" id="115a-3017-6574-f5b2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, one model in the unit regains up to 1 lost wound.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, one model in this unit regains up to 1 lost wound.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7465,7 +7459,7 @@ Improve the Damage characteristic of melee weapons equipped by this model by 1.<
           <profiles>
             <profile name="Alien Majesty" id="fe35-4c05-517a-c1a6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within Engagement Range of the unit, subtract 1 from that unit's Objective Control characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within Engagement Range of this unit, subtract 1 from that unit's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7493,7 +7487,7 @@ Improve the Damage characteristic of melee weapons equipped by this model by 1.<
           <profiles>
             <profile name="Serpentine Tactics" id="f8fb-90ab-a2c7-c41b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is eligible to shoot in a turn in which it Fell Back.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is eligible to shoot in a turn in which it Fell Back.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7566,8 +7560,8 @@ Improve the Damage characteristic of melee weapons equipped by this model by 1.<
           <profiles>
             <profile name="Starfall Shells" id="3c97-b4bb-2ab4-6de9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next Shooting phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit by cult sniper rifle during its just-finished shooting sequence: that unit gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the start of your next Shooting phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit by cult sniper rifle during that shooting sequence. Subtract 1 from that unit's Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7612,7 +7606,7 @@ Improve the Damage characteristic of melee weapons equipped by this model by 1.<
           <profiles>
             <profile name="Assault Commando" id="bdff-5347-d565-131c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, if the unit disembarked from a Transport this turn, you can re-roll the Hit roll.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, if this unit disembarked from a Transport this turn, you can re-roll Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7680,7 +7674,7 @@ Improve the Damage characteristic of melee weapons equipped by this model by 1.<
           <profiles>
             <profile name="Enraptured Damnation" id="368c-102a-a57c-d4e8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Enemy units cannot target the unit with the Fire Overwatch Stratagem.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Enemy units cannot target this unit with the Fire Overwatch Stratagem.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7749,7 +7743,7 @@ Improve the Armour Penetration characteristic of melee weapons equipped by this 
           <profiles>
             <profile name="Inhuman Integration" id="abb4-b592-3b3c-475b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target unit is an enemy unit, while the target is within 6" of a friendly TYRANIDS unit, the unit's weapons gain [SUSTAINED HITS 1].</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target unit is an enemy unit and the target is within 6" of a friendly TYRANIDS unit, this unit's weapons gain [SUSTAINED HITS 1].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7818,8 +7812,8 @@ Improve the Armour Penetration characteristic of melee weapons equipped by this 
             <profile name="Denunciator of Tyrants" id="9094-b49d-3234-5a5e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against CHARACTER targets:
-  -&gt; The unit gets +1 to Hit rolls.
-  -&gt; The unit gets +1 to Wound rolls.</characteristic>
+  - Add 1 to this unit's Hit rolls.
+  - Add 1 to this unit's Wound rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7887,7 +7881,7 @@ Improve the Armour Penetration characteristic of melee weapons equipped by this 
           <profiles>
             <profile name="Incendiary Inspiration" id="57a1-8724-df91-1403" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7932,7 +7926,7 @@ Improve the Armour Penetration characteristic of melee weapons equipped by this 
           <profiles>
             <profile name="Prowling Agitant" id="2066-5c46-c14f-9717" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the unit can make a Normal move of up to D6".</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during your opponent's Movement phase, while the triggering unit is within 8" of this unit and this unit is unengaged, this unit can make a Normal move of up to D6".</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7977,7 +7971,7 @@ Improve the Armour Penetration characteristic of melee weapons equipped by this 
           <profiles>
             <profile name="A Chink In Their Armour" id="a4b5-1ecc-8206-a7c8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, until the end of your next Fight phase, ranged weapons equipped by models in this unit gain [LETHAL HITS].</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, until the end of your next Fight phase, ranged weapons equipped by models in this unit gain [LETHAL HITS].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8022,7 +8016,7 @@ Improve the Armour Penetration characteristic of melee weapons equipped by this 
           <profiles>
             <profile name="Our Time is Nigh" id="7b7a-bc5a-fc61-65da" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a Charge is declared, you may use this ability, once per battle per model, until the end of the phase, the unit gets +2 to Charge rolls.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a Charge is declared, you can use this ability, once per battle per model, until the end of the phase, add 2 to this unit's Charge rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8067,7 +8061,7 @@ Improve the Armour Penetration characteristic of melee weapons equipped by this 
           <profiles>
             <profile name="Assassination Edict" id="edb0-9f36-b698-bca1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against CHARACTER targets, the unit gets +1 to Hit rolls.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against CHARACTER targets, add 1 to this unit's Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8161,8 +8155,8 @@ Improve the Armour Penetration characteristic of melee weapons equipped by this 
           <profiles>
             <profile name="Mark of the Star Children (Upgrade)" id="06d7-df2e-85dd-f907" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve the unit's Toughness characteristic by 1.
-Set the unit's Save characteristic to 4.
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve this unit's Toughness characteristic by 1.
+Set this unit's Save characteristic to 4+.
 Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
               </characteristics>
             </profile>
@@ -8191,7 +8185,7 @@ Improve the Strength characteristic of melee weapons equipped by models in this 
           <profiles>
             <profile name="Talons of the Sire" id="351e-8847-8290-25de" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll a Wound roll of 1.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll Wound rolls of 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8224,7 +8218,7 @@ Improve the Strength characteristic of melee weapons equipped by models in this 
           <profiles>
             <profile name="Inspired to Greatness" id="55f3-3d1a-60b5-ec1b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll the Damage roll.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll Damage rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8252,7 +8246,7 @@ Improve the Strength characteristic of melee weapons equipped by models in this 
           <profiles>
             <profile name="Devious Disguises (Upgrade)" id="ebae-4991-9bca-7120" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 3 from the unit's detection range characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 3" from this unit's detection range.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8267,15 +8261,15 @@ Improve the Strength characteristic of melee weapons equipped by models in this 
   <sharedRules>
     <rule name="Cult Ambush" id="3db3-80e4-899c-debf" hidden="false">
       <description>If your Army Faction is GENESTEALER CULTS, you gain 6/10/14 Resurgence points (Incursion/Strike Force/Onslaught).
--&gt; Each time a friendly unit is destroyed, if every model in that unit (excluding CHARACTER models) has the Cult Ambush ability, you may use this ability:
-  -&gt; Spend the Resurgence points the cost table gives for the datasheet and Starting Strength of that unit (Aberrants: 4 for 5 models, 8 for 10 models; Acolyte Hybrids with Autopistols, Acolyte Hybrids with Hand Flamers or Hybrid Metamorphs: 2 for 5 models, 4 for 10 models; Atalan Jackals: 2 for 5 models, 6 for 10 models; Neophyte Hybrids: 3 for 10 models, 6 for 20 models; Purestrain Genestealers: 2 for 5 models, 6 for 10 models).
-  -&gt; Add a new unit identical to that unit (excluding CHARACTER models) to your army in Cult Ambush, at its Starting Strength and with all of its wounds remaining, with its [ONE SHOT] weapons counted as not having been shot.
-  -&gt; Place a cult ambush marker (32mm) more than 9" horizontally away from all enemy units.
+Each time a friendly unit is destroyed, if every model in that unit (excluding CHARACTER models) has the Cult Ambush ability, you can use this ability:
+  - Spend the Resurgence points the cost table gives for the datasheet and Starting Strength of that unit (Aberrants: 4 for 5 models, 8 for 10 models; Acolyte Hybrids with Autopistols, Acolyte Hybrids with Hand Flamers or Hybrid Metamorphs: 2 for 5 models, 4 for 10 models; Atalan Jackals: 2 for 5 models, 6 for 10 models; Neophyte Hybrids: 3 for 10 models, 6 for 20 models; Purestrain Genestealers: 2 for 5 models, 6 for 10 models).
+  - Add a new unit identical to that unit (excluding CHARACTER models) to your army in Cult Ambush, at its Starting Strength and with all of its wounds remaining, with its [ONE SHOT] weapons counted as not having been shot.
+  - Place a cult ambush marker (32mm) more than 9" horizontally away from all enemy units.
 If your Army Faction is GENESTEALER CULTS:
-  -&gt; Friendly units that are in Cult Ambush cannot be targeted with the Rapid Ingress Stratagem.
-  -&gt; Friendly units that are in Cult Ambush are not destroyed for still being in Strategic Reserves at the end of the third battle round.
--&gt; Each time an enemy model ends a move (the triggering model must not have AIRCRAFT): if your Army Faction is GENESTEALER CULTS, while the triggering model is within 8" of a cult ambush marker, remove that cult ambush marker from the battlefield.
--&gt; At the end of your opponent's Movement phase, you may use this ability: if your Army Faction is GENESTEALER CULTS, select any number of friendly units that are in Cult Ambush (at most the number of your cult ambush markers on the battlefield): that unit can make an Ingress move; that unit can be set up on the battlefield using a Cult Ambush marker, wholly within 3" of that marker, even in the first battle round.</description>
+  - Friendly units that are in Cult Ambush cannot be targeted with the Rapid Ingress Stratagem.
+  - Friendly units that are in Cult Ambush are not destroyed for still being in Strategic Reserves at the end of the third battle round.
+Each time an enemy model (excluding AIRCRAFT models) ends a move, if your Army Faction is GENESTEALER CULTS, while the triggering model is within 8" of a cult ambush marker, remove that cult ambush marker from the battlefield.
+At the end of your opponent's Movement phase, you can use this ability: if your Army Faction is GENESTEALER CULTS, select any number of friendly units that are in Cult Ambush (at most the number of your cult ambush markers on the battlefield); those units can make an Ingress move; those units can be set up on the battlefield using a Cult Ambush marker, wholly within 3" of that marker, even in the first battle round.</description>
     </rule>
   </sharedRules>
   <catalogueLinks>

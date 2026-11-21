@@ -352,6 +352,6 @@ describe("equipped-weapon-count: a unit's weapons by keyword", () => {
     expect(condition.parameters.subject).toBe("this-unit");
     expect(condition.parameters.count).toEqual({ min: 1 });
     expect(condition.parameters.weapons).toEqual({ keyword: [{ keyword_id: "melta" }, { keyword_id: "torrent" }] });
-    expect(describePredicate(condition, false)).toBe("the unit is equipped with 1+ weapons with [MELTA] or [TORRENT]");
+    expect(describePredicate(condition, false)).toBe("this unit is equipped with one or more weapons with [MELTA] or [TORRENT]");
   });
 });

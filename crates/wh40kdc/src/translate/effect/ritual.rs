@@ -84,7 +84,7 @@ pub(super) fn ritual_menu_inline(e: &P, ctx: &Ctx) -> String {
 
 pub(super) fn ritual_menu_block(e: &P, depth: usize, ctx: &Ctx) -> String {
     let indent = "  ".repeat(depth);
-    let arrow = if depth > 0 { "-> " } else { "" };
+    let arrow = if depth > 0 { "- " } else { "" };
     let mut lines = vec![format!(
         "{indent}{arrow}Attempt one of the Rituals below ({RITUAL_LIMIT}). To do so, {}:",
         test_phrase(e, ctx)

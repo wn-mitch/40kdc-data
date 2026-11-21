@@ -22,29 +22,29 @@
             </profile>
             <profile name="Leader" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Leader ability.</characteristic>
+                <characteristic name="Description">This unit gains the Leader ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Structural Analyser" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While this model is leading a unit, while making ranged attacks, the unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">While this model is leading a unit, while making ranged attacks, add 1 to this unit's Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Infiltrators ability.</characteristic>
+                <characteristic name="Description">This unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="For the Greater Good" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of your Shooting phase, you may use this ability, if your Army Faction is TAU EMPIRE:
-  -&gt; Select one or more friendly units if the selected unit has the For the Greater Good ability: that unit is an Observer.
-  -&gt; Until the end of the phase: during the Shooting phase, in your turn, for each friendly unit that is Observers: select one enemy unit that is not Spotted if the selected unit is visible to the unit: unless the unit has been selected to shoot this phase, if the unit is eligible to shoot (excluding Fortification units), while the unit is not Battle-shocked, that unit is Spotted by the unit until the end of the phase; if the attacking unit is Guided, while the target is Spotted, improve all friendly models' Ballistic Skill characteristic by 1; if the attacking unit is Guided, while the target is Spotted, while the target is Spotted by a friendly MARKERLIGHT unit that is an Observer, all friendly models' weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">At the start of your Shooting phase, you can use this ability, if your Army Faction is TAU EMPIRE:
+  - Select one or more friendly units with the For the Greater Good ability. Those units are an Observer.
+  - Until the end of the phase, during your Shooting phase, for each friendly unit that is Observers: select one enemy unit that is not Spotted and visible to this unit; unless this unit has been selected to shoot this phase, if this unit is eligible to shoot (excluding Fortification units), while this unit is not Battle-shocked, that unit is Spotted by that unit until the end of the phase; if the attacking unit is Guided, while the target is Spotted, improve friendly models' Ballistic Skill characteristic by 1; if the attacking unit is Guided, while the target is Spotted and the target is Spotted by a friendly MARKERLIGHT unit that is an Observer, friendly models' weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -107,30 +107,30 @@
             </profile>
             <profile name="Grav-inhibitor Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">For the rest of the battle, the target gets -2 to Charge rolls.</characteristic>
+                <characteristic name="Description">For the rest of the battle, subtract 2 from the target's Charge rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Pulse Accelerator Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Add 6 to the Range characteristic of ranged pulse carbine weapons equipped by models in this unit.</characteristic>
+                <characteristic name="Description">Add 6" to the Range characteristic of ranged pulse carbine weapons equipped by models in this unit.</characteristic>
               </characteristics>
             </profile>
             <profile name="Recon Drone" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">This model gains 1 Drone Burst Cannon weapon.
-The unit gains the Infiltrators ability.</characteristic>
+This unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Target Uploaded" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">While the target is Spotted:
-  -&gt; Improve the unit's Ballistic Skill characteristic by 1.
-  -&gt; The unit's weapons gain [IGNORES COVER].</characteristic>
+  - Improve this unit's Ballistic Skill characteristic by 1.
+  - This unit's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
             <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Gun Drone" typeName="Abilities">
@@ -140,8 +140,8 @@ The unit gains the Infiltrators ability.</characteristic>
             </profile>
             <profile name="Marker Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the MARKERLIGHT keyword.
-The unit is eligible to act as an Observer even if it Advanced this turn.</characteristic>
+                <characteristic name="Description">This unit gains the MARKERLIGHT keyword.
+This unit is eligible to act as an Observer even if it Advanced this turn.</characteristic>
               </characteristics>
             </profile>
             <profile name="Shield Drone" typeName="Abilities">
@@ -151,9 +151,9 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
             </profile>
             <profile name="For the Greater Good" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of your Shooting phase, you may use this ability, if your Army Faction is TAU EMPIRE:
-  -&gt; Select one or more friendly units if the selected unit has the For the Greater Good ability: that unit is an Observer.
-  -&gt; Until the end of the phase: during the Shooting phase, in your turn, for each friendly unit that is Observers: select one enemy unit that is not Spotted if the selected unit is visible to the unit: unless the unit has been selected to shoot this phase, if the unit is eligible to shoot (excluding Fortification units), while the unit is not Battle-shocked, that unit is Spotted by the unit until the end of the phase; if the attacking unit is Guided, while the target is Spotted, improve all friendly models' Ballistic Skill characteristic by 1; if the attacking unit is Guided, while the target is Spotted, while the target is Spotted by a friendly MARKERLIGHT unit that is an Observer, all friendly models' weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">At the start of your Shooting phase, you can use this ability, if your Army Faction is TAU EMPIRE:
+  - Select one or more friendly units with the For the Greater Good ability. Those units are an Observer.
+  - Until the end of the phase, during your Shooting phase, for each friendly unit that is Observers: select one enemy unit that is not Spotted and visible to this unit; unless this unit has been selected to shoot this phase, if this unit is eligible to shoot (excluding Fortification units), while this unit is not Battle-shocked, that unit is Spotted by that unit until the end of the phase; if the attacking unit is Guided, while the target is Spotted, improve friendly models' Ballistic Skill characteristic by 1; if the attacking unit is Guided, while the target is Spotted and the target is Spotted by a friendly MARKERLIGHT unit that is an Observer, friendly models' weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -403,17 +403,17 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
             </profile>
             <profile name="Battlesuit Support Systems" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit is eligible to shoot in a turn in which it Fell Back.</characteristic>
+                <characteristic name="Description">This unit is eligible to shoot in a turn in which it Fell Back.</characteristic>
               </characteristics>
             </profile>
             <profile name="Starscythe" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While making ranged attacks, while the target does not have the MONSTER or VEHICLE keyword, improve the unit's Armour Penetration characteristic by 1.</characteristic>
+                <characteristic name="Description">While making ranged attacks, while the target does not have the MONSTER or VEHICLE keyword, improve this unit's Armour Penetration characteristic by 1.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+                <characteristic name="Description">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Gun Drone" typeName="Abilities">
@@ -423,8 +423,8 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
             </profile>
             <profile name="Marker Drone" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the MARKERLIGHT keyword.
-The unit is eligible to act as an Observer even if it Advanced this turn.</characteristic>
+                <characteristic name="Description">This unit gains the MARKERLIGHT keyword.
+This unit is eligible to act as an Observer even if it Advanced this turn.</characteristic>
               </characteristics>
             </profile>
             <profile name="Shield Drone" typeName="Abilities">
@@ -434,9 +434,9 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
             </profile>
             <profile name="For the Greater Good" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of your Shooting phase, you may use this ability, if your Army Faction is TAU EMPIRE:
-  -&gt; Select one or more friendly units if the selected unit has the For the Greater Good ability: that unit is an Observer.
-  -&gt; Until the end of the phase: during the Shooting phase, in your turn, for each friendly unit that is Observers: select one enemy unit that is not Spotted if the selected unit is visible to the unit: unless the unit has been selected to shoot this phase, if the unit is eligible to shoot (excluding Fortification units), while the unit is not Battle-shocked, that unit is Spotted by the unit until the end of the phase; if the attacking unit is Guided, while the target is Spotted, improve all friendly models' Ballistic Skill characteristic by 1; if the attacking unit is Guided, while the target is Spotted, while the target is Spotted by a friendly MARKERLIGHT unit that is an Observer, all friendly models' weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description">At the start of your Shooting phase, you can use this ability, if your Army Faction is TAU EMPIRE:
+  - Select one or more friendly units with the For the Greater Good ability. Those units are an Observer.
+  - Until the end of the phase, during your Shooting phase, for each friendly unit that is Observers: select one enemy unit that is not Spotted and visible to this unit; unless this unit has been selected to shoot this phase, if this unit is eligible to shoot (excluding Fortification units), while this unit is not Battle-shocked, that unit is Spotted by that unit until the end of the phase; if the attacking unit is Guided, while the target is Spotted, improve friendly models' Ballistic Skill characteristic by 1; if the attacking unit is Guided, while the target is Spotted and the target is Spotted by a friendly MARKERLIGHT unit that is an Observer, friendly models' weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
           </profiles>

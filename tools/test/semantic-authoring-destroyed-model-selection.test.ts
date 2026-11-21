@@ -47,7 +47,7 @@ describe("a selection among the destroyed models' units", () => {
       effect: { type: "test", target: "selected-unit", modifier: { test: "battle-shock" } } });
     const validate = createValidator().getSchema("https://40kdc.dev/schemas/enrichment/ability-dsl/effect.schema.json");
     expect(validate?.(result.mechanics.effect), JSON.stringify(validate?.errors)).toBe(true);
-    expect(describeAbility(result.mechanics as never)).toContain("Select one enemy unit that lost 1+ models to the just-resolved attacks: that unit must take a Battle-shock test.");
+    expect(describeAbility(result.mechanics as never)).toContain("Select one enemy unit that lost one or more models to those attacks. That unit must take a Battle-shock test.");
   });
 
   it("selects once after the gated attacks resolve: the per-attack gate's target conditions limit the selected unit", () => {

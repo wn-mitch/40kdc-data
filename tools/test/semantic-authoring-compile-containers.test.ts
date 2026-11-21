@@ -300,7 +300,7 @@ describe("Semantic authoring leading-container compiler", () => {
     });
     const text = rendered(authored("astra-militarum", "voice-of-command-astra-militarum"), ordersRecord());
     expect(text).toContain("OFFICER models can issue up to one or more Orders to eligible friendly units within 6\" that are not Battle-shocked, each one of:");
-    expect(text).toContain("improve the unit's Save characteristic by 1 (to no better than 3+)");
+    expect(text).toContain("Improve this unit's Save characteristic by 1, to no better than 3+");
     expect(text).toContain("A unit holds at most one Order; a newer Order replaces it.");
     expect(text).toContain("An Order ends when its unit becomes Battle-shocked.");
     expect(text).toContain("Only ASTRA MILITARUM models in that unit benefit from its Order.");

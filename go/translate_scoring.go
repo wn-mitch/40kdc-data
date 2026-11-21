@@ -24,7 +24,7 @@ func describeTrigger(t map[string]any) string {
 	turn := "your"
 	switch t["player_turn"] {
 	case "opponent-turn":
-		turn = "the opponent's"
+		turn = "your opponent's"
 	case "either":
 		turn = "any"
 	}

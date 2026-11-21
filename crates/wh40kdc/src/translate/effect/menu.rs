@@ -252,10 +252,10 @@ pub(crate) fn menu_inline(e: &P, ctx: &Ctx) -> String {
 pub(crate) fn menu_block(e: &P, indent: &str, arrow: &str, ctx: &Ctx) -> String {
     let su = shared_usage_clause(e.get("shared_usage"));
     let intro = if su.is_empty() {
-        "Actions may be performed when their conditions are met".to_string()
+        "You can perform these actions when their triggers are met".to_string()
     } else {
         format!(
-            "Actions may be performed when their conditions are met. {}",
+            "You can perform these actions when their triggers are met. {}",
             capitalize(&su)
         )
     };

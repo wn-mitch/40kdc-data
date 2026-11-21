@@ -17,31 +17,30 @@
             </profile>
             <profile name="Advanced Firepower" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While making ranged attacks, while the target is an enemy unit with the MONSTER or VEHICLE keyword:
-  -&gt; You can re-roll one Hit roll.
-  -&gt; You can re-roll one Wound roll.
-  -&gt; You can re-roll one Damage roll.</characteristic>
+                <characteristic name="Description">While making ranged attacks against an enemy unit with the MONSTER or VEHICLE keyword:
+  - You can re-roll one Hit roll.
+  - You can re-roll one Wound roll.
+  - You can re-roll one Damage roll.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+                <characteristic name="Description">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Aegis of the Emperor" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">All friendly ADEPTUS CUSTODES units with the Aegis of the Emperor ability have the Feel No Pain 5+ ability against mortal wounds.</characteristic>
+                <characteristic name="Description">Friendly ADEPTUS CUSTODES units with the Aegis of the Emperor ability have Feel No Pain 5+ against mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -121,20 +120,20 @@
             </profile>
             <profile name="Purity of Execution" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can: During the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit within 18" of the unit visible to this model:
-    -&gt; That unit is detected.
-    -&gt; While the selected unit is detected, add 3 to that unit's detection range characteristic.</characteristic>
+                <characteristic name="Description">During your Shooting phase, until the end of the phase, you can use this ability:
+  - Select one enemy unit within 18" of this unit visible to this model:
+    - That unit is detected.
+    - While the selected unit is detected, add 3" to that unit's detection range.</characteristic>
               </characteristics>
             </profile>
             <profile name="Daughters of the Abyss" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">All friendly ANATHEMA PSYKANA units have the Feel No Pain 3+ ability against Psychic Attacks.
-All friendly ANATHEMA PSYKANA units gain the Psychic Null ability:
-  -&gt; While a friendly ADEPTUS CUSTODES unit is within 6" of this unit, that unit has the Feel No Pain 5+ ability against Psychic Attacks.
+                <characteristic name="Description">Friendly ANATHEMA PSYKANA units have Feel No Pain 3+ against Psychic Attacks.
+Friendly ANATHEMA PSYKANA units gain the Psychic Null ability:
+  - While a friendly ADEPTUS CUSTODES unit is within 6" of this unit, that unit has Feel No Pain 5+ against Psychic Attacks.
 Your army can include ANATHEMA PSYKANA units.
 You cannot select Anathema Psykana as your Army Faction.
-All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
+Friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
               </characteristics>
             </profile>
           </profiles>

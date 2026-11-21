@@ -1,6 +1,9 @@
 package wh40kdc
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
 // The ability-level sentence of the effect describer: trigger, usage and
 // duration lead-ins, ability parts, resource-action menus and the
@@ -115,9 +118,9 @@ func sharedUsageClause(su map[string]any) string {
 func resourceActionMenuBlock(e map[string]any, indent, arrow string, ctx effCtx) string {
 	su, _ := asMap(e["shared_usage"])
 	suText := sharedUsageClause(su)
-	intro := "Actions may be performed when their conditions are met"
+	intro := "You can perform these actions when their triggers are met"
 	if suText != "" {
-		intro = "Actions may be performed when their conditions are met. " + capitalize(suText)
+		intro = "You can perform these actions when their triggers are met. " + capitalize(suText)
 	}
 	lines := []string{indent + arrow + intro + ":"}
 	for _, a := range getList(e, "actions") {
@@ -221,12 +224,31 @@ func partHead(e map[string]any) string {
 	if isObject(e["usage"]) {
 		usage = usageClause(e["usage"])
 	}
-	_, trail := durationClauses(e["duration"])
 	// A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
-	if strings.HasSuffix(trail, "control it") {
-		trail = strings.TrimSuffix(trail, "it") + "that objective marker"
+	// Skip when the inner designate-target / persistent-designation already prints the same duration.
+	innerEff := mapOr(e["effect"])
+	ownDesigDur := (innerEff["type"] == "designate-target" || innerEff["type"] == "persistent-designation") && innerEff["duration"] == e["duration"]
+	trail := ""
+	if !ownDesigDur {
+		_, trail = durationClauses(e["duration"])
+		if strings.HasSuffix(trail, "control it") {
+			trail = strings.TrimSuffix(trail, "it") + "that objective marker"
+		}
 	}
-	return joinNonEmpty([]string{label, moment, usage, named, cost, trail}, ", ")
+	return joinNonEmpty([]string{label, moment, usage, trail, named, cost}, ", ")
+}
+
+// partTriggerCtx reports whether an ability-part's own trigger already names a destruction or allocation event.
+func partTriggerCtx(e map[string]any, ctx effCtx) effCtx {
+	for _, t := range normalizeTriggers(e["trigger"]) {
+		if t["event"] == "destroyed" || t["event"] == "model-destroyed" {
+			ctx.destroyedTrigger = true
+		}
+		if t["event"] == "damage-allocated" {
+			ctx.allocatedTrigger = true
+		}
+	}
+	return ctx
 }
 
 // partWithModelRefs is a part with its own trigger, its effect's event refs read as that trigger's
@@ -247,11 +269,20 @@ func partWithModelRefs(e map[string]any) map[string]any {
 // partInline renders a part on one line: its head, then its effect.
 func partInline(e map[string]any, ctx effCtx) string {
 	e = partWithModelRefs(e)
+	childCtx := partTriggerCtx(e, ctx)
 	head := partHead(e)
-	body := describeEffectInline(mapOr(e["effect"]), ctx)
+	body := describeEffectInline(mapOr(e["effect"]), childCtx)
 	// An optional part whose effect already reads "you can ..." needs no "you can:" before it.
 	if head == "you can" && strings.HasPrefix(body, "you can ") {
 		return body
+	}
+	// A part head ending in "you can use this ability" joins with ": " to avoid a comma splice.
+	if strings.HasSuffix(head, "you can use this ability") {
+		return head + ": " + body
+	}
+	// When a part head is a plain trigger/condition without a label, join with ", " instead of ": ".
+	if head != "" && !jsTruthy(e["name"]) && !strings.HasSuffix(head, "you can") {
+		return head + ", " + body
 	}
 	if head != "" {
 		return head + ": " + body
@@ -272,24 +303,29 @@ func describeAppliesTo(a map[string]any) string {
 	if len(required) == 0 && len(any) == 0 && len(excluded) == 0 && len(notAll) == 0 {
 		return ""
 	}
-	var positive []string
-	if len(required) > 0 {
-		positive = append(positive, strings.Join(required, ", "))
-	}
-	if len(any) > 0 {
-		positive = append(positive, "at least one of "+orList(any))
-	}
-	base := "all units"
-	if len(positive) > 0 {
-		base = "units with " + strings.Join(positive, " and ")
+	var base string
+	if len(required) > 0 && len(any) == 0 {
+		base = strings.Join(required, " ") + " units"
+	} else {
+		var positive []string
+		if len(required) > 0 {
+			positive = append(positive, strings.Join(required, ", "))
+		}
+		if len(any) > 0 {
+			positive = append(positive, "the "+orList(any)+" keyword")
+		}
+		base = "all units"
+		if len(positive) > 0 {
+			base = "units with " + strings.Join(positive, " and ")
+		}
 	}
 	exc := ""
 	if len(excluded) > 0 {
-		exc = " (excluding " + strings.Join(excluded, ", ") + ")"
+		exc = " (excluding " + orList(excluded) + " units)"
 	}
 	partial := ""
 	if len(notAll) > 0 {
-		partial = " (excluding units with all of " + strings.Join(notAll, ", ") + ")"
+		partial = " (excluding units with all of " + andList(notAll) + ")"
 	}
 	return "Applies to: " + base + exc + partial + "."
 }
@@ -304,11 +340,33 @@ func joinNonEmpty(parts []string, sep string) string {
 	return strings.Join(out, sep)
 }
 
-// assembleSentence joins non-empty clauses, capitalizes and ends with a period.
+var (
+	trailingIfClauseRe = regexp.MustCompile(`, if [^.]+$`)
+	startsOptionalRe   = regexp.MustCompile(`^(?:You can\b|Choose\b|Select\b)`)
+	containsYouCanRe   = regexp.MustCompile(`\byou can\b`)
+	bodyAlreadyOptRe   = regexp.MustCompile(`^(?:you can\b|choose\b|select\b)`)
+	bodyImperativeRe   = regexp.MustCompile(`^(?:add|subtract|return|remove|destroy|heal|move|place|roll|spend|discard|improve|worsen|set|halve|multiply|reduce|increase|issue|split)\b`)
+)
+
+// assembleSentence joins non-empty clauses, merging adjacent `if` clauses, capitalizes and ends with a period.
 func assembleSentence(parts []string) string {
-	body := joinNonEmpty(parts, ", ")
-	if body == "" {
+	var nonEmpty []string
+	for _, p := range parts {
+		if p != "" {
+			nonEmpty = append(nonEmpty, p)
+		}
+	}
+	if len(nonEmpty) == 0 {
 		return ""
+	}
+	body := nonEmpty[0]
+	for i := 1; i < len(nonEmpty); i++ {
+		next := nonEmpty[i]
+		if trailingIfClauseRe.MatchString(body) && strings.HasPrefix(next, "if ") {
+			body += " and " + next[3:]
+		} else {
+			body += ", " + next
+		}
 	}
 	if strings.HasSuffix(body, ".") || strings.HasSuffix(body, ":") {
 		return capitalize(body)
@@ -316,17 +374,43 @@ func assembleSentence(parts []string) string {
 	return capitalize(body) + "."
 }
 
+// withOptionality weaves `optional: true` cleanly without a clunky `You can: ` prefix.
+func withOptionality(rendered string) string {
+	if rendered == "" {
+		return ""
+	}
+	if startsOptionalRe.MatchString(rendered) || containsYouCanRe.MatchString(rendered) {
+		return rendered
+	}
+	if newline := strings.IndexByte(rendered, '\n'); newline > 0 {
+		first := rendered[:newline]
+		rest := rendered[newline:]
+		if strings.HasSuffix(first, ":") {
+			return first[:len(first)-1] + ", you can use this ability:" + rest
+		}
+	}
+	return "You can use this ability: " + rendered
+}
+
+func maybeOptionalBody(body string, optional bool) string {
+	if optional && !bodyAlreadyOptRe.MatchString(body) && bodyImperativeRe.MatchString(body) {
+		return "you can " + body
+	}
+	return body
+}
+
 // describeAbility renders the full generated text for an ability: the effect
 // sentence plus a trailing `Applies to:` line.
 func describeAbility(a map[string]any) string {
-	core := ""
+	optional := a["optional"] == true
+	rendered := ""
 	if e, ok := asMap(a["effect"]); ok && e != nil {
 		scope, _ := asMap(a["scope"])
-		core = renderTopLevel(e, scope, a["usage"], a["trigger"])
+		rendered = renderTopLevel(e, scope, a["usage"], a["trigger"], optional)
 	}
-	// An optional ability is the player's choice, unless its text already opens with that choice.
-	if a["optional"] == true && core != "" && !strings.HasPrefix(core, "You can ") {
-		core = "You can: " + core
+	core := rendered
+	if optional {
+		core = withOptionality(rendered)
 	}
 	applies, _ := asMap(a["applies_to"])
 	return joinNonEmpty([]string{core, describeAppliesTo(applies)}, "\n")
@@ -342,7 +426,7 @@ func conditionWithinRange(c map[string]any) (float64, bool) {
 	return f, ok
 }
 
-func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
+func renderTopLevel(e, scope map[string]any, usage, trigger any, optional bool) string {
 	ctx := effCtx{}
 	var scopeDuration any
 	if scope != nil {
@@ -354,24 +438,39 @@ func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 	if isList(usage) || mapOr(usage)["frequency"] != nil {
 		lead = usageClause(usage)
 	}
+	triggers := liveTriggers(normalizeTriggers(trigger))
+	for _, t := range triggers {
+		if t["event"] == "destroyed" || t["event"] == "model-destroyed" {
+			ctx.destroyedTrigger = true
+		}
+		if t["event"] == "damage-allocated" {
+			ctx.allocatedTrigger = true
+		}
+	}
+	// When every trigger introduces a friendly filtered unit (e.g. a Stratagem's "When a friendly X unit is selected to fight"),
+	// `this-unit` / `event-subject` in the effect body refers back to "that unit".
+	if len(triggers) > 0 {
+		allFriendlyObj := true
+		for _, t := range triggers {
+			if sm, ok := asMap(t["subject"]); !ok || sm == nil || sm["owner"] != "friendly" {
+				allFriendlyObj = false
+				break
+			}
+		}
+		if allFriendlyObj {
+			ctx.unitSubject = "that unit"
+		}
+	}
 	// Every trigger's object (subject) is a model: the effect's `event-object` reads "that model"
 	// (`event-subject` "the triggering model").
-	e = modelEventRefs(e, normalizeTriggers(trigger)).(map[string]any)
+	e = modelEventRefs(e, triggers).(map[string]any)
 	var condRange float64
 	hasCondRange := false
 	if e["type"] == "conditional" {
 		condRange, hasCondRange = conditionWithinRange(mapOr(e["condition"]))
 	}
 	var trigs []string
-	for _, t := range normalizeTriggers(trigger) {
-		if t["event"] == "destroyed" || t["event"] == "model-destroyed" {
-			ctx.destroyedTrigger = true
-		}
-	}
-	for _, t := range normalizeTriggers(trigger) {
-		if t["event"] == nil {
-			continue
-		}
+	for _, t := range triggers {
 		t = withAuraRecipient(t, e)
 		tt := t
 		if hasCondRange {
@@ -391,22 +490,24 @@ func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 	}
 	trig := strings.Join(trigs, " or ")
 	if e["type"] == "conditional" {
-		inner := mapOr(e["effect"])
-		leadIn := conditionLeadInFor(mapOr(e["condition"]), isDefensiveEffect(inner))
 		gate, gated := recipientGate(e, ctx)
 		if gated && gate.inner["type"] == "sequence" {
 			// "While a friendly X unit is …:" then that unit's effects.
 			header := joinNonEmpty([]string{trig, lead, gate.lead, trail}, ", ")
 			return capitalize(header) + ":\n" + describeEffect(gate.inner, 1, gate.ctx)
 		}
-		if containerTypes[ejstrType(inner)] {
-			header := joinNonEmpty([]string{trig, lead, leadIn, trail}, ", ")
-			return capitalize(header) + ":\n" + describeEffect(inner, 1, ctx)
-		}
 		if gated {
 			return assembleSentence([]string{trig, lead, gate.lead, trail, describeEffectInline(gate.inner, gate.ctx)})
 		}
-		return assembleSentence([]string{trig, lead, leadIn, trail, describeEffectInline(inner, ctx)})
+		flatCond, inner := flattenConditional(e, ctx)
+		leadIn := conditionLeadInFor(flatCond, isDefensiveEffect(inner))
+		childCtx := withSuppressedWeaponType(ctx, flatCond)
+		if containerTypes[ejstrType(inner)] {
+			header := joinNonEmpty([]string{trig, lead, leadIn, trail}, ", ")
+			return capitalize(header) + ":\n" + describeEffect(inner, 1, childCtx)
+		}
+		body := describeEffectInline(inner, childCtx)
+		return assembleSentence([]string{trig, lead, leadIn, trail, maybeOptionalBody(body, optional)})
 	}
 	if containerTypes[ejstrType(e)] || isDefinedGrant(e) {
 		ownDuration := (e["type"] == "designate-target" || e["type"] == "persistent-designation") && e["duration"] != nil
@@ -415,12 +516,23 @@ func renderTopLevel(e, scope map[string]any, usage, trigger any) string {
 			t = ""
 		}
 		head := joinNonEmpty([]string{trig, lead, t}, ", ")
+		// Inline simple single-leaf `dice-gated` or `select-units` under a header instead of a 1-bullet list.
+		if head != "" && e["type"] == "dice-gated" {
+			return assembleSentence([]string{head, describeEffectInline(e, ctx)})
+		}
+		if head != "" && e["type"] == "select-units" && !containerTypes[ejstrType(mapOr(e["effect"]))] {
+			sel := mapOr(e["selector"])
+			plural := selectUnitsPlural(sel)
+			nested := describeEffectInline(mapOr(e["effect"]), selectedContextPlural(ctx, sel, plural))
+			return capitalize(head) + ", select " + selectUnitsSubjectIn(sel, ctx.eachModel) + selectionBinding(sel) + ". " + capitalize(nested) + "."
+		}
 		if head != "" {
 			return capitalize(head) + ":\n" + describeEffect(e, 1, ctx)
 		}
 		return describeEffect(e, 0, ctx)
 	}
-	return assembleSentence([]string{trig, lead, trail, describeEffectInline(e, ctx)})
+	body := describeEffectInline(e, ctx)
+	return assembleSentence([]string{trig, lead, trail, maybeOptionalBody(body, optional)})
 }
 
 func containsStr(l []string, s string) bool {

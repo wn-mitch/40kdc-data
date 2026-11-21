@@ -25,11 +25,20 @@ func keywordNames(p map[string]any) string {
 
 var (
 	battleRoundOnwardRe  = regexp.MustCompile(`^during the (\w+) battle round onward$`)
-	belowStartingRe      = regexp.MustCompile(` is below starting strength$`)
+	belowStartingRe      = regexp.MustCompile(` is below Starting Strength$`)
+	belowHalfRe          = regexp.MustCompile(` is below Half-strength$`)
 	leadingForRe         = regexp.MustCompile(`^for `)
 	negatedLeadInWordsRe = regexp.MustCompile(`^(if|while|when|during|in|against) `)
 	incomingAttackRe     = regexp.MustCompile(`^against [a-z -]*attacks( |$)`)
+	targetIsRe           = regexp.MustCompile(`^while the target is (an? .+)$`)
+	whileMakingAttacksRe = regexp.MustCompile(`while making [a-z -]*attacks$`)
 )
+
+var leadinTurnOwners = map[string]string{
+	"your-turn":     "your",
+	"opponent-turn": "your opponent's",
+	"either":        "either player's",
+}
 
 func matchesLeadIn(c map[string]any, negated bool) string {
 	p := paramsOf(c)
@@ -61,7 +70,7 @@ func matchesLeadIn(c map[string]any, negated bool) string {
 			if negated {
 				lead = "unless"
 			}
-			return lead + " the unit has the " + keywordNames(f) + " keyword" + plural
+			return lead + " this unit has the " + keywordNames(f) + " keyword" + plural
 		}
 		lead := "if"
 		if negated {
@@ -212,28 +221,31 @@ func conditionLeadInFor(c map[string]any, defending bool) string {
 		return "if " + describePredicate(c, false)
 	case "attachment":
 		if p["role"] == "leading" && (p["subject"] == "this-model" || p["subject"] == nil) {
-			phrase := strings.TrimPrefix(describePredicate(c, false), "the model ")
-			return "while this model " + phrase
+			phrase := describePredicate(c, false)
+			if rest, ok := strings.CutPrefix(phrase, "the model "); ok {
+				phrase = "this model " + rest
+			}
+			return "while " + phrase
 		}
 		return "while " + describePredicate(c, false)
 	case "happened":
 		f := mapOr(p["filter"])
 		types := cstrList(f["move_types"])
-		// A phase filter reads in the full history phrase ("the unit charged in the Charge phase this turn").
+		// A phase filter reads in the full history phrase ("this unit charged in the Charge phase this turn").
 		if p["event"] == "move-ended" && p["window"] == "turn" && len(types) == 1 && p["subject"] == nil && f["phase"] == nil {
 			switch types[0] {
 			case "charge":
-				return "if the unit charged this turn"
+				return "if this unit charged this turn"
 			case "advance":
-				return "if the unit Advanced this turn"
+				return "if this unit Advanced this turn"
 			case "remain-stationary":
-				return "if the unit Remained Stationary this turn"
+				return "if this unit Remained Stationary this turn"
 			}
 		}
 		if p["event"] == "disembarked" && p["subject"] == nil && f["transport"] == nil && f["phase"] == nil {
-			return trimEnd("if the unit disembarked from a Transport " + windowPhrase(p["window"]))
+			return trimEnd("if this unit disembarked from a Transport " + windowPhrase(p["window"]))
 		}
-		// "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
+		// "while this unit is performing an Agile Manoeuvre": the use is being resolved now.
 		if p["event"] == "used" && p["window"] == "event" && f["ability_keyword"] == nil && f["same_rule_as"] == nil {
 			return "while " + describeHappened(p, false)
 		}
@@ -247,7 +259,9 @@ func conditionLeadInFor(c map[string]any, defending bool) string {
 		}
 		return "while " + describePredicate(c, false)
 	case "strength":
-		return "while " + belowStartingRe.ReplaceAllString(describePredicate(c, false), " is below its starting strength")
+		s := belowStartingRe.ReplaceAllString(describePredicate(c, false), " is below its Starting Strength")
+		s = belowHalfRe.ReplaceAllString(s, " is Below Half-strength")
+		return "while " + s
 	case "designated":
 		if p["subject"] == "defender" && cstr(p["tag"]) == strings.ToUpper(cstr(p["tag"])) {
 			return "against " + cstr(p["tag"]) + " targets"
@@ -319,18 +333,55 @@ func ownKeyword(op map[string]any) (string, bool) {
 	return cstr(all[0]), true
 }
 
-// joinLeadIns joins the operands of an `and` lead-in. Runs of keyword
-// exclusions collapse into one clause: on the attack's target, "against a unit
-// that is not a X or Y"; on the unit an aura or effect is applied to,
-// "(excluding X or Y units)". Either attaches to the preceding clause with a
-// space; a run of the unit's own keywords reads "if the unit is a X Y unit";
-// all other operands join with ", ".
+// joinLeadIns joins the operands of an `and` lead-in. Merges `phase-is` +
+// `player-turn-is` into one timing window ("during your Shooting phase"),
+// collapses runs of keyword exclusions, and avoids doubled openers
+// ("while A, while B" -> "while A and B").
 func joinLeadIns(operands []map[string]any, defending bool) string {
+	// Flatten nested `and` operands so phase+turn fusion and opener deduplication work across nesting.
+	var flat []map[string]any
+	var flatten func([]map[string]any)
+	flatten = func(list []map[string]any) {
+		for _, op := range list {
+			if ops, ok := conditionOperands(op, "and"); ok {
+				flatten(ops)
+			} else {
+				flat = append(flat, op)
+			}
+		}
+	}
+	flatten(operands)
+
+	// Fuse one `phase-is` + one `player-turn-is` into a single natural window ("during your Shooting phase").
+	phaseIdx, turnIdx := -1, -1
+	for i, o := range flat {
+		if phaseIdx < 0 && !jsTruthy(o["operator"]) && o["type"] == "phase-is" {
+			if _, ok := paramsOf(o)["phase"].(string); ok {
+				phaseIdx = i
+			}
+		}
+		if turnIdx < 0 && !jsTruthy(o["operator"]) && o["type"] == "player-turn-is" {
+			if _, ok := leadinTurnOwners[cstr(paramsOf(o)["turn"])]; ok {
+				turnIdx = i
+			}
+		}
+	}
+	fusedWindow := ""
+	if phaseIdx >= 0 && turnIdx >= 0 {
+		pp := paramsOf(flat[phaseIdx])
+		owner := leadinTurnOwners[cstr(paramsOf(flat[turnIdx])["turn"])]
+		if pp["step"] != nil {
+			fusedWindow = stepWindow(pp, owner)
+		} else {
+			fusedWindow = "during " + owner + " " + titleCase(cstr(pp["phase"])) + " phase"
+		}
+	}
+
 	var parts []string
 	run := func(i int, pick func(map[string]any) (string, bool)) ([]string, int) {
 		var kws []string
-		for i < len(operands) {
-			kw, ok := pick(operands[i])
+		for i < len(flat) {
+			kw, ok := pick(flat[i])
 			if !ok {
 				break
 			}
@@ -341,8 +392,19 @@ func joinLeadIns(operands []map[string]any, defending bool) string {
 	}
 	notDefender := func(o map[string]any) (string, bool) { return notKeyword(o, "defender") }
 	notRecipient := func(o map[string]any) (string, bool) { return notKeyword(o, "recipient") }
-	for i := 0; i < len(operands); {
-		op := operands[i]
+	firstFused := phaseIdx
+	if turnIdx < firstFused {
+		firstFused = turnIdx
+	}
+	for i := 0; i < len(flat); {
+		if fusedWindow != "" && (i == phaseIdx || i == turnIdx) {
+			if i == firstFused {
+				parts = append(parts, fusedWindow)
+			}
+			i++
+			continue
+		}
+		op := flat[i]
 		if _, ok := notDefender(op); ok {
 			kws, next := run(i, notDefender)
 			parts = append(parts, negatedTargetKeywords(kws))
@@ -362,9 +424,9 @@ func joinLeadIns(operands []map[string]any, defending bool) string {
 		if _, ok := ownKeyword(op); ok {
 			kws, next := run(i, ownKeyword)
 			if len(kws) >= 2 {
-				parts = append(parts, "if the unit is "+article(kws[0])+" "+strings.Join(kws, " ")+" unit")
+				parts = append(parts, "if this unit is "+article(kws[0])+" "+strings.Join(kws, " ")+" unit")
 			} else {
-				parts = append(parts, "if the unit has the "+kws[0]+" keyword")
+				parts = append(parts, "if this unit has the "+kws[0]+" keyword")
 			}
 			i = next
 			continue
@@ -374,16 +436,41 @@ func joinLeadIns(operands []map[string]any, defending bool) string {
 	}
 	acc := ""
 	for _, part := range parts {
-		switch {
-		case acc == "":
+		if acc == "" {
 			acc = part
-		case againstTargetsRe.MatchString(part) && strings.HasSuffix(acc, " targets") && againstClauseRe.MatchString(acc):
-			// A second keyword gate on the same target narrows it: "against ORKS targets that are also VEHICLE".
-			acc += " that are also " + againstTargetsRe.FindStringSubmatch(part)[1]
-		case (strings.HasPrefix(part, "against ") && !incomingAttackRe.MatchString(part)) || strings.HasPrefix(part, "(excluding "):
+			continue
+		}
+		// A second keyword gate on the same target narrows it: "against ORKS targets that are also VEHICLE".
+		if m := againstTargetsRe.FindStringSubmatch(part); m != nil && strings.HasSuffix(acc, " targets") && againstClauseRe.MatchString(acc) {
+			acc += " that are also " + m[1]
+			continue
+		}
+		// "while making melee attacks" + "while the target is an enemy X unit" -> "while making melee attacks against an enemy X unit".
+		if m := targetIsRe.FindStringSubmatch(part); m != nil && whileMakingAttacksRe.MatchString(acc) {
+			acc += " against " + m[1]
+			continue
+		}
+		// Merge consecutive clauses sharing the same opener ("while A" + "while B" -> "while A and B").
+		mergedOpener := false
+		lastClause := acc
+		if idx := strings.LastIndex(acc, ", "); idx >= 0 {
+			lastClause = acc[idx+2:]
+		}
+		for _, opener := range []string{"while ", "if ", "when "} {
+			if strings.HasPrefix(lastClause, opener) && strings.HasPrefix(part, opener) &&
+				!strings.HasPrefix(part, "while making ") && !strings.HasPrefix(lastClause, "while making ") {
+				acc += " and " + strings.TrimPrefix(part, opener)
+				mergedOpener = true
+				break
+			}
+		}
+		if mergedOpener {
+			continue
+		}
+		if (strings.HasPrefix(part, "against ") && !incomingAttackRe.MatchString(part)) || strings.HasPrefix(part, "(excluding ") {
 			// A target narrowing attaches to the clause before it; an incoming attack is its own clause.
 			acc += " " + part
-		default:
+		} else {
 			acc += ", " + part
 		}
 	}

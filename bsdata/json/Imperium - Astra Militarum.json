@@ -3903,7 +3903,7 @@
       {
         "name": "Voice of Command",
         "id": "c40b-2bab-d7c3-7e99",
-        "description": "If your Army Faction is ASTRA MILITARUM:\n  -> At the start of your Command phase or at the end of each phase, if the unit disembarked from a Transport this phase or the unit was set up this phase, until the start of your next Command phase:\n    -> OFFICER models can issue up to one or more Orders to eligible friendly units within 6\" that are not Battle-shocked, each one of:\n      - MOVE! MOVE! MOVE: add 3 to the unit's Move characteristic.\n      - FIX BAYONETS: improve the Weapon Skill characteristic of melee weapons equipped by models in this unit by 1.\n      - TAKE AIM: improve the Ballistic Skill characteristic of ranged weapons equipped by models in this unit by 1.\n      - FIRST RANK, FIRE! SECOND RANK, FIRE: improve the Attacks characteristic of ranged weapons with [RAPID FIRE] equipped by models in this unit by 1.\n      - TAKE COVER: improve the unit's Save characteristic by 1 (to no better than 3+).\n      - DUTY AND HONOUR: improve the unit's Leadership characteristic by 1; improve the unit's Objective Control characteristic by 1.\n    A unit holds at most one Order; a newer Order replaces it.\n    An Order ends when its unit becomes Battle-shocked.\n    Only ASTRA MILITARUM models in that unit benefit from its Order.",
+        "description": "If your Army Faction is ASTRA MILITARUM:\n  - At the start of your Command phase or at the end of each phase, if this unit disembarked from a Transport this phase or this unit was set up this phase, until the start of your next Command phase:\n    - OFFICER models can issue up to one or more Orders to eligible friendly units within 6\" that are not Battle-shocked, each one of:\n      - MOVE! MOVE! MOVE: Add 3\" to this unit's Move characteristic.\n      - FIX BAYONETS: Improve the Weapon Skill characteristic of melee weapons equipped by models in this unit by 1.\n      - TAKE AIM: Improve the Ballistic Skill characteristic of ranged weapons equipped by models in this unit by 1.\n      - FIRST RANK, FIRE! SECOND RANK, FIRE: Improve the Attacks characteristic of ranged weapons with [RAPID FIRE] equipped by models in this unit by 1.\n      - TAKE COVER: Improve this unit's Save characteristic by 1, to no better than 3+.\n      - DUTY AND HONOUR: Improve this unit's Leadership characteristic by 1; improve this unit's Objective Control characteristic by 1.\n    A unit holds at most one Order; a newer Order replaces it.\n    An Order ends when its unit becomes Battle-shocked.\n    Only ASTRA MILITARUM models in that unit benefit from its Order.",
         "hidden": false
       }
     ],
@@ -4067,7 +4067,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your Shooting phase:\n  -> Select one enemy unit if the selected unit is within 18\" of the unit and the selected unit is visible to the unit (your Daring Recon Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll a Hit roll of 1 for attacks made by all friendly ASTRA MILITARUM models.",
+                "$text": "At the start of your Shooting phase:\n  - Select one enemy unit that is within 18\" of this unit and visible to this unit (your Daring Recon Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll Hit rolls of 1 for attacks made by friendly ASTRA MILITARUM models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4081,7 +4081,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4095,7 +4095,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5254,7 +5254,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit is eligible to shoot in a turn in which it Fell Back.",
+                "$text": "While this model is leading a unit, this unit is eligible to shoot in a turn in which it Fell Back.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5268,7 +5268,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5903,7 +5903,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your opponent's turn, you may use this ability, while the unit is unengaged, until the start of your next Shooting phase:\n  -> The unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.\n  -> The unit gains the Deep Strike ability.",
+                "$text": "At the end of your opponent's turn, you can use this ability, while this unit is unengaged, until the start of your next Shooting phase:\n  - This unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.\n  - This unit gains the Deep Strike ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5917,7 +5917,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Fights First ability, the unit gains the Fights First ability.",
+                "$text": "While this unit has the Fights First ability, this unit gains the Fights First ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5931,7 +5931,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5959,7 +5959,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5973,7 +5973,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Benefit of Cover.",
+                "$text": "This unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7342,7 +7342,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7370,7 +7370,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit has the OFFICER keyword, OFFICER models in the unit have the Feel No Pain 4+ ability.",
+                "$text": "If this unit has the OFFICER keyword, OFFICER models in this unit have Feel No Pain 4+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7384,7 +7384,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability:\n  -> Select one enemy unit if the selected unit is within Engagement Range of this model:\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
+                "$text": "When this unit is selected to fight, you can use this ability:\n  - Select one enemy unit that is within Engagement Range of this model:\n    - Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7672,7 +7672,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
+                "$text": "At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9680,7 +9680,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9694,7 +9694,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9708,7 +9708,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit is the Tempestor Prime model, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].",
+                "$text": "If this unit is the Tempestor Prime model, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11785,7 +11785,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11799,7 +11799,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is friendly, the unit must be your Warlord.",
+                "$text": "While this model is friendly, this unit must be your Warlord.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11813,7 +11813,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After deployment, you may use this ability:\n  -> Select up to 3 friendly ASTRA MILITARUM units:\n    -> For each selected unit:\n      -> That unit can be set up on the battlefield.\n      -> That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
+                "$text": "After deployment, you can use this ability:\n  - Select up to 3 friendly ASTRA MILITARUM units:\n    - For each selected unit:\n      - That unit can be set up on the battlefield.\n      - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11827,7 +11827,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your Command phase, while this model is on the battlefield, you gain 1CP.",
+                "$text": "At the start of your Command phase, while this model is on the battlefield, you gain 1 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12099,7 +12099,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is set up, if the unit is using Deep Strike, you may use this ability, during the Movement phase, in your turn, until the end of the turn:\n  -> The unit resolves the Precision Drop ability now.\n  -> The unit can be set up on the battlefield more than 6\" away from all enemy models.\n  -> The triggering unit cannot declare a charge.",
+                "$text": "When this unit is set up, if this unit is using Deep Strike, you can use this ability, during your Movement phase, until the end of the turn:\n  - This unit resolves the Precision Drop ability now.\n  - This unit can be set up on the battlefield more than 6\" away from all enemy models.\n  - The triggering unit cannot declare a charge.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12113,7 +12113,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is set up, if the unit is using Deep Strike, models named Tempestor Aquilon in the unit are eligible to shoot with their sentry flamer, sentry grenade launcher or sentry hot‐shot volley gun.",
+                "$text": "When this unit is set up, if this unit is using Deep Strike, models named Tempestor Aquilon in this unit are eligible to shoot with their sentry flamer, sentry grenade launcher or sentry hot‐shot volley gun.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12127,7 +12127,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15148,7 +15148,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15162,7 +15162,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:\n  -> The triggering unit can make a Normal move as if it were your Movement phase.\n  -> The unit cannot declare a charge.",
+                "$text": "After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:\n  - The triggering unit can make a Normal move as if it were your Movement phase.\n  - This unit cannot declare a charge.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15176,7 +15176,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16076,7 +16076,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can re-roll a Hit roll of 1.",
+                "$text": "You can re-roll Hit rolls of 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16090,7 +16090,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16104,7 +16104,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17887,7 +17887,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When this model selects its targets with Stormsword siege cannon weapons: during the Shooting phase, in your turn, for each unit that is the same unit as the target unit or that is a unit within 3\" of the target unit: roll one D6: on a 5+, the unit is struck by concussive wave until the end of the phase.\n-> After this model resolves its attacks:\n  For each unit that is struck by concussive wave: The unit suffers D3 mortal wounds.",
+                "$text": "When this model selects its targets with Stormsword siege cannon weapons, during your Shooting phase, for each unit that is the same unit as the target unit or a unit within 3\" of the target unit: roll one D6: on a 5+, that unit is struck by concussive wave until the end of the phase.\nAfter this model resolves its attacks:\n  For each unit that is struck by concussive wave: That unit suffers D3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17901,7 +17901,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17915,7 +17915,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18774,7 +18774,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Transport Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll the Hit roll for attacks made by all friendly models.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the end of the phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Transport Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll Hit rolls for attacks made by friendly models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18788,7 +18788,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19419,7 +19419,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit is tagged affected by order, if the unit Remained Stationary this turn, weapons with [HEAVY] equipped by models in this unit gain [SUSTAINED HITS 1].",
+                "$text": "While this unit is designated as Affected By Order, if this unit Remained Stationary this turn, weapons with [HEAVY] equipped by models in this unit gain [SUSTAINED HITS 1].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20063,7 +20063,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model ends a move or each time an enemy unit ends a move, while this model is within 3\" of an enemy unit:\n  -> Select one enemy unit within 3\" of this model:\n    -> Destroy this model.\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D6 mortal wounds.",
+                "$text": "When this model ends a move or each time an enemy unit ends a move, while this model is within 3\" of an enemy unit:\n  - Select one enemy unit within 3\" of this model:\n    - Destroy this model.\n    - Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D6 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20077,7 +20077,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Before a Deadly Demise roll is made, the unit's Deadly Demise rolls succeed only on an unmodified 4+.",
+                "$text": "Before a Deadly Demise roll is made, this unit's Deadly Demise rolls succeed only on an unmodified 4+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20091,7 +20091,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20474,7 +20474,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is selected to shoot, you may use this ability, until the end of the phase:\n  -> You can re-roll one Hit roll.\n  -> You can re-roll one Wound roll.\n  -> You can re-roll one Damage roll.",
+                "$text": "When this model is selected to shoot, you can use this ability, until the end of the phase:\n  - You can re-roll one Hit roll.\n  - You can re-roll one Wound roll.\n  - You can re-roll one Damage roll.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20488,7 +20488,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20502,7 +20502,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time the unit issues an Order, the range of this model's Voice of Command ability is 12\".",
+                "$text": "Each time this unit issues an Order, the range of this model's Voice of Command ability is 12\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20516,7 +20516,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21498,7 +21498,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit by exterminator autocannon during its just-finished shooting sequence (each unit can be selected for this ability at most once per phase across your army) (your Withering Hail Target). Until the end of the phase, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly ASTRA MILITARUM unit.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the end of the phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit by exterminator autocannon during that shooting sequence (each unit can be selected for this ability at most once per phase across your army) (your Withering Hail Target). Until the end of the phase, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly ASTRA MILITARUM unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21512,7 +21512,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21526,7 +21526,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23338,7 +23338,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23352,7 +23352,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Subtract 1 from the attacking unit's Damage characteristic.",
+                "$text": "Subtract 1 from the Damage characteristic of the attacking unit's attacks.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24698,7 +24698,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24712,7 +24712,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit has the Feel No Pain 4+ ability against Psychic Attacks.",
+                "$text": "While this model is leading a unit, this unit has Feel No Pain 4+ against Psychic Attacks.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24726,7 +24726,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your opponent's Shooting phase, you may use this ability, until the end of the phase:\n  -> Roll one D6:\n    - On 1: The unit suffers D3 mortal wounds.\n    - On 2-6: The unit has a 4+ invulnerable save.",
+                "$text": "At the start of your opponent's Shooting phase, you can use this ability, until the end of the phase:\n  - Roll one D6:\n    - On 1: This unit suffers D3 mortal wounds.\n    - On 2-6: This unit has a 4+ invulnerable save.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24970,7 +24970,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When you target the unit with the Fire Overwatch Stratagem, when resolving this use:\n  -> While the unit is not within 6\" of a friendly PLATOON unit, the unit's Hit rolls succeed only on an unmodified 5+.\n  -> While the unit is within 6\" of a friendly PLATOON unit, the unit's Hit rolls succeed only on an unmodified 4+.",
+                "$text": "When you target this unit with the Fire Overwatch Stratagem, for this activation:\n  - While this unit is not within 6\" of a friendly PLATOON unit, this unit's Hit rolls succeed only on an unmodified 5+.\n  - While this unit is within 6\" of a friendly PLATOON unit, this unit's Hit rolls succeed only on an unmodified 4+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25600,7 +25600,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making ranged attacks against MONSTER or VEHICLE targets:\n  -> You can re-roll a Hit roll of 1.\n  -> You can re-roll a Wound roll of 1.",
+                "$text": "While making ranged attacks against MONSTER or VEHICLE targets:\n  - You can re-roll Hit rolls of 1.\n  - You can re-roll Wound rolls of 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25614,7 +25614,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26354,7 +26354,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26368,7 +26368,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27250,7 +27250,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Benefit of Cover.",
+                "$text": "This unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27278,7 +27278,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit is an ASTRA MILITARUM INFANTRY unit, for the rest of the battle:\n  -> All friendly ASTRA MILITARUM INFANTRY units can be set up on the battlefield on top of a terrain feature.\n  -> All friendly ASTRA MILITARUM INFANTRY units can end their moves on top of terrain features.",
+                "$text": "If this unit is an ASTRA MILITARUM INFANTRY unit, for the rest of the battle:\n  - Friendly ASTRA MILITARUM INFANTRY units can be set up on the battlefield on top of a terrain feature.\n  - Friendly ASTRA MILITARUM INFANTRY units can end their moves on top of terrain features.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27292,7 +27292,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Shooting phase, the attacking unit gets -1 to Hit rolls.",
+                "$text": "During the Shooting phase, subtract 1 from the attacking unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27494,7 +27494,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Against MONSTER or VEHICLE targets, you can re-roll the Wound roll.",
+                "$text": "Against MONSTER or VEHICLE targets, you can re-roll Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27508,7 +27508,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -28627,7 +28627,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -28641,7 +28641,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: If the unit contains 2+ OFFICER models, you can re-roll the Battle-shock roll.",
+                "$text": "If this unit contains 2 or more OFFICER models, you can re-roll the Battle-shock roll.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -28655,7 +28655,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of each phase, you may use this ability, once per battle round per unit:\n  -> Select one friendly ASTRA MILITARUM INFANTRY unit if the selected unit is Battle-shocked and the selected unit is within 12\" of this model:\n    -> Destroy 1 model in that unit.\n    -> That unit is no longer Battle-shocked.",
+                "$text": "At the start of each phase, you can use this ability, once per battle round per unit:\n  - Select one friendly ASTRA MILITARUM INFANTRY unit that is Battle-shocked and within 12\" of this model:\n    - Destroy 1 model in that unit.\n    - That unit is no longer Battle-shocked.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -29152,7 +29152,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The first time this battle, during the Shooting phase, for the rest of the battle:\n  Select one of the following (Target Action):\n    - Place a deathstrike target marker anywhere.\n    - Move the deathstrike target marker.",
+                "$text": "The first time this battle, during the Shooting phase, for the rest of the battle:\n  Choose one of the following (Target Action):\n    - Place a deathstrike target marker anywhere.\n    - Move the deathstrike target marker.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -29166,7 +29166,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -29180,7 +29180,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -29666,7 +29666,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit ends a move, you may use this ability, during the Movement phase, in the opponent's turn, while the triggering unit is within 8\" of the unit, while the unit is unengaged, the unit can make a Normal move of up to 6\".",
+                "$text": "Each time an enemy unit ends a move, you can use this ability, during your opponent's Movement phase, while the triggering unit is within 8\" of this unit and this unit is unengaged, this unit can make a Normal move of up to 6\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -30473,7 +30473,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  For each enemy unit that was hit by an attack made by the triggering unit made with a [INDIRECT FIRE] weapon during its just-finished shooting sequence:\n    -> If the unit has the INFANTRY keyword, if the unit was hit by an attack made by the triggering unit by Multiple rocket launcher during its just-finished shooting sequence, the unit must take a Battle-shock test, applying -1 to that test.\n    -> Unless the unit has the INFANTRY keyword and the unit was hit by an attack made by the triggering unit by Multiple rocket launcher during its just-finished shooting sequence, the unit must take a Battle-shock test.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the end of the phase:\n  For each enemy unit that was hit by an attack made by the triggering unit made with a [INDIRECT FIRE] weapon during that shooting sequence:\n    - If this unit has the INFANTRY keyword and this unit was hit by an attack made by the triggering unit by Multiple rocket launcher during that shooting sequence, that unit must take a Battle-shock test, applying -1 to that test.\n    - Unless this unit has the INFANTRY keyword and this unit was hit by an attack made by the triggering unit by Multiple rocket launcher during that shooting sequence, that unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -31032,7 +31032,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making attacks made with executioner plasma cannon, while the target unit is below half strength, this model gets +1 to Hit rolls.",
+                "$text": "While making attacks made with executioner plasma cannon, while the target unit is Below Half-strength, add 1 to this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -31046,7 +31046,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -31060,7 +31060,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -32889,7 +32889,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the target is not within range of an objective marker, you can re-roll a Wound roll of 1.\nWhile the target is within range of an objective marker, you can re-roll the Wound roll.",
+                "$text": "While the target is not within range of an objective marker, you can re-roll Wound rolls of 1.\nWhile the target is within range of an objective marker, you can re-roll Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -32903,7 +32903,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -35253,7 +35253,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -35267,7 +35267,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your opponent's Movement phase, you may use this ability, while a unit embarked within the unit is not embarked:\n  -> Select one friendly ASTRA MILITARUM INFANTRY unit (excluding ARTILLERY units) if the selected unit is within 6\" of the unit and the selected unit is unengaged: that unit is eligible to embark into this unit.",
+                "$text": "At the end of your opponent's Movement phase, you can use this ability, while a unit embarked within this unit is not embarked:\n  - Select one friendly ASTRA MILITARUM INFANTRY unit (excluding ARTILLERY units) that is within 6\" of this unit and unengaged. That unit is eligible to embark into this unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -35281,7 +35281,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -35295,7 +35295,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -36149,7 +36149,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -36163,7 +36163,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit has the OFFICER keyword, OFFICER models in the unit have the Feel No Pain 4+ ability.",
+                "$text": "If this unit has the OFFICER keyword, OFFICER models in this unit have Feel No Pain 4+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -36810,7 +36810,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of each phase, you may use this ability, once per battle round per unit, until the start of your next Command phase, select one option of Voice of Command for the unit, in addition to any already active.",
+                "$text": "At the start of each phase, you can use this ability, once per battle round per unit, until the start of your next Command phase, select one option of Voice of Command for this unit, in addition to any already active.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -36824,7 +36824,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -38915,7 +38915,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: If the unit contains 1+ OFFICER models, while the unit is within range of an objective marker, you can re-roll the Battle-shock roll.",
+                "$text": "If this unit contains one or more OFFICER models, while this unit is within range of an objective marker, you can re-roll the Battle-shock roll.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -38929,7 +38929,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -41527,7 +41527,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit has the OFFICER keyword, ranged weapons equipped by models in this unit gain [ASSAULT].",
+                "$text": "If this unit has the OFFICER keyword, ranged weapons equipped by models in this unit gain [ASSAULT].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -41541,7 +41541,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -41555,7 +41555,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -43402,7 +43402,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Against MONSTER or VEHICLE targets, until the end of the phase, while making attacks made with magma cannon, the target counts as being within half the attacking weapon's range of this model.",
+                "$text": "Against MONSTER or VEHICLE targets, while making attacks made with magma cannon, until the end of the phase, the target counts as being within half the attacking weapon's range of this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -43416,7 +43416,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -43430,7 +43430,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -43444,7 +43444,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -44296,7 +44296,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When damage is allocated, once per battle per model, each time an attack is allocated to this model, change the Damage of that attack to 0.",
+                "$text": "When damage is allocated, once per battle per model, change the Damage of that attack to 0.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -44310,7 +44310,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -44324,7 +44324,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -45364,7 +45364,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making melee attacks, while the unit is not Battle-shocked, you can re-roll the Hit roll for attacks made by this model.",
+                "$text": "While making melee attacks, while this unit is not Battle-shocked, you can re-roll Hit rolls for attacks made by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -45378,7 +45378,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -45735,7 +45735,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit is below its starting strength, the unit gets +1 to Hit rolls.\nWhile the unit is below half strength, the unit gets +1 to Wound rolls.",
+                "$text": "While this unit is below its Starting Strength, add 1 to this unit's Hit rolls.\nWhile this unit is Below Half-strength, add 1 to this unit's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -48490,7 +48490,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -48504,7 +48504,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -49363,7 +49363,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next Shooting phase:\n  -> Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit by Wyvern quad stormshard mortar during its just-finished shooting sequence:\n    -> That unit is marked as suppressed.\n    -> While the unit is tagged suppressed, that unit gets -1 to Hit rolls.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next Shooting phase:\n  - Select one enemy unit without the MONSTER or VEHICLE keyword and that was hit by an attack made by the triggering unit by Wyvern quad stormshard mortar during that shooting sequence:\n    - That unit is Suppressed.\n    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -49377,7 +49377,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -49391,7 +49391,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -49979,7 +49979,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit is eligible to shoot in a turn in which it Fell Back.\nThe unit is eligible to declare a charge in a turn in which it Fell Back.",
+                "$text": "This unit is eligible to shoot in a turn in which it Fell Back.\nThis unit is eligible to declare a charge in a turn in which it Fell Back.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -51357,7 +51357,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next Shooting phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n    -> That unit is scattered.\n    -> While the selected unit is scattered, that unit cannot benefit from Cover.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next Shooting phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:\n    - That unit is scattered.\n    - While the selected unit is scattered, that unit cannot benefit from Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -51371,7 +51371,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -51385,7 +51385,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -52174,7 +52174,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -52188,7 +52188,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -54120,7 +54120,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit has the OFFICER keyword, for the rest of the battle:\n  -> The unit is eligible to be targeted with Stratagems even if it is Battle-shocked.\n  -> The unit's Voice of Command ability has no limit on its duration.",
+                "$text": "If this unit has the OFFICER keyword, for the rest of the battle:\n  - This unit is eligible to be targeted with Stratagems even if it is Battle-shocked.\n  - This unit's Voice of Command ability has no limit on its duration.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -54134,7 +54134,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -56175,7 +56175,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:\n  -> This model can make a Normal move.\n  -> This model cannot declare a charge.",
+                "$text": "After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:\n  - This model can make a Normal move.\n  - This model cannot declare a charge.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -56203,7 +56203,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit cannot be your Warlord.",
+                "$text": "This unit cannot be your Warlord.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -56217,7 +56217,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After an enemy unit shoots, once per turn per unit, during the Shooting phase, in the opponent's turn, if the triggering unit has selected a friendly REGIMENT unit within 3\" of this model as a target of its ranged attacks, until the end of the phase:\n  -> If the unit is eligible to shoot, this model is eligible to shoot as if it were your Shooting phase.\n  -> If the unit is eligible to shoot, this model must target the triggering unit with ranged attacks.",
+                "$text": "After an enemy unit shoots, once per turn per unit, during your opponent's Shooting phase, if the triggering unit has selected a friendly REGIMENT unit within 3\" of this model as a target of its ranged attacks, until the end of the phase:\n  - If this unit is eligible to shoot, this model is eligible to shoot as if it were your Shooting phase.\n  - If this unit is eligible to shoot, this model must target the triggering unit with ranged attacks.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -56231,7 +56231,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -56245,7 +56245,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -56571,7 +56571,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -56585,7 +56585,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -58382,7 +58382,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Friendly units embarked within the unit are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.",
+                "$text": "Friendly units embarked within this unit are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -58396,7 +58396,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -58735,7 +58735,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making ranged attacks, if the target is the closest eligible target, improve the unit's Armour Penetration characteristic by 1.",
+                "$text": "While making ranged attacks, if the target is the closest eligible target, improve this unit's Armour Penetration characteristic by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -58749,7 +58749,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -59452,7 +59452,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -59466,7 +59466,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move, until the end of the turn, melee weapons equipped by models in this unit gain [DEVASTATING WOUNDS].",
+                "$text": "When this unit ends a Charge move, until the end of the turn, melee weapons equipped by models in this unit gain [DEVASTATING WOUNDS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -59480,7 +59480,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of each phase, if this model was destroyed this phase (1+ times), the first time this battle per model:\n  -> Roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with D3 wounds remaining.",
+                "$text": "At the end of each phase, if this model was destroyed this phase (one or more times), the first time this battle per model, roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with D3 wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -59494,7 +59494,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -59918,7 +59918,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -59932,7 +59932,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Command phase, in your turn, until the start of your next Command phase:\n  -> Select one friendly ASTRA MILITARUM VEHICLE model if the selected unit is within 3\" of this model (each model can be selected for this ability at most once per turn across your army):\n    -> That model regains up to D3 lost wounds.\n    -> That model has a 4+ invulnerable save.",
+                "$text": "During your Command phase, until the start of your next Command phase:\n  - Select one friendly ASTRA MILITARUM VEHICLE model that is within 3\" of this model (each model can be selected for this ability at most once per turn across your army):\n    - That model regains up to D3 lost wounds.\n    - That model has a 4+ invulnerable save.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -60293,7 +60293,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -60307,7 +60307,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit selects its targets with Tremor cannon weapons, during the Shooting phase, in your turn:\n  For each enemy unit that is the same unit as the target unit or that is an enemy INFANTRY unit within 3\" of the target unit: The unit must take a Battle-shock test.",
+                "$text": "When this unit selects its targets with Tremor cannon weapons, during your Shooting phase:\n  For each enemy unit that is the same unit as the target unit or an enemy INFANTRY unit within 3\" of the target unit: That unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -60321,7 +60321,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -60335,7 +60335,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -61163,7 +61163,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making melee attacks, if the unit charged this turn or if a unit charged the unit this turn, the unit gets +1 to Wound rolls.",
+                "$text": "While making melee attacks, if this unit charged this turn or if a unit charged this unit this turn, add 1 to this unit's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -61177,7 +61177,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -62319,7 +62319,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Before a Deadly Demise roll is made, if during the Shooting phase and in the opponent's turn and 1+ units destroyed, until the end of the phase:\n  -> Roll one D6: on a 2+, each time this model is destroyed, it can shoot before being removed from play.",
+                "$text": "Before a Deadly Demise roll is made, if during the Shooting phase and in your opponent's turn and one or more units destroyed, until the end of the phase, roll one D6: on a 2+, each time this model is destroyed, it can shoot before being removed from play.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -62333,7 +62333,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -62347,7 +62347,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -62375,7 +62375,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time the unit issues an Order, the range of this model's Voice of Command ability is 12\".",
+                "$text": "Each time this unit issues an Order, the range of this model's Voice of Command ability is 12\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -64549,7 +64549,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your opponent's Movement phase, friendly units embarked within the unit are eligible to disembark.",
+                "$text": "At the end of your opponent's Movement phase, friendly units embarked within this unit are eligible to disembark.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -64563,7 +64563,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time the unit uses ability, the unit's Takes to the Skies ability has no limit on its range.",
+                "$text": "Each time this unit uses ability, this unit's Takes to the Skies ability has no limit on its range.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -64577,7 +64577,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -64591,7 +64591,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -65282,7 +65282,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -65296,7 +65296,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the number that can apply at once of the unit's Voice of Command ability is 2.",
+                "$text": "While this model is leading a unit, the number that can apply at once of this unit's Voice of Command ability is 2.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -65310,7 +65310,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target a friendly REGIMENT unit within 12\" of this model with a Stratagem, you may use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).",
+                "$text": "Each time you target a friendly REGIMENT unit within 12\" of this model with a Stratagem, you can use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -65650,7 +65650,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -65664,7 +65664,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -66523,7 +66523,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next Shooting phase:\n  -> Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit by storm eagle rockets during its just-finished shooting sequence:\n    -> That unit is marked as staggered.\n    -> While the selected unit is tagged staggered, subtract 1 from that unit's Objective Control characteristic.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next Shooting phase:\n  - Select one enemy unit without the MONSTER or VEHICLE keyword and that was hit by an attack made by the triggering unit by storm eagle rockets during that shooting sequence:\n    - That unit is Staggered.\n    - While the selected unit is Staggered, subtract 1 from that unit's Objective Control characteristic.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -66537,7 +66537,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -66551,7 +66551,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -67121,7 +67121,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -67149,7 +67149,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -68069,7 +68069,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit destroys a friendly ASTRA MILITARUM unit other than this unit (the triggering unit must have FLY), you may use this ability or after an enemy unit shoots, once per turn per army, during the Shooting phase, in the opponent's turn, while that unit is within 6\" of this model, until the end of the phase:\n  -> This model is eligible to shoot as if it were your Shooting phase.\n  -> This model must target the triggering unit with attacks.",
+                "$text": "Each time an enemy FLY unit destroys a friendly ASTRA MILITARUM unit other than this unit, you can use this ability or after an enemy unit shoots, once per turn per army, during your opponent's Shooting phase, while that unit is within 6\" of this model, until the end of the phase:\n  - This model is eligible to shoot as if it were your Shooting phase.\n  - This model must target the triggering unit with attacks.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -68083,7 +68083,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -68097,7 +68097,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -68465,7 +68465,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making ranged attacks, while making attacks made with vanquisher battle cannon against MONSTER or VEHICLE targets, you can re-roll the Wound roll for attacks made by this model.",
+                "$text": "While making ranged attacks, while making attacks made with vanquisher battle cannon against MONSTER or VEHICLE targets, you can re-roll Wound rolls for attacks made by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -68479,7 +68479,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -68493,7 +68493,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -70290,7 +70290,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next Shooting phase:\n  For each enemy INFANTRY unit that was hit by an attack made by the triggering unit by Earthshaker cannon during its just-finished shooting sequence:\n    -> The unit is shaken.\n    -> While the unit is shaken, subtract 2 from the unit's Move characteristic.\n    -> While the unit is shaken, the unit gets -2 to Charge rolls.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next Shooting phase:\n  For each enemy INFANTRY unit that was hit by an attack made by the triggering unit by Earthshaker cannon during that shooting sequence:\n    - That unit is shaken.\n    - While this unit is shaken, subtract 2\" from that unit's Move characteristic.\n    - While this unit is shaken, subtract 2 from that unit's Charge rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -70304,7 +70304,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -70318,7 +70318,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -70888,7 +70888,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -70902,7 +70902,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -71877,7 +71877,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: Once per turn per unit, the Grenade Stratagem that targets the unit costs 0CP.",
+                "$text": "You can use this ability: Once per turn per unit, the Grenade Stratagem that targets this unit costs 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -71891,7 +71891,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -73895,7 +73895,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Against FLY targets, you can re-roll the Hit roll for attacks made by this model.",
+                "$text": "Against FLY targets, you can re-roll Hit rolls for attacks made by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -73909,7 +73909,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -73923,7 +73923,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -74479,7 +74479,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Shooting phase, each time an attack is allocated to the unit, subtract 1 from the Damage characteristic of that attack.",
+                "$text": "During the Shooting phase, each time an attack is allocated to this unit, subtract 1 from the Damage characteristic of that attack.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -74493,7 +74493,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -74507,7 +74507,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -76208,7 +76208,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "For the rest of the battle, the duration of the unit's Orders Cadian Castellan ability is until replaced battle shocked or battle end.",
+                "$text": "For the rest of the battle, the duration of this unit's Orders Cadian Castellan ability is until replaced battle shocked or battle end.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -76222,7 +76222,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -76236,7 +76236,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -77561,7 +77561,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -77575,7 +77575,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -77589,7 +77589,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While a unit embarked within the unit is embarked, while the unit is not Battle-shocked, add 1 to this model's Objective Control characteristic for every 3 models embarked within this model.",
+                "$text": "While a unit embarked within this unit is embarked and this unit is not Battle-shocked, add 1 to this model's Objective Control characteristic for every 3 models embarked within this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -77895,7 +77895,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of each phase, you may use this ability, once per turn per unit:\n  -> Select one friendly ASTRA MILITARUM INFANTRY unit if the selected unit does not contain 1-1 models and the selected unit is Battle-shocked and the selected unit is within 24\" of this model and the selected unit is visible to this model:\n    -> Destroy 1 model in that unit.\n    -> That unit is no longer Battle-shocked.",
+                "$text": "At the start of each phase, you can use this ability, once per turn per unit:\n  - Select one friendly ASTRA MILITARUM INFANTRY unit that does not contain exactly 1 models and is Battle-shocked and within 24\" of this model and visible to this model:\n    - Destroy 1 model in that unit.\n    - That unit is no longer Battle-shocked.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -77909,7 +77909,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -77923,7 +77923,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a friendly unit disembarks from a Transport within 6\" of this model, after it has been set up (the triggering unit must have ASTRA MILITARUM and REGIMENT), during the Movement phase, in your turn:\n  -> This model can issue up to 1 Order from Voice of Command to the triggering unit (if it is one of the eligible friendly REGIMENT units), not counting toward the Orders it can issue this turn.",
+                "$text": "When a friendly ASTRA MILITARUM REGIMENT unit disembarks from a Transport within 6\" of this model, after it has been set up, during your Movement phase:\n  - This model can issue up to 1 Order from Voice of Command to the triggering unit (if it is one of the eligible friendly REGIMENT units), not counting toward the Orders it can issue this turn.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -78423,7 +78423,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of each phase, you may use this ability, once per turn per unit:\n  -> Select one friendly ASTRA MILITARUM INFANTRY unit if the selected unit does not contain 1-1 models and the selected unit is Battle-shocked and the selected unit is within 12\" of this model:\n    -> Destroy 1 model in that unit.\n    -> That unit is no longer Battle-shocked.",
+                "$text": "At the start of each phase, you can use this ability, once per turn per unit:\n  - Select one friendly ASTRA MILITARUM INFANTRY unit that does not contain exactly 1 models and is Battle-shocked and within 12\" of this model:\n    - Destroy 1 model in that unit.\n    - That unit is no longer Battle-shocked.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -78437,7 +78437,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit is eligible to shoot in a turn in which it Fell Back.\nThe unit is eligible to declare a charge in a turn in which it Fell Back.",
+                "$text": "This unit is eligible to shoot in a turn in which it Fell Back.\nThis unit is eligible to declare a charge in a turn in which it Fell Back.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -78451,7 +78451,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -78853,7 +78853,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Command phase, until the start of your next Command phase, during the Command phase, select up to one: Counterstrategist (select up to one enemy unit within 8\" of this model that was set up this phase or that moved this phase: that unit is marked as counterstrategist target until the end of the phase; select up to one friendly REGIMENT unit within 6\" of this model visible to this model that did not make a Normal move this phase and not the unit used the Fire Overwatch stratagem this phase: select one of the following: that unit can make a Normal move of up to D6\" / that unit is eligible to shoot; that unit must target units that are tagged counterstrategist target with ranged attacks; that unit's Hit rolls with ranged weapons succeed only on an unmodified 6+ / that unit is eligible to declare a charge) / Decisive Command (the range of this model's Voice of Command ability is 12\") / Inspiring Hero (you can re-roll the Battle-shock roll for friendly ASTRA MILITARUM units within 6\" of this model; you can re-roll the Leadership roll for friendly ASTRA MILITARUM units within 6\" of this model).",
+                "$text": "During the Command phase, during the Command phase, until the start of your next Command phase:\n  - Select up to one:\n    - Counterstrategist: Select up to one enemy unit within 8\" of this model that was set up this phase or moved this phase; that unit is designated as Counterstrategist Target until the end of the phase; select up to one friendly REGIMENT unit within 6\" of this model visible to this model if this unit did not make a Normal move this phase and not this unit used the Fire Overwatch stratagem this phase; choose one of the following: that unit can make a Normal move of up to D6\" / that unit is eligible to shoot; that unit must target units that are designated as Counterstrategist Target with ranged attacks; that unit's Hit rolls with ranged weapons succeed only on an unmodified 6+ / that unit is eligible to declare a charge.\n    - Decisive Command: The range of this model's Voice of Command ability is 12\".\n    - Inspiring Hero: You can re-roll the Battle-shock roll for friendly ASTRA MILITARUM units within 6\" of this model; you can re-roll the Leadership roll for friendly ASTRA MILITARUM units within 6\" of this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -78867,7 +78867,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Command phase, until the start of your next Command phase, during the Command phase, select up to one enemy unit within 8\" of this model that was set up this phase or that moved this phase: that unit is marked as counterstrategist target until the end of the phase; select up to one friendly REGIMENT unit within 6\" of this model visible to this model that did not make a Normal move this phase and not the unit used the Fire Overwatch stratagem this phase: select one of the following: that unit can make a Normal move of up to D6\" / that unit is eligible to shoot; that unit must target units that are tagged counterstrategist target with ranged attacks; that unit's Hit rolls with ranged weapons succeed only on an unmodified 6+ / that unit is eligible to declare a charge.",
+                "$text": "During the Command phase, during the Command phase, until the start of your next Command phase:\n  - Select up to one enemy unit within 8\" of this model that was set up this phase or moved this phase. That unit is designated as Counterstrategist Target until the end of the phase.\n  - Select up to one friendly REGIMENT unit within 6\" of this model visible to this model if this unit did not make a Normal move this phase and not this unit used the Fire Overwatch stratagem this phase:\n    Choose one of the following:\n      - That unit can make a Normal move of up to D6\".\n      - That unit is eligible to shoot; that unit must target units that are designated as Counterstrategist Target with ranged attacks; that unit's Hit rolls with ranged weapons succeed only on an unmodified 6+.\n      - That unit is eligible to declare a charge.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -78881,7 +78881,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Command phase, until the start of your next Command phase, during the Command phase, the range of this model's Voice of Command ability is 12\".",
+                "$text": "During the Command phase, during the Command phase, until the start of your next Command phase, the range of this model's Voice of Command ability is 12\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -78895,7 +78895,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Command phase, until the start of your next Command phase, during the Command phase, you can re-roll the Battle-shock roll for friendly ASTRA MILITARUM units within 6\" of this model; you can re-roll the Leadership roll for friendly ASTRA MILITARUM units within 6\" of this model.",
+                "$text": "During the Command phase, during the Command phase, until the start of your next Command phase:\n  - You can re-roll the Battle-shock roll for friendly ASTRA MILITARUM units within 6\" of this model.\n  - You can re-roll the Leadership roll for friendly ASTRA MILITARUM units within 6\" of this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -78909,7 +78909,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -78937,7 +78937,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of each phase, if this model was destroyed this phase (1+ times), the first time this battle per model:\n  -> Roll one D6: on a 2+, this model can be set up on the battlefield more than 1\" away from all enemy models, with 3 wounds remaining.",
+                "$text": "At the end of each phase, if this model was destroyed this phase (one or more times), the first time this battle per model, roll one D6: on a 2+, this model can be set up on the battlefield more than 1\" away from all enemy models, with 3 wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -79260,7 +79260,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, until the end of the turn:\n  -> The triggering unit can make a Normal move of up to D6\".\n  -> The unit cannot declare a charge.",
+                "$text": "After this unit resolves its attacks, you can use this ability, during your Shooting phase, until the end of the turn:\n  - The triggering unit can make a Normal move of up to D6\".\n  - This unit cannot declare a charge.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -79274,7 +79274,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -82291,7 +82291,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model's unit is targeted with a Stratagem:\n  While a friendly OFFICER model is within 6\" of the unit:\n    -> Roll one D6+1: on a 5+, you gain 1CP.\n  While a friendly OFFICER model is not within 6\" of the unit:\n    -> Roll one D6: on a 5+, you gain 1CP.",
+                "$text": "When this model's unit is targeted with a Stratagem:\n  - While a friendly OFFICER model is within 6\" of this unit:\n    - Roll one D6+1: on a 5+, you gain 1 CP.\n  - While a friendly OFFICER model is not within 6\" of this unit:\n    - Roll one D6: on a 5+, you gain 1 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -82485,7 +82485,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the number that can apply at once of the unit's Voice of Command ability is 2.",
+                "$text": "While this model is leading a unit, the number that can apply at once of this unit's Voice of Command ability is 2.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -82859,7 +82859,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your Command phase, you may use this ability, while the unit is below its starting strength, return D3 destroyed TEMPESTUS SCIONS models to the unit, each with its full wounds remaining.",
+                "$text": "At the start of your Command phase, you can use this ability, while this unit is below its Starting Strength, return D3 destroyed TEMPESTUS SCIONS models to this unit, each with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -82889,7 +82889,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Add 1 to the unit's Objective Control characteristic.",
+                "$text": "Add 1 to this unit's Objective Control characteristic.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -82919,7 +82919,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time the unit issues an Order, the range of the unit's Voice of Command ability is 24\".",
+                "$text": "Each time this unit issues an Order, the range of this unit's Voice of Command ability is 24\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -84341,7 +84341,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the GRENADES keyword.",
+                "$text": "This unit gains the GRENADES keyword.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -84371,7 +84371,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to shoot, you may use this ability, once per battle per unit, until the end of the phase, ranged weapons equipped by models in this unit gain [LETHAL HITS].",
+                "$text": "When this unit is selected to shoot, you can use this ability, once per battle per unit, until the end of the phase, ranged weapons equipped by models in this unit gain [LETHAL HITS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -89927,7 +89927,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of each phase, you may use this ability, once per battle per unit:\n  -> Select one enemy unit within 3\" of this model:\n    -> Roll one D6: on a 2+, unless the selected unit has the VEHICLE keyword, that unit suffers D3 mortal wounds; if the selected unit has the VEHICLE keyword, that unit suffers 2D3 mortal wounds.",
+                "$text": "At the start of each phase, you can use this ability, once per battle per unit:\n  - Select one enemy unit within 3\" of this model:\n    - Roll one D6: on a 2+, unless the selected unit has the VEHICLE keyword, that unit suffers D3 mortal wounds; if the selected unit has the VEHICLE keyword, that unit suffers 2D3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -90645,7 +90645,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your Command phase, you may use this ability, while the unit is below its starting strength, return D3 destroyed PLATOON models (excluding CHARACTER models) to the unit, each with its full wounds remaining.",
+                "$text": "At the start of your Command phase, you can use this ability, while this unit is below its Starting Strength, return D3 destroyed PLATOON models (excluding CHARACTER models) to this unit, each with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -92127,7 +92127,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your Command phase, you may use this ability, while the unit is below its starting strength:\n  -> Unless at least 2 models in this unit are equipped with the Death Korps Medi Pack wargear, return D3 destroyed DEATH KORPS TROOPERS models to the unit, each with its full wounds remaining.\n  -> If at least 2 models in this unit are equipped with the Death Korps Medi Pack wargear, return D3+1 destroyed DEATH KORPS TROOPERS models to the unit, each with its full wounds remaining.",
+                "$text": "At the start of your Command phase, you can use this ability, while this unit is below its Starting Strength:\n  - Unless at least 2 models in this unit are equipped with the Death Korps Medi Pack wargear, return D3 destroyed DEATH KORPS TROOPERS models to this unit, each with its full wounds remaining.\n  - If at least 2 models in this unit are equipped with the Death Korps Medi Pack wargear, return D3+1 destroyed DEATH KORPS TROOPERS models to this unit, each with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -93625,7 +93625,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain 6+ ability against mortal wounds.",
+                "$text": "This unit has Feel No Pain 6+ against mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -93715,7 +93715,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time the unit issues an Order, once per battle per unit:\n  -> Increase the number of uses of this model's Voice of Command ability by 1.\n  -> Place a Servo scribes token marker.",
+                "$text": "Each time this unit issues an Order, once per battle per unit:\n  - Increase the number of uses of this model's Voice of Command ability by 1.\n  - Place a Servo scribes token marker.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -96533,7 +96533,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your Shooting phase, you may use this ability, once per battle per unit:\n  -> Select one enemy unit if the selected unit is within 9\" of this model and the selected unit is visible to this model:\n    -> Roll one D6: on a 3+, unless the selected unit has the FORTIFICATION or VEHICLE keyword, that unit suffers D3 mortal wounds; if the selected unit has the FORTIFICATION or VEHICLE keyword, that unit suffers 2D3 mortal wounds.",
+                "$text": "At the start of your Shooting phase, you can use this ability, once per battle per unit:\n  - Select one enemy unit that is within 9\" of this model and visible to this model:\n    - Roll one D6: on a 3+, unless the selected unit has the FORTIFICATION or VEHICLE keyword, that unit suffers D3 mortal wounds; if the selected unit has the FORTIFICATION or VEHICLE keyword, that unit suffers 2D3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -97117,7 +97117,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move, you may use this ability:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit:\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-3: That unit suffers D3 mortal wounds.\n      - On 4-5: That unit suffers 3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
+                "$text": "When this unit ends a Charge move, you can use this ability:\n  - Select one enemy unit that is within Engagement Range of this unit:\n    - Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-3: That unit suffers D3 mortal wounds.\n      - On 4-5: That unit suffers 3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -98406,7 +98406,7 @@
                   {
                     "name": "Masters of Camouflage",
                     "id": "f3bf-9eed-0ccf-149c",
-                    "description": "All friendly ASTRA MILITARUM units (excluding TITANIC units) gain the Stealth ability.",
+                    "description": "Friendly ASTRA MILITARUM units (excluding TITANIC units) gain the Stealth ability.",
                     "hidden": false
                   }
                 ]
@@ -98453,7 +98453,7 @@
                   {
                     "name": "Iron Tread",
                     "id": "41f3-fc2d-9631-6f18",
-                    "description": "The unit's Advance rolls count as 6.",
+                    "description": "This unit's Advance rolls count as 6.",
                     "hidden": false
                   }
                 ]
@@ -98500,7 +98500,7 @@
                   {
                     "name": "Born Soldiers",
                     "id": "908f-ec0a-39a9-075f",
-                    "description": "While making ranged attacks, while the target does not have the MONSTER or VEHICLE keyword, ranged weapons equipped by all friendly REGIMENT units gain [LETHAL HITS].\nWhile making ranged attacks against MONSTER or VEHICLE targets, ranged weapons equipped by all friendly SQUADRON units gain [LETHAL HITS].",
+                    "description": "While making ranged attacks, while the target does not have the MONSTER or VEHICLE keyword, ranged weapons equipped by friendly REGIMENT units gain [LETHAL HITS].\nWhile making ranged attacks against MONSTER or VEHICLE targets, ranged weapons equipped by friendly SQUADRON units gain [LETHAL HITS].",
                     "hidden": false
                   }
                 ]
@@ -98554,7 +98554,7 @@
                   {
                     "name": "Ruthless Discipline",
                     "id": "39c4-6d7e-a03c-3b5f",
-                    "description": "Increase the number of uses of all friendly ASTRA MILITARUM OFFICER models' Voice of Command ability by 1.\nYou can re-roll a Hit roll of 1 for attacks made by friendly ASTRA MILITARUM units that are tagged affected by order.",
+                    "description": "Increase the number of uses of friendly ASTRA MILITARUM OFFICER models' Voice of Command ability by 1.\nYou can re-roll Hit rolls of 1 for attacks made by friendly ASTRA MILITARUM units that are designated as Affected By Order.",
                     "hidden": false
                   }
                 ]
@@ -98601,7 +98601,7 @@
                   {
                     "name": "Fire Zone Purge",
                     "id": "c18b-7449-86f1-205f",
-                    "description": "If your army includes a MILITARUM TEMPESTUS OFFICER model that is the Warlord:\n  -> All friendly TEMPESTUS SCIONS units gain the BATTLELINE keyword.\n  -> Improve all friendly TEMPESTUS SCIONS units' Objective Control characteristic by 1.\n-> When a friendly unit is selected to shoot (the triggering unit must have MILITARUM TEMPESTUS), until the end of the phase: if the triggering unit was set up this turn, the triggering unit gets +1 to Hit rolls with ranged weapons.\nApplies to: units with ASTRA MILITARUM.",
+                    "description": "If your army includes a MILITARUM TEMPESTUS OFFICER model that is the Warlord:\n  - Friendly TEMPESTUS SCIONS units gain the BATTLELINE keyword.\n  - Improve friendly TEMPESTUS SCIONS units' Objective Control characteristic by 1.\nWhen a friendly MILITARUM TEMPESTUS unit is selected to shoot, until the end of the phase, if the triggering unit was set up this turn, add 1 to the triggering unit's Hit rolls with ranged weapons.\nApplies to: ASTRA MILITARUM units.",
                     "hidden": false
                   }
                 ]
@@ -98648,7 +98648,7 @@
                   {
                     "name": "Armoured Fist",
                     "id": "25b5-d8d4-e629-3cb9",
-                    "description": "While making ranged attacks, if the unit disembarked from a Transport this turn, all friendly ASTRA MILITARUM models get +1 to Wound rolls.",
+                    "description": "While making ranged attacks, if this unit disembarked from a Transport this turn, add 1 to friendly ASTRA MILITARUM models' Wound rolls.",
                     "hidden": false
                   }
                 ]
@@ -98695,7 +98695,7 @@
                   {
                     "name": "Artillery Support",
                     "id": "c9ec-fc14-d4d9-4579",
-                    "description": "At the start of the battle round:\n  Select exactly 1 distinct options (Artillery Support):\n    - Until the end of the battle round: for each enemy unit, up to 2/3/4 units (Incursion/Strike Force/Onslaught) of your choice: while the unit is not within 12\" of a friendly unit, roll one D6: on a 5+, the unit is shaken; while the unit is shaken, subtract 2 from the unit's Move characteristic; while the unit is shaken, the unit gets -2 to Charge rolls.\n    - Until the end of the battle round: select up to 2/3/4 enemy units (Incursion/Strike Force/Onslaught) if the selected unit is not within 12\" of a friendly unit: that unit is scattered; while the selected unit is scattered, that unit cannot benefit from Cover.\n    - Until the end of the battle round: select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught): that unit gains the Stealth ability.",
+                    "description": "At the start of the battle round:\n  Choose one of the following (Artillery Support):\n    - Until the end of the battle round, for each enemy unit, up to 2/3/4 units (Incursion/Strike Force/Onslaught) of your choice: while this unit is not within 12\" of a friendly unit, roll one D6: on a 5+, that unit is shaken; while this unit is shaken, subtract 2\" from that unit's Move characteristic; while this unit is shaken, subtract 2 from that unit's Charge rolls.\n    - Until the end of the battle round, select up to 2/3/4 enemy units (Incursion/Strike Force/Onslaught) that is not within 12\" of a friendly unit; those units are scattered; while the selected unit is scattered, those units cannot benefit from Cover.\n    - Until the end of the battle round, select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught); those units gain the Stealth ability.",
                     "hidden": false
                   }
                 ]
@@ -98749,7 +98749,7 @@
                   {
                     "name": "Absolutist Principles",
                     "id": "21f5-ff74-710f-b027",
-                    "description": "For the rest of the battle:\n  -> All friendly units with the BULLGRYN SQUAD, OGRYN SQUAD or RATLINGS keyword gain the ABHUMAN keyword.\n  -> Increase the recipients of all friendly COMMISSAR models' Voice of Command ability by 1; it can also affect all friendly ABHUMAN units.\nApplies to: units with ASTRA MILITARUM.",
+                    "description": "For the rest of the battle:\n  - Friendly units with the BULLGRYN SQUAD, OGRYN SQUAD or RATLINGS keyword gain the ABHUMAN keyword.\n  - Increase the recipients of friendly COMMISSAR models' Voice of Command ability by 1; it can also affect friendly ABHUMAN units.\nApplies to: ASTRA MILITARUM units.",
                     "hidden": false
                   }
                 ]
@@ -98803,7 +98803,7 @@
                   {
                     "name": "Designated Targets",
                     "id": "a2d9-7769-0223-1427",
-                    "description": "All friendly ASTRA MILITARUM INFANTRY SMOKE or SCOUT SENTINELS units gain the Signal Flares ability:\n  -> You can, until the end of the phase: during the Shooting phase, in your turn, select one enemy unit visible to this model if the selected unit is within 12\" of the unit: that unit is marked as designated; while the selected unit is tagged designated, add 3 to that unit's detection range characteristic.\nYou cannot select this Detachment together with another RECON Detachment.\nApplies to: units with ASTRA MILITARUM.",
+                    "description": "Friendly ASTRA MILITARUM INFANTRY SMOKE or SCOUT SENTINELS units gain the Signal Flares ability:\n  - Until the end of the phase, you can: during your Shooting phase, select one enemy unit visible to this model that is within 12\" of this unit; that unit is designated as Designated; while the selected unit is designated as Designated, add 3\" to that unit's detection range.\nYou cannot select this Detachment together with another RECON Detachment.\nApplies to: ASTRA MILITARUM units.",
                     "hidden": false
                   }
                 ]
@@ -98850,7 +98850,7 @@
                   {
                     "name": "Ceaseless Cannonade",
                     "id": "a685-7e55-696b-2913",
-                    "description": "When a friendly unit is selected to shoot (the triggering unit must have ASTRA MILITARUM) (the triggering unit must have SQUADRON or TITANIC), until the end of the phase:\n  -> While a friendly unit other than this unit is not within Engagement Range of the target unit, the triggering unit is eligible to shoot even if it is within Engagement Range of enemy units.\n  -> Unless making attacks made with [INDIRECT FIRE] weapons, the triggering unit ignores any negative modifiers to its Hit rolls.\nApplies to: units with ASTRA MILITARUM.",
+                    "description": "When a friendly ASTRA MILITARUM unit with the SQUADRON or TITANIC keyword is selected to shoot, until the end of the phase:\n  - While a friendly unit other than this unit is not within Engagement Range of the target unit, that unit is eligible to shoot even if it is within Engagement Range of enemy units.\n  - Unless making attacks made with [INDIRECT FIRE] weapons, that unit ignores any negative modifiers to its Hit rolls.\nApplies to: ASTRA MILITARUM units.",
                     "hidden": false
                   }
                 ]
@@ -98897,7 +98897,7 @@
                   {
                     "name": "Squadron Command",
                     "id": "9695-4e59-5ed5-28ca",
-                    "description": "For the rest of the battle:\n  -> All friendly OFFICER units' Voice of Command ability can also affect all SQUADRON units.\n  -> All friendly OFFICER units' Voice of Command ability gains the option On My Signal (nothing happens).\nApplies to: units with ASTRA MILITARUM.",
+                    "description": "For the rest of the battle:\n  - Friendly OFFICER units' Voice of Command ability can also affect SQUADRON units.\n  - Friendly OFFICER units' Voice of Command ability gains the option On My Signal (nothing happens).\nApplies to: ASTRA MILITARUM units.",
                     "hidden": false
                   },
                   {
@@ -99048,7 +99048,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "After deployment, you may use this ability, while this model is on the battlefield:\n  -> Select up to 3 friendly ASTRA MILITARUM INFANTRY units other than the unit:\n    -> For each selected unit:\n      -> That unit can be set up on the battlefield.\n      -> That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
+                    "$text": "After deployment, you can use this ability, while this model is on the battlefield:\n  - Select up to 3 friendly ASTRA MILITARUM INFANTRY units other than this unit:\n    - For each selected unit:\n      - That unit can be set up on the battlefield.\n      - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -99198,7 +99198,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of each phase, you may use this ability, once per battle per model:\n  -> Select one enemy unit (excluding MONSTER or VEHICLE units) within 8\" of the unit: that unit must take a Battle-shock test.",
+                    "$text": "At the start of each phase, you can use this ability, once per battle per model, select one enemy unit (excluding MONSTER or VEHICLE units) within 8\" of this unit. That unit must take a Battle-shock test.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -99498,7 +99498,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time an enemy unit ends a Normal, Advance, Fall Back or Charge move (the triggering unit must have INFANTRY or MOUNTED), while the triggering unit is within 8\" of the unit, until the start of your next turn:\n  -> Roll one D6: on a 4+, the triggering unit is stunned.\n  -> While the triggering unit is stunned, the triggering unit gets -1 to Hit rolls.",
+                    "$text": "Each time an enemy INFANTRY or MOUNTED unit ends a Normal, Advance, Fall Back or Charge move, while the triggering unit is within 8\" of this unit, until the start of your next turn:\n  - Roll one D6: on a 4+, the triggering unit is stunned.\n  - While the triggering unit is stunned, subtract 1 from the triggering unit's Hit rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -99686,7 +99686,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "This model has the Feel No Pain 6+ ability.",
+                    "$text": "This model has Feel No Pain 6+.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -99874,7 +99874,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While making ranged attacks, you can re-roll a Hit roll of 1.",
+                    "$text": "While making ranged attacks, you can re-roll Hit rolls of 1.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -100016,7 +100016,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "While this unit is Battle-shocked, subtract 1 from this unit's Objective Control characteristic.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -100158,7 +100158,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While this model is leading a unit, while making ranged attacks, if this model remained stationary this turn, the unit scores Critical Hits on Hit rolls of 5+.",
+                    "$text": "While this model is leading a unit, while making ranged attacks, if this model remained stationary this turn, this unit scores Critical Hits on Hit rolls of 5+.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -100300,7 +100300,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "During the Command phase, in your turn, increase the number of uses of this model's Voice of Command ability by 1.",
+                    "$text": "During your Command phase, increase the number of uses of this model's Voice of Command ability by 1.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -100442,7 +100442,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "When an enemy unit is set up, while the triggering unit is within 8\" of this unit:\n  - This model can issue up to 1 Order from Voice of Command to eligible friendly units, not counting toward the Orders it can issue this turn.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -100523,7 +100523,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "This model's Voice of Command ability can also affect all friendly OGRYN units.\nThis model can also be attached to friendly units with the BULLGRYN SQUAD or OGRYN SQUAD keyword.",
+                    "$text": "This model's Voice of Command ability can also affect friendly OGRYN units.\nThis model can also be attached to friendly units with the BULLGRYN SQUAD or OGRYN SQUAD keyword.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -100665,7 +100665,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "This model's Voice of Command ability gains the option Target Weak Spot (while making ranged attacks, while the target is within 12\" of the attacking unit, improve the unit's Armour Penetration characteristic by 1).",
+                    "$text": "This model's Voice of Command ability gains the option Target Weak Spot (while making ranged attacks, while the target is within 12\" of the attacking unit, improve this unit's Armour Penetration characteristic by 1).",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -100791,7 +100791,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "This model's Voice of Command ability gains the option Move to the Shadows (until the attacking unit finishes resolving its attacks, while making ranged attacks, this unit gains the Stealth ability).",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -100933,7 +100933,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time the unit issues an Order, the range of this model's Voice of Command ability is 12\".",
+                    "$text": "Each time this unit issues an Order, the range of this model's Voice of Command ability is 12\".",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -101014,7 +101014,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time the unit issues an Order, while the unit has the Master Vox ability, the number of targets of this model's Voice of Command ability is 3.\nApplies to: units with ASTRA MILITARUM, MILITARUM TEMPESTUS, OFFICER.",
+                    "$text": "Each time this unit issues an Order, while this unit has the Master Vox ability, the number of targets of this model's Voice of Command ability is 3.\nApplies to: ASTRA MILITARUM MILITARUM TEMPESTUS OFFICER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -101095,7 +101095,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "During the first battle round, during the Movement phase, in your turn, the unit can make an Ingress move.\nApplies to: units with ASTRA MILITARUM, MILITARUM TEMPESTUS, OFFICER.",
+                    "$text": "During the first battle round, during your Movement phase, this unit can make an Ingress move.\nApplies to: ASTRA MILITARUM MILITARUM TEMPESTUS OFFICER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -101221,7 +101221,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the end of your Command phase, if you control 1+ objectives, while the unit is within range of an objective marker you control or while the Transport this unit is embarked within is within range of an objective marker you control, until you no longer control it, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
+                    "$text": "At the end of your Command phase, if you control one or more objectives, while this unit is within range of an objective marker you control or while the Transport this unit is embarked within is within range of an objective marker you control, until you no longer control it, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -101302,7 +101302,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of your Shooting phase, until the end of the phase:\n  -> Select one friendly TRANSPORT unit (excluding AIRCRAFT or TITANIC units) if the selected unit is within 3\" of this model: you can re-roll the Hit roll for attacks made by that unit.",
+                    "$text": "At the start of your Shooting phase, until the end of the phase, select one friendly TRANSPORT unit (excluding AIRCRAFT or TITANIC units) that is within 3\" of this model. You can re-roll Hit rolls for attacks made by that unit.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -101428,7 +101428,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit has the Benefit of Cover.\nWhile the unit is wholly within 3\" of a friendly TRANSPORT unit, the unit gains the Stealth ability.",
+                    "$text": "This unit has the Benefit of Cover.\nWhile this unit is wholly within 3\" of a friendly TRANSPORT unit, this unit gains the Stealth ability.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -101554,7 +101554,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit is eligible to disembark even if its Transport Advanced this turn; if it does, it counts as having made a Normal move that phase, and cannot declare a charge this turn.",
+                    "$text": "This unit is eligible to disembark even if its Transport Advanced this turn; if it does, it counts as having made a Normal move that phase, and cannot declare a charge this turn.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -101680,7 +101680,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While this model is leading a REGIMENT unit, the unit gains the Scouts 6\" ability.",
+                    "$text": "While this model is leading a REGIMENT unit, this unit gains the Scouts 6\" ability.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -101806,7 +101806,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Enemy units cannot target the unit with the Fire Overwatch Stratagem.",
+                    "$text": "Enemy units cannot target this unit with the Fire Overwatch Stratagem.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -102074,7 +102074,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time an Order is issued to the unit, while this model is leading a unit, the Take Cover option of Voice of Command is active for the unit.",
+                    "$text": "Each time an Order is issued to the unit, while this model is leading a unit, the Take Cover option of Voice of Command is active for this unit.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -102155,7 +102155,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the unit is selected to shoot, until this unit has resolved its ranged attacks, add 6 to all enemy units' detection range characteristic.\nApplies to: units with RATLINGS.",
+                    "$text": "When this unit is selected to shoot, until this unit has resolved its ranged attacks, add 6\" to enemy units' detection range.\nApplies to: RATLINGS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -102236,7 +102236,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "This model has the Feel No Pain 4+ ability.\nApplies to: units with COMMISSAR.",
+                    "$text": "This model has Feel No Pain 4+.\nApplies to: COMMISSAR units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -102317,7 +102317,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit gains the Infiltrators ability.\nApplies to: units with Scout Sentinels.",
+                    "$text": "This unit gains the Infiltrators ability.\nApplies to: Scout Sentinels units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -102443,7 +102443,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "During the first battle round, during the Movement phase, in your turn, the unit can make an Ingress move.\nApplies to: units with ASTRA MILITARUM, INFANTRY, PLATOON.",
+                    "$text": "During the first battle round, during your Movement phase, this unit can make an Ingress move.\nApplies to: ASTRA MILITARUM INFANTRY PLATOON units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -102509,7 +102509,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "For the rest of the battle:\n  -> This model gains the Voice of Command ability.\n  -> This model gains the OFFICER keyword.\n  -> The number of uses of this model's Voice of Command ability is 2; it can also affect all friendly ASTRA MILITARUM units with the TITANIC or SQUADRON keyword.\nApplies to: units with ASTRA MILITARUM, TITANIC, CHARACTER.",
+                    "$text": "For the rest of the battle:\n  - This model gains the Voice of Command ability.\n  - This model gains the OFFICER keyword.\n  - The number of uses of this model's Voice of Command ability is 2; it can also affect friendly ASTRA MILITARUM units with the TITANIC or SQUADRON keyword.\nApplies to: ASTRA MILITARUM TITANIC CHARACTER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -102575,7 +102575,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: While making ranged attacks, you can re-roll the Damage roll for attacks made by this model with ranged weapons.\nApplies to: units with ASTRA MILITARUM, TITANIC, CHARACTER.",
+                    "$text": "While making ranged attacks, you can re-roll Damage rolls for attacks made by this model.\nApplies to: ASTRA MILITARUM TITANIC CHARACTER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -102656,7 +102656,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time this model uses Omnissiahs Blessing, until the start of your next Command phase, add 3 to that unit's Move characteristic.\nApplies to: units with ASTRA MILITARUM, TECH-PRIEST ENGINSEER.",
+                    "$text": "Each time this model uses Omnissiahs Blessing, until the start of your next Command phase, add 3\" to that unit's Move characteristic.\nApplies to: ASTRA MILITARUM TECH-PRIEST ENGINSEER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -102722,7 +102722,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When a unit disembarks from this Transport, if this model made a Normal move this turn, the triggering unit is eligible to declare a charge even if it disembarked this turn.\nApplies to: units with ASTRA MILITARUM, TITANIC, CHARACTER, TRANSPORT.",
+                    "$text": "When a unit disembarks from this Transport, if this model made a Normal move this turn, the triggering unit is eligible to declare a charge even if it disembarked this turn.\nApplies to: ASTRA MILITARUM TITANIC CHARACTER TRANSPORT units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -102848,7 +102848,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time an Order is issued to the unit, you may use this ability:\n  -> Select up to 2 friendly PLATOON units other than the unit if the selected unit is within 3\" of the unit: that unit is marked as affected by order.\nApplies to: units with ASTRA MILITARUM, OFFICER, INFANTRY.",
+                    "$text": "Each time an Order is issued to the unit, you can use this ability, select up to 2 friendly PLATOON units other than this unit that is within 3\" of this unit. Those units are designated as Affected By Order.\nApplies to: ASTRA MILITARUM OFFICER INFANTRY units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -102974,7 +102974,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the end of your opponent's Fight phase, while the unit is unengaged, while every model in the unit is within 3\" of a friendly ASTRA MILITARUM TRANSPORT unit, the unit is eligible to embark.\nApplies to: units with ASTRA MILITARUM, OFFICER, INFANTRY.",
+                    "$text": "At the end of your opponent's Fight phase, while this unit is unengaged and every model in this unit is within 3\" of a friendly ASTRA MILITARUM TRANSPORT unit, this unit is eligible to embark.\nApplies to: ASTRA MILITARUM OFFICER INFANTRY units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -103055,7 +103055,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While a friendly ARMOURED SKIRMISHER unit is within 3\" of this model, that unit has the Feel No Pain 5+ ability.\nApplies to: units with ASTRA MILITARUM, TECH-PRIEST ENGINSEER.",
+                    "$text": "While a friendly ARMOURED SKIRMISHER unit is within 3\" of this model, that unit has Feel No Pain 5+.\nApplies to: ASTRA MILITARUM TECH-PRIEST ENGINSEER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -103197,7 +103197,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "After deployment, you may use this ability, while the unit is on the battlefield:\n  -> Select up to 2 friendly units with the REGIMENT or SQUADRON keyword:\n    -> For each selected unit:\n      -> That unit can be set up on the battlefield.\n      -> That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.\nApplies to: units with ASTRA MILITARUM, OFFICER.",
+                    "$text": "After deployment, you can use this ability, while this unit is on the battlefield:\n  - Select up to 2 friendly units with the REGIMENT or SQUADRON keyword:\n    - For each selected unit:\n      - That unit can be set up on the battlefield.\n      - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.\nApplies to: ASTRA MILITARUM OFFICER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

@@ -723,7 +723,7 @@
       {
         "name": "Cabal of Sorcerers",
         "id": "da67-e345-a357-4020",
-        "description": "At the start of your Shooting phase, once per turn per model, if your Army Faction is THOUSAND SONS:\n  -> Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, the unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:\n    - Destiny’s Ruin (Warp Charge 5): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll the Hit roll for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.\n    - Temporal Surge (Warp Charge 6): Until the end of the turn: select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword if the selected unit is unengaged and the selected unit is within 24\" of this model and the selected unit is visible to this model: unless the Psychic test result is 10+, that unit can make a Normal move of up to D6\"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6\"; that unit cannot declare a charge.\n    - Doombolt (Warp Charge 7): Select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model and (the selected unit does not have the Lone Operative ability or the selected unit is an attached unit or the selected unit is within 12\" of this model): unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.\n    - Twist of Fate (Warp Charge 9): Until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model and the selected unit is visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 2 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.",
+        "description": "At the start of your Shooting phase, once per turn per model, if your Army Faction is THOUSAND SONS:\n  - Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, this unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:\n    - Destiny’s Ruin (Warp Charge 5): Select one enemy unit that is within 24\" of this model and visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll Hit rolls of 1 for attacks made by friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll Hit rolls for attacks made by friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.\n    - Temporal Surge (Warp Charge 6): Until the end of the turn, select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword that is unengaged, within 24\" of this model and visible to this model; unless the Psychic test result is 10+, that unit can make a Normal move of up to D6\"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6\"; that unit cannot declare a charge.\n    - Doombolt (Warp Charge 7): Select one enemy unit that is within 24\" of this model and visible to this model and (without the Lone Operative ability or that is an attached unit or within 12\" of this model); unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.\n    - Twist of Fate (Warp Charge 9): Select one enemy unit that is within 24\" of this model and visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 2 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.",
         "hidden": false
       },
       {
@@ -880,7 +880,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -894,7 +894,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If this model is equipped with one weapon named \"Close combat weapon\", if this model is equipped with exactly 2 melee weapons other than \"Close combat weapon\", improve the Attacks characteristic of melee weapons other than \"Close combat weapon\" equipped by this model by 2.",
+                "$text": "If this model is equipped with one weapon named \"Close combat weapon\" and this model is equipped with exactly 2 melee weapons other than \"Close combat weapon\", improve the Attacks characteristic of melee weapons other than \"Close combat weapon\" equipped by this model by 2.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -908,7 +908,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn or during the Fight phase, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n    -> While the selected unit is within 9\" of a friendly PSYKER THOUSAND SONS unit, that unit must take a Battle-shock test, applying -1 to that test.\n    -> While the selected unit is not within 9\" of a friendly PSYKER THOUSAND SONS unit, that unit must take a Battle-shock test.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase or during the Fight phase, until the end of the phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:\n    - While the selected unit is within 9\" of a friendly PSYKER THOUSAND SONS unit, that unit must take a Battle-shock test, applying -1 to that test.\n    - While the selected unit is not within 9\" of a friendly PSYKER THOUSAND SONS unit, that unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5395,7 +5395,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5409,7 +5409,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5423,7 +5423,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While a friendly unit is within 6\" of this model, if the unit has the PSYKER keyword, that unit gets +1 to Psychic rolls.",
+                "$text": "While a friendly unit is within 6\" of this model, if this unit has the PSYKER keyword, add 1 to that unit's Psychic rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5451,7 +5451,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5819,7 +5819,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5833,7 +5833,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6524,7 +6524,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit gets +1 to Hit rolls.",
+                "$text": "While this model is leading a unit, add 1 to this unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6538,7 +6538,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6552,7 +6552,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit:\n  -> Destroy 1 of the Bodyguard models in the unit.\n  -> Add D3 to the Attacks characteristic of weapons with [PSYCHIC] equipped by this model.\n  -> Add D3 to the Strength characteristic of weapons with [PSYCHIC] equipped by this model.",
+                "$text": "While this model is leading a unit:\n  - Destroy 1 of the Bodyguard models in this unit.\n  - Add D3 to the Attacks characteristic of weapons with [PSYCHIC] equipped by this model.\n  - Add D3 to the Strength characteristic of weapons with [PSYCHIC] equipped by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6778,7 +6778,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6792,7 +6792,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Command phase, one model in the unit regains up to 3 lost wounds.",
+                "$text": "At the start of the Command phase, one model in this unit regains up to 3 lost wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7278,7 +7278,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit's weapons gain [LETHAL HITS].",
+                "$text": "While this model is leading a unit, this unit's weapons gain [LETHAL HITS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7292,7 +7292,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7306,7 +7306,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: Once per battle per unit, during the Shooting phase, in your turn or during the Fight phase, until the end of the phase:\n  -> Improve the Attacks characteristic of weapons with [PSYCHIC] equipped by this model by 3.\n  -> Improve the Strength characteristic of weapons with [PSYCHIC] equipped by this model by 3.",
+                "$text": "Once per battle per unit, during your Shooting phase or during the Fight phase, until the end of the phase, you can use this ability:\n  - Improve the Attacks characteristic of weapons with [PSYCHIC] equipped by this model by 3.\n  - Improve the Strength characteristic of weapons with [PSYCHIC] equipped by this model by 3.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7760,7 +7760,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7788,7 +7788,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8390,7 +8390,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8404,7 +8404,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Sorcerous Support Target). Until the end of the phase, each time a friendly unit makes an attack against it:\n    -> If the attacking unit disembarked from this Transport this turn, while making psychic attacks, all friendly models get +1 to Hit rolls.\n    -> If the attacking unit disembarked from this Transport this turn, while making psychic attacks, all friendly models get +1 to Wound rolls.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the end of the phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Sorcerous Support Target). Until the end of the phase, each time a friendly unit makes an attack against it:\n    - If the attacking unit disembarked from this Transport this turn, while making psychic attacks, add 1 to friendly models' Hit rolls.\n    - If the attacking unit disembarked from this Transport this turn, while making psychic attacks, add 1 to friendly models' Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8418,7 +8418,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9393,7 +9393,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time the unit attempts a Ritual, the unit gets +1 to Psychic rolls.",
+                "$text": "Each time this unit attempts a Ritual, add 1 to this unit's Psychic rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9407,7 +9407,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9421,7 +9421,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After deployment, you may use this ability:\n  -> Select up to 3 friendly THOUSAND SONS units:\n    -> For each selected unit:\n      Select one of the following:\n        - That unit can be set up on the battlefield.\n        - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
+                "$text": "After deployment, you can use this ability:\n  - Select up to 3 friendly THOUSAND SONS units:\n    - For each selected unit:\n      Choose one of the following:\n        - That unit can be set up on the battlefield.\n        - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9816,7 +9816,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Shooting phase, you can re-roll a Wound roll of 1.",
+                "$text": "During the Shooting phase, you can re-roll Wound rolls of 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11045,7 +11045,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: Once per turn per unit:\n  Select one of the following:\n    - One of the unit's Hit rolls counts as 6.\n    - One of the unit's Wound rolls counts as 6.\n    - One of the unit's saving throw rolls counts as 6.",
+                "$text": "Once per turn per unit, you can use this ability:\n  Choose one of the following:\n    - One of this unit's Hit rolls counts as 6.\n    - One of this unit's Wound rolls counts as 6.\n    - One of this unit's saving throw rolls counts as 6.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11059,7 +11059,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11073,7 +11073,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit's weapons gain [SUSTAINED HITS 1].",
+                "$text": "While this model is leading a unit, this unit's weapons gain [SUSTAINED HITS 1].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11350,7 +11350,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.",
+                "$text": "When this unit ends a Charge move, select one enemy unit that is within Engagement Range of this unit. Roll one D6 for each friendly model in this unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12139,7 +12139,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit ends a move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8\" of the unit, while the unit is unengaged, the unit can make a Normal move of up to D6\".",
+                "$text": "Each time an enemy unit ends a move, during your opponent's Movement phase, while the triggering unit is within 8\" of this unit and this unit is unengaged, this unit can make a Normal move of up to D6\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12936,7 +12936,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12950,7 +12950,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit contains 1+ PSYKER models, the attacking unit gets -1 to Wound rolls.",
+                "$text": "If this unit contains one or more PSYKER models, subtract 1 from the attacking unit's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14322,7 +14322,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The number of uses of each RITUAL ability of this model is 2, but it can be used at most 2 times per turn.\n-> Each time the unit attempts a Ritual: the unit gets +2 to Psychic rolls.",
+                "$text": "The number of uses of each RITUAL ability of this model is 2, but it can be used at most 2 times per turn.\nEach time this unit attempts a Ritual, add 2 to this unit's Psychic rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14336,7 +14336,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is friendly, the unit must be your Warlord.",
+                "$text": "While this model is friendly, this unit must be your Warlord.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14350,7 +14350,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, until the start of the next battle round:\n  -> Select one:\n    - Impossible Form: unless against psychic attacks, subtract 1 from the attacking unit's Damage characteristic.\n    - Treason of Tzeentch: at the start of your opponent's Shooting phase, until the end of the phase: select one enemy unit if the selected unit is within 24\" of this model: ranged weapons equipped by models in that unit gain [HAZARDOUS].\n    - Time Flux: while a friendly THOUSAND SONS unit is within 6\" of this model, add 2 to that unit's Move characteristic.",
+                "$text": "At the start of the battle round, until the start of the next battle round:\n  - Select one:\n    - Impossible Form: Unless against psychic attacks, subtract 1 from the Damage characteristic of the attacking unit's attacks.\n    - Treason of Tzeentch: At the start of your opponent's Shooting phase, until the end of the phase, select one enemy unit that is within 24\" of this model; ranged weapons equipped by models in that unit gain [HAZARDOUS].\n    - Time Flux: While a friendly THOUSAND SONS unit is within 6\" of this model, add 2\" to that unit's Move characteristic.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14364,7 +14364,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, unless against psychic attacks, until the start of the next battle round, subtract 1 from the attacking unit's Damage characteristic.",
+                "$text": "At the start of the battle round, unless against psychic attacks, until the start of the next battle round, subtract 1 from the Damage characteristic of the attacking unit's attacks.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14378,7 +14378,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, until the start of the next battle round:\n  -> At the start of your opponent's Shooting phase, until the end of the phase:\n    -> Select one enemy unit if the selected unit is within 24\" of this model: ranged weapons equipped by models in that unit gain [HAZARDOUS].",
+                "$text": "At the start of the battle round, until the start of the next battle round:\n  - At the start of your opponent's Shooting phase, until the end of the phase:\n    - Select one enemy unit that is within 24\" of this model. Ranged weapons equipped by models in that unit gain [HAZARDOUS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14392,7 +14392,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, until the start of the next battle round, while a friendly THOUSAND SONS unit is within 6\" of this model, add 2 to that unit's Move characteristic.",
+                "$text": "At the start of the battle round, until the start of the next battle round, while a friendly THOUSAND SONS unit is within 6\" of this model, add 2\" to that unit's Move characteristic.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14406,7 +14406,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14420,7 +14420,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14434,7 +14434,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14781,7 +14781,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Shooting phase against a unit that is not a MONSTER or VEHICLE, improve the unit's Armour Penetration characteristic by 1.",
+                "$text": "During the Shooting phase against a unit that is not a MONSTER or VEHICLE, improve this unit's Armour Penetration characteristic by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14795,7 +14795,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14809,7 +14809,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15552,7 +15552,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15566,7 +15566,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: The unit is eligible to be targeted with the Counteroffensive Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\nThe unit's Counteroffensive ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
+                "$text": "You can use this ability: This unit is eligible to be targeted with the Counteroffensive Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.\nThis unit's Counteroffensive ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15580,7 +15580,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Normal, Advance or Fall Back move:\n  -> The unit can move over non-Titanic models as though they were not there.\n  -> The unit can move over terrain features as though they were not there.\n  -> The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  -> The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  -> The unit automatically passes Desperate Escape tests.",
+                "$text": "When this unit ends a Normal, Advance or Fall Back move:\n  - This unit can move over non-Titanic models as though they were not there.\n  - This unit can move over terrain features as though they were not there.\n  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  - This unit automatically passes Desperate Escape tests.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15594,7 +15594,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17339,7 +17339,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is set up, you may use this ability, during the Movement phase, in your turn, if the triggering unit was set up this phase, if the triggering unit used the Deep Strike ability this phase, until the end of the turn:\n  -> This model resolves the Aetherstride ability now.\n  -> The unit can be set up on the battlefield more than 6\" away from all enemy models.\n  -> Dark Blessing weapons equipped by this model gain [SUSTAINED HITS D3].\n  -> The triggering unit cannot declare a charge.",
+                "$text": "When this model is set up, you can use this ability, during your Movement phase, if the triggering unit was set up this phase and the triggering unit used the Deep Strike ability this phase, until the end of the turn:\n  - This model resolves the Aetherstride ability now.\n  - This unit can be set up on the battlefield more than 6\" away from all enemy models.\n  - Dark Blessing weapons equipped by this model gain [SUSTAINED HITS D3].\n  - The triggering unit cannot declare a charge.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17353,7 +17353,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Against CHARACTER targets:\n  -> You can re-roll a Hit roll of 1.\n  -> You can re-roll a Wound roll of 1.",
+                "$text": "Against CHARACTER targets:\n  - You can re-roll Hit rolls of 1.\n  - You can re-roll Wound rolls of 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17367,7 +17367,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17381,7 +17381,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17855,7 +17855,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your opponent's turn, you may use this ability, while the unit is not within 6\" of an enemy unit, the unit can be placed into Strategic Reserves.",
+                "$text": "At the end of your opponent's turn, you can use this ability, while this unit is not within 6\" of an enemy unit, this unit can be placed into Strategic Reserves.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17869,7 +17869,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19532,7 +19532,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19546,7 +19546,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When you target the unit with the Fire Overwatch Stratagem or when you target the unit with the Heroic Intervention Stratagem, once per turn per unit, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).",
+                "$text": "When you target this unit with the Fire Overwatch Stratagem or when you target this unit with the Heroic Intervention Stratagem, once per turn per unit, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19560,7 +19560,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20337,7 +20337,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:\n  -> Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit by Arcane Fire during its just-finished shooting sequence:\n    -> That unit is ensnared.\n    -> While the selected unit is ensnared, subtract 2 from that unit's Move characteristic.\n    -> While the selected unit is ensnared, that unit gets -2 to Charge rolls.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:\n  - Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit by Arcane Fire during that shooting sequence:\n    - That unit is ensnared.\n    - While the selected unit is ensnared, subtract 2\" from that unit's Move characteristic.\n    - While the selected unit is ensnared, subtract 2 from that unit's Charge rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20351,7 +20351,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, while the attacking unit is within 18\" of the unit, enemy units can target the unit with ranged weapons.",
+                "$text": "While this model is leading a unit and the attacking unit is within 18\" of this unit, enemy units can target this unit with ranged weapons.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20365,7 +20365,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20826,7 +20826,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20840,7 +20840,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21285,7 +21285,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit has a 4+ invulnerable save.",
+                "$text": "While this model is leading a unit, this unit has a 4+ invulnerable save.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21299,7 +21299,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21313,7 +21313,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: During the Command phase, in your turn, while this model is leading a unit:\n  -> Roll one D6:\n    - On 1: The unit suffers D3 mortal wounds.\n    - On 2-5: Return 1 destroyed BODYGUARD model to the unit, each with its full wounds remaining.\n    - On 6: Return 2 destroyed BODYGUARD models to the unit, each with its full wounds remaining.",
+                "$text": "During your Command phase, while this model is leading a unit, you can use this ability:\n  - Roll one D6:\n    - On 1: This unit suffers D3 mortal wounds.\n    - On 2-5: Return 1 destroyed BODYGUARD model to this unit, each with its full wounds remaining.\n    - On 6: Return 2 destroyed BODYGUARD models to this unit, each with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21911,7 +21911,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit's weapons gain [LETHAL HITS].",
+                "$text": "While this model is leading a unit, this unit's weapons gain [LETHAL HITS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21925,7 +21925,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21939,7 +21939,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your Shooting phase:\n  -> Select one enemy unit if the selected unit is visible to this model (your Marked By Fate Target). Until the end of the phase, each time a friendly unit makes an attack against it, the unit gets +1 to Hit rolls.",
+                "$text": "At the start of your Shooting phase:\n  - Select one enemy unit that is visible to this model (your Marked By Fate Target). Until the end of the phase, each time a friendly unit makes an attack against it, add 1 to this unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21953,7 +21953,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22409,7 +22409,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Shooting phase:\n  -> You can re-roll a failed Hit roll.\n  -> You can re-roll a failed Damage roll.",
+                "$text": "During the Shooting phase:\n  - You can re-roll failed Hit rolls.\n  - You can re-roll failed Damage rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22423,7 +22423,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22437,7 +22437,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23180,7 +23180,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n    -> That unit is marked as suppressed.\n    -> While the unit is tagged suppressed, that unit gets -1 to Hit rolls.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:\n    - That unit is Suppressed.\n    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23194,7 +23194,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23208,7 +23208,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23778,7 +23778,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Normal move, you may use this ability, until the end of the turn:\n  -> Select one enemy unit if the selected unit was moved over by this model during that move: that unit cannot benefit from Cover.",
+                "$text": "When this unit ends a Normal move, you can use this ability, until the end of the turn, select one enemy unit that was moved over by this model during that move. That unit cannot benefit from Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23792,7 +23792,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23806,7 +23806,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24249,7 +24249,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When a friendly PSYKER THOUSAND SONS model with the Cabal of Sorcerers ability is destroyed:\n  -> Select one friendly model within 9\" of that model with the Spirit Snare ability: that model gains the following rules (each time the unit attempts a Ritual, for the rest of the battle: this model gets +1 to Psychic rolls (to a maximum of +2)).",
+                "$text": "When a friendly PSYKER THOUSAND SONS model with the Cabal of Sorcerers ability is destroyed:\n  - Select one friendly model within 9\" of that model with the Spirit Snare ability. That model gains the following rules (each time this unit attempts a Ritual, for the rest of the battle, add 1 to this model's Psychic rolls, to a maximum of +2).",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24263,7 +24263,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24561,7 +24561,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24575,7 +24575,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability:\n  -> Select one enemy unit if the selected unit is within Engagement Range of the unit, binding it as enemy:\n    -> Select one or more friendly BRIMSTONE models in the unit, binding them as horrors:\n      -> For each selected model:\n        -> Roll one D6: on a 4+, destroy that model; the bound enemy suffers 1 mortal wound.",
+                "$text": "When this unit is selected to fight, you can use this ability:\n  - Select one enemy unit that is within Engagement Range of this unit (referred to below as the enemy):\n    - Select one or more friendly BRIMSTONE models in this unit (referred to below as the horrors):\n      - For each selected model:\n        - Roll one D6: on a 4+, destroy that model; the chosen enemy suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24589,7 +24589,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24603,7 +24603,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a friendly BLUE model in the unit is destroyed, after the attacking unit has resolved its attacks, while the unit is on the battlefield:\n  -> Roll one D6: on a 4+, add 1 Brimstone Horror model to the unit.",
+                "$text": "When a friendly BLUE model in this unit is destroyed, after the attacking unit has resolved its attacks, while this unit is on the battlefield:\n  - Roll one D6: on a 4+, add 1 Brimstone Horror model to this unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24617,7 +24617,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit contains 1+ BLUE models, while an enemy unit is within 6\" of this unit, worsen that unit's Leadership characteristic by 1.",
+                "$text": "If this unit contains one or more BLUE models, while an enemy unit is within 6\" of this unit, worsen that unit's Leadership characteristic by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24994,7 +24994,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit is eligible to shoot in a turn in which it Fell Back.",
+                "$text": "This unit is eligible to shoot in a turn in which it Fell Back.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25008,7 +25008,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25722,7 +25722,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25736,7 +25736,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25750,7 +25750,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25764,7 +25764,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time your opponent uses a Stratagem, while that unit is within 12\" of this model, increase the CP cost of that use of the Stratagem by 1CP.",
+                "$text": "Each time your opponent uses a Stratagem, while that unit is within 12\" of this model, increase the CP cost of that use of the Stratagem by 1 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25778,7 +25778,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your Command phase, while this model is on the battlefield:\n  -> This model must take a Leadership test.\n  -> If the triggering leadership roll succeeded, you gain 1CP.",
+                "$text": "At the end of your Command phase, while this model is on the battlefield:\n  - This model must take a Leadership test.\n  - If the triggering leadership roll succeeded, you gain 1 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26144,7 +26144,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26158,7 +26158,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26172,7 +26172,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26186,7 +26186,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Shooting phase, in your turn, until the end of the phase:\n  Select one of the following:\n    - Ranged Bolt of Change weapons equipped by this model gain [IGNORES COVER].\n    - Ranged Bolt of Change weapons equipped by this model gain [LETHAL HITS].\n    - Ranged Bolt of Change weapons equipped by this model gain [SUSTAINED HITS D3].",
+                "$text": "During your Shooting phase, until the end of the phase:\n  Choose one of the following:\n    - Ranged Bolt of Change weapons equipped by this model gain [IGNORES COVER].\n    - Ranged Bolt of Change weapons equipped by this model gain [LETHAL HITS].\n    - Ranged Bolt of Change weapons equipped by this model gain [SUSTAINED HITS D3].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26674,7 +26674,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26688,7 +26688,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit contains at most 0 PINK models:\n  -> The unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position.\n  -> If the unit contains 1+ PINK models, the unit loses the Sullen Malevolence ability.\n  -> If the unit contains 1+ PINK models, the unit loses the Exploding Horrors ability.",
+                "$text": "If this unit contains at most 0 PINK models:\n  - This unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position.\n  - If this unit contains one or more PINK models, this unit loses the Sullen Malevolence ability.\n  - If this unit contains one or more PINK models, this unit loses the Exploding Horrors ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26702,7 +26702,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a friendly model with the BLUE or PINK keyword in the unit is destroyed, after the attacking unit has resolved its attacks, while the unit is on the battlefield:\n  -> Roll one D6: on a 4+, if that model has the PINK keyword, add 2 Blue Horror models to the unit; if that model has the BLUE keyword, add 1 Brimstone Horror model to the unit.",
+                "$text": "When a friendly model with the BLUE or PINK keyword in this unit is destroyed, after the attacking unit has resolved its attacks, while this unit is on the battlefield:\n  - Roll one D6: on a 4+, if that model has the PINK keyword, add 2 Blue Horror models to this unit; if that model has the BLUE keyword, add 1 Brimstone Horror model to this unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27277,7 +27277,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27291,7 +27291,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Normal move, you may use this ability, during the Movement phase, in your turn:\n  -> Select one enemy unit if the selected unit was moved over by the unit during that move: roll one D6 for each model in the unit: for each 4+, that unit suffers 1 mortal wound.",
+                "$text": "When this unit ends a Normal move, you can use this ability, during your Movement phase:\n  - Select one enemy unit that was moved over by this unit during that move. Roll one D6 for each model in this unit: for each 4+, that unit suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -32170,7 +32170,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: Select one of the following:\n  - You can re-roll the Charge roll.\n  - You can re-roll the Advance roll.",
+                "$text": "Choose one of the following:\n  - You can re-roll the Charge roll.\n  - You can re-roll the Advance roll.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -32200,7 +32200,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit is within range of an objective marker you control, improve the unit's Leadership characteristic by 1.",
+                "$text": "While this unit is within range of an objective marker you control, improve this unit's Leadership characteristic by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -34478,7 +34478,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Set the unit's Leadership characteristic to 6.",
+                "$text": "Set this unit's Leadership characteristic to 6+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -34508,7 +34508,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gets +1 to Charge rolls.",
+                "$text": "Add 1 to this unit's Charge rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -34830,7 +34830,7 @@
                   {
                     "name": "Infernal Pacts",
                     "id": "03cb-8ef7-90ab-1e31",
-                    "description": "All friendly SCINTILLATING LEGIONS units gain the Daemonic Illusions ability:\n  -> While a friendly PSYKER THOUSAND SONS unit is within 6\" of the unit, while that unit is visible to the unit, against ranged attacks, that unit has a 4+ invulnerable save.\nAll friendly THOUSAND SONS units gain the Mortal Sorcery ability:\n  -> While a friendly PSYKER SCINTILLATING LEGIONS unit is within 6\" of the unit, while that unit is visible to the unit, that unit gains the Cabal of Sorcerers ability.",
+                    "description": "Friendly SCINTILLATING LEGIONS units gain the Daemonic Illusions ability:\n  - While a friendly PSYKER THOUSAND SONS unit is within 6\" of this unit and that unit is visible to this unit, against ranged attacks, that unit has a 4+ invulnerable save.\nFriendly THOUSAND SONS units gain the Mortal Sorcery ability:\n  - While a friendly PSYKER SCINTILLATING LEGIONS unit is within 6\" of this unit and that unit is visible to this unit, that unit gains the Cabal of Sorcerers ability.",
                     "hidden": false
                   }
                 ]
@@ -34877,7 +34877,7 @@
                   {
                     "name": "Warpfire Infusion",
                     "id": "bab7-8ce4-ada7-86c5",
-                    "description": "Until the end of the phase:\n  -> When a friendly unit is selected to shoot (the triggering unit must have THOUSAND SONS and VEHICLE), you may use this ability or when a friendly unit is selected to fight (the triggering unit must have THOUSAND SONS and VEHICLE), you may use this ability:\n    While the triggering unit is within 6\" of a friendly PSYKER THOUSAND SONS unit:\n      -> You can re-roll one Hit roll.\n      -> You can re-roll one Wound roll.\n      -> You can re-roll one Damage roll.\n    While the triggering unit is not within 6\" of a friendly PSYKER THOUSAND SONS unit:\n      Select one of the following:\n        - You can re-roll one Hit roll.\n        - You can re-roll one Wound roll.\n        - You can re-roll one Damage roll.\n  -> When a friendly THOUSAND SONS VEHICLE model in the unit is destroyed: while the triggering unit has the Deadly Demise ability, while that model is within 6\" of a friendly PSYKER THOUSAND SONS unit, the threshold of this model's Deadly Demise ability is 5.",
+                    "description": "Until the end of the phase:\n  - When a friendly THOUSAND SONS VEHICLE unit is selected to shoot, you can use this ability or when a friendly THOUSAND SONS VEHICLE unit is selected to fight, you can use this ability:\n    - While the triggering unit is within 6\" of a friendly PSYKER THOUSAND SONS unit:\n      - You can re-roll one Hit roll.\n      - You can re-roll one Wound roll.\n      - You can re-roll one Damage roll.\n    - While the triggering unit is not within 6\" of a friendly PSYKER THOUSAND SONS unit:\n      Choose one of the following:\n        - You can re-roll one Hit roll.\n        - You can re-roll one Wound roll.\n        - You can re-roll one Damage roll.\n  - When a friendly THOUSAND SONS VEHICLE model in this unit is destroyed, while the triggering unit has the Deadly Demise ability and that model is within 6\" of a friendly PSYKER THOUSAND SONS unit, the threshold of this model's Deadly Demise ability is 5.",
                     "hidden": false
                   }
                 ]
@@ -34924,7 +34924,7 @@
                   {
                     "name": "Flow of Magic",
                     "id": "8eca-330d-bf11-dfcf",
-                    "description": "Your deployment zone is within Flow of Magic. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Flow of Magic until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Flow of Magic until the end of the phase (evaluated once at that time). You can re-roll a Wound roll of 1 with weapons with [PSYCHIC]. If this model is wholly within Flow of Magic, all friendly THOUSAND SONS units get +1 to Wound rolls with weapons with [PSYCHIC] instead.",
+                    "description": "Your deployment zone is within Flow of Magic. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Flow of Magic until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Flow of Magic until the end of the phase (evaluated once at that time). You can re-roll Wound rolls of 1 with weapons with [PSYCHIC]. If this model is wholly within Flow of Magic, add 1 to friendly THOUSAND SONS units' Wound rolls with weapons with [PSYCHIC] instead.",
                     "hidden": false
                   }
                 ]
@@ -34971,7 +34971,7 @@
                   {
                     "name": "Kindred Sorcery",
                     "id": "de20-736a-e032-e311",
-                    "description": "Until the start of your next Command phase:\n  -> At the start of your Command phase:\n    -> Select one (each may be chosen once per battle):\n      - Imbued Manifestation: add 6 to the Range characteristic of ranged weapons with [PSYCHIC] equipped by models in this unit.\n      - Psychic Maelstrom: the unit gets +1 to Wound rolls with weapons with [PSYCHIC].\n      - Wrath of the Immaterium: weapons with [PSYCHIC] equipped by models in this unit gain [DEVASTATING WOUNDS].",
+                    "description": "Until the start of your next Command phase:\n  - At the start of your Command phase:\n    - Select one (each can be chosen once per battle):\n      - Imbued Manifestation: Add 6\" to the Range characteristic of ranged weapons with [PSYCHIC] equipped by models in this unit.\n      - Psychic Maelstrom: Add 1 to this unit's Wound rolls with weapons with [PSYCHIC].\n      - Wrath of the Immaterium: Weapons with [PSYCHIC] equipped by models in this unit gain [DEVASTATING WOUNDS].",
                     "hidden": false
                   }
                 ]
@@ -35025,7 +35025,7 @@
                   {
                     "name": "Warpmeld Sacrifice",
                     "id": "a2f2-ea70-4522-498f",
-                    "description": "Until the end of the phase:\n  -> When an enemy unit targets a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword, you may use this ability:\n    -> If the target unit is the same unit as that unit, the attacking unit gets -1 to Wound rolls.\n    -> At the end of each phase, until the end of the phase: that unit suffers D3 mortal wounds.\n  -> When a friendly unit is selected to shoot (the triggering unit must have MUTANT and TZEENTCH) (the triggering unit must have INFANTRY or MOUNTED), you may use this ability or when a friendly unit is selected to fight (the triggering unit must have MUTANT and TZEENTCH) (the triggering unit must have INFANTRY or MOUNTED), you may use this ability:\n    -> The triggering unit gets +1 to Wound rolls.\n    -> At the end of each phase, until the end of the phase: the triggering unit suffers D3 mortal wounds.",
+                    "description": "Until the end of the phase:\n  - When an enemy unit targets a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword, you can use this ability:\n    - If the target unit is the same unit as that unit, subtract 1 from the attacking unit's Wound rolls.\n    - At the end of each phase, until the end of the phase, that unit suffers D3 mortal wounds.\n  - When a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword is selected to shoot, you can use this ability or when a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword is selected to fight, you can use this ability:\n    - Add 1 to the triggering unit's Wound rolls.\n    - At the end of each phase, until the end of the phase, the triggering unit suffers D3 mortal wounds.",
                     "hidden": false
                   }
                 ]
@@ -35072,7 +35072,7 @@
                   {
                     "name": "All is Dust",
                     "id": "066c-2424-bc90-a455",
-                    "description": "When damage is allocated to a friendly RUBRICAE model, the unit gets +1 to saving throw rolls.",
+                    "description": "When damage is allocated to a friendly RUBRICAE model, add 1 to this unit's saving throw rolls.",
                     "hidden": false
                   }
                 ]
@@ -35119,7 +35119,7 @@
                   {
                     "name": "Sorcerous Invigoration",
                     "id": "3f73-9386-7134-276b",
-                    "description": "Each time a friendly unit attempts a Ritual (the triggering unit must have PSYKER and THOUSAND SONS) (the triggering unit must not have MONSTER), once per turn per unit, the triggering unit regains up to D3 lost wounds.\nApplies to: units with THOUSAND SONS, PSYKER (excluding MONSTER).",
+                    "description": "Each time a friendly PSYKER THOUSAND SONS unit (excluding MONSTER units) attempts a Ritual, once per turn per unit, that unit regains up to D3 lost wounds.\nApplies to: THOUSAND SONS PSYKER units (excluding MONSTER units).",
                     "hidden": false
                   }
                 ]
@@ -35166,7 +35166,7 @@
                   {
                     "name": "Ensorcelled Animus",
                     "id": "e833-eded-1eb5-1033",
-                    "description": "All friendly SEKHETAR ROBOTS units' weapons gain [PSYCHIC].\nAll friendly PSYKER THOUSAND SONS units gain the Infusion ability:\n  -> While a friendly SEKHETAR ROBOTS unit is within 12\" of this unit, improve the Weapon Skill characteristic of melee weapons equipped by that unit by 1.\nApplies to: units with THOUSAND SONS.",
+                    "description": "Friendly SEKHETAR ROBOTS units' weapons gain [PSYCHIC].\nFriendly PSYKER THOUSAND SONS units gain the Infusion ability:\n  - While a friendly SEKHETAR ROBOTS unit is within 12\" of this unit, improve the Weapon Skill characteristic of melee weapons equipped by that unit by 1.\nApplies to: THOUSAND SONS units.",
                     "hidden": false
                   }
                 ]
@@ -35220,7 +35220,7 @@
                   {
                     "name": "All-Seeing Mutant Hordes",
                     "id": "af44-8f8e-9462-5f04",
-                    "description": "For the rest of the battle:\n  -> All friendly TZAANGORS units gain the BATTLELINE keyword.\n  -> During the Shooting phase, in your turn, if the attacking unit has the MUTANT keyword, add 6 to all enemy units' detection range characteristic.\nApplies to: units with THOUSAND SONS.",
+                    "description": "For the rest of the battle:\n  - Friendly TZAANGORS units gain the BATTLELINE keyword.\n  - During your Shooting phase, if the attacking unit has the MUTANT keyword, add 6\" to enemy units' detection range.\nApplies to: THOUSAND SONS units.",
                     "hidden": false
                   }
                 ]
@@ -35389,7 +35389,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of your Shooting phase, until the end of the phase:\n  -> Select one enemy unit if the selected unit is within 12\" of this model and the selected unit is visible to this model:\n    -> That unit must take a Battle-shock test.\n    -> If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds.",
+                    "$text": "At the start of your Shooting phase, until the end of the phase:\n  - Select one enemy unit that is within 12\" of this model and visible to this model:\n    - That unit must take a Battle-shock test.\n    - If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -35515,7 +35515,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time the unit uses ability, while this model is within 6\" of a friendly SCINTILLATING LEGIONS unit, the unit gets +1 to Psychic rolls.\nApplies to: units with THOUSAND SONS, INFANTRY.",
+                    "$text": "Each time this unit uses ability, while this model is within 6\" of a friendly SCINTILLATING LEGIONS unit, add 1 to this unit's Psychic rolls.\nApplies to: THOUSAND SONS INFANTRY units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -35665,7 +35665,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "After deployment, you may use this ability:\n  -> Select up to 3 friendly THOUSAND SONS units:\n    -> For each selected unit:\n      -> That unit can be set up on the battlefield.\n      -> That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
+                    "$text": "After deployment, you can use this ability:\n  - Select up to 3 friendly THOUSAND SONS units:\n    - For each selected unit:\n      - That unit can be set up on the battlefield.\n      - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -35791,7 +35791,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of each phase, you may use this ability, once per battle per model, until the end of the phase, this model has a 2+ invulnerable save.\nApplies to: units with THOUSAND SONS, INFANTRY.",
+                    "$text": "At the start of each phase, you can use this ability, once per battle per model, until the end of the phase, this model has a 2+ invulnerable save.\nApplies to: THOUSAND SONS INFANTRY units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -35933,7 +35933,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "After a Channel the Warp roll is made, you may use this ability, while this model is within 6\" of a friendly THOUSAND SONS VEHICLE unit:\n  -> Select one friendly THOUSAND SONS VEHICLE unit within 6\" of this model:\n    -> That unit suffers 1 mortal wound.\n    -> You can re-roll one Psychic roll for this model.\nApplies to: units with THOUSAND SONS.",
+                    "$text": "After a Channel the Warp roll is made, you can use this ability, while this model is within 6\" of a friendly THOUSAND SONS VEHICLE unit:\n  - Select one friendly THOUSAND SONS VEHICLE unit within 6\" of this model:\n    - That unit suffers 1 mortal wound.\n    - You can re-roll one Psychic roll for this model.\nApplies to: THOUSAND SONS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -36059,7 +36059,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While this model is within 3\" of a friendly THOUSAND SONS VEHICLE unit, this model gains the Lone Operative ability.\nApplies to: units with THOUSAND SONS, INFANTRY.",
+                    "$text": "While this model is within 3\" of a friendly THOUSAND SONS VEHICLE unit, this model gains the Lone Operative ability.\nApplies to: THOUSAND SONS INFANTRY units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -36201,7 +36201,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: During the Command phase, in your turn:\n  -> Select one friendly THOUSAND SONS VEHICLE model if the selected unit is within 6\" of this model: that model regains up to D3 lost wounds.\nApplies to: units with THOUSAND SONS.",
+                    "$text": "During your Command phase, you can use this ability:\n  - Select one friendly THOUSAND SONS VEHICLE model that is within 6\" of this model. That model regains up to D3 lost wounds.\nApplies to: THOUSAND SONS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -36343,7 +36343,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time the unit attempts a Ritual, while this model is within 6\" of a friendly THOUSAND SONS VEHICLE unit, when resolving this use, increase the range of each RITUAL ability of this model by 6\".\nApplies to: units with THOUSAND SONS.",
+                    "$text": "Each time this unit attempts a Ritual, while this model is within 6\" of a friendly THOUSAND SONS VEHICLE unit, for this activation, increase the range of each RITUAL ability of this model by 6\".\nApplies to: THOUSAND SONS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -36485,7 +36485,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Unless the unit is wholly within Flow of Magic, add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by models in this unit.\nWhile the unit is wholly within Flow of Magic, add 2 to the Strength characteristic of weapons with [PSYCHIC] equipped by models in this unit.",
+                    "$text": "Unless this unit is wholly within Flow of Magic, add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by models in this unit.\nWhile this unit is wholly within Flow of Magic, add 2 to the Strength characteristic of weapons with [PSYCHIC] equipped by models in this unit.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -36627,7 +36627,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While the unit is within Flow of Magic, for the rest of the battle:\n  -> Increase the range of each PSYCHIC ability of this model by 6\".\n  -> You can re-roll the Hazard roll with weapons with [PSYCHIC].",
+                    "$text": "While this unit is within Flow of Magic, for the rest of the battle:\n  - Increase the range of each PSYCHIC ability of this model by 6\".\n  - You can re-roll the Hazard roll with weapons with [PSYCHIC].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -36769,7 +36769,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While the unit is wholly within Flow of Magic, add 3 to the Attacks characteristic of ranged weapons equipped by this model.",
+                    "$text": "While this unit is wholly within Flow of Magic, add 3 to the Attacks characteristic of ranged weapons equipped by this model.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -36911,7 +36911,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While the unit is on the battlefield:\n  -> The unit is marked as wholly within flow of magic.\n  -> The unit cannot attempt Rituals.",
+                    "$text": "While this unit is on the battlefield:\n  - This unit is designated as Wholly Within Flow of Magic.\n  - This unit cannot attempt Rituals.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -37053,7 +37053,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time the unit attempts a Ritual, when resolving this use, increase the range of each RITUAL ability of this model by 6\".\nApplies to: units with THOUSAND SONS.",
+                    "$text": "Each time this unit attempts a Ritual, for this activation, increase the range of each RITUAL ability of this model by 6\".\nApplies to: THOUSAND SONS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -37147,7 +37147,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Once per battle per unit, until the end of the phase, this model is eligible to attempt Rituals.\nApplies to: units with EXALTED SORCERER.",
+                    "$text": "Once per battle per unit, until the end of the phase, this model is eligible to attempt Rituals.\nApplies to: EXALTED SORCERER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -37289,7 +37289,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Once per battle per army, until the end of the turn:\n  -> The unit can be placed into Strategic Reserves.\n  -> The unit gains the Deep Strike ability.\n  -> The unit can make an Ingress move.\nApplies to: units with THOUSAND SONS.",
+                    "$text": "Once per battle per army, until the end of the turn:\n  - This unit can be placed into Strategic Reserves.\n  - This unit gains the Deep Strike ability.\n  - This unit can make an Ingress move.\nApplies to: THOUSAND SONS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -37431,7 +37431,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by this model.\nAdd 1 to the Damage characteristic of weapons with [PSYCHIC] equipped by this model.\nApplies to: units with THOUSAND SONS.",
+                    "$text": "Add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by this model.\nAdd 1 to the Damage characteristic of weapons with [PSYCHIC] equipped by this model.\nApplies to: THOUSAND SONS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -37512,7 +37512,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Before a Psychic test is made, if that test is for a Ritual the triggering unit is attempting, you may use this ability:\n  -> Roll D3, then:\n    -> This model suffers a number of mortal wounds equal to the result of that roll.\n    -> While this model is on the battlefield, add the result of that roll to the unit's Psychic rolls.\nApplies to: units with TZAANGOR SHAMAN.",
+                    "$text": "Before a Psychic test is made, if that test is for a Ritual the triggering unit is attempting, you can use this ability:\n  - Roll D3, then:\n    - This model suffers a number of mortal wounds equal to the result of that roll.\n    - While this model is on the battlefield, add the result of that roll to this unit's Psychic rolls.\nApplies to: TZAANGOR SHAMAN units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -37593,7 +37593,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While this model is leading a unit, the attacking unit gets -1 to Hit rolls.\nApplies to: units with TZAANGOR SHAMAN.",
+                    "$text": "While this model is leading a unit, subtract 1 from the attacking unit's Hit rolls.\nApplies to: TZAANGOR SHAMAN units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -37776,7 +37776,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "This model has the Feel No Pain 4+ ability.\nSet this model's Wounds characteristic to 5.\nApplies to: units with TZAANGOR SHAMAN.",
+                    "$text": "This model has Feel No Pain 4+.\nSet this model's Wounds characteristic to 5.\nApplies to: TZAANGOR SHAMAN units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -37918,7 +37918,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "For the rest of the battle:\n  Select one of the following:\n    - Select 2 friendly RUBRICAE BATTLELINE units: that unit gains the Infiltrators ability.\n    - Select one friendly RUBRICAE unit without the BATTLELINE keyword: that unit gains the Infiltrators ability.\nApplies to: units with THOUSAND SONS.",
+                    "$text": "For the rest of the battle:\n  Choose one of the following:\n    - Select 2 friendly RUBRICAE BATTLELINE units; those units gain the Infiltrators ability.\n    - Select one friendly RUBRICAE unit without the BATTLELINE keyword; that unit gains the Infiltrators ability.\nApplies to: THOUSAND SONS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -38060,7 +38060,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While a friendly RUBRICAE unit is within 9\" of this model, you can re-roll the Battle-shock roll for that unit.\nApplies to: units with THOUSAND SONS.",
+                    "$text": "While a friendly RUBRICAE unit is within 9\" of this model, you can re-roll the Battle-shock roll for that unit.\nApplies to: THOUSAND SONS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -38202,7 +38202,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While this model is leading a unit, RUBRICAE models in the unit get +1 to Hit rolls.\nApplies to: units with THOUSAND SONS.",
+                    "$text": "While this model is leading a unit, add 1 to RUBRICAE models in this unit's Hit rolls.\nApplies to: THOUSAND SONS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -38328,7 +38328,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Melee weapons equipped by this model gain [SUSTAINED HITS D3] and [DEVASTATING WOUNDS].\nApplies to: units with THOUSAND SONS, INFANTRY.",
+                    "$text": "Melee weapons equipped by this model gain [SUSTAINED HITS D3] and [DEVASTATING WOUNDS].\nApplies to: THOUSAND SONS INFANTRY units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -38454,7 +38454,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the end of each phase, if this model was destroyed this phase (1+ times), once per battle per army:\n  -> Roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1\" away from all enemy models, with 3 wounds remaining, as a separate unit with a Starting Strength of 1 (it is no longer part of its attached unit).\nApplies to: units with THOUSAND SONS, PSYKER (excluding MONSTER).",
+                    "$text": "At the end of each phase, if this model was destroyed this phase (one or more times), once per battle per army, roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1\" away from all enemy models, with 3 wounds remaining, as a separate unit with a Starting Strength of 1 (it is no longer part of its attached unit).\nApplies to: THOUSAND SONS PSYKER units (excluding MONSTER units).",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -38580,7 +38580,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "This model regains up to 3 lost wounds.\nApplies to: units with THOUSAND SONS, PSYKER (excluding MONSTER).",
+                    "$text": "This model regains up to 3 lost wounds.\nApplies to: THOUSAND SONS PSYKER units (excluding MONSTER units).",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -38690,7 +38690,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "-> When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, use Soul Bound: during the Movement phase, in your turn, select one friendly SEKHETAR ROBOTS unit within 3\" of this model if the selected unit has the SEKHETAR ROBOTS keyword: that unit regains up to D3+1 lost wounds.\n-> Kine‑shielded Guardians: while this model is within 3\" of a friendly SEKHETAR ROBOTS unit, this model gains the Lone Operative ability.\nApplies to: units with THOUSAND SONS, SORCERER.",
+                    "$text": "When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, use Soul Bound: during your Movement phase, select one friendly SEKHETAR ROBOTS unit within 3\" of this model with the SEKHETAR ROBOTS keyword; that unit regains up to D3+1 lost wounds.\nKine‑shielded Guardians: while this model is within 3\" of a friendly SEKHETAR ROBOTS unit, this model gains the Lone Operative ability.\nApplies to: THOUSAND SONS SORCERER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -38800,7 +38800,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, during the Movement phase, in your turn, until the start of your next turn:\n  -> Select one friendly SEKHETAR ROBOTS unit within 6\" of the unit: improve the Ballistic Skill characteristic of ranged weapons equipped by models in that unit by 1.\nApplies to: units with THOUSAND SONS, SORCERER.",
+                    "$text": "When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase, until the start of your next turn:\n  - Select one friendly SEKHETAR ROBOTS unit within 6\" of this unit. Improve the Ballistic Skill characteristic of ranged weapons equipped by models in that unit by 1.\nApplies to: THOUSAND SONS SORCERER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -38881,7 +38881,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, during the Movement phase, in your turn:\n  -> Select one friendly MUTANT unit within 6\" of this model that is Battle-shocked: that unit is no longer Battle-shocked.\nApplies to: units with THOUSAND SONS, TZAANGOR SHAMAN.",
+                    "$text": "When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase:\n  - Select one friendly MUTANT unit within 6\" of this model that is Battle-shocked. That unit is no longer Battle-shocked.\nApplies to: THOUSAND SONS TZAANGOR SHAMAN units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -38962,7 +38962,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1.\nMelee weapons equipped by models in this unit gain [CLEAVE 1].\nApplies to: units with SPAWN.",
+                    "$text": "Improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1.\nMelee weapons equipped by models in this unit gain [CLEAVE 1].\nApplies to: SPAWN units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

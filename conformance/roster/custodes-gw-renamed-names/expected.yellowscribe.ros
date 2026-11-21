@@ -17,25 +17,25 @@
             </profile>
             <profile name="Sanctified Flames" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; If the selected unit has the PSYKER keyword, that unit must take a Battle-shock test, applying -1 to that test.
-    -&gt; Unless the selected unit has the PSYKER keyword, that unit must take a Battle-shock test.</characteristic>
+                <characteristic name="Description">After this unit resolves its attacks, you can use this ability, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:
+    - If the selected unit has the PSYKER keyword, that unit must take a Battle-shock test, applying -1 to that test.
+    - Unless the selected unit has the PSYKER keyword, that unit must take a Battle-shock test.</characteristic>
               </characteristics>
             </profile>
             <profile name="Scouts" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit gains the Scouts X" ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Daughters of the Abyss" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">All friendly ANATHEMA PSYKANA units have the Feel No Pain 3+ ability against Psychic Attacks.
-All friendly ANATHEMA PSYKANA units gain the Psychic Null ability:
-  -&gt; While a friendly ADEPTUS CUSTODES unit is within 6" of this unit, that unit has the Feel No Pain 5+ ability against Psychic Attacks.
+                <characteristic name="Description">Friendly ANATHEMA PSYKANA units have Feel No Pain 3+ against Psychic Attacks.
+Friendly ANATHEMA PSYKANA units gain the Psychic Null ability:
+  - While a friendly ADEPTUS CUSTODES unit is within 6" of this unit, that unit has Feel No Pain 5+ against Psychic Attacks.
 Your army can include ANATHEMA PSYKANA units.
 You cannot select Anathema Psykana as your Army Faction.
-All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
+Friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -97,20 +97,20 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
             </profile>
             <profile name="Purity of Execution" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can: During the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit within 18" of the unit visible to this model:
-    -&gt; That unit is detected.
-    -&gt; While the selected unit is detected, add 3 to that unit's detection range characteristic.</characteristic>
+                <characteristic name="Description">During your Shooting phase, until the end of the phase, you can use this ability:
+  - Select one enemy unit within 18" of this unit visible to this model:
+    - That unit is detected.
+    - While the selected unit is detected, add 3" to that unit's detection range.</characteristic>
               </characteristics>
             </profile>
             <profile name="Daughters of the Abyss" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">All friendly ANATHEMA PSYKANA units have the Feel No Pain 3+ ability against Psychic Attacks.
-All friendly ANATHEMA PSYKANA units gain the Psychic Null ability:
-  -&gt; While a friendly ADEPTUS CUSTODES unit is within 6" of this unit, that unit has the Feel No Pain 5+ ability against Psychic Attacks.
+                <characteristic name="Description">Friendly ANATHEMA PSYKANA units have Feel No Pain 3+ against Psychic Attacks.
+Friendly ANATHEMA PSYKANA units gain the Psychic Null ability:
+  - While a friendly ADEPTUS CUSTODES unit is within 6" of this unit, that unit has Feel No Pain 5+ against Psychic Attacks.
 Your army can include ANATHEMA PSYKANA units.
 You cannot select Anathema Psykana as your Army Faction.
-All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
+Friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -172,17 +172,17 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
             </profile>
             <profile name="Daughters of the Abyss" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">All friendly ANATHEMA PSYKANA units have the Feel No Pain 3+ ability against Psychic Attacks.
-All friendly ANATHEMA PSYKANA units gain the Psychic Null ability:
-  -&gt; While a friendly ADEPTUS CUSTODES unit is within 6" of this unit, that unit has the Feel No Pain 5+ ability against Psychic Attacks.
+                <characteristic name="Description">Friendly ANATHEMA PSYKANA units have Feel No Pain 3+ against Psychic Attacks.
+Friendly ANATHEMA PSYKANA units gain the Psychic Null ability:
+  - While a friendly ADEPTUS CUSTODES unit is within 6" of this unit, that unit has Feel No Pain 5+ against Psychic Attacks.
 Your army can include ANATHEMA PSYKANA units.
 You cannot select Anathema Psykana as your Army Faction.
-All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
+Friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deft Parry" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">Against melee attacks, subtract 1 from the attacking unit's Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -234,37 +234,37 @@ All friendly ANATHEMA PSYKANA units cannot be your Warlord.</characteristic>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+                <characteristic name="Description">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Neutronium Cascade Mine (Once per battle, per unit)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of each phase, you may use this ability, once per battle per unit:
-  -&gt; Select one enemy unit within 3" of the unit:
-    -&gt; Roll one D6: on a 2+, unless the selected unit has the MONSTER or VEHICLE keyword, that unit suffers D3 mortal wounds; if the selected unit has the MONSTER or VEHICLE keyword, that unit suffers 2D3 mortal wounds.</characteristic>
+                <characteristic name="Description">At the start of each phase, you can use this ability, once per battle per unit:
+  - Select one enemy unit within 3" of this unit:
+    - Roll one D6: on a 2+, unless the selected unit has the MONSTER or VEHICLE keyword, that unit suffers D3 mortal wounds; if the selected unit has the MONSTER or VEHICLE keyword, that unit suffers 2D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Swift Ruin (Once per phase, per army)" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">You can: The unit is eligible to be targeted with the Rapid Ingress Stratagem even if it has already been targeted with that Stratagem this phase.
-Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-The unit's Rapid Ingress ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
+                <characteristic name="Description">You can use this ability: This unit is eligible to be targeted with the Rapid Ingress Stratagem even if it has already been targeted with that Stratagem this phase.
+Reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+This unit's Rapid Ingress ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
               </characteristics>
             </profile>
             <profile name="Take Wing" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the end of your opponent's Fight phase, you may use this ability, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
+                <characteristic name="Description">At the end of your opponent's Fight phase, you can use this ability, while this unit is unengaged, this unit can be placed into Strategic Reserves.</characteristic>
               </characteristics>
             </profile>
             <profile name="Aegis of the Emperor" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">All friendly ADEPTUS CUSTODES units with the Aegis of the Emperor ability have the Feel No Pain 5+ ability against mortal wounds.</characteristic>
+                <characteristic name="Description">Friendly ADEPTUS CUSTODES units with the Aegis of the Emperor ability have Feel No Pain 5+ against mortal wounds.</characteristic>
               </characteristics>
             </profile>
             <profile name="Martial Ka’tah" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">-&gt; At the start of your Command phase: all friendly ADEPTUS CUSTODES units with the Martial Katah ability are readied.
--&gt; You can: while the unit is readied, select one: Conversai (until the end of the turn: the unit is no longer readied; during the Command phase, in your turn, the unit is eligible to start an Action even if it is within Engagement Range of enemy units or it is Battle-shocked; the unit is eligible to shoot even if it is performing an Action) / Calistus (when the unit is selected to move, until the end of the phase: the unit is no longer readied; during the Movement phase, in your turn, the unit can move over models as though they were not there, during its Normal, Advance and Fall Back moves) / Salvus (when the unit is selected to shoot, until the end of the phase: the unit is no longer readied; during the Shooting phase, in your turn, the unit ignores any modifiers to its Ballistic Skill characteristics; the unit ignores any modifiers to its Hit and Wound rolls) / Dacatarai (at the start of the Fight phase, until the end of the phase: the unit is no longer readied; while making melee attacks, while the target is an enemy unit (excluding MONSTER or VEHICLE units), you can re-roll a Hit roll of 1 with melee weapons) / Kaptaris (at the start of the Fight phase, until the end of the phase: the unit is no longer readied; against melee attacks, the attacking unit gets -1 to Hit rolls) / Rendax (when the unit is selected to fight, until the end of the phase: the unit is no longer readied; during the Fight phase, against MONSTER or VEHICLE targets, melee weapons equipped by models in this unit gain [LETHAL HITS]).</characteristic>
+                <characteristic name="Description">At the start of your Command phase, friendly ADEPTUS CUSTODES units with the Martial Katah ability are readied.
+You can: while this unit is readied, select one: Conversai (until the end of the turn, this unit is no longer readied; during your Command phase, this unit is eligible to start an Action even if it is within Engagement Range of enemy units or it is Battle-shocked; this unit is eligible to shoot even if it is performing an Action) / Calistus (when this unit is selected to move, until the end of the phase, this unit is no longer readied; during your Movement phase, this unit can move over models as though they were not there, during its Normal, Advance and Fall Back moves) / Salvus (when this unit is selected to shoot, until the end of the phase, this unit is no longer readied; during your Shooting phase, this unit ignores any modifiers to its Ballistic Skill characteristics; this unit ignores any modifiers to its Hit and Wound rolls) / Dacatarai (at the start of the Fight phase, until the end of the phase, this unit is no longer readied; while making melee attacks against an enemy unit (excluding MONSTER or VEHICLE units), you can re-roll Hit rolls of 1) / Kaptaris (at the start of the Fight phase, until the end of the phase, this unit is no longer readied; against melee attacks, subtract 1 from the attacking unit's Hit rolls) / Rendax (when this unit is selected to fight, until the end of the phase, this unit is no longer readied; during the Fight phase against MONSTER or VEHICLE targets, melee weapons equipped by models in this unit gain [LETHAL HITS]).</characteristic>
               </characteristics>
             </profile>
           </profiles>

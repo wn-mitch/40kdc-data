@@ -136,8 +136,8 @@ describe("rated core rules", () => {
   });
 
   it("describes the rating as X without a unit, and the printed value with one", () => {
-    expect(describeAbility({ effect: fnp as never })).toContain("Feel No Pain X+ ability, X being its rating");
-    expect(describeAbility({ effect: withRating(fnp, 5) as never })).toContain("Feel No Pain 5+ ability");
+    expect(describeAbility({ effect: fnp as never })).toContain("Feel No Pain X+, X being its rating");
+    expect(describeAbility({ effect: withRating(fnp, 5) as never })).toContain("Feel No Pain 5+");
     expect(describeAbility({ effect: scouts as never })).toContain('Scouts X" ability, X being its rating');
     expect(describeAbility({ effect: demise as never })).toContain("equal to its rating");
     expect(describeAbility({ effect: withRating(demise, "D3") as never })).toContain("D3 mortal wounds");

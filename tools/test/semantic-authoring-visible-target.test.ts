@@ -42,7 +42,7 @@ describe("an attack's visible target", () => {
       { type: "attack-is", parameters: { attack_type: "ranged" } },
       { type: "matches", parameters: { subject: "defender", filter: { owner: "enemy", visible: { to: "attacker" } } } },
     ] });
-    expect(describeAbility({ ability_id: "fabricated-visible-target", ...mechanics } as never)).toContain("the target is an enemy unit that is visible to the attacking unit");
+    expect(describeAbility({ ability_id: "fabricated-visible-target", ...mechanics } as never)).toContain("While making ranged attacks against an enemy unit that is visible to the attacking unit");
     // An unseen target (an Indirect Fire attack) gets nothing; a seen one gets the keyword.
     const source = { kind: "ability", abilityId: "fabricated-visible-target", abilityKind: "unit" } as const;
     expect(effectToBuffs(mechanics.effect, source, { phase: "shooting", targetVisible: false }).applied).toEqual([]);

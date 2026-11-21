@@ -4,10 +4,10 @@
  * `permanent` add no trail; `one-use` leads the sentence instead (see `durationClauses`).
  */
 const TRAILS: Record<string, string> = {
-  "attack-sequence": "until that unit finishes resolving its attacks",
-  resolution: "when resolving this use",
+  "attack-sequence": "until the attacking unit finishes resolving its attacks",
+  resolution: "for this activation",
   "while-leading": "while this model is leading a unit",
-  "after-resolving": "after resolving this use",
+  "after-resolving": "after resolving this ability",
   phase: "until the end of the phase",
   turn: "until the end of the turn",
   battle: "for the rest of the battle",

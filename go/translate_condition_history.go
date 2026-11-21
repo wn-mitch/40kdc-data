@@ -7,14 +7,14 @@ import "strings"
 
 var happenedMoveVerbs = map[string]string{
 	"charge": "charge", "advance": "advance", "fall-back": "fall back",
-	"remain-stationary": "remain stationary", "ingress": "make an ingress move",
+	"remain-stationary": "remain stationary", "ingress": "make an Ingress move",
 	"embark": "embark",
 }
 
 // pastVerbs is the past tense of the verbs history predicates use.
 var pastVerbs = map[string]string{
 	"charge": "charged", "advance": "advanced", "fall back": "fell back", "remain stationary": "remained stationary",
-	"make an ingress move": "made an ingress move", "move": "moved", "disembark": "disembarked",
+	"make an Ingress move": "made an Ingress move", "move": "moved", "disembark": "disembarked",
 	"embark": "embarked",
 }
 
@@ -43,7 +43,7 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 	}
 	f := mapOr(p["filter"])
 	event := cstr(p["event"])
-	who := subjectOf(p, "the unit")
+	who := subjectOf(p, "this unit")
 	count := mapOr(p["count"])
 	amount := controlCountPhrase(p["count"])
 	// The phase the event happened in leads its window: "in the Fight phase this battle".
@@ -85,7 +85,7 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		}
 		// A charge with an object: the unit the charge was made against ("was charged this turn").
 		if p["object"] != nil && len(types) == 1 && types[0] == "charge" {
-			return withWindow(who+" "+done+" "+unitRefPhrase(p["object"], "the unit"), p["window"])
+			return withWindow(who+" "+done+" "+unitRefPhrase(p["object"], "this unit"), p["window"])
 		}
 		return withWindow(who+" "+done, p["window"])
 	case "selected":
@@ -118,7 +118,7 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		if cstr(f["kind"]) == "stratagem" && f["id"] != nil {
 			target := "the unit"
 			if p["object"] != nil {
-				target = unitRefPhrase(p["object"], "the unit")
+				target = unitRefPhrase(p["object"], "this unit")
 			}
 			return withWindow(target+" "+has+" been targeted with the "+idLabel(f["id"])+" Stratagem", p["window"])
 		}
@@ -137,12 +137,12 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			what += " for its " + atk + " attacks"
 		}
 		if p["object"] != nil {
-			what = unitRefPhrase(p["object"], "the unit") + " as " + noun
+			what = unitRefPhrase(p["object"], "this unit") + " as " + noun
 			if atk != "" {
 				what += " of its " + atk + " attacks"
 			}
 			if f["all_attacks"] == true {
-				what = unitRefPhrase(p["object"], "the unit") + " as the target of all of its "
+				what = unitRefPhrase(p["object"], "this unit") + " as the target of all of its "
 				if atk != "" {
 					what += atk + " "
 				}
@@ -155,7 +155,7 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		if f["transport"] == "this-unit" || f["transport"] == "this-model" {
 			from = "this Transport"
 		} else if f["transport"] != nil {
-			from = unitRefPhrase(f["transport"], "the unit")
+			from = unitRefPhrase(f["transport"], "this unit")
 		}
 		return withWindow(who+" "+didNot("disembark")+" from "+from, p["window"])
 	case "after-roll":
@@ -190,14 +190,14 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			if _, has := byMap["event_var"]; has {
 				by = " from the triggering unit"
 			} else {
-				by = " from " + unitRefPhrase(f["by"], "the unit")
+				by = " from " + unitRefPhrase(f["by"], "this unit")
 			}
 		} else if f["by"] != nil {
-			by = " from " + unitRefPhrase(f["by"], "the unit")
+			by = " from " + unitRefPhrase(f["by"], "this unit")
 		}
 		when := " " + windowPhrase(p["window"])
 		if p["window"] == "event" {
-			when = " during its just-finished shooting sequence"
+			when = " during that shooting sequence"
 		}
 		if f["roll"] == "hit" && f["result"] == "success" {
 			var hits string
@@ -212,11 +212,15 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			// Who made the attacks, when it is not the unit being checked ("hit by an attack made by this unit").
 			attacker := ""
 			if p["subject"] != nil && p["subject"] != "this-unit" {
-				attacker = " made by " + unitRefPhrase(p["subject"], "the unit")
+				attacker = " made by " + unitRefPhrase(p["subject"], "this unit")
 			}
 			return neg + target + " was hit by " + hits + attacker + weapon + by + when
 		}
-		// Whose roll it was, when the subject names one: "the unit made a battle-shock roll and failed it".
+		times := ""
+		if p["count"] != nil {
+			times = " (" + amount + " times)"
+		}
+		// Whose roll it was, when the subject names one: "this unit made a battle-shock roll and failed it".
 		if p["subject"] != nil {
 			outcome := ""
 			if f["result"] == "failure" {
@@ -224,24 +228,23 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			} else if f["result"] == "success" {
 				outcome = " and passed it"
 			}
-			return trimEnd(neg + who + " made a " + rollWord(f["roll"]) + " roll" + outcome + " " + windowPhrase(p["window"]))
+			return trimEnd(neg + who + " made " + withArticle(rollWord(f["roll"])+" roll") + outcome + " " + windowPhrase(p["window"]) + times)
 		}
 		result := "was made "
 		if jsTruthy(f["result"]) {
 			result = "was a " + cstr(f["result"]) + " "
 		}
-		return trimEnd(neg + "a " + rollWord(f["roll"]) + " roll " + result + windowPhrase(p["window"]))
+		return trimEnd(neg + withArticle(rollWord(f["roll"])+" roll") + " " + result + windowPhrase(p["window"]) + times)
 	case "damage-allocated":
-		obj := unitRefPhrase(p["object"], "the unit")
+		obj := unitRefPhrase(p["object"], "this unit")
 		atk := ""
 		if jsTruthy(f["attack_type"]) {
 			atk = cstr(f["attack_type"]) + " "
 		}
-		tail := " " + windowPhrase(p["window"])
 		if p["window"] == "event" {
-			tail = " from the triggering attacks"
+			return neg + obj + " lost one or more wounds from the triggering " + atk + "attacks"
 		}
-		return neg + obj + " lost one or more wounds from " + atk + "attacks" + tail
+		return trimEnd(neg + obj + " lost one or more wounds from " + atk + "attacks " + windowPhrase(p["window"]))
 	case "destroyed", "model-destroyed":
 		noun := "unit"
 		if event == "model-destroyed" {
@@ -253,7 +256,7 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 				made = " made with " + weaponNoun(map[string]any{"weapons": f["weapons"]})
 			}
 			if jsTruthy(f["attack_type"]) {
-				return neg + "destroyed by a " + cstr(f["attack_type"]) + " attack" + made
+				return neg + "destroyed by " + withArticle(cstr(f["attack_type"])+" attack") + made
 			}
 			return neg + "destroyed by any attack" + made
 		}
@@ -297,17 +300,17 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 				objects = strings.Replace(objects, "model", "models", 1)
 			}
 		}
-		// "the unit lost 1+ models to the just-resolved attacks": the victims are one unit's models (a selection's candidate).
+		// "this unit lost one or more models to those attacks": the victims are one unit's models (a selection's candidate).
 		if event == "model-destroyed" && obj["member_of"] != nil && p["window"] == "event" {
-			victim := "the unit"
+			victim := "this unit"
 			if obj["member_of"] != "selected-unit" {
-				victim = unitRefPhrase(obj["member_of"], "the unit")
+				victim = unitRefPhrase(obj["member_of"], "this unit")
 			}
 			atk := ""
 			if jsTruthy(f["attack_type"]) {
 				atk = cstr(f["attack_type"]) + " "
 			}
-			return neg + victim + " lost " + amount + " models to the just-resolved " + atk + "attacks"
+			return neg + victim + " lost " + amount + " models to those " + atk + "attacks"
 		}
 		// "the enemy WARLORD": one designated model, named as itself rather than counted.
 		warlord := !extended && kws == "" && obj["designated"] == "warlord"
@@ -321,18 +324,18 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			killer = p["subject"]
 		}
 		if killer != nil {
-			// A destruction by one attack type says it: "with its just-resolved melee attacks", "with melee attacks this phase".
+			// A destruction by one attack type says it: "with those melee attacks", "with melee attacks this phase".
 			atk := ""
 			if jsTruthy(f["attack_type"]) {
 				atk = cstr(f["attack_type"]) + " "
 			}
 			when := windowPhrase(p["window"])
 			if p["window"] == "event" {
-				when = "with its just-resolved " + atk + "attacks"
+				when = "with those " + atk + "attacks"
 			} else if atk != "" {
 				when = "with " + atk + "attacks " + windowPhrase(p["window"])
 			}
-			return trimEnd(neg + unitRefPhrase(killer, "the unit") + " has destroyed " + victims + " " + when)
+			return trimEnd(neg + unitRefPhrase(killer, "this unit") + " has destroyed " + victims + " " + when)
 		}
 		if warlord {
 			was := "was"
@@ -402,15 +405,16 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		if which := usedAbilityPhrase(f); which != "" {
 			return neg + withWindow(who+" used "+which, p["window"])
 		}
-		what := "a "
-		if f["id"] != nil {
-			what = "the " + idLabel(f["id"]) + " "
-		}
 		kind := f["kind"]
 		if kind == nil {
 			kind = "ability"
 		}
-		return neg + withWindow(who+" used "+what+dekebab(cstr(kind)), p["window"])
+		kindWord := dekebab(cstr(kind))
+		what := withArticle(kindWord)
+		if f["id"] != nil {
+			what = "the " + idLabel(f["id"]) + " " + kindWord
+		}
+		return neg + withWindow(who+" used "+what, p["window"])
 	case "state-changed":
 		// "cause it to become Below Half-strength": the unit's strength fell past a threshold.
 		// With no subject, any unit: "a unit became Below Half-strength".
@@ -432,6 +436,7 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 			}
 			return withWindow(unit+" "+fell+" below its Starting Strength", p["window"])
 		}
+		return neg + withWindow(unit+" changed state", p["window"])
 	case "objective-gained":
 		return trimEnd(neg + "you newly control " + amount + " objectives " + windowPhrase(p["window"]))
 	case "designation-changed":

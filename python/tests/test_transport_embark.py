@@ -13,7 +13,7 @@ def test_embark_within_reads_the_subject_able_to_embark_within_the_transport() -
         "type": "eligible",
         "parameters": {"subject": "this-unit", "to": "embark-within", "transport": "ability-unit"},
     }
-    assert describe_condition(condition) == "the unit is able to embark within this unit"
+    assert describe_condition(condition) == "this unit is able to embark within this unit"
 
 
 def test_embark_within_negated_by_the_not_operator() -> None:
@@ -30,4 +30,4 @@ def test_embark_within_negated_by_the_not_operator() -> None:
             }
         ],
     }
-    assert describe_condition(condition) == "the unit is not able to embark within that Transport"
+    assert describe_condition(condition) == "this unit is not able to embark within that Transport"

@@ -2289,7 +2289,7 @@
       {
         "name": "Corsairs and Travelling Players",
         "id": "96a9-9b00-974d-4f41",
-        "description": "Your army can include at most 500 units with the HARLEQUINS or ANHRATHE keyword.\nAll friendly units cannot be your Warlord.\nAll friendly units cannot be given Enhancements.",
+        "description": "Your army can include at most 500 units with the HARLEQUINS or ANHRATHE keyword.\nFriendly units cannot be your Warlord.\nFriendly units cannot be given Enhancements.",
         "hidden": false
       }
     ],
@@ -2518,7 +2518,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Normal or Advance move, you may use this ability:\n  -> Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the selected unit was moved over by this model during that move: roll one D6 for each model in the unit: for each 4+, that unit suffers 1 mortal wound.",
+                "$text": "When this unit ends a Normal or Advance move, you can use this ability, select one enemy unit without the MONSTER or VEHICLE keyword and that was moved over by this model during that move. Roll one D6 for each model in this unit: for each 4+, that unit suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -2532,7 +2532,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Movement phase, in your turn:\n  -> When the unit is selected to make an Advance move, you may use this ability:\n    -> Spend 1 Pain token.\n    -> The unit is Empowered.\n  -> When the unit ends an Advance move, until the end of the phase: while the unit is Empowered, the unit does not make an Advance roll; add 8\" to its Move characteristic instead.",
+                "$text": "During your Movement phase:\n  - When this unit is selected to make an Advance move, you can use this ability:\n    - Spend 1 Pain token.\n    - This unit is Empowered.\n  - When this unit ends an Advance move, until the end of the phase, while this unit is Empowered, this unit does not make an Advance roll; add 8\" to its Move characteristic instead.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5010,7 +5010,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5024,7 +5024,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5038,7 +5038,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time pain token pool is spent:\n  If one or more models in this unit have no weapon named \"Spirit vortex\":\n    -> Roll one D6+1: on a 5+, you gain 1 Pain token.\n  Unless one or more models in this unit have no weapon named \"Spirit vortex\":\n    -> Roll one D6: on a 5+, you gain 1 Pain token.",
+                "$text": "Each time pain token pool is spent:\n  - If one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6+1: on a 5+, you gain 1 Pain token.\n  - Unless one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6: on a 5+, you gain 1 Pain token.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5052,7 +5052,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Fight phase, while the unit is below its starting strength:\n  -> Each time this model is destroyed, it can fight before being removed from play.\n  -> Each time this model is destroyed, it can shoot before being removed from play.",
+                "$text": "During the Fight phase, while this unit is below its Starting Strength:\n  - Each time this model is destroyed, it can fight before being removed from play.\n  - Each time this model is destroyed, it can shoot before being removed from play.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5690,7 +5690,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making melee attacks against CHARACTER targets:\n  -> You can re-roll the Hit roll for attacks made by this model.\n  -> You can re-roll the Wound roll for attacks made by this model.\n-> Each time the unit destroys a CHARACTER model: you gain 1CP.",
+                "$text": "While making melee attacks against CHARACTER targets:\n  - You can re-roll Hit rolls for attacks made by this model.\n  - You can re-roll Wound rolls for attacks made by this model.\nEach time this unit destroys a CHARACTER model, you gain 1 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5704,7 +5704,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5718,7 +5718,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to make an Advance move, you may use this ability or before a Charge roll is made, you may use this ability, during the Movement phase, in your turn, during the Charge phase, in your turn, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  While the unit is Empowered:\n    Select one of the following:\n      - You can re-roll the Charge roll.\n      - You can re-roll the Advance roll.",
+                "$text": "When this unit is selected to make an Advance move, you can use this ability or before a Charge roll is made, you can use this ability, during your Movement phase, during the Charge phase, in your turn, until the end of the phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - While this unit is Empowered:\n    Choose one of the following:\n      - You can re-roll the Charge roll.\n      - You can re-roll the Advance roll.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6047,7 +6047,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  While the unit is Empowered:\n    -> Add 1 to the Attacks characteristic of melee weapons equipped by models in this unit.\n    -> Add 1 to the Strength characteristic of melee weapons equipped by models in this unit.",
+                "$text": "When this unit is selected to fight, you can use this ability, during the Fight phase, until the end of the phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - While this unit is Empowered:\n    - Add 1 to the Attacks characteristic of melee weapons equipped by models in this unit.\n    - Add 1 to the Strength characteristic of melee weapons equipped by models in this unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6061,7 +6061,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6075,7 +6075,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit ends a move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8\" of the unit, while the unit is unengaged, the unit can make a Normal move of up to D6\".",
+                "$text": "Each time an enemy unit ends a move, during your opponent's Movement phase, while the triggering unit is within 8\" of this unit and this unit is unengaged, this unit can make a Normal move of up to D6\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7375,7 +7375,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of the Fight phase, you may use this ability, while a unit embarked within the unit is not embarked:\n  -> Select one friendly DRUKHARI INFANTRY unit (excluding FLY units) if the selected unit contains at most 6 models and the selected unit is wholly within 6\" of the unit and the selected unit is unengaged:\n    -> That unit is eligible to embark into this unit.\n    -> That unit is eligible to embark even if it disembarked this turn.",
+                "$text": "At the end of the Fight phase, you can use this ability, while a unit embarked within this unit is not embarked:\n  - Select one friendly DRUKHARI INFANTRY unit (excluding FLY units) that contains at most 6 models and is wholly within 6\" of this unit and unengaged:\n    - That unit is eligible to embark into this unit.\n    - That unit is eligible to embark even if it disembarked this turn.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7389,7 +7389,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7403,7 +7403,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to make an Advance move, you may use this ability, during the Movement phase, in your turn, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> This model is Empowered.\n  -> While this model is Empowered, friendly units embarked within this model are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.",
+                "$text": "When this unit is selected to make an Advance move, you can use this ability, during your Movement phase, until the end of the phase:\n  - Spend 1 Pain token.\n  - This model is Empowered.\n  - While this model is Empowered, friendly units embarked within this model are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7417,7 +7417,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7431,7 +7431,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7445,7 +7445,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7853,7 +7853,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, once per turn per unit:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Murderous Crossfire Target). Until the end of the phase, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly DRUKHARI unit.",
+                "$text": "After this unit resolves its attacks, once per turn per unit:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Murderous Crossfire Target). Until the end of the phase, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly DRUKHARI unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7867,7 +7867,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Movement phase, in your turn:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  -> When the unit is set up, if the unit is using Deep Strike, you may use this ability, until the end of the turn:\n    -> While the unit is Empowered, the unit can be set up on the battlefield more than 6\" away from all enemy models.\n    -> While the unit is within 8\" of an enemy unit, the triggering unit cannot declare a charge.",
+                "$text": "During your Movement phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - When this unit is set up, if this unit is using Deep Strike, you can use this ability, until the end of the turn:\n    - While this unit is Empowered, this unit can be set up on the battlefield more than 6\" away from all enemy models.\n    - While this unit is within 8\" of an enemy unit, the triggering unit cannot declare a charge.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7881,7 +7881,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8931,7 +8931,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
+                "$text": "At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8945,7 +8945,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, during the Shooting phase, in your turn or during the Fight phase, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  -> While the unit is Empowered, while the target is not within range of an objective marker, you can re-roll a Wound roll of 1.\n  -> While the target is within range of an objective marker, you can re-roll the Wound roll.",
+                "$text": "When this unit is selected to shoot, you can use this ability or when this unit is selected to fight, you can use this ability, during your Shooting phase or during the Fight phase, until the end of the phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - While this unit is Empowered and the target is not within range of an objective marker, you can re-roll Wound rolls of 1.\n  - While the target is within range of an objective marker, you can re-roll Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10307,7 +10307,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10321,7 +10321,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10335,7 +10335,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to shoot, you may use this ability, during the Shooting phase, in your turn, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> This model is Empowered.\n  -> While this model is Empowered, while a unit embarked within the unit is embarked, while making ranged attacks made with [ANTI] weapons, you can re-roll the Hit roll for attacks made by this model.",
+                "$text": "When this unit is selected to shoot, you can use this ability, during your Shooting phase, until the end of the phase:\n  - Spend 1 Pain token.\n  - This model is Empowered.\n  - While this model is Empowered and a unit embarked within this unit is embarked, while making ranged attacks made with [ANTI] weapons, you can re-roll Hit rolls for attacks made by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10349,7 +10349,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Command phase, until the end of the battle round:\n  -> At the start of your Command phase:\n    -> Select one:\n      - Masters of the Shadowed Sky: while the unit is within range of an objective marker you control, if a friendly KABALITE WARRIORS unit that is embarked has the KABALITE WARRIORS keyword, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.\n      - Speed of the Kill: friendly WYCHES units that are embarked can disembark, ending that move wholly within 6\" of this model.\n      - Visions of Butchery: add 1 to the Attacks characteristic of bladevanes weapons equipped by this model for every 1 models in or embarked within this model; add 1 to the Attacks characteristic of chainsnares weapons equipped by this model for every 1 models in or embarked within this model.\n      - Aethersails: if a friendly DRUKHARI unit that is embarked has the DRUKHARI keyword, you can re-roll the Advance roll for this model; you can re-roll the Charge roll for this model.",
+                "$text": "During the Command phase, until the end of the battle round:\n  - At the start of your Command phase:\n    - Select one:\n      - Masters of the Shadowed Sky: While this unit is within range of an objective marker you control, if a friendly KABALITE WARRIORS unit that is embarked has the KABALITE WARRIORS keyword, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.\n      - Speed of the Kill: Friendly WYCHES units that are embarked can disembark, ending that move wholly within 6\" of this model.\n      - Visions of Butchery: Add 1 to the Attacks characteristic of bladevanes weapons equipped by this model for every 1 models in or embarked within this model; add 1 to the Attacks characteristic of chainsnares weapons equipped by this model for every 1 models in or embarked within this model.\n      - Aethersails: If a friendly DRUKHARI unit that is embarked has the DRUKHARI keyword, you can re-roll the Advance roll for this model; you can re-roll the Charge roll for this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10363,7 +10363,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Command phase, until the end of the battle round:\n  -> At the start of your Command phase: while the unit is within range of an objective marker you control, if a friendly KABALITE WARRIORS unit that is embarked has the KABALITE WARRIORS keyword, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
+                "$text": "During the Command phase, until the end of the battle round:\n  - At the start of your Command phase, while this unit is within range of an objective marker you control, if a friendly KABALITE WARRIORS unit that is embarked has the KABALITE WARRIORS keyword, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10377,7 +10377,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Command phase, until the end of the battle round:\n  -> At the start of your Command phase: friendly WYCHES units that are embarked can disembark, ending that move wholly within 6\" of this model.",
+                "$text": "During the Command phase, until the end of the battle round:\n  - At the start of your Command phase, friendly WYCHES units that are embarked can disembark, ending that move wholly within 6\" of this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10391,7 +10391,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Command phase, until the end of the battle round:\n  -> At the start of your Command phase:\n    -> Add 1 to the Attacks characteristic of bladevanes weapons equipped by this model for every 1 models in or embarked within this model.\n    -> Add 1 to the Attacks characteristic of chainsnares weapons equipped by this model for every 1 models in or embarked within this model.",
+                "$text": "During the Command phase, until the end of the battle round:\n  - At the start of your Command phase:\n    - Add 1 to the Attacks characteristic of bladevanes weapons equipped by this model for every 1 models in or embarked within this model.\n    - Add 1 to the Attacks characteristic of chainsnares weapons equipped by this model for every 1 models in or embarked within this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10405,7 +10405,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Command phase, until the end of the battle round:\n  -> At the start of your Command phase: if a friendly DRUKHARI unit that is embarked has the DRUKHARI keyword, you can re-roll the Advance roll for this model; you can re-roll the Charge roll for this model.",
+                "$text": "During the Command phase, until the end of the battle round:\n  - At the start of your Command phase, if a friendly DRUKHARI unit that is embarked has the DRUKHARI keyword, you can re-roll the Advance roll for this model; you can re-roll the Charge roll for this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10419,7 +10419,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10864,7 +10864,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit gains the Fights First ability.",
+                "$text": "While this model is leading a unit, this unit gains the Fights First ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10878,7 +10878,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  While the unit is Empowered, while making melee attacks:\n    -> Improve the triggering unit's Strength characteristic by 1.\n    -> Improve the triggering unit's Armour Penetration characteristic by 1.",
+                "$text": "When this unit is selected to fight, you can use this ability, during the Fight phase, until the end of the phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - While this unit is Empowered, while making melee attacks:\n    - Improve the triggering unit's Strength characteristic by 1.\n    - Improve the triggering unit's Armour Penetration characteristic by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10892,7 +10892,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Fights First ability, the unit gains the Fights First ability.",
+                "$text": "While this unit has the Fights First ability, this unit gains the Fights First ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10906,7 +10906,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10920,7 +10920,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, you may use this ability, once per battle per unit, until the end of the phase:\n  -> This model has a 3+ invulnerable save.\n  -> Set the Attacks characteristic of melee weapons equipped by this model to 12.",
+                "$text": "At the start of the Fight phase, you can use this ability, once per battle per unit, until the end of the phase:\n  - This model has a 3+ invulnerable save.\n  - Set the Attacks characteristic of melee weapons equipped by this model to 12.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11166,7 +11166,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making ranged attacks, while the target does not have the FLY keyword, the unit gets +1 to Hit rolls.",
+                "$text": "While making ranged attacks, while the target does not have the FLY keyword, add 1 to this unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11180,7 +11180,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Shooting phase, in your turn:\n  -> When the unit is selected to shoot, you may use this ability:\n    -> Spend 1 Pain token.\n    -> The unit is Empowered.\n  -> After the unit resolves its attacks, until the start of your next turn:\n    -> Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n      -> While the unit is Empowered, that unit is marked as pinned.\n      -> While the selected unit is tagged pinned, subtract 2 from that unit's Move characteristic.\n      -> While the selected unit is tagged pinned, this unit gets -2 to Charge rolls.",
+                "$text": "During your Shooting phase:\n  - When this unit is selected to shoot, you can use this ability:\n    - Spend 1 Pain token.\n    - This unit is Empowered.\n  - After this unit resolves its attacks, until the start of your next turn:\n    - Select one enemy unit without the MONSTER or VEHICLE keyword and that was hit by an attack made by the triggering unit during that shooting sequence:\n      - While this unit is Empowered, that unit is Pinned.\n      - While the selected unit is Pinned, subtract 2\" from that unit's Move characteristic.\n      - While the selected unit is Pinned, subtract 2 from this unit's Charge rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11194,7 +11194,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11208,7 +11208,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11779,7 +11779,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:\n  -> The unit can make a Normal move of up to 6\".\n  -> The unit cannot declare a charge.",
+                "$text": "After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:\n  - This unit can make a Normal move of up to 6\".\n  - This unit cannot declare a charge.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11793,7 +11793,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to shoot, you may use this ability, during the Shooting phase, in your turn, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  -> While the unit is Empowered, while making ranged attacks, you can re-roll the Hit roll.",
+                "$text": "When this unit is selected to shoot, you can use this ability, during your Shooting phase, until the end of the phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - While this unit is Empowered, while making ranged attacks, you can re-roll Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11807,7 +11807,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13033,7 +13033,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> At the start of the Fight phase, you may use this ability:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n-> When a model in the unit is destroyed: each time a model in this unit is destroyed, while the unit is Empowered, unless the triggering unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
+                "$text": "At the start of the Fight phase, you can use this ability:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\nWhen a model in this unit is destroyed, while this unit is Empowered, unless the triggering unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13047,7 +13047,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time the unit destroys an enemy unit, you gain 1 Pain token.",
+                "$text": "Each time this unit destroys an enemy unit, you gain 1 Pain token.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13061,7 +13061,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13075,7 +13075,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14415,7 +14415,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  Select exactly 1 distinct options (One of the Following):\n    - Set the Attacks characteristic of melee weapons equipped by friendly models (excluding CHARACTER models) in the unit to 3.\n    - Set the Attacks characteristic of melee weapons equipped by friendly models (excluding CHARACTER models) in the unit to 4; melee weapons equipped by friendly models (excluding CHARACTER models) in the unit gain [HAZARDOUS].",
+                "$text": "When this unit is selected to fight, you can use this ability, during the Fight phase, until the end of the phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  Choose one of the following:\n    - Set the Attacks characteristic of melee weapons equipped by friendly models (excluding CHARACTER models) in this unit to 3.\n    - Set the Attacks characteristic of melee weapons equipped by friendly models (excluding CHARACTER models) in this unit to 4; melee weapons equipped by friendly models (excluding CHARACTER models) in this unit gain [HAZARDOUS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14429,7 +14429,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn or during the Fight phase:\n  -> Select one enemy unit (excluding VEHICLE units) that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase or during the Fight phase:\n  - Select one enemy unit (excluding VEHICLE units) that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17704,7 +17704,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While an enemy unit is within 6\" of this model, worsen that unit's Leadership characteristic by 1.\n-> At the start of the Battle Shock step in your opponent's turn: while an enemy unit is within 6\" of this model, while the unit is below its starting strength, that unit must take a Battle-shock test.",
+                "$text": "While an enemy unit is within 6\" of this model, worsen that unit's Leadership characteristic by 1.\nAt the start of the Battle Shock step in your opponent's turn, while an enemy unit is within 6\" of this model, while this unit is below its Starting Strength, that unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17718,7 +17718,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: During the Command phase, in your turn:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  -> Return D3+1 destroyed BODYGUARD models to the unit, each with its full wounds remaining.",
+                "$text": "During your Command phase, you can use this ability:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - Return D3+1 destroyed BODYGUARD models to this unit, each with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17732,7 +17732,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17746,7 +17746,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Once per phase per army, during the Command phase, in your turn, while a friendly model with the Pain Adept ability is on the battlefield:\n  -> Roll one D6: on a 4+, you gain 1 Pain token.",
+                "$text": "Once per phase per army, during your Command phase, while a friendly model with the Pain Adept ability is on the battlefield:\n  - Roll one D6: on a 4+, you gain 1 Pain token.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17760,7 +17760,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18126,7 +18126,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target the unit with a Stratagem, you may use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).",
+                "$text": "Each time you target this unit with a Stratagem, you can use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18140,7 +18140,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to shoot or fight, you may use this ability, during the Shooting phase, in your turn or during the Fight phase, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  -> While the unit is Empowered, you can re-roll the Hit roll for attacks made by the triggering unit.",
+                "$text": "When this unit is selected to shoot or fight, you can use this ability, during your Shooting phase or during the Fight phase, until the end of the phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - While this unit is Empowered, you can re-roll Hit rolls for attacks made by the triggering unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18154,7 +18154,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18168,7 +18168,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of each phase, you may use this ability, once per battle per unit:\n  -> Select one friendly DRUKHARI unit if the selected unit is Battle-shocked and the selected unit is within 12\" of this model: that unit is no longer Battle-shocked.",
+                "$text": "At the start of each phase, you can use this ability, once per battle per unit, select one friendly DRUKHARI unit that is Battle-shocked and within 12\" of this model. That unit is no longer Battle-shocked.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18869,7 +18869,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to shoot or fight, you may use this ability, during the Shooting phase, in your turn or during the Fight phase, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  While the unit is Empowered:\n    Select one of the following:\n      - The unit's weapons gain [SUSTAINED HITS 1].\n      - The unit's weapons gain [LETHAL HITS].",
+                "$text": "When this unit is selected to shoot or fight, you can use this ability, during your Shooting phase or during the Fight phase, until the end of the phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - While this unit is Empowered:\n    Choose one of the following:\n      - This unit's weapons gain [SUSTAINED HITS 1].\n      - This unit's weapons gain [LETHAL HITS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18883,7 +18883,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18897,7 +18897,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When an enemy unit within 12\" of this model is targeted with a Stratagem, you may use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1CP.",
+                "$text": "When an enemy unit within 12\" of this model is targeted with a Stratagem, you can use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18911,7 +18911,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After deployment, you may use this ability:\n  -> Select up to 3 friendly DRUKHARI units:\n    -> For each selected unit:\n      Select one of the following:\n        - That unit can be set up on the battlefield.\n        - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
+                "$text": "After deployment, you can use this ability:\n  - Select up to 3 friendly DRUKHARI units:\n    - For each selected unit:\n      Choose one of the following:\n        - That unit can be set up on the battlefield.\n        - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18925,7 +18925,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19206,7 +19206,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Shooting phase, in your turn:\n  -> When the unit is selected to shoot, you may use this ability:\n    -> Spend 1 Pain token.\n    -> This model is Empowered.\n  -> After the unit resolves its attacks, until the start of your next turn:\n    -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n      -> While this model is Empowered, that unit is marked as suppressed.\n      -> While the unit is tagged suppressed, that unit gets -1 to Hit rolls.",
+                "$text": "During your Shooting phase:\n  - When this unit is selected to shoot, you can use this ability:\n    - Spend 1 Pain token.\n    - This model is Empowered.\n  - After this unit resolves its attacks, until the start of your next turn:\n    - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:\n      - While this model is Empowered, that unit is Suppressed.\n      - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19220,7 +19220,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Unless the target unit is below its starting strength, you can re-roll the Hit roll for attacks made by this model.",
+                "$text": "Unless the target unit is below its Starting Strength, you can re-roll Hit rolls for attacks made by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19234,7 +19234,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19248,7 +19248,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19262,7 +19262,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19620,7 +19620,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your Charge phase, you may use this ability, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  While the unit is Empowered:\n    -> The unit is eligible to declare a charge in a turn in which it Advanced.\n    -> The unit is eligible to declare a charge in a turn in which it Fell Back.",
+                "$text": "At the start of your Charge phase, you can use this ability, until the end of the phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - While this unit is Empowered:\n    - This unit is eligible to declare a charge in a turn in which it Advanced.\n    - This unit is eligible to declare a charge in a turn in which it Fell Back.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19634,7 +19634,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the No Escape ability:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
+                "$text": "Each time an enemy unit (excluding MONSTER or VEHICLE units) starts a Fall Back move, while the triggering unit is within Engagement Range of a friendly unit with the No Escape ability:\n  - While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  - While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20404,7 +20404,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When declaring Battle Formations, while this unit is being led by a model, friendly Leader models in the unit gain the Scouts 7\" ability.",
+                "$text": "When declaring Battle Formations, while this unit is being led by a model, friendly Leader models in this unit gain the Scouts 7\" ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20418,7 +20418,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, during the first battle round:\n  -> Select one objective marker, binding it as objective:\n    -> For the rest of the battle: while the unit is within range of an objective marker, while the unit is not Battle-shocked, the unit has a 5+ invulnerable save; set the unit's Objective Control characteristic to 3.",
+                "$text": "At the start of the battle round, during the first battle round:\n  - Select one objective marker:\n    - For the rest of the battle, while this unit is within range of an objective marker and this unit is not Battle-shocked, this unit has a 5+ invulnerable save; set this unit's Objective Control characteristic to 3.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20432,7 +20432,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Fight phase:\n  -> The unit's weapons gain [LETHAL HITS].\n  -> The unit's weapons gain [PRECISION].",
+                "$text": "During the Fight phase:\n  - This unit's weapons gain [LETHAL HITS].\n  - This unit's weapons gain [PRECISION].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20446,7 +20446,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22315,7 +22315,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Shooting phase, in your turn:\n  -> When the unit is selected to shoot, you may use this ability:\n    -> Spend 1 Pain token.\n    -> The unit is Empowered.\n  -> After the unit resolves its attacks, until the end of the phase:\n    -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: while the unit is Empowered, that unit cannot benefit from Cover.",
+                "$text": "During your Shooting phase:\n  - When this unit is selected to shoot, you can use this ability:\n    - Spend 1 Pain token.\n    - This unit is Empowered.\n  - After this unit resolves its attacks, until the end of the phase:\n    - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. While this unit is Empowered, that unit cannot benefit from Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22329,7 +22329,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your opponent's Fight phase:\n  -> Select one enemy model without the Lone Operative ability visible to this model if the selected unit is within 24\" of the unit:\n    For each enemy unit within D6\" of the selected unit:\n      -> Roll one D6: on a 4+, the unit suffers D6 mortal wounds.",
+                "$text": "At the end of your opponent's Fight phase:\n  - Select one enemy model without the Lone Operative ability visible to this model that is within 24\" of this unit:\n    For each enemy unit within D6\" of the selected unit:\n      - Roll one D6: on a 4+, that unit suffers D6 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22343,7 +22343,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22357,7 +22357,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22371,7 +22371,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22916,7 +22916,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22930,7 +22930,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  -> While the unit is Empowered, while making melee attacks, the triggering unit gets +1 to Wound rolls.",
+                "$text": "When this unit is selected to fight, you can use this ability, during the Fight phase, until the end of the phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - While this unit is Empowered, while making melee attacks, add 1 to the triggering unit's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22944,7 +22944,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Pile-in or Consolidation move, while this model is leading a unit, add 3\" to the unit's Pile-in and Consolidation moves.",
+                "$text": "When this unit ends a Pile-in or Consolidation move, while this model is leading a unit, add 3\" to this unit's Pile-in and Consolidation moves.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22958,7 +22958,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the target unit is below its starting strength:\n  -> You can re-roll the Hit roll for attacks made by this model.\n  -> While the target unit is below half strength, you can re-roll the Wound roll for attacks made by this model.",
+                "$text": "While the target unit is below its Starting Strength:\n  - You can re-roll Hit rolls for attacks made by this model.\n  - While the target unit is Below Half-strength, you can re-roll Wound rolls for attacks made by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23276,7 +23276,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  -> While the unit is Empowered, while making melee attacks against INFANTRY targets, melee weapons equipped by models in this unit gain [DEVASTATING WOUNDS].",
+                "$text": "When this unit is selected to fight, you can use this ability, during the Fight phase, until the end of the phase:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - While this unit is Empowered, while making melee attacks against INFANTRY targets, melee weapons equipped by models in this unit gain [DEVASTATING WOUNDS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23290,7 +23290,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> At the start of the Fight phase, once per phase per army:\n  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Tormentors ability, the unit must take a Battle-shock test.\nWhile making melee attacks, while the target is Battle-shocked, the unit gets +1 to Hit rolls.",
+                "$text": "At the start of the Fight phase, once per phase per army:\n  For each enemy unit: While this unit is within Engagement Range of a friendly unit with the Tormentors ability, that unit must take a Battle-shock test.\nWhile making melee attacks, while the target is Battle-shocked, add 1 to this unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24210,7 +24210,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your opponent's Fight phase, you may use this ability, while the unit is unengaged:\n  -> Spend 1 Pain token.\n  -> The unit is Empowered.\n  -> The unit can be placed into Strategic Reserves.",
+                "$text": "At the end of your opponent's Fight phase, you can use this ability, while this unit is unengaged:\n  - Spend 1 Pain token.\n  - This unit is Empowered.\n  - This unit can be placed into Strategic Reserves.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24224,7 +24224,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24238,7 +24238,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the attacking unit is not within 18\" of the unit, the unit cannot target the unit with ranged weapons.",
+                "$text": "While the attacking unit is not within 18\" of this unit, this unit cannot be targeted with ranged weapons.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24252,7 +24252,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24266,7 +24266,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24831,7 +24831,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When you use Eviscerating Fly By, you may use this ability, you can re-roll a number of Eviscerating Fly By rolls equal to the number of models in this unit equipped with Cluster Caltrops.",
+                "$text": "When you use Eviscerating Fly By, you can use this ability, you can re-roll a number of Eviscerating Fly By rolls equal to the number of models in this unit equipped with Cluster Caltrops.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25431,7 +25431,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the SMOKE and GRENADES keywords.",
+                "$text": "This unit gains the SMOKE and GRENADES keywords.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -26181,7 +26181,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit is not Battle-shocked, add 1 to this model's Objective Control characteristic.",
+                "$text": "While this unit is not Battle-shocked, add 1 to this model's Objective Control characteristic.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -28459,7 +28459,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Add 1 to the Attacks characteristic of melee weapons equipped by this model.\nAdd 1 to the Strength characteristic of melee weapons equipped by this model.\n-> After this model resolves its attacks, if this model has destroyed 1+ enemy models with its just-resolved melee attacks, the first time this battle per model, for the rest of the battle:\n  -> Add 1 to the Attacks characteristic of melee weapons equipped by this model.\n  -> Add 1 to the Strength characteristic of melee weapons equipped by this model.",
+                "$text": "Add 1 to the Attacks characteristic of melee weapons equipped by this model.\nAdd 1 to the Strength characteristic of melee weapons equipped by this model.\nAfter this model resolves its attacks, if this model has destroyed one or more enemy models with those melee attacks, the first time this battle per model, for the rest of the battle:\n  - Add 1 to the Attacks characteristic of melee weapons equipped by this model.\n  - Add 1 to the Strength characteristic of melee weapons equipped by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -29059,7 +29059,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the SMOKE keyword.",
+                "$text": "This unit gains the SMOKE keyword.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -29329,7 +29329,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After a saving throw is failed, once per turn per unit, each time an attack is allocated to the unit, change the Damage of that attack to 0.",
+                "$text": "After a saving throw is failed, once per turn per unit, each time an attack is allocated to this unit, change the Damage of that attack to 0.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -29851,7 +29851,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Select one of the following:\n  - The unit's Hit rolls count as 6.\n  - The unit's Wound rolls count as 6.",
+                "$text": "Choose one of the following:\n  - This unit's Hit rolls count as 6.\n  - This unit's Wound rolls count as 6.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -30113,7 +30113,7 @@
                   {
                     "name": "Combat Drugs",
                     "id": "0731-0fd9-3632-b5a9",
-                    "description": "At the start of your Command phase, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - Adrenalight: add 1 to the Attacks characteristic of melee weapons equipped by all friendly WYCH CULT models.\n    - Hypex: add 2 to all friendly WYCH CULT models' Move characteristic.\n    - Serpentin: improve the Weapon Skill characteristic of melee weapons equipped by all friendly WYCH CULT models by 1.\n    - Painbringer: add 1 to all friendly WYCH CULT models' Toughness characteristic.\n    - Grave Lotus: add 1 to the Strength characteristic of melee weapons equipped by all friendly WYCH CULT models.\n    - Splintermind: improve all friendly WYCH CULT models' Leadership characteristic by 1; improve the Ballistic Skill characteristic of ranged weapons equipped by all friendly WYCH CULT models by 1.\n  -> Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Adrenalight, 2 Hypex, 3 Serpentin, 4 Painbringer, 5 Grave Lotus, 6 Splintermind); a result already active has no additional effect.",
+                    "description": "At the start of your Command phase, until the start of your next Command phase:\n  - Select one (each can be chosen once per battle):\n    - Adrenalight: Add 1 to the Attacks characteristic of melee weapons equipped by friendly WYCH CULT models.\n    - Hypex: Add 2\" to friendly WYCH CULT models' Move characteristic.\n    - Serpentin: Improve the Weapon Skill characteristic of melee weapons equipped by friendly WYCH CULT models by 1.\n    - Painbringer: Add 1 to friendly WYCH CULT models' Toughness characteristic.\n    - Grave Lotus: Add 1 to the Strength characteristic of melee weapons equipped by friendly WYCH CULT models.\n    - Splintermind: Improve friendly WYCH CULT models' Leadership characteristic by 1; improve the Ballistic Skill characteristic of ranged weapons equipped by friendly WYCH CULT models by 1.\n  - Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Adrenalight, 2 Hypex, 3 Serpentin, 4 Painbringer, 5 Grave Lotus, 6 Splintermind); a result already active has no additional effect.",
                     "hidden": false
                   }
                 ]
@@ -30160,7 +30160,7 @@
                   {
                     "name": "Murderous Agenda",
                     "id": "e441-ef60-b591-4da2",
-                    "description": "For the rest of the battle:\n  -> At the start of the battle round, if during the first battle round:\n    -> Select one enemy unit (your Contract Unit target). For the rest of the battle, each time a friendly unit makes an attack against it, the unit's weapons gain [PRECISION].",
+                    "description": "For the rest of the battle:\n  - At the start of the first battle round:\n    - Select one enemy unit (your Contract Unit target). For the rest of the battle, each time a friendly unit makes an attack against it, this unit's weapons gain [PRECISION].",
                     "hidden": false
                   }
                 ]
@@ -30207,7 +30207,7 @@
                   {
                     "name": "Rain of Cruelty",
                     "id": "35db-7775-b2cf-936a",
-                    "description": "When a friendly unit disembarks from a Transport (the triggering unit must have DRUKHARI), until the end of the turn:\n  -> Ranged weapons equipped by the triggering unit gain [IGNORES COVER].\n  -> Melee weapons equipped by the triggering unit gain [LANCE].",
+                    "description": "When a friendly DRUKHARI unit disembarks from a Transport, until the end of the turn:\n  - Ranged weapons equipped by that unit gain [IGNORES COVER].\n  - Melee weapons equipped by that unit gain [LANCE].",
                     "hidden": false
                   }
                 ]
@@ -30254,7 +30254,7 @@
                   {
                     "name": "Callous Competition",
                     "id": "492a-b334-5834-1d64",
-                    "description": "-> At the start of the battle:\n  -> All friendly DRUKHARI units are marked as winning the wager.\n  -> All friendly DRUKHARI units are no longer marked as losing the wager.\n  -> All friendly HARLEQUINS units are marked as losing the wager.\n  -> All friendly HARLEQUINS units are no longer marked as winning the wager.\n-> Each time a friendly unit destroys an enemy unit (the triggering unit must have DRUKHARI):\n  -> All friendly DRUKHARI units are marked as winning the wager.\n  -> All friendly DRUKHARI units are no longer marked as losing the wager.\n  -> All friendly HARLEQUINS units are marked as losing the wager.\n  -> All friendly HARLEQUINS units are no longer marked as winning the wager.\n-> Each time a friendly unit destroys an enemy unit (the triggering unit must have HARLEQUINS):\n  -> All friendly HARLEQUINS units are marked as winning the wager.\n  -> All friendly HARLEQUINS units are no longer marked as losing the wager.\n  -> All friendly DRUKHARI units are marked as losing the wager.\n  -> All friendly DRUKHARI units are no longer marked as winning the wager.\nWhile the attacking unit is tagged winning the wager, while the attacking unit is not tagged losing the wager, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the DRUKHARI or HARLEQUINS keyword.\nWhile the attacking unit is tagged losing the wager, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the DRUKHARI or HARLEQUINS keyword.\nWhile the attacking unit is tagged losing the wager, you can re-roll a Wound roll of 1 for attacks made by all friendly models with the DRUKHARI or HARLEQUINS keyword.",
+                    "description": "At the start of the battle:\n  - Friendly DRUKHARI units are designated as Winning the Wager.\n  - Friendly DRUKHARI units are no longer designated as Losing the Wager.\n  - Friendly HARLEQUINS units are designated as Losing the Wager.\n  - Friendly HARLEQUINS units are no longer designated as Winning the Wager.\nEach time a friendly DRUKHARI unit destroys an enemy unit:\n  - Friendly DRUKHARI units are designated as Winning the Wager.\n  - Friendly DRUKHARI units are no longer designated as Losing the Wager.\n  - Friendly HARLEQUINS units are designated as Losing the Wager.\n  - Friendly HARLEQUINS units are no longer designated as Winning the Wager.\nEach time a friendly HARLEQUINS unit destroys an enemy unit:\n  - Friendly HARLEQUINS units are designated as Winning the Wager.\n  - Friendly HARLEQUINS units are no longer designated as Losing the Wager.\n  - Friendly DRUKHARI units are designated as Losing the Wager.\n  - Friendly DRUKHARI units are no longer designated as Winning the Wager.\nWhile the attacking unit is designated as Winning the Wager and the attacking unit is not designated as Losing the Wager, you can re-roll Hit rolls of 1 for attacks made by friendly models with the DRUKHARI or HARLEQUINS keyword.\nWhile the attacking unit is designated as Losing the Wager, you can re-roll Hit rolls of 1 for attacks made by friendly models with the DRUKHARI or HARLEQUINS keyword.\nWhile the attacking unit is designated as Losing the Wager, you can re-roll Wound rolls of 1 for attacks made by friendly models with the DRUKHARI or HARLEQUINS keyword.",
                     "hidden": false
                   }
                 ]
@@ -30301,7 +30301,7 @@
                   {
                     "name": "Alliance of Agony",
                     "id": "3d71-db98-520f-b499",
-                    "description": "At the start of the battle, for the rest of the battle:\n  -> If the unit is an ARCHON KABALITE WARRIORS unit, you gain 2 Pain tokens.\n  -> If the unit is a SUCCUBUS WYCHES unit, you gain 2 Pain tokens.\n  -> If the unit is a HAEMONCULUS WRACKS unit, you gain 2 Pain tokens.",
+                    "description": "At the start of the battle, for the rest of the battle:\n  - If this unit is an ARCHON KABALITE WARRIORS unit, you gain 2 Pain tokens.\n  - If this unit is a SUCCUBUS WYCHES unit, you gain 2 Pain tokens.\n  - If this unit is a HAEMONCULUS WRACKS unit, you gain 2 Pain tokens.",
                     "hidden": false
                   }
                 ]
@@ -30348,7 +30348,7 @@
                   {
                     "name": "Stitchflesh Abominations",
                     "id": "d925-4d53-1f4a-9bf6",
-                    "description": "Against HAEMONCULUS COVENS targets, when the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.",
+                    "description": "Against HAEMONCULUS COVENS targets, when the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.",
                     "hidden": false
                   }
                 ]
@@ -30395,7 +30395,7 @@
                   {
                     "name": "Exacting Cruelty",
                     "id": "eef8-0f1e-77be-4bd3",
-                    "description": "Against a unit that is not a MONSTER or VEHICLE, melee weapons equipped by all friendly WYCH CULT units gain [LETHAL HITS].\nYou cannot select this Detachment together with another WYCH CULT Detachment.",
+                    "description": "Against a unit that is not a MONSTER or VEHICLE, melee weapons equipped by friendly WYCH CULT units gain [LETHAL HITS].\nYou cannot select this Detachment together with another WYCH CULT Detachment.",
                     "hidden": false
                   }
                 ]
@@ -30442,7 +30442,7 @@
                   {
                     "name": "Contracted Harvest",
                     "id": "dc55-22d6-ef50-e39f",
-                    "description": "Against a unit that is not a MONSTER or VEHICLE, ranged weapons equipped by all friendly units with the BLADES FOR HIRE or KABAL keyword gain [SUSTAINED HITS 1].\nYou cannot select this Detachment together with another KABAL Detachment.",
+                    "description": "Against a unit that is not a MONSTER or VEHICLE, ranged weapons equipped by friendly units with the BLADES FOR HIRE or KABAL keyword gain [SUSTAINED HITS 1].\nYou cannot select this Detachment together with another KABAL Detachment.",
                     "hidden": false
                   }
                 ]
@@ -30489,7 +30489,7 @@
                   {
                     "name": "Darkest Artifice",
                     "id": "e704-483e-2572-7132",
-                    "description": "While the target is a friendly unit with the CRONOS or TALOS keyword, when the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.\nYou cannot select this Detachment together with another COVENS Detachment.",
+                    "description": "While the target is a friendly unit with the CRONOS or TALOS keyword, when the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.\nYou cannot select this Detachment together with another COVENS Detachment.",
                     "hidden": false
                   }
                 ]
@@ -30670,7 +30670,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of the Fight phase, you may use this ability, once per battle per model, until the end of the phase, the unit gains the Fights First ability.",
+                    "$text": "At the start of the Fight phase, you can use this ability, once per battle per model, until the end of the phase, this unit gains the Fights First ability.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -30751,7 +30751,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Enemy units cannot target the unit with the Fire Overwatch Stratagem.",
+                    "$text": "Enemy units cannot target this unit with the Fire Overwatch Stratagem.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -30913,7 +30913,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "Set this model's Save characteristic to 3+.\nAt the start of the Command phase, you can use this ability:\n  - Spend 1 Pain token.\n  - This model regains all its lost wounds.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -30994,7 +30994,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: The unit gains the Deep Strike ability.\nThe Rapid Ingress Stratagem that targets the unit costs 0CP.",
+                    "$text": "You can use this ability: This unit gains the Deep Strike ability.\nThe Rapid Ingress Stratagem that targets this unit costs 0 CP.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31075,7 +31075,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When declaring Battle Formations:\n  -> Select up to 3 friendly units with the HAND OF THE ARCHON or KABALITE WARRIORS keyword: that unit gains the Infiltrators ability.",
+                    "$text": "When declaring Battle Formations, select up to 3 friendly units with the HAND OF THE ARCHON or KABALITE WARRIORS keyword. Those units gain the Infiltrators ability.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31156,7 +31156,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While this model is leading a unit:\n  -> Improve the unit's Leadership characteristic by 1.\n  -> Improve the unit's Objective Control characteristic by 1.",
+                    "$text": "While this model is leading a unit:\n  - Improve this unit's Leadership characteristic by 1.\n  - Improve this unit's Objective Control characteristic by 1.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31258,7 +31258,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While the unit is wholly within 6\" of a friendly DRUKHARI TRANSPORT unit:\n  -> The unit gains the Stealth ability.\n  -> While making ranged attacks, the unit has the Benefit of Cover.",
+                    "$text": "While this unit is wholly within 6\" of a friendly DRUKHARI TRANSPORT unit:\n  - This unit gains the Stealth ability.\n  - While making ranged attacks, this unit has the Benefit of Cover.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31360,7 +31360,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time pain token pool is spent, until the end of the phase:\n  -> Select one friendly DRUKHARI TRANSPORT unit if the selected unit is within 6\" of the unit:\n    -> During the Shooting phase, this unit is Empowered.\n    -> You can re-roll the Hit roll for attacks made by that unit.",
+                    "$text": "Each time pain token pool is spent, until the end of the phase:\n  - Select one friendly DRUKHARI TRANSPORT unit that is within 6\" of this unit:\n    - During the Shooting phase, this unit is Empowered.\n    - You can re-roll Hit rolls for attacks made by that unit.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31462,7 +31462,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time the unit destroys an enemy unit or when the unit is selected to fight, during the Fight phase, while the triggering unit is within range of an objective marker, you gain 1 Pain token.",
+                    "$text": "Each time this unit destroys an enemy unit or when this unit is selected to fight, during the Fight phase, while the triggering unit is within range of an objective marker, you gain 1 Pain token.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31564,7 +31564,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the unit disembarks from a Transport, until the end of the turn, enemy units cannot target the unit with the Fire Overwatch Stratagem.",
+                    "$text": "When this unit disembarks from a Transport, until the end of the turn, enemy units cannot target this unit with the Fire Overwatch Stratagem.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31768,7 +31768,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit gains the Deep Strike ability.\n-> When the unit is set up, if the unit is using Deep Strike, until the end of the turn: while the unit is tagged losing the wager, you can re-roll the Charge roll.",
+                    "$text": "This unit gains the Deep Strike ability.\nWhen this unit is set up, if this unit is using Deep Strike, until the end of the turn, while this unit is designated as Losing the Wager, you can re-roll the Charge roll.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31834,7 +31834,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit gains the Stealth ability.\nThe unit gains the Infiltrators ability.",
+                    "$text": "This unit gains the Stealth ability.\nThis unit gains the Infiltrators ability.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32038,7 +32038,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "This unit is Empowered.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32119,7 +32119,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of your Command phase, you may use this ability, while this model is on the battlefield:\n  Select exactly 1 distinct options:\n    - Spend 1 Pain token; you gain 1CP.\n    - Roll one D6: on a 4+, you gain 1CP.",
+                    "$text": "At the start of your Command phase, you can use this ability, while this model is on the battlefield:\n  Choose one of the following:\n    - Spend 1 Pain token; you gain 1 CP.\n    - Roll one D6: on a 4+, you gain 1 CP.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32524,7 +32524,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Add 1 to this model's Wounds characteristic.\nAdd 1 to the unit's Toughness characteristic.",
+                    "$text": "Add 1 to this model's Wounds characteristic.\nAdd 1 to this unit's Toughness characteristic.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32605,7 +32605,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Increase the range of this model's Fear Incarnate ability by 3\".\n-> When a friendly unit fails a Battle-shock test (the triggering unit must have DRUKHARI) within 9\" of this model or each time a friendly DRUKHARI unit is destroyed within 9\" of this model:\n  -> Roll one D6: on a 4+, you gain 1 Pain token.",
+                    "$text": "Increase the range of this model's Fear Incarnate ability by 3\".\nWhen a friendly DRUKHARI unit fails a Battle-shock test within 9\" of this model or each time a friendly DRUKHARI unit is destroyed within 9\" of this model:\n  - Roll one D6: on a 4+, you gain 1 Pain token.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32686,7 +32686,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Your opponent cannot target the unit with Overwatch.",
+                    "$text": "Your opponent cannot target this unit with Overwatch.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32767,7 +32767,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Add 1 to the unit's Toughness characteristic.",
+                    "$text": "Add 1 to this unit's Toughness characteristic.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32848,7 +32848,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Add 1 to the unit's Leadership characteristic.\nAdd 1 to the unit's Objective Control characteristic.",
+                    "$text": "Add 1 to this unit's Leadership characteristic.\nAdd 1 to this unit's Objective Control characteristic.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32929,7 +32929,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit's weapons gain [PRECISION].",
+                    "$text": "This unit's weapons gain [PRECISION].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -33010,7 +33010,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.",
+                    "$text": "When the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -33104,7 +33104,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit has a 5+ invulnerable save.",
+                    "$text": "This unit has a 5+ invulnerable save.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

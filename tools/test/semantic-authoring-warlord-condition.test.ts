@@ -194,7 +194,7 @@ describe("Bearer condition on the Warlord (S3: 9113 shape and duplicates, T5 and
   it("describes the gate as \"while this model is the Warlord\"", () => {
     const mechanics = compiledEffect(bearerLeaves("1CP"), BEARER_TEXT("1CP"), "da-boss-orks");
     const text = describeAbility({ effect: mechanics.effect as never, scope: { duration: "permanent" } });
-    expect(text).toContain("while this model is the Warlord");
+    expect(text).toContain("and this model is the Warlord");
   });
 });
 

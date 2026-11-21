@@ -167,32 +167,31 @@
         </profile>
         <profile name="Firing Deck" id="9904-e938-8748-0538" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Walking Bastion" id="6818-3b8f-7675-c20c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit ignores any modifiers to its Weapon Skill and Ballistic Skill characteristics.
-The unit ignores any modifiers to its Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit ignores any modifiers to its Weapon Skill and Ballistic Skill characteristics.
+This unit ignores any modifiers to its Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="71f3-2114-0a8e-dc80" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="a380-8453-b662-d98d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Super-heavy Walker" id="900c-3e97-e9fd-9d6c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the turn:
-  -&gt; This model can move over models excluding titanic and terrain as though they were not there; this model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  If this model moved:
-    -&gt; Roll one D6: on exactly 1, the unit is Battle-shocked.</characteristic>
+  - This model can move over models excluding titanic and terrain as though they were not there; this model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - If this model moved:
+    - Roll one D6: on exactly 1, this unit is Battle-shocked.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -304,13 +303,13 @@ The unit ignores any modifiers to its Hit rolls.</characteristic>
         </profile>
         <profile name="Da Jump (Psychic level 1)" id="06e2-2be3-36b0-2d8c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Movement phase, in your turn, while the unit is not Battle-shocked, until the end of the phase:
-  -&gt; Roll D6, then:
-    -&gt; Roll one D6:
-      - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Movement phase, while this unit is not Battle-shocked, until the end of the phase, you can use this ability:
+  - Roll D6, then:
+    - Roll one D6:
+      - On 1: This unit is Battle-shocked.
       - On 2-6: Nothing happens.
-  -&gt; The unit can be placed into Strategic Reserves.
-  -&gt; The unit gains the Deep Strike ability.</characteristic>
+  - This unit can be placed into Strategic Reserves.
+  - This unit gains the Deep Strike ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Waaagh! Energy (Psyker level 1)" id="9b73-63d4-1508-1fb0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -320,19 +319,18 @@ The unit ignores any modifiers to its Hit rolls.</characteristic>
         </profile>
         <profile name="Warpath (Psychic level 1)" id="266d-0dbc-9740-7905" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, during the Fight phase, while the unit is not Battle-shocked, until the end of the phase:
-  -&gt; Roll D6, then:
-    -&gt; Roll one D6:
-      - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, during the Fight phase, while this unit is not Battle-shocked, until the end of the phase:
+  - Roll D6, then:
+    - Roll one D6:
+      - On 1: This unit is Battle-shocked.
       - On 2-6: Nothing happens.
-  -&gt; You can re-roll a Wound roll of 1 with melee weapons.
-  -&gt; Melee weapons equipped by models in this unit gain [PSYCHIC].</characteristic>
+  - You can re-roll Wound rolls of 1 with melee weapons.
+  - Melee weapons equipped by models in this unit gain [PSYCHIC].</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="55dc-c8f3-c738-64d2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="6f19-5755-25a4-16b7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -465,9 +463,9 @@ The unit ignores any modifiers to its Hit rolls.</characteristic>
       <profiles>
         <profile name="High-speed Carnage" id="d3f6-8300-6517-3d0f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit charged this turn:
-  -&gt; Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.
-  -&gt; Improve the Damage characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit charged this turn:
+  - Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.
+  - Improve the Damage characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -657,17 +655,17 @@ The unit ignores any modifiers to its Hit rolls.</characteristic>
       <profiles>
         <profile name="Deep Strike" id="89b2-8875-ebf6-a7d5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deff From Above" id="918f-2746-2869-f366" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn, if the unit made an ingress move this turn, while making ranged attacks, the unit gets +1 to Hit rolls with ranged weapons.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase, if this unit made an Ingress move this turn, while making ranged attacks, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Aerial Manoover" id="8643-9f38-9169-72c8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase, you may use this ability, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase, you can use this ability, while this unit is unengaged, this unit can be placed into Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -859,15 +857,15 @@ The unit ignores any modifiers to its Hit rolls.</characteristic>
         </profile>
         <profile name="Crude Surgery" id="fb68-55a1-e6fc-0bae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, in your turn, the unit regains up to 3 lost wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, this unit regains up to 3 lost wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Catch Dat Red Bit (Once per battle, per unit)" id="0aa2-05ae-9b99-e098" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this model uses Crude Surgery, you may use this ability:
-  -&gt; The unit regains up to D3 lost wounds.
-  -&gt; Place a Grot Orderly token marker.
-  -&gt; Remove that Grot Orderly token marker from the battlefield.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this model uses Crude Surgery, you can use this ability:
+  - This unit regains up to D3 lost wounds.
+  - Place a Grot Orderly token marker.
+  - Remove that Grot Orderly token marker from the battlefield.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="d695-90d2-9774-9b26" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -953,13 +951,12 @@ The unit ignores any modifiers to its Hit rolls.</characteristic>
       <profiles>
         <profile name="Spiteful Power Trip" id="c138-69c1-33d2-0fe5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the target's highest T is less than 7, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the target's highest T is less than 7, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="3232-c36e-ee0f-88e2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1094,21 +1091,21 @@ The unit ignores any modifiers to its Hit rolls.</characteristic>
         <profile name="More Dakka" id="f273-af3d-7a35-a7cc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Ranged weapons equipped by models in this unit gain [IGNORES COVER].
-While the unit is riled up, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
+While this unit is riled up, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
           </characteristics>
         </profile>
         <profile name="Shokk-boosta" id="b9c5-f151-6627-5bd5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Movement phase, in your turn, until the end of the phase:
-  -&gt; When the unit is selected to make an Advance move, you may use this ability:
-    -&gt; The unit's Advance rolls count as 6.
-    -&gt; The unit can move over models as though they were not there.
-  -&gt; When the unit ends an Advance move: the unit must take a Hazard test for each model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Movement phase, until the end of the phase:
+  - When this unit is selected to make an Advance move, you can use this ability:
+    - This unit's Advance rolls count as 6.
+    - This unit can move over models as though they were not there.
+  - When this unit ends an Advance move, this unit must take a Hazard test for each model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="8f81-4101-0739-9868" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1240,14 +1237,14 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
       <profiles>
         <profile name="Bomb Squig" id="c0f5-de60-adf8-f77e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, you may use this ability, once per battle per unit, during the Movement phase, in your turn:
-  -&gt; Select one enemy unit visible to this model if the selected unit is within 12" of the unit:
-    -&gt; Roll one D6: on a 3+, that unit suffers D3 mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, you can use this ability, once per battle per unit, during your Movement phase:
+  - Select one enemy unit visible to this model that is within 12" of this unit:
+    - Roll one D6: on a 3+, that unit suffers D3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Brutal Impact" id="e575-6361-4e6e-82f3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit charged this turn, improve the unit's Damage characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit charged this turn, improve this unit's Damage characteristic by 1.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1459,21 +1456,20 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Intimidating Motivation" id="6aa0-93dc-a886-c27e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, during the Movement phase, in your turn, until the start of your next turn:
-  -&gt; Select one friendly ORKS unit if the selected unit is within 6" of the unit:
-    -&gt; That unit is no longer Battle-shocked.
-    -&gt; That unit is riled up.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase, until the start of your next turn:
+  - Select one friendly ORKS unit that is within 6" of this unit:
+    - That unit is no longer Battle-shocked.
+    - That unit is riled up.</characteristic>
           </characteristics>
         </profile>
         <profile name="Krushin' Impetus" id="3a30-6ba3-e7a2-8b44" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 3+, that unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move, you can use this ability, select one enemy unit that is within Engagement Range of this unit. Roll one D6 for each friendly model in this unit that is within Engagement Range of the selected unit: for each 3+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="54db-f50c-62cf-58ad" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1564,18 +1560,17 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Damaged" id="de6c-13d0-c324-6f0e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="17f7-ded1-20c8-f507" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Go fer da Weak Spot" id="0365-7893-675c-3ebf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn, while making ranged attacks, while the target is an enemy unit with the MONSTER or VEHICLE keyword, the unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase, while making ranged attacks against an enemy unit with the MONSTER or VEHICLE keyword, add 1 to this unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1760,23 +1755,22 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Deadly Demise" id="aaad-f7fa-e0f1-ad70" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="1d15-6863-25b2-0470" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Mobile Fortress" id="7d84-e51a-9200-0d67" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against ranged attacks, subtract 1 from the attacking unit's Damage characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against ranged attacks, subtract 1 from the Damage characteristic of the attacking unit's attacks.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="842e-bbff-7dec-5829" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1939,12 +1933,12 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Infiltrators" id="d39a-d314-da54-4aca" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Kunnin' Infiltrator" id="3ea2-c8ed-eced-d918" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase, you may use this ability, while the unit is hidden, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase, you can use this ability, while this unit is hidden and this unit is unengaged, this unit can be placed into Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="fc80-5c2a-84f0-44a9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1954,17 +1948,17 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Stealth" id="a7a0-bb63-dd90-0377" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deff from the Shadows (First battle round onwards)" id="4ac8-65d5-7c06-ade4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Movement phase, while the unit is in Strategic Reserves, the unit can make an Ingress move.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Movement phase, while this unit is in Strategic Reserves, this unit can make an Ingress move.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="0e9d-699f-4f03-13eb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2054,31 +2048,30 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Big an' Shooty" id="35e0-0e7c-b271-0abc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn, you can re-roll a Hit roll of 1 with ranged weapons.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase, you can re-roll Hit rolls of 1 with ranged weapons.</characteristic>
           </characteristics>
         </profile>
         <profile name="Gut Hatch" id="5184-e5a9-74bd-2cee" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, during the Movement phase, in your turn, friendly units embarked within the unit can disembark using the Assault Disembarkation rules.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, during your Movement phase, friendly units embarked within this unit can disembark using the Assault Disembarkation rules.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="9d16-ec5b-5cb7-da12" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="24db-7755-20c5-5836" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Super-heavy Walker" id="40b0-2e96-13d8-dd9e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the turn:
-  -&gt; This model can move over models excluding titanic and terrain as though they were not there; this model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  If this model moved:
-    -&gt; Roll one D6: on exactly 1, the unit is Battle-shocked.</characteristic>
+  - This model can move over models excluding titanic and terrain as though they were not there; this model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - If this model moved:
+    - Roll one D6: on exactly 1, this unit is Battle-shocked.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2167,27 +2160,27 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Da Grand Warlord's Ladz" id="721b-4ab6-3ab5-eedb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is within 3" of a friendly INFANTRY ORKS unit other than this unit, the unit gains the Lone Operative ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is within 3" of a friendly INFANTRY ORKS unit other than this unit, this unit gains the Lone Operative ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Makari, Hoist Dat Banner" id="5530-cb7c-41e5-2bc7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Movement phase, in your turn, until the start of your next turn:
-  -&gt; Select any number of friendly ORKS units (at most the battle round number):
-    -&gt; For each selected unit:
-      -&gt; That unit is riled up.
-      -&gt; Place a Makari token marker.
-      -&gt; Remove that Makari token marker from the battlefield.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Movement phase, until the start of your next turn, you can use this ability:
+  - Select any number of friendly ORKS units (at most the battle round number):
+    - For each selected unit:
+      - That unit is riled up.
+      - Place a Makari token marker.
+      - Remove that Makari token marker from the battlefield.</characteristic>
           </characteristics>
         </profile>
         <profile name="Prophet of Da Great Waaagh!" id="3489-406f-0e20-139c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while a friendly ORKS unit is within 6" of this unit, that unit gets +1 to Hit rolls; that unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while a friendly ORKS unit is within 6" of this unit, add 1 to that unit's Hit rolls; add 1 to that unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Supreme Commander" id="d9a8-12c3-b24f-c6f4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, the unit must be your Warlord.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, this unit must be your Warlord.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2265,14 +2258,14 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
       <profiles>
         <profile name="Bomb Squigs" id="e9e4-2587-2bf7-338c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, you may use this ability, twice per battle per unit, during the Movement phase, in your turn:
-  -&gt; Select one enemy unit visible to this model if the selected unit is within 12" of the unit:
-    -&gt; Roll one D6: on a 3+, that unit suffers D3 mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, you can use this ability, twice per battle per unit, during your Movement phase:
+  - Select one enemy unit visible to this model that is within 12" of this unit:
+    - Roll one D6: on a 3+, that unit suffers D3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Trophy Hunters" id="14cc-171a-4bb0-c1d5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gets +1 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2503,31 +2496,30 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Deadly Demise" id="9aa0-5033-7bbd-4cf7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Idol of Belligerence" id="2dd3-2264-5496-76c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly unit embarked within the unit is selected to make a Disembark move, during the Movement phase, in your turn, until the start of your next turn, the triggering unit is riled up.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly unit embarked within this unit is selected to make a Disembark move, during your Movement phase, until the start of your next turn, that unit is riled up.</characteristic>
           </characteristics>
         </profile>
         <profile name="Waaagh! Effigy" id="e74c-fb86-2662-86e0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is riled up.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is riled up.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="60aa-ff20-487e-992b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Super-heavy Walker" id="891a-2643-4913-d6d8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the turn:
-  -&gt; This model can move over models excluding titanic and terrain as though they were not there; this model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  If this model moved:
-    -&gt; Roll one D6: on exactly 1, the unit is Battle-shocked.</characteristic>
+  - This model can move over models excluding titanic and terrain as though they were not there; this model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - If this model moved:
+    - Roll one D6: on exactly 1, this unit is Battle-shocked.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2624,31 +2616,30 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Deadly Demise" id="5e75-5daa-cfd3-ca1a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fortification" id="1c6c-d335-cab2-6fa3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is engaged with a friendly FORTIFICATION unit, while an enemy unit is unengaged with a friendly unit (excluding FORTIFICATION units), for the rest of the battle:
-  -&gt; Friendly units can target enemy units that are engaged with ranged attacks.
-  -&gt; Against ranged attacks, unless against close quarters shooting attacks, the attacking unit gets -1 to Hit rolls with ranged weapons.
-  -&gt; When the unit is selected to make a Fall Back move: while the triggering unit is engaged with a friendly FORTIFICATION unit, while the triggering unit is unengaged with a friendly unit (excluding FORTIFICATION units), while the unit is not Battle-shocked, the triggering unit is not affected by Desperate Escape tests.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is engaged with a friendly FORTIFICATION unit and an enemy unit is unengaged with a friendly unit (excluding FORTIFICATION units), for the rest of the battle:
+  - Friendly units can target enemy units that are engaged with ranged attacks.
+  - Against ranged attacks, unless against close quarters shooting attacks, subtract 1 from the attacking unit's Hit rolls.
+  - When this unit is selected to make a Fall Back move, while the triggering unit is engaged with a friendly FORTIFICATION unit and the triggering unit is unengaged with a friendly unit (excluding FORTIFICATION units) and this unit is not Battle-shocked, the triggering unit is not affected by Desperate Escape tests.</characteristic>
           </characteristics>
         </profile>
         <profile name="Ramshackle Cover" id="1451-cc87-897d-75d6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit selects its targets, unless the target is not fully visible to the attacking model because of this unit, until that unit finishes resolving its attacks, the target has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit selects its targets, unless the target is not fully visible to the attacking model because of this unit, until the attacking unit finishes resolving its attacks, the target has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Raucous Occupants" id="2f7e-b5cb-b984-8209" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is within range of a home objective marker, for the rest of the battle, while this model is within range of a home objective marker, add 1 to this model's Objective Control characteristic for every 1 models in or embarked within this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is within range of a home objective marker and this model is within range of a home objective marker, for the rest of the battle, add 1 to this model's Objective Control characteristic for every 1 models in or embarked within this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="a28d-9c3a-ffd2-76f1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2780,15 +2771,15 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
       <profiles>
         <profile name="Bomb Squigs" id="eb29-5119-21ce-748d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, you may use this ability, twice per battle per unit, during the Movement phase, in your turn:
-  -&gt; Select one enemy unit visible to this model if the selected unit is within 12" of the unit:
-    -&gt; Roll one D6: on a 3+, that unit suffers D3 mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, you can use this ability, twice per battle per unit, during your Movement phase:
+  - Select one enemy unit visible to this model that is within 12" of this unit:
+    - Roll one D6: on a 3+, that unit suffers D3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Rokkit Barrage" id="5411-8538-2d57-8171" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test, applying -1 to that test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test, applying -1 to that test.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3030,38 +3021,38 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
       <profiles>
         <profile name="Bomb Squig" id="7497-b5a5-3015-9ae8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, you may use this ability, once per battle per unit, during the Movement phase, in your turn:
-  -&gt; Select one enemy unit visible to this model if the selected unit is within 12" of the unit:
-    -&gt; Roll one D6: on a 3+, that unit suffers D3 mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, you can use this ability, once per battle per unit, during your Movement phase:
+  - Select one enemy unit visible to this model that is within 12" of this unit:
+    - Roll one D6: on a 3+, that unit suffers D3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Found 'Em!" id="72b4-b2cf-7883-8679" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Movement phase, in your turn, until the end of the turn:
-  -&gt; Select one enemy unit within 12" of the unit: add 3 to that unit's detection range characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Movement phase, until the end of the turn, you can use this ability:
+  - Select one enemy unit within 12" of this unit. Add 3" to that unit's detection range.</characteristic>
           </characteristics>
         </profile>
         <profile name="Nowhere to Hide" id="6719-0f6a-606a-636d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is hidden, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is hidden, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Taktikal Know-wotz" id="8809-594a-bf81-94bc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, you may use this ability:
-  -&gt; Split the unit into 2 units of 5 and 5 models.
-  -&gt; The unit gains the Bomb Squig ability.
-  -&gt; The unit gains the Found Em ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, you can use this ability:
+  - Split this unit into 2 units of 5 and 5 models.
+  - This unit gains the Bomb Squig ability.
+  - This unit gains the Found Em ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="bc0f-3091-99d6-5c91" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="f038-7453-eac7-0816" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3355,17 +3346,17 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
       <profiles>
         <profile name="Ammo Runts (Once per battle, per unit)" id="faea-b8de-6188-5ef3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, you may use this ability, during the Shooting phase, in your turn, while making ranged attacks, until the end of the phase, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability, during your Shooting phase, while making ranged attacks, until the end of the phase, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Never Too Busy to Fight" id="52b9-b8dc-59d9-5273" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is eligible to start an Action even if it is within Engagement Range of enemy units.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is eligible to start an Action even if it is within Engagement Range of enemy units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tide of Muscle" id="f605-04a0-a59d-1824" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Fight phase, if the unit charged this turn, melee weapons equipped by models in this unit gain [LETHAL HITS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Fight phase, if this unit charged this turn, melee weapons equipped by models in this unit gain [LETHAL HITS].</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3790,18 +3781,17 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Firing Deck" id="0df9-9618-a146-4268" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="151b-5e91-dc03-07ea" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Pilin' Out" id="0cf8-83df-5485-b037" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of this model, friendly units embarked within this model can disembark using the Rapid Disembarkation rules.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during your opponent's Movement phase, while the triggering unit is within 8" of this model, friendly units embarked within this model can disembark using the Rapid Disembarkation rules.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3964,21 +3954,21 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Hardy Bioniks" id="5ee0-e4f9-51a8-5318" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Push Dat Bit Back In" id="8dbb-9353-a69f-7c40" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, in your turn:
-  -&gt; Select one friendly BEAST SNAGGA unit if the selected unit is within 6" of the unit: that unit regains up to 3 lost wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase:
+  - Select one friendly BEAST SNAGGA unit that is within 6" of this unit. That unit regains up to 3 lost wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Runnin' Wiv da Herd" id="8102-1b94-a957-f538" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is attached to a MOUNTED unit:
-  -&gt; This model loses the INFANTRY keyword.
-  -&gt; This model gains the MOBILE and MOUNTED keywords.
-  -&gt; Add 4 to this model's Move characteristic.</characteristic>
+  - This model loses the INFANTRY keyword.
+  - This model gains the MOBILE and MOUNTED keywords.
+  - Add 4" to this model's Move characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="abd9-4dce-f481-ab11" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4066,31 +4056,30 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Big an' Stompy" id="a1ba-5d38-6af2-7115" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll a Hit roll of 1 with melee weapons.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll Hit rolls of 1 with melee weapons.</characteristic>
           </characteristics>
         </profile>
         <profile name="Gut Hatch" id="7cbd-f7e7-3fa6-2576" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, during the Movement phase, in your turn, friendly units embarked within the unit can disembark using the Assault Disembarkation rules.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, during your Movement phase, friendly units embarked within this unit can disembark using the Assault Disembarkation rules.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="478d-ed54-ceca-09e9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="69cf-d701-d8fe-a560" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Super-heavy Walker" id="c4d1-4ae1-fb55-0bf9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the turn:
-  -&gt; This model can move over models excluding titanic and terrain as though they were not there; this model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  If this model moved:
-    -&gt; Roll one D6: on exactly 1, the unit is Battle-shocked.</characteristic>
+  - This model can move over models excluding titanic and terrain as though they were not there; this model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - If this model moved:
+    - Roll one D6: on exactly 1, this unit is Battle-shocked.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4184,12 +4173,12 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
       <profiles>
         <profile name="Madcap Artillery" id="b5e5-679b-4c0c-bd72" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, if all ranged weapons equipped by each MEK GUNZ model in the unit are the same, until the start of your next turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; If one or more models in this unit are each equipped with one weapon named "Bubblechukka", that unit gains the Bubblechukka ability (this unit is wobbled; while the unit is wobbled, the target has the Benefit of Cover).
-    -&gt; If one or more models in this unit are each equipped with one weapon named "Kustom Mega-kannon", that unit gains the Kustom Mega-kannon ability (this unit is zapped; while the unit is zapped, subtract 1 from this unit's Leadership characteristic).
-    -&gt; If one or more models in this unit are each equipped with one weapon named "Smasha Gun", that unit gains the Smasha Gun ability (this unit is smashed; while the unit is smashed, subtract 2 from this unit's Move characteristic).
-    -&gt; If one or more models in this unit are each equipped with one weapon named "Traktor Kannon", that unit gains the Traktor Kannon ability (this unit is grounded; while the unit is grounded, this unit loses the Take to the Skies rule).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, if all ranged weapons equipped by each MEK GUNZ model in the unit are the same, until the start of your next turn:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:
+    - If one or more models in this unit are each equipped with one weapon named "Bubblechukka", that unit gains the Bubblechukka ability (this unit is wobbled; while this unit is wobbled, the target has the Benefit of Cover).
+    - If one or more models in this unit are each equipped with one weapon named "Kustom Mega-kannon", that unit gains the Kustom Mega-kannon ability (this unit is zapped; while this unit is zapped, subtract 1 from this unit's Leadership characteristic).
+    - If one or more models in this unit are each equipped with one weapon named "Smasha Gun", that unit gains the Smasha Gun ability (this unit is smashed; while this unit is smashed, subtract 2" from this unit's Move characteristic).
+    - If one or more models in this unit are each equipped with one weapon named "Traktor Kannon", that unit gains the Traktor Kannon ability (this unit is grounded; while this unit is grounded, this unit loses the Take to the Skies rule).</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4433,15 +4422,15 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
       <profiles>
         <profile name="Rokkit Charge" id="ae7d-9f52-48d7-c54f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, if the unit charged this turn, until the end of the phase:
-  -&gt; Improve the Attacks characteristic of melee weapons equipped by models in this unit by 1.
-  -&gt; Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.
-  -&gt; Melee weapons equipped by models in this unit gain [HAZARDOUS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, if this unit charged this turn, until the end of the phase:
+  - Improve the Attacks characteristic of melee weapons equipped by models in this unit by 1.
+  - Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.
+  - Melee weapons equipped by models in this unit gain [HAZARDOUS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="7dac-3f70-5a63-3340" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4666,7 +4655,7 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
       <profiles>
         <profile name="Finderz Keeperz" id="806e-eae5-23d5-ebc3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn, while the unit is within range of an objective marker or while the target is within range of an objective marker, improve the Armour Penetration characteristic of ranged weapons equipped by models in this unit by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase, while this unit is within range of an objective marker or while the target is within range of an objective marker, improve the Armour Penetration characteristic of ranged weapons equipped by models in this unit by 1.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4863,8 +4852,8 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         <profile name="Boom Bomb" id="4371-f27d-860d-1eb2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase:
-  -&gt; Select one enemy unit without the Lone Operative ability visible to this model if the selected unit is within 24" of the unit:
-    -&gt; Roll one D6:
+  - Select one enemy unit without the Lone Operative ability visible to this model that is within 24" of this unit:
+    - Roll one D6:
       - On 1-3: That unit suffers D3 mortal wounds.
       - On 4-5: That unit suffers 3 mortal wounds.
       - On 6: That unit suffers D3+3 mortal wounds.</characteristic>
@@ -4872,13 +4861,12 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Damaged" id="9259-58f6-1efb-4c03" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="8d8f-8c88-3aed-a6c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4964,13 +4952,12 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Deadly Demise" id="1691-f17c-4b8f-8311" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Dread 'Ard" id="6f6a-a72c-8c0d-9f37" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 1 from the unit's Damage characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 1 from this unit's Damage characteristic.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5199,25 +5186,25 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Dodge Dis" id="1a2a-2057-01c4-b0a0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Keep Huntin'" id="2c36-1303-dbe6-936e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, during the Movement phase, in your turn, until the start of your next turn:
-  -&gt; Select one friendly BEAST SNAGGA unit within 6" of the unit:
-    -&gt; That unit is no longer Battle-shocked.
-    -&gt; That unit is riled up.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase, until the start of your next turn:
+  - Select one friendly BEAST SNAGGA unit within 6" of this unit:
+    - That unit is no longer Battle-shocked.
+    - That unit is riled up.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="305c-ec7d-269a-eb8e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="510c-271c-f359-aac6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5308,18 +5295,17 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Strafing Run" id="c248-93de-f3b5-e535" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn, while making ranged attacks, while the target does not have the FLY keyword, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase, while making ranged attacks, while the target does not have the FLY keyword, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="e8a4-e2a9-a3d6-2a98" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="6b06-a295-b326-da65" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5421,18 +5407,18 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Fix Dat Armour Up" id="79c9-2e2f-184e-e723" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per battle per unit, during the Command phase, in your turn, the unit regains up to 3 lost wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per battle per unit, during your Command phase, this unit regains up to 3 lost wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="More Dakka" id="5b44-0f6e-9602-fb72" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Ranged weapons equipped by models in this unit gain [IGNORES COVER].
-While the unit is riled up, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
+While this unit is riled up, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="e3c3-3c8c-05a3-6139" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5630,10 +5616,10 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
       <profiles>
         <profile name="Mobbed" id="6db4-2c0a-86d8-26ce" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  For each enemy unit with the MONSTER or VEHICLE keyword within Engagement Range of the unit:
-    -&gt; Unless the unit contains 13+ models, the unit must take a Battle-shock test, applying -1 to that test.
-    -&gt; Unless the unit does not contain 13+ models, if the unit contains 13+ models, the unit must take a Battle-shock test, applying -2 to that test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move:
+  For each enemy unit with the MONSTER or VEHICLE keyword within Engagement Range of this unit:
+    - Unless this unit contains 13 or more models, that unit must take a Battle-shock test, applying -1 to that test.
+    - Unless this unit does not contain 13 or more models, if this unit contains 13 or more models, that unit must take a Battle-shock test, applying -2 to that test.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5873,28 +5859,27 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Fuel-mixa Grot" id="b42d-cd00-6c9f-c8cf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gets +1 to Advance rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Advance rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Get Back in da Race!" id="8bda-41d9-e7b4-4cf5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, during the Movement phase, in your turn, until the start of your next turn:
-  -&gt; Select one friendly SPEED FREEKS unit within 6" of the unit:
-    -&gt; That unit is no longer Battle-shocked.
-    -&gt; Friendly units embarked within that unit are no longer Battle-shocked.
-    -&gt; That unit is riled up.
-    -&gt; Friendly units embarked within that unit are riled up.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase, until the start of your next turn:
+  - Select one friendly SPEED FREEKS unit within 6" of this unit:
+    - That unit is no longer Battle-shocked.
+    - Friendly units embarked within that unit are no longer Battle-shocked.
+    - That unit is riled up.
+    - Friendly units embarked within that unit are riled up.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="1c82-9678-f386-9c94" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="5969-1bc4-9c4d-dc71" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5996,10 +5981,10 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Clever Know-wotz" id="a534-0bab-b83e-b8ff" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, during the Movement phase, in your turn, until the start of your next Movement phase:
-  -&gt; Select one friendly ORKS VEHICLE model (excluding AIRCRAFT or TITANIC models) if the selected unit is within 3" of this model:
-    -&gt; That model regains up to D3 lost wounds.
-    -&gt; That model gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase, until the start of your next Movement phase:
+  - Select one friendly ORKS VEHICLE model (excluding AIRCRAFT or TITANIC models) that is within 3" of this model:
+    - That model regains up to D3 lost wounds.
+    - Add 1 to that model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="4418-c80d-6901-02a8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -6086,22 +6071,22 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Beast Snagga Following" id="925f-dfbb-92e0-36e0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is within 3" of a friendly BEAST SNAGGA unit (excluding CHARACTER MONSTER units), the unit gains the Lone Operative ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is within 3" of a friendly BEAST SNAGGA unit (excluding CHARACTER MONSTER units), this unit gains the Lone Operative ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Da Bigger Dey Iz..." id="61db-4839-35f2-21b4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while the target is an enemy unit with the MONSTER or VEHICLE keyword, you can re-roll the Wound roll with melee weapons.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks against an enemy unit with the MONSTER or VEHICLE keyword, you can re-roll Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="One Last Kill" id="bbef-155f-ed92-5678" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Before this model is removed from play, until the end of the phase, during the Fight phase, unless the unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; when its unit is selected to fight, it can fight. Remove it after this unit has fought or at the end of the phase, whichever comes first.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Before this model is removed from play, until the end of the phase, during the Fight phase, unless this unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; when its unit is selected to fight, it can fight. Remove it after this unit has fought or at the end of the phase, whichever comes first.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="d6e9-fe9d-68f6-f518" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6189,7 +6174,7 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Super Runts" id="fa5a-4d1f-5ee2-8626" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is riled up.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is riled up.
 Improve the Attacks characteristic of melee scavenged shivs weapons equipped by models in this unit by 1.
 Improve the Weapon Skill characteristic of melee scavenged shivs weapons equipped by models in this unit by 1.
 Improve the Strength characteristic of melee scavenged shivs weapons equipped by models in this unit by 1.</characteristic>
@@ -6197,7 +6182,7 @@ Improve the Strength characteristic of melee scavenged shivs weapons equipped by
         </profile>
         <profile name="Leader" id="0343-eadd-181e-516b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6337,12 +6322,12 @@ Improve the Strength characteristic of melee scavenged shivs weapons equipped by
         <profile name="Downtrodden" id="9a66-0338-d76f-cbb9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For Transport capacity, each group of 2 Gretchin models occupies 1 model space, rounding up.
-Applies to: units with GRETCHIN.</characteristic>
+Applies to: GRETCHIN units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Thievin' Scavengers" id="5486-38ca-20d3-bf01" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6484,12 +6469,12 @@ Applies to: units with GRETCHIN.</characteristic>
         <profile name="More Dakka" id="00eb-0014-6a2b-4382" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Ranged weapons equipped by models in this unit gain [IGNORES COVER].
-While the unit is riled up, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
+While this unit is riled up, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="bce4-106c-149d-a9de" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support Shokka" id="bb04-51c1-2b88-3292" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -6584,22 +6569,22 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Beastscent" id="5ae8-1ad1-9506-d003" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly unit is selected to make a Disembark move, you may use this ability, during the Movement phase, in your turn, while the unit is not Battle-shocked, until the end of the turn:
-  -&gt; Roll D6, then:
-    -&gt; Roll one D6:
-      - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly unit is selected to make a Disembark move, you can use this ability, during your Movement phase, while this unit is not Battle-shocked, until the end of the turn:
+  - Roll D6, then:
+    - Roll one D6:
+      - On 1: That unit is Battle-shocked.
       - On 2-6: Nothing happens.
-  -&gt; Against MONSTER or VEHICLE targets, the triggering unit gets +1 to Wound rolls.</characteristic>
+  - Against MONSTER or VEHICLE targets, add 1 to that unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Warpath" id="7971-f25d-1c87-7a07" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, during the Fight phase, while the unit is not Battle-shocked, until the end of the phase:
-  -&gt; Roll D6, then:
-    -&gt; Roll one D6:
-      - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, during the Fight phase, while this unit is not Battle-shocked, until the end of the phase:
+  - Roll D6, then:
+    - Roll one D6:
+      - On 1: This unit is Battle-shocked.
       - On 2-6: Nothing happens.
-  -&gt; Melee weapons equipped by models in this unit gain [LETHAL HITS] and [PSYCHIC].</characteristic>
+  - Melee weapons equipped by models in this unit gain [LETHAL HITS] and [PSYCHIC].</characteristic>
           </characteristics>
         </profile>
         <profile name="Wurrboy (psyker level 1)" id="c377-32d7-bd0d-86d3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -6609,18 +6594,17 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Damaged" id="62a7-9659-9c50-540d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="0f7e-5f31-2a1f-b037" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="99c7-d68c-a378-af39" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6719,12 +6703,12 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
       <profiles>
         <profile name="Ammo Runts (Once per battle, per unit)" id="1d81-a4bd-df76-74e3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, you may use this ability, during the Shooting phase, in your turn, while making ranged attacks, until the end of the phase, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability, during your Shooting phase, while making ranged attacks, until the end of the phase, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Get Out da Way!" id="7f5d-dcc9-34cf-548a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit can move over models (excluding MONSTER and VEHICLE models) as though they were not there, during its Charge moves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit can move over models (excluding MONSTER and VEHICLE models) as though they were not there, during its Charge moves.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6999,25 +6983,25 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Boss of da Hunt" id="a47c-c559-016c-a69f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is within 3" of a friendly BEAST SNAGGA unit (excluding CHARACTER MONSTER units), the unit gains the Lone Operative ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is within 3" of a friendly BEAST SNAGGA unit (excluding CHARACTER MONSTER units), this unit gains the Lone Operative ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="9795-6448-4922-2d28" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Thundering Stampede (Aura)" id="2c79-8906-dbb1-3168" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly BEAST SNAGGA unit is within 6" of this unit, that unit gets +1 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly BEAST SNAGGA unit is within 6" of this unit, add 1 to that unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Keep Huntin'! (Once per battle round, per army)" id="3aae-fcf8-8736-ff41" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, during the Movement phase, in your turn, until the start of your next turn:
-  -&gt; Select one friendly BEAST SNAGGA unit within 6" of the unit:
-    -&gt; That unit is no longer Battle-shocked.
-    -&gt; That unit is riled up.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase, until the start of your next turn:
+  - Select one friendly BEAST SNAGGA unit within 6" of this unit:
+    - That unit is no longer Battle-shocked.
+    - That unit is riled up.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7149,12 +7133,12 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
       <profiles>
         <profile name="Arrogant Invulnerability" id="d11d-3a48-ff97-cc34" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Worsen the attacking unit's Armour Penetration characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Worsen the Armour Penetration characteristic of the attacking unit's attacks by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Krumpin' Time" id="2a56-71df-6231-85fd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Fight phase, while the unit is riled up, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Fight phase, while this unit is riled up, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7392,19 +7376,18 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         <profile name="Burna Bomb" id="4a1e-f871-562c-10ec" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase, until the end of your next turn:
-  -&gt; Select one enemy unit (excluding MONSTER or VEHICLE units) without the Lone Operative ability visible to this model if the selected unit is within 36" of the unit:
-    -&gt; Roll one D6: on a 2+, that unit suffers D3 mortal wounds; that unit is marked as unhideable; each time a ranged attack targets that unit, the attacking weapon has [IGNORES COVER].</characteristic>
+  - Select one enemy unit (excluding MONSTER or VEHICLE units) without the Lone Operative ability visible to this model that is within 36" of this unit:
+    - Roll one D6: on a 2+, that unit suffers D3 mortal wounds; that unit is Unhideable; each time a ranged attack targets that unit, the attacking weapon has [IGNORES COVER].</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6bf1-0ac1-605c-7e35" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="ef94-5096-ef09-b655" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7527,28 +7510,27 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Tramplasquig Charge" id="4b20-de04-26f5-eddc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target the unit with the Crushing Impact Stratagem, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target this unit with the Crushing Impact Stratagem, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="472d-7f3a-fd9d-eca3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="26ad-08c8-159e-c559" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="363d-a644-41d9-74b9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="2654-156f-9ff5-d9da" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7646,27 +7628,27 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Intimidating Motivation" id="2d27-347c-6649-3ef9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, during the Movement phase, in your turn, until the start of your next turn:
-  -&gt; Select one friendly ORKS unit if the selected unit is within 6" of the unit:
-    -&gt; That unit is no longer Battle-shocked.
-    -&gt; That unit is riled up.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase, until the start of your next turn:
+  - Select one friendly ORKS unit that is within 6" of this unit:
+    - That unit is no longer Battle-shocked.
+    - That unit is riled up.</characteristic>
           </characteristics>
         </profile>
         <profile name="Might is Right" id="21bb-6fec-9d9a-36be" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit charged this turn:
-  -&gt; Improve the Attacks characteristic of melee weapons equipped by this model by 3.
-  -&gt; Improve the Strength characteristic of melee weapons equipped by this model by 2.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit charged this turn:
+  - Improve the Attacks characteristic of melee weapons equipped by this model by 3.
+  - Improve the Strength characteristic of melee weapons equipped by this model by 2.</characteristic>
           </characteristics>
         </profile>
         <profile name="Boss' Ammo Runt (Once per battle, per unit)" id="c960-b7df-c70e-0c08" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, you may use this ability, during the Shooting phase, in your turn, while making ranged attacks, until the end of the phase, this model gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability, during your Shooting phase, while making ranged attacks, until the end of the phase, add 1 to this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="e2e6-c6e2-0802-de97" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7822,7 +7804,7 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Waaagh! Banner" id="d0ac-e315-5af3-df96" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gets +1 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="cd09-6ff3-e902-bd0b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7915,18 +7897,17 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Blitz Dem Gitz" id="6fb8-dee2-6db7-db08" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn, against a unit that is not a MONSTER or VEHICLE, improve the Attacks characteristic of ranged blitzkannon weapons equipped by models in this unit by 6.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase against a unit that is not a MONSTER or VEHICLE, improve the Attacks characteristic of ranged blitzkannon weapons equipped by models in this unit by 6.</characteristic>
           </characteristics>
         </profile>
         <profile name="Even More Dakka" id="3404-6e1a-08e3-47b2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is riled up, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is riled up, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="659e-2848-6e15-4b0a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8021,7 +8002,7 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Sumfin' to Prove" id="d0f4-643d-eb81-9d01" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gets +1 to Hit rolls with melee weapons.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Hit rolls with melee weapons.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="d4a6-45c6-9be8-2d5d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -8107,54 +8088,53 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Full Throttle" id="7784-0d50-40c7-aea9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, in your turn, until the start of your next Command phase:
-  Select exactly 1 distinct options (Throttlerokkit Shokka Engine Ability):
-    - When the unit is selected to make an Advance or Fall Back move: the unit is eligible to declare a charge even if it Advanced this turn or it Fell Back this turn.
-    - During the Command phase, in your turn, while the unit is unengaged, the unit can be placed into Strategic Reserves.
-    - When the unit is selected to move, you may use this ability: during the Movement phase, in your turn, while the unit is unengaged, the unit can make a Pulse Jet move.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, until the start of your next Command phase:
+  Choose one of the following (Throttlerokkit Shokka Engine Ability):
+    - When this unit is selected to make an Advance or Fall Back move, this unit is eligible to declare a charge even if it Advanced this turn or it Fell Back this turn.
+    - During your Command phase, while this unit is unengaged, this unit can be placed into Strategic Reserves.
+    - When this unit is selected to move, you can use this ability: during your Movement phase, while this unit is unengaged, this unit can make a Pulse Jet move.</characteristic>
           </characteristics>
         </profile>
         <profile name="Turbo Engine" id="2fea-69cd-3c8e-9a99" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, in your turn, until the start of your next Command phase:
-  -&gt; When the unit is selected to make an Advance or Fall Back move: the unit is eligible to declare a charge even if it Advanced this turn or it Fell Back this turn.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, until the start of your next Command phase:
+  - When this unit is selected to make an Advance or Fall Back move, this unit is eligible to declare a charge even if it Advanced this turn or it Fell Back this turn.</characteristic>
           </characteristics>
         </profile>
         <profile name="Shokk Attack Engine" id="44dc-652f-a9df-847e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, in your turn, until the start of your next Command phase, during the Command phase, in your turn, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, during the Command phase, in your turn, while this unit is unengaged, until the start of your next Command phase, this unit can be placed into Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Pulse Jet" id="506c-f682-3a76-3d23" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, in your turn, until the start of your next Command phase:
-  -&gt; When the unit is selected to move, you may use this ability: during the Movement phase, in your turn, while the unit is unengaged, the unit can make a Pulse Jet move.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, until the start of your next Command phase:
+  - When this unit is selected to move, you can use this ability: during your Movement phase, while this unit is unengaged, this unit can make a Pulse Jet move.</characteristic>
           </characteristics>
         </profile>
         <profile name="Pulse Jet" id="d434-eb0b-dbe5-a7d2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to move, you may use this ability, during the Movement phase, in your turn, while the unit is unengaged, the unit can make a Pulse Jet move.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to move, you can use this ability, during your Movement phase, while this unit is unengaged, this unit can make a Pulse Jet move.</characteristic>
           </characteristics>
         </profile>
         <profile name="Shokk Attack Engine" id="f2f8-7d26-c133-62ec" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: During your Command phase, while this unit is unengaged, this unit can be placed into Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Turbo Engine" id="91e0-2292-cf5a-eed4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to make an Advance or Fall Back move, the unit is eligible to declare a charge even if it Advanced this turn or it Fell Back this turn.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to make an Advance or Fall Back move, this unit is eligible to declare a charge even if it Advanced this turn or it Fell Back this turn.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="d658-20d3-effd-2730" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="fbf6-a301-750d-e8f0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="ed46-713e-8182-1246" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -8261,18 +8241,17 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Damaged" id="aab1-b4bf-ecb9-4759" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="09f9-43b8-5c8b-0900" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Mobile Arsenal" id="0bbe-151c-0e45-56fb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn, you can re-roll a Hit roll of 1 with ranged weapons.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase, you can re-roll Hit rolls of 1 with ranged weapons.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8526,34 +8505,34 @@ While the unit is riled up, ranged weapons equipped by models in this unit gain 
         </profile>
         <profile name="Intimidating Motivation" id="46b2-0406-3943-3b38" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, during the Movement phase, in your turn, until the start of your next turn:
-  -&gt; Select one friendly ORKS unit if the selected unit is within 6" of the unit:
-    -&gt; That unit is no longer Battle-shocked.
-    -&gt; That unit is riled up.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase, until the start of your next turn:
+  - Select one friendly ORKS unit that is within 6" of this unit:
+    - That unit is no longer Battle-shocked.
+    - That unit is riled up.</characteristic>
           </characteristics>
         </profile>
         <profile name="Nazdreg's Know-wotz" id="0626-61f5-55df-51d7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Deep Strike ability.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Deep Strike ability.
 Ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteristic>
           </characteristics>
         </profile>
         <profile name="Supreme Kunnin'" id="0e7e-9ea6-1e3a-4474" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, you may use this ability, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of the unit, while the unit is unengaged:
-  Select one of the following:
-    - The unit can make a Normal move of up to D6".
-    - While the unit is riled up, the unit can make a Normal move of up to 5".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, you can use this ability, during your opponent's Movement phase, while the triggering unit is within 8" of this unit and this unit is unengaged:
+  Choose one of the following:
+    - This unit can make a Normal move of up to D6".
+    - While this unit is riled up, this unit can make a Normal move of up to 5".</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="08be-49ea-8bbd-0df4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="b309-375d-1ac5-2d80" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8637,16 +8616,15 @@ Ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteri
       <profiles>
         <profile name="Squig Barrage" id="40a5-7d0c-be98-81a9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:
-  -&gt; Select one enemy unit (excluding MONSTER or VEHICLE units) that was hit by an attack made by the triggering unit by Squig Launchas during its just-finished shooting sequence:
-    -&gt; That unit is marked as covered in squigs.
-    -&gt; While the selected unit is tagged covered in squigs, that unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:
+  - Select one enemy unit (excluding MONSTER or VEHICLE units) that was hit by an attack made by the triggering unit by Squig Launchas during that shooting sequence:
+    - That unit is designated as Covered in Squigs.
+    - While the selected unit is designated as Covered in Squigs, subtract 1 from that unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="8bb3-a36b-8117-5047" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8789,9 +8767,9 @@ Ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteri
         </profile>
         <profile name="That'll Learn Ya" id="844d-c891-4300-9ba0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a Battle-shock test is made, if the unit is Battle-shocked and the unit contains 4+ GRETCHIN models, you may use this ability, once per battle round per unit:
-  -&gt; Destroy D3 of the GRETCHIN models in the unit.
-  -&gt; The unit is no longer Battle-shocked.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a Battle-shock test is made, if this unit is Battle-shocked and this unit contains 4 or more GRETCHIN models, you can use this ability, once per battle round per unit:
+  - Destroy D3 of the GRETCHIN models in this unit.
+  - This unit is no longer Battle-shocked.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="e21d-d370-7aa7-2a37" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -8877,14 +8855,13 @@ Ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteri
       <profiles>
         <profile name="Deadly Demise" id="145a-513e-32b4-df61" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Drive-by Skorchin'" id="5fdc-9915-50a1-c085" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Movement phase, in your turn, until the end of the turn:
-  -&gt; Select one enemy unit (excluding MONSTER or VEHICLE units) visible to this model if the selected unit is within 6" of the unit: that unit cannot be targeted with the Fire Overwatch Stratagem.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Movement phase, until the end of the turn, you can use this ability:
+  - Select one enemy unit (excluding MONSTER or VEHICLE units) visible to this model that is within 6" of this unit. That unit cannot be targeted with the Fire Overwatch Stratagem.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9054,15 +9031,15 @@ Ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteri
       <profiles>
         <profile name="Bust 'Em" id="480d-5015-4a1c-f2b7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; That unit is marked as busted.
-    -&gt; While the target is tagged busted, all friendly SPEED FREEKS units' weapons gain [LETHAL HITS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the turn:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:
+    - That unit is Busted.
+    - While the target is Busted, friendly SPEED FREEKS units' weapons gain [LETHAL HITS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Speednob Support" id="45bf-069f-08da-b5a0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While every model in the unit is within 3" of a friendly SPEED FREEKS unit (excluding WARTRAKK units) other than this unit, the unit gains the Lone Operative ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While every model in this unit is within 3" of a friendly SPEED FREEKS unit (excluding WARTRAKK units) other than this unit, this unit gains the Lone Operative ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9752,8 +9729,8 @@ Ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteri
       <profiles>
         <profile name="Blastajet Force Field" id="fdb8-3d22-6ba4-e646" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has a 5+ invulnerable save.
-The unit loses the SMOKE keyword.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has a 5+ invulnerable save.
+This unit loses the SMOKE keyword.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10371,10 +10348,10 @@ The unit loses the SMOKE keyword.</characteristic>
       <profiles>
         <profile name="Pulsa Rokkit" id="7245-0424-ce2d-1aac" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, you may use this ability, once per battle per unit, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit with the MONSTER or VEHICLE keyword if the selected unit is within 24" of the unit (your Pulsa Rokkit Target). Each time a friendly unit makes an attack against it:
-    -&gt; The unit's weapons gain [LETHAL HITS].
-    -&gt; Improve the Armour Penetration characteristic of that attack by 1 if it is made by the unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability, once per battle per unit, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit with the MONSTER or VEHICLE keyword that is within 24" of this unit (your Pulsa Rokkit Target). Each time a friendly unit makes an attack against it:
+    - This unit's weapons gain [LETHAL HITS].
+    - Improve the Armour Penetration characteristic of that attack by 1 if it is made by this unit.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11306,7 +11283,7 @@ The unit loses the SMOKE keyword.</characteristic>
       <profiles>
         <profile name="Kustom Force Field" id="04e6-1ef3-2b24-fbc2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against ranged attacks, the unit has a 4+ invulnerable save.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against ranged attacks, this unit has a 4+ invulnerable save.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -12019,8 +11996,8 @@ The unit loses the SMOKE keyword.</characteristic>
         <profile name="Paired Krumpas" id="0906-daae-2283-e73f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making attacks made with Kustom Krumpa:
-  -&gt; You can re-roll the Hit roll for attacks made by this model.
-  -&gt; You can re-roll the Wound roll for attacks made by this model.</characteristic>
+  - You can re-roll Hit rolls for attacks made by this model.
+  - You can re-roll Wound rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -13012,8 +12989,8 @@ The unit loses the SMOKE keyword.</characteristic>
               </constraints>
               <rules>
                 <rule name="Unstoppable Momentum" id="9dc9-7d26-c287-e349" hidden="false">
-                  <description>You can re-roll the Charge roll for all friendly WAGON units.
--&gt; When a friendly unit is selected to make an Advance move (the triggering unit must have WAGON): the unit's Advance rolls count as 6.</description>
+                  <description>You can re-roll the Charge roll for friendly WAGON units.
+When a friendly WAGON unit is selected to make an Advance move, this unit's Advance rolls count as 6.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13030,9 +13007,9 @@ The unit loses the SMOKE keyword.</characteristic>
               </constraints>
               <rules>
                 <rule name="'Ard As Nails" id="2b07-1ac6-3c0f-e331" hidden="false">
-                  <description>When a friendly WARBOSS model in the unit is destroyed:
-  -&gt; Unless the unit has fought this phase, while the unit is riled up, roll one D6+1. On a 3+, leave that model on the battlefield; when its unit is selected to fight, it can fight. Remove it after this unit has fought or at the end of the phase, whichever comes first.
-  -&gt; Unless the unit has fought this phase, while the unit is not riled up, roll one D6. On a 3+, leave that model on the battlefield; when its unit is selected to fight, it can fight. Remove it after this unit has fought or at the end of the phase, whichever comes first.</description>
+                  <description>When a friendly WARBOSS model in this unit is destroyed:
+  - Unless this unit has fought this phase, while this unit is riled up, roll one D6+1. On a 3+, leave that model on the battlefield; when its unit is selected to fight, it can fight. Remove it after this unit has fought or at the end of the phase, whichever comes first.
+  - Unless this unit has fought this phase, while this unit is not riled up, roll one D6. On a 3+, leave that model on the battlefield; when its unit is selected to fight, it can fight. Remove it after this unit has fought or at the end of the phase, whichever comes first.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13049,7 +13026,7 @@ The unit loses the SMOKE keyword.</characteristic>
               </constraints>
               <rules>
                 <rule name="Displays of Savagery" id="b2cd-3184-89e1-e879" hidden="false">
-                  <description>Melee weapons equipped by all friendly units with the MEGANOBZ or NOBZ keyword gain [SUSTAINED HITS 1].</description>
+                  <description>Melee weapons equipped by friendly units with the MEGANOBZ or NOBZ keyword gain [SUSTAINED HITS 1].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13066,7 +13043,7 @@ The unit loses the SMOKE keyword.</characteristic>
               </constraints>
               <rules>
                 <rule name="Da Hunt Is On" id="851f-5eb0-1d53-b8d8" hidden="false">
-                  <description>While the target is an enemy unit with the MONSTER or VEHICLE keyword, improve all friendly BEAST SNAGGA units' Armour Penetration characteristic by 1.</description>
+                  <description>While the target is an enemy unit with the MONSTER or VEHICLE keyword, improve friendly BEAST SNAGGA units' Armour Penetration characteristic by 1.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13083,11 +13060,11 @@ The unit loses the SMOKE keyword.</characteristic>
               </constraints>
               <rules>
                 <rule name="Try Dat Button!" id="63cb-f028-b45a-22e1" hidden="false">
-                  <description>During the Shooting phase, in your turn or during the Fight phase, until the end of the phase:
-  -&gt; When a friendly unit is selected to shoot or fight (the triggering unit must have ORKS and WALKER) (the triggering unit must not have TITANIC), you may use this ability:
-    Select one of the following:
+                  <description>During your Shooting phase or during the Fight phase, until the end of the phase:
+  - When a friendly ORKS WALKER unit (excluding TITANIC units) is selected to shoot or fight, you can use this ability:
+    Choose one of the following:
       - Roll one D6: on 1-2, improve the triggering unit's Attacks characteristic by 1; on 3-4, improve the triggering unit's Strength characteristic by 2; on 5-6, improve the triggering unit's Armour Penetration characteristic by 1.
-      - Roll 2 D6 and resolve each one (re-rolling any repeated result): on 1-2, improve the triggering unit's Attacks characteristic by 1; on 3-4, improve the triggering unit's Strength characteristic by 2; on 5-6, improve the triggering unit's Armour Penetration characteristic by 1; after the triggering unit resolves its attacks: the triggering unit must take a Hazard test.</description>
+      - Roll 2 D6 and resolve each one (re-rolling any repeated result): on 1-2, improve the triggering unit's Attacks characteristic by 1; on 3-4, improve the triggering unit's Strength characteristic by 2; on 5-6, improve the triggering unit's Armour Penetration characteristic by 1; after the triggering unit resolves its attacks, the triggering unit must take a Hazard test.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13104,8 +13081,8 @@ The unit loses the SMOKE keyword.</characteristic>
               </constraints>
               <rules>
                 <rule name="Skyborne Loons" id="c56a-44f4-ed87-0ba8" hidden="false">
-                  <description>All friendly AIRCRAFT ORKS units do not count toward the points limit for Strategic Reserves.
-While a friendly ORKS unit with the AIRCRAFT or DEFFKOPTAS keyword is riled up, that unit gets +1 to Hit rolls with ranged weapons.</description>
+                  <description>Friendly AIRCRAFT ORKS units do not count toward the points limit for Strategic Reserves.
+While a friendly ORKS unit with the AIRCRAFT or DEFFKOPTAS keyword is riled up, add 1 to that unit's Hit rolls with ranged weapons.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13122,7 +13099,7 @@ While a friendly ORKS unit with the AIRCRAFT or DEFFKOPTAS keyword is riled up, 
               </constraints>
               <rules>
                 <rule name="Mob-Handed Brutality" id="c204-b523-d3cb-64e7" hidden="false">
-                  <description>Melee weapons equipped by all friendly BOYZ units gain [SUSTAINED HITS 1].
+                  <description>Melee weapons equipped by friendly BOYZ units gain [SUSTAINED HITS 1].
 If a friendly INFANTRY ORKS unit charged this turn against a unit that is not a MONSTER or VEHICLE, melee weapons equipped by that unit gain [LETHAL HITS].</description>
                 </rule>
               </rules>
@@ -13140,10 +13117,10 @@ If a friendly INFANTRY ORKS unit charged this turn against a unit that is not a 
               </constraints>
               <rules>
                 <rule name="Adrenaline Junkies" id="b5c2-b1f1-f9ae-98d7" hidden="false">
-                  <description>All friendly WARBIKERS units gain the BATTLELINE keyword.
--&gt; When a friendly unit is selected to make an Advance or Fall Back move (the triggering unit must have SPEED FREEKS), until the end of the turn:
-  -&gt; Ranged weapons equipped by the triggering unit gain [ASSAULT].
-  -&gt; The triggering unit is eligible to declare a charge even if it Advanced this turn or it Fell Back this turn.</description>
+                  <description>Friendly WARBIKERS units gain the BATTLELINE keyword.
+When a friendly SPEED FREEKS unit is selected to make an Advance or Fall Back move, until the end of the turn:
+  - Ranged weapons equipped by the triggering unit gain [ASSAULT].
+  - The triggering unit is eligible to declare a charge even if it Advanced this turn or it Fell Back this turn.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13160,11 +13137,11 @@ If a friendly INFANTRY ORKS unit charged this turn against a unit that is not a 
               </constraints>
               <rules>
                 <rule name="Unpredictable Genius" id="abe9-1653-fdc3-1987" hidden="false">
-                  <description>When a friendly unit selects its targets (the triggering unit must have BIG MEK, MEK GUNZ, MORKANAUT or WAZBOM BLASTAJET), during the Shooting phase, in your turn, while making ranged attacks, when all of the unit's attacks target the same enemy unit, until this unit has resolved its ranged attacks:
-  -&gt; Roll one D6:
+                  <description>When a friendly BIG MEK, MEK GUNZ, MORKANAUT or WAZBOM BLASTAJET unit selects its targets, during your Shooting phase, while making ranged attacks, when all of the unit's attacks target the same enemy unit, until this unit has resolved its ranged attacks:
+  - Roll one D6:
     - On 1: The target has a 4+ invulnerable save.
-    - On 2-3: Select one enemy unit other than the target if the selected unit is within 3" of the target unit: that unit suffers D3 mortal wounds.
-    - On 4: The unit gets +1 to Hit rolls.
+    - On 2-3: Select one enemy unit other than the target that is within 3" of the target unit; that unit suffers D3 mortal wounds.
+    - On 4: Add 1 to that unit's Hit rolls.
     - On 5: The target gains the FLY keyword; the target cannot benefit from Cover.
     - On 6: Worsen the target's Toughness characteristic by 1.</description>
                 </rule>
@@ -13183,8 +13160,8 @@ If a friendly INFANTRY ORKS unit charged this turn against a unit that is not a 
               </constraints>
               <rules>
                 <rule name="Sneaky Little Gitz" id="c25a-e11c-9502-dc74" hidden="false">
-                  <description>All friendly GRETCHIN units gain the BATTLELINE keyword.
--&gt; When a friendly unit is selected to make an Advance or Fall Back move (the triggering unit must have GRETCHIN): the triggering unit is eligible to start an Action.</description>
+                  <description>Friendly GRETCHIN units gain the BATTLELINE keyword.
+When a friendly GRETCHIN unit is selected to make an Advance or Fall Back move, the triggering unit is eligible to start an Action.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13201,8 +13178,8 @@ If a friendly INFANTRY ORKS unit charged this turn against a unit that is not a 
               </constraints>
               <rules>
                 <rule name="Dakka! Dakka! Dakka!" id="d592-a36f-afdc-653c" hidden="false">
-                  <description>Ranged weapons equipped by all friendly INFANTRY ORKS units gain [ASSAULT].
-While the unit is riled up, add 3 to the Range characteristic of ranged weapons equipped by models in this unit.</description>
+                  <description>Ranged weapons equipped by friendly INFANTRY ORKS units gain [ASSAULT].
+While this unit is riled up, add 3" to the Range characteristic of ranged weapons equipped by models in this unit.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13219,8 +13196,8 @@ While the unit is riled up, add 3 to the Range characteristic of ranged weapons 
               </constraints>
               <rules>
                 <rule name="Suspiciously Well Organised" id="3a9f-731a-826b-7629" hidden="false">
-                  <description>All friendly STORMBOYZ units gain the BATTLELINE keyword.
--&gt; When a friendly unit is selected to make a Fall Back move (the triggering unit must have BOYZ, KOMMANDOS or STORMBOYZ): the triggering unit is eligible to declare a charge even if it Fell Back this turn.</description>
+                  <description>Friendly STORMBOYZ units gain the BATTLELINE keyword.
+When a friendly BOYZ, KOMMANDOS or STORMBOYZ unit is selected to make a Fall Back move, the triggering unit is eligible to declare a charge even if it Fell Back this turn.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13237,7 +13214,7 @@ While the unit is riled up, add 3 to the Range characteristic of ranged weapons 
               </constraints>
               <rules>
                 <rule name="Get Stuck In" id="f3ca-3844-4d8a-7096" hidden="false">
-                  <description>Melee weapons equipped by all friendly ORKS units gain [SUSTAINED HITS 1].</description>
+                  <description>Melee weapons equipped by friendly ORKS units gain [SUSTAINED HITS 1].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13254,7 +13231,7 @@ While the unit is riled up, add 3 to the Range characteristic of ranged weapons 
               </constraints>
               <rules>
                 <rule name="Wreckin' and Lootin'" id="e509-082c-37c5-1d72" hidden="false">
-                  <description>When a friendly unit is selected to shoot (the triggering unit must have BREAKA BOYZ, FLASH GITZ or TANKBUSTAS), during the Shooting phase, in your turn, until the end of the phase, while the triggering unit is within range of an objective marker or while the target is within range of an objective marker, you can re-roll a Hit roll of 1.</description>
+                  <description>When a friendly BREAKA BOYZ, FLASH GITZ or TANKBUSTAS unit is selected to shoot, during your Shooting phase, while the triggering unit is within range of an objective marker or while the target is within range of an objective marker, until the end of the phase, you can re-roll Hit rolls of 1.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13271,13 +13248,13 @@ While the unit is riled up, add 3 to the Range characteristic of ranged weapons 
               </constraints>
               <rules>
                 <rule name="Powers Of Da Waaagh!" id="6da2-1ce1-bc3a-d8e4" hidden="false">
-                  <description>Improve the Strength characteristic of weapons with [PSYCHIC] equipped by all friendly ORKS PSYKER models by 1.
-Improve the Strength characteristic of weapons with [PSYCHIC] equipped by all friendly ORKS PSYKER models by 1 for every 5 models in or embarked within this model.
-All friendly ORKS PSYKER models gain the Roar of Mork ability:
-  -&gt; You can:
-    -&gt; By paying this cost (spend 1 Psychic Level): during the Movement phase, in your turn, while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; select one enemy unit (excluding MONSTER or VEHICLE units) if the selected unit is within 12" of the unit: that unit must take a Battle-shock test, applying -1 to that test for every 10 models in this unit.
-All friendly ORKS PSYKER models gain the Visions of Violence ability:
-  -&gt; At the start of the Fight phase, you may use this ability, by paying this cost (spend 1 Psychic Level), until the end of the phase: while the unit is not Battle-shocked, roll D6; then roll one D6: on 1, the unit is Battle-shocked; on 2-6, nothing happens; the unit gains the Fights First ability.</description>
+                  <description>Improve the Strength characteristic of weapons with [PSYCHIC] equipped by friendly ORKS PSYKER models by 1.
+Improve the Strength characteristic of weapons with [PSYCHIC] equipped by friendly ORKS PSYKER models by 1 for every 5 models in or embarked within this model.
+Friendly ORKS PSYKER models gain the Roar of Mork ability:
+  - You can:
+    - By paying this cost (spend 1 Psychic Level), during your Movement phase, while this unit is not Battle-shocked, roll D6; then roll one D6: on 1, this unit is Battle-shocked; on 2-6, nothing happens; select one enemy unit (excluding MONSTER or VEHICLE units) that is within 12" of this unit; that unit must take a Battle-shock test, applying -1 to that test for every 10 models in this unit.
+Friendly ORKS PSYKER models gain the Visions of Violence ability:
+  - At the start of the Fight phase, you can use this ability, until the end of the phase, by paying this cost (spend 1 Psychic Level), while this unit is not Battle-shocked, roll D6; then roll one D6: on 1, this unit is Battle-shocked; on 2-6, nothing happens; this unit gains the Fights First ability.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -13328,8 +13305,8 @@ All friendly ORKS PSYKER models gain the Visions of Violence ability:
           <profiles>
             <profile name="Boss Boomer (Upgrade)" id="d3d8-7fe4-8107-2b59" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly WARBOSS model with the Intimidating Motivation ability embarked within the unit is embarked, the unit gains the Intimidating Motivation ability.
-While a friendly WARBOSS model with the Keep Huntin ability embarked within the unit is embarked, the unit gains the Keep Huntin ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly WARBOSS model with the Intimidating Motivation ability embarked within this unit is embarked, this unit gains the Intimidating Motivation ability.
+While a friendly WARBOSS model with the Keep Huntin ability embarked within this unit is embarked, this unit gains the Keep Huntin ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13364,9 +13341,9 @@ While a friendly WARBOSS model with the Keep Huntin ability embarked within the 
           <profiles>
             <profile name="Targetin' Gizmos (Upgrade)" id="1625-6747-19e3-24f6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly BIG MEK model embarked within the unit is embarked:
-  -&gt; Ranged weapons equipped by models in this unit gain [IGNORES COVER].
-  -&gt; While the unit is riled up, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly BIG MEK model embarked within this unit is embarked:
+  - Ranged weapons equipped by models in this unit gain [IGNORES COVER].
+  - While this unit is riled up, ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13400,8 +13377,7 @@ While a friendly WARBOSS model with the Keep Huntin ability embarked within the 
           <profiles>
             <profile name="Surly as a Squiggoth" id="4830-af71-7024-b227" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if this model was destroyed this phase (1+ times), once per battle per army:
-  -&gt; Roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1" away from all enemy models, with 3 wounds remaining.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if this model was destroyed this phase (one or more times), once per battle per army, roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1" away from all enemy models, with 3 wounds remaining.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13473,9 +13449,9 @@ While a friendly WARBOSS model with the Keep Huntin ability embarked within the 
           <profiles>
             <profile name="Blitzboss" id="3eda-b6f1-1029-67c5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the Transport this unit is embarked within has the TRANSPORT keyword, unless the Transport this unit is embarked within has the WALKER keyword, while the unit is embarked:
-  -&gt; Add 2 to the Transport this unit is embarked within's Move characteristic.
-  -&gt; The Transport this unit is embarked within has a 5+ invulnerable save.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the Transport this unit is embarked within has the TRANSPORT keyword, unless the Transport this unit is embarked within has the WALKER keyword, while this unit is embarked:
+  - Add 2" to the Transport this unit is embarked within's Move characteristic.
+  - The Transport this unit is embarked within has a 5+ invulnerable save.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13511,7 +13487,7 @@ While a friendly WARBOSS model with the Keep Huntin ability embarked within the 
           <profiles>
             <profile name="Proper Killy" id="f91e-e6b9-9a95-67db" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll a Hit roll of 1.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll Hit rolls of 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13547,10 +13523,10 @@ While a friendly WARBOSS model with the Keep Huntin ability embarked within the 
           <profiles>
             <profile name="Morgog's Finkin' Cap" id="fdee-09b4-f079-b1d8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Movement phase, you may use this ability, once per battle per army, while the unit is unengaged:
-  -&gt; The unit can make a Normal move of up to D6".
-  -&gt; While the unit is riled up, you can re-roll any roll.
-Applies to: units with WARBOSS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Movement phase, you can use this ability, once per battle per army, while this unit is unengaged:
+  - This unit can make a Normal move of up to D6".
+  - While this unit is riled up, you can re-roll any roll.
+Applies to: WARBOSS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13614,9 +13590,9 @@ Applies to: units with WARBOSS.</characteristic>
           <profiles>
             <profile name="Wimp-kickaz (Upgrade)" id="ce8d-f1ff-3477-7f1e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move, while the triggering unit is within Engagement Range of the unit:
-  -&gt; While the unit is riled up, the triggering unit must take a Desperate Escape test, applying -1 to that test.
-  -&gt; While the unit is not riled up, the triggering unit must take a Desperate Escape test.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to make a Fall Back move, while the triggering unit is within Engagement Range of this unit:
+  - While this unit is riled up, the triggering unit must take a Desperate Escape test, applying -1 to that test.
+  - While this unit is not riled up, the triggering unit must take a Desperate Escape test.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13649,7 +13625,7 @@ Applies to: units with WARBOSS.</characteristic>
           <profiles>
             <profile name="Tellyporta Boss" id="b854-4b04-0b6d-09f9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless the unit has the VEHICLE keyword, this model gains the Deep Strike ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless this unit has the VEHICLE keyword, this model gains the Deep Strike ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13683,7 +13659,7 @@ Applies to: units with WARBOSS.</characteristic>
           <profiles>
             <profile name="Glory Hog" id="ad59-ac42-eec9-4e27" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to make a Fall Back move, the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to make a Fall Back move, this unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13747,7 +13723,7 @@ Applies to: units with WARBOSS.</characteristic>
           <profiles>
             <profile name="Cybork Boosta" id="7ec5-74f9-47c9-dcf1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 2 to this model's Move characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 2" to this model's Move characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13783,8 +13759,8 @@ Applies to: units with WARBOSS.</characteristic>
             <profile name="Dreadherder" id="c466-04f1-3552-9e71" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is within 3" of a friendly ORKS WALKER unit (excluding BIG MEK units), this model gains the Lone Operative ability.
--&gt; Until the end of the turn: while this model is within 3" of a friendly ORKS WALKER unit (excluding BIG MEK units), during the Shooting phase, in your turn, select one friendly ORKS WALKER unit if the selected unit is within 3" of this model: you can re-roll a Hit roll of 1 for attacks made by that unit.
-Applies to: units with BIG MEK.</characteristic>
+Until the end of the turn, while this model is within 3" of a friendly ORKS WALKER unit (excluding BIG MEK units), during your Shooting phase, select one friendly ORKS WALKER unit that is within 3" of this model; you can re-roll Hit rolls of 1 for attacks made by that unit.
+Applies to: BIG MEK units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13819,9 +13795,9 @@ Applies to: units with BIG MEK.</characteristic>
           <profiles>
             <profile name="Flyboss (Upgrade)" id="2817-0d85-8036-f8e2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the CHARACTER keyword.
--&gt; When the unit ends an ingress move, until the start of your next turn:
-  For each friendly ORKS unit with the AIRCRAFT or DEFFKOPTAS keyword within 6" of the unit: The unit is riled up.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the CHARACTER keyword.
+When this unit ends an Ingress move, until the start of your next turn:
+  For each friendly ORKS unit with the AIRCRAFT or DEFFKOPTAS keyword within 6" of this unit: That unit is riled up.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13856,8 +13832,8 @@ Applies to: units with BIG MEK.</characteristic>
           <profiles>
             <profile name="Impulsive Recon (Upgrade)" id="f84c-4a32-7c93-29de" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the first battle round, during the Movement phase, in your turn, the unit can make an Ingress move.
-Applies to: units with ORKS, AIRCRAFT.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the first battle round, during your Movement phase, this unit can make an Ingress move.
+Applies to: ORKS AIRCRAFT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13901,9 +13877,9 @@ Applies to: units with ORKS, AIRCRAFT.</characteristic>
           <profiles>
             <profile name="Ferocious Show-off" id="e793-1391-3670-edf7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Select one of the following:
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Choose one of the following:
   - Improve the Attacks characteristic of melee weapons equipped by this model by 1.
-  - If the unit contains 11+ models, improve the Attacks characteristic of melee weapons equipped by this model by 2.</characteristic>
+  - If this unit contains 11 or more models, improve the Attacks characteristic of melee weapons equipped by this model by 2.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13931,7 +13907,7 @@ Applies to: units with ORKS, AIRCRAFT.</characteristic>
           <profiles>
             <profile name="'Ard Boyz" id="1bb4-65a9-0671-76cd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set the unit's Save characteristic to 4.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this unit's Save characteristic to 4+.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -13969,7 +13945,7 @@ Applies to: units with ORKS, AIRCRAFT.</characteristic>
           <profiles>
             <profile name="Smoky Gubbinz (Upgrade)" id="34a9-eab1-c76e-0da0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit selects its targets, unless the target is not fully visible to the attacking model because of this unit, until that unit finishes resolving its attacks, the target has the Benefit of Cover.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit selects its targets, unless the target is not fully visible to the attacking model because of this unit, until the attacking unit finishes resolving its attacks, the target has the Benefit of Cover.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14032,7 +14008,7 @@ Applies to: units with ORKS, AIRCRAFT.</characteristic>
           <profiles>
             <profile name="Mekwaaagh! Mastermind" id="7f32-408d-217f-77ea" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is riled up.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is riled up.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14060,12 +14036,12 @@ Applies to: units with ORKS, AIRCRAFT.</characteristic>
           <profiles>
             <profile name="Temperamental Shokka (Upgrade)" id="ee3b-e335-dfc3-4f5b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, you may use this ability, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Roll one D6:
-    - On 1: Ranged Shokk Attack Gun weapons equipped by this model gain [TORRENT]; after the unit resolves its attacks: destroy this model.
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability, during your Shooting phase, until the end of the phase:
+  - Roll one D6:
+    - On 1: Ranged Shokk Attack Gun weapons equipped by this model gain [TORRENT]; after this unit resolves its attacks, destroy this model.
     - On 2-5: Improve the Attacks characteristic of ranged shokk attack gun weapons equipped by this model by 1.
     - On 6: Ranged Shokk Attack Gun weapons equipped by this model gain [SUSTAINED HITS 2].
-Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
+Applies to: BIG MEK WITH SHOKK ATTACK GUN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14093,11 +14069,11 @@ Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
           <profiles>
             <profile name="Enhanced Runt-maw (Upgrade)" id="c578-b0e0-5558-c428" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, until the start of your next turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; That unit is infested with Snotlings.
-    -&gt; While an enemy unit is infested with Snotlings, that unit gets -1 to Leadership rolls.
-Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, until the start of your next turn:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:
+    - That unit is infested with Snotlings.
+    - While an enemy unit is infested with Snotlings, subtract 1 from that unit's Leadership rolls.
+Applies to: BIG MEK WITH SHOKK ATTACK GUN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14125,7 +14101,7 @@ Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
           <profiles>
             <profile name="Extra Sneaky (Upgrade)" id="2b58-7f0d-99fe-296d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 3 from the unit's detection range characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 3" from this unit's detection range.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14153,7 +14129,7 @@ Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
           <profiles>
             <profile name="Minefield Detail (Upgrade)" id="cd6e-a952-b79e-9a74" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is not embarked, the unit gains the Scouts 6" ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is not embarked, this unit gains the Scouts 6" ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14197,8 +14173,8 @@ Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
             <profile name="Supa-glowy Fing" id="c406-42d2-dfe3-8683" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against ORKS targets that are also INFANTRY (excluding Vehicle units), for the rest of the battle:
-  -&gt; Ranged weapons equipped by this model gain [ANTI-INFANTRY 4+] and [DEVASTATING WOUNDS] and [SUPA HAZARDOUS].
-  -&gt; After the unit resolves its attacks: the unit must take 2 Hazard tests for each selected supa hazardous weapon.</characteristic>
+  - Ranged weapons equipped by this model gain [ANTI-INFANTRY 4+] and [DEVASTATING WOUNDS] and [SUPA HAZARDOUS].
+  - After this unit resolves its attacks, this unit must take 2 Hazard tests for each selected supa hazardous weapon.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14239,7 +14215,7 @@ Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
           <profiles>
             <profile name="Targetin' Squigs" id="3fa8-4222-a936-814e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, unless making ranged attacks made with [TORRENT] weapons, add 3 to the Range characteristic of ranged weapons equipped by models in this unit.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, unless making ranged attacks made with [TORRENT] weapons, add 3" to the Range characteristic of ranged weapons equipped by models in this unit.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14277,8 +14253,8 @@ Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
             <profile name="Kill Kommanda" id="f271-f2d6-7ec7-fba0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is an attached unit:
-  -&gt; The unit gains the Infiltrators ability.
-  -&gt; The unit gains the Stealth ability.</characteristic>
+  - This unit gains the Infiltrators ability.
+  - This unit gains the Stealth ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14358,7 +14334,7 @@ Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
           <profiles>
             <profile name="Headwoppa's Killchoppa" id="016a-85c7-4c37-f20b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit charged this turn, improve the Armour Penetration characteristic of melee weapons equipped by this model by 1.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit charged this turn, improve the Armour Penetration characteristic of melee weapons equipped by this model by 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14405,7 +14381,7 @@ Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
           <profiles>
             <profile name="Da Boss is Watchin'" id="7c11-1206-ac20-75fc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per battle per army, during the Movement phase, in your turn, until the start of your next turn, the unit is riled up.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: Once per battle per army, during your Movement phase, until the start of your next turn, this unit is riled up.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14452,9 +14428,9 @@ Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
           <profiles>
             <profile name="Kunnin' But Brutal" id="9d8e-f832-772e-387a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to make a Fall Back move:
-  -&gt; The unit is eligible to shoot in a turn in which it Fell Back.
-  -&gt; The unit is eligible to declare a charge in a turn in which it Fell Back.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to make a Fall Back move:
+  - This unit is eligible to shoot in a turn in which it Fell Back.
+  - This unit is eligible to declare a charge in a turn in which it Fell Back.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14501,7 +14477,7 @@ Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
           <profiles>
             <profile name="Follow Me Ladz" id="72fb-3c92-9b33-632b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 2 to the unit's Move characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 2" to this unit's Move characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14538,10 +14514,10 @@ Applies to: units with BIG MEK WITH SHOKK ATTACK GUN.</characteristic>
           <profiles>
             <profile name="Kaptin's Hat" id="c832-4428-fca6-1851" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you may use this ability:
-  -&gt; Select up to 3 friendly INFANTRY ORKS units:
-    -&gt; For each selected unit:
-      Select one of the following:
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you can use this ability:
+  - Select up to 3 friendly INFANTRY ORKS units:
+    - For each selected unit:
+      Choose one of the following:
         - That unit can be set up on the battlefield.
         - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.</characteristic>
               </characteristics>
@@ -14672,25 +14648,25 @@ You can re-roll the Psychic roll.</characteristic>
   <sharedRules>
     <rule name="Waaagh!" id="6ac2-fce9-ef59-43eb" hidden="false">
       <description>You can re-roll the Advance roll.
-While the unit is riled up, the unit has a 5+ invulnerable save.
-While the unit is riled up, ranged weapons equipped by models in this unit gain [ASSAULT].
--&gt; When the unit is selected to make an Advance move: while the unit is riled up, the triggering unit is eligible to declare a charge even if it Advanced this turn.
--&gt; At the start of the Command phase, you may use this ability, once per battle per army, until the end of the next turn: all friendly ORKS units with the Waaagh ability are riled up.</description>
+While this unit is riled up, this unit has a 5+ invulnerable save.
+While this unit is riled up, ranged weapons equipped by models in this unit gain [ASSAULT].
+When this unit is selected to make an Advance move, while this unit is riled up, the triggering unit is eligible to declare a charge even if it Advanced this turn.
+At the start of the Command phase, you can use this ability, once per battle per army, until the end of the next turn, friendly ORKS units with the Waaagh ability are riled up.</description>
     </rule>
     <rule name="Da Boss" id="6415-b617-d268-762c" hidden="false">
-      <description>At the start of the battle round, while this model has the Da Boss ability, while this model is the Warlord, you gain 1CP.</description>
+      <description>At the start of the battle round, while this model has the Da Boss ability and this model is the Warlord, you gain 1 CP.</description>
     </rule>
     <rule name="Unstable energies" id="ef60-7b2a-ef20-bea6" hidden="false">
-      <description>At the start of the battle round, all friendly ORKS PSYKER units' psychic level becomes their Psyker Level characteristic.</description>
+      <description>At the start of the battle round, friendly ORKS PSYKER units' psychic level becomes their Psyker Level characteristic.</description>
     </rule>
     <rule name="Special Move Types" id="e605-279f-ae10-621c" hidden="false">
       <description>Pulse Jet move:
   - The unit can move up to D6+18".
-  - While it moves, the unit can move over terrain features and models as though they were not there; the unit ignores vertical distances when it moves; the unit cannot end a move within Engagement Range of any enemy unit.
-  - After it moves, until the end of the turn: the unit cannot declare a charge; until the end of the turn: the unit cannot start an Action; until the start of your next turn: the attacking unit gets -1 to Hit rolls.
+  - While it moves, this unit can move over terrain features and models as though they were not there; this unit ignores vertical distances when it moves; this unit cannot end a move within Engagement Range of any enemy unit.
+  - After it moves, until the end of the turn, this unit cannot declare a charge; until the end of the turn, this unit cannot start an Action; until the start of your next turn, subtract 1 from the attacking unit's Hit rolls.
 Assault Disembark move (the Assault mode of a Disembark move):
   - Each model is set up wholly within 3" of that Transport.
-  - A unit can make this move only if the unit is embarked and the Transport this unit is embarked within is on the battlefield and the unit did not embark this phase and not (the Transport this unit is embarked within advanced this phase or the Transport this unit is embarked within fell back this phase).</description>
+  - A unit can make this move only if this unit is embarked and the Transport this unit is embarked within is on the battlefield and this unit did not embark this phase and not (the Transport this unit is embarked within advanced this phase or the Transport this unit is embarked within fell back this phase).</description>
     </rule>
   </sharedRules>
   <catalogueLinks>

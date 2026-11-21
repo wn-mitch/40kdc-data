@@ -55,7 +55,7 @@ describe("Semantic authoring weapon-ability-range: a weapon ability tested at fu
 
   it("describes the benefit against the weapon's full range", () => {
     const effect = { type: "weapon-ability-range", target: "this-unit", modifier: { keyword: { keyword_id: "rapid-fire" }, range: "weapon" } } as unknown as Effect;
-    expect(describeEffect(effect)).toBe("The unit's attacks benefit from [RAPID FIRE] when the target is within the weapon's range.");
+    expect(describeEffect(effect)).toBe("This unit's attacks benefit from [RAPID FIRE] when the target is within the weapon's range.");
   });
 
   it("refuses an antecedent subject with no earlier unit-filter or selection, rather than defaulting to this unit", () => {

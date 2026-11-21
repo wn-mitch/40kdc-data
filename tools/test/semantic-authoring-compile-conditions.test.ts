@@ -306,7 +306,7 @@ describe("Semantic authoring batch-6 describer round-trip and prefill", () => {
     const previews: Array<[string, Record<string, unknown>, RegExp]> = [
       ["rule-active", { rule: "oath-of-moment" }, /is active/iu],
       ["unit-owner", { owner: "enemy" }, /enemy unit/iu],
-      ["model-count", { min: 6 }, /contains 6\+ models/iu],
+      ["model-count", { min: 6 }, /contains 6 or more models/iu],
       ["wounds-state", { kind: "damaged" }, /damaged/iu],
       ["in-region", { region_kind: "territory", territory: "no-mans-land" }, /no.mans.land/iu],
       ["controls-objective", { mode: "more-than-opponent" }, /more objectives than/iu],

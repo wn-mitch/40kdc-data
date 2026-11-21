@@ -20,7 +20,7 @@ export interface Condition {
 
 import { describeHappened, destroyedCount } from "./condition-history.js";
 import { namedEquipmentPhrase } from "./condition-equipment.js";
-import { andList, countPhrase, dekebab, designationPhrase, EVENT_OBJECT_MODEL, EVENT_SUBJECT_MODEL, idLabel, keywordList, keywordNoun, objectivePhrase, ord, orList, type P, placeRefPhrase, rangePhrase, rollWord, ruleRefPhrase, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase } from "./condition-refs.js";
+import { andList, countPhrase, dekebab, designationPhrase, EVENT_OBJECT_MODEL, EVENT_SUBJECT_MODEL, idLabel, keywordList, keywordNoun, objectivePhrase, ord, orList, type P, placeRefPhrase, rangePhrase, rollWord, ruleRefPhrase, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase, withArticle, withinClause } from "./condition-refs.js";
 import { bracketKeyword, diceCase, diceTableResultLabel, weaponNoun } from "./effect-words.js";
 
 export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPhrase } from "./condition-refs.js";
@@ -42,7 +42,7 @@ export function negatePhrase(phrase: string): string {
   ] as const) {
     if (from.test(phrase)) return phrase.replace(from, to);
   }
-  if (/^1\+ /.test(phrase)) return `no ${phrase.slice(3)}`;
+  if (/^(?:1\+|one or more) /.test(phrase)) return `no ${phrase.replace(/^(?:1\+|one or more) /, "")}`;
   const m = /^(.*?) (is|was|contains|has) (.*)$/.exec(phrase);
   if (m) {
     const [, who, verb, rest] = m;
@@ -79,7 +79,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
     case "deployment-window":
       return `${neg}during deployment`;
     case "player-turn-is":
-      return `${neg}in ${p.turn === "your-turn" ? "your" : p.turn === "opponent-turn" ? "the opponent's" : "either player's"} turn`;
+      return `${neg}in ${p.turn === "your-turn" ? "your" : p.turn === "opponent-turn" ? "your opponent's" : "either player's"} turn`;
     case "battle-round": {
       const min = p.min != null ? Number(p.min) : undefined;
       const max = p.max != null ? Number(p.max) : undefined;
@@ -114,19 +114,19 @@ export function describePredicate(c: Condition, negated: boolean): string {
         return `${neg}${subjectOf(p)} is attached to ${unitFilterPhrase(w)}`;
       }
       const kw = Array.isArray(w.all_of) ? `${(w.all_of as unknown[]).map(str).join(" ")} ` : "";
-      if (p.role === "leading") return `${neg}${p.subject === "this-model" || p.subject == null ? "the model" : subjectOf(p)} is leading a ${kw}unit`;
-      if (p.role === "led") return `${neg}${subjectOf(p, "this unit")} is being led by ${/^[aeiou]/i.test(kw) ? "an" : "a"} ${kw}model`;
+      if (p.role === "leading") return `${neg}${p.subject === "this-model" || p.subject == null ? "this model" : subjectOf(p)} is leading ${withArticle(`${kw}unit`)}`;
+      if (p.role === "led") return `${neg}${subjectOf(p, "this unit")} is being led by ${withArticle(`${kw}model`)}`;
       // Attached to a named unit: "this model is attached to a DOMINION SQUAD unit".
-      if (kw) return `${neg}${subjectOf(p)} is attached to ${/^[aeiou]/i.test(kw) ? "an" : "a"} ${kw}unit`;
+      if (kw) return `${neg}${subjectOf(p)} is attached to ${withArticle(`${kw}unit`)}`;
       return `${neg}${subjectOf(p)} is an attached unit`;
     }
     case "strength": {
       const who = subjectOf(p);
-      return `${neg}${who} is ${p.at_or_below === true ? "at or below" : "below"} ${p.below === "half" ? "half strength" : "starting strength"}`;
+      return `${neg}${who} is ${p.at_or_below === true ? "at or below" : "below"} ${p.below === "half" ? "Half-strength" : "Starting Strength"}`;
     }
     case "model-count": {
       const kw = p.keyword != null ? `${str(p.keyword)} ` : "";
-      const range = p.min != null && p.max != null ? `${str(p.min)}-${str(p.max)}` : p.min != null ? `${str(p.min)}+` : `at most ${str(p.max)}`;
+      const range = countPhrase({ min: p.min, max: p.max });
       return `${neg}${subjectOf(p)} contains ${range} ${kw}models`;
     }
     case "wounds": {
@@ -160,7 +160,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
       if (p.to === "embark-within") return `${subjectOf(p)} is ${negated ? "not " : ""}able to embark within ${transportPhrase(p.transport)}`;
       if (p.to === "be-selected") {
         const source = (p.source_ability as P | undefined)?.ability_id;
-        return `${neg}the candidate was eligible for the ${dekebab(str(source))} ability at the end of the opponent's previous turn`;
+        return `${neg}the candidate was eligible for the ${dekebab(str(source))} ability at the end of your opponent's previous turn`;
       }
       const to: Record<string, string> = { shoot: "shoot", "declare-charge": "declare a charge", fight: "fight", "start-action": "start an action" };
       return `${subjectOf(p)} is ${negated ? "not " : ""}eligible to ${to[str(p.to)] ?? dekebab(str(p.to))}`;
@@ -184,9 +184,11 @@ export function describePredicate(c: Condition, negated: boolean): string {
       const who = every ? `every model in ${subjectOf(p)}${p.count != null ? ` (${countPhrase(p.count)} models)` : ""}` : p.count != null ? `${countPhrase(p.count)} models in ${subjectOf(p)}` : subjectOf(p);
       const plural = !every && p.count != null;
       const target = range === "half-weapon" || range === "weapon" ? "" : ` of ${placeRefPhrase(of)}`;
+      const zero = typeof range === "object" && range != null && (range as P).inches === 0 && of != null;
+      const dist = zero ? `in contact with ${placeRefPhrase(of)}` : `${wholly}within ${rangePhrase(range)}${target}`;
       // An earlier position: the start of the phase, or of the move that triggered the ability.
       const at = p.at === "phase-start" ? " at the start of the phase" : p.at === "move-start" ? " at the start of that move" : "";
-      return `${who} ${at !== "" ? (plural ? "were" : "was") : (plural ? "are" : "is")} ${negated ? "not " : ""}${wholly}within ${rangePhrase(range)}${target}${at}`;
+      return `${who} ${at !== "" ? (plural ? "were" : "was") : (plural ? "are" : "is")} ${negated ? "not " : ""}${dist}${at}`;
     }
     case "in-region": {
       const r = (p.region ?? {}) as P;
@@ -217,10 +219,10 @@ export function describePredicate(c: Condition, negated: boolean): string {
       if (p.count != null || (p.compare == null && p.proportion == null)) clauses.push(`${who} ${countPhrase(p.count)} ${objective}`);
       if (p.compare != null) {
         const compare = p.compare as P;
-        const other = compare.owner === "friendly" ? "you" : "the opponent";
+        const other = compare.owner === "friendly" ? "you" : "your opponent";
         const holder = p.by === "enemy" ? "your opponent holds" : "you hold";
         if (compare.comparison === "gt") clauses.push(`${holder} more ${objective} than ${other}`);
-        else clauses.push(`the number of ${objective} ${p.by === "enemy" ? "your opponent controls" : "you control"} is ${comparisonPhrase(compare.comparison)} the number ${compare.owner === "friendly" ? "you control" : "the opponent controls"}`);
+        else clauses.push(`the number of ${objective} ${p.by === "enemy" ? "your opponent controls" : "you control"} is ${comparisonPhrase(compare.comparison)} the number ${compare.owner === "friendly" ? "you control" : "your opponent controls"}`);
       }
       if (p.proportion != null) {
         const proportion = p.proportion as P;
@@ -278,7 +280,7 @@ export function describePredicate(c: Condition, negated: boolean): string {
     case "resource": {
       if (p.below_max === true) {
         const source = (p.source_ability as P | undefined)?.ability_id;
-        return `${neg}the ${dekebab(str(source))} ability had unused selection capacity at the end of the opponent's previous turn`;
+        return `${neg}the ${dekebab(str(source))} ability had unused selection capacity at the end of your opponent's previous turn`;
       }
       const amount = countPhrase(p.count);
       // A pool is the player's ("If you have 3 or more Pact points").
@@ -377,8 +379,8 @@ function describeMatches(p: P, negated: boolean): string {
     }
     if (f.within != null) {
       const within = f.within as P;
-      const to = within.range === "weapon" || within.range === "half-weapon" ? "" : ` of ${placeRefPhrase(within.of)}`;
-      return `${who} is ${no}${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${to}`;
+      const to = within.range === "weapon" || within.range === "half-weapon" ? "" : placeRefPhrase(within.of);
+      return `${who} is ${no}${withinClause(within, to).trimStart()}`;
     }
   }
   // A trigger's model reads as a model ("the triggering model is within Engagement Range of …").

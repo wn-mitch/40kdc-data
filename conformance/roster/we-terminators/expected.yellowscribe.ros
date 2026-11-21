@@ -22,18 +22,17 @@
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Devastating Assault" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit ends a Charge move, until the end of the turn, hellforged weapons equipped by this model gain [DEVASTATING WOUNDS].</characteristic>
+                <characteristic name="Description">When this unit ends a Charge move, until the end of the turn, hellforged weapons equipped by this model gain [DEVASTATING WOUNDS].</characteristic>
               </characteristics>
             </profile>
             <profile name="Direct the Slaughter" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Each time you target a friendly WORLD EATERS unit within 12" of this model with a Stratagem, you may use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+                <characteristic name="Description">Each time you target a friendly WORLD EATERS unit within 12" of this model with a Stratagem, you can use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
               </characteristics>
             </profile>
             <profile name="Lord of Murder" typeName="Abilities">
@@ -43,14 +42,14 @@
             </profile>
             <profile name="Blessings of Khorne" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
-  -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
-    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
-    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
-    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+                <characteristic name="Description">At the start of the battle round, you can use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
+  - Roll 8D6; allocate dice to activate up to 2 of the following:
+    - Unbridled Bloodlust (requires pair of 1+): add 1 to this unit's Charge rolls.
+    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to this unit's Pile-in and Consolidation moves.
+    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
     - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
     - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
-    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
+    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, this unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -131,26 +130,26 @@
             </profile>
             <profile name="Bloody Fury" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before a Hit roll is made for an attack made by this model, you may use this ability:
-  -&gt; While making ranged attacks, if the target is the closest eligible target, you can re-roll a failed Hit roll for attacks made by this model with ranged weapons.
-  -&gt; If the target is the closest eligible target, you can re-roll a failed Charge roll for this model.</characteristic>
+                <characteristic name="Description">Before a Hit roll is made for an attack made by this model, you can use this ability:
+  - While making ranged attacks, if the target is the closest eligible target, you can re-roll failed Hit rolls for attacks made by this model.
+  - If the target is the closest eligible target, you can re-roll a failed Charge roll for this model.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+                <characteristic name="Description">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Blessings of Khorne" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
-  -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
-    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
-    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
-    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+                <characteristic name="Description">At the start of the battle round, you can use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
+  - Roll 8D6; allocate dice to activate up to 2 of the following:
+    - Unbridled Bloodlust (requires pair of 1+): add 1 to this unit's Charge rolls.
+    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to this unit's Pile-in and Consolidation moves.
+    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
     - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
     - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
-    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
+    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, this unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -325,26 +324,26 @@
             </profile>
             <profile name="Bloody Fury" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">Before a Hit roll is made for an attack made by this model, you may use this ability:
-  -&gt; While making ranged attacks, if the target is the closest eligible target, you can re-roll a failed Hit roll for attacks made by this model with ranged weapons.
-  -&gt; If the target is the closest eligible target, you can re-roll a failed Charge roll for this model.</characteristic>
+                <characteristic name="Description">Before a Hit roll is made for an attack made by this model, you can use this ability:
+  - While making ranged attacks, if the target is the closest eligible target, you can re-roll failed Hit rolls for attacks made by this model.
+  - If the target is the closest eligible target, you can re-roll a failed Charge roll for this model.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+                <characteristic name="Description">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="Blessings of Khorne" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the battle round, you may use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
-  -&gt; Roll 8D6; allocate dice to activate up to 2 of the following:
-    - Unbridled Bloodlust (requires pair of 1+): the unit gets +1 to Charge rolls.
-    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to the unit's Pile-in and Consolidation moves.
-    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee: each time a model in this unit is destroyed, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
+                <characteristic name="Description">At the start of the battle round, you can use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:
+  - Roll 8D6; allocate dice to activate up to 2 of the following:
+    - Unbridled Bloodlust (requires pair of 1+): add 1 to this unit's Charge rolls.
+    - Rage-Fuelled Invigoration (requires pair of 2+): add 3" to this unit's Pile-in and Consolidation moves.
+    - Total Carnage (requires pair of 3+): when a friendly model is destroyed in melee, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
     - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
     - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].
-    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
+    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, this unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
               </characteristics>
             </profile>
           </profiles>

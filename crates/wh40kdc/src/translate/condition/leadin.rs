@@ -174,7 +174,7 @@ pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
         "happened" => {
             let f = obj(p.get("filter"));
             let types: Vec<String> = strs(f.get("move_types")).unwrap_or_default();
-            // A phase filter reads in the full history phrase ("the unit charged in the Charge
+            // A phase filter reads in the full history phrase ("this unit charged in the Charge
             // phase this turn").
             if is(p, "event", "move-ended")
                 && is(p, "window", "turn")
@@ -183,10 +183,10 @@ pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
                 && nn(f, "phase").is_none()
             {
                 match types[0].as_str() {
-                    "charge" => return "if the unit charged this turn".to_string(),
-                    "advance" => return "if the unit Advanced this turn".to_string(),
+                    "charge" => return "if this unit charged this turn".to_string(),
+                    "advance" => return "if this unit Advanced this turn".to_string(),
                     "remain-stationary" => {
-                        return "if the unit Remained Stationary this turn".to_string()
+                        return "if this unit Remained Stationary this turn".to_string()
                     }
                     _ => {}
                 }
@@ -197,13 +197,13 @@ pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
                 && nn(f, "phase").is_none()
             {
                 return format!(
-                    "if the unit disembarked from a Transport {}",
+                    "if this unit disembarked from a Transport {}",
                     window_phrase(p.get("window"))
                 )
                 .trim_end()
                 .to_string();
             }
-            // "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
+            // "while this unit is performing an Agile Manoeuvre": the use is being resolved now.
             if is(p, "event", "used")
                 && is(p, "window", "event")
                 && nn(f, "ability_keyword").is_none()
@@ -228,8 +228,12 @@ pub fn condition_lead_in_for(c: &Value, defending: bool) -> String {
         }
         "strength" => {
             let s = pred();
-            let s = match s.strip_suffix(" is below starting strength") {
-                Some(head) => format!("{head} is below its starting strength"),
+            let s = match s.strip_suffix(" is below Starting Strength") {
+                Some(head) => format!("{head} is below its Starting Strength"),
+                None => s,
+            };
+            let s = match s.strip_suffix(" is below Half-strength") {
+                Some(head) => format!("{head} is Below Half-strength"),
                 None => s,
             };
             format!("while {s}")
@@ -354,7 +358,7 @@ fn matches_lead_in(c: &Value, negated: bool) -> String {
                         .and_then(Value::as_array)
                         .is_some_and(|words| words.len() > 1));
             return format!(
-                "{} the unit has the {} keyword{}",
+                "{} this unit has the {} keyword{}",
                 if negated { "unless" } else { "if" },
                 keyword_names(f),
                 if plural { "s" } else { "" }
@@ -375,16 +379,61 @@ fn matches_lead_in(c: &Value, negated: bool) -> String {
     format!("while {}", describe_predicate(c, negated))
 }
 
-/// Join the operands of an `and` lead-in. Runs of keyword exclusions collapse into one clause:
-/// on the attack's target, "against a unit that is not a X or Y"; on the unit an aura or effect
-/// is applied to, "(excluding X or Y units)". Either attaches to the preceding clause with a
-/// space; a run of the unit's own keywords reads "if the unit is a X Y unit"; all other operands
-/// join with ", ".
+fn turn_owner_leadin(turn: &str) -> Option<&'static str> {
+    match turn {
+        "your-turn" => Some("your"),
+        "opponent-turn" => Some("your opponent's"),
+        "either" => Some("either player's"),
+        _ => None,
+    }
+}
+
+/// Join the operands of an `and` lead-in. Merges `phase-is` + `player-turn-is` into one timing
+/// window ("during your Shooting phase"), collapses runs of keyword exclusions, and avoids doubled
+/// openers ("while A, while B" -> "while A and B").
 pub(crate) fn join_lead_ins(ops: &[Value], defending: bool) -> String {
+    fn flatten<'a>(list: &'a [Value], out: &mut Vec<&'a Value>) {
+        for op in list {
+            if operator(op) == Some("and") {
+                if let Some(inner) = operands(op) {
+                    flatten(inner, out);
+                    continue;
+                }
+            }
+            out.push(op);
+        }
+    }
+    let mut flat = Vec::new();
+    flatten(ops, &mut flat);
+
+    // Fuse one `phase-is` + one `player-turn-is` into a single natural window ("during your Shooting phase").
+    let phase_idx = flat.iter().position(|o| {
+        !has_operator(o)
+            && ctype(o) == Some("phase-is")
+            && params(o).get("phase").is_some_and(Value::is_string)
+    });
+    let turn_idx = flat.iter().position(|o| {
+        !has_operator(o)
+            && ctype(o) == Some("player-turn-is")
+            && turn_owner_leadin(&st(params(o).get("turn"))).is_some()
+    });
+    let fused_window = match (phase_idx, turn_idx) {
+        (Some(pi), Some(ti)) => {
+            let pp = params(flat[pi]);
+            let owner = turn_owner_leadin(&st(params(flat[ti]).get("turn"))).unwrap();
+            Some(if nn(pp, "step").is_some() {
+                super::predicate::step_window(pp, owner)
+            } else {
+                format!("during {owner} {} phase", title_case(&st(pp.get("phase"))))
+            })
+        }
+        _ => None,
+    };
+
     let run = |mut i: usize, pick: &dyn Fn(&Value) -> Option<String>| -> (Vec<String>, usize) {
         let mut kws = Vec::new();
-        while i < ops.len() {
-            match pick(&ops[i]) {
+        while i < flat.len() {
+            match pick(flat[i]) {
                 Some(kw) => {
                     kws.push(kw);
                     i += 1;
@@ -396,8 +445,17 @@ pub(crate) fn join_lead_ins(ops: &[Value], defending: bool) -> String {
     };
     let mut parts: Vec<String> = Vec::new();
     let mut i = 0;
-    while i < ops.len() {
-        let op = &ops[i];
+    while i < flat.len() {
+        if let (Some(fused), Some(pi), Some(ti)) = (&fused_window, phase_idx, turn_idx) {
+            if i == pi || i == ti {
+                if i == pi.min(ti) {
+                    parts.push(fused.clone());
+                }
+                i += 1;
+                continue;
+            }
+        }
+        let op = flat[i];
         if not_keyword(op, "defender").is_some() {
             let (kws, next) = run(i, &|o| not_keyword(o, "defender"));
             parts.push(negated_target_keywords(&kws));
@@ -419,9 +477,13 @@ pub(crate) fn join_lead_ins(ops: &[Value], defending: bool) -> String {
         if own_keyword(op).is_some() {
             let (kws, next) = run(i, &own_keyword);
             parts.push(if kws.len() >= 2 {
-                format!("if the unit is {} {} unit", article(&kws[0]), kws.join(" "))
+                format!(
+                    "if this unit is {} {} unit",
+                    article(&kws[0]),
+                    kws.join(" ")
+                )
             } else {
-                format!("if the unit has the {} keyword", kws[0])
+                format!("if this unit has the {} keyword", kws[0])
             });
             i = next;
             continue;
@@ -436,12 +498,26 @@ pub(crate) fn join_lead_ins(ops: &[Value], defending: bool) -> String {
             .strip_prefix("against ")
             .and_then(|r| r.strip_suffix(" targets"))
             .filter(|t| !t.is_empty());
+        // "while making melee attacks" + "while the target is an enemy X unit" -> "while making melee attacks against an enemy X unit".
+        let target_is = part.strip_prefix("while the target is ").filter(|r| {
+            (r.starts_with("a ") && r.len() > 2) || (r.starts_with("an ") && r.len() > 3)
+        });
         if acc.is_empty() {
             acc = part;
         } else if let Some(target) = target.filter(|_| {
             acc.ends_with(" targets") && (acc.starts_with("against ") || acc.contains(", against "))
         }) {
             acc = format!("{acc} that are also {target}");
+        } else if let Some(rest) = target_is.filter(|_| ends_with_while_making_attacks(&acc)) {
+            acc = format!("{acc} against {rest}");
+        } else if let Some(opener) = ["while ", "if ", "when "].into_iter().find(|&op| {
+            let last_clause = acc.rsplit(", ").next().unwrap_or("");
+            last_clause.starts_with(op)
+                && part.starts_with(op)
+                && !part.starts_with("while making ")
+                && !last_clause.starts_with("while making ")
+        }) {
+            acc = format!("{acc} and {}", &part[opener.len()..]);
         } else if (part.starts_with("against ") && !is_incoming_attack(&part))
             || part.starts_with("(excluding ")
         {
@@ -452,6 +528,19 @@ pub(crate) fn join_lead_ins(ops: &[Value], defending: bool) -> String {
         }
     }
     acc
+}
+
+/// `/while making [a-z -]*attacks$/`.
+fn ends_with_while_making_attacks(acc: &str) -> bool {
+    let Some(before_attacks) = acc.strip_suffix("attacks") else {
+        return false;
+    };
+    let Some(idx) = before_attacks.rfind("while making ") else {
+        return false;
+    };
+    let mid = &before_attacks[idx + "while making ".len()..];
+    mid.bytes()
+        .all(|b| b.is_ascii_lowercase() || b == b' ' || b == b'-')
 }
 
 /// `^against [a-z -]*attacks( |$)`: an incoming-attack lead-in ("against ranged attacks").

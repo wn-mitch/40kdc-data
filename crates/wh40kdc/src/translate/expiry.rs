@@ -8,9 +8,9 @@ use serde_json::Value;
 /// when it adds none.
 pub(crate) fn expiry_trail(duration: Option<&Value>) -> &'static str {
     match duration.and_then(Value::as_str) {
-        Some("attack-sequence") => "until that unit finishes resolving its attacks",
-        Some("resolution") => "when resolving this use",
-        Some("after-resolving") => "after resolving this use",
+        Some("attack-sequence") => "until the attacking unit finishes resolving its attacks",
+        Some("resolution") => "for this activation",
+        Some("after-resolving") => "after resolving this ability",
         Some("while-leading") => "while this model is leading a unit",
         Some("phase") => "until the end of the phase",
         Some("turn") => "until the end of the turn",

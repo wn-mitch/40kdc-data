@@ -178,7 +178,7 @@ describe("Rituals attempted with a Psychic test (compile-ritual-menu.ts)", () =>
   it("renders the test once, then each Ritual with its Warp Charge", () => {
     const text = describeAbility({ id: "sample", name: "Sample", effect: mechanicsOf().effect } as any);
     const lines = text.split("\n");
-    expect(lines[0]).toBe("Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, the unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:");
+    expect(lines[0]).toBe("Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, this unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:");
     expect(lines[1]).toMatch(/^ {2}- Gloom Bolt \(Warp Charge 6\): .*unless the Psychic test result is 10\+, that unit suffers D3 mortal wounds; if the Psychic test result is 10\+, that unit suffers D6 mortal wounds\.$/u);
     expect(lines[2]).toMatch(/^ {2}- Hush \(Warp Charge 5\): /u);
     expect(lines).toHaveLength(3);

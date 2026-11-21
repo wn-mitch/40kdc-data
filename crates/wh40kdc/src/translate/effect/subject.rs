@@ -5,8 +5,8 @@ use serde_json::Value;
 
 use super::words::*;
 use crate::translate::condition::{
-    alternative_filters, and_list, article, designation_phrase, keyword_alternatives, nn, obj,
-    or_list, place_ref_phrase, range_phrase, state_phrase, territory_phrase, P,
+    alternative_filters, and_list, designation_phrase, keyword_alternatives, nn, obj, or_list,
+    place_ref_phrase, state_phrase, territory_phrase, with_article, within_clause, P,
 };
 use crate::translate::dekebab;
 
@@ -40,6 +40,17 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     let all = map_arr(f, "all_of", jv)
         .map(|k| format!("{} ", k.join(" ")))
         .unwrap_or_default();
+    let unit_id_names = map_arr(f, "unit_ids", |id| title_case(&jv(id)))
+        .map(|names| or_list(&names))
+        .unwrap_or_default();
+    let inline_unit_ids = if !unit_id_names.is_empty()
+        && all.is_empty()
+        && !f.get("any_of_filters").is_some_and(Value::is_array)
+    {
+        format!("{unit_id_names} ")
+    } else {
+        String::new()
+    };
     let noun = if sv(f, "level") == Some("model") {
         match sv(f, "attachment_role") {
             Some("bodyguard") => "Bodyguard models",
@@ -52,7 +63,7 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     let compact = keyword_alternatives(f);
     let mut s = match &compact {
         Some(alternatives) => format!("{owner}{} {noun}", or_list(alternatives)),
-        None => format!("{owner}{all}{noun}"),
+        None => format!("{owner}{all}{inline_unit_ids}{noun}"),
     };
     if compact.is_none() && f.get("any_of_filters").is_some_and(Value::is_array) {
         let alternatives: Vec<String> = alternative_filters(f)
@@ -76,8 +87,8 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     if let Some(names) = map_arr(f, "model_names", jv) {
         s.push_str(&format!(" named {}", or_list(&names)));
     }
-    if let Some(ids) = map_arr(f, "unit_ids", jv) {
-        s.push_str(&format!(" with unit ID {}", or_list(&ids)));
+    if !unit_id_names.is_empty() && inline_unit_ids.is_empty() {
+        s.push_str(&format!(" ({unit_id_names})"));
     }
     // "each model in this unit within 3\" of an enemy unit": the models' unit comes before their range.
     let member_first = sv(f, "level") == Some("model")
@@ -88,23 +99,18 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     }
     if let Some(within) = nn(f, "within") {
         let within = obj(Some(within));
-        s.push_str(&format!(
-            " {}within {}{}",
-            if is_true(within, "wholly") {
-                "wholly "
-            } else {
-                ""
-            },
-            range_phrase(within.get("range")),
-            within
-                .get("of")
-                .map(|of| if of.as_str() == Some("recipient") && ctx.each_model {
-                    " of that model".to_string()
+        let of = within
+            .get("of")
+            .filter(|v| !v.is_null())
+            .map(|of| {
+                if of.as_str() == Some("recipient") && ctx.each_model {
+                    "that model".to_string()
                 } else {
-                    format!(" of {}", place_ref_phrase(Some(of)))
-                })
-                .unwrap_or_default()
-        ));
+                    place_ref_phrase(Some(of))
+                }
+            })
+            .unwrap_or_default();
+        s.push_str(&within_clause(within, Some(&of)));
     }
     if member_first {
         let mut rest = f.clone();
@@ -144,25 +150,7 @@ pub(crate) fn filter_subject(f: &P, ctx: &Ctx) -> String {
     if let Some(ex) = nn(f, "excluding") {
         s.push_str(&format!(" other than {}", effect_subject(Some(ex), ctx)));
     }
-    let bounded = [
-        "within",
-        "visible",
-        "designated",
-        "not_designated",
-        "state",
-        "not_states",
-        "embarked_in",
-        "member_of",
-        "engaged_with",
-        "not_engaged_with",
-    ]
-    .iter()
-    .any(|k| nn(f, k).is_some());
-    if bounded {
-        s
-    } else {
-        format!("all {s}")
-    }
+    s
 }
 
 /// A unit filter's relations to other units and abilities.
@@ -237,7 +225,7 @@ fn filter_relations(f: &P, ctx: &Ctx) -> String {
         let phrase = if exact {
             phrase
         } else {
-            format!("{} {phrase}", article(&phrase))
+            with_article(&phrase)
                 .replacen("a other ", "another ", 1)
                 .replacen("an other ", "another ", 1)
         };
@@ -260,10 +248,10 @@ fn filter_relations(f: &P, ctx: &Ctx) -> String {
     s
 }
 
-/// " in the unit": the unit a model-level filter's models are in.
+/// " in this unit": the unit a model-level filter's models are in.
 fn member_of(unit: &Value, ctx: &Ctx) -> String {
     if unit.as_str() == Some("this-unit") {
-        " in the unit".to_string()
+        " in this unit".to_string()
     } else {
         format!(" in {}", effect_subject(Some(unit), ctx))
     }
@@ -273,33 +261,41 @@ fn member_of(unit: &Value, ctx: &Ctx) -> String {
 pub(crate) fn effect_subject(target: Option<&Value>, ctx: &Ctx) -> String {
     let target = target.filter(|t| !t.is_null());
     match target.map(|t| (t, t.as_str())) {
-        None | Some((_, Some("this-unit"))) => ctx.unit_subject.clone().unwrap_or_else(|| {
-            if ctx.selected_unit || ctx.selected_model {
-                "this unit"
-            } else {
-                "the unit"
-            }
-            .to_string()
-        }),
+        None | Some((_, Some("this-unit"))) => ctx
+            .unit_subject()
+            .map(str::to_string)
+            .unwrap_or_else(|| "this unit".to_string()),
         Some((_, Some("selected-unit"))) => if ctx.selected_model {
-            "that model"
+            if ctx.selected_plural {
+                "those models"
+            } else {
+                "that model"
+            }
         } else if ctx.selected_unit {
-            "that unit"
+            if ctx.selected_plural {
+                "those units"
+            } else {
+                "that unit"
+            }
         } else {
             "the selected unit"
         }
         .to_string(),
-        Some((_, Some("recipient"))) => if ctx.aura_recipient {
-            "that unit"
-        } else if ctx.each_model {
+        Some((_, Some("recipient"))) => if ctx.each_model || ctx.selected_model {
             "that model"
+        } else if ctx.aura_recipient || ctx.selected_unit {
+            "that unit"
         } else {
-            "the unit"
+            "this unit"
         }
         .to_string(),
+        Some((_, Some("event-subject"))) if ctx.unit_subject() == Some("that unit") => {
+            "that unit".to_string()
+        }
         Some((_, Some("attacker"))) => ctx
-            .unit_subject
-            .clone()
+            .unit_subject()
+            .filter(|&us| us != "that unit")
+            .map(str::to_string)
             .unwrap_or_else(|| "the attacking unit".to_string()),
         Some((_, Some(s))) => role_subject(s)
             .map(str::to_string)
@@ -311,7 +307,7 @@ pub(crate) fn effect_subject(target: Option<&Value>, ctx: &Ctx) -> String {
             }
             if r.get("selection_var").is_some_and(Value::is_string) {
                 return format!(
-                    "the bound {}",
+                    "the chosen {}",
                     jstr(r.get("selection_var")).replace('_', " ")
                 );
             }
@@ -340,14 +336,23 @@ pub(crate) fn weapon_holder(target: Option<&Value>, ctx: &Ctx) -> String {
         }
     }
     if s == Some("selected-unit") && ctx.selected_model {
-        return "that model".to_string();
+        return if ctx.selected_plural {
+            "those models"
+        } else {
+            "that model"
+        }
+        .to_string();
     }
     if unit_like {
         return "models in this unit".to_string();
     }
     if s == Some("selected-unit") {
         return if ctx.selected_unit {
-            "models in that unit"
+            if ctx.selected_plural {
+                "models in those units"
+            } else {
+                "models in that unit"
+            }
         } else {
             "models in the selected unit"
         }

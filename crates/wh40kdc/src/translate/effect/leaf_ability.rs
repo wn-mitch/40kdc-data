@@ -495,7 +495,7 @@ pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
     s
 }
 
-pub(super) fn targeting(m: &P, subj: &str, ctx: &Ctx) -> String {
+pub(super) fn targeting(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String {
     let who = strip_all(&match nn(m, "by") {
         Some(by) => effect_subject(Some(by), ctx),
         None if nn(m, "target").is_some() => subj.to_string(),
@@ -596,12 +596,16 @@ pub(super) fn targeting(m: &P, subj: &str, ctx: &Ctx) -> String {
             effect_subject(Some(engaged), ctx)
         );
     }
+    let range_text = nn(m, "range")
+        .map(|r| range_phrase(Some(r)))
+        .unwrap_or_default();
     let range = match nn(m, "range") {
         None => String::new(),
-        Some(r) if may == Some("cannot-target") => {
-            format!(" unless {attacking} is within {}", range_phrase(Some(r)))
+        Some(_) if may == Some("cannot-target") => {
+            format!(" unless {attacking} is within {range_text}")
         }
-        Some(r) => format!(" within {}", range_phrase(Some(r))),
+        Some(_) if whom.contains(&format!("within {range_text}")) => String::new(),
+        Some(_) => format!(" within {range_text}"),
     };
     let unless = nn(m, "only_if_none")
         .map(|o| {
@@ -645,6 +649,26 @@ pub(super) fn targeting(m: &P, subj: &str, ctx: &Ctx) -> String {
     } else {
         ""
     };
+    // When no `by` is specified and `m.target` is the same entity as `e.target`, render passively
+    // ("this unit cannot be targeted with ranged weapons") instead of "this unit cannot target this unit".
+    if nn(m, "by").is_none()
+        && nn(m, "target").is_some_and(|t| t.as_str() != Some("every-eligible"))
+        && nn(m, "target") == nn(e, "target")
+    {
+        let passive = match may {
+            Some("cannot-target") => "cannot be targeted",
+            Some("must-target") => "must be targeted",
+            _ => "can be targeted",
+        };
+        let passive_range = match nn(m, "range") {
+            None => String::new(),
+            Some(_) if may == Some("cannot-target") => {
+                format!(" unless the attacking unit is within {range_text}")
+            }
+            Some(_) => format!(" within {range_text}"),
+        };
+        return format!("{whom} {passive}{kind}{passive_range}{unless}{except}");
+    }
     // "cannot target enemy units … if the target unit was engaged with this unit at the start of the turn".
     if let Some(c) = nn(m, "target_condition") {
         let condition = describe_condition_value(&as_target_candidate(c));

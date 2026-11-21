@@ -108,10 +108,10 @@ describe("a number the player pledges, then gains as points (resource-gain set a
     const text = describeAbility({ id: "sample", name: "Sample", effect } as any);
     expect(text).toContain("declare a number as your vow");
     expect(text).toContain("If you destroyed at least as many enemy units this battle round as your vow, you gain a number of Glory points equal to your vow");
-    expect(text).toContain("While you have 2+ glory points");
+    expect(text).toContain("While you have 2 or more glory points");
     const set = { type: "resource-gain", target: "this-model", modifier: { pool: "vow", amount: "D3", set: true } };
     expect(describeAbility({ id: "sample", name: "Sample", effect: set } as any)).toBe("Your vow becomes D3.");
-    expect(describeCondition({ operator: "not", operands: [{ type: "resource", parameters: { pool: "glory-points", count: { min: 2 } } }] } as any)).toBe("you do not have 2+ glory points");
+    expect(describeCondition({ operator: "not", operands: [{ type: "resource", parameters: { pool: "glory-points", count: { min: 2 } } }] } as any)).toBe("you do not have 2 or more glory points");
   });
 });
 
@@ -189,9 +189,9 @@ describe("a unit's own pool as large as one of its characteristics (resource-gai
 
   it("says whose pool and whose characteristic, in the number the subject takes", () => {
     const one = { type: "resource-gain", target: "this-unit", modifier: { pool: "psychic-level", amount: { characteristic: "psyker-level" }, set: true } };
-    expect(describeAbility({ id: "sample", name: "Sample", effect: one } as any)).toBe("The unit's psychic level becomes its Psyker Level characteristic.");
+    expect(describeAbility({ id: "sample", name: "Sample", effect: one } as any)).toBe("This unit's psychic level becomes its Psyker Level characteristic.");
     const many = { ...one, target: { owner: "friendly", all_of: ["GLOOM WARDENS", "PSYKER"] } };
-    expect(describeAbility({ id: "sample", name: "Sample", effect: many } as any)).toBe("All friendly GLOOM WARDENS PSYKER units' psychic level becomes their Psyker Level characteristic.");
+    expect(describeAbility({ id: "sample", name: "Sample", effect: many } as any)).toBe("Friendly GLOOM WARDENS PSYKER units' psychic level becomes their Psyker Level characteristic.");
     const gain = { type: "resource-gain", target: "this-unit", modifier: { pool: "fury", amount: { characteristic: "W" } } };
     expect(describeAbility({ id: "sample", name: "Sample", effect: gain } as any)).toBe("You gain a number of Fury equal to its Wounds characteristic.");
   });

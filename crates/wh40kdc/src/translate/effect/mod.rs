@@ -136,47 +136,85 @@ pub(crate) fn inline(e: &Value, ctx: &Ctx) -> String {
 /// Without one it narrows the aura's own origin (this model, or this unit).
 fn aura_emitter(filter: &P, origin: &str, ctx: &Ctx) -> String {
     let Some(owner) = sv(filter, "owner") else {
-        return aura_role_filter(filter, origin, ctx);
+        return aura_role_filter(filter, origin, &[], ctx);
     };
     let side = if owner == "any" {
         String::new()
     } else {
         format!(" {owner}")
     };
-    let keywords = map_arr(filter, "all_of", jv)
-        .map(|keywords| {
-            keywords
-                .iter()
-                .map(|keyword| format!(" {keyword}"))
-                .collect::<String>()
-        })
-        .unwrap_or_default();
-    let mut rest = filter.clone();
-    rest.remove("owner");
-    rest.remove("all_of");
-    aura_role_filter(&rest, &format!("one or more{side}{keywords} models"), ctx)
+    let mut all_list = map_arr(filter, "all_of", jv).unwrap_or_default();
+    let none_list = map_arr(filter, "none_of", jv).unwrap_or_default();
+    let mut any_list = map_arr(filter, "any_of", jv).unwrap_or_default();
+    if any_list.iter().any(|k| all_list.contains(k)) {
+        any_list.clear();
+    } else if !none_list.is_empty() {
+        any_list.retain(|k| !none_list.contains(k));
+    }
+    if any_list.len() == 1 {
+        all_list.push(any_list.remove(0));
+    }
+    let keywords: String = all_list.iter().map(|k| format!(" {k}")).collect();
+    let mut remaining = filter.clone();
+    remaining.remove("owner");
+    remaining.remove("all_of");
+    remaining.remove("any_of");
+    remaining.remove("none_of");
+    if !any_list.is_empty() {
+        remaining.insert(
+            "any_of".into(),
+            Value::Array(any_list.into_iter().map(Value::String).collect()),
+        );
+    }
+    if !none_list.is_empty() {
+        remaining.insert(
+            "none_of".into(),
+            Value::Array(none_list.into_iter().map(Value::String).collect()),
+        );
+    }
+    aura_role_filter(
+        &remaining,
+        &format!("one or more{side}{keywords} models"),
+        &all_list,
+        ctx,
+    )
 }
 
-fn aura_role_filter(filter: &P, noun: &str, ctx: &Ctx) -> String {
-    let all = map_arr(filter, "all_of", jv)
-        .map(|keywords| format!(" with {}", keywords.join(" and ")))
-        .unwrap_or_default();
-    let any = map_arr(filter, "any_of", jv)
-        .map(|keywords| {
-            format!(
-                " with at least one of {}",
-                crate::translate::condition::or_list(&keywords)
-            )
-        })
-        .unwrap_or_default();
-    let none = map_arr(filter, "none_of", jv)
-        .map(|keywords| {
-            format!(
-                " without {}",
-                crate::translate::condition::or_list(&keywords)
-            )
-        })
-        .unwrap_or_default();
+fn aura_role_filter(filter: &P, noun: &str, already_all: &[String], ctx: &Ctx) -> String {
+    let mut all_list: Vec<String> = already_all.to_vec();
+    let mut extra_all = map_arr(filter, "all_of", jv).unwrap_or_default();
+    all_list.extend(extra_all.iter().cloned());
+    let none_list = map_arr(filter, "none_of", jv).unwrap_or_default();
+    let mut any_list = map_arr(filter, "any_of", jv).unwrap_or_default();
+    if any_list.iter().any(|k| all_list.contains(k)) {
+        any_list.clear();
+    } else if !none_list.is_empty() {
+        any_list.retain(|k| !none_list.contains(k));
+    }
+    if any_list.len() == 1 {
+        extra_all.push(any_list.remove(0));
+    }
+    let all = if extra_all.is_empty() {
+        String::new()
+    } else {
+        format!(" with {}", extra_all.join(" and "))
+    };
+    let any = if any_list.is_empty() {
+        String::new()
+    } else {
+        format!(
+            " with the {} keyword",
+            crate::translate::condition::or_list(&any_list)
+        )
+    };
+    let none = if none_list.is_empty() {
+        String::new()
+    } else {
+        format!(
+            " (excluding {} models)",
+            crate::translate::condition::or_list(&none_list)
+        )
+    };
     let not_all = map_arr(filter, "not_all_of", jv)
         .map(|keywords| format!(" without all of {}", keywords.join(" and ")))
         .unwrap_or_default();
@@ -237,7 +275,7 @@ pub(super) fn aura_reach(e: &P, m: &P, ctx: &Ctx) -> (String, String) {
         }
     );
     let recipient = if nn(m, "eligible").is_some() && nn(m, "recipient_filter").is_some() {
-        aura_role_filter(obj(m.get("recipient_filter")), &eligible_who, ctx)
+        aura_role_filter(obj(m.get("recipient_filter")), &eligible_who, &[], ctx)
     } else {
         eligible_who
     };
@@ -387,6 +425,9 @@ fn choice_prompt(e: &P) -> String {
     if sv(e, "chosen_by") != Some("opponent") {
         return own;
     }
+    if let Some(rest) = own.strip_prefix("choose ") {
+        return format!("your opponent chooses {rest}");
+    }
     match own.strip_prefix("select ") {
         Some(rest) => format!("your opponent selects {rest}"),
         None => format!("your opponent: {own}"),
@@ -397,24 +438,32 @@ fn own_choice_prompt(e: &P) -> String {
     if let Some(p) = sv(e, "choice_prompt").filter(|p| !p.trim().is_empty()) {
         return p.to_string();
     }
-    let label = match sv(e, "choice_label").filter(|l| !l.is_empty()) {
-        Some(l) => format!(" ({})", title_case(l)),
-        None => String::new(),
+    let raw_label = sv(e, "choice_label")
+        .filter(|l| !l.is_empty())
+        .map(title_case)
+        .unwrap_or_default();
+    let label = if !raw_label.is_empty() && raw_label.to_lowercase() != "one of the following" {
+        format!(" ({raw_label})")
+    } else {
+        String::new()
     };
     if let (Some(min), Some(max)) = (nn(e, "min_choices"), nn(e, "max_choices")) {
+        if min.as_f64() == Some(1.0) && max.as_f64() == Some(1.0) {
+            return format!("choose one of the following{label}");
+        }
         let quantity = if min.as_f64() == max.as_f64() {
-            format!("exactly {}", jv(max))
+            jv(max)
         } else if min.as_f64() == Some(0.0) {
             format!("up to {}", jv(max))
         } else {
-            format!("from {} through {}", jv(min), jv(max))
+            format!("{} to {}", jv(min), jv(max))
         };
-        return format!("select {quantity} distinct options{label}");
+        return format!("choose {quantity} of the following{label}");
     }
-    format!("select one of the following{label}")
+    format!("choose one of the following{label}")
 }
 
-/// What leads a part: its moment, usage limit, name, the choice to use it and its cost.
+/// What leads a part: its moment, usage limit, duration, name, the choice to use it and its cost.
 fn part_head(e: &P) -> String {
     let moment = ability::part_trigger_phrases(e);
     let level = match nn(e, "level") {
@@ -449,13 +498,46 @@ fn part_head(e: &P) -> String {
         Some(u) => usage_clause(u),
         None => String::new(),
     };
-    let (_, trail) = duration_clauses(e.get("duration"));
-    // A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
-    let trail = match trail.strip_suffix("control it") {
-        Some(head) => format!("{head}control that objective marker"),
-        None => trail.to_string(),
+    // Skip when the inner designate-target / persistent-designation already prints the same duration.
+    let inner_map = obj(e.get("effect"));
+    let own_desig_dur = matches!(ty(inner_map), "designate-target" | "persistent-designation")
+        && nn(inner_map, "duration") == nn(e, "duration");
+    let (_, raw_trail) = if own_desig_dur {
+        ("", "")
+    } else {
+        duration_clauses(e.get("duration"))
     };
-    join_nonempty(&[&label, &moment, &usage, &named, &cost, &trail], ", ")
+    // A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
+    let trail = match raw_trail.strip_suffix("control it") {
+        Some(head) => format!("{head}control that objective marker"),
+        None => raw_trail.to_string(),
+    };
+    join_nonempty(&[&label, &moment, &usage, &trail, &named, &cost], ", ")
+}
+
+/// Whether an ability-part's own trigger already names a destruction or allocation event.
+pub(super) fn part_trigger_ctx(e: &P, ctx: &Ctx) -> Ctx {
+    let ts = menu::normalize_triggers(e.get("trigger"));
+    let destroyed = ts.iter().any(|t| {
+        matches!(
+            t.get("event").and_then(Value::as_str),
+            Some("destroyed" | "model-destroyed")
+        )
+    });
+    let allocated = ts
+        .iter()
+        .any(|t| t.get("event").and_then(Value::as_str) == Some("damage-allocated"));
+    if !destroyed && !allocated {
+        return ctx.clone();
+    }
+    let mut out = ctx.clone();
+    if destroyed {
+        out.destroyed_trigger = true;
+    }
+    if allocated {
+        out.allocated_trigger = true;
+    }
+    out
 }
 
 /// A part with its own trigger: its effect's event refs read as that trigger's model, if it names one.
@@ -475,14 +557,72 @@ pub(super) fn part_with_model_refs(e: &P) -> P {
 
 fn part_inline(e: &P, ctx: &Ctx) -> String {
     let e = &part_with_model_refs(e);
+    let child_ctx = part_trigger_ctx(e, ctx);
     let head = part_head(e);
-    let body = inline(child(e, "effect"), ctx);
+    let body = inline(child(e, "effect"), &child_ctx);
     // An optional part whose effect already reads "you can ..." needs no "you can:" before it.
     if head.is_empty() || (head == "you can" && body.starts_with("you can ")) {
         body
+    } else if head.ends_with("you can use this ability") {
+        format!("{head}: {body}")
+    } else if !truthy_key(e, "name") && !head.ends_with("you can") {
+        format!("{head}, {body}")
     } else {
         format!("{head}: {body}")
     }
+}
+
+/// Flatten nested `conditional(c1, conditional(c2, inner))` when neither is a `recipient_gate`.
+pub(super) fn flatten_conditional(e: &P, ctx: &Ctx) -> (Value, Value) {
+    let mut conds: Vec<Value> = Vec::new();
+    let mut cur_val = Value::Object(e.clone());
+    loop {
+        let cur = obj(Some(&cur_val));
+        if ty(cur) != "conditional"
+            || nn(cur, "condition").is_none()
+            || nn(cur, "effect").is_none()
+            || recipient_gate::recipient_gate(cur, ctx).is_some()
+        {
+            break;
+        }
+        conds.push(nn(cur, "condition").unwrap().clone());
+        cur_val = nn(cur, "effect").unwrap().clone();
+    }
+    if conds.is_empty() {
+        return (child(e, "condition").clone(), child(e, "effect").clone());
+    }
+    let condition = if conds.len() == 1 {
+        conds.remove(0)
+    } else {
+        serde_json::json!({ "operator": "and", "operands": conds })
+    };
+    (condition, cur_val)
+}
+
+/// Extract bare `ranged` / `melee` attack_type from a condition so nested leaves don't repeat it.
+pub(super) fn attack_type_from_condition(c: &Value) -> Option<&'static str> {
+    let c = c.as_object()?;
+    if sv(c, "operator") == Some("and") {
+        if let Some(ops) = arr(c, "operands") {
+            for op in ops {
+                if let Some(found) = attack_type_from_condition(op) {
+                    return Some(found);
+                }
+            }
+        }
+        return None;
+    }
+    if sv(c, "type") == Some("attack-is") {
+        let params = obj(c.get("parameters"));
+        if nn(params, "weapons").is_none() {
+            return match sv(params, "attack_type") {
+                Some("ranged") => Some("ranged"),
+                Some("melee") => Some("melee"),
+                _ => None,
+            };
+        }
+    }
+    None
 }
 
 fn inline_base(e: &P, ctx: &Ctx) -> String {
@@ -505,13 +645,18 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             if let Some(g) = recipient_gate::recipient_gate(e, ctx) {
                 return format!("{}, {}", g.lead, inline(&g.inner, &g.ctx));
             }
+            let (cond, eff) = flatten_conditional(e, ctx);
+            let child_ctx = match attack_type_from_condition(&cond) {
+                Some(t) => Ctx {
+                    suppress_weapon_type: Some(t.to_string()),
+                    ..ctx.clone()
+                },
+                None => ctx.clone(),
+            };
             format!(
                 "{}, {}",
-                condition_lead_in_for(
-                    child(e, "condition"),
-                    is_defensive_effect(child(e, "effect"))
-                ),
-                inline(child(e, "effect"), ctx)
+                condition_lead_in_for(&cond, is_defensive_effect(&eff)),
+                inline(&eff, &child_ctx)
             )
         }
         "rules-bundle" | "sequence" => {
@@ -593,7 +738,7 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
         "designate-target" => designate_target_inline(e, ctx),
         "stance-select" => {
             let consumable = if sv(e, "mode") == Some("consumable") {
-                " (each may be chosen once per battle)"
+                " (each can be chosen once per battle)"
             } else {
                 ""
             };
@@ -651,7 +796,7 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
             }
             let subject = match sv(obj(m.get("option")), "option_id") {
                 Some(option) if sv(m, "allocation") == Some("fixed-option") => title_case(option),
-                _ => format!("one option of {}", title_case(&jstr(m.get("ability_id")))),
+                _ => format!("one option of {}", ability_label(m.get("ability_id"))),
             };
             format!("you can select {subject} {times} per battle")
         }

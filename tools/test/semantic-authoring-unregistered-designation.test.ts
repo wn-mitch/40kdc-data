@@ -35,17 +35,17 @@ function compiled(list: CompileLeaf[], text: string): string {
 // Designation ids that the registry holds but the describer printed as "marked as <id>" before wave 10.
 describe("describer: designation terms for the wave-10 ids", () => {
   it("prints a designation check as its printed term, not as an internal tag", () => {
-    expect(describeCondition({ type: "matches", parameters: { filter: { designated: "shaken" } } } as never)).toBe("the unit is shaken");
+    expect(describeCondition({ type: "matches", parameters: { filter: { designated: "shaken" } } } as never)).toBe("this unit is shaken");
     expect(describeCondition({ type: "matches", parameters: { subject: "defender", filter: { designated: "overlapping-fire" } } } as never))
       .toContain("is caught in overlapping fire");
   });
 
   it("prints a designation as its printed term on the effect", () => {
     const describe = (tag: string) => describeAbility({ effect: { type: "designate", target: "this-unit", modifier: { tag } }, scope: { duration: "permanent" } } as never);
-    expect(describe("shaken")).toBe("The unit is shaken.");
-    expect(describe("nulled")).toBe("The unit is nulled.");
-    expect(describe("mutated")).toBe("The unit is mutated.");
-    expect(describe("overlapping-fire")).toBe("The unit is caught in overlapping fire.");
+    expect(describe("shaken")).toBe("This unit is shaken.");
+    expect(describe("nulled")).toBe("This unit is nulled.");
+    expect(describe("mutated")).toBe("This unit is mutated.");
+    expect(describe("overlapping-fire")).toBe("This unit is caught in overlapping fire.");
   });
 });
 

@@ -1,6 +1,7 @@
 package wh40kdc
 
 import (
+	"reflect"
 	"regexp"
 	"strings"
 )
@@ -190,7 +191,7 @@ var targetKinds = map[string]string{
 	"stratagem": " with Stratagems", "ability": " with abilities",
 }
 
-func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
+func targetingLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	who := "units"
 	if m["by"] != nil {
 		who = effectSubject(m["by"], ctx)
@@ -274,10 +275,11 @@ func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	rng := ""
 	if m["range"] != nil {
+		rangeText := rangePhrase(m["range"])
 		if m["may"] == "cannot-target" {
-			rng = " unless " + attacking + " is within " + rangePhrase(m["range"])
-		} else {
-			rng = " within " + rangePhrase(m["range"])
+			rng = " unless " + attacking + " is within " + rangeText
+		} else if !strings.Contains(whom, "within "+rangeText) {
+			rng = " within " + rangeText
 		}
 	}
 	unless := ""
@@ -291,6 +293,26 @@ func targetingLeaf(m map[string]any, subj string, ctx effCtx) string {
 	except := ""
 	if m["except"] == "core-stratagems" {
 		except = " (Core Stratagems can still target it)"
+	}
+	// When no `by` is specified and `m.target` is the same entity as `e.target`, render passively
+	// ("this unit cannot be targeted with ranged weapons") instead of "this unit cannot target this unit".
+	if m["by"] == nil && m["target"] != nil && m["target"] != "every-eligible" && reflect.DeepEqual(m["target"], e["target"]) {
+		passive := "can be targeted"
+		switch m["may"] {
+		case "cannot-target":
+			passive = "cannot be targeted"
+		case "must-target":
+			passive = "must be targeted"
+		}
+		passiveRange := ""
+		if m["range"] != nil {
+			if m["may"] == "cannot-target" {
+				passiveRange = " unless the attacking unit is within " + rangePhrase(m["range"])
+			} else {
+				passiveRange = " within " + rangePhrase(m["range"])
+			}
+		}
+		return whom + " " + passive + kind + passiveRange + unless + except
 	}
 	// "cannot target enemy units … if the target unit was engaged with this unit at the start of the turn".
 	if cond, ok := asMap(m["target_condition"]); ok && cond != nil {

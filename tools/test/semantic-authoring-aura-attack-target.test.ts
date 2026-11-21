@@ -48,7 +48,7 @@ describe("an attack that targets the enemy unit an aura reaches", () => {
       condition: { type: "same-unit", parameters: { subject: "defender", as: "recipient" } },
       effect: { type: "roll-modifier", target: { owner: "friendly", all_of: ["SAMPLE"] }, modifier: { roll: "hit", operation: "add", value: 1 } },
     });
-    expect(describeAbility({ id: "sample", name: "Sample", ...mechanics })).toContain("if the attack targets that unit, all friendly SAMPLE units get +1 to Hit rolls");
+    expect(describeAbility({ id: "sample", name: "Sample", ...mechanics })).toContain("if the attack targets that unit, add 1 to friendly SAMPLE units' Hit rolls");
   });
 
   it("refuses a friendly aura, whose unit is not the enemy an attack targets", () => {

@@ -237,15 +237,15 @@
       <profiles>
         <profile name="Kroot Linebreakers" id="30a6-aab4-eb70-6cba" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit:
-    -&gt; Roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers D3 mortal wounds.
-    -&gt; If 1+ enemy models destroyed, that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move:
+  - Select one enemy unit that is within Engagement Range of this unit:
+    - Roll one D6 for each friendly model in this unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers D3 mortal wounds.
+    - If one or more enemy models destroyed, that unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="9301-c54a-06a2-5fc8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -382,29 +382,28 @@
         </profile>
         <profile name="Aggressive Deployment" id="14b8-ad11-885f-37e8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Aggressive Deployment Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll the Wound roll for attacks made by all friendly models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Aggressive Deployment Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll Wound rolls for attacks made by friendly models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Air Caste Colossus" id="1eaa-697b-4e02-cb01" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, Stratagems that target the unit cost three times their stated CP cost.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, Stratagems that target this unit cost three times their stated CP cost.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="40c5-c8e6-8db4-d205" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Hover" id="5826-6c3a-c60c-d974" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit uses ability, the unit's Takes to the Skies ability has no limit on its range.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit uses ability, this unit's Takes to the Skies ability has no limit on its range.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="fef8-8291-4e67-ed28" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -496,19 +495,19 @@
       <profiles>
         <profile name="Deep Strike" id="c4d8-7aaa-341e-8600" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fireknife" id="ac7d-786e-fbe5-79bf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks:
-  -&gt; While the target unit is below its starting strength, you can re-roll a Hit roll of 1.
-  -&gt; Unless the target unit is below its starting strength, you can re-roll the Hit roll.</characteristic>
+  - While the target unit is below its Starting Strength, you can re-roll Hit rolls of 1.
+  - Unless the target unit is below its Starting Strength, you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Weapon Support Systems" id="432a-4ea6-4acd-c110" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While making ranged attacks, the unit ignores any modifiers to its Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: While making ranged attacks, this unit ignores any modifiers to its Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1024,19 +1023,17 @@
       <profiles>
         <profile name="Deadly Demise" id="9dd6-d12b-aa70-c23b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Drone Harassment Tactics" id="5ceb-3492-0d22-d674" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase:
-  -&gt; Select one enemy unit within 12" of the unit: that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, select one enemy unit within 12" of this unit. That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="a950-73a4-99c4-024d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1236,19 +1233,19 @@
       <profiles>
         <profile name="Forward Observers" id="449b-6887-6463-5aa7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit becomes observer, while making ranged attacks, if the attacking unit is Guided, while the target is Spotted, until the end of the phase:
-  -&gt; You can re-roll a Hit roll of 1 for attacks made by all friendly units.
-  -&gt; You can re-roll a Wound roll of 1 for attacks made by all friendly units.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit becomes observer, while making ranged attacks, if the attacking unit is Guided, while the target is Spotted, until the end of the phase:
+  - You can re-roll Hit rolls of 1 for attacks made by friendly units.
+  - You can re-roll Wound rolls of 1 for attacks made by friendly units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="55a0-9a34-9f35-53fe" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="281a-d1dc-05a5-b902" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1713,19 +1710,17 @@
         </profile>
         <profile name="Deadly Demise" id="3870-5a87-257f-2f66" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Pulse Bombs" id="e4e5-e6d5-d106-f6df" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase:
-  -&gt; Select one enemy unit without the Lone Operative ability visible to this model if the selected unit is within 24" of the unit: roll 6 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase, select one enemy unit without the Lone Operative ability visible to this model that is within 24" of this unit. Roll 6 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="621f-0707-0452-96bd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1836,17 +1831,17 @@
         <profile name="Bounty Hunters" id="20a3-4ffd-646f-b60c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle:
-  -&gt; Select one enemy unit (your Bounty Hunters Target). Each time a friendly unit makes an attack against it, the unit's weapons gain [LETHAL HITS] and [PRECISION].</characteristic>
+  - Select one enemy unit (your Bounty Hunters Target). Each time a friendly unit makes an attack against it, this unit's weapons gain [LETHAL HITS] and [PRECISION].</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="15b0-9856-6bcb-f122" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="d9a5-9292-4d94-f355" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2211,26 +2206,25 @@
         </profile>
         <profile name="Coordinated Strike" id="498a-074f-9070-f1a4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this model is Guided, while the target is Spotted, you can re-roll a Hit roll of 1 for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this model is Guided, while the target is Spotted, you can re-roll Hit rolls of 1 for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="b23f-189e-83a5-4588" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Super-heavy Walker" id="6f07-5d4c-00c4-e0c2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the turn:
-  -&gt; This model can move over models excluding titanic and terrain as though they were not there; this model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  If this model moved:
-    -&gt; Roll one D6: on exactly 1, the unit is Battle-shocked.</characteristic>
+  - This model can move over models excluding titanic and terrain as though they were not there; this model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - If this model moved:
+    - Roll one D6: on exactly 1, this unit is Battle-shocked.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="0db9-da75-7b7e-41a4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="62f1-fc73-be3d-7816" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2410,19 +2404,19 @@
         <profile name="Recon Drone" id="258b-2110-fa24-c5b8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model gains 1 Drone Burst Cannon weapon.
-The unit gains the Infiltrators ability.</characteristic>
+This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Target Uploaded" id="3643-9857-e72f-107d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is Spotted:
-  -&gt; Improve the unit's Ballistic Skill characteristic by 1.
-  -&gt; The unit's weapons gain [IGNORES COVER].</characteristic>
+  - Improve this unit's Ballistic Skill characteristic by 1.
+  - This unit's weapons gain [IGNORES COVER].</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="02bc-4f16-5a18-1e10" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2960,15 +2954,15 @@ The unit gains the Infiltrators ability.</characteristic>
       <profiles>
         <profile name="DS8 Support Turret" id="9c94-4d96-7380-f525" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Movement phase, if the unit Remained Stationary this turn, until the start of your next Command phase, this model gains 1 Support Turret weapon.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Movement phase, if this unit Remained Stationary this turn, until the start of your next Command phase, this model gains 1 Support Turret weapon.</characteristic>
           </characteristics>
         </profile>
         <profile name="Suppression Volley" id="0680-f286-3101-c50f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:
-  -&gt; Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; While the unit is on the battlefield, that unit is marked as suppressed.
-    -&gt; While the unit is tagged suppressed, that unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:
+  - Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit during that shooting sequence:
+    - While this unit is on the battlefield, that unit is Suppressed.
+    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3272,27 +3266,27 @@ The unit gains the Infiltrators ability.</characteristic>
         </profile>
         <profile name="Neocapacitor Shields" id="82ef-f884-143c-1ad8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Charge phase, you may use this ability, until the end of the turn:
-  -&gt; Select one enemy unit (excluding MONSTER or VEHICLE units) visible to this model if the selected unit is within 12" of the unit:
-    -&gt; That unit must take a Battle-shock test.
-    -&gt; This unit gets -1 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Charge phase, you can use this ability, until the end of the turn:
+  - Select one enemy unit (excluding MONSTER or VEHICLE units) visible to this model that is within 12" of this unit:
+    - That unit must take a Battle-shock test.
+    - Subtract 1 from this unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Retro-thrusters" id="30e0-fc65-9dab-272e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, if the unit is eligible to fight:
-  -&gt; The unit can make a Normal move of up to 6".
-  -&gt; The unit can Fall Back.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, if this unit is eligible to fight:
+  - This unit can make a Normal move of up to 6".
+  - This unit can Fall Back.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="a461-8917-591c-2472" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="0ff9-4fdd-a687-c21a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3482,17 +3476,17 @@ The unit gains the Infiltrators ability.</characteristic>
       <profiles>
         <profile name="Battlesuit Support Systems" id="1c9f-8edc-34f6-5994" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is eligible to shoot in a turn in which it Fell Back.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is eligible to shoot in a turn in which it Fell Back.</characteristic>
           </characteristics>
         </profile>
         <profile name="Starscythe" id="d5e8-4386-21f1-6a77" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while the target does not have the MONSTER or VEHICLE keyword, improve the unit's Armour Penetration characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while the target does not have the MONSTER or VEHICLE keyword, improve this unit's Armour Penetration characteristic by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="6bb1-1e46-ebe2-db3a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4010,19 +4004,18 @@ The unit gains the Infiltrators ability.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="9eef-73fc-f0f6-99d4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Strafing Run" id="8a9f-834e-f269-7816" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence and the selected unit does not have the FLY keyword: that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence and without the FLY keyword. That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="52fe-31d3-1d18-3573" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4254,12 +4247,12 @@ The unit gains the Infiltrators ability.</characteristic>
       <profiles>
         <profile name="Breach and Clear" id="375d-e4fb-7756-0e09" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while the target is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while the target is within range of an objective marker, you can re-roll Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="DS8 Support Turret" id="fb50-e7ee-2a21-d658" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Movement phase, if the unit Remained Stationary this turn, until the start of your next Command phase, this model gains 1 Support Turret weapon.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Movement phase, if this unit Remained Stationary this turn, until the start of your next Command phase, this model gains 1 Support Turret weapon.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4543,30 +4536,29 @@ The unit gains the Infiltrators ability.</characteristic>
         </profile>
         <profile name="Heavy Walker" id="c00e-9d62-d549-5979" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal, Advance or Fall Back move:
-  -&gt; This model can move over non-Titanic models as though they were not there, during its Normal, Advance and Fall Back moves.
-  -&gt; This model can move over terrain features 4" or lower as though they were not there, during its Normal, Advance and Fall Back moves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal, Advance or Fall Back move:
+  - This model can move over non-Titanic models as though they were not there, during its Normal, Advance and Fall Back moves.
+  - This model can move over terrain features 4" or lower as though they were not there, during its Normal, Advance and Fall Back moves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support System" id="d3a9-e498-fe74-926b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While making ranged attacks, the unit ignores any modifiers to its Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: While making ranged attacks, this unit ignores any modifiers to its Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Titan-killer" id="2944-4640-ad11-b81e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against TITANIC or TOWERING targets, you can re-roll the Hit roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against TITANIC or TOWERING targets, you can re-roll Hit rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="d79d-f1e1-a0c5-5fed" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="fd2a-67a5-2407-1ae4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="a6ca-41eb-2136-0093" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4756,12 +4748,12 @@ The unit gains the Infiltrators ability.</characteristic>
         </profile>
         <profile name="Firing Deck" id="1cbd-d6b4-2432-c37d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fortification" id="3cb4-4e0e-e08a-ff08" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, the attacking unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, subtract 1 from the attacking unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tidewall Cover" id="9af3-858c-00a2-5ec8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4771,8 +4763,7 @@ The unit gains the Infiltrators ability.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="8a6c-e0bc-ea2b-457b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4834,22 +4825,22 @@ The unit gains the Infiltrators ability.</characteristic>
       <profiles>
         <profile name="Hunting Hounds" id="6691-0000-0458-58c9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is within 12" of a friendly CHARACTER KROOT unit, set the unit's Objective Control characteristic to 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is within 12" of a friendly CHARACTER KROOT unit, set this unit's Objective Control characteristic to 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Loping Pounce" id="2112-fe44-6c2a-895f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, while the unit is within 6" of a friendly INFANTRY KROOT unit, until the end of the turn, the unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, while this unit is within 6" of a friendly INFANTRY KROOT unit, until the end of the turn, this unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="4b6d-c865-6631-635a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="4601-bede-b4e6-2316" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4975,18 +4966,17 @@ The unit gains the Infiltrators ability.</characteristic>
         </profile>
         <profile name="Coordinated Leadership" id="91fb-2db2-27b2-ef0a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase:
-  -&gt; Roll one D6: on a 4+, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, roll one D6: on a 4+, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Failure Is Not an Option" id="1cc9-2bd3-18b3-c5b5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit has the Feel No Pain 5+ ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit has Feel No Pain 5+.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="d570-194b-9475-385e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5169,25 +5159,24 @@ The unit gains the Infiltrators ability.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="92ef-0f7c-3acb-f0ef" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Nova Charge" id="ac2a-471c-9aa0-0f06" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, once per battle per unit, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one ranged weapon equipped by this model; the effects below refer to it as the selected weapon.
-  -&gt; The selected ranged weapon equipped by this model gains [DEVASTATING WOUNDS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, once per battle per unit, during your Shooting phase, until the end of the phase:
+  - Select one ranged weapon equipped by this model; the effects below refer to it as the selected weapon.
+  - The selected ranged weapon equipped by this model gains [DEVASTATING WOUNDS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Weapon Support System" id="068d-bfce-8bfd-f358" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While making ranged attacks, the unit ignores any modifiers to its Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: While making ranged attacks, this unit ignores any modifiers to its Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="e8b7-9bc1-982d-dda5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5389,22 +5378,22 @@ If your army includes an ETHEREAL unit, your army cannot include friendly COMMAN
         </profile>
         <profile name="Leader" id="2b27-e27e-dad3-549a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Puretide's Teachings" id="7bcd-6940-1d7d-9621" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, while the unit has the My Will Be Done ability, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model's unit is targeted with a Stratagem, you can use this ability, once per battle round per army, while this unit has the My Will Be Done ability, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Way of the Short Blade" id="73dd-c4e8-f86e-3012" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while the target is within 9" of the attacking unit, the unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit and the target is within 9" of the attacking unit, add 1 to this unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="5046-e524-7de6-f41d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5493,14 +5482,14 @@ If your army includes an ETHEREAL unit, your army cannot include friendly COMMAN
       <profiles>
         <profile name="Kroot Packmates" id="c58e-b3eb-f5f4-5e22" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per turn, during the Shooting phase, in the opponent's turn, if the unit has selected a friendly KROOT INFANTRY unit within 6" other than this unit as a target:
-  -&gt; The unit is eligible to shoot as if it were your Shooting phase.
-  -&gt; The unit must target the triggering unit with ranged attacks.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per turn, during your opponent's Shooting phase, if this unit has selected a friendly KROOT INFANTRY unit within 6" other than this unit as a target:
+  - This unit is eligible to shoot as if it were your Shooting phase.
+  - This unit must target the triggering unit with ranged attacks.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="9737-f297-cbf8-10dc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5669,7 +5658,7 @@ If your army includes an ETHEREAL unit, your army cannot include friendly COMMAN
         </profile>
         <profile name="Hero of the Empire (Aura)" id="fa0b-2b64-e405-b7ab" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while a friendly T'AU EMPIRE unit is within 6" of this model, you can re-roll a Hit roll of 1 for attacks made by that unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while a friendly T'AU EMPIRE unit is within 6" of this model, you can re-roll Hit rolls of 1 for attacks made by that unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="4982-a0bf-9887-2654" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5679,17 +5668,17 @@ If your army includes an ETHEREAL unit, your army cannot include friendly COMMAN
         </profile>
         <profile name="Supreme Commander" id="1f39-1325-21c6-8e4f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, the unit must be your Warlord.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, this unit must be your Warlord.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="c083-1866-fa93-0224" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="3a5d-0355-d10b-7f73" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5801,23 +5790,22 @@ If your army includes an ETHEREAL unit, your army cannot include friendly COMMAN
         </profile>
         <profile name="Stealth Drones" id="610c-a331-a9f8-20b0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When damage is allocated, you may use this ability, twice per battle per unit, each time an attack is allocated to this model, change the Damage of that attack to 0.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When damage is allocated, you can use this ability, twice per battle per unit, change the Damage of that attack to 0.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="b755-1a87-4a8e-7684" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="a733-025f-1922-db23" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="6de0-4b6e-31a2-f589" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="e194-1304-8695-b7de" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5827,7 +5815,7 @@ If your army includes an ETHEREAL unit, your army cannot include friendly COMMAN
         </profile>
         <profile name="Damaged" id="3085-e360-56c9-bfdf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6035,19 +6023,18 @@ If your army includes an ETHEREAL unit, your army cannot include friendly COMMAN
         <profile name="Titan Hunter" id="7c25-ed15-6995-a350" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is within half the attacking weapon's range:
-  -&gt; Ranged Twin heavy rail cannon weapons equipped by this model gain [ANTI-TITANIC 3+].
-  -&gt; Ranged Seeker missile weapons equipped by this model gain [ANTI-TITANIC 3+].</characteristic>
+  - Ranged Twin heavy rail cannon weapons equipped by this model gain [ANTI-TITANIC 3+].
+  - Ranged Seeker missile weapons equipped by this model gain [ANTI-TITANIC 3+].</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="0475-bc7a-d69f-06ed" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6630-ade4-e71c-9b6e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6201,26 +6188,25 @@ If your army includes an ETHEREAL unit, your army cannot include friendly COMMAN
         </profile>
         <profile name="Targeting Array" id="fc73-523d-e5f9-7f72" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is selected to shoot, you may use this ability, until the end of the phase:
-  Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is selected to shoot, you can use this ability, until the end of the phase:
+  Choose one of the following:
     - You can re-roll one Hit roll.
     - You can re-roll one Wound roll.</characteristic>
           </characteristics>
         </profile>
         <profile name="Velocity Tracker" id="c9c1-abc9-25e7-f864" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against FLY targets, you can re-roll the Hit roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against FLY targets, you can re-roll Hit rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="c806-32d3-5f3d-893a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="01f6-ca63-761e-ebd0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6346,12 +6332,12 @@ If your army includes an ETHEREAL unit, your army cannot include friendly COMMAN
       <profiles>
         <profile name="Airborne Agility" id="2b8c-415b-c277-3a01" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you may use this ability, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you can use this ability, while this unit is unengaged, this unit can be placed into Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="4319-28bf-cb43-b10f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6675,18 +6661,18 @@ If your army includes an ETHEREAL unit, your army cannot include friendly COMMAN
         <profile name="Coldstar Commander" id="00e3-f91e-02b7-986f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit:
-  -&gt; Set the unit's Move characteristic to 12.
-  -&gt; Ranged weapons equipped by models in this unit gain [ASSAULT].</characteristic>
+  - Set this unit's Move characteristic to 12".
+  - Ranged weapons equipped by models in this unit gain [ASSAULT].</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="59a8-e4dd-22b2-167e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="a698-694a-cd8d-07bf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7451,38 +7437,38 @@ If your army includes an ETHEREAL unit, your army cannot include friendly COMMAN
         </profile>
         <profile name="Kroot Ambush" id="3e19-bf11-9421-9656" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Select one of the following:
-  - The unit can be removed from the battlefield and set up again wholly within your deployment zone.
-  - The unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Choose one of the following:
+  - This unit can be removed from the battlefield and set up again wholly within your deployment zone.
+  - This unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.
 Select up to one friendly KROOT unit other than this unit:
-  Select one of the following:
+  Choose one of the following:
     - That unit can be removed from the battlefield and set up again wholly within your deployment zone.
     - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="4a3f-8a1b-0af9-f035" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Trail Finding" id="ff03-bf68-2de5-b43f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the unit can make a Normal move of up to D6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during your opponent's Movement phase, while the triggering unit is within 8" of this unit and this unit is unengaged, this unit can make a Normal move of up to D6".</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="d662-3150-09bd-0924" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="119f-2532-60a6-539c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="6400-eb28-bb47-4216" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7563,7 +7549,7 @@ Select up to one friendly KROOT unit other than this unit:
       <profiles>
         <profile name="Firing Deck" id="25be-1934-553a-49da" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tidewall Defence Platform" id="9ee0-7031-6ab3-f2b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7573,13 +7559,12 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Deadly Demise" id="b2f2-09a7-3770-1ed1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fortification" id="65c6-baa7-09aa-733f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, the attacking unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, subtract 1 from the attacking unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tidewall Cover" id="7b21-de0d-705b-f143" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7745,7 +7730,7 @@ Select up to one friendly KROOT unit other than this unit:
       <profiles>
         <profile name="Advanced Armour" id="d6e4-72f4-788d-df4b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain 4+ ability against mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain 4+ against mortal wounds.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8560,17 +8545,17 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Enforcer Commander" id="28dd-48c3-5be4-37ee" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, against ranged attacks, worsen the attacking unit's Armour Penetration characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, against ranged attacks, worsen the Armour Penetration characteristic of the attacking unit's attacks by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="01e5-985c-c4e6-d15a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="0367-ca88-9c7a-cd83" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9324,7 +9309,7 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Leader" id="6c14-5a5b-9283-3933" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Volley Fire" id="aac4-e877-edb2-9a30" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -9482,18 +9467,17 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Ground Strike Fighter" id="d586-6406-003f-6ae7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against a unit that is not a FLY, this model gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against a unit that is not a FLY, add 1 to this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="bd0e-4d35-8d41-0a3b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="08e4-07bc-34e4-3389" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9615,13 +9599,12 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Rapid Deployment" id="6016-b1ae-989b-3730" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Friendly units embarked within the unit are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Friendly units embarked within this unit are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="9445-baf3-5f71-ac88" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9769,22 +9752,22 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Leader" id="41e6-366c-0cbd-20d1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Structural Analyser" id="a67a-cfbb-d1f6-2dc2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while making ranged attacks, the unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while making ranged attacks, add 1 to this unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="70f8-d12e-04d8-b97a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="e343-e438-7840-e848" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9873,24 +9856,23 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Armour Hunter" id="4198-5b8f-79fc-8f49" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against MONSTER or VEHICLE targets, this model gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against MONSTER or VEHICLE targets, add 1 to this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="711d-e7c7-8ee1-3ed3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6559-d469-7d37-035a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Targeting Array" id="6cbe-000b-bb82-e2a8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is selected to shoot, you may use this ability, until the end of the phase:
-  Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is selected to shoot, you can use this ability, until the end of the phase:
+  Choose one of the following:
     - You can re-roll one Hit roll.
     - You can re-roll one Wound roll.</characteristic>
           </characteristics>
@@ -10095,18 +10077,17 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Deadly Demise" id="fb99-6ff3-afde-013a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="4a50-1913-0fa9-918f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fortification" id="3abb-0f90-c023-88d0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, the attacking unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, subtract 1 from the attacking unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tidewall Cover" id="7bf7-9c1c-f67e-1047" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -10168,14 +10149,14 @@ Select up to one friendly KROOT unit other than this unit:
       <profiles>
         <profile name="Sunforge" id="283c-9901-994e-66a7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While making ranged attacks against MONSTER or VEHICLE targets:
-  -&gt; You can re-roll the Wound roll.
-  -&gt; You can re-roll the Damage roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against MONSTER or VEHICLE targets, you can use this ability:
+  - You can re-roll Wound rolls.
+  - You can re-roll Damage rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="664f-756d-f411-dae3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10566,17 +10547,17 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Precise Targeting" id="271b-63bf-71fe-c288" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is Spotted, you can re-roll the Hit roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is Spotted, you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="4709-a3e1-c0db-0cea" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="c1ed-aa34-11ad-f850" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="9515-3657-ead0-0ab9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -10713,22 +10694,22 @@ Select up to one friendly KROOT unit other than this unit:
       <profiles>
         <profile name="Bodyguard" id="378a-5ea5-91b1-71eb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Declare Battle Formations step, the unit can join one friendly unit, becoming part of that Bodyguard unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Declare Battle Formations step, this unit can join one friendly unit, becoming part of that Bodyguard unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fieldcraft" id="24a0-f6f9-ff6d-f2b1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="a299-9d73-c7e4-b518" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="a685-3cda-1a81-61b8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10984,33 +10965,32 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Leader" id="8963-c22f-77dc-7b85" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Root of Honour" id="0857-ee84-1f20-b92a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per unit:
-  -&gt; Select one friendly KROOT unit if the selected unit is Battle-shocked and the selected unit is within 12" of this model: that unit is no longer Battle-shocked.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per unit, select one friendly KROOT unit that is Battle-shocked and within 12" of this model. That unit is no longer Battle-shocked.</characteristic>
           </characteristics>
         </profile>
         <profile name="War Leader" id="602a-90ec-c03b-5797" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, while the unit has the War Leader ability, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model's unit is targeted with a Stratagem, you can use this ability, once per battle round per army, while this unit has the War Leader ability, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="0b2f-d6d4-75a4-1a35" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="4d23-fd0b-b330-8215" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="bc87-8b3e-9865-2a71" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11132,19 +11112,19 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Advanced Scouting" id="85df-ba19-f990-e97b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, until the end of the turn, you can re-roll a failed Hit roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, until the end of the turn, you can re-roll failed Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fire and Fade" id="cc6e-7d20-dd0f-06f3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:
-  -&gt; The unit can make a Normal move of up to 6".
-  -&gt; This model cannot declare a charge.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:
+  - This unit can make a Normal move of up to 6".
+  - This model cannot declare a charge.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="ae33-0136-8d8e-75ab" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="8188-8907-0fdd-00a5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -11154,7 +11134,7 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Scouts" id="e8be-c5b7-8d61-9418" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11280,14 +11260,14 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Leader" id="e18b-9687-813f-ef7e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Rites of Feasting" id="cf36-d28b-7093-2a91" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, for the rest of the battle:
-  -&gt; Unless the unit has destroyed 1+ enemy units in the Fight phase this battle, the unit has the Feel No Pain 6+ ability.
-  -&gt; If the unit has destroyed 1+ enemy units in the Fight phase this battle, the unit has the Feel No Pain 5+ ability.</characteristic>
+  - Unless this unit has destroyed one or more enemy units in the Fight phase this battle, this unit has Feel No Pain 6+.
+  - If this unit has destroyed one or more enemy units in the Fight phase this battle, this unit has Feel No Pain 5+.</characteristic>
           </characteristics>
         </profile>
         <profile name="Ritual Butchery" id="50b7-2208-d4ad-f79d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -11297,17 +11277,17 @@ Select up to one friendly KROOT unit other than this unit:
         </profile>
         <profile name="Stealth" id="7e0a-0cad-d710-e82a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="1989-f9d9-4978-a88a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="bf63-dd8f-f7f3-592f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11594,8 +11574,8 @@ Select up to one friendly KROOT unit other than this unit:
       <profiles>
         <profile name="Marker Drone" id="304d-ca52-333e-bcd2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the MARKERLIGHT keyword.
-The unit is eligible to act as an Observer even if it Advanced this turn.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the MARKERLIGHT keyword.
+This unit is eligible to act as an Observer even if it Advanced this turn.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11763,7 +11743,7 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
       <profiles>
         <profile name="Homing Beacon" id="9d3d-2e7a-4070-1645" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Stratagems that target this model cost 0CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Stratagems that target this model cost 0 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -12151,7 +12131,7 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
       <profiles>
         <profile name="Grav-inhibitor Drone" id="baa6-255a-5d24-f40a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle, the target gets -2 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle, subtract 2 from the target's Charge rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -12163,7 +12143,7 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
       <profiles>
         <profile name="Pulse Accelerator Drone" id="9a1d-011c-6e1f-81a8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 6 to the Range characteristic of ranged pulse carbine weapons equipped by models in this unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 6" to the Range characteristic of ranged pulse carbine weapons equipped by models in this unit.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -12328,7 +12308,7 @@ The unit is eligible to act as an Observer even if it Advanced this turn.</chara
       <profiles>
         <profile name="Guardian Drone" id="4220-3f29-aa90-bf12" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against ranged attacks, the attacking unit gets -1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against ranged attacks, subtract 1 from the attacking unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -12846,7 +12826,7 @@ This model has a Transport capacity of 12 TACTICAL DRONES models.</characteristi
         <profile name="Hover Drone" id="c580-c9e2-9476-41c9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model gains the FLY keyword.
-Set this model's Move characteristic to 10.</characteristic>
+Set this model's Move characteristic to 10".</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -13108,7 +13088,7 @@ Set this model's Move characteristic to 10.</characteristic>
       <profiles>
         <profile name="Advanced Guardian Drone" id="b339-1ccd-e6d8-982b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against ranged attacks, the attacking unit gets -1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against ranged attacks, subtract 1 from the attacking unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -13138,8 +13118,7 @@ Set this model's Move characteristic to 10.</characteristic>
       <profiles>
         <profile name="Command-link Drone (Aura)" id="350f-9f66-80c8-6acf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly T'AU EMPIRE unit within 6" of this model is targeted with a Stratagem:
-  -&gt; Roll one D6: on a 5+, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly T'AU EMPIRE unit within 6" of this model is targeted with a Stratagem, roll one D6: on a 5+, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -13409,7 +13388,7 @@ This model loses the SMOKE keyword.</characteristic>
       <profiles>
         <profile name="Oversight Drone" id="99f5-a897-7b08-2f83" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, once per battle per unit, until the end of the phase, ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, once per battle per unit, until the end of the phase, ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -13654,7 +13633,7 @@ This model loses the SMOKE keyword.</characteristic>
       <profiles>
         <profile name="Weapon Support System" id="534d-ff46-3958-20d2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While making ranged attacks, the unit ignores any modifiers to its Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: While making ranged attacks, this unit ignores any modifiers to its Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -14400,8 +14379,8 @@ This model loses the SMOKE keyword.</characteristic>
               <rules>
                 <rule name="Bonded Heroes" id="c55f-a841-3197-54aa" hidden="false">
                   <description>While making ranged attacks, while the target is within 12" of the attacking unit:
-  -&gt; Improve all friendly BATTLESUIT T'AU EMPIRE models' Strength characteristic by 1.
-  -&gt; While the target is within 8" of the attacking unit, improve all friendly BATTLESUIT T'AU EMPIRE models' Armour Penetration characteristic by 1.</description>
+  - Improve friendly BATTLESUIT T'AU EMPIRE models' Strength characteristic by 1.
+  - While the target is within 8" of the attacking unit, improve friendly BATTLESUIT T'AU EMPIRE models' Armour Penetration characteristic by 1.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -14420,8 +14399,8 @@ This model loses the SMOKE keyword.</characteristic>
               <rules>
                 <rule name="Killing Blow" id="3985-c109-09e9-2c8a" hidden="false">
                   <description>Until the end of the battle round:
-  -&gt; During the first 3 battle rounds, ranged weapons equipped by models in this unit gain [ASSAULT].
-  -&gt; During the first 3 battle rounds, while the unit is GUIDED, ranged weapons equipped by models in this unit gain [LETHAL HITS].</description>
+  - During the first 3 battle rounds, ranged weapons equipped by models in this unit gain [ASSAULT].
+  - During the first 3 battle rounds, while this unit is GUIDED, ranged weapons equipped by models in this unit gain [LETHAL HITS].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -14438,13 +14417,13 @@ This model loses the SMOKE keyword.</characteristic>
               </constraints>
               <rules>
                 <rule name="Hunter's Instincts" id="60f7-67be-a410-85cf" hidden="false">
-                  <description>While the target unit is below its starting strength, all friendly KROOT models get +1 to Hit rolls.
-While the target unit is below half strength, all friendly KROOT models get +1 to Wound rolls.</description>
+                  <description>While the target unit is below its Starting Strength, add 1 to friendly KROOT models' Hit rolls.
+While the target unit is Below Half-strength, add 1 to friendly KROOT models' Wound rolls.</description>
                 </rule>
                 <rule name="Skirmish Fighters" id="daf3-cd3b-04ee-5435" hidden="false">
                   <description>For the rest of the battle:
-  -&gt; Against melee attacks, this model has a 6+ invulnerable save.
-  -&gt; Against ranged attacks, this model has a 5+ invulnerable save.</description>
+  - Against melee attacks, this model has a 6+ invulnerable save.
+  - Against ranged attacks, this model has a 5+ invulnerable save.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -14462,7 +14441,7 @@ While the target unit is below half strength, all friendly KROOT models get +1 t
               </constraints>
               <rules>
                 <rule name="Superior Craftsmanship" id="2815-847d-088d-e12c" hidden="false">
-                  <description>Add 6 to the Range characteristic of ranged weapons equipped by the attacking unit.</description>
+                  <description>Add 6" to the Range characteristic of ranged weapons equipped by the attacking unit.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -14480,10 +14459,10 @@ While the target unit is below half strength, all friendly KROOT models get +1 t
               </constraints>
               <rules>
                 <rule name="Patient Hunter" id="1eea-e334-c921-c50d" hidden="false">
-                  <description>You can: During battle rounds 3-5:
-  -&gt; Ranged weapons equipped by all friendly T'AU EMPIRE models gain [SUSTAINED HITS 1].
-  -&gt; During battle rounds 3-5, if the triggering unit is Guided, while making ranged attacks, while the target is Spotted, the unit ignores any modifiers to its Ballistic Skill characteristics.
-  -&gt; During battle rounds 3-5, if the triggering unit is Guided, while making ranged attacks, while the target is Spotted, the unit ignores any modifiers to its Hit rolls.</description>
+                  <description>During battle rounds 3-5, you can use this ability:
+  - Ranged weapons equipped by friendly T'AU EMPIRE models gain [SUSTAINED HITS 1].
+  - During battle rounds 3-5, if the triggering unit is Guided, while making ranged attacks, while the target is Spotted, this unit ignores any modifiers to its Ballistic Skill characteristics.
+  - During battle rounds 3-5, if the triggering unit is Guided, while making ranged attacks, while the target is Spotted, this unit ignores any modifiers to its Hit rolls.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -14500,10 +14479,10 @@ While the target unit is below half strength, all friendly KROOT models get +1 t
               </constraints>
               <rules>
                 <rule name="Integrated Command Structure" id="0208-a6f7-c697-db4e" hidden="false">
-                  <description>All friendly units with the KROOT or VESPID STINGWINGS keyword gain the Harnessed Alien Instincts ability:
-  -&gt; You can, until the end of the phase: during the Shooting phase, in your turn, select one enemy unit visible to this model if the selected unit is within 12" of the unit: that unit is marked as prey marked; while the selected unit is tagged prey marked, add 3 to that unit's detection range characteristic.
-All friendly units with the GHOSTKEEL BATTLESUIT or STEALTH BATTLESUITS keyword gain the Localised Stealth Projectors ability:
-  -&gt; After the unit resolves its attacks: while a friendly unit with the KROOT or VESPID STINGWINGS keyword is within 6" of this unit, those attacks do not stop the triggering unit from being hidden.
+                  <description>Friendly units with the KROOT or VESPID STINGWINGS keyword gain the Harnessed Alien Instincts ability:
+  - Until the end of the phase, you can: during your Shooting phase, select one enemy unit visible to this model that is within 12" of this unit; that unit is designated as Prey Marked; while the selected unit is designated as Prey Marked, add 3" to that unit's detection range.
+Friendly units with the GHOSTKEEL BATTLESUIT or STEALTH BATTLESUITS keyword gain the Localised Stealth Projectors ability:
+  - After this unit resolves its attacks, while a friendly unit with the KROOT or VESPID STINGWINGS keyword is within 6" of this unit, those attacks do not stop the triggering unit from being hidden.
 You cannot select this Detachment together with another AUXILIARIES Detachment.</description>
                 </rule>
               </rules>
@@ -14522,7 +14501,7 @@ You cannot select this Detachment together with another AUXILIARIES Detachment.<
               </constraints>
               <rules>
                 <rule name="Expert Fieldcraft" id="05da-accf-5214-34f0" hidden="false">
-                  <description>When a friendly unit is selected to shoot (the triggering unit must have PATHFINDER TEAM or STEALTH BATTLESUITS), during the Shooting phase, in your turn, until the end of the phase, those attacks do not stop the triggering unit from being hidden.</description>
+                  <description>When a friendly PATHFINDER TEAM or STEALTH BATTLESUITS unit is selected to shoot, during your Shooting phase, until the end of the phase, those attacks do not stop that unit from being hidden.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -14571,9 +14550,8 @@ You cannot select this Detachment together with another AUXILIARIES Detachment.<
           <profiles>
             <profile name="Puretide Engram Neurochip" id="cd71-2084-6904-dd53" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem:
-  -&gt; Roll one D6: on a 4+, you gain 1CP.
-Applies to: units with T’AU EMPIRE, BATTLESUIT.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, roll one D6: on a 4+, you gain 1 CP.
+Applies to: T’AU EMPIRE BATTLESUIT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14606,8 +14584,8 @@ Applies to: units with T’AU EMPIRE, BATTLESUIT.</characteristic>
           <profiles>
             <profile name="Starflare Ignition System" id="aa26-1fe3-51db-a4c9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you may use this ability, while the unit is unengaged, the unit can be placed into Strategic Reserves.
-Applies to: units with T’AU EMPIRE, BATTLESUIT.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you can use this ability, while this unit is unengaged, this unit can be placed into Strategic Reserves.
+Applies to: T’AU EMPIRE BATTLESUIT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14641,9 +14619,9 @@ Applies to: units with T’AU EMPIRE, BATTLESUIT.</characteristic>
             <profile name="Internal Grenade Racks" id="1348-aa7f-71ce-8f68" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model gains the GRENADES keyword.
--&gt; When the unit ends a Normal move, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit was moved over by this model during that move: roll 6 D6: for each 4+, that unit suffers 1 mortal wound.
-Applies to: units with T’AU EMPIRE, BATTLESUIT.</characteristic>
+When this unit ends a Normal move, you can use this ability:
+  - Select one enemy unit that was moved over by this model during that move. Roll 6 D6: for each 4+, that unit suffers 1 mortal wound.
+Applies to: T’AU EMPIRE BATTLESUIT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14676,11 +14654,11 @@ Applies to: units with T’AU EMPIRE, BATTLESUIT.</characteristic>
           <profiles>
             <profile name="Prototype Weapon System" id="1a61-6788-69c4-4b31" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, until that unit finishes resolving its attacks:
-  Select one of the following (LETHAL HITS or SUSTAINED HITS 1):
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, until the attacking unit finishes resolving its attacks:
+  Choose one of the following (LETHAL HITS or SUSTAINED HITS 1):
     - Ranged weapons equipped by this model gain [LETHAL HITS].
     - Ranged weapons equipped by this model gain [SUSTAINED HITS 1].
-Applies to: units with T’AU EMPIRE, BATTLESUIT.</characteristic>
+Applies to: T’AU EMPIRE BATTLESUIT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14717,8 +14695,8 @@ Applies to: units with T’AU EMPIRE, BATTLESUIT.</characteristic>
           <profiles>
             <profile name="Exemplar of the Mont'ka" id="5b9d-2ba0-3115-48a5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, during the fourth battle round, the unit gains the Killing Blow ability.
-Applies to: units with T’AU EMPIRE.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, during the fourth battle round, this unit gains the Killing Blow ability.
+Applies to: T’AU EMPIRE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14759,7 +14737,7 @@ Applies to: units with T’AU EMPIRE.</characteristic>
             <profile name="Strike Swiftly" id="8692-8ce4-5c97-3c16" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle, friendly units within 6" gain the Scouts 6" ability.
-Applies to: units with T’AU EMPIRE.</characteristic>
+Applies to: T’AU EMPIRE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14800,9 +14778,9 @@ Applies to: units with T’AU EMPIRE.</characteristic>
             <profile name="Strategic Conqueror" id="7485-eb33-fc85-f7c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle:
-  -&gt; The objective is marked as strategic conqueror.
-  -&gt; While this model is on the battlefield, while a friendly T’AU EMPIRE model is within range of an objective marker tagged strategic conqueror, add 1 to that model's Objective Control characteristic.
-Applies to: units with T’AU EMPIRE.</characteristic>
+  - The objective is designated as Strategic Conqueror.
+  - While this model is on the battlefield and a friendly T’AU EMPIRE model is within range of an objective marker tagged strategic conqueror, add 1 to that model's Objective Control characteristic.
+Applies to: T’AU EMPIRE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14839,8 +14817,8 @@ Applies to: units with T’AU EMPIRE.</characteristic>
           <profiles>
             <profile name="Coordinated Exploitation" id="514a-3717-330c-111a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit becomes observer, while this model is leading a unit, until the end of the phase, if a friendly model is Guided, while the target is Spotted by the unit, ranged weapons equipped by that model gain [SUSTAINED HITS 1].
-Applies to: units with T’AU EMPIRE.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit becomes observer, while this model is leading a unit, until the end of the phase, if a friendly model is Guided, while the target is Spotted by this unit, ranged weapons equipped by that model gain [SUSTAINED HITS 1].
+Applies to: T’AU EMPIRE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14877,7 +14855,7 @@ Applies to: units with T’AU EMPIRE.</characteristic>
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Ranged weapons equipped by models in this unit gain [IGNORES COVER].
 Enemy units cannot be set up on the battlefield from Strategic Reserves within 12" of this model.
-Applies to: units with KROOT.</characteristic>
+Applies to: KROOT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14906,9 +14884,9 @@ Applies to: units with KROOT.</characteristic>
             <profile name="Nomadic Hunter" id="98a9-e4f3-974d-16b3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit:
-  -&gt; Add 3 to the unit's Move characteristic.
-  -&gt; Ranged weapons equipped by models in this unit gain [ASSAULT].
-Applies to: units with KROOT, TRAIL SHAPER.</characteristic>
+  - Add 3" to this unit's Move characteristic.
+  - Ranged weapons equipped by models in this unit gain [ASSAULT].
+Applies to: KROOT TRAIL SHAPER units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14937,7 +14915,7 @@ Applies to: units with KROOT, TRAIL SHAPER.</characteristic>
             <profile name="Root-carved Weapons" id="bdae-552b-9493-1a13" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model's weapons gain [PRECISION] and [DEVASTATING WOUNDS].
-Applies to: units with KROOT, WAR SHAPER.</characteristic>
+Applies to: KROOT WAR SHAPER units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -14965,8 +14943,8 @@ Applies to: units with KROOT, WAR SHAPER.</characteristic>
           <profiles>
             <profile name="Borthrod Gland" id="1c21-1125-c8af-3b43" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while making melee attacks, the unit scores Critical Hits on Hit rolls of 5+.
-Applies to: units with KROOT, FLESH SHAPER.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while making melee attacks, this unit scores Critical Hits on Hit rolls of 5+.
+Applies to: KROOT FLESH SHAPER units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15000,11 +14978,11 @@ Applies to: units with KROOT, FLESH SHAPER.</characteristic>
             <profile name="Thermoneutronic Projector" id="9e51-a586-0b86-c26f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations:
-  -&gt; Select one t’au flamer weapon equipped by this model; the effects below refer to it as the selected weapon.
-  -&gt; Improve the Strength characteristic of the selected weapon equipped by this model by 2.
-  -&gt; Improve the Armour Penetration characteristic of the selected weapon equipped by this model by 1.
-  -&gt; Improve the Damage characteristic of the selected weapon equipped by this model by 1.
-Applies to: units with BATTLESUIT.</characteristic>
+  - Select one t’au flamer weapon equipped by this model; the effects below refer to it as the selected weapon.
+  - Improve the Strength characteristic of the selected weapon equipped by this model by 2.
+  - Improve the Armour Penetration characteristic of the selected weapon equipped by this model by 1.
+  - Improve the Damage characteristic of the selected weapon equipped by this model by 1.
+Applies to: BATTLESUIT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15038,12 +15016,12 @@ Applies to: units with BATTLESUIT.</characteristic>
             <profile name="Plasma Accelerator Rifle" id="66d0-2fb0-70d7-529a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations:
-  -&gt; Select one plasma rifle weapon equipped by this model; the effects below refer to it as the selected weapon.
-  -&gt; Improve the Strength characteristic of the selected weapon equipped by this model by 2.
-  -&gt; Improve the Attacks characteristic of the selected weapon equipped by this model by 1.
-  -&gt; Improve the Armour Penetration characteristic of the selected weapon equipped by this model by 1.
-  -&gt; Improve the Damage characteristic of the selected weapon equipped by this model by 1.
-Applies to: units with BATTLESUIT.</characteristic>
+  - Select one plasma rifle weapon equipped by this model; the effects below refer to it as the selected weapon.
+  - Improve the Strength characteristic of the selected weapon equipped by this model by 2.
+  - Improve the Attacks characteristic of the selected weapon equipped by this model by 1.
+  - Improve the Armour Penetration characteristic of the selected weapon equipped by this model by 1.
+  - Improve the Damage characteristic of the selected weapon equipped by this model by 1.
+Applies to: BATTLESUIT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15077,11 +15055,11 @@ Applies to: units with BATTLESUIT.</characteristic>
             <profile name="Supernova Launcher" id="4405-1aeb-f27d-cf58" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations:
-  -&gt; Select one airbursting fragmentation projector weapon equipped by this model; the effects below refer to it as the selected weapon.
-  -&gt; Improve the Strength characteristic of the selected weapon equipped by this model by 3.
-  -&gt; Improve the Armour Penetration characteristic of the selected weapon equipped by this model by 1.
-  -&gt; Improve the Damage characteristic of the selected weapon equipped by this model by 1.
-Applies to: units with BATTLESUIT.</characteristic>
+  - Select one airbursting fragmentation projector weapon equipped by this model; the effects below refer to it as the selected weapon.
+  - Improve the Strength characteristic of the selected weapon equipped by this model by 3.
+  - Improve the Armour Penetration characteristic of the selected weapon equipped by this model by 1.
+  - Improve the Damage characteristic of the selected weapon equipped by this model by 1.
+Applies to: BATTLESUIT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15118,8 +15096,8 @@ Applies to: units with BATTLESUIT.</characteristic>
           <profiles>
             <profile name="Exemplar of the Kauyon" id="236c-e441-63fd-89b3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, from the second battle round onward, the first battle round of the unit's Patient Hunter ability is 2.
-Applies to: units with T’AU EMPIRE.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, from the second battle round onward, the first battle round of this unit's Patient Hunter ability is 2.
+Applies to: T’AU EMPIRE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15160,9 +15138,9 @@ Applies to: units with T’AU EMPIRE.</characteristic>
             <profile name="Precision of the Patient Hunter" id="e55f-df7a-b42b-632e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks:
-  -&gt; This model gets +1 to Hit rolls.
-  -&gt; During battle rounds 3-5, this model gets +1 to Wound rolls.
-Applies to: units with T’AU EMPIRE.</characteristic>
+  - Add 1 to this model's Hit rolls.
+  - During battle rounds 3-5, add 1 to this model's Wound rolls.
+Applies to: T’AU EMPIRE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15202,12 +15180,12 @@ Applies to: units with T’AU EMPIRE.</characteristic>
           <profiles>
             <profile name="Solid-image Projection Unit" id="810a-2be7-01f0-999e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you may use this ability:
-  -&gt; Select up to 3 friendly T'AU EMPIRE units:
-    -&gt; For each selected unit:
-      -&gt; That unit can be set up on the battlefield.
-      -&gt; That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.
-Applies to: units with T’AU EMPIRE.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you can use this ability:
+  - Select up to 3 friendly T'AU EMPIRE units:
+    - For each selected unit:
+      - That unit can be set up on the battlefield.
+      - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.
+Applies to: T’AU EMPIRE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15244,8 +15222,8 @@ Applies to: units with T’AU EMPIRE.</characteristic>
           <profiles>
             <profile name="Through Unity, Devastation" id="2179-d53a-abdb-b186" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit becomes observer, while this model is leading a unit, until the end of the phase, if a friendly model is Guided, while the target is Spotted by the unit, ranged weapons equipped by that model gain [LETHAL HITS].
-Applies to: units with T’AU EMPIRE.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit becomes observer, while this model is leading a unit, until the end of the phase, if a friendly model is Guided, while the target is Spotted by this unit, ranged weapons equipped by that model gain [LETHAL HITS].
+Applies to: T’AU EMPIRE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15279,9 +15257,8 @@ Applies to: units with T’AU EMPIRE.</characteristic>
           <profiles>
             <profile name="Student of Kauyon" id="3bea-8e7a-87fe-5e21" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, you may use this ability:
-  -&gt; Select up to 3 friendly KROOT units with the CARNIVORES or FARSTALKERS keyword: that unit gains the Deep Strike ability.
-Applies to: units with KROOT, SHAPER.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, you can use this ability, select up to 3 friendly KROOT units with the CARNIVORES or FARSTALKERS keyword. Those units gain the Deep Strike ability.
+Applies to: KROOT SHAPER units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15317,11 +15294,11 @@ Applies to: units with KROOT, SHAPER.</characteristic>
           <profiles>
             <profile name="Admired Leader" id="9ee6-8ae5-baff-ffff" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, until the start of your next Command phase:
-  -&gt; Select one friendly unit with the KROOT or VESPID STINGWINGS keyword within 12" of this model:
-    -&gt; Improve that unit's Leadership characteristic by 1.
-    -&gt; Improve that unit's Objective Control characteristic by 1.
-Applies to: units with T’AU EMPIRE.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, until the start of your next Command phase, you can use this ability:
+  - Select one friendly unit with the KROOT or VESPID STINGWINGS keyword within 12" of this model:
+    - Improve that unit's Leadership characteristic by 1.
+    - Improve that unit's Objective Control characteristic by 1.
+Applies to: T’AU EMPIRE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15349,7 +15326,7 @@ Applies to: units with T’AU EMPIRE.</characteristic>
           <profiles>
             <profile name="Negation Emitters (Upgrade)" id="0eb2-1bdc-8cb1-08de" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 3 from the unit's detection range characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 3" from this unit's detection range.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15383,8 +15360,7 @@ Applies to: units with T’AU EMPIRE.</characteristic>
           <profiles>
             <profile name="Unmasking Suite (Upgrade)" id="efff-d06e-23ae-89d3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, you may use this ability, until this unit has resolved its ranged attacks:
-  -&gt; Select one enemy unit if the selected unit is within 24" of the unit: add 9 to that unit's detection range characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability, until this unit has resolved its ranged attacks, select one enemy unit that is within 24" of this unit. Add 9" to that unit's detection range.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -15399,17 +15375,17 @@ Applies to: units with T’AU EMPIRE.</characteristic>
   <sharedRules>
     <rule name="Drones" id="6d69-6933-9c64-a172" hidden="false">
       <description>Place a Drone token marker.
-If this unit has the Guardian Drone wargear, against ranged attacks, the attacking unit gets -1 to Wound rolls.
+If this unit has the Guardian Drone wargear, against ranged attacks, subtract 1 from the attacking unit's Wound rolls.
 If this unit has the Gun Drone wargear, this model gains 1 Twin Pulse Carbine weapon.
-If this unit has the Marker Drone wargear, the unit gains the MARKERLIGHT keyword.
-If this unit has the Marker Drone wargear, the unit is eligible to act as an Observer even if it Advanced this turn.
+If this unit has the Marker Drone wargear, this unit gains the MARKERLIGHT keyword.
+If this unit has the Marker Drone wargear, this unit is eligible to act as an Observer even if it Advanced this turn.
 If this unit has the Missile Drone wargear, this model gains 1 Missile Pod weapon.
 If this unit has the Shield Drone wargear, add 1 to this model's Wounds characteristic.</description>
     </rule>
     <rule name="For the Greater Good" id="f67c-fe00-db17-281c" hidden="false">
-      <description>At the start of your Shooting phase, you may use this ability, if your Army Faction is TAU EMPIRE:
-  -&gt; Select one or more friendly units if the selected unit has the For the Greater Good ability: that unit is an Observer.
-  -&gt; Until the end of the phase: during the Shooting phase, in your turn, for each friendly unit that is Observers: select one enemy unit that is not Spotted if the selected unit is visible to the unit: unless the unit has been selected to shoot this phase, if the unit is eligible to shoot (excluding Fortification units), while the unit is not Battle-shocked, that unit is Spotted by the unit until the end of the phase; if the attacking unit is Guided, while the target is Spotted, improve all friendly models' Ballistic Skill characteristic by 1; if the attacking unit is Guided, while the target is Spotted, while the target is Spotted by a friendly MARKERLIGHT unit that is an Observer, all friendly models' weapons gain [IGNORES COVER].</description>
+      <description>At the start of your Shooting phase, you can use this ability, if your Army Faction is TAU EMPIRE:
+  - Select one or more friendly units with the For the Greater Good ability. Those units are an Observer.
+  - Until the end of the phase, during your Shooting phase, for each friendly unit that is Observers: select one enemy unit that is not Spotted and visible to this unit; unless this unit has been selected to shoot this phase, if this unit is eligible to shoot (excluding Fortification units), while this unit is not Battle-shocked, that unit is Spotted by that unit until the end of the phase; if the attacking unit is Guided, while the target is Spotted, improve friendly models' Ballistic Skill characteristic by 1; if the attacking unit is Guided, while the target is Spotted and the target is Spotted by a friendly MARKERLIGHT unit that is an Observer, friendly models' weapons gain [IGNORES COVER].</description>
     </rule>
   </sharedRules>
   <catalogueLinks>

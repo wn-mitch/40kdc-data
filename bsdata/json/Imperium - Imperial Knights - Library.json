@@ -1446,7 +1446,7 @@
       {
         "name": "Code Chivalric",
         "id": "7d93-51b3-fd61-3213",
-        "description": "Select one of the following (Select Deed):\n  - Select one of the following (Quality: Martial Valour): you can re-roll a Hit roll of 1 with ranged weapons / you can re-roll a Hit roll of 1 with melee weapons / you can re-roll a Wound roll of 1 with ranged weapons / you can re-roll a Wound roll of 1 with melee weapons; if the unit has the CHARACTER keyword, when destroyed by any attack, all friendly units are marked as oath fulfilled.\n  - Select one of the following (Quality: Eager for Challenge): add 2 to the unit's Move characteristic / the unit gets +1 to Advance rolls / the unit gets +1 to Charge rolls; if you hold more objectives than the opponent, all friendly units are marked as oath fulfilled.\n  - Select one of the following (Quality: Legacy Unsullied): add 2 to the unit's Objective Control characteristic / add 1 to the unit's Leadership characteristic; if you destroyed at least 0 enemy units this turn, all friendly units are marked as oath fulfilled.",
+        "description": "Choose one of the following (Select Deed):\n  - Choose one of the following (Quality: Martial Valour): you can re-roll Hit rolls of 1 with ranged weapons / you can re-roll Hit rolls of 1 with melee weapons / you can re-roll Wound rolls of 1 with ranged weapons / you can re-roll Wound rolls of 1 with melee weapons; if this unit has the CHARACTER keyword, when destroyed by any attack, friendly units are designated as Oath Fulfilled.\n  - Choose one of the following (Quality: Eager for Challenge): add 2\" to this unit's Move characteristic / add 1 to this unit's Advance rolls / add 1 to this unit's Charge rolls; if you hold more objectives than your opponent, friendly units are designated as Oath Fulfilled.\n  - Choose one of the following (Quality: Legacy Unsullied): add 2 to this unit's Objective Control characteristic / add 1 to this unit's Leadership characteristic; if you destroyed at least 0 enemy units this turn, friendly units are designated as Oath Fulfilled.",
         "hidden": false
       },
       {
@@ -1458,13 +1458,13 @@
       {
         "name": "Super-heavy Walker",
         "id": "8789-fe15-fdef-1305",
-        "description": "-> When this model ends a Normal, Advance or Fall Back move:\n  -> The triggering unit can move over non-Titanic models as though they were not there.\n  -> The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  -> The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  -> The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  -> The triggering unit can move over terrain features over 4\" as though they were not there.\n-> When this model moves through terrain over 4\" tall:\n  -> Roll one D6:\n    - On 1: The unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
+        "description": "When this model ends a Normal, Advance or Fall Back move:\n  - The triggering unit can move over non-Titanic models as though they were not there.\n  - The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  - The triggering unit can move over terrain features over 4\" as though they were not there.\nWhen this model moves through terrain over 4\" tall:\n  - Roll one D6:\n    - On 1: This unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
         "hidden": false
       },
       {
         "name": "Freeblades",
         "id": "23c7-ce00-8ab2-6f48",
-        "description": "You can: If every model in your army has the IMPERIUM keyword:\n  Select one of the following:\n    - Your army can include at most 1 models from TITANIC IMPERIAL KNIGHTS units.\n    - Your army can include at most 3 models from ARMIGER units.\n  -> All friendly TITANIC IMPERIAL KNIGHTS or ARMIGER units cannot be your Warlord.\n  -> All friendly TITANIC IMPERIAL KNIGHTS or ARMIGER units cannot be given Enhancements.",
+        "description": "If every model in your army has the IMPERIUM keyword, you can use this ability:\n  Choose one of the following:\n    - Your army can include at most 1 models from TITANIC IMPERIAL KNIGHTS units.\n    - Your army can include at most 3 models from ARMIGER units.\n  - Friendly TITANIC IMPERIAL KNIGHTS or ARMIGER units cannot be your Warlord.\n  - Friendly TITANIC IMPERIAL KNIGHTS or ARMIGER units cannot be given Enhancements.",
         "hidden": false
       }
     ],
@@ -1699,7 +1699,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -1713,7 +1713,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Against VEHICLE targets:\n  Against a unit that is not a FORTIFICATION:\n    -> Improve this model's Strength characteristic by 1.\n    -> Improve this model's Damage characteristic by 1.\n  Against FORTIFICATION targets:\n    -> Improve this model's Strength characteristic by 2.\n    -> Improve this model's Damage characteristic by 2.",
+                "$text": "Against VEHICLE targets:\n  - Against a unit that is not a FORTIFICATION:\n    - Improve this model's Strength characteristic by 1.\n    - Improve this model's Damage characteristic by 1.\n  - Against FORTIFICATION targets:\n    - Improve this model's Strength characteristic by 2.\n    - Improve this model's Damage characteristic by 2.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -1727,7 +1727,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -2511,7 +2511,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -2525,7 +2525,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a ranged attack is allocated to a friendly IMPERIAL KNIGHTS model, unless the target is not fully visible to the attacking model because of this model, until that unit finishes resolving its attacks:\n  -> That model has the Benefit of Cover.\n  -> That model has a 4+ invulnerable save.",
+                "$text": "When a ranged attack is allocated to a friendly IMPERIAL KNIGHTS model, unless the target is not fully visible to the attacking model because of this model, until the attacking unit finishes resolving its attacks:\n  - That model has the Benefit of Cover.\n  - That model has a 4+ invulnerable save.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -2539,7 +2539,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -2553,7 +2553,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When damage is allocated, while the Defenders Duty is active, each time an attack is allocated to this model, subtract 1 from the Damage characteristic of that attack.",
+                "$text": "When damage is allocated, while the Defenders Duty is active, subtract 1 from the Damage characteristic of that attack.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3372,7 +3372,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3386,7 +3386,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit by Acheron flame cannon during its just-finished shooting sequence: that unit cannot benefit from Cover.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the end of the phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit by Acheron flame cannon during that shooting sequence. That unit cannot benefit from Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3400,7 +3400,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, once per phase per army, while 1+ the units Bondsman-affected by the unit:\n  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Acherons Duty ability, the unit must take a Battle-shock test, applying -1 to that test.",
+                "$text": "At the start of the Fight phase, once per phase per army, while one or more this units Bondsman-affected by this unit:\n  For each enemy unit: While this unit is within Engagement Range of a friendly unit with the Acherons Duty ability, that unit must take a Battle-shock test, applying -1 to that test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3414,7 +3414,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3819,7 +3819,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3833,7 +3833,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4925,7 +4925,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:\n  -> Select one enemy unit (excluding MONSTER or VEHICLE units) that was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n    -> While this model is on the battlefield, that unit is marked as suppressed.\n    -> While the unit is tagged suppressed, that unit gets -1 to Hit rolls.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:\n  - Select one enemy unit (excluding MONSTER or VEHICLE units) that was hit by an attack made by the triggering unit during that shooting sequence:\n    - While this model is on the battlefield, that unit is Suppressed.\n    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4939,7 +4939,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4953,7 +4953,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the Castigators Duty is active:\n  -> Ranged weapons equipped by this model gain [SUSTAINED HITS 1].\n  -> Improve the Armour Penetration characteristic of ranged weapons equipped by this model by 1.",
+                "$text": "While the Castigators Duty is active:\n  - Ranged weapons equipped by this model gain [SUSTAINED HITS 1].\n  - Improve the Armour Penetration characteristic of ranged weapons equipped by this model by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4967,7 +4967,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5709,7 +5709,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5723,7 +5723,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5737,7 +5737,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the Paladins Duty is active:\n  -> The unit's weapons gain [LETHAL HITS].\n  -> Melee weapons equipped by models in this unit gain [LANCE].",
+                "$text": "While the Paladins Duty is active:\n  - This unit's weapons gain [LETHAL HITS].\n  - Melee weapons equipped by models in this unit gain [LANCE].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6956,7 +6956,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making ranged attacks, if the target is the closest eligible target, this model gets +1 to Hit rolls.",
+                "$text": "While making ranged attacks, if the target is the closest eligible target, add 1 to this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6970,7 +6970,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6984,7 +6984,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6998,7 +6998,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: While the Errants Duty is active:\n  -> You can re-roll the Advance roll.\n  -> Ranged weapons equipped by models in this unit gain [ASSAULT].",
+                "$text": "While the Errants Duty is active, you can use this ability:\n  - You can re-roll the Advance roll.\n  - Ranged weapons equipped by models in this unit gain [ASSAULT].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8189,7 +8189,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Movement phase, in your turn, if this model remained stationary this turn, until the end of the turn, ranged weapons equipped by this model gain [SUSTAINED HITS 1].",
+                "$text": "During your Movement phase, if this model remained stationary this turn, until the end of the turn, ranged weapons equipped by this model gain [SUSTAINED HITS 1].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8203,7 +8203,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8217,7 +8217,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the attacking unit is Bondsman-affected by the unit, while making ranged attacks, all friendly units get +1 to Hit rolls.",
+                "$text": "While the attacking unit is Bondsman-affected by this unit, while making ranged attacks, add 1 to friendly units' Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8231,7 +8231,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9619,7 +9619,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9633,7 +9633,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9647,7 +9647,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the Wardens Duty is active:\n  -> The unit's weapons gain [SUSTAINED HITS 1].\n  -> Ranged weapons equipped by models in this unit gain [IGNORES COVER].",
+                "$text": "While the Wardens Duty is active:\n  - This unit's weapons gain [SUSTAINED HITS 1].\n  - Ranged weapons equipped by models in this unit gain [IGNORES COVER].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10866,7 +10866,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> At the start of the battle:\n  -> Select one enemy unit, binding it as quarry selection (your Quarry target). When your Quarry target is destroyed, you may select one enemy unit, binding it as quarry selection to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against it, while the unit is tagged quarry, you can re-roll the Wound roll for attacks made by this model.",
+                "$text": "At the start of the battle:\n  - Select one enemy unit (your Quarry target). When your Quarry target is destroyed, you may select one enemy unit to replace it. Only one such designation can be active for this unit. For the rest of the battle, each time this model makes an attack against it, while this unit is a Quarry, you can re-roll Wound rolls for attacks made by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10880,7 +10880,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the attacking unit is Bondsman-affected by the unit, while the unit is tagged quarry, you can re-roll the Wound roll for attacks made by all friendly units.",
+                "$text": "While the attacking unit is Bondsman-affected by this unit and this unit is a Quarry, you can re-roll Wound rolls for attacks made by friendly units.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10894,7 +10894,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10908,7 +10908,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12161,7 +12161,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: The Crushing Impact Stratagem that targets the unit costs 0CP.\nThis model's Crushing Impact ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
+                "$text": "You can use this ability: The Crushing Impact Stratagem that targets this unit costs 0 CP.\nThis model's Crushing Impact ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12175,7 +12175,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12189,7 +12189,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12203,7 +12203,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If a friendly model that is Bondsman-affected by the unit advanced this turn, that model is eligible to declare a charge even if it Advanced this turn.",
+                "$text": "If a friendly model that is Bondsman-affected by this unit advanced this turn, that model is eligible to declare a charge even if it Advanced this turn.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12788,7 +12788,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12802,7 +12802,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\nThe unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
+                "$text": "You can use this ability: This unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.\nThis unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12816,7 +12816,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13846,7 +13846,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Consolidation move, if you are engaged on 1+ fronts, add 3\" to the unit's Consolidation moves.",
+                "$text": "When this unit ends a Consolidation move, if you are engaged on one or more fronts, add 3\" to this unit's Consolidation moves.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13860,7 +13860,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13874,7 +13874,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13888,7 +13888,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: While the Gallants Duty is active:\n  -> You can re-roll the Charge roll.\n  -> While making melee attacks, you can re-roll the Hit roll.",
+                "$text": "While the Gallants Duty is active:\n  - You can re-roll the Charge roll.\n  - While making melee attacks, you can re-roll Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14815,7 +14815,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move, until the end of the turn:\n  -> Add 1 to the Attacks characteristic of melee reaper chain‑cleaver – strike weapons equipped by this model.\n  -> Add 2 to the Attacks characteristic of melee reaper chain‑cleaver – sweep weapons equipped by this model.",
+                "$text": "When this unit ends a Charge move, until the end of the turn:\n  - Add 1 to the Attacks characteristic of melee reaper chain‑cleaver – strike weapons equipped by this model.\n  - Add 2 to the Attacks characteristic of melee reaper chain‑cleaver – sweep weapons equipped by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14829,7 +14829,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14843,7 +14843,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15724,7 +15724,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Shooting phase, in your turn:\n  -> When this model selects its targets with thundercoil harpoon weapons:\n    For each enemy unit that is the same unit as the target unit or that is an enemy unit within 6\" of the target unit:\n      -> Roll one D6: on a 4+, the unit is struck by arcing energies until the end of the phase.\n  -> After this model resolves its attacks:\n    For each unit that is struck by arcing energies: The unit suffers D3 mortal wounds.",
+                "$text": "During your Shooting phase:\n  - When this model selects its targets with thundercoil harpoon weapons:\n    For each enemy unit that is the same unit as the target unit or an enemy unit within 6\" of the target unit:\n      - Roll one D6: on a 4+, that unit is struck by arcing energies until the end of the phase.\n  - After this model resolves its attacks:\n    For each unit that is struck by arcing energies: That unit suffers D3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15738,7 +15738,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15752,7 +15752,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16334,7 +16334,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If 1+ CANIS REX models destroyed, this model can be set up on the battlefield from its Transport.\nFriendly units cannot target this model with Stratagems.\nThe unit is not destroyed until this model is also destroyed.",
+                "$text": "If one or more CANIS REX models destroyed, this model can be set up on the battlefield from its Transport.\nFriendly units cannot target this model with Stratagems.\nThis unit is not destroyed until this model is also destroyed.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16872,7 +16872,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of each phase, you may use this ability, once per battle per unit:\n  -> Select one friendly IMPERIUM unit if the selected unit is Battle-shocked and the selected unit is within 12\" of this model: that unit is no longer Battle-shocked.",
+                "$text": "At the start of each phase, you can use this ability, once per battle per unit, select one friendly IMPERIUM unit that is Battle-shocked and within 12\" of this model. That unit is no longer Battle-shocked.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16886,7 +16886,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Once per turn, Stratagems that target this model cost 0CP.",
+                "$text": "Once per turn, Stratagems that target this model cost 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16900,7 +16900,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16914,7 +16914,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16928,7 +16928,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If 1+ CANIS REX models destroyed, this model can be set up on the battlefield from its Transport.\nFriendly units cannot target this model with Stratagems.\nThe unit is not destroyed until this model is also destroyed.",
+                "$text": "If one or more CANIS REX models destroyed, this model can be set up on the battlefield from its Transport.\nFriendly units cannot target this model with Stratagems.\nThis unit is not destroyed until this model is also destroyed.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17684,7 +17684,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: While making ranged attacks against MONSTER or VEHICLE targets, you can re-roll the Damage roll for attacks made by this model.",
+                "$text": "While making ranged attacks against MONSTER or VEHICLE targets, you can re-roll Damage rolls for attacks made by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17698,7 +17698,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17712,7 +17712,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18606,7 +18606,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:\n  -> Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit by Armiger autocannon during its just-finished shooting sequence:\n    -> That unit is marked as suppressed.\n    -> While the unit is tagged suppressed, that unit gets -1 to Hit rolls.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:\n  - Select one enemy unit without the MONSTER or VEHICLE keyword and that was hit by an attack made by the triggering unit by Armiger autocannon during that shooting sequence:\n    - That unit is Suppressed.\n    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18620,7 +18620,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18634,7 +18634,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19522,7 +19522,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19536,7 +19536,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19550,7 +19550,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the Magaeras Duty is active, while making ranged attacks, if the target is the closest eligible target:\n  -> Improve the unit's Strength characteristic by 1.\n  -> Improve the unit's Armour Penetration characteristic by 1.",
+                "$text": "While the Magaeras Duty is active, while making ranged attacks, if the target is the closest eligible target:\n  - Improve this unit's Strength characteristic by 1.\n  - Improve this unit's Armour Penetration characteristic by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20450,7 +20450,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of your opponent's next turn:\n  For each enemy INFANTRY unit that was hit by an attack made by the triggering unit by graviton crusher during its just-finished shooting sequence:\n    -> The unit is grav-pinned.\n    -> While the Grav Pinned is active, subtract 2 from the unit's Move characteristic.\n    -> While the Grav Pinned is active, the unit gets -2 to Charge rolls.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the end of your opponent's next turn:\n  For each enemy INFANTRY unit that was hit by an attack made by the triggering unit by graviton crusher during that shooting sequence:\n    - That unit is grav-pinned.\n    - While the Grav Pinned is active, subtract 2\" from that unit's Move characteristic.\n    - While the Grav Pinned is active, subtract 2 from that unit's Charge rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20464,7 +20464,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20478,7 +20478,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20492,7 +20492,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to shoot or when the unit is selected to fight or after the triggering unit resolves its attacks, while the Styrixs Duty is active:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test, applying -1 to that test.",
+                "$text": "When this unit is selected to shoot or when this unit is selected to fight or after the triggering unit resolves its attacks, while the Styrixs Duty is active:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test, applying -1 to that test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21392,7 +21392,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the attacking unit is Bondsman-affected by the unit against TITANIC or TOWERING targets:\n  -> You can re-roll the Hit roll for attacks made by all friendly units.\n  -> You can re-roll the Wound roll for attacks made by all friendly units.",
+                "$text": "While the attacking unit is Bondsman-affected by this unit against TITANIC or TOWERING targets:\n  - You can re-roll Hit rolls for attacks made by friendly units.\n  - You can re-roll Wound rolls for attacks made by friendly units.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21406,7 +21406,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Against MONSTER or VEHICLE targets:\n  -> This model gets +1 to Hit rolls.\n  -> Against TITANIC or TOWERING targets, this model gets +1 to Wound rolls.",
+                "$text": "Against MONSTER or VEHICLE targets:\n  - Add 1 to this model's Hit rolls.\n  - Against TITANIC or TOWERING targets, add 1 to this model's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21420,7 +21420,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21434,7 +21434,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22162,7 +22162,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to make a Normal or Advance move, until the end of the phase, add D3 to this model's Move characteristic.",
+                "$text": "When this unit is selected to make a Normal or Advance move, until the end of the phase, add D3\" to this model's Move characteristic.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22176,7 +22176,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If this model is equipped with one weapon named \"Thundershock spear\", if this model is equipped with one weapon named \"Bellatus reaper chainsword\", add 2 to the Attacks characteristic of melee weapons equipped by this model.",
+                "$text": "If this model is equipped with one weapon named \"Thundershock spear\" and this model is equipped with one weapon named \"Bellatus reaper chainsword\", add 2 to the Attacks characteristic of melee weapons equipped by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22204,7 +22204,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22218,7 +22218,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -28375,7 +28375,7 @@
                   {
                     "name": "Bold Gallantry",
                     "id": "0ff9-8e83-02a3-e694",
-                    "description": "Each time a friendly unit ends an Advance move (the triggering unit must have IMPERIAL KNIGHTS), until the end of the turn, ranged weapons equipped by all friendly IMPERIAL KNIGHTS models gain [ASSAULT].",
+                    "description": "Each time a friendly IMPERIAL KNIGHTS unit ends an Advance move, until the end of the turn, ranged weapons equipped by friendly IMPERIAL KNIGHTS models gain [ASSAULT].",
                     "hidden": false
                   }
                 ]
@@ -28422,7 +28422,7 @@
                   {
                     "name": "Cogbound Alliance",
                     "id": "125d-9823-80a9-da40",
-                    "description": "If the unit has the IMPERIAL KNIGHTS keyword:\n  -> Add 1 to the Ballistic Skill characteristic of friendly ADEPTUS MECHANICUS units within 6\".\n  -> Ranged weapons equipped by friendly ADEPTUS MECHANICUS units within 6\" gain [HEAVY].\nIf the unit has the TECH PRIEST keyword, during the Command phase:\n  -> Select up to one friendly IMPERIAL KNIGHTS model within 3\" of this model (each model can be selected for this ability at most once per phase across your army): that model regains up to D3 lost wounds.",
+                    "description": "If this unit has the IMPERIAL KNIGHTS keyword:\n  - Add 1 to the Ballistic Skill characteristic of friendly ADEPTUS MECHANICUS units within 6\".\n  - Ranged weapons equipped by friendly ADEPTUS MECHANICUS units within 6\" gain [HEAVY].\nIf this unit has the TECH PRIEST keyword, during the Command phase:\n  - Select up to one friendly IMPERIAL KNIGHTS model within 3\" of this model (each model can be selected for this ability at most once per phase across your army). That model regains up to D3 lost wounds.",
                     "hidden": false
                   }
                 ]
@@ -28469,7 +28469,7 @@
                   {
                     "name": "Dauntless Defenders",
                     "id": "8af9-99ac-8a61-6c24",
-                    "description": "While the unit is within Defensive Line:\n  -> The unit ignores any modifiers to its Hit rolls.\n  -> This model's weapons gain [SUSTAINED HITS 1].",
+                    "description": "While this unit is within Defensive Line:\n  - This unit ignores any modifiers to its Hit rolls.\n  - This model's weapons gain [SUSTAINED HITS 1].",
                     "hidden": false
                   }
                 ]
@@ -28523,7 +28523,7 @@
                   {
                     "name": "Knightly Teachings",
                     "id": "8a9f-5ffb-9686-2cd7",
-                    "description": "Each time a friendly model uses a Bondsman ability, you may use this ability, unless a friendly model other than that unit used that same ability this turn, when resolving this use:\n  -> Unless your army is honoured, replace that ability's selection with up to 3 friendly ARMIGER models within 12\" of that unit that are not Bondsman-affected; those recipients are affected by that same ability until the start of your next Command phase.\n  -> If your army is honoured, replace that ability's selection with up to 3 friendly ARMIGER models within 15\" of that unit that are not Bondsman-affected; those recipients are affected by that same ability until the start of your next Command phase.",
+                    "description": "Each time a friendly model uses a Bondsman ability, you can use this ability, unless a friendly model other than that unit used that same ability this turn, for this activation:\n  - Unless your army is honoured, replace that ability's selection with up to 3 friendly ARMIGER models within 12\" of that unit that are not Bondsman-affected; those recipients are affected by that same ability until the start of your next Command phase.\n  - If your army is honoured, replace that ability's selection with up to 3 friendly ARMIGER models within 15\" of that unit that are not Bondsman-affected; those recipients are affected by that same ability until the start of your next Command phase.",
                     "hidden": false
                   }
                 ]
@@ -28570,13 +28570,13 @@
                   {
                     "name": "Heroes of Legend",
                     "id": "28b0-e374-c6d9-e771",
-                    "description": "-> At the start of your turn: if the Code Chivalric oath is fulfilled, the unit resolves the Code Chivalric Oath procedure again.\nWhen selecting deeds and qualities for Code Chivalric for the unit; exclude previously selected deeds and qualities; if a duplicate is rolled, choose an unselected result in that domain; stop when every domain is exhausted.\nAll friendly models with the Code Chivalric ability retain qualities from fulfilled Code Chivalric Oaths.\nFor the unit, on completion of additional Code Chivalric deeds, regardless of how those deeds were selected, replace their reward with: you gain 1CP.",
+                    "description": "At the start of your turn, if the Code Chivalric oath is fulfilled, this unit resolves the Code Chivalric Oath procedure again.\nWhen selecting deeds and qualities for Code Chivalric for this unit; exclude previously selected deeds and qualities; if a duplicate is rolled, choose an unselected result in that domain; stop when every domain is exhausted.\nFriendly models with the Code Chivalric ability retain qualities from fulfilled Code Chivalric Oaths.\nFor this unit, on completion of additional Code Chivalric deeds, regardless of how those deeds were selected, replace their reward with: you gain 1 CP.",
                     "hidden": false
                   },
                   {
                     "name": "Valour's Reward",
                     "id": "11c4-e814-61ef-c0df",
-                    "description": "For the rest of the battle:\n  -> Friendly units that are tagged enhancement expended cannot use Enhancements.\n  -> When you fulfil an Oath: friendly units that are tagged enhancement expended are no longer marked as enhancement expended.",
+                    "description": "For the rest of the battle:\n  - Friendly units that are designated as Enhancement Expended cannot use Enhancements.\n  - When you fulfil an Oath, friendly units that are designated as Enhancement Expended are no longer designated as Enhancement Expended.",
                     "hidden": false
                   }
                 ]
@@ -28623,7 +28623,7 @@
                   {
                     "name": "Rain of Devastation",
                     "id": "b2de-7134-e071-79c5",
-                    "description": "While the target unit is within the terrain area terrain area, all friendly DOMINUS IMPERIAL KNIGHTS units get +1 to Hit rolls.\nApplies to: units with IMPERIAL KNIGHTS, DOMINUS.",
+                    "description": "While the target unit is within the terrain area terrain area, add 1 to friendly DOMINUS IMPERIAL KNIGHTS units' Hit rolls.\nApplies to: IMPERIAL KNIGHTS DOMINUS units.",
                     "hidden": false
                   }
                 ]
@@ -28677,7 +28677,7 @@
                   {
                     "name": "Driven from Their Lairs",
                     "id": "7ede-6e26-4e24-cbad",
-                    "description": "For the rest of the battle, ranged weapons equipped by models in this unit gain [IGNORES COVER].\nApplies to: units with IMPERIAL KNIGHTS, ARMIGER.",
+                    "description": "For the rest of the battle, ranged weapons equipped by models in this unit gain [IGNORES COVER].\nApplies to: IMPERIAL KNIGHTS ARMIGER units.",
                     "hidden": false
                   }
                 ]
@@ -28724,7 +28724,7 @@
                   {
                     "name": "Knights of Legend",
                     "id": "2110-bc6b-92ce-94d4",
-                    "description": "All friendly IMPERIAL KNIGHTS models have the Feel No Pain 6+ ability.\n-> At the start of your Command phase: all friendly IMPERIAL KNIGHTS models regain up to 1 lost wound.\nApplies to: units with IMPERIAL KNIGHTS.",
+                    "description": "Friendly IMPERIAL KNIGHTS models have Feel No Pain 6+.\nAt the start of your Command phase, friendly IMPERIAL KNIGHTS models regain up to 1 lost wound.\nApplies to: IMPERIAL KNIGHTS units.",
                     "hidden": false
                   }
                 ]
@@ -28949,7 +28949,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the end of your Movement phase:\n  -> Select one friendly IMPERIAL KNIGHTS model other than the unit if the selected unit is within 12\" of this model and the selected unit is visible to this model:\n    -> Unless your army is honoured, that model regains up to D3 lost wounds.\n    -> If your army is honoured, that model regains up to 3 lost wounds.",
+                    "$text": "At the end of your Movement phase:\n  - Select one friendly IMPERIAL KNIGHTS model other than this unit that is within 12\" of this model and visible to this model:\n    - Unless your army is honoured, that model regains up to D3 lost wounds.\n    - If your army is honoured, that model regains up to 3 lost wounds.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -29155,7 +29155,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the end of your Movement phase, until the start of your next Movement phase:\n  -> Select one friendly IMPERIAL KNIGHTS model other than the unit if the selected unit is within 12\" of this model and the selected unit is visible to this model: that model gains the Stealth ability.",
+                    "$text": "At the end of your Movement phase, until the start of your next Movement phase, select one friendly IMPERIAL KNIGHTS model other than this unit that is within 12\" of this model and visible to this model. That model gains the Stealth ability.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -29361,7 +29361,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of your Shooting phase, until the end of the phase:\n  -> Select one friendly IMPERIAL KNIGHTS model other than the unit if the selected unit is within 12\" of this model and the selected unit is visible to this model: ranged weapons equipped by that model gain [IGNORES COVER].",
+                    "$text": "At the start of your Shooting phase, until the end of the phase, select one friendly IMPERIAL KNIGHTS model other than this unit that is within 12\" of this model and visible to this model. Ranged weapons equipped by that model gain [IGNORES COVER].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -29567,7 +29567,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of your Charge phase, you may use this ability, until the end of the phase:\n  -> Select one friendly IMPERIAL KNIGHTS model other than the unit if the selected unit is within 12\" of this model and the selected unit is visible to this model: you can re-roll the Charge roll for that model.",
+                    "$text": "At the start of your Charge phase, you can use this ability, until the end of the phase, select one friendly IMPERIAL KNIGHTS model other than this unit that is within 12\" of this model and visible to this model. You can re-roll the Charge roll for that model.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -30251,7 +30251,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While making melee attacks, while the unit is within Defensive Line:\n  -> You can re-roll a Hit roll of 1 for attacks made by this model.\n  -> You can re-roll a Wound roll of 1 for attacks made by this model.",
+                    "$text": "While making melee attacks, while this unit is within Defensive Line:\n  - You can re-roll Hit rolls of 1 for attacks made by this model.\n  - You can re-roll Wound rolls of 1 for attacks made by this model.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -30457,7 +30457,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While making ranged attacks, while the unit is within Defensive Line, this model's weapons gain [IGNORES COVER].",
+                    "$text": "While making ranged attacks, while this unit is within Defensive Line, this model's weapons gain [IGNORES COVER].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -30663,7 +30663,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: Once per turn per model, the Crushing Impact Stratagem that targets the unit costs 0CP.",
+                    "$text": "You can use this ability: Once per turn per model, the Crushing Impact Stratagem that targets this unit costs 0 CP.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -30869,7 +30869,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: While 2+ the units Bondsman-affected by the unit, while the attacking unit is Bondsman-affected by the unit, you can re-roll a Hit roll of 1 for attacks made by all friendly units.",
+                    "$text": "While 2 or more this units Bondsman-affected by this unit and the attacking unit is Bondsman-affected by this unit, you can re-roll Hit rolls of 1 for attacks made by friendly units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31075,7 +31075,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While 2+ the units Bondsman-affected by the unit, melee weapons equipped by friendly ARMIGER units that are Bondsman-affected by the unit gain [PRECISION].",
+                    "$text": "While 2 or more this units Bondsman-affected by this unit, melee weapons equipped by friendly ARMIGER units that are Bondsman-affected by this unit gain [PRECISION].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31693,7 +31693,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the unit ends a Charge move, you may use this ability:\n  For each enemy unit within Engagement Range of this model:\n    -> This model is marked as enhancement expended.\n    -> The unit must take a Battle-shock test, applying -1 to that test.",
+                    "$text": "When this unit ends a Charge move, you can use this ability:\n  For each enemy unit within Engagement Range of this model:\n    - This model is designated as Enhancement Expended.\n    - That unit must take a Battle-shock test, applying -1 to that test.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -31899,7 +31899,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the unit is selected to shoot, you may use this ability, during the Shooting phase, in your turn, until the end of the phase:\n  -> This model is marked as enhancement expended.\n  -> Against FLY targets, you can re-roll the Hit roll for attacks made by this model.",
+                    "$text": "When this unit is selected to shoot, you can use this ability, during your Shooting phase, until the end of the phase:\n  - This model is designated as Enhancement Expended.\n  - Against FLY targets, you can re-roll Hit rolls for attacks made by this model.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32105,7 +32105,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the unit is selected to fight, you may use this ability, until the end of the phase:\n  -> This model is marked as enhancement expended.\n  -> Melee weapons equipped by this model gain [SUSTAINED HITS 2].",
+                    "$text": "When this unit is selected to fight, you can use this ability, until the end of the phase:\n  - This model is designated as Enhancement Expended.\n  - Melee weapons equipped by this model gain [SUSTAINED HITS 2].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32311,7 +32311,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "After the unit resolves its attacks in a fight, you may use this ability, if this model has destroyed 1+ enemy units with its just-resolved attacks:\n  -> Select one enemy unit if the selected unit is unengaged and the selected unit is within 12\" of this model and the selected unit is visible to this model:\n    -> This model is marked as enhancement expended.\n    -> Roll 6 D6: for each 4+, that unit suffers 1 mortal wound.",
+                    "$text": "After this unit resolves its attacks in a fight, you can use this ability, if this model has destroyed one or more enemy units with those attacks:\n  - Select one enemy unit that is unengaged, within 12\" of this model and visible to this model:\n    - This model is designated as Enhancement Expended.\n    - Roll 6 D6: for each 4+, that unit suffers 1 mortal wound.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32405,7 +32405,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Add 1 to this model's Toughness characteristic.\nApplies to: units with IMPERIAL KNIGHTS, DOMINUS.",
+                    "$text": "Add 1 to this model's Toughness characteristic.\nApplies to: IMPERIAL KNIGHTS DOMINUS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32499,7 +32499,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can re-roll the Attacks roll.\nApplies to: units with IMPERIAL KNIGHTS, DOMINUS.",
+                    "$text": "You can re-roll the Attacks roll.\nApplies to: IMPERIAL KNIGHTS DOMINUS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32601,7 +32601,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit gains the MOBILE keyword.\nApplies to: units with IMPERIAL KNIGHTS, ARMIGER.",
+                    "$text": "This unit gains the MOBILE keyword.\nApplies to: IMPERIAL KNIGHTS ARMIGER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32703,7 +32703,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When you target the unit with the Fire Overwatch Stratagem or when you target the unit with the Heroic Intervention Stratagem, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\nApplies to: units with IMPERIAL KNIGHTS, ARMIGER.",
+                    "$text": "When you target this unit with the Fire Overwatch Stratagem or when you target this unit with the Heroic Intervention Stratagem, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.\nApplies to: IMPERIAL KNIGHTS ARMIGER units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -32909,7 +32909,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the end of your opponent's turn, you may use this ability, once per battle per army, while the unit is unengaged, until the start of your next Shooting phase:\n  -> The unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.\n  -> The unit gains the Deep Strike ability.\n  -> The unit must make an Ingress move.\nApplies to: units with IMPERIAL KNIGHTS.",
+                    "$text": "At the end of your opponent's turn, you can use this ability, once per battle per army, while this unit is unengaged, until the start of your next Shooting phase:\n  - This unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.\n  - This unit gains the Deep Strike ability.\n  - This unit must make an Ingress move.\nApplies to: IMPERIAL KNIGHTS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -33115,7 +33115,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "This model has a 5+ invulnerable save.\nApplies to: units with IMPERIAL KNIGHTS.",
+                    "$text": "This model has a 5+ invulnerable save.\nApplies to: IMPERIAL KNIGHTS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -33321,7 +33321,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Improve the Attacks characteristic of melee weapons equipped by this model by 2.\nWhile making melee attacks, this model gets +1 to Hit rolls.\nApplies to: units with IMPERIAL KNIGHTS.",
+                    "$text": "Improve the Attacks characteristic of melee weapons equipped by this model by 2.\nWhile making melee attacks, add 1 to this model's Hit rolls.\nApplies to: IMPERIAL KNIGHTS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -33527,7 +33527,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Ranged weapons equipped by this model gain [IGNORES COVER].\nApplies to: units with IMPERIAL KNIGHTS.",
+                    "$text": "Ranged weapons equipped by this model gain [IGNORES COVER].\nApplies to: IMPERIAL KNIGHTS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

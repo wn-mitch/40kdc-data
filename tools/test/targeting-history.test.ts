@@ -92,7 +92,7 @@ describe("targeting-restriction version 7: not_engaged_with", () => {
     expect(result.mechanics.effect).toEqual(effect);
     expect(validate()(effect)).toBe(true);
     expect(validate()({ ...effect, modifier: { ...effect.modifier, may: "cannot-target" } })).toBe(false);
-    expect(describeEffectInline(effect as never)).toBe("enemy units are not considered to be within Engagement Range of the unit when targets are selected with ranged weapons");
+    expect(describeEffectInline(effect as never)).toBe("enemy units are not considered to be within Engagement Range of this unit when targets are selected with ranged weapons");
   });
 });
 

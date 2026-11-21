@@ -1231,7 +1231,7 @@
       {
         "name": "Titanic Support",
         "id": "a407-eff5-9a8c-b356",
-        "description": "Nothing happens.",
+        "description": "You can use this ability: If every model in your army has the IMPERIUM keyword, your army can include at most 1 models from ADEPTUS TITANICUS units.",
         "hidden": false
       },
       {
@@ -1249,7 +1249,7 @@
       {
         "name": "Titanic Support",
         "id": "b79e-850e-3289-356d",
-        "description": "Nothing happens.",
+        "description": "You can use this ability: If every model in your army has the CHAOS keyword, your army can include at most 1 models from TITANICUS TRAITORIS units.",
         "hidden": false
       },
       {
@@ -1632,7 +1632,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target the unit with a Stratagem, Stratagems that target the unit cost three times their stated CP cost.",
+                "$text": "Each time you target this unit with a Stratagem, Stratagems that target this unit cost three times their stated CP cost.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -1646,7 +1646,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When this model ends a Normal, Advance or Fall Back move:\n  -> The triggering unit can move over non-Titanic models as though they were not there.\n  -> The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  -> The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  -> The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  -> The triggering unit can move over terrain features over 4\" as though they were not there.\n-> When this model moves through terrain over 4\" tall:\n  -> Roll one D6:\n    - On 1: The unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
+                "$text": "When this model ends a Normal, Advance or Fall Back move:\n  - The triggering unit can move over non-Titanic models as though they were not there.\n  - The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  - The triggering unit can move over terrain features over 4\" as though they were not there.\nWhen this model moves through terrain over 4\" tall:\n  - Roll one D6:\n    - On 1: This unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -1660,7 +1660,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -1688,7 +1688,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3242,7 +3242,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target the unit with a Stratagem, Stratagems that target the unit cost three times their stated CP cost.",
+                "$text": "Each time you target this unit with a Stratagem, Stratagems that target this unit cost three times their stated CP cost.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3256,7 +3256,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When this model ends a Normal, Advance or Fall Back move:\n  -> The triggering unit can move over non-Titanic models as though they were not there.\n  -> The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  -> The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  -> The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  -> The triggering unit can move over terrain features over 4\" as though they were not there.\n-> When this model moves through terrain over 4\" tall:\n  -> Roll one D6:\n    - On 1: The unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
+                "$text": "When this model ends a Normal, Advance or Fall Back move:\n  - The triggering unit can move over non-Titanic models as though they were not there.\n  - The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  - The triggering unit can move over terrain features over 4\" as though they were not there.\nWhen this model moves through terrain over 4\" tall:\n  - Roll one D6:\n    - On 1: This unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3270,7 +3270,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly IMPERIUM unit.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the end of the phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly IMPERIUM unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3284,7 +3284,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3312,7 +3312,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4201,7 +4201,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an Advance move, until the end of the phase, the unit does not make an Advance roll; add 8\" to its Move characteristic instead.",
+                "$text": "When this unit ends an Advance move, until the end of the phase, this unit does not make an Advance roll; add 8\" to its Move characteristic instead.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4215,7 +4215,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When this model ends a Normal, Advance or Fall Back move:\n  -> The triggering unit can move over non-Titanic models as though they were not there.\n  -> The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  -> The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  -> The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  -> The triggering unit can move over terrain features over 4\" as though they were not there.\n-> When this model moves through terrain over 4\" tall:\n  -> Roll one D6:\n    - On 1: The unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
+                "$text": "When this model ends a Normal, Advance or Fall Back move:\n  - The triggering unit can move over non-Titanic models as though they were not there.\n  - The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  - The triggering unit can move over terrain features over 4\" as though they were not there.\nWhen this model moves through terrain over 4\" tall:\n  - Roll one D6:\n    - On 1: This unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4229,7 +4229,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4257,7 +4257,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4271,7 +4271,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target the unit with a Stratagem, Stratagems that target the unit cost twice their stated CP cost.",
+                "$text": "Each time you target this unit with a Stratagem, Stratagems that target this unit cost twice their stated CP cost.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4967,7 +4967,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When this model ends a Normal, Advance or Fall Back move:\n  -> The triggering unit can move over non-Titanic models as though they were not there.\n  -> The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  -> The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  -> The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  -> The triggering unit can move over terrain features over 4\" as though they were not there.\n-> When this model moves through terrain over 4\" tall:\n  -> Roll one D6:\n    - On 1: The unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
+                "$text": "When this model ends a Normal, Advance or Fall Back move:\n  - The triggering unit can move over non-Titanic models as though they were not there.\n  - The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  - The triggering unit can move over terrain features over 4\" as though they were not there.\nWhen this model moves through terrain over 4\" tall:\n  - Roll one D6:\n    - On 1: This unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4981,7 +4981,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4995,7 +4995,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5023,7 +5023,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5037,7 +5037,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target the unit with a Stratagem, Stratagems that target the unit cost 4 times their stated CP cost.",
+                "$text": "Each time you target this unit with a Stratagem, Stratagems that target this unit cost 4 times their stated CP cost.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7719,7 +7719,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target the unit with a Stratagem, Stratagems that target the unit cost three times their stated CP cost.",
+                "$text": "Each time you target this unit with a Stratagem, Stratagems that target this unit cost three times their stated CP cost.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7733,7 +7733,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When this model ends a Normal, Advance or Fall Back move:\n  -> The triggering unit can move over non-Titanic models as though they were not there.\n  -> The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  -> The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  -> The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  -> The triggering unit can move over terrain features over 4\" as though they were not there.\n-> When this model moves through terrain over 4\" tall:\n  -> Roll one D6:\n    - On 1: The unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
+                "$text": "When this model ends a Normal, Advance or Fall Back move:\n  - The triggering unit can move over non-Titanic models as though they were not there.\n  - The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  - The triggering unit can move over terrain features over 4\" as though they were not there.\nWhen this model moves through terrain over 4\" tall:\n  - Roll one D6:\n    - On 1: This unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7747,7 +7747,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7775,7 +7775,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9240,7 +9240,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target the unit with a Stratagem, Stratagems that target the unit cost three times their stated CP cost.",
+                "$text": "Each time you target this unit with a Stratagem, Stratagems that target this unit cost three times their stated CP cost.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9254,7 +9254,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When this model ends a Normal, Advance or Fall Back move:\n  -> The triggering unit can move over non-Titanic models as though they were not there.\n  -> The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  -> The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  -> The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  -> The triggering unit can move over terrain features over 4\" as though they were not there.\n-> When this model moves through terrain over 4\" tall:\n  -> Roll one D6:\n    - On 1: The unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
+                "$text": "When this model ends a Normal, Advance or Fall Back move:\n  - The triggering unit can move over non-Titanic models as though they were not there.\n  - The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  - The triggering unit can move over terrain features over 4\" as though they were not there.\nWhen this model moves through terrain over 4\" tall:\n  - Roll one D6:\n    - On 1: This unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9268,7 +9268,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly CHAOS unit.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the end of the phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly CHAOS unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9282,7 +9282,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9310,7 +9310,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10110,7 +10110,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an Advance move, until the end of the phase, the unit does not make an Advance roll; add 8\" to its Move characteristic instead.",
+                "$text": "When this unit ends an Advance move, until the end of the phase, this unit does not make an Advance roll; add 8\" to its Move characteristic instead.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10124,7 +10124,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When this model ends a Normal, Advance or Fall Back move:\n  -> The triggering unit can move over non-Titanic models as though they were not there.\n  -> The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  -> The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  -> The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  -> The triggering unit can move over terrain features over 4\" as though they were not there.\n-> When this model moves through terrain over 4\" tall:\n  -> Roll one D6:\n    - On 1: The unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
+                "$text": "When this model ends a Normal, Advance or Fall Back move:\n  - The triggering unit can move over non-Titanic models as though they were not there.\n  - The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  - The triggering unit can move over terrain features over 4\" as though they were not there.\nWhen this model moves through terrain over 4\" tall:\n  - Roll one D6:\n    - On 1: This unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10138,7 +10138,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10166,7 +10166,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10180,7 +10180,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target the unit with a Stratagem, Stratagems that target the unit cost twice their stated CP cost.",
+                "$text": "Each time you target this unit with a Stratagem, Stratagems that target this unit cost twice their stated CP cost.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10787,7 +10787,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When this model ends a Normal, Advance or Fall Back move:\n  -> The triggering unit can move over non-Titanic models as though they were not there.\n  -> The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  -> The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  -> The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  -> The triggering unit can move over terrain features over 4\" as though they were not there.\n-> When this model moves through terrain over 4\" tall:\n  -> Roll one D6:\n    - On 1: The unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
+                "$text": "When this model ends a Normal, Advance or Fall Back move:\n  - The triggering unit can move over non-Titanic models as though they were not there.\n  - The triggering unit can move over terrain features 4\" or lower as though they were not there.\n  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.\n  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.\n  - The triggering unit can move over terrain features over 4\" as though they were not there.\nWhen this model moves through terrain over 4\" tall:\n  - Roll one D6:\n    - On 1: This unit is Battle-shocked.\n    - On 2-6: Nothing happens.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10801,7 +10801,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10815,7 +10815,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10843,7 +10843,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10857,7 +10857,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target the unit with a Stratagem, Stratagems that target the unit cost 4 times their stated CP cost.",
+                "$text": "Each time you target this unit with a Stratagem, Stratagems that target this unit cost 4 times their stated CP cost.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

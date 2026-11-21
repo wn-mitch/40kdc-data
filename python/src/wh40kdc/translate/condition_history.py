@@ -11,7 +11,6 @@ from wh40kdc.translate.condition_refs import (
     _MOVE_VERBS,
     P,
     _designation_phrase,
-    _is_num,
     _list,
     _obj,
     _objective_phrase,
@@ -34,9 +33,10 @@ from wh40kdc.translate.condition_refs import (
     unit_filter_phrase,
     unit_ref_phrase,
     used_ability_phrase,
+    with_article,
 )
 from wh40kdc.translate.condition_refs import _window_phrase as _base_window_phrase
-from wh40kdc.translate.effect_words import weapon_noun
+from wh40kdc.translate.effect_words import bracket_keyword, weapon_noun
 
 # A rule of one kind being used now, when the filter names none.
 _IN_PROGRESS: dict[str, str] = {
@@ -63,7 +63,7 @@ def _describe_happened_core(p: P, negated: bool) -> str:
     f = _obj(p.get("filter"))
     event = _str(p.get("event"))
     bounds = _obj(p.get("count"))
-    n = bounds.get("min", 1)
+    amount = count_phrase(p.get("count"))
     window = p.get("window")
     who = _subject_of(p)
     # The phase the event happened in leads its window: "in the Fight phase this battle".
@@ -143,24 +143,24 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         obj = unit_ref_phrase(p.get("object"), "the unit")
         target = "the target" if obj == "the target unit" else obj
         atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
-        weapons = f.get("weapons")
-        keyword = ""
-        name = ""
-        if isinstance(weapons, dict):
-            kw = weapons.get("keyword")
-            if isinstance(kw, dict):
-                kw = kw.get("keyword_id")
-            if _truthy(kw):
-                keyword = f"[{dekebab(_str(kw)).upper()}]"
-            if _truthy(weapons.get("name")):
-                raw_name = _str(weapons["name"])
-                name = (
-                    title_case(raw_name)
-                    if re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)+", raw_name)
-                    else raw_name
-                )
-        if name:
-            weapon = f" by {name}" + (f" (with {keyword})" if keyword else "")
+        weapons = _obj(f.get("weapons"))
+        kw = weapons.get("keyword")
+        keyword = (
+            bracket_keyword(kw) if kw is not None and not isinstance(kw, list) else ""
+        )
+        raw_name = _str(weapons.get("name"))
+        weapon_name = (
+            title_case(raw_name)
+            if re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)+", raw_name)
+            else raw_name
+        )
+        simple = all(key in ("name", "keyword") for key in weapons) and not isinstance(
+            weapons.get("keyword"), list
+        )
+        if not simple:
+            weapon = f" made with {weapon_noun({'weapons': weapons})}"
+        elif _truthy(weapons.get("name")):
+            weapon = f" by {weapon_name}" + (f" (with {keyword})" if keyword else "")
         elif keyword:
             weapon = f" made with a {keyword} weapon"
         else:
@@ -173,7 +173,7 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         else:
             by = ""
         when = (
-            " during its just-finished shooting sequence"
+            " during that shooting sequence"
             if window == "event"
             else f" {_window_phrase(window)}"
         )
@@ -183,15 +183,19 @@ def _describe_happened_core(p: P, negated: bool) -> str:
             f" made by {unit_ref_phrase(subj)}" if subj is not None and subj != "this-unit" else ""
         )
         if f.get("roll") == "hit" and f.get("result") == "success":
-            if _is_num(n) and n > 1:
-                hits = f"{_str(n)}+ {atk}attacks"
+            if (bounds.get("min") is not None and bounds.get("min") != 1) or bounds.get(
+                "max"
+            ) is not None:
+                hits = f"{amount} {atk}attacks"
             elif atk == "":
                 hits = "an attack"
             else:
                 hits = f"a {atk}attack"
             return f"{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}"
         # Whose roll it was, when the subject names one:
-        # "the unit made a battle-shock roll and failed it".
+        # "this unit made a battle-shock roll and failed it".
+        times = f" ({amount} times)" if p.get("count") is not None else ""
+        roll_phrase = with_article(f"{roll_word(f.get('roll'))} roll")
         if subj is not None:
             outcome = (
                 " and failed it"
@@ -200,15 +204,17 @@ def _describe_happened_core(p: P, negated: bool) -> str:
                 if f.get("result") == "success"
                 else ""
             )
-            made = f"{neg}{who} made a {roll_word(f.get('roll'))} roll{outcome}"
-            return f"{made} {_window_phrase(window)}".rstrip()
+            made = f"{neg}{who} made {roll_phrase}{outcome}"
+            return f"{made} {_window_phrase(window)}{times}".rstrip()
         result = f"was a {_str(f['result'])} " if _truthy(f.get("result")) else "was made "
-        return f"{neg}a {roll_word(f.get('roll'))} roll {result}{_window_phrase(window)}".rstrip()
+        return f"{neg}{roll_phrase} {result}{_window_phrase(window)}{times}".rstrip()
     if event == "damage-allocated":
-        obj = unit_ref_phrase(p.get("object"), "the unit")
+        obj = unit_ref_phrase(p.get("object"), "this unit")
         atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
-        tail = " from the triggering attacks" if window == "event" else f" {_window_phrase(window)}"
-        return f"{neg}{obj} lost one or more wounds from {atk}attacks{tail}"
+        if window == "event":
+            return f"{neg}{obj} lost one or more wounds from the triggering {atk}attacks"
+        win = _window_phrase(window)
+        return f"{neg}{obj} lost one or more wounds from {atk}attacks {win}".rstrip()
     if event in ("destroyed", "model-destroyed"):
         noun = "model" if event == "model-destroyed" else "unit"
         if is_event_object(p.get("object")) and window == "event":
@@ -218,7 +224,8 @@ def _describe_happened_core(p: P, negated: bool) -> str:
                 else ""
             )
             if _truthy(f.get("attack_type")):
-                return f"{neg}destroyed by a {_str(f['attack_type'])} attack{made}"
+                attack_type = _str(f["attack_type"])
+                return f"{neg}destroyed by {with_article(f'{attack_type} attack')}{made}"
             return f"{neg}destroyed by any attack{made}"
         # "this model": the destroyed model is this one, not any model of the unit.
         if p.get("object") == "this-model":
@@ -241,23 +248,23 @@ def _describe_happened_core(p: P, negated: bool) -> str:
                 {**victim, "level": "model" if event == "model-destroyed" else "unit"}
             )
             objects = re.sub(r"\b(unit|model)\b", r"\1s", re.sub(r"^an? ", "", phrase), count=1)
-        # "the unit lost 1+ models to the just-resolved attacks": the victims are one unit's
+        # "this unit lost one or more models to those attacks": the victims are one unit's
         # models (a selection's candidate).
         if event == "model-destroyed" and victim.get("member_of") is not None and window == "event":
             member = victim["member_of"]
-            who = "the unit" if member == "selected-unit" else unit_ref_phrase(member)
+            who = "this unit" if member == "selected-unit" else unit_ref_phrase(member)
             atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
-            return f"{neg}{who} lost {_str(n)}+ models to the just-resolved {atk}attacks"
+            return f"{neg}{who} lost {amount} models to those {atk}attacks"
         # "the enemy WARLORD": one designated model, named as itself rather than counted.
         warlord = not extended and kws == "" and victim.get("designated") == "warlord"
-        victims = f"the {owner}Warlord" if warlord else f"{_str(n)}+ {objects}"
+        victims = f"the {owner}Warlord" if warlord else f"{amount} {objects}"
         # Who destroyed them: the filter's attacker, else the event's subject.
         killer_ref = f["by"] if f.get("by") is not None else p.get("subject")
         if killer_ref is not None:
-            # A destruction by one attack type says it: "with its just-resolved melee attacks".
+            # A destruction by one attack type says it: "with those melee attacks".
             atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
             if window == "event":
-                when = f"with its just-resolved {atk}attacks"
+                when = f"with those {atk}attacks"
             else:
                 when = (f"with {atk}attacks " if atk else "") + _window_phrase(window)
             killer = unit_ref_phrase(killer_ref)
@@ -270,7 +277,7 @@ def _describe_happened_core(p: P, negated: bool) -> str:
             if not extended and victim.get("designated") is not None
             else ""
         )
-        return f"{neg}{_with_window(f'{_str(n)}+ {objects}{tagged} destroyed', window)}"
+        return f"{neg}{_with_window(f'{amount} {objects}{tagged} destroyed', window)}"
     if event == "used":
         # A Ritual is attempted with a Psychic test: the bound test is for the Ritual the unit
         # attempts.
@@ -284,7 +291,7 @@ def _describe_happened_core(p: P, negated: bool) -> str:
             verb = "using" if kind in ("ability", "stratagem") else "performing"
             return f"{who} is {'not ' if negated else ''}{verb} {rule}"
         if f.get("kind") == "action":
-            s = f"{neg}{_str(n)}+ actions completed"
+            s = f"{neg}{amount} actions completed"
             if f.get("id") is not None:
                 s += f" ({dekebab(_str(f['id']))})"
             o = p.get("object")
@@ -301,9 +308,13 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         which = used_ability_phrase(f)
         if which is not None:
             return f"{neg}{_with_window(f'{who} used {which}', window)}"
-        what = f"the {id_label(f['id'])} " if f.get("id") is not None else "a "
         used_kind = _str(f["kind"]) if f.get("kind") is not None else "ability"
-        return f"{neg}{_with_window(f'{who} used {what}{dekebab(used_kind)}', window)}"
+        used_phrase = (
+            f"the {id_label(f['id'])} {dekebab(used_kind)}"
+            if f.get("id") is not None
+            else with_article(dekebab(used_kind))
+        )
+        return f"{neg}{_with_window(f'{who} used {used_phrase}', window)}"
     if event == "state-changed":
         # "cause it to become Below Half-strength": the unit's strength fell past a threshold.
         # With no subject, any unit: "a unit became Below Half-strength".
@@ -314,13 +325,18 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         if f.get("strength") == "below-starting":
             fell = "did not fall" if negated else "fell"
             return _with_window(f"{unit} {fell} below its Starting Strength", window)
-        return f"{neg}{_with_window('state changed happened', window)}"
+        return f"{neg}{_with_window(f'{unit} changed state', window)}"
     if event == "objective-gained":
-        return f"{neg}you newly control {_str(n)}+ objectives {_window_phrase(window)}".rstrip()
+        return f"{neg}you newly control {amount} objectives {_window_phrase(window)}".rstrip()
     if event == "designation-changed":
         units = unit_ref_phrase(p.get("object"), "units")
         became = _designation_phrase(_str(f.get("tag")))
-        return f"{neg}{_with_window(f'{_str(n)}+ {units} became {became}', window)}"
+        return f"{neg}{_with_window(f'{amount} {units} became {became}', window)}"
+    if event == "resource-spent":
+        pool = _str(f.get("pool"))
+        what = {"yp-pool": "YP"}.get(pool, dekebab(pool))
+        spent = f"you spent no {what}" if negated else f"you spent {what}"
+        return _with_window(spent, window)
     return f"{neg}{_with_window(f'{dekebab(event)} happened', window)}"
 
 

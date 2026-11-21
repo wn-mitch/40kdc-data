@@ -17,22 +17,22 @@
             </profile>
             <profile name="Bolter Discipline" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, in your turn, while the unit is within range of an objective marker or while the target is within range of an objective marker, the unit gets +1 to Hit rolls with ranged weapons.</characteristic>
+                <characteristic name="Description">During your Shooting phase, while this unit is within range of an objective marker or while the target is within range of an objective marker, add 1 to this unit's Hit rolls with ranged weapons.</characteristic>
               </characteristics>
             </profile>
             <profile name="Tactical Mainstay" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit is eligible to start an Action even if it is within Engagement Range of enemy units or it is Battle-shocked.
--&gt; Each time the unit uses action: the unit is eligible to shoot even if it is performing an Action.</characteristic>
+                <characteristic name="Description">This unit is eligible to start an Action even if it is within Engagement Range of enemy units or it is Battle-shocked.
+Each time this unit uses action, this unit is eligible to shoot even if it is performing an Action.</characteristic>
               </characteristics>
             </profile>
             <profile name="Combat Doctrines" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
-  -&gt; Select one (each may be chosen once per battle):
-    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.
-    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
-    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+                <characteristic name="Description">At the start of your Command phase, you can use this ability, until the start of your next Command phase:
+  - Select one (each can be chosen once per battle):
+    - Assault Doctrine: When this unit is selected to make an Advance move, this unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: Ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: When this unit is selected to make a Fall Back move, this unit is eligible to shoot even if it Fell Back this turn; this unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -122,18 +122,18 @@
             </profile>
             <profile name="Targeted Intercession" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">If the unit charged this turn:
-  -&gt; Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.
-  -&gt; Improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
+                <characteristic name="Description">If this unit charged this turn:
+  - Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.
+  - Improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1.</characteristic>
               </characteristics>
             </profile>
             <profile name="Combat Doctrines" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
-  -&gt; Select one (each may be chosen once per battle):
-    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.
-    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
-    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+                <characteristic name="Description">At the start of your Command phase, you can use this ability, until the start of your next Command phase:
+  - Select one (each can be chosen once per battle):
+    - Assault Doctrine: When this unit is selected to make an Advance move, this unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: Ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: When this unit is selected to make a Fall Back move, this unit is eligible to shoot even if it Fell Back this turn; this unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -231,22 +231,22 @@
             </profile>
             <profile name="Bolter Discipline" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">During the Shooting phase, in your turn, while the unit is within range of an objective marker or while the target is within range of an objective marker, the unit gets +1 to Hit rolls with ranged weapons.</characteristic>
+                <characteristic name="Description">During your Shooting phase, while this unit is within range of an objective marker or while the target is within range of an objective marker, add 1 to this unit's Hit rolls with ranged weapons.</characteristic>
               </characteristics>
             </profile>
             <profile name="Tactical Mainstay" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit is eligible to start an Action even if it is within Engagement Range of enemy units or it is Battle-shocked.
--&gt; Each time the unit uses action: the unit is eligible to shoot even if it is performing an Action.</characteristic>
+                <characteristic name="Description">This unit is eligible to start an Action even if it is within Engagement Range of enemy units or it is Battle-shocked.
+Each time this unit uses action, this unit is eligible to shoot even if it is performing an Action.</characteristic>
               </characteristics>
             </profile>
             <profile name="Combat Doctrines" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
-  -&gt; Select one (each may be chosen once per battle):
-    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.
-    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
-    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+                <characteristic name="Description">At the start of your Command phase, you can use this ability, until the start of your next Command phase:
+  - Select one (each can be chosen once per battle):
+    - Assault Doctrine: When this unit is selected to make an Advance move, this unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: Ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: When this unit is selected to make a Fall Back move, this unit is eligible to shoot even if it Fell Back this turn; this unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -396,32 +396,31 @@
             </profile>
             <profile name="Assault Ramp" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit ends a Normal move, during the Movement phase, in your turn, friendly units embarked within the unit can disembark using the Assault Disembarkation rules.</characteristic>
+                <characteristic name="Description">When this unit ends a Normal move, during your Movement phase, friendly units embarked within this unit can disembark using the Assault Disembarkation rules.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Power Of The Machine Spirit" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">After an enemy unit shoots, until the end of the phase, the unit is eligible to shoot as if it were your Shooting phase.</characteristic>
+                <characteristic name="Description">After an enemy unit shoots, until the end of the phase, this unit is eligible to shoot as if it were your Shooting phase.</characteristic>
               </characteristics>
             </profile>
             <profile name="Combat Doctrines" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of your Command phase, you may use this ability, until the start of your next Command phase:
-  -&gt; Select one (each may be chosen once per battle):
-    - Assault Doctrine: when the unit is selected to make an Advance move: the unit is eligible to declare a charge even if it Advanced this turn.
-    - Devastator Doctrine: ranged weapons equipped by models in this unit gain [ASSAULT].
-    - Tactical Doctrine: when the unit is selected to make a Fall Back move: the unit is eligible to shoot even if it Fell Back this turn; the unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
+                <characteristic name="Description">At the start of your Command phase, you can use this ability, until the start of your next Command phase:
+  - Select one (each can be chosen once per battle):
+    - Assault Doctrine: When this unit is selected to make an Advance move, this unit is eligible to declare a charge even if it Advanced this turn.
+    - Devastator Doctrine: Ranged weapons equipped by models in this unit gain [ASSAULT].
+    - Tactical Doctrine: When this unit is selected to make a Fall Back move, this unit is eligible to shoot even if it Fell Back this turn; this unit is eligible to declare a charge even if it Fell Back this turn.</characteristic>
               </characteristics>
             </profile>
           </profiles>

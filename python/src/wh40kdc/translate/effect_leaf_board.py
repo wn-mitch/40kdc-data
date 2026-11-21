@@ -56,6 +56,7 @@ from wh40kdc.translate.effect_words import (
     title_case,
     v,
     weapon_noun,
+    with_article,
 )
 from wh40kdc.translate.expiry import expiry_trail
 
@@ -84,9 +85,9 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
     if m.get("range") is not None and f" within {range_phrase(m['range'])}" not in subj:
         rng = f" within {range_phrase(m['range'])}"
     who = f"{subj}{rng}"
-    # "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
+    # ", to a maximum of 6 mortal wounds": a cap on the total, however many are rolled or counted.
     cap = (
-        f" (to a maximum of {jstr(m['max'])} mortal {'wound' if m['max'] == 1 else 'wounds'})"
+        f", to a maximum of {jstr(m['max'])} mortal {'wound' if m['max'] == 1 else 'wounds'}"
         if m.get("max") is not None
         else ""
     )
@@ -762,7 +763,7 @@ def _marker(m: dict[str, Any], ctx: Ctx) -> str:
 def _test(m: dict[str, Any], subj: str) -> str:
     n = num(m.get("count") if m.get("count") is not None else 1)
     tests = (
-        f"a {test_name(m.get('test'))} test"
+        with_article(f"{test_name(m.get('test'))} test")
         if n == 1
         else f"{num_str(n)} {test_name(m.get('test'))} tests"
     )
@@ -804,7 +805,7 @@ def _designate(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     return f"{what} {v(what, 'is')} {tag}{by}{until}"
 
 
-def _damage_reduction(m: dict[str, Any], subj: str) -> str:
+def _damage_reduction(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     r = jstr(m.get("reduction"))
     if r == "half":
         how = "halve the Damage of that attack"
@@ -812,6 +813,8 @@ def _damage_reduction(m: dict[str, Any], subj: str) -> str:
         how = "change the Damage of that attack to 0"
     else:
         how = f"subtract {r} from the Damage characteristic of that attack"
+    if ctx.get("allocated_trigger") and m.get("weapons") is None:
+        return how
     weapon = isinstance(m.get("weapons"), dict) and bool(m["weapons"])
     attack = f"an attack with {weapon_noun(m)}" if weapon else "an attack"
     return f"each time {attack} is allocated to {subj}, {how}"
@@ -863,13 +866,13 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "mortal-wounds":
         return _mortal_wounds(m, subj)
     if t == "damage-reduction":
-        return _damage_reduction(m, subj)
+        return _damage_reduction(m, subj, ctx)
     if t == "feel-no-pain":
         rated = is_rating_ref(m.get("threshold"))
         threshold = "X" if rated else jstr(m.get("threshold"))
         against = _FNP_AGAINST.get(jstr(m.get("against")), "")
         tail = ", X being its rating" if rated else ""
-        return f"{subj} {v(subj, 'has')} the Feel No Pain {threshold}+ ability{against}{tail}"
+        return f"{subj} {v(subj, 'has')} Feel No Pain {threshold}+{against}{tail}"
     if t == "invulnerable-save":
         scope = _obj(m.get("weapons"))
         vs = f" against {jstr(scope['type'])} attacks" if scope.get("type") else ""

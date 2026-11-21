@@ -26,8 +26,8 @@ import { ritualMenuBlock, ritualMenuInline } from "./effect-ritual.js";
 import { objectiveSelectorPhrase, rollHead, selectObjectiveBlock, selectObjectiveInline, selectionBinding, selectionLimit, selectorCount, selectorNoun, selectorSubject, selectUnitsSubject } from "./effect-bind.js";
 import {
   diceTableResultLabel,
-  abilityLabel, amountOf, capitalize, diceCase, filterSubject, formatComparison, jstr, orList, quantityPhrase, rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollKindNoun, scaleSource,
-  signed, testName, type Ctx,
+  abilityLabel, amountOf, andList, capitalize, diceCase, filterSubject, formatComparison, jstr, orList, quantityPhrase, rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollKindNoun, scaleSource,
+  signed, testName, withArticle, type Ctx,
 } from "./effect-words.js";
 export type { Ctx };
 export { describeTrigger };
@@ -252,21 +252,21 @@ function selectUnitsPlural(sel: Record<string, unknown> = {}): boolean {
   return selectorCount(sel).plural;
 }
 
-function selectedContext(ctx: Ctx, sel: Record<string, unknown>): Ctx {
+function selectedContext(ctx: Ctx, sel: Record<string, unknown>, plural = selectUnitsPlural(sel)): Ctx {
   const selectedModel = selectorNoun(sel) === "model";
-  return { ...ctx, selectedUnit: !selectedModel, selectedModel, unitSubject: undefined };
+  return { ...ctx, selectedUnit: !selectedModel, selectedModel, selectedPlural: plural, unitSubject: undefined };
 }
 
 /** A `for-each-unit` body: a loop over models names each pass's model "that model". */
 function eachContext(ctx: Ctx, sel: Record<string, unknown>): Ctx {
-  return { ...selectedContext(ctx, sel), eachModel: selectorNoun(sel) === "model" };
+  return { ...selectedContext(ctx, sel, false), eachModel: selectorNoun(sel) === "model" };
 }
 
 function selectUnitsInline(sel: Record<string, unknown>, effect: Effect, ctx: Ctx): string {
   const subject = selectUnitsSubject(sel, ctx);
   const binding = selectionBinding(sel);
   const nested = describeEffectInline(effect, selectedContext(ctx, sel));
-  return `select ${subject}${binding}: ${nested}`;
+  return `select ${subject}${binding}; ${nested}`;
 }
 
 
@@ -363,7 +363,7 @@ function persistentDesignationLead(e: Effect): string {
     const name = persistentDesignationName(e.designation, select.kind);
     clauses.push(`When ${name} is destroyed, ${replacement.optional ? "you may" : "you must"} select ${noun} to replace it.`);
   }
-  if (lifecycle?.exclusivity === "one-active-per-bearer-unit") clauses.push("Only one such designation can be active for this bearer unit.");
+  if (lifecycle?.exclusivity === "one-active-per-bearer-unit") clauses.push("Only one such designation can be active for this unit.");
   return clauses.join(" ");
 }
 
@@ -385,7 +385,7 @@ function persistentDesignationReplacement(e: Effect): string {
   const previous = persistentDesignationName(e.designation, select.kind);
   const label = persistentDesignationLabel(e.designation, select.kind);
   const embarked = e.allow_while_embarked ? ". This selection can be made while this unit is embarked" : "";
-  return `when ${previous} is destroyed, ${replacement?.optional ? "you may" : "you must"} select ${designationTargetSubject(select)}${label} to replace this bearer unit's existing designation. Its existing effects apply to the new target without changing the designation's expiry${embarked}`;
+  return `when ${previous} is destroyed, ${replacement?.optional ? "you may" : "you must"} select ${designationTargetSubject(select)}${label} to replace this unit's existing designation. Its existing effects apply to the new target without changing the designation's expiry${embarked}`;
 }
 
 
@@ -488,12 +488,25 @@ function scalingWording(s: NonNullable<Effect["scaling"]>): string {
 }
 
 
-/** Preserve independent aura predicates while sharing canonical filter vocabulary. */
-function auraRoleFilter(filter: Record<string, unknown>, noun: string): string {
+/** Preserve independent aura predicates while simplifying redundant boolean combinations. */
+function auraRoleFilter(filter: Record<string, unknown>, noun: string, alreadyAll: string[] = []): string {
   const { all_of, any_of, none_of, not_all_of, ...relations } = filter;
-  const all = Array.isArray(all_of) ? ` with ${all_of.map(jstr).join(" and ")}` : "";
-  const any = Array.isArray(any_of) ? ` with at least one of ${orList(any_of.map(jstr))}` : "";
-  const none = Array.isArray(none_of) ? ` without ${orList(none_of.map(jstr))}` : "";
+  const allList = [...alreadyAll, ...(Array.isArray(all_of) ? all_of.map(jstr) : [])];
+  const noneList = Array.isArray(none_of) ? none_of.map(jstr) : [];
+  // Boolean simplification:
+  // 1) If `all_of` already satisfies `any_of`, `any_of` is redundant.
+  // 2) Any keyword in both `any_of` and `none_of` cannot match; strip it from `any_of`.
+  let anyList = Array.isArray(any_of) ? any_of.map(jstr) : [];
+  if (anyList.some((k) => allList.includes(k))) anyList = [];
+  else if (noneList.length > 0) anyList = anyList.filter((k) => !noneList.includes(k));
+  const extraAll = Array.isArray(all_of) ? all_of.map(jstr) : [];
+  if (anyList.length === 1) {
+    extraAll.push(anyList[0]!);
+    anyList = [];
+  }
+  const all = extraAll.length > 0 ? ` with ${extraAll.join(" and ")}` : "";
+  const any = anyList.length > 0 ? ` with the ${orList(anyList)} keyword` : "";
+  const none = noneList.length > 0 ? ` (excluding ${orList(noneList)} models)` : "";
   const notAll = Array.isArray(not_all_of) ? ` without all of ${not_all_of.map(jstr).join(" and ")}` : "";
   const other = Object.keys(relations).length ? ` matching ${filterSubject(relations)}` : "";
   return `${noun}${all}${any}${none}${notAll}${other}`;
@@ -505,10 +518,23 @@ function auraRoleFilter(filter: Record<string, unknown>, noun: string): string {
  * Without one it narrows the aura's own origin (this model, or this unit).
  */
 function auraEmitter(filter: Record<string, unknown>, origin: string): string {
-  const { owner, all_of, ...rest } = filter;
+  const { owner, all_of, any_of, none_of, ...rest } = filter;
   if (typeof owner !== "string") return auraRoleFilter(filter, origin);
-  const keywords = Array.isArray(all_of) ? all_of.map((keyword) => ` ${jstr(keyword)}`).join("") : "";
-  return auraRoleFilter(rest, `one or more${owner === "any" ? "" : ` ${owner}`}${keywords} models`);
+  const allList = Array.isArray(all_of) ? all_of.map(jstr) : [];
+  const noneList = Array.isArray(none_of) ? none_of.map(jstr) : [];
+  let anyList = Array.isArray(any_of) ? any_of.map(jstr) : [];
+  if (anyList.some((k) => allList.includes(k))) anyList = [];
+  else if (noneList.length > 0) anyList = anyList.filter((k) => !noneList.includes(k));
+  // If narrowing `any_of` by `none_of` leaves a single keyword, fold it inline with `all_of`.
+  if (anyList.length === 1) {
+    allList.push(anyList[0]!);
+    anyList = [];
+  }
+  const keywords = allList.map((keyword) => ` ${keyword}`).join("");
+  const remaining: Record<string, unknown> = { ...rest };
+  if (anyList.length > 0) remaining.any_of = anyList;
+  if (noneList.length > 0) remaining.none_of = noneList;
+  return auraRoleFilter(remaining, `one or more${owner === "any" ? "" : ` ${owner}`}${keywords} models`, allList);
 }
 
 /** Who an aura reaches and where: "an enemy unit" and "within 6\" of this unit". */
@@ -613,6 +639,36 @@ function rollWithRider(steps: Effect[], ctx: Ctx): string | null {
   return `roll one ${diceCase(g.dice)}. On ${comp}, ${describeEffectInline(g.on_success, ctx)}. Regardless of the result, ${describeEffectInline(second, ctx)}`;
 }
 
+/** Flatten nested `conditional(c1, conditional(c2, inner))` when neither is a `recipientGate`. */
+function flattenConditional(e: Effect, ctx: Ctx): { condition: Condition; effect: Effect } {
+  const conds: Condition[] = [];
+  let cur: Effect = e;
+  while (cur.type === "conditional" && cur.condition != null && cur.effect != null && !recipientGate(cur, ctx)) {
+    conds.push(cur.condition);
+    cur = cur.effect;
+  }
+  if (conds.length === 0) return { condition: e.condition ?? {}, effect: e.effect ?? {} };
+  const condition: Condition = conds.length === 1 ? conds[0]! : { operator: "and", operands: conds };
+  return { condition, effect: cur };
+}
+
+/** Extract bare `ranged` / `melee` attack_type from a condition so nested leaves don't repeat it. */
+function attackTypeFromCondition(c?: Condition): string | undefined {
+  if (!c) return undefined;
+  if (c.operator === "and" && c.operands) {
+    for (const op of c.operands) {
+      const found = attackTypeFromCondition(op);
+      if (found) return found;
+    }
+    return undefined;
+  }
+  if (c.type === "attack-is" && c.parameters?.weapons == null) {
+    const t = c.parameters?.attack_type;
+    if (t === "ranged" || t === "melee") return t;
+  }
+  return undefined;
+}
+
 function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
   const m = e.modifier ?? {};
 
@@ -624,14 +680,16 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     case "no-effect":
       return "nothing happens";
     // Container types — inline forms.
-    case "conditional":
+    case "conditional": {
       if (e.effect?.type === "named-region-state" && e.effect.modifier?.consumer != null)
         return describeNamedRegionConditional(e.effect.modifier ?? {}, e.condition ?? {}, ctx);
-      {
-        const gate = recipientGate(e, ctx);
-        if (gate) return `${gate.lead}, ${describeEffectInline(gate.inner, gate.ctx)}`;
-      }
-      return `${conditionLeadIn(e.condition ?? {}, isDefensiveEffect(e.effect))}, ${describeEffectInline(e.effect ?? {}, ctx)}`;
+      const gate = recipientGate(e, ctx);
+      if (gate) return `${gate.lead}, ${describeEffectInline(gate.inner, gate.ctx)}`;
+      const flat = flattenConditional(e, ctx);
+      const atkType = attackTypeFromCondition(flat.condition);
+      const childCtx = atkType ? { ...ctx, suppressWeaponType: atkType } : ctx;
+      return `${conditionLeadIn(flat.condition, isDefensiveEffect(flat.effect))}, ${describeEffectInline(flat.effect, childCtx)}`;
+    }
     case "rules-bundle":
     case "sequence": {
       const rider = rollWithRider(e.steps ?? [], ctx);
@@ -684,7 +742,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       return `select ${designationTargetSubject(sel)}${desig}; ${durTrail ? `${durTrail}, ` : ""}${body}`;
     }
     case "stance-select":
-      return `${stanceInitial(e) ? `${stanceInitial(e)}; ` : ""}${stancePick(e)}${e.mode === "consumable" ? " (each may be chosen once per battle)" : ""}${stanceAdditive(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}${stanceRandom(e) ? `; ${stanceRandom(e)}` : ""}`;
+      return `${stanceInitial(e) ? `${stanceInitial(e)}; ` : ""}${stancePick(e)}${e.mode === "consumable" ? " (each can be chosen once per battle)" : ""}${stanceAdditive(e)}: ${(e.options ?? []).map((o) => `${jstr(o.name)} (${describeEffectInline(o.effect ?? {}, ctx)})`).join(" / ")}${stanceRandom(e) ? `; ${stanceRandom(e)}` : ""}`;
     case "stance-selection-capacity": {
       const m = (e.modifier ?? {}) as {
         ability_id?: unknown;
@@ -702,7 +760,7 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
       const subject =
         m.allocation === "fixed-option" && m.option != null
           ? titleCase(jstr(m.option.option_id))
-          : `one option of ${titleCase(jstr(m.ability_id))}`;
+          : `one option of ${abilityLabel(m.ability_id)}`;
       return `you can select ${subject} ${times} per battle`;
     }
     case "risk-reward":
@@ -777,6 +835,7 @@ function stancePick(e: Effect): string {
 function choicePrompt(e: Effect): string {
   const own = ownChoicePrompt(e);
   if (e.chosen_by !== "opponent") return own;
+  if (own.startsWith("choose ")) return `your opponent chooses ${own.slice("choose ".length)}`;
   return own.startsWith("select ") ? `your opponent selects ${own.slice("select ".length)}` : `your opponent: ${own}`;
 }
 
@@ -787,11 +846,14 @@ function secondaryLead(e: Effect, index: number): string {
 
 function ownChoicePrompt(e: Effect): string {
   if (typeof e.choice_prompt === "string" && e.choice_prompt.trim().length > 0) return e.choice_prompt;
+  const rawLabel = e.choice_label ? titleCase(e.choice_label) : "";
+  const label = rawLabel && rawLabel.toLowerCase() !== "one of the following" ? ` (${rawLabel})` : "";
   if (e.min_choices != null && e.max_choices != null) {
-    const quantity = e.min_choices === e.max_choices ? `exactly ${e.max_choices}` : e.min_choices === 0 ? `up to ${e.max_choices}` : `from ${e.min_choices} through ${e.max_choices}`;
-    return `select ${quantity} distinct options${e.choice_label ? ` (${titleCase(e.choice_label)})` : ""}`;
+    if (e.min_choices === 1 && e.max_choices === 1) return `choose one of the following${label}`;
+    const quantity = e.min_choices === e.max_choices ? `${e.max_choices}` : e.min_choices === 0 ? `up to ${e.max_choices}` : `${e.min_choices} to ${e.max_choices}`;
+    return `choose ${quantity} of the following${label}`;
   }
-  return `select one of the following${e.choice_label ? ` (${titleCase(e.choice_label)})` : ""}`;
+  return `choose one of the following${label}`;
 }
 
 function namedRegionRecord(value: unknown): Record<string, unknown> {
@@ -892,8 +954,8 @@ function describeNamedRegionConditional(m: Record<string, unknown>, condition: C
 }
 
 /**
- * What leads a part: its moment, its usage limit, its name when the rules give one, the choice to
- * use it and its cost ("at the end of your Movement phase, once per battle, you can").
+ * What leads a part: its moment, its usage limit, its duration, its name when the rules give one,
+ * the choice to use it and its cost ("at the end of your Movement phase, once per battle, you can").
  */
 function partHead(e: Effect): string {
   const moment = normalizeTriggers(e.trigger).map((t) => describeTrigger(withAuraRecipient(t, e.effect, {}))).filter(Boolean).join(" or ");
@@ -903,8 +965,19 @@ function partHead(e: Effect): string {
   const named = label ? "" : e.name ? `${e.optional ? "you can use " : "use "}${jstr(e.name)}${level}` : e.optional ? "you can" : "";
   const cost = e.cost ? `by paying this cost (${describeEffectInline(e.cost)})` : "";
   // A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
-  const trail = durationClauses(e.duration).trail.replace(/control it$/u, "control that objective marker");
-  return [label, moment, e.usage ? usageClause(e.usage) : "", named, cost, trail].filter(Boolean).join(", ");
+  // Skip when the inner designate-target / persistent-designation already prints the same duration.
+  const ownDesigDur = (e.effect?.type === "designate-target" || e.effect?.type === "persistent-designation") && e.effect.duration === e.duration;
+  const trail = ownDesigDur ? "" : durationClauses(e.duration).trail.replace(/control it$/u, "control that objective marker");
+  return [label, moment, e.usage ? usageClause(e.usage) : "", trail, named, cost].filter(Boolean).join(", ");
+}
+
+/** Whether an ability-part's own trigger already names a destruction or allocation event. */
+function partTriggerCtx(e: Effect, ctx: Ctx): Ctx {
+  const ts = normalizeTriggers(e.trigger);
+  const destroyed = ts.some((t) => t.event === "destroyed" || t.event === "model-destroyed");
+  const allocated = ts.some((t) => t.event === "damage-allocated");
+  if (!destroyed && !allocated) return ctx;
+  return { ...ctx, ...(destroyed ? { destroyedTrigger: true } : {}), ...(allocated ? { allocatedTrigger: true } : {}) };
 }
 
 /** A part with its own trigger: its effect's event refs read as that trigger's model, if it names one. */
@@ -915,10 +988,15 @@ function partWithModelRefs(e: Effect): Effect {
 
 /** A part on one line: its head, then its effect. */
 function partInline(e: Effect, ctx: Ctx): string {
+  const childCtx = partTriggerCtx(e, ctx);
   const head = partHead(e);
-  const body = describeEffectInline(e.effect ?? {}, ctx);
+  const body = describeEffectInline(e.effect ?? {}, childCtx);
   // An optional part whose effect already reads "you can …" needs no "you can:" before it.
   if (head === "you can" && body.startsWith("you can ")) return body;
+  // A part head ending in "you can use this ability" joins with ": " to avoid a comma splice.
+  if (head.endsWith("you can use this ability")) return `${head}: ${body}`;
+  // When a part head is a plain trigger/condition without a label, join with ", " instead of ": ".
+  if (head && !e.name && !head.endsWith("you can")) return `${head}, ${body}`;
   return head ? `${head}: ${body}` : body;
 }
 
@@ -928,18 +1006,21 @@ function partInline(e: Effect, ctx: Ctx): string {
  */
 export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): string {
   const indent = "  ".repeat(depth);
-  const arrow = depth > 0 ? "-> " : "";
+  const arrow = depth > 0 ? "- " : "";
 
   switch (e.type) {
     case "conditional": {
-      const inner = e.effect ?? {};
       const gate = recipientGate(e, ctx);
-      if (gate && gate.inner.type === "sequence") return `${indent}${capitalize(gate.lead)}:\n` + describeEffect(gate.inner, depth + 1, gate.ctx);
-      if (CONTAINER_TYPES.has(inner.type ?? "")) {
-        return `${indent}${capitalize(conditionLeadIn(e.condition ?? {}))}:\n` + describeEffect(inner, depth + 1, ctx);
-      }
+      if (gate && gate.inner.type === "sequence") return `${indent}${arrow}${capitalize(gate.lead)}:\n` + describeEffect(gate.inner, depth + 1, gate.ctx);
       if (gate) return `${indent}${arrow}${capitalize(gate.lead)}, ${describeEffectInline(gate.inner, gate.ctx)}.`;
-      return `${indent}${arrow}${capitalize(conditionLeadIn(e.condition ?? {}, isDefensiveEffect(inner)))}, ${describeEffectInline(inner, ctx)}.`;
+      const flat = flattenConditional(e, ctx);
+      const inner = flat.effect;
+      const atkType = attackTypeFromCondition(flat.condition);
+      const childCtx = atkType ? { ...ctx, suppressWeaponType: atkType } : ctx;
+      if (CONTAINER_TYPES.has(inner.type ?? "")) {
+        return `${indent}${arrow}${capitalize(conditionLeadIn(flat.condition))}:\n` + describeEffect(inner, depth + 1, childCtx);
+      }
+      return `${indent}${arrow}${capitalize(conditionLeadIn(flat.condition, isDefensiveEffect(inner)))}, ${describeEffectInline(inner, childCtx)}.`;
     }
     case "rules-bundle":
     case "sequence": {
@@ -948,15 +1029,15 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       return (e.steps ?? []).map((s) => describeEffect(s, depth, ctx)).join("\n");
     }
     case "ability-part": {
-      // A part is always a bullet of its ability, even at the top level.
       e = partWithModelRefs(e);
       const inner = e.effect ?? {};
+      const childCtx = partTriggerCtx(e, ctx);
       // A part with nothing to head it (a printed grant's body) lists its container's steps in its place.
       if (CONTAINER_TYPES.has(inner.type ?? "")) {
         const head = partHead(e);
-        return head ? `${indent}-> ${capitalize(head)}:\n` + describeEffect(inner, depth + 1, ctx) : describeEffect(inner, depth, ctx);
+        return head ? `${indent}${arrow}${capitalize(head)}:\n` + describeEffect(inner, depth + 1, childCtx) : describeEffect(inner, depth, childCtx);
       }
-      return `${indent}-> ${capitalize(partInline(e, ctx))}.`;
+      return `${indent}${arrow}${capitalize(partInline(e, childCtx))}.`;
     }
     case "ability-grant":
       // A grant printed with its ability: the holder and name, then the ability one level deeper.
@@ -1012,18 +1093,18 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
     case "select-units": {
       const selector = e.selector ?? {};
       const inner = e.effect ?? {};
-      const selectedCtx = selectedContext(ctx, selector);
+      const plural = selectUnitsPlural(selector);
       const lead = `Select ${selectUnitsSubject(selector, ctx)}${selectionBinding(selector)}`;
       const header = `${indent}${arrow}${lead}`;
       if (CONTAINER_TYPES.has(inner.type ?? "")) {
-        if (selectUnitsPlural(selector)) {
-          const nested = describeEffect(inner, depth + 2, selectedCtx);
-          return `${header}:\n${indent}  -> For each selected ${selectorNoun(selector)}:\n${nested}`;
+        if (plural) {
+          const nested = describeEffect(inner, depth + 2, selectedContext(ctx, selector, false));
+          return `${header}:\n${indent}  - For each selected ${selectorNoun(selector)}:\n${nested}`;
         }
-        return `${header.replace(/\.$/, "")}:\n` + describeEffect(inner, depth + 1, selectedCtx);
+        return `${header.replace(/\.$/, "")}:\n` + describeEffect(inner, depth + 1, selectedContext(ctx, selector, false));
       }
-      const nested = describeEffectInline(inner, selectedCtx);
-      return `${header}: ${nested}.`;
+      const nested = describeEffectInline(inner, selectedContext(ctx, selector, plural));
+      return `${header}. ${capitalize(nested)}.`;
     }
     case "persistent-designation": {
       if (e.operation === "replace") return `${indent}${arrow}${capitalize(persistentDesignationReplacement(e))}.`;
@@ -1053,7 +1134,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
         const lines = e.applies.map((applies) => {
           const recipient = designatedRecipientContext(applies, ctx);
           const entry = applies.effect ?? {};
-          const lead = `${indent}  -> ${capitalize(designationWhen(applies, true))}`;
+          const lead = `${indent}  - ${capitalize(designationWhen(applies, true))}`;
           return CONTAINER_TYPES.has(entry.type ?? "") ? `${lead}:\n${describeEffect(entry, depth + 2, recipient)}` : `${lead}, ${describeEffectInline(entry, recipient)}.`;
         });
         return `${indent}${arrow}Select ${designationTargetSubject(sel)}${desig}${durTrail ? `. ${capitalize(durTrail)}` : ""}:\n${lines.join("\n")}`;
@@ -1070,11 +1151,11 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       return `${head}, ${describeEffectInline(inner, recipientCtx)}.`;
     }
     case "stance-select": {
-      const consum = e.mode === "consumable" ? " (each may be chosen once per battle)" : "";
+      const consum = e.mode === "consumable" ? " (each can be chosen once per battle)" : "";
       const lines = [`${indent}${arrow}${capitalize(stancePick(e))}${consum}${stanceAdditive(e)}:`];
       if (stanceInitial(e)) lines.unshift(`${indent}${arrow}${capitalize(stanceInitial(e))}.`);
       for (const opt of e.options ?? []) {
-        lines.push(`${indent}  - ${jstr(opt.name)}: ${describeEffectInline(opt.effect ?? {}, ctx)}.`);
+        lines.push(`${indent}  - ${jstr(opt.name)}: ${capitalize(describeEffectInline(opt.effect ?? {}, ctx))}.`);
       }
       if (stanceRandom(e)) lines.push(`${indent}${arrow}${capitalize(stanceRandom(e))}.`);
       return lines.join("\n");
@@ -1083,7 +1164,7 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       const risk = e.risk ?? {};
       const onFail = risk.on_fail ? describeEffectInline(risk.on_fail, ctx) : "there is a consequence";
       const reward = describeEffectInline(e.reward ?? {}, ctx);
-      return `${indent}${arrow}First take a ${testName(risk.test)} test — on a failure, ${onFail}; then ${reward}.`;
+      return `${indent}${arrow}Take ${withArticle(`${testName(risk.test)} test`)}. On a failure, ${onFail}; then ${reward}.`;
     }
     case "issue-orders": {
       const n = e.count != null ? jstr(e.count) : "one or more";
@@ -1100,14 +1181,14 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       }
       const lines = [`${indent}${arrow}${issue} up to ${n} Orders to ${orderTo(e, units)}${rng}${states}${orderLimit(e)}, each one of:`];
       for (const opt of e.options ?? []) {
-        lines.push(`${indent}  - ${jstr(opt.name)}: ${describeEffectInline(opt.effect ?? {}, ctx)}.`);
+        lines.push(`${indent}  - ${jstr(opt.name)}: ${capitalize(describeEffectInline(opt.effect ?? {}, ctx))}.`);
       }
       for (const rule of orderRuleSentences(e, ctx)) lines.push(`${indent}${rule}`);
       return lines.join("\n");
     }
     case "resource-action-menu": {
       const su = sharedUsageClause(e.shared_usage);
-      const intro = su ? `Actions may be performed when their conditions are met. ${capitalize(su)}` : "Actions may be performed when their conditions are met";
+      const intro = su ? `You can perform these actions when their triggers are met. ${capitalize(su)}` : "You can perform these actions when their triggers are met";
       const lines = [`${indent}${arrow}${intro}:`];
       for (const action of e.actions ?? []) {
         lines.push(`${indent}  - ${describeMenuAction(action, ctx)}`);
@@ -1174,19 +1255,47 @@ export function describeAppliesTo(a?: AbilityAppliesTo | null): string {
   const excluded = a.none_of ?? [];
   const notAll = a.not_all_of ?? [];
   if (required.length === 0 && any.length === 0 && excluded.length === 0 && notAll.length === 0) return "";
-  const positive = [required.join(", "), any.length ? `at least one of ${orList(any)}` : ""].filter(Boolean).join(" and ");
-  const base = positive ? `units with ${positive}` : "all units";
-  const exc = excluded.length ? ` (excluding ${excluded.join(", ")})` : "";
-  const partial = notAll.length ? ` (excluding units with all of ${notAll.join(", ")})` : "";
+  let base: string;
+  if (required.length > 0 && any.length === 0) {
+    base = `${required.join(" ")} units`;
+  } else {
+    const positive = [required.join(", "), any.length ? `the ${orList(any)} keyword` : ""].filter(Boolean).join(" and ");
+    base = positive ? `units with ${positive}` : "all units";
+  }
+  const exc = excluded.length ? ` (excluding ${orList(excluded)} units)` : "";
+  const partial = notAll.length ? ` (excluding units with all of ${andList(notAll)})` : "";
   return `Applies to: ${base}${exc}${partial}.`;
 }
 
-/** Join non-empty clauses with ", ", capitalize the sentence, and end with a period. */
+/** Join non-empty clauses with ", ", merging adjacent `if` clauses, capitalize, and end with a period. */
 function assembleSentence(parts: string[]): string {
-  const body = parts.filter((p) => p.length > 0).join(", ");
-  if (body.length === 0) return "";
+  const nonEmpty = parts.filter((p) => p.length > 0);
+  if (nonEmpty.length === 0) return "";
+  let body = nonEmpty[0]!;
+  for (let i = 1; i < nonEmpty.length; i++) {
+    const next = nonEmpty[i]!;
+    if (/, if [^.]+$/u.test(body) && next.startsWith("if ")) {
+      body = `${body} and ${next.slice(3)}`;
+    } else {
+      body = `${body}, ${next}`;
+    }
+  }
   const period = body.endsWith(".") || body.endsWith(":") ? "" : ".";
   return capitalize(body) + period;
+}
+
+/** Weave `optional: true` cleanly without a clunky `You can: ` prefix. */
+function withOptionality(rendered: string): string {
+  if (!rendered) return "";
+  if (/^(?:You can\b|Choose\b|Select\b)/u.test(rendered) || /\byou can\b/u.test(rendered)) return rendered;
+  // Block header ("During your Command phase, until ...:\n  - ..."): weave ", you can use this ability:" before the colon.
+  const newline = rendered.indexOf("\n");
+  if (newline > 0) {
+    const first = rendered.slice(0, newline);
+    const rest = rendered.slice(newline);
+    if (first.endsWith(":")) return `${first.slice(0, -1)}, you can use this ability:${rest}`;
+  }
+  return `You can use this ability: ${rendered}`;
 }
 
 /**
@@ -1197,9 +1306,8 @@ function assembleSentence(parts: string[]): string {
  * carries no rules prose.
  */
 export function describeAbility(a: AbilityLike): string {
-  const rendered = a.effect ? renderTopLevel(a.effect, a.scope, a.usage, a.trigger) : "";
-  // An optional ability is the player's choice, unless its text already opens with that choice.
-  const core = a.optional === true && rendered && !rendered.startsWith("You can ") ? `You can: ${rendered}` : rendered;
+  const rendered = a.effect ? renderTopLevel(a.effect, a.scope, a.usage, a.trigger, a.optional === true) : "";
+  const core = a.optional === true ? withOptionality(rendered) : rendered;
   const applies = describeAppliesTo(a.applies_to);
   return [core, applies].filter(Boolean).join("\n");
 }
@@ -1216,6 +1324,7 @@ function renderTopLevel(
   scope?: AbilityScope,
   usage?: AbilityUsage | AbilityUsage[] | null,
   trigger?: AbilityTriggerSpec | null,
+  optional = false,
 ): string {
   const ctx: Ctx = {};
   const { lead: durLead, trail } = durationClauses(scope?.duration);
@@ -1227,6 +1336,12 @@ function renderTopLevel(
   // within-range condition on the effect, render the range once (drop it here).
   const triggers = normalizeTriggers(trigger).filter((t) => t.event != null);
   if (triggers.some((t) => t.event === "destroyed" || t.event === "model-destroyed")) ctx.destroyedTrigger = true;
+  if (triggers.some((t) => t.event === "damage-allocated")) ctx.allocatedTrigger = true;
+  // When every trigger introduces a friendly filtered unit (e.g. a Stratagem's "When a friendly X unit is selected to fight"),
+  // `this-unit` / `event-subject` in the effect body refers back to "that unit".
+  if (triggers.length > 0 && triggers.every((t) => typeof t.subject === "object" && t.subject != null && (t.subject as Record<string, unknown>).owner === "friendly")) {
+    ctx.unitSubject = "that unit";
+  }
   // Every trigger's object (subject) is a model: the effect's `event-object` reads "that model"
   // (`event-subject` "the triggering model").
   e = modelEventRefs(e, triggers);
@@ -1241,21 +1356,27 @@ function renderTopLevel(
     .join(" or ");
 
   if (e.type === "conditional") {
-    const inner = e.effect ?? {};
-    const leadIn = conditionLeadIn(e.condition ?? {}, isDefensiveEffect(inner));
     const gate = recipientGate(e, ctx);
     if (gate && gate.inner.type === "sequence") {
       // "While a friendly X unit is …:" then that unit's effects.
       const header = [trig, lead, gate.lead, trail].filter((p) => p.length > 0).join(", ");
       return capitalize(header) + ":\n" + describeEffect(gate.inner, 1, gate.ctx);
     }
+    if (gate) return assembleSentence([trig, lead, gate.lead, trail, describeEffectInline(gate.inner, gate.ctx)]);
+    const flat = flattenConditional(e, ctx);
+    const inner = flat.effect;
+    const leadIn = conditionLeadIn(flat.condition, isDefensiveEffect(inner));
+    const atkType = attackTypeFromCondition(flat.condition);
+    const childCtx = atkType ? { ...ctx, suppressWeaponType: atkType } : ctx;
     if (CONTAINER_TYPES.has(inner.type ?? "")) {
       // Block: "<trigger>[, <lead-in>][, <duration>]:" then the indented container.
       const header = [trig, lead, leadIn, trail].filter((p) => p.length > 0).join(", ");
-      return capitalize(header) + ":\n" + describeEffect(inner, 1, ctx);
+      return capitalize(header) + ":\n" + describeEffect(inner, 1, childCtx);
     }
-    if (gate) return assembleSentence([trig, lead, gate.lead, trail, describeEffectInline(gate.inner, gate.ctx)]);
-    return assembleSentence([trig, lead, leadIn, trail, describeEffectInline(inner, ctx)]);
+    const body = describeEffectInline(inner, childCtx);
+    const optBody = optional && !/^(?:you can\b|choose\b|select\b)/u.test(body) && /^(?:add|subtract|return|remove|destroy|heal|move|place|roll|spend|discard|improve|worsen|set|halve|multiply|reduce|increase|issue|split)\b/u.test(body)
+      ? `you can ${body}` : body;
+    return assembleSentence([trig, lead, leadIn, trail, optBody]);
   }
 
   if (CONTAINER_TYPES.has(e.type ?? "") || isDefinedGrant(e)) {
@@ -1265,31 +1386,47 @@ function renderTopLevel(
     const ownDuration =
       (e.type === "designate-target" || e.type === "persistent-designation") && e.duration != null;
     const head = [trig, lead, ownDuration ? "" : trail].filter((p) => p.length > 0).join(", ");
+    // Inline simple single-leaf `dice-gated` or `select-units` under a header instead of a 1-bullet list.
+    if (head && e.type === "dice-gated") {
+      return assembleSentence([head, describeEffectInline(e, ctx)]);
+    }
+    if (head && e.type === "select-units" && !CONTAINER_TYPES.has(e.effect?.type ?? "")) {
+      const sel = e.selector ?? {};
+      const plural = selectUnitsPlural(sel);
+      const nested = describeEffectInline(e.effect ?? {}, selectedContext(ctx, sel, plural));
+      return `${capitalize(head)}, select ${selectUnitsSubject(sel, ctx)}${selectionBinding(sel)}. ${capitalize(nested)}.`;
+    }
     // Under a header, the block's steps are indented as they are under a condition's lead-in.
     return head ? capitalize(head) + ":\n" + describeEffect(e, 1, ctx) : describeEffect(e, 0, ctx);
   }
 
-  return assembleSentence([trig, lead, trail, describeEffectInline(e, ctx)]);
+  const body = describeEffectInline(e, ctx);
+  const optBody = optional && !/^(?:you can\b|choose\b|select\b)/u.test(body) && /^(?:add|subtract|return|remove|destroy|heal|move|place|roll|spend|discard|improve|worsen|set|halve|multiply|reduce|increase|issue|split)\b/u.test(body)
+    ? `you can ${body}` : body;
+  return assembleSentence([trig, lead, trail, optBody]);
 }
 
 function leadershipTest(e: Effect, ctx: Ctx): string {
   const who = unitRefPhrase(e.test?.subject);
   const kind = e.test?.kind === "battle-shock" ? "Battle-shock" : "Leadership";
   const modifiers = (e.test?.modifiers ?? []).map((modifier) => `apply ${signed("add", modifier.value)} if ${describeCondition(modifier.condition)}`).join("; ");
-  const success = e.on_success ? describeEffectInline(e.on_success, ctx) : "nothing happens";
+  const hasSuccess = e.on_success != null && e.on_success.type !== "no-effect";
   const failures = [
     ...(e.test?.kind === "battle-shock" ? [`${who} becomes Battle-shocked`] : []),
     ...(e.on_fail ? [describeEffectInline(e.on_fail, ctx)] : []),
   ];
+  const base = `${who} takes ${withArticle(`${kind} test`)}${modifiers ? ` (${modifiers})` : ""}`;
+  if (!hasSuccess && failures.length > 0) return `${base}; if failed, ${failures.join("; ")}`;
+  const success = hasSuccess ? describeEffectInline(e.on_success!, ctx) : "nothing happens";
   const fail = failures.length ? `; otherwise, ${failures.join("; ")}` : "";
-  return `${who} takes a ${kind} test (2D6, passing on its current Leadership or higher${modifiers ? `; ${modifiers}` : ""}); if passed, ${success}${fail}`;
+  return `${base}; if passed, ${success}${fail}`;
 }
 
 function selectionRefName(ref: unknown, fallback: string): string {
   const value = ref && typeof ref === "object" ? ref as Record<string, unknown> : {};
   const id = value.selection_var ?? value.event_var;
   return typeof id === "string" && id.length > 0
-    ? `the bound ${dekebab(id.replace(/_/g, "-"))}`
+    ? `the chosen ${dekebab(id.replace(/_/g, "-"))}`
     : fallback;
 }
 

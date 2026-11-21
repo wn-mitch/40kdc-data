@@ -18,10 +18,12 @@ use crate::translate::designations::designation_label;
 /// Rendering context threaded down from the containers to the leaves.
 #[derive(Default, Clone)]
 pub(crate) struct Ctx {
-    /// Inside a `select-units` / `for-each-unit`: the selected unit reads "that unit".
+    /// Inside a `select-units` / `for-each-unit`: the selected unit reads "that unit" (or "those units" when plural).
     pub selected_unit: bool,
-    /// Inside a model-level selection: the selected model reads "that model".
+    /// Inside a model-level selection: the selected model reads "that model" (or "those models" when plural).
     pub selected_model: bool,
+    /// Inside a plural `select-units` without an enclosing loop: selected-unit reads "those units" / "those models".
+    pub selected_plural: bool,
     /// Explicit beneficiary binding inside a designated attack.
     pub unit_subject: Option<String>,
     /// Inside an aura: the recipient reads "that unit".
@@ -30,9 +32,13 @@ pub(crate) struct Ctx {
     pub each_model: bool,
     /// The ability's trigger already says a unit or model is destroyed; leaves must not repeat it.
     pub destroyed_trigger: bool,
+    /// The ability's trigger already says damage/an attack is allocated; damage-reduction must not repeat it.
+    pub allocated_trigger: bool,
     /// Inside a designation's `attackers-of-target` entry: a characteristic change applies to each
     /// attack against the target.
     pub attack_on_target: bool,
+    /// An enclosing `attack-is` already stated this attack type ("ranged"/"melee"), so bare weapon-type filters don't repeat it.
+    pub suppress_weapon_type: Option<String>,
 }
 
 impl Ctx {
@@ -123,13 +129,14 @@ pub(crate) fn test_name(test: Option<&Value>) -> String {
     }
 }
 
-/// Does a subject noun phrase take a plural verb? (`enemy units within 6"`, `all friendly units`).
+/// Does a subject noun phrase take a plural verb? (`enemy units within 6"`, `friendly units`, `those units`).
 pub(crate) fn is_plural(subj: &str) -> bool {
     // `/(^| )(units|models)\b/`: a leading space lets a subject that opens on the noun match.
     let spaced = format!(" {subj}");
     has_word_end(&spaced, " units")
         || has_word_end(&spaced, " models")
         || subj.starts_with("all ")
+        || subj.starts_with("those ")
         || subj.starts_with("targets ")
 }
 
@@ -478,7 +485,7 @@ pub(crate) fn weapon_roll_scope(m: &P) -> String {
 }
 
 /// A tag an effect applies: a registered id prints the rules' term, a legacy upper-case tag
-/// stays as printed, others read "marked as …".
+/// stays as printed, others read "designated as …".
 pub(crate) fn designation_for(tag: &str) -> String {
     if let Some(label) = designation_label(tag, false) {
         return label;
@@ -486,7 +493,7 @@ pub(crate) fn designation_for(tag: &str) -> String {
     if tag == tag.to_uppercase() {
         tag.to_string()
     } else {
-        format!("marked as {}", dekebab(tag))
+        format!("designated as {}", title_case(tag))
     }
 }
 

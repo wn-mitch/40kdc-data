@@ -82,7 +82,7 @@ describe("unit-position models every: compiled shapes", () => {
       ["attacks that target this unit have -1 AP", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "worsen", value: 1, weapon_type: "all" }],
     ), BEACON_TEXT);
     expect(mechanics.effect.condition).toEqual({ type: "within", parameters: { of: { objective: {} }, range: "objective-control", models: "every" } });
-    expect(describeCondition(mechanics.effect.condition)).toBe("every model in the unit is within range of an objective marker");
+    expect(describeCondition(mechanics.effect.condition)).toBe("every model in this unit is within range of an objective marker");
   });
 
   it("keeps the every-model flag off an objective check that does not carry it", () => {
@@ -93,7 +93,7 @@ describe("unit-position models every: compiled shapes", () => {
       ["attacks that target this unit have -1 AP", "characteristic-modifier", { subject: "attack", characteristics: ["AP"], operation: "worsen", value: 1, weapon_type: "all" }],
     ), BEACON_TEXT);
     expect(mechanics.effect.condition).toEqual({ type: "matches", parameters: { filter: { within: { of: { objective: {} }, range: "objective-control" } } } });
-    expect(describeCondition(mechanics.effect.condition)).toBe("the unit is within range of an objective marker");
+    expect(describeCondition(mechanics.effect.condition)).toBe("this unit is within range of an objective marker");
   });
 
   it("compiles the bearer's own every-model check on a selection as eligibility of the selected unit", () => {
@@ -181,12 +181,12 @@ describe("unit-position models every: describer wording", () => {
   const objective = (extra: Record<string, unknown>) => ({ type: "within", parameters: { of: { objective: {} }, range: "objective-control", ...extra } });
 
   it("names every model of the subject for an objective check", () => {
-    expect(describeCondition(objective({ models: "every" }) as any)).toBe("every model in the unit is within range of an objective marker");
-    expect(describeCondition(objective({}) as any)).toBe("the unit is within range of an objective marker");
+    expect(describeCondition(objective({ models: "every" }) as any)).toBe("every model in this unit is within range of an objective marker");
+    expect(describeCondition(objective({}) as any)).toBe("this unit is within range of an objective marker");
   });
 
   it("names every model of the subject for a selected objective marker", () => {
     const selected = { type: "within", parameters: { of: { objective: { selection_var: "marker" } }, range: "objective-control", models: "every" } };
-    expect(describeCondition(selected as any)).toBe("every model in the unit is within range of that objective marker");
+    expect(describeCondition(selected as any)).toBe("every model in this unit is within range of that objective marker");
   });
 });

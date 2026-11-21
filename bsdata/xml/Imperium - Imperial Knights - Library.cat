@@ -417,24 +417,23 @@
         </profile>
         <profile name="Deadly Demise" id="5fa6-2b9d-dac9-236c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sunderer of Fortresses" id="e3fe-9436-43ed-efbe" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against VEHICLE targets:
-  Against a unit that is not a FORTIFICATION:
-    -&gt; Improve this model's Strength characteristic by 1.
-    -&gt; Improve this model's Damage characteristic by 1.
-  Against FORTIFICATION targets:
-    -&gt; Improve this model's Strength characteristic by 2.
-    -&gt; Improve this model's Damage characteristic by 2.</characteristic>
+  - Against a unit that is not a FORTIFICATION:
+    - Improve this model's Strength characteristic by 1.
+    - Improve this model's Damage characteristic by 1.
+  - Against FORTIFICATION targets:
+    - Improve this model's Strength characteristic by 2.
+    - Improve this model's Damage characteristic by 2.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="4b4e-a625-a984-ace4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="de0c-fb0e-0bca-1fc4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -533,25 +532,24 @@
         </profile>
         <profile name="Deadly Demise" id="688a-b9db-53fc-acc2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Selfless Protector" id="d563-9518-5493-b3ca" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a ranged attack is allocated to a friendly IMPERIAL KNIGHTS model, unless the target is not fully visible to the attacking model because of this model, until that unit finishes resolving its attacks:
-  -&gt; That model has the Benefit of Cover.
-  -&gt; That model has a 4+ invulnerable save.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a ranged attack is allocated to a friendly IMPERIAL KNIGHTS model, unless the target is not fully visible to the attacking model because of this model, until the attacking unit finishes resolving its attacks:
+  - That model has the Benefit of Cover.
+  - That model has a 4+ invulnerable save.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="a4c7-2877-b68f-cf7b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Defender's Duty" id="66b1-96e3-ce17-eb7a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When damage is allocated, while the Defenders Duty is active, each time an attack is allocated to this model, subtract 1 from the Damage characteristic of that attack.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When damage is allocated, while the Defenders Duty is active, subtract 1 from the Damage characteristic of that attack.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="0164-96cd-d085-4f7f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -728,25 +726,24 @@
         </profile>
         <profile name="Deadly Demise" id="c998-d63a-cec8-2e03" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Searing Flames" id="9b50-9b2e-37d4-cb7e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit by Acheron flame cannon during its just-finished shooting sequence: that unit cannot benefit from Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit by Acheron flame cannon during that shooting sequence. That unit cannot benefit from Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Acheron's Duty" id="b5f2-d8ba-4b32-d8df" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army, while 1+ the units Bondsman-affected by the unit:
-  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Acherons Duty ability, the unit must take a Battle-shock test, applying -1 to that test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army, while one or more this units Bondsman-affected by this unit:
+  For each enemy unit: While this unit is within Engagement Range of a friendly unit with the Acherons Duty ability, that unit must take a Battle-shock test, applying -1 to that test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6d2e-44c9-555d-4f57" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="265c-b37f-186c-ee73" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -917,13 +914,12 @@
         </profile>
         <profile name="Deadly Demise" id="10f8-13f3-7999-e7b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="cf37-31b0-000d-e851" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="53ea-3b55-aa66-32a5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1112,28 +1108,27 @@
         </profile>
         <profile name="Storm of Bolts" id="b9b5-365a-8360-d679" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:
-  -&gt; Select one enemy unit (excluding MONSTER or VEHICLE units) that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; While this model is on the battlefield, that unit is marked as suppressed.
-    -&gt; While the unit is tagged suppressed, that unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:
+  - Select one enemy unit (excluding MONSTER or VEHICLE units) that was hit by an attack made by the triggering unit during that shooting sequence:
+    - While this model is on the battlefield, that unit is Suppressed.
+    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="b827-e869-5552-3f1a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Castigator's Duty" id="4ec3-2182-3354-7e51" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the Castigators Duty is active:
-  -&gt; Ranged weapons equipped by this model gain [SUSTAINED HITS 1].
-  -&gt; Improve the Armour Penetration characteristic of ranged weapons equipped by this model by 1.</characteristic>
+  - Ranged weapons equipped by this model gain [SUSTAINED HITS 1].
+  - Improve the Armour Penetration characteristic of ranged weapons equipped by this model by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="2841-8879-417f-c9c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="e710-a92e-8ca5-02b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1298,20 +1293,19 @@
         </profile>
         <profile name="Deadly Demise" id="3970-cf86-dad8-ae7f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="9994-322b-0d20-96c3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Paladin's Duty" id="7bed-af4d-3030-9620" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the Paladins Duty is active:
-  -&gt; The unit's weapons gain [LETHAL HITS].
-  -&gt; Melee weapons equipped by models in this unit gain [LANCE].</characteristic>
+  - This unit's weapons gain [LETHAL HITS].
+  - Melee weapons equipped by models in this unit gain [LANCE].</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="0a12-0362-2ab3-92f0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1614,25 +1608,24 @@
         </profile>
         <profile name="Aggressive Assault" id="7833-12bb-93fb-1f38" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, if the target is the closest eligible target, this model gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, if the target is the closest eligible target, add 1 to this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="1006-f5b6-bbd8-5d77" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="5d65-67ae-cde1-1a65" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Errant's Duty" id="4f77-d488-2f2d-4838" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While the Errants Duty is active:
-  -&gt; You can re-roll the Advance roll.
-  -&gt; Ranged weapons equipped by models in this unit gain [ASSAULT].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the Errants Duty is active, you can use this ability:
+  - You can re-roll the Advance roll.
+  - Ranged weapons equipped by models in this unit gain [ASSAULT].</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="5d51-88ad-96ce-9433" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1929,23 +1922,22 @@
         </profile>
         <profile name="Punishing Salvoes" id="5ea6-fbcd-1cb2-f641" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Movement phase, in your turn, if this model remained stationary this turn, until the end of the turn, ranged weapons equipped by this model gain [SUSTAINED HITS 1].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Movement phase, if this model remained stationary this turn, until the end of the turn, ranged weapons equipped by this model gain [SUSTAINED HITS 1].</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="d82d-ff29-decf-22fe" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Crusader's Duty" id="c148-9dae-314b-b2b7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is Bondsman-affected by the unit, while making ranged attacks, all friendly units get +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is Bondsman-affected by this unit, while making ranged attacks, add 1 to friendly units' Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="ca0a-ef4f-eadd-803e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="7e12-5196-7c70-af8c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2287,20 +2279,19 @@
         </profile>
         <profile name="Deadly Demise" id="35f6-3339-1ad3-f51d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="bffc-06c8-1699-21f2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Warden's Duty" id="dbd5-1e6c-ce69-c5da" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the Wardens Duty is active:
-  -&gt; The unit's weapons gain [SUSTAINED HITS 1].
-  -&gt; Ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteristic>
+  - This unit's weapons gain [SUSTAINED HITS 1].
+  - Ranged weapons equipped by models in this unit gain [IGNORES COVER].</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="98e2-d689-aff1-adb3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2603,24 +2594,23 @@
         </profile>
         <profile name="Exemplar of the Code" id="3ca7-9f47-17e9-ddbc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the battle:
-  -&gt; Select one enemy unit, binding it as quarry selection (your Quarry target). When your Quarry target is destroyed, you may select one enemy unit, binding it as quarry selection to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against it, while the unit is tagged quarry, you can re-roll the Wound roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle:
+  - Select one enemy unit (your Quarry target). When your Quarry target is destroyed, you may select one enemy unit to replace it. Only one such designation can be active for this unit. For the rest of the battle, each time this model makes an attack against it, while this unit is a Quarry, you can re-roll Wound rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Mentor (Bondsman)" id="2cd0-7e58-2888-ae9a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is Bondsman-affected by the unit, while the unit is tagged quarry, you can re-roll the Wound roll for attacks made by all friendly units.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is Bondsman-affected by this unit and this unit is a Quarry, you can re-roll Wound rolls for attacks made by friendly units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="4774-53fe-0f17-f008" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="9499-ac1c-0127-fc9d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="870f-ccc5-4e25-2433" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2933,24 +2923,23 @@
         </profile>
         <profile name="Shock Charge" id="1e24-b787-a8eb-9042" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The Crushing Impact Stratagem that targets the unit costs 0CP.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: The Crushing Impact Stratagem that targets this unit costs 0 CP.
 This model's Crushing Impact ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="355d-4ff9-2d5c-0db8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="60c4-88d4-38a5-fa49" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lancer's Duty" id="6711-8241-f429-a746" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If a friendly model that is Bondsman-affected by the unit advanced this turn, that model is eligible to declare a charge even if it Advanced this turn.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If a friendly model that is Bondsman-affected by this unit advanced this turn, that model is eligible to declare a charge even if it Advanced this turn.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="38b4-69cc-79db-3004" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3149,20 +3138,19 @@ This model's Crushing Impact ability has no limit on its number of uses, and thi
         </profile>
         <profile name="Deadly Demise" id="6b80-e388-03f1-fac5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Protection Protocols" id="35c0-d069-5bd8-3d49" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
-Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-The unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: This unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
+Reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+This unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="0295-1951-6496-90ad" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="ea89-f9f9-a4c5-44ad" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3366,25 +3354,24 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         </profile>
         <profile name="Martial Pride" id="a57b-f0c8-889d-49a3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Consolidation move, if you are engaged on 1+ fronts, add 3" to the unit's Consolidation moves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Consolidation move, if you are engaged on one or more fronts, add 3" to this unit's Consolidation moves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="312b-0227-2e02-3cd9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="49e3-3a0d-f88b-882f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Gallant's Duty" id="20ba-637e-9525-f3a4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While the Gallants Duty is active:
-  -&gt; You can re-roll the Charge roll.
-  -&gt; While making melee attacks, you can re-roll the Hit roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the Gallants Duty is active:
+  - You can re-roll the Charge roll.
+  - While making melee attacks, you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="20c8-a1cd-1d26-6c24" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3692,20 +3679,19 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         </profile>
         <profile name="Impetuous Glory" id="9ca1-5bd5-7290-7290" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, until the end of the turn:
-  -&gt; Add 1 to the Attacks characteristic of melee reaper chain‑cleaver – strike weapons equipped by this model.
-  -&gt; Add 2 to the Attacks characteristic of melee reaper chain‑cleaver – sweep weapons equipped by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move, until the end of the turn:
+  - Add 1 to the Attacks characteristic of melee reaper chain‑cleaver – strike weapons equipped by this model.
+  - Add 2 to the Attacks characteristic of melee reaper chain‑cleaver – sweep weapons equipped by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="5381-11f0-6ba2-4a7b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="d573-ac88-b8b5-f966" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="4878-a241-790c-fa8b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3860,23 +3846,22 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         </profile>
         <profile name="Thundershock" id="8a9a-f47d-6dd2-7d48" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn:
-  -&gt; When this model selects its targets with thundercoil harpoon weapons:
-    For each enemy unit that is the same unit as the target unit or that is an enemy unit within 6" of the target unit:
-      -&gt; Roll one D6: on a 4+, the unit is struck by arcing energies until the end of the phase.
-  -&gt; After this model resolves its attacks:
-    For each unit that is struck by arcing energies: The unit suffers D3 mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase:
+  - When this model selects its targets with thundercoil harpoon weapons:
+    For each enemy unit that is the same unit as the target unit or an enemy unit within 6" of the target unit:
+      - Roll one D6: on a 4+, that unit is struck by arcing energies until the end of the phase.
+  - After this model resolves its attacks:
+    For each unit that is struck by arcing energies: That unit suffers D3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="c1e1-87f3-84d4-a992" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="03ea-37b7-7ebf-9759" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="794f-4365-ef69-4508" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4103,9 +4088,9 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         </profile>
         <profile name="Using Sir Hekhtur" id="55c0-3d1b-6f70-4252" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If 1+ CANIS REX models destroyed, this model can be set up on the battlefield from its Transport.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If one or more CANIS REX models destroyed, this model can be set up on the battlefield from its Transport.
 Friendly units cannot target this model with Stratagems.
-The unit is not destroyed until this model is also destroyed.</characteristic>
+This unit is not destroyed until this model is also destroyed.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4184,31 +4169,29 @@ The unit is not destroyed until this model is also destroyed.</characteristic>
         </profile>
         <profile name="Chainbreaker" id="ff3b-b838-12ac-4277" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per unit:
-  -&gt; Select one friendly IMPERIUM unit if the selected unit is Battle-shocked and the selected unit is within 12" of this model: that unit is no longer Battle-shocked.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per unit, select one friendly IMPERIUM unit that is Battle-shocked and within 12" of this model. That unit is no longer Battle-shocked.</characteristic>
           </characteristics>
         </profile>
         <profile name="Legendary Freeblade" id="11f5-a75c-9248-b163" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per turn, Stratagems that target this model cost 0CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per turn, Stratagems that target this model cost 0 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="c3bf-ee6b-cb46-d6e6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="a7e2-28a9-19c4-fab2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Using Sir Hekhtur" id="c1ab-8859-a9bb-f059" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If 1+ CANIS REX models destroyed, this model can be set up on the battlefield from its Transport.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If one or more CANIS REX models destroyed, this model can be set up on the battlefield from its Transport.
 Friendly units cannot target this model with Stratagems.
-The unit is not destroyed until this model is also destroyed.</characteristic>
+This unit is not destroyed until this model is also destroyed.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="b6de-52f4-6e5e-d221" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4343,18 +4326,17 @@ The unit is not destroyed until this model is also destroyed.</characteristic>
         </profile>
         <profile name="Titan Hunter" id="4686-2313-920e-d4a3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While making ranged attacks against MONSTER or VEHICLE targets, you can re-roll the Damage roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against MONSTER or VEHICLE targets, you can re-roll Damage rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="ec94-3ba9-ca7a-d3f3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="8377-7a8f-a743-a807" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Ion Aegis (Aura)" id="6443-eecf-9138-b5a3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4633,21 +4615,20 @@ The unit is not destroyed until this model is also destroyed.</characteristic>
         </profile>
         <profile name="Suppression Protocols" id="25a8-8677-475d-cbfe" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:
-  -&gt; Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit by Armiger autocannon during its just-finished shooting sequence:
-    -&gt; That unit is marked as suppressed.
-    -&gt; While the unit is tagged suppressed, that unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:
+  - Select one enemy unit without the MONSTER or VEHICLE keyword and that was hit by an attack made by the triggering unit by Armiger autocannon during that shooting sequence:
+    - That unit is Suppressed.
+    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="5723-bdd4-a86e-5d3b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="24f8-723d-b9b7-6fa1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="0ac3-4fb0-a112-a17d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4802,20 +4783,19 @@ The unit is not destroyed until this model is also destroyed.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="a34b-4ccc-7978-4813" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6e07-ac69-cd06-0876" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Magaera's Duty" id="b69a-909a-77a5-cdbe" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the Magaeras Duty is active, while making ranged attacks, if the target is the closest eligible target:
-  -&gt; Improve the unit's Strength characteristic by 1.
-  -&gt; Improve the unit's Armour Penetration characteristic by 1.</characteristic>
+  - Improve this unit's Strength characteristic by 1.
+  - Improve this unit's Armour Penetration characteristic by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="ac5b-3395-9106-382d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5021,28 +5001,27 @@ The unit is not destroyed until this model is also destroyed.</characteristic>
         </profile>
         <profile name="Grav-pinned" id="b942-a6cf-18a8-b863" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of your opponent's next turn:
-  For each enemy INFANTRY unit that was hit by an attack made by the triggering unit by graviton crusher during its just-finished shooting sequence:
-    -&gt; The unit is grav-pinned.
-    -&gt; While the Grav Pinned is active, subtract 2 from the unit's Move characteristic.
-    -&gt; While the Grav Pinned is active, the unit gets -2 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of your opponent's next turn:
+  For each enemy INFANTRY unit that was hit by an attack made by the triggering unit by graviton crusher during that shooting sequence:
+    - That unit is grav-pinned.
+    - While the Grav Pinned is active, subtract 2" from that unit's Move characteristic.
+    - While the Grav Pinned is active, subtract 2 from that unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="4f92-7f29-cda6-4d51" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="f537-7c5b-b25b-03c7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Styrix's Duty" id="a0f6-33fa-9e20-7bfd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot or when the unit is selected to fight or after the triggering unit resolves its attacks, while the Styrixs Duty is active:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test, applying -1 to that test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot or when this unit is selected to fight or after the triggering unit resolves its attacks, while the Styrixs Duty is active:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test, applying -1 to that test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="77c5-9b8b-4fb8-443c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5248,27 +5227,26 @@ The unit is not destroyed until this model is also destroyed.</characteristic>
         </profile>
         <profile name="Atrapos' Duty (Bondsman)" id="1612-619c-60c1-b94f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is Bondsman-affected by the unit against TITANIC or TOWERING targets:
-  -&gt; You can re-roll the Hit roll for attacks made by all friendly units.
-  -&gt; You can re-roll the Wound roll for attacks made by all friendly units.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is Bondsman-affected by this unit against TITANIC or TOWERING targets:
+  - You can re-roll Hit rolls for attacks made by friendly units.
+  - You can re-roll Wound rolls for attacks made by friendly units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Macro-extinction Protocols" id="12f3-9ad8-8472-9ae6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against MONSTER or VEHICLE targets:
-  -&gt; This model gets +1 to Hit rolls.
-  -&gt; Against TITANIC or TOWERING targets, this model gets +1 to Wound rolls.</characteristic>
+  - Add 1 to this model's Hit rolls.
+  - Against TITANIC or TOWERING targets, add 1 to this model's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="53cc-04b3-4c8e-a3f4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="aa11-3d9e-ea23-f49b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="a869-70f0-5b37-83fc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5428,12 +5406,12 @@ The unit is not destroyed until this model is also destroyed.</characteristic>
         </profile>
         <profile name="Ram Jets" id="d754-af8e-b58b-e847" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to make a Normal or Advance move, until the end of the phase, add D3 to this model's Move characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to make a Normal or Advance move, until the end of the phase, add D3" to this model's Move characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Thundercharge" id="29c7-5936-81fe-a2df" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this model is equipped with one weapon named "Thundershock spear", if this model is equipped with one weapon named "Bellatus reaper chainsword", add 2 to the Attacks characteristic of melee weapons equipped by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this model is equipped with one weapon named "Thundershock spear" and this model is equipped with one weapon named "Bellatus reaper chainsword", add 2 to the Attacks characteristic of melee weapons equipped by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Saturation Fire" id="18f0-b454-8723-c441" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5443,13 +5421,12 @@ The unit is not destroyed until this model is also destroyed.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="3de6-3cf6-2f69-9c7d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="a824-6ec5-75b7-2463" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="02bb-0fef-84da-5675" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7316,7 +7293,7 @@ The unit is not destroyed until this model is also destroyed.</characteristic>
               </constraints>
               <rules>
                 <rule name="Bold Gallantry" id="0ff9-8e83-02a3-e694" hidden="false">
-                  <description>Each time a friendly unit ends an Advance move (the triggering unit must have IMPERIAL KNIGHTS), until the end of the turn, ranged weapons equipped by all friendly IMPERIAL KNIGHTS models gain [ASSAULT].</description>
+                  <description>Each time a friendly IMPERIAL KNIGHTS unit ends an Advance move, until the end of the turn, ranged weapons equipped by friendly IMPERIAL KNIGHTS models gain [ASSAULT].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7333,11 +7310,11 @@ The unit is not destroyed until this model is also destroyed.</characteristic>
               </constraints>
               <rules>
                 <rule name="Cogbound Alliance" id="125d-9823-80a9-da40" hidden="false">
-                  <description>If the unit has the IMPERIAL KNIGHTS keyword:
-  -&gt; Add 1 to the Ballistic Skill characteristic of friendly ADEPTUS MECHANICUS units within 6".
-  -&gt; Ranged weapons equipped by friendly ADEPTUS MECHANICUS units within 6" gain [HEAVY].
-If the unit has the TECH PRIEST keyword, during the Command phase:
-  -&gt; Select up to one friendly IMPERIAL KNIGHTS model within 3" of this model (each model can be selected for this ability at most once per phase across your army): that model regains up to D3 lost wounds.</description>
+                  <description>If this unit has the IMPERIAL KNIGHTS keyword:
+  - Add 1 to the Ballistic Skill characteristic of friendly ADEPTUS MECHANICUS units within 6".
+  - Ranged weapons equipped by friendly ADEPTUS MECHANICUS units within 6" gain [HEAVY].
+If this unit has the TECH PRIEST keyword, during the Command phase:
+  - Select up to one friendly IMPERIAL KNIGHTS model within 3" of this model (each model can be selected for this ability at most once per phase across your army). That model regains up to D3 lost wounds.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7354,9 +7331,9 @@ If the unit has the TECH PRIEST keyword, during the Command phase:
               </constraints>
               <rules>
                 <rule name="Dauntless Defenders" id="8af9-99ac-8a61-6c24" hidden="false">
-                  <description>While the unit is within Defensive Line:
-  -&gt; The unit ignores any modifiers to its Hit rolls.
-  -&gt; This model's weapons gain [SUSTAINED HITS 1].</description>
+                  <description>While this unit is within Defensive Line:
+  - This unit ignores any modifiers to its Hit rolls.
+  - This model's weapons gain [SUSTAINED HITS 1].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7373,9 +7350,9 @@ If the unit has the TECH PRIEST keyword, during the Command phase:
               </constraints>
               <rules>
                 <rule name="Knightly Teachings" id="8a9f-5ffb-9686-2cd7" hidden="false">
-                  <description>Each time a friendly model uses a Bondsman ability, you may use this ability, unless a friendly model other than that unit used that same ability this turn, when resolving this use:
-  -&gt; Unless your army is honoured, replace that ability's selection with up to 3 friendly ARMIGER models within 12" of that unit that are not Bondsman-affected; those recipients are affected by that same ability until the start of your next Command phase.
-  -&gt; If your army is honoured, replace that ability's selection with up to 3 friendly ARMIGER models within 15" of that unit that are not Bondsman-affected; those recipients are affected by that same ability until the start of your next Command phase.</description>
+                  <description>Each time a friendly model uses a Bondsman ability, you can use this ability, unless a friendly model other than that unit used that same ability this turn, for this activation:
+  - Unless your army is honoured, replace that ability's selection with up to 3 friendly ARMIGER models within 12" of that unit that are not Bondsman-affected; those recipients are affected by that same ability until the start of your next Command phase.
+  - If your army is honoured, replace that ability's selection with up to 3 friendly ARMIGER models within 15" of that unit that are not Bondsman-affected; those recipients are affected by that same ability until the start of your next Command phase.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7393,15 +7370,15 @@ If the unit has the TECH PRIEST keyword, during the Command phase:
               </constraints>
               <rules>
                 <rule name="Heroes of Legend" id="28b0-e374-c6d9-e771" hidden="false">
-                  <description>-&gt; At the start of your turn: if the Code Chivalric oath is fulfilled, the unit resolves the Code Chivalric Oath procedure again.
-When selecting deeds and qualities for Code Chivalric for the unit; exclude previously selected deeds and qualities; if a duplicate is rolled, choose an unselected result in that domain; stop when every domain is exhausted.
-All friendly models with the Code Chivalric ability retain qualities from fulfilled Code Chivalric Oaths.
-For the unit, on completion of additional Code Chivalric deeds, regardless of how those deeds were selected, replace their reward with: you gain 1CP.</description>
+                  <description>At the start of your turn, if the Code Chivalric oath is fulfilled, this unit resolves the Code Chivalric Oath procedure again.
+When selecting deeds and qualities for Code Chivalric for this unit; exclude previously selected deeds and qualities; if a duplicate is rolled, choose an unselected result in that domain; stop when every domain is exhausted.
+Friendly models with the Code Chivalric ability retain qualities from fulfilled Code Chivalric Oaths.
+For this unit, on completion of additional Code Chivalric deeds, regardless of how those deeds were selected, replace their reward with: you gain 1 CP.</description>
                 </rule>
                 <rule name="Valour's Reward" id="11c4-e814-61ef-c0df" hidden="false">
                   <description>For the rest of the battle:
-  -&gt; Friendly units that are tagged enhancement expended cannot use Enhancements.
-  -&gt; When you fulfil an Oath: friendly units that are tagged enhancement expended are no longer marked as enhancement expended.</description>
+  - Friendly units that are designated as Enhancement Expended cannot use Enhancements.
+  - When you fulfil an Oath, friendly units that are designated as Enhancement Expended are no longer designated as Enhancement Expended.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7418,8 +7395,8 @@ For the unit, on completion of additional Code Chivalric deeds, regardless of ho
               </constraints>
               <rules>
                 <rule name="Rain of Devastation" id="b2de-7134-e071-79c5" hidden="false">
-                  <description>While the target unit is within the terrain area terrain area, all friendly DOMINUS IMPERIAL KNIGHTS units get +1 to Hit rolls.
-Applies to: units with IMPERIAL KNIGHTS, DOMINUS.</description>
+                  <description>While the target unit is within the terrain area terrain area, add 1 to friendly DOMINUS IMPERIAL KNIGHTS units' Hit rolls.
+Applies to: IMPERIAL KNIGHTS DOMINUS units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7437,7 +7414,7 @@ Applies to: units with IMPERIAL KNIGHTS, DOMINUS.</description>
               <rules>
                 <rule name="Driven from Their Lairs" id="7ede-6e26-4e24-cbad" hidden="false">
                   <description>For the rest of the battle, ranged weapons equipped by models in this unit gain [IGNORES COVER].
-Applies to: units with IMPERIAL KNIGHTS, ARMIGER.</description>
+Applies to: IMPERIAL KNIGHTS ARMIGER units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7455,9 +7432,9 @@ Applies to: units with IMPERIAL KNIGHTS, ARMIGER.</description>
               </constraints>
               <rules>
                 <rule name="Knights of Legend" id="2110-bc6b-92ce-94d4" hidden="false">
-                  <description>All friendly IMPERIAL KNIGHTS models have the Feel No Pain 6+ ability.
--&gt; At the start of your Command phase: all friendly IMPERIAL KNIGHTS models regain up to 1 lost wound.
-Applies to: units with IMPERIAL KNIGHTS.</description>
+                  <description>Friendly IMPERIAL KNIGHTS models have Feel No Pain 6+.
+At the start of your Command phase, friendly IMPERIAL KNIGHTS models regain up to 1 lost wound.
+Applies to: IMPERIAL KNIGHTS units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7521,9 +7498,9 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
             <profile name="Bearer of the Iron Chalice" id="e11e-eaf3-6b07-e1f6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase:
-  -&gt; Select one friendly IMPERIAL KNIGHTS model other than the unit if the selected unit is within 12" of this model and the selected unit is visible to this model:
-    -&gt; Unless your army is honoured, that model regains up to D3 lost wounds.
-    -&gt; If your army is honoured, that model regains up to 3 lost wounds.</characteristic>
+  - Select one friendly IMPERIAL KNIGHTS model other than this unit that is within 12" of this model and visible to this model:
+    - Unless your army is honoured, that model regains up to D3 lost wounds.
+    - If your army is honoured, that model regains up to 3 lost wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7570,8 +7547,7 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Bearer of the Evanescent Ion" id="927f-76ce-f5b4-0816" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, until the start of your next Movement phase:
-  -&gt; Select one friendly IMPERIAL KNIGHTS model other than the unit if the selected unit is within 12" of this model and the selected unit is visible to this model: that model gains the Stealth ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, until the start of your next Movement phase, select one friendly IMPERIAL KNIGHTS model other than this unit that is within 12" of this model and visible to this model. That model gains the Stealth ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7618,8 +7594,7 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Bearer of the Judicant's Helm" id="e2b5-19d2-9009-b694" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, until the end of the phase:
-  -&gt; Select one friendly IMPERIAL KNIGHTS model other than the unit if the selected unit is within 12" of this model and the selected unit is visible to this model: ranged weapons equipped by that model gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, until the end of the phase, select one friendly IMPERIAL KNIGHTS model other than this unit that is within 12" of this model and visible to this model. Ranged weapons equipped by that model gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7666,8 +7641,7 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Bearer of the Lancer's Sigil" id="8e82-21e8-f0c5-1f3a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Charge phase, you may use this ability, until the end of the phase:
-  -&gt; Select one friendly IMPERIAL KNIGHTS model other than the unit if the selected unit is within 12" of this model and the selected unit is visible to this model: you can re-roll the Charge roll for that model.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Charge phase, you can use this ability, until the end of the phase, select one friendly IMPERIAL KNIGHTS model other than this unit that is within 12" of this model and visible to this model. You can re-roll the Charge roll for that model.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7831,9 +7805,9 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Purgation's Hand" id="9122-2792-3671-41c7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while the unit is within Defensive Line:
-  -&gt; You can re-roll a Hit roll of 1 for attacks made by this model.
-  -&gt; You can re-roll a Wound roll of 1 for attacks made by this model.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while this unit is within Defensive Line:
+  - You can re-roll Hit rolls of 1 for attacks made by this model.
+  - You can re-roll Wound rolls of 1 for attacks made by this model.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7880,7 +7854,7 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Augury Halo" id="ed30-f569-76f2-10e5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while the unit is within Defensive Line, this model's weapons gain [IGNORES COVER].</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while this unit is within Defensive Line, this model's weapons gain [IGNORES COVER].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7927,7 +7901,7 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Vengeful Tread" id="cc04-5821-677b-0a5e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per turn per model, the Crushing Impact Stratagem that targets the unit costs 0CP.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: Once per turn per model, the Crushing Impact Stratagem that targets this unit costs 0 CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7974,7 +7948,7 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Mentor's Pride" id="32ad-737e-50cf-27dc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While 2+ the units Bondsman-affected by the unit, while the attacking unit is Bondsman-affected by the unit, you can re-roll a Hit roll of 1 for attacks made by all friendly units.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While 2 or more this units Bondsman-affected by this unit and the attacking unit is Bondsman-affected by this unit, you can re-roll Hit rolls of 1 for attacks made by friendly units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8021,7 +7995,7 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Fables of Nightmare" id="1bd1-8f15-5455-d9fa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While 2+ the units Bondsman-affected by the unit, melee weapons equipped by friendly ARMIGER units that are Bondsman-affected by the unit gain [PRECISION].</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While 2 or more this units Bondsman-affected by this unit, melee weapons equipped by friendly ARMIGER units that are Bondsman-affected by this unit gain [PRECISION].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8162,10 +8136,10 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Herald of Triumph" id="12a6-219c-72de-c677" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, you may use this ability:
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move, you can use this ability:
   For each enemy unit within Engagement Range of this model:
-    -&gt; This model is marked as enhancement expended.
-    -&gt; The unit must take a Battle-shock test, applying -1 to that test.</characteristic>
+    - This model is designated as Enhancement Expended.
+    - That unit must take a Battle-shock test, applying -1 to that test.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8212,9 +8186,9 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Wyrmslayer Divination" id="785e-97b4-1d0a-a757" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, you may use this ability, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; This model is marked as enhancement expended.
-  -&gt; Against FLY targets, you can re-roll the Hit roll for attacks made by this model.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability, during your Shooting phase, until the end of the phase:
+  - This model is designated as Enhancement Expended.
+  - Against FLY targets, you can re-roll Hit rolls for attacks made by this model.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8261,9 +8235,9 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Pennant of Silvered Fury" id="ce34-4b23-f86f-8acb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, until the end of the phase:
-  -&gt; This model is marked as enhancement expended.
-  -&gt; Melee weapons equipped by this model gain [SUSTAINED HITS 2].</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, until the end of the phase:
+  - This model is designated as Enhancement Expended.
+  - Melee weapons equipped by this model gain [SUSTAINED HITS 2].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8310,10 +8284,10 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
           <profiles>
             <profile name="Crushing Condemnation" id="0616-be67-d319-9086" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks in a fight, you may use this ability, if this model has destroyed 1+ enemy units with its just-resolved attacks:
-  -&gt; Select one enemy unit if the selected unit is unengaged and the selected unit is within 12" of this model and the selected unit is visible to this model:
-    -&gt; This model is marked as enhancement expended.
-    -&gt; Roll 6 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks in a fight, you can use this ability, if this model has destroyed one or more enemy units with those attacks:
+  - Select one enemy unit that is unengaged, within 12" of this model and visible to this model:
+    - This model is designated as Enhancement Expended.
+    - Roll 6 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8347,7 +8321,7 @@ Applies to: units with IMPERIAL KNIGHTS.</description>
             <profile name="Blessed Plate" id="bac0-f406-9938-acea" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this model's Toughness characteristic.
-Applies to: units with IMPERIAL KNIGHTS, DOMINUS.</characteristic>
+Applies to: IMPERIAL KNIGHTS DOMINUS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8381,7 +8355,7 @@ Applies to: units with IMPERIAL KNIGHTS, DOMINUS.</characteristic>
             <profile name="Archeotech Autoloaders" id="7c27-d513-5468-e8ff" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll the Attacks roll.
-Applies to: units with IMPERIAL KNIGHTS, DOMINUS.</characteristic>
+Applies to: IMPERIAL KNIGHTS DOMINUS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8415,8 +8389,8 @@ Applies to: units with IMPERIAL KNIGHTS, DOMINUS.</characteristic>
           <profiles>
             <profile name="Gyro-optimised Actuators (Upgrade)" id="ef49-598b-a883-7562" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the MOBILE keyword.
-Applies to: units with IMPERIAL KNIGHTS, ARMIGER.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the MOBILE keyword.
+Applies to: IMPERIAL KNIGHTS ARMIGER units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8450,8 +8424,8 @@ Applies to: units with IMPERIAL KNIGHTS, ARMIGER.</characteristic>
           <profiles>
             <profile name="Ancestral Overbleed (Upgrade)" id="84a9-fefc-5205-a154" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target the unit with the Fire Overwatch Stratagem or when you target the unit with the Heroic Intervention Stratagem, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-Applies to: units with IMPERIAL KNIGHTS, ARMIGER.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target this unit with the Fire Overwatch Stratagem or when you target this unit with the Heroic Intervention Stratagem, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+Applies to: IMPERIAL KNIGHTS ARMIGER units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8498,11 +8472,11 @@ Applies to: units with IMPERIAL KNIGHTS, ARMIGER.</characteristic>
           <profiles>
             <profile name="Mysterious Guardian" id="40ec-62fc-96e8-2fab" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you may use this ability, once per battle per army, while the unit is unengaged, until the start of your next Shooting phase:
-  -&gt; The unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.
-  -&gt; The unit gains the Deep Strike ability.
-  -&gt; The unit must make an Ingress move.
-Applies to: units with IMPERIAL KNIGHTS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you can use this ability, once per battle per army, while this unit is unengaged, until the start of your next Shooting phase:
+  - This unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.
+  - This unit gains the Deep Strike ability.
+  - This unit must make an Ingress move.
+Applies to: IMPERIAL KNIGHTS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8550,7 +8524,7 @@ Applies to: units with IMPERIAL KNIGHTS.</characteristic>
             <profile name="Sanctuary" id="b132-c0eb-e8d9-2c84" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has a 5+ invulnerable save.
-Applies to: units with IMPERIAL KNIGHTS.</characteristic>
+Applies to: IMPERIAL KNIGHTS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8598,8 +8572,8 @@ Applies to: units with IMPERIAL KNIGHTS.</characteristic>
             <profile name="Bringer of Justice" id="9c0c-2065-3e65-cae4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve the Attacks characteristic of melee weapons equipped by this model by 2.
-While making melee attacks, this model gets +1 to Hit rolls.
-Applies to: units with IMPERIAL KNIGHTS.</characteristic>
+While making melee attacks, add 1 to this model's Hit rolls.
+Applies to: IMPERIAL KNIGHTS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8647,7 +8621,7 @@ Applies to: units with IMPERIAL KNIGHTS.</characteristic>
             <profile name="Hunter's Eye" id="f80c-497f-a270-a196" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Ranged weapons equipped by this model gain [IGNORES COVER].
-Applies to: units with IMPERIAL KNIGHTS.</characteristic>
+Applies to: IMPERIAL KNIGHTS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8661,33 +8635,33 @@ Applies to: units with IMPERIAL KNIGHTS.</characteristic>
   </sharedSelectionEntryGroups>
   <sharedRules>
     <rule name="Code Chivalric" id="7d93-51b3-fd61-3213" hidden="false">
-      <description>Select one of the following (Select Deed):
-  - Select one of the following (Quality: Martial Valour): you can re-roll a Hit roll of 1 with ranged weapons / you can re-roll a Hit roll of 1 with melee weapons / you can re-roll a Wound roll of 1 with ranged weapons / you can re-roll a Wound roll of 1 with melee weapons; if the unit has the CHARACTER keyword, when destroyed by any attack, all friendly units are marked as oath fulfilled.
-  - Select one of the following (Quality: Eager for Challenge): add 2 to the unit's Move characteristic / the unit gets +1 to Advance rolls / the unit gets +1 to Charge rolls; if you hold more objectives than the opponent, all friendly units are marked as oath fulfilled.
-  - Select one of the following (Quality: Legacy Unsullied): add 2 to the unit's Objective Control characteristic / add 1 to the unit's Leadership characteristic; if you destroyed at least 0 enemy units this turn, all friendly units are marked as oath fulfilled.</description>
+      <description>Choose one of the following (Select Deed):
+  - Choose one of the following (Quality: Martial Valour): you can re-roll Hit rolls of 1 with ranged weapons / you can re-roll Hit rolls of 1 with melee weapons / you can re-roll Wound rolls of 1 with ranged weapons / you can re-roll Wound rolls of 1 with melee weapons; if this unit has the CHARACTER keyword, when destroyed by any attack, friendly units are designated as Oath Fulfilled.
+  - Choose one of the following (Quality: Eager for Challenge): add 2" to this unit's Move characteristic / add 1 to this unit's Advance rolls / add 1 to this unit's Charge rolls; if you hold more objectives than your opponent, friendly units are designated as Oath Fulfilled.
+  - Choose one of the following (Quality: Legacy Unsullied): add 2 to this unit's Objective Control characteristic / add 1 to this unit's Leadership characteristic; if you destroyed at least 0 enemy units this turn, friendly units are designated as Oath Fulfilled.</description>
     </rule>
     <rule name="Bondsman" id="5a02-96fa-cd86-e47a" hidden="false">
       <description>Nothing happens.</description>
     </rule>
     <rule name="Super-heavy Walker" id="8789-fe15-fdef-1305" hidden="false">
-      <description>-&gt; When this model ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over non-Titanic models as though they were not there.
-  -&gt; The triggering unit can move over terrain features 4" or lower as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The triggering unit can move over terrain features over 4" as though they were not there.
--&gt; When this model moves through terrain over 4" tall:
-  -&gt; Roll one D6:
-    - On 1: The unit is Battle-shocked.
+      <description>When this model ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over non-Titanic models as though they were not there.
+  - The triggering unit can move over terrain features 4" or lower as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - The triggering unit can move over terrain features over 4" as though they were not there.
+When this model moves through terrain over 4" tall:
+  - Roll one D6:
+    - On 1: This unit is Battle-shocked.
     - On 2-6: Nothing happens.</description>
     </rule>
     <rule name="Freeblades" id="23c7-ce00-8ab2-6f48" hidden="false">
-      <description>You can: If every model in your army has the IMPERIUM keyword:
-  Select one of the following:
+      <description>If every model in your army has the IMPERIUM keyword, you can use this ability:
+  Choose one of the following:
     - Your army can include at most 1 models from TITANIC IMPERIAL KNIGHTS units.
     - Your army can include at most 3 models from ARMIGER units.
-  -&gt; All friendly TITANIC IMPERIAL KNIGHTS or ARMIGER units cannot be your Warlord.
-  -&gt; All friendly TITANIC IMPERIAL KNIGHTS or ARMIGER units cannot be given Enhancements.</description>
+  - Friendly TITANIC IMPERIAL KNIGHTS or ARMIGER units cannot be your Warlord.
+  - Friendly TITANIC IMPERIAL KNIGHTS or ARMIGER units cannot be given Enhancements.</description>
     </rule>
   </sharedRules>
 </catalogue>

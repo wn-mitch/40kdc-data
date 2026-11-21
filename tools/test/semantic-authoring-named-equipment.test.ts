@@ -115,7 +115,7 @@ describe("named-weapon and unit-wargear: describer", () => {
     expect(describePredicate(weapon(1, "lack", 1) as never, false)).toBe('one or more models in this unit have no weapon named "Fizz blade"');
     expect(describePredicate(weapon(2, "lack", 2) as never, false)).toBe('at least 2 models in this unit have fewer than 2 weapons named "Fizz blade"');
     expect(describePredicate(weapon(2, "carry", 2) as never, false)).toBe('at least 2 models in this unit are each equipped with exactly 2 weapons named "Fizz blade"');
-    expect(describePredicate(weapon(1, "carry", 2) as never, true)).toBe('it is not the case that at least 2 models in this unit are each equipped with one weapon named "Fizz blade"');
+    expect(describePredicate(weapon(1, "carry", 2) as never, true)).toBe('fewer than 2 models in this unit are each equipped with one weapon named "Fizz blade"');
   });
 
   it("reads wargear presence, and the models forms, with the wargear id as a title", () => {

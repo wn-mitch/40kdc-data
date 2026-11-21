@@ -376,19 +376,19 @@ describe("a unit-filter naming the unit a Leader is leading", () => {
     const grant = (target: Record<string, unknown>) => describeAbility({ effect: { type: "keyword-grant", target, modifier: { keywords: ["DELTA"] } }, scope } as never);
 
     it("reads keyword-only alternatives as \"A or B C units\", distinct from an any-of", () => {
-      expect(grant({ owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] })).toContain("all friendly ALPHA or BETA GAMMA units gain the DELTA keyword");
-      expect(grant({ owner: "friendly", any_of: ["ALPHA", "BETA"] })).toContain("all friendly units with the ALPHA or BETA keyword");
+      expect(grant({ owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] })).toContain("friendly ALPHA or BETA GAMMA units gain the DELTA keyword");
+      expect(grant({ owner: "friendly", any_of: ["ALPHA", "BETA"] })).toContain("friendly units with the ALPHA or BETA keyword");
     });
 
     it("names each alternative in full when one has more than keywords or the filter has keywords of its own", () => {
-      expect(grant({ owner: "enemy", any_of_filters: [{ all_of: ["ALPHA"] }, { state: "battle-shocked" }] })).toContain("all enemy units that are ALPHA units or units that are Battle-shocked");
+      expect(grant({ owner: "enemy", any_of_filters: [{ all_of: ["ALPHA"] }, { state: "battle-shocked" }] })).toContain("enemy units that are ALPHA units or units that are Battle-shocked");
       expect(grant({ owner: "friendly", all_of: ["ALPHA"], any_of_filters: [{ all_of: ["BETA"], none_of: ["DELTA"] }, { all_of: ["GAMMA", "EPSILON"] }] }))
-        .toContain("all friendly ALPHA units that are BETA units (excluding DELTA units) or GAMMA EPSILON units");
+        .toContain("friendly ALPHA units that are BETA units (excluding DELTA units) or GAMMA EPSILON units");
     });
 
     it("names the alternatives a trigger's unit must be", () => {
       const text = describeAbility({ trigger: { event: "destroyed", subject: { owner: "friendly", level: "model", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } }, scope } as never);
-      expect(text).toContain("(the triggering model must be an ALPHA model or a BETA GAMMA model)");
+      expect(text).toContain("Each time a friendly ALPHA or BETA GAMMA model destroys a unit");
     });
 
     const reroll = { type: "re-roll", target: { owner: "friendly", any_of_filters: [{ all_of: ["ALPHA"] }, { all_of: ["BETA", "GAMMA"] }] }, modifier: { roll: "hit", result_scope: "any-result" } };

@@ -145,6 +145,8 @@ def _stat_change(m: dict[str, Any], what: str) -> str:
 
 # Characteristics a model rolls against, where a better value is a lower number ("3+").
 _ROLL_TARGET_STATS = frozenset({"Sv", "WS", "BS", "Ld"})
+# Characteristics measured in inches.
+_DISTANCE_STATS = frozenset({"M", "Range", "detection-range"})
 
 
 def _bounds(m: dict[str, Any]) -> str:
@@ -155,9 +157,9 @@ def _bounds(m: dict[str, Any]) -> str:
         and m.get("minimum") is not None
         and m.get("maximum") is None
     ):
-        return f" (to no better than {jstr(m['minimum'])}+)"
-    lo = f" (to a minimum of {jstr(m['minimum'])})" if m.get("minimum") is not None else ""
-    hi = f" (to a maximum of {jstr(m['maximum'])})" if m.get("maximum") is not None else ""
+        return f", to no better than {jstr(m['minimum'])}+"
+    lo = f", to a minimum of {jstr(m['minimum'])}" if m.get("minimum") is not None else ""
+    hi = f", to a maximum of {jstr(m['maximum'])}" if m.get("maximum") is not None else ""
     return lo + hi
 
 
@@ -197,25 +199,44 @@ def _attack_maker(target: Any, m: dict[str, Any], subj: str) -> str:
 
 
 def _stat_modifier(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
+    stat_key = jstr(m.get("stat"))
     # AP is printed negative; the DSL stores its magnitude.
     if (
-        m.get("stat") == "AP"
+        stat_key == "AP"
         and m.get("operation") == "set"
         and is_num(m.get("value"))
         and m["value"] > 0
     ):
         m = {**m, "value": f"-{jstr(m['value'])}"}
-    stat = f"{stat_name(m.get('stat'))} characteristic"
+    # Roll-target stats (Sv, WS, BS, Ld) set to a number print with a trailing "+" ("2+").
+    if stat_key in _ROLL_TARGET_STATS and m.get("operation") == "set" and is_num(m.get("value")):
+        m = {**m, "value": f"{jstr(m['value'])}+"}
+    # Distance stats (M, Range, detection-range) print with inches on add/subtract/set.
+    val = m.get("value")
+    if (
+        stat_key in _DISTANCE_STATS
+        and m.get("operation") in ("add", "subtract", "set")
+        and (is_num(val) or (isinstance(val, str) and not val.endswith('"')))
+    ):
+        m = {**m, "value": f'{dice_case(val)}"'}
+    stat = (
+        "detection range"
+        if stat_key == "detection-range"
+        else f"{stat_name(m.get('stat'))} characteristic"
+    )
     if m.get("incoming") is True:
         return (
             f"{_incoming_lead(m, subj)}{_stat_change(m, f'the {stat} of that attack')}{_bounds(m)}"
         )
-    if ctx.get("attack_on_target") and jstr(m.get("stat")) in _ATTACK_STATS:
+    if ctx.get("attack_on_target") and stat_key in _ATTACK_STATS:
         change = _stat_change(m, f"the {stat} of that attack")
         return f"{change}{_bounds(m)}{_attack_maker(e.get('target'), m, subj)}"
     if has_weapon(m):
         holder = weapon_holder(e.get("target"), ctx)
         what = f"the {stat} of {weapon_noun(m)} equipped by {holder}"
+        return f"{_stat_change(m, what)}{_bounds(m)}"
+    if e.get("target") == "attacker" and stat_key in _ATTACK_STATS:
+        what = f"the {stat} of the attacking unit's attacks"
         return f"{_stat_change(m, what)}{_bounds(m)}"
     return f"{_stat_change(m, of_or_possessive(subj, stat))}{_bounds(m)}"
 
@@ -256,7 +277,24 @@ def _ignore_modifiers(m: dict[str, Any], subj: str) -> str:
     )
 
 
-def _roll_modifier(m: dict[str, Any], subj: str) -> str:
+_ATTACK_ROLLS = frozenset({"hit", "wound", "damage"})
+
+
+def _suppressed_weapon_scope(m: dict[str, Any], ctx: Ctx) -> str:
+    """Whether a weapon filter only restates an enclosing ``while making <type> attacks``."""
+    if not has_weapon(m):
+        return ""
+    w = _obj(m.get("weapons"))
+    if (
+        ctx.get("suppress_weapon_type")
+        and w.get("type") == ctx.get("suppress_weapon_type")
+        and len(w) == 1
+    ):
+        return ""
+    return weapon_roll_scope(m)
+
+
+def _roll_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     # A bound roll's result as the value ("add 1 for each of those mortal wounds").
     raw = m.get("value")
     bound = (
@@ -265,37 +303,36 @@ def _roll_modifier(m: dict[str, Any], subj: str) -> str:
         and raw.get("successes_on") is None
     )
     from_roll = m.get("value_from") == "previous-roll" or bound
-    value = "the result of that roll" if from_roll else None
+    bound_value = "the result of that roll" if from_roll else None
     cap = (
-        f" (to a maximum of {signed(m.get('operation'), m['cap'])})"
+        f", to a maximum of {signed(m.get('operation'), m['cap'])}"
         if m.get("cap") is not None
         else ""
     )
     rolls = f"{roll_name(m.get('roll'))} rolls"
+    scope = _suppressed_weapon_scope(m, ctx)
     # "Halve Advance and Charge rolls made for that unit": the result is halved, with no value.
     if m.get("operation") == "halve":
-        return f"halve {of_or_possessive(subj, rolls)}{weapon_roll_scope(m)}"
-    sub = m.get("operation") == "subtract"
+        return f"halve {of_or_possessive(subj, rolls)}{scope}"
+    sub = m.get("operation") in ("subtract", "worsen")
+    raw_val: Any = raw
+    n = num(raw_val)
+    if not bound_value and not math.isnan(n) and n < 0:
+        sub = not sub
+        raw_val = num_str(abs(n))
+    verb = "subtract" if sub else "add"
+    prep = "from" if sub else "to"
+    val = bound_value if bound_value is not None else dice_case(raw_val)
     if m.get("incoming") is True:
-        if value:
-            change = f"{'subtract' if sub else 'add'} {value} {'from' if sub else 'to'}"
-        else:
-            change = f"apply {signed(m.get('operation'), m.get('value'))} to"
-        return f"{_incoming_lead(m, subj)}{change} the {roll_name(m.get('roll'))} roll{cap}"
-    if value:
-        return (
-            f"{'subtract' if sub else 'add'} {value} {'from' if sub else 'to'} "
-            f"{of_or_possessive(subj, rolls)}{weapon_roll_scope(m)}{cap}"
-        )
-    return (
-        f"{subj} {v(subj, 'gets')} {signed(m.get('operation'), m.get('value'))} to "
-        f"{rolls}{weapon_roll_scope(m)}{cap}"
-    )
+        lead = _incoming_lead(m, subj)
+        return f"{lead}{verb} {val} {prep} the {roll_name(m.get('roll'))} roll{cap}"
+    return f"{verb} {val} {prep} {of_or_possessive(subj, rolls)}{scope}{cap}"
 
 
 def _re_roll(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     rn = jstr(m.get("roll"))
     noun = "roll" if rn == "any" else f"{roll_name(m.get('roll'))} roll"
+    is_attack_roll = rn in _ATTACK_ROLLS
     cnt = m.get("count") if is_num(m.get("count")) else None
     failed = "failed " if m.get("subset") == "all-failures" else ""
     if isinstance(m.get("count"), (dict, list)):
@@ -306,6 +343,15 @@ def _re_roll(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f"{'one' if cnt == 1 else f'up to {jstr(cnt)}'} {failed}{noun}{'' if cnt == 1 else 's'}"
             f"{_subset_suffix(m)}"
         )
+    elif is_attack_roll:
+        if m.get("subset") == "ones":
+            which = f"{noun}s of 1"
+        elif m.get("subset") == "ones-and-twos":
+            which = f"{noun}s of 1 or 2"
+        elif m.get("subset") == "all-failures":
+            which = f"failed {noun}s"
+        else:
+            which = f"{noun}s"
     elif m.get("subset") in ("ones", "ones-and-twos"):
         which = f"{'any' if rn == 'any' else 'a'} {noun}{_subset_suffix(m)}"
     elif m.get("subset") == "all-failures":
@@ -318,6 +364,7 @@ def _re_roll(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         else ""
     )
     can = "must" if m.get("mandatory") is True else "can"
+    scope = _suppressed_weapon_scope(m, ctx)
     if m.get("incoming") is True:
         return f"{_incoming_lead(m, subj)}the attacking player {can} re-roll {which}{pool}"
     # "you can re-roll …" names whose roll it is unless that is the ability's own unit.
@@ -331,9 +378,9 @@ def _re_roll(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     holder = weapon_holder(target, ctx) if model else subj
     owner = ""
     if not own:
-        attacks = "attacks made by " if rn in ("hit", "wound", "damage") else ""
+        attacks = "attacks made by " if is_attack_roll else ""
         owner = f" for {attacks}{holder}"
-    return f"you {can} re-roll {which}{owner}{weapon_roll_scope(m)}{pool}"
+    return f"you {can} re-roll {which}{owner}{scope}{pool}"
 
 
 def _failed_noun(m: dict[str, Any], noun: str) -> str:
@@ -769,7 +816,7 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
     if t == "ignore-modifiers":
         return _ignore_modifiers(m, subj)
     if t == "roll-modifier":
-        return _roll_modifier(m, subj)
+        return _roll_modifier(m, subj, ctx)
     if t == "re-roll":
         return _re_roll(e, m, subj, ctx)
     if t == "roll-result":
@@ -793,7 +840,7 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
     if t == "permission":
         return permission(m, subj, ctx)
     if t == "targeting":
-        return targeting(m, subj, ctx)
+        return targeting(e, m, subj, ctx)
     if t == "weapon-ability-range":
         return _weapon_ability_range(m, subj)
     if t == "counts-as":

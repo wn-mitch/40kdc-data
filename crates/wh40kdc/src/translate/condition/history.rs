@@ -15,7 +15,7 @@ pub(crate) fn past_of(verb: &str) -> String {
         "advance" => "advanced".to_string(),
         "fall back" => "fell back".to_string(),
         "remain stationary" => "remained stationary".to_string(),
-        "make an ingress move" => "made an ingress move".to_string(),
+        "make an Ingress move" => "made an Ingress move".to_string(),
         "move" => "moved".to_string(),
         "disembark" => "disembarked".to_string(),
         "embark" => "embarked".to_string(),
@@ -93,7 +93,7 @@ fn happened_phrase(p: &P, negated: bool) -> String {
     let neg = if negated { "not " } else { "" };
     let f = obj(p.get("filter"));
     let event = st(p.get("event"));
-    let who = subject_of(p, "the unit");
+    let who = subject_of(p, "this unit");
     let n_val = obj(p.get("count"))
         .get("min")
         .and_then(Value::as_f64)
@@ -129,7 +129,7 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                     "advance" => "advance",
                     "fall-back" => "fall back",
                     "remain-stationary" => "remain stationary",
-                    "ingress" => "make an ingress move",
+                    "ingress" => "make an Ingress move",
                     "embark" => "embark",
                     _ => return None,
                 })
@@ -144,7 +144,7 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             };
             // A charge with an object: the unit the charge was made against ("was charged this turn").
             if nn(p, "object").is_some() && types.len() == 1 && types[0] == "charge" {
-                let object = unit_ref_phrase(nn(p, "object"), "the unit");
+                let object = unit_ref_phrase(nn(p, "object"), "this unit");
                 return with_window(&format!("{who} {done} {object}"), window);
             }
             with_window(&format!("{who} {done}"), window)
@@ -181,7 +181,7 @@ fn happened_phrase(p: &P, negated: bool) -> String {
         "targets-selected" => {
             // A named Stratagem's targeting (compile-opponent-stratagem.ts): the unit targeted, by name.
             if st(f.get("kind")) == "stratagem" && f.get("id").is_some() {
-                let target = unit_ref_phrase(nn(p, "object"), "the unit");
+                let target = unit_ref_phrase(nn(p, "object"), "this unit");
                 let has = if negated { "has not" } else { "has" };
                 return with_window(
                     &format!(
@@ -212,15 +212,15 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                     };
                     format!(
                         "{} as the target of all of its {atk}attacks",
-                        unit_ref_phrase(Some(o), "the unit")
+                        unit_ref_phrase(Some(o), "this unit")
                     )
                 }
                 Some(o) if atk.is_empty() => {
-                    format!("{} as {noun}", unit_ref_phrase(Some(o), "the unit"))
+                    format!("{} as {noun}", unit_ref_phrase(Some(o), "this unit"))
                 }
                 Some(o) => format!(
                     "{} as {noun} of its {atk} attacks",
-                    unit_ref_phrase(Some(o), "the unit")
+                    unit_ref_phrase(Some(o), "this unit")
                 ),
                 None if atk.is_empty() => plural.to_string(),
                 None => format!("{plural} for its {atk} attacks"),
@@ -239,7 +239,7 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                 Some(Value::String(s)) if s == "this-unit" || s == "this-model" => {
                     "this Transport".to_string()
                 }
-                other => unit_ref_phrase(other, "the unit"),
+                other => unit_ref_phrase(other, "this unit"),
             };
             with_window(
                 &format!("{who} {} from {from}", did_not("disembark")),
@@ -247,7 +247,7 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             )
         }
         "after-roll" => {
-            let obj_phrase = unit_ref_phrase(p.get("object"), "the unit");
+            let obj_phrase = unit_ref_phrase(p.get("object"), "this unit");
             let target = if obj_phrase == "the target unit" {
                 "the target".to_string()
             } else {
@@ -294,19 +294,19 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                     " from the triggering unit".to_string()
                 }
                 Some(v) if !v.is_null() => {
-                    format!(" from {}", unit_ref_phrase(Some(v), "the unit"))
+                    format!(" from {}", unit_ref_phrase(Some(v), "this unit"))
                 }
                 _ => String::new(),
             };
             let when = if window.and_then(Value::as_str) == Some("event") {
-                " during its just-finished shooting sequence".to_string()
+                " during that shooting sequence".to_string()
             } else {
                 format!(" {}", window_phrase(window))
             };
             // Who made the attacks, when it is not the unit being checked.
             let attacker = match nn(p, "subject") {
                 Some(sub) if sub.as_str() != Some("this-unit") => {
-                    format!(" made by {}", unit_ref_phrase(Some(sub), "the unit"))
+                    format!(" made by {}", unit_ref_phrase(Some(sub), "this unit"))
                 }
                 _ => String::new(),
             };
@@ -323,7 +323,7 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                 };
                 return format!("{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}");
             }
-            // Whose roll it was, when the subject names one: "the unit made a battle-shock roll
+            // Whose roll it was, when the subject names one: "this unit made a battle-shock roll
             // and failed it".
             if nn(p, "subject").is_some() {
                 let outcome = if is(f, "result", "failure") {
@@ -334,8 +334,8 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                     ""
                 };
                 return format!(
-                    "{neg}{who} made a {} roll{outcome} {}{}",
-                    roll_word(f.get("roll")),
+                    "{neg}{who} made {}{outcome} {}{}",
+                    with_article(&format!("{} roll", roll_word(f.get("roll")))),
                     window_phrase(window),
                     if nn(p, "count").is_some() {
                         format!(" ({amount} times)")
@@ -352,8 +352,8 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                 "was made ".to_string()
             };
             format!(
-                "{neg}a {} roll {result}{}{}",
-                roll_word(f.get("roll")),
+                "{neg}{} {result}{}{}",
+                with_article(&format!("{} roll", roll_word(f.get("roll")))),
                 window_phrase(window),
                 if nn(p, "count").is_some() {
                     format!(" ({amount} times)")
@@ -365,18 +365,24 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             .to_string()
         }
         "damage-allocated" => {
-            let obj_phrase = unit_ref_phrase(p.get("object"), "the unit");
+            let obj_phrase = unit_ref_phrase(p.get("object"), "this unit");
             let atk = if truthy(f.get("attack_type")) {
                 format!("{} ", st(f.get("attack_type")))
             } else {
                 String::new()
             };
-            let when = if window.and_then(Value::as_str) == Some("event") {
-                " from the triggering attacks".to_string()
+            if window.and_then(Value::as_str) == Some("event") {
+                format!(
+                    "{neg}{obj_phrase} lost one or more wounds from the triggering {atk}attacks"
+                )
             } else {
-                format!(" {}", window_phrase(window))
-            };
-            format!("{neg}{obj_phrase} lost one or more wounds from {atk}attacks{when}")
+                format!(
+                    "{neg}{obj_phrase} lost one or more wounds from {atk}attacks {}",
+                    window_phrase(window)
+                )
+                .trim_end()
+                .to_string()
+            }
         }
         "destroyed" | "model-destroyed" => {
             let noun = if event == "model-destroyed" {
@@ -394,8 +400,8 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                 };
                 return if truthy(f.get("attack_type")) {
                     format!(
-                        "{neg}destroyed by a {} attack{with}",
-                        st(f.get("attack_type"))
+                        "{neg}destroyed by {}{with}",
+                        with_article(&format!("{} attack", st(f.get("attack_type"))))
                     )
                 } else {
                     format!("{neg}destroyed by any attack{with}")
@@ -438,23 +444,21 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             } else {
                 format!("{owner}{kws}{noun}s")
             };
-            // "the unit lost 1+ models to the just-resolved attacks": the victims are one unit's
+            // "this unit lost one or more models to those attacks": the victims are one unit's
             // models (a selection's candidate).
             if event == "model-destroyed" && window.and_then(Value::as_str) == Some("event") {
                 if let Some(member) = nn(o, "member_of") {
                     let victim = if member.as_str() == Some("selected-unit") {
-                        "the unit".to_string()
+                        "this unit".to_string()
                     } else {
-                        unit_ref_phrase(Some(member), "the unit")
+                        unit_ref_phrase(Some(member), "this unit")
                     };
                     let atk = if truthy(f.get("attack_type")) {
                         format!("{} ", st(f.get("attack_type")))
                     } else {
                         String::new()
                     };
-                    return format!(
-                        "{neg}{victim} lost {amount} models to the just-resolved {atk}attacks"
-                    );
+                    return format!("{neg}{victim} lost {amount} models to those {atk}attacks");
                 }
             }
             // "the enemy WARLORD": one designated model, named as itself rather than counted.
@@ -468,14 +472,14 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             };
             // Who destroyed them: the filter's attacker, else the event's subject.
             if let Some(by) = nn(f, "by").or_else(|| nn(p, "subject")) {
-                // A destruction by one attack type says it: "with its just-resolved melee attacks".
+                // A destruction by one attack type says it: "with those melee attacks".
                 let atk = if truthy(f.get("attack_type")) {
                     format!("{} ", st(f.get("attack_type")))
                 } else {
                     String::new()
                 };
                 let when = if window.and_then(Value::as_str) == Some("event") {
-                    format!("with its just-resolved {atk}attacks")
+                    format!("with those {atk}attacks")
                 } else if atk.is_empty() {
                     window_phrase(window)
                 } else {
@@ -483,7 +487,7 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                 };
                 return format!(
                     "{neg}{} has destroyed {victims} {when}",
-                    unit_ref_phrase(Some(by), "the unit")
+                    unit_ref_phrase(Some(by), "this unit")
                 )
                 .trim_end()
                 .to_string();
@@ -557,17 +561,17 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                     with_window(&format!("{who} used {which}"), window)
                 );
             }
-            let which = match nn(f, "id") {
-                Some(id) => format!("the {} ", id_label(Some(id))),
-                None => "a ".to_string(),
-            };
             let kind = match nn(f, "kind") {
                 Some(k) => st(Some(k)),
                 None => "ability".to_string(),
             };
+            let what = match nn(f, "id") {
+                Some(id) => format!("the {} {}", id_label(Some(id)), dekebab(&kind)),
+                None => with_article(&dekebab(&kind)),
+            };
             format!(
                 "{neg}{}",
-                with_window(&format!("{who} used {which}{}", dekebab(&kind)), window)
+                with_window(&format!("{who} used {what}"), window)
             )
         }
         // "cause it to become Below Half-strength": the unit's strength fell past a threshold.
@@ -591,6 +595,17 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             with_window(
                 &format!("{unit} {fell} below its Starting Strength"),
                 window,
+            )
+        }
+        "state-changed" => {
+            let unit = if nn(p, "subject").is_none() {
+                "a unit".to_string()
+            } else {
+                who.clone()
+            };
+            format!(
+                "{neg}{}",
+                with_window(&format!("{unit} changed state"), window)
             )
         }
         "objective-gained" => format!(
@@ -620,7 +635,7 @@ fn happened_phrase(p: &P, negated: bool) -> String {
 pub(crate) fn destroyed_count(side: &P) -> String {
     let objects = super::board::pluralize_first_noun(&strip_article(&unit_ref_phrase(
         side.get("object"),
-        "the unit",
+        "this unit",
     )));
     format!("{objects} {}", window_phrase(side.get("window")))
         .trim_end()

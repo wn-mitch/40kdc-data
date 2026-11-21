@@ -53,11 +53,11 @@ describe("a named-ability bar through compileLeaves and the describer", () => {
   it("renders as a selection the ability cannot make, and with a named selector as a targeting", () => {
     const render = (modifier: Record<string, unknown>) =>
       describeAbility({ ability_id: "x", name: "x", scope: { duration: "permanent" }, effect: { type: "targeting", target: "this-unit", modifier } } as never);
-    expect(render({ may: "cannot-target", kind: "ability", target: "this-unit", ability: "fixture-rule-test-faction" })).toBe("The unit cannot be selected by the Fixture Rule Test Faction ability.");
+    expect(render({ may: "cannot-target", kind: "ability", target: "this-unit", ability: "fixture-rule-test-faction" })).toBe("This unit cannot be selected by the Fixture Rule Test Faction ability.");
     expect(render({ by: { owner: "enemy" }, may: "cannot-target", kind: "ability", target: "this-unit", ability: "fixture-rule-test-faction" })).toBe(
-      "Enemy units cannot target the unit with the Fixture Rule Test Faction ability.",
+      "Enemy units cannot target this unit with the Fixture Rule Test Faction ability.",
     );
     // Without a named ability the generic kind phrase is unchanged.
-    expect(render({ by: { owner: "enemy" }, may: "cannot-target", kind: "ability", target: "this-unit" })).toBe("Enemy units cannot target the unit with abilities.");
+    expect(render({ by: { owner: "enemy" }, may: "cannot-target", kind: "ability", target: "this-unit" })).toBe("Enemy units cannot target this unit with abilities.");
   });
 });

@@ -564,17 +564,16 @@
       <profiles>
         <profile name="Eviscerating Fly-by" id="f293-125d-d9bc-c561" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal or Advance move, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the selected unit was moved over by this model during that move: roll one D6 for each model in the unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal or Advance move, you can use this ability, select one enemy unit without the MONSTER or VEHICLE keyword and that was moved over by this model during that move. Roll one D6 for each model in this unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Matchless Swiftness" id="fd41-a266-15f6-ae38" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Movement phase, in your turn:
-  -&gt; When the unit is selected to make an Advance move, you may use this ability:
-    -&gt; Spend 1 Pain token.
-    -&gt; The unit is Empowered.
-  -&gt; When the unit ends an Advance move, until the end of the phase: while the unit is Empowered, the unit does not make an Advance roll; add 8" to its Move characteristic instead.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Movement phase:
+  - When this unit is selected to make an Advance move, you can use this ability:
+    - Spend 1 Pain token.
+    - This unit is Empowered.
+  - When this unit ends an Advance move, until the end of the phase, while this unit is Empowered, this unit does not make an Advance roll; add 8" to its Move characteristic instead.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1274,29 +1273,28 @@
       <profiles>
         <profile name="Deadly Demise" id="eebe-d3fa-b975-824e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="1268-9bf4-5a69-44f2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Pain Engine (Aura)" id="7f56-92e7-59de-f348" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time pain token pool is spent:
-  If one or more models in this unit have no weapon named "Spirit vortex":
-    -&gt; Roll one D6+1: on a 5+, you gain 1 Pain token.
-  Unless one or more models in this unit have no weapon named "Spirit vortex":
-    -&gt; Roll one D6: on a 5+, you gain 1 Pain token.</characteristic>
+  - If one or more models in this unit have no weapon named "Spirit vortex":
+    - Roll one D6+1: on a 5+, you gain 1 Pain token.
+  - Unless one or more models in this unit have no weapon named "Spirit vortex":
+    - Roll one D6: on a 5+, you gain 1 Pain token.</characteristic>
           </characteristics>
         </profile>
         <profile name="Pain Parasite" id="9620-ed2d-3788-e7be" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Fight phase, while the unit is below its starting strength:
-  -&gt; Each time this model is destroyed, it can fight before being removed from play.
-  -&gt; Each time this model is destroyed, it can shoot before being removed from play.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Fight phase, while this unit is below its Starting Strength:
+  - Each time this model is destroyed, it can fight before being removed from play.
+  - Each time this model is destroyed, it can shoot before being removed from play.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1467,23 +1465,23 @@
         <profile name="Bloody Spectacle" id="8a15-0176-4746-d9c3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks against CHARACTER targets:
-  -&gt; You can re-roll the Hit roll for attacks made by this model.
-  -&gt; You can re-roll the Wound roll for attacks made by this model.
--&gt; Each time the unit destroys a CHARACTER model: you gain 1CP.</characteristic>
+  - You can re-roll Hit rolls for attacks made by this model.
+  - You can re-roll Wound rolls for attacks made by this model.
+Each time this unit destroys a CHARACTER model, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="04f3-b242-658d-50c5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lithe Agility" id="ff48-5d4e-3db7-86d5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to make an Advance move, you may use this ability or before a Charge roll is made, you may use this ability, during the Movement phase, in your turn, during the Charge phase, in your turn, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  While the unit is Empowered:
-    Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to make an Advance move, you can use this ability or before a Charge roll is made, you can use this ability, during your Movement phase, during the Charge phase, in your turn, until the end of the phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - While this unit is Empowered:
+    Choose one of the following:
       - You can re-roll the Charge roll.
       - You can re-roll the Advance roll.</characteristic>
           </characteristics>
@@ -1567,22 +1565,22 @@
       <profiles>
         <profile name="Battlefield Butchery" id="b882-9d6f-ab26-0d4e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  While the unit is Empowered:
-    -&gt; Add 1 to the Attacks characteristic of melee weapons equipped by models in this unit.
-    -&gt; Add 1 to the Strength characteristic of melee weapons equipped by models in this unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, during the Fight phase, until the end of the phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - While this unit is Empowered:
+    - Add 1 to the Attacks characteristic of melee weapons equipped by models in this unit.
+    - Add 1 to the Strength characteristic of melee weapons equipped by models in this unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="bc31-267e-9e68-ab59" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Skyboard Evasion" id="3f50-c815-b88f-ee74" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the unit can make a Normal move of up to D6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during your opponent's Movement phase, while the triggering unit is within 8" of this unit and this unit is unengaged, this unit can make a Normal move of up to D6".</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1927,39 +1925,38 @@
         </profile>
         <profile name="Aerialists" id="1061-1825-6b7f-0bd9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, you may use this ability, while a unit embarked within the unit is not embarked:
-  -&gt; Select one friendly DRUKHARI INFANTRY unit (excluding FLY units) if the selected unit contains at most 6 models and the selected unit is wholly within 6" of the unit and the selected unit is unengaged:
-    -&gt; That unit is eligible to embark into this unit.
-    -&gt; That unit is eligible to embark even if it disembarked this turn.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, you can use this ability, while a unit embarked within this unit is not embarked:
+  - Select one friendly DRUKHARI INFANTRY unit (excluding FLY units) that contains at most 6 models and is wholly within 6" of this unit and unengaged:
+    - That unit is eligible to embark into this unit.
+    - That unit is eligible to embark even if it disembarked this turn.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="7b9a-3c0d-3889-016d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Rapid Deployment" id="898c-74a0-a73e-7280" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to make an Advance move, you may use this ability, during the Movement phase, in your turn, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; This model is Empowered.
-  -&gt; While this model is Empowered, friendly units embarked within this model are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to make an Advance move, you can use this ability, during your Movement phase, until the end of the phase:
+  - Spend 1 Pain token.
+  - This model is Empowered.
+  - While this model is Empowered, friendly units embarked within this model are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="e368-36ef-8271-260d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="b2d7-1a68-e275-b5b7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="5007-7b77-478b-19ba" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2054,23 +2051,23 @@
       <profiles>
         <profile name="Murderous Crossfire" id="2ee4-82f9-d6a9-5766" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, once per turn per unit:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Murderous Crossfire Target). Until the end of the phase, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly DRUKHARI unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, once per turn per unit:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Murderous Crossfire Target). Until the end of the phase, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly DRUKHARI unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Swooping Descent" id="abb0-0181-4de7-7387" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Movement phase, in your turn:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  -&gt; When the unit is set up, if the unit is using Deep Strike, you may use this ability, until the end of the turn:
-    -&gt; While the unit is Empowered, the unit can be set up on the battlefield more than 6" away from all enemy models.
-    -&gt; While the unit is within 8" of an enemy unit, the triggering unit cannot declare a charge.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Movement phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - When this unit is set up, if this unit is using Deep Strike, you can use this ability, until the end of the turn:
+    - While this unit is Empowered, this unit can be set up on the battlefield more than 6" away from all enemy models.
+    - While this unit is within 8" of an enemy unit, the triggering unit cannot declare a charge.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="9bdb-f858-e59d-4306" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2372,16 +2369,16 @@
       <profiles>
         <profile name="Cruel Enforcers" id="8405-af0a-d9a1-0772" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sadistic Raiders" id="9cc3-2ec5-2d42-bc4e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, during the Shooting phase, in your turn or during the Fight phase, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  -&gt; While the unit is Empowered, while the target is not within range of an objective marker, you can re-roll a Wound roll of 1.
-  -&gt; While the target is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability or when this unit is selected to fight, you can use this ability, during your Shooting phase or during the Fight phase, until the end of the phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - While this unit is Empowered and the target is not within range of an objective marker, you can re-roll Wound rolls of 1.
+  - While the target is within range of an objective marker, you can re-roll Wound rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2750,63 +2747,62 @@
         </profile>
         <profile name="Deadly Demise" id="0687-87d2-f43b-4552" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="5742-a1ef-dc24-d801" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Splinter Racks" id="8fc5-61e6-9d52-f011" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, you may use this ability, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; This model is Empowered.
-  -&gt; While this model is Empowered, while a unit embarked within the unit is embarked, while making ranged attacks made with [ANTI] weapons, you can re-roll the Hit roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability, during your Shooting phase, until the end of the phase:
+  - Spend 1 Pain token.
+  - This model is Empowered.
+  - While this model is Empowered and a unit embarked within this unit is embarked, while making ranged attacks made with [ANTI] weapons, you can re-roll Hit rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Vanguard of the Dark City" id="ea36-6f90-1175-574d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, until the end of the battle round:
-  -&gt; At the start of your Command phase:
-    -&gt; Select one:
-      - Masters of the Shadowed Sky: while the unit is within range of an objective marker you control, if a friendly KABALITE WARRIORS unit that is embarked has the KABALITE WARRIORS keyword, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.
-      - Speed of the Kill: friendly WYCHES units that are embarked can disembark, ending that move wholly within 6" of this model.
-      - Visions of Butchery: add 1 to the Attacks characteristic of bladevanes weapons equipped by this model for every 1 models in or embarked within this model; add 1 to the Attacks characteristic of chainsnares weapons equipped by this model for every 1 models in or embarked within this model.
-      - Aethersails: if a friendly DRUKHARI unit that is embarked has the DRUKHARI keyword, you can re-roll the Advance roll for this model; you can re-roll the Charge roll for this model.</characteristic>
+  - At the start of your Command phase:
+    - Select one:
+      - Masters of the Shadowed Sky: While this unit is within range of an objective marker you control, if a friendly KABALITE WARRIORS unit that is embarked has the KABALITE WARRIORS keyword, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.
+      - Speed of the Kill: Friendly WYCHES units that are embarked can disembark, ending that move wholly within 6" of this model.
+      - Visions of Butchery: Add 1 to the Attacks characteristic of bladevanes weapons equipped by this model for every 1 models in or embarked within this model; add 1 to the Attacks characteristic of chainsnares weapons equipped by this model for every 1 models in or embarked within this model.
+      - Aethersails: If a friendly DRUKHARI unit that is embarked has the DRUKHARI keyword, you can re-roll the Advance roll for this model; you can re-roll the Charge roll for this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Masters of the Shadowed Sky" id="e6b0-fef3-6cf7-6801" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, until the end of the battle round:
-  -&gt; At the start of your Command phase: while the unit is within range of an objective marker you control, if a friendly KABALITE WARRIORS unit that is embarked has the KABALITE WARRIORS keyword, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+  - At the start of your Command phase, while this unit is within range of an objective marker you control, if a friendly KABALITE WARRIORS unit that is embarked has the KABALITE WARRIORS keyword, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
           </characteristics>
         </profile>
         <profile name="Speed of the Kill" id="c07d-1979-bc2d-2da4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, until the end of the battle round:
-  -&gt; At the start of your Command phase: friendly WYCHES units that are embarked can disembark, ending that move wholly within 6" of this model.</characteristic>
+  - At the start of your Command phase, friendly WYCHES units that are embarked can disembark, ending that move wholly within 6" of this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Visions of Butchery" id="1541-2e04-7d23-5d4f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, until the end of the battle round:
-  -&gt; At the start of your Command phase:
-    -&gt; Add 1 to the Attacks characteristic of bladevanes weapons equipped by this model for every 1 models in or embarked within this model.
-    -&gt; Add 1 to the Attacks characteristic of chainsnares weapons equipped by this model for every 1 models in or embarked within this model.</characteristic>
+  - At the start of your Command phase:
+    - Add 1 to the Attacks characteristic of bladevanes weapons equipped by this model for every 1 models in or embarked within this model.
+    - Add 1 to the Attacks characteristic of chainsnares weapons equipped by this model for every 1 models in or embarked within this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Aethersails" id="95af-9a6f-b891-6e58" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Command phase, until the end of the battle round:
-  -&gt; At the start of your Command phase: if a friendly DRUKHARI unit that is embarked has the DRUKHARI keyword, you can re-roll the Advance roll for this model; you can re-roll the Charge roll for this model.</characteristic>
+  - At the start of your Command phase, if a friendly DRUKHARI unit that is embarked has the DRUKHARI keyword, you can re-roll the Advance roll for this model; you can re-roll the Charge roll for this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="4dc1-0806-de87-dbfe" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2912,34 +2908,34 @@
         </profile>
         <profile name="Blur of Blades" id="ad93-7899-ed8a-f465" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Brides of Death" id="d698-b502-57e4-4034" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  While the unit is Empowered, while making melee attacks:
-    -&gt; Improve the triggering unit's Strength characteristic by 1.
-    -&gt; Improve the triggering unit's Armour Penetration characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, during the Fight phase, until the end of the phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - While this unit is Empowered, while making melee attacks:
+    - Improve the triggering unit's Strength characteristic by 1.
+    - Improve the triggering unit's Armour Penetration characteristic by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fights First" id="5b1e-a43e-0840-3900" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Fights First ability, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="5a96-6148-33c8-5445" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Thrilling Spectacle" id="1683-c414-800b-6b3f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, once per battle per unit, until the end of the phase:
-  -&gt; This model has a 3+ invulnerable save.
-  -&gt; Set the Attacks characteristic of melee weapons equipped by this model to 12.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability, once per battle per unit, until the end of the phase:
+  - This model has a 3+ invulnerable save.
+  - Set the Attacks characteristic of melee weapons equipped by this model to 12.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3024,31 +3020,30 @@
         </profile>
         <profile name="Ground-attack Craft" id="f475-fc38-1c10-9fa4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while the target does not have the FLY keyword, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, while the target does not have the FLY keyword, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Nowhere to Run" id="50e0-5399-3e14-1f7f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn:
-  -&gt; When the unit is selected to shoot, you may use this ability:
-    -&gt; Spend 1 Pain token.
-    -&gt; The unit is Empowered.
-  -&gt; After the unit resolves its attacks, until the start of your next turn:
-    -&gt; Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-      -&gt; While the unit is Empowered, that unit is marked as pinned.
-      -&gt; While the selected unit is tagged pinned, subtract 2 from that unit's Move characteristic.
-      -&gt; While the selected unit is tagged pinned, this unit gets -2 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase:
+  - When this unit is selected to shoot, you can use this ability:
+    - Spend 1 Pain token.
+    - This unit is Empowered.
+  - After this unit resolves its attacks, until the start of your next turn:
+    - Select one enemy unit without the MONSTER or VEHICLE keyword and that was hit by an attack made by the triggering unit during that shooting sequence:
+      - While this unit is Empowered, that unit is Pinned.
+      - While the selected unit is Pinned, subtract 2" from that unit's Move characteristic.
+      - While the selected unit is Pinned, subtract 2 from this unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="70aa-4dc5-d764-722c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="01b8-1343-e670-1281" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3193,22 +3188,22 @@
       <profiles>
         <profile name="Airborne Evasion" id="fc39-6cc6-0df2-133a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:
-  -&gt; The unit can make a Normal move of up to 6".
-  -&gt; The unit cannot declare a charge.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:
+  - This unit can make a Normal move of up to 6".
+  - This unit cannot declare a charge.</characteristic>
           </characteristics>
         </profile>
         <profile name="Winged Strike" id="9772-3e5a-c706-e9fb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, you may use this ability, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  -&gt; While the unit is Empowered, while making ranged attacks, you can re-roll the Hit roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability, during your Shooting phase, until the end of the phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - While this unit is Empowered, while making ranged attacks, you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="6d97-e644-f751-dcb5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3540,26 +3535,25 @@
         </profile>
         <profile name="Mindless Killing Machines" id="3893-c52a-c05f-e7e2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the Fight phase, you may use this ability:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
--&gt; When a model in the unit is destroyed: each time a model in this unit is destroyed, while the unit is Empowered, unless the triggering unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+When a model in this unit is destroyed, while this unit is Empowered, unless the triggering unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</characteristic>
           </characteristics>
         </profile>
         <profile name="Torture Device" id="ded6-c162-9b08-b508" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit destroys an enemy unit, you gain 1 Pain token.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit destroys an enemy unit, you gain 1 Pain token.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="299b-92d4-5e00-0089" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="c0a5-e2c0-a224-6c3b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3940,18 +3934,18 @@
       <profiles>
         <profile name="Experimental Enhancements" id="0649-b2e4-68c5-9891" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  Select exactly 1 distinct options (One of the Following):
-    - Set the Attacks characteristic of melee weapons equipped by friendly models (excluding CHARACTER models) in the unit to 3.
-    - Set the Attacks characteristic of melee weapons equipped by friendly models (excluding CHARACTER models) in the unit to 4; melee weapons equipped by friendly models (excluding CHARACTER models) in the unit gain [HAZARDOUS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, during the Fight phase, until the end of the phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  Choose one of the following:
+    - Set the Attacks characteristic of melee weapons equipped by friendly models (excluding CHARACTER models) in this unit to 3.
+    - Set the Attacks characteristic of melee weapons equipped by friendly models (excluding CHARACTER models) in this unit to 4; melee weapons equipped by friendly models (excluding CHARACTER models) in this unit gain [HAZARDOUS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Torturer's Craft" id="0e68-8bb3-ca6d-0c77" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn or during the Fight phase:
-  -&gt; Select one enemy unit (excluding VEHICLE units) that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase or during the Fight phase:
+  - Select one enemy unit (excluding VEHICLE units) that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4825,31 +4819,31 @@
         <profile name="Fear Incarnate (Aura)" id="e6be-a993-7685-3d7c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within 6" of this model, worsen that unit's Leadership characteristic by 1.
--&gt; At the start of the Battle Shock step in your opponent's turn: while an enemy unit is within 6" of this model, while the unit is below its starting strength, that unit must take a Battle-shock test.</characteristic>
+At the start of the Battle Shock step in your opponent's turn, while an enemy unit is within 6" of this model, while this unit is below its Starting Strength, that unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fleshcraft" id="9f5d-1ddd-1f96-425d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  -&gt; Return D3+1 destroyed BODYGUARD models to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, you can use this ability:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - Return D3+1 destroyed BODYGUARD models to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="092e-386f-14b2-0528" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Pain Adept" id="15bd-e053-be89-b6fc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per phase per army, during the Command phase, in your turn, while a friendly model with the Pain Adept ability is on the battlefield:
-  -&gt; Roll one D6: on a 4+, you gain 1 Pain token.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per phase per army, during your Command phase, while a friendly model with the Pain Adept ability is on the battlefield:
+  - Roll one D6: on a 4+, you gain 1 Pain token.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="a31f-ac1e-f9d1-57ab" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4939,26 +4933,25 @@
         </profile>
         <profile name="Devious Mastermind" id="6bbd-abd1-6777-81ae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, you may use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, you can use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Hatred Eternal" id="fd1b-849a-10c5-1735" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot or fight, you may use this ability, during the Shooting phase, in your turn or during the Fight phase, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  -&gt; While the unit is Empowered, you can re-roll the Hit roll for attacks made by the triggering unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot or fight, you can use this ability, during your Shooting phase or during the Fight phase, until the end of the phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - While this unit is Empowered, you can re-roll Hit rolls for attacks made by the triggering unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="44c9-d183-bed9-b798" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Overlord" id="5732-71fc-ccd3-8d81" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per unit:
-  -&gt; Select one friendly DRUKHARI unit if the selected unit is Battle-shocked and the selected unit is within 12" of this model: that unit is no longer Battle-shocked.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per unit, select one friendly DRUKHARI unit that is Battle-shocked and within 12" of this model. That unit is no longer Battle-shocked.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5147,38 +5140,38 @@
         </profile>
         <profile name="Archon of the Poisoned Tongue" id="e020-b7d4-54d2-6c0c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot or fight, you may use this ability, during the Shooting phase, in your turn or during the Fight phase, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  While the unit is Empowered:
-    Select one of the following:
-      - The unit's weapons gain [SUSTAINED HITS 1].
-      - The unit's weapons gain [LETHAL HITS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot or fight, you can use this ability, during your Shooting phase or during the Fight phase, until the end of the phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - While this unit is Empowered:
+    Choose one of the following:
+      - This unit's weapons gain [SUSTAINED HITS 1].
+      - This unit's weapons gain [LETHAL HITS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="0055-8061-cb78-5159" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Mind like a Steel Trap (Aura)" id="fa3e-3429-d9b9-9927" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit within 12" of this model is targeted with a Stratagem, you may use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit within 12" of this model is targeted with a Stratagem, you can use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Precognisant" id="8bb2-07f7-7ddc-00f5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you may use this ability:
-  -&gt; Select up to 3 friendly DRUKHARI units:
-    -&gt; For each selected unit:
-      Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you can use this ability:
+  - Select up to 3 friendly DRUKHARI units:
+    - For each selected unit:
+      Choose one of the following:
         - That unit can be set up on the battlefield.
         - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="206e-66f1-5651-edf0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5266,35 +5259,34 @@
         </profile>
         <profile name="Agonising Suppression" id="d35e-9859-4343-4d3d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn:
-  -&gt; When the unit is selected to shoot, you may use this ability:
-    -&gt; Spend 1 Pain token.
-    -&gt; This model is Empowered.
-  -&gt; After the unit resolves its attacks, until the start of your next turn:
-    -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-      -&gt; While this model is Empowered, that unit is marked as suppressed.
-      -&gt; While the unit is tagged suppressed, that unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase:
+  - When this unit is selected to shoot, you can use this ability:
+    - Spend 1 Pain token.
+    - This model is Empowered.
+  - After this unit resolves its attacks, until the start of your next turn:
+    - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:
+      - While this model is Empowered, that unit is Suppressed.
+      - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Eradicate the Foe" id="e4bc-4c5f-55f6-1f55" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless the target unit is below its starting strength, you can re-roll the Hit roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless the target unit is below its Starting Strength, you can re-roll Hit rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="b7c0-3f75-ab68-108f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="e46a-2367-83b1-c71a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="cb6d-f30f-bb81-9c70" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5397,19 +5389,19 @@
       <profiles>
         <profile name="Acrobatic Gladiators" id="a6d7-b319-34fe-6733" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Charge phase, you may use this ability, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  While the unit is Empowered:
-    -&gt; The unit is eligible to declare a charge in a turn in which it Advanced.
-    -&gt; The unit is eligible to declare a charge in a turn in which it Fell Back.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Charge phase, you can use this ability, until the end of the phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - While this unit is Empowered:
+    - This unit is eligible to declare a charge in a turn in which it Advanced.
+    - This unit is eligible to declare a charge in a turn in which it Fell Back.</characteristic>
           </characteristics>
         </profile>
         <profile name="No Escape" id="78dc-ea48-2571-770e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the No Escape ability:
-  -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
-  -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit (excluding MONSTER or VEHICLE units) starts a Fall Back move, while the triggering unit is within Engagement Range of a friendly unit with the No Escape ability:
+  - While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
+  - While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5630,26 +5622,26 @@
       <profiles>
         <profile name="Archon's Retinue" id="17fb-4ee6-0a7b-afa2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, while this unit is being led by a model, friendly Leader models in the unit gain the Scouts 7" ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, while this unit is being led by a model, friendly Leader models in this unit gain the Scouts 7" ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Archon's Will" id="1e74-ccad-3c5d-4693" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, during the first battle round:
-  -&gt; Select one objective marker, binding it as objective:
-    -&gt; For the rest of the battle: while the unit is within range of an objective marker, while the unit is not Battle-shocked, the unit has a 5+ invulnerable save; set the unit's Objective Control characteristic to 3.</characteristic>
+  - Select one objective marker:
+    - For the rest of the battle, while this unit is within range of an objective marker and this unit is not Battle-shocked, this unit has a 5+ invulnerable save; set this unit's Objective Control characteristic to 3.</characteristic>
           </characteristics>
         </profile>
         <profile name="Assassins' Poisons" id="89c5-159b-a0a7-e317" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Fight phase:
-  -&gt; The unit's weapons gain [LETHAL HITS].
-  -&gt; The unit's weapons gain [PRECISION].</characteristic>
+  - This unit's weapons gain [LETHAL HITS].
+  - This unit's weapons gain [PRECISION].</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="33d6-dd9a-580c-1450" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6176,36 +6168,35 @@
         </profile>
         <profile name="Nowhere to Hide" id="95ab-20d5-1178-8151" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn:
-  -&gt; When the unit is selected to shoot, you may use this ability:
-    -&gt; Spend 1 Pain token.
-    -&gt; The unit is Empowered.
-  -&gt; After the unit resolves its attacks, until the end of the phase:
-    -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: while the unit is Empowered, that unit cannot benefit from Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase:
+  - When this unit is selected to shoot, you can use this ability:
+    - Spend 1 Pain token.
+    - This unit is Empowered.
+  - After this unit resolves its attacks, until the end of the phase:
+    - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. While this unit is Empowered, that unit cannot benefit from Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Void Mine" id="9454-75c7-1f59-36b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase:
-  -&gt; Select one enemy model without the Lone Operative ability visible to this model if the selected unit is within 24" of the unit:
+  - Select one enemy model without the Lone Operative ability visible to this model that is within 24" of this unit:
     For each enemy unit within D6" of the selected unit:
-      -&gt; Roll one D6: on a 4+, the unit suffers D6 mortal wounds.</characteristic>
+      - Roll one D6: on a 4+, that unit suffers D6 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="5882-729d-1e47-d705" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="d41c-0fd7-86f2-851d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6161-fce5-beac-c82e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6341,27 +6332,27 @@
         </profile>
         <profile name="Leader" id="65cc-010d-1449-2a82" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Master of Blades" id="2e84-f0ab-2513-a38a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  -&gt; While the unit is Empowered, while making melee attacks, the triggering unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, during the Fight phase, until the end of the phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - While this unit is Empowered, while making melee attacks, add 1 to the triggering unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Onslaught" id="3f31-29f6-726f-077e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Pile-in or Consolidation move, while this model is leading a unit, add 3" to the unit's Pile-in and Consolidation moves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Pile-in or Consolidation move, while this model is leading a unit, add 3" to this unit's Pile-in and Consolidation moves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Silent Executioner" id="aaeb-de32-455e-0ea1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target unit is below its starting strength:
-  -&gt; You can re-roll the Hit roll for attacks made by this model.
-  -&gt; While the target unit is below half strength, you can re-roll the Wound roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target unit is below its Starting Strength:
+  - You can re-roll Hit rolls for attacks made by this model.
+  - While the target unit is Below Half-strength, you can re-roll Wound rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6438,17 +6429,17 @@
       <profiles>
         <profile name="Decapitating Strikes" id="a018-d138-1529-8500" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, during the Fight phase, until the end of the phase:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  -&gt; While the unit is Empowered, while making melee attacks against INFANTRY targets, melee weapons equipped by models in this unit gain [DEVASTATING WOUNDS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, during the Fight phase, until the end of the phase:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - While this unit is Empowered, while making melee attacks against INFANTRY targets, melee weapons equipped by models in this unit gain [DEVASTATING WOUNDS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Tormentors" id="5fe7-1033-aa07-ffb6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the Fight phase, once per phase per army:
-  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Tormentors ability, the unit must take a Battle-shock test.
-While making melee attacks, while the target is Battle-shocked, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army:
+  For each enemy unit: While this unit is within Engagement Range of a friendly unit with the Tormentors ability, that unit must take a Battle-shock test.
+While making melee attacks, while the target is Battle-shocked, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6687,30 +6678,30 @@ While making melee attacks, while the target is Battle-shocked, the unit gets +1
       <profiles>
         <profile name="Fade Away" id="2d82-7b8a-6af7-2371" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase, you may use this ability, while the unit is unengaged:
-  -&gt; Spend 1 Pain token.
-  -&gt; The unit is Empowered.
-  -&gt; The unit can be placed into Strategic Reserves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase, you can use this ability, while this unit is unengaged:
+  - Spend 1 Pain token.
+  - This unit is Empowered.
+  - This unit can be placed into Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="fbfc-58be-3d9b-44e6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Shade Weavers" id="09b8-2797-05bd-0fce" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is not within 18" of the unit, the unit cannot target the unit with ranged weapons.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the attacking unit is not within 18" of this unit, this unit cannot be targeted with ranged weapons.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="ff60-4f2c-c2a6-c0f1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="11bb-2414-4c8e-8276" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6882,7 +6873,7 @@ While making melee attacks, while the target is Battle-shocked, the unit gets +1
       <profiles>
         <profile name="Cluster caltrops" id="abdd-8ee0-a016-1756" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you use Eviscerating Fly By, you may use this ability, you can re-roll a number of Eviscerating Fly By rolls equal to the number of models in this unit equipped with Cluster Caltrops.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you use Eviscerating Fly By, you can use this ability, you can re-roll a number of Eviscerating Fly By rolls equal to the number of models in this unit equipped with Cluster Caltrops.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7069,7 +7060,7 @@ Melee weapons equipped by this model gain [LETHAL HITS].</characteristic>
       <profiles>
         <profile name="Phantasm Grenade Launcher" id="b315-0432-7630-3382" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the SMOKE and GRENADES keywords.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the SMOKE and GRENADES keywords.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7297,7 +7288,7 @@ Melee weapons equipped by this model gain [LETHAL HITS].</characteristic>
       <profiles>
         <profile name="Kabalite Icon" id="a0f0-7ba9-b387-f793" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is not Battle-shocked, add 1 to this model's Objective Control characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is not Battle-shocked, add 1 to this model's Objective Control characteristic.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7981,9 +7972,9 @@ Melee weapons equipped by this model gain [LETHAL HITS].</characteristic>
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to the Attacks characteristic of melee weapons equipped by this model.
 Add 1 to the Strength characteristic of melee weapons equipped by this model.
--&gt; After this model resolves its attacks, if this model has destroyed 1+ enemy models with its just-resolved melee attacks, the first time this battle per model, for the rest of the battle:
-  -&gt; Add 1 to the Attacks characteristic of melee weapons equipped by this model.
-  -&gt; Add 1 to the Strength characteristic of melee weapons equipped by this model.</characteristic>
+After this model resolves its attacks, if this model has destroyed one or more enemy models with those melee attacks, the first time this battle per model, for the rest of the battle:
+  - Add 1 to the Attacks characteristic of melee weapons equipped by this model.
+  - Add 1 to the Strength characteristic of melee weapons equipped by this model.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8169,7 +8160,7 @@ Add 1 to the Strength characteristic of melee weapons equipped by this model.
       <profiles>
         <profile name="Phantasm Grenade Launcher" id="c362-5d41-0896-3a62" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the SMOKE keyword.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the SMOKE keyword.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8253,7 +8244,7 @@ Add 1 to the Strength characteristic of melee weapons equipped by this model.
       <profiles>
         <profile name="Stimm-needler" id="f117-a49c-3112-c81e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a saving throw is failed, once per turn per unit, each time an attack is allocated to the unit, change the Damage of that attack to 0.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a saving throw is failed, once per turn per unit, each time an attack is allocated to this unit, change the Damage of that attack to 0.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8406,9 +8397,9 @@ Add 1 to the Strength characteristic of melee weapons equipped by this model.
       <profiles>
         <profile name="Incubi Shrine Token" id="a5ea-716c-8af0-a5e9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Select one of the following:
-  - The unit's Hit rolls count as 6.
-  - The unit's Wound rolls count as 6.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Choose one of the following:
+  - This unit's Hit rolls count as 6.
+  - This unit's Wound rolls count as 6.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8484,14 +8475,14 @@ Add 1 to the Strength characteristic of melee weapons equipped by this model.
               <rules>
                 <rule name="Combat Drugs" id="0731-0fd9-3632-b5a9" hidden="false">
                   <description>At the start of your Command phase, until the start of your next Command phase:
-  -&gt; Select one (each may be chosen once per battle):
-    - Adrenalight: add 1 to the Attacks characteristic of melee weapons equipped by all friendly WYCH CULT models.
-    - Hypex: add 2 to all friendly WYCH CULT models' Move characteristic.
-    - Serpentin: improve the Weapon Skill characteristic of melee weapons equipped by all friendly WYCH CULT models by 1.
-    - Painbringer: add 1 to all friendly WYCH CULT models' Toughness characteristic.
-    - Grave Lotus: add 1 to the Strength characteristic of melee weapons equipped by all friendly WYCH CULT models.
-    - Splintermind: improve all friendly WYCH CULT models' Leadership characteristic by 1; improve the Ballistic Skill characteristic of ranged weapons equipped by all friendly WYCH CULT models by 1.
-  -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Adrenalight, 2 Hypex, 3 Serpentin, 4 Painbringer, 5 Grave Lotus, 6 Splintermind); a result already active has no additional effect.</description>
+  - Select one (each can be chosen once per battle):
+    - Adrenalight: Add 1 to the Attacks characteristic of melee weapons equipped by friendly WYCH CULT models.
+    - Hypex: Add 2" to friendly WYCH CULT models' Move characteristic.
+    - Serpentin: Improve the Weapon Skill characteristic of melee weapons equipped by friendly WYCH CULT models by 1.
+    - Painbringer: Add 1 to friendly WYCH CULT models' Toughness characteristic.
+    - Grave Lotus: Add 1 to the Strength characteristic of melee weapons equipped by friendly WYCH CULT models.
+    - Splintermind: Improve friendly WYCH CULT models' Leadership characteristic by 1; improve the Ballistic Skill characteristic of ranged weapons equipped by friendly WYCH CULT models by 1.
+  - Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Adrenalight, 2 Hypex, 3 Serpentin, 4 Painbringer, 5 Grave Lotus, 6 Splintermind); a result already active has no additional effect.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8509,8 +8500,8 @@ Add 1 to the Strength characteristic of melee weapons equipped by this model.
               <rules>
                 <rule name="Murderous Agenda" id="e441-ef60-b591-4da2" hidden="false">
                   <description>For the rest of the battle:
-  -&gt; At the start of the battle round, if during the first battle round:
-    -&gt; Select one enemy unit (your Contract Unit target). For the rest of the battle, each time a friendly unit makes an attack against it, the unit's weapons gain [PRECISION].</description>
+  - At the start of the first battle round:
+    - Select one enemy unit (your Contract Unit target). For the rest of the battle, each time a friendly unit makes an attack against it, this unit's weapons gain [PRECISION].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8527,9 +8518,9 @@ Add 1 to the Strength characteristic of melee weapons equipped by this model.
               </constraints>
               <rules>
                 <rule name="Rain of Cruelty" id="35db-7775-b2cf-936a" hidden="false">
-                  <description>When a friendly unit disembarks from a Transport (the triggering unit must have DRUKHARI), until the end of the turn:
-  -&gt; Ranged weapons equipped by the triggering unit gain [IGNORES COVER].
-  -&gt; Melee weapons equipped by the triggering unit gain [LANCE].</description>
+                  <description>When a friendly DRUKHARI unit disembarks from a Transport, until the end of the turn:
+  - Ranged weapons equipped by that unit gain [IGNORES COVER].
+  - Melee weapons equipped by that unit gain [LANCE].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8546,24 +8537,24 @@ Add 1 to the Strength characteristic of melee weapons equipped by this model.
               </constraints>
               <rules>
                 <rule name="Callous Competition" id="492a-b334-5834-1d64" hidden="false">
-                  <description>-&gt; At the start of the battle:
-  -&gt; All friendly DRUKHARI units are marked as winning the wager.
-  -&gt; All friendly DRUKHARI units are no longer marked as losing the wager.
-  -&gt; All friendly HARLEQUINS units are marked as losing the wager.
-  -&gt; All friendly HARLEQUINS units are no longer marked as winning the wager.
--&gt; Each time a friendly unit destroys an enemy unit (the triggering unit must have DRUKHARI):
-  -&gt; All friendly DRUKHARI units are marked as winning the wager.
-  -&gt; All friendly DRUKHARI units are no longer marked as losing the wager.
-  -&gt; All friendly HARLEQUINS units are marked as losing the wager.
-  -&gt; All friendly HARLEQUINS units are no longer marked as winning the wager.
--&gt; Each time a friendly unit destroys an enemy unit (the triggering unit must have HARLEQUINS):
-  -&gt; All friendly HARLEQUINS units are marked as winning the wager.
-  -&gt; All friendly HARLEQUINS units are no longer marked as losing the wager.
-  -&gt; All friendly DRUKHARI units are marked as losing the wager.
-  -&gt; All friendly DRUKHARI units are no longer marked as winning the wager.
-While the attacking unit is tagged winning the wager, while the attacking unit is not tagged losing the wager, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the DRUKHARI or HARLEQUINS keyword.
-While the attacking unit is tagged losing the wager, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the DRUKHARI or HARLEQUINS keyword.
-While the attacking unit is tagged losing the wager, you can re-roll a Wound roll of 1 for attacks made by all friendly models with the DRUKHARI or HARLEQUINS keyword.</description>
+                  <description>At the start of the battle:
+  - Friendly DRUKHARI units are designated as Winning the Wager.
+  - Friendly DRUKHARI units are no longer designated as Losing the Wager.
+  - Friendly HARLEQUINS units are designated as Losing the Wager.
+  - Friendly HARLEQUINS units are no longer designated as Winning the Wager.
+Each time a friendly DRUKHARI unit destroys an enemy unit:
+  - Friendly DRUKHARI units are designated as Winning the Wager.
+  - Friendly DRUKHARI units are no longer designated as Losing the Wager.
+  - Friendly HARLEQUINS units are designated as Losing the Wager.
+  - Friendly HARLEQUINS units are no longer designated as Winning the Wager.
+Each time a friendly HARLEQUINS unit destroys an enemy unit:
+  - Friendly HARLEQUINS units are designated as Winning the Wager.
+  - Friendly HARLEQUINS units are no longer designated as Losing the Wager.
+  - Friendly DRUKHARI units are designated as Losing the Wager.
+  - Friendly DRUKHARI units are no longer designated as Winning the Wager.
+While the attacking unit is designated as Winning the Wager and the attacking unit is not designated as Losing the Wager, you can re-roll Hit rolls of 1 for attacks made by friendly models with the DRUKHARI or HARLEQUINS keyword.
+While the attacking unit is designated as Losing the Wager, you can re-roll Hit rolls of 1 for attacks made by friendly models with the DRUKHARI or HARLEQUINS keyword.
+While the attacking unit is designated as Losing the Wager, you can re-roll Wound rolls of 1 for attacks made by friendly models with the DRUKHARI or HARLEQUINS keyword.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8581,9 +8572,9 @@ While the attacking unit is tagged losing the wager, you can re-roll a Wound rol
               <rules>
                 <rule name="Alliance of Agony" id="3d71-db98-520f-b499" hidden="false">
                   <description>At the start of the battle, for the rest of the battle:
-  -&gt; If the unit is an ARCHON KABALITE WARRIORS unit, you gain 2 Pain tokens.
-  -&gt; If the unit is a SUCCUBUS WYCHES unit, you gain 2 Pain tokens.
-  -&gt; If the unit is a HAEMONCULUS WRACKS unit, you gain 2 Pain tokens.</description>
+  - If this unit is an ARCHON KABALITE WARRIORS unit, you gain 2 Pain tokens.
+  - If this unit is a SUCCUBUS WYCHES unit, you gain 2 Pain tokens.
+  - If this unit is a HAEMONCULUS WRACKS unit, you gain 2 Pain tokens.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8600,7 +8591,7 @@ While the attacking unit is tagged losing the wager, you can re-roll a Wound rol
               </constraints>
               <rules>
                 <rule name="Stitchflesh Abominations" id="d925-4d53-1f4a-9bf6" hidden="false">
-                  <description>Against HAEMONCULUS COVENS targets, when the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.</description>
+                  <description>Against HAEMONCULUS COVENS targets, when the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8617,7 +8608,7 @@ While the attacking unit is tagged losing the wager, you can re-roll a Wound rol
               </constraints>
               <rules>
                 <rule name="Exacting Cruelty" id="eef8-0f1e-77be-4bd3" hidden="false">
-                  <description>Against a unit that is not a MONSTER or VEHICLE, melee weapons equipped by all friendly WYCH CULT units gain [LETHAL HITS].
+                  <description>Against a unit that is not a MONSTER or VEHICLE, melee weapons equipped by friendly WYCH CULT units gain [LETHAL HITS].
 You cannot select this Detachment together with another WYCH CULT Detachment.</description>
                 </rule>
               </rules>
@@ -8635,7 +8626,7 @@ You cannot select this Detachment together with another WYCH CULT Detachment.</d
               </constraints>
               <rules>
                 <rule name="Contracted Harvest" id="dc55-22d6-ef50-e39f" hidden="false">
-                  <description>Against a unit that is not a MONSTER or VEHICLE, ranged weapons equipped by all friendly units with the BLADES FOR HIRE or KABAL keyword gain [SUSTAINED HITS 1].
+                  <description>Against a unit that is not a MONSTER or VEHICLE, ranged weapons equipped by friendly units with the BLADES FOR HIRE or KABAL keyword gain [SUSTAINED HITS 1].
 You cannot select this Detachment together with another KABAL Detachment.</description>
                 </rule>
               </rules>
@@ -8653,7 +8644,7 @@ You cannot select this Detachment together with another KABAL Detachment.</descr
               </constraints>
               <rules>
                 <rule name="Darkest Artifice" id="e704-483e-2572-7132" hidden="false">
-                  <description>While the target is a friendly unit with the CRONOS or TALOS keyword, when the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.
+                  <description>While the target is a friendly unit with the CRONOS or TALOS keyword, when the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.
 You cannot select this Detachment together with another COVENS Detachment.</description>
                 </rule>
               </rules>
@@ -8726,7 +8717,7 @@ You cannot select this Detachment together with another COVENS Detachment.</desc
           <profiles>
             <profile name="Chronoshard" id="00c2-3f03-7d41-ee27" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, once per battle per model, until the end of the phase, the unit gains the Fights First ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability, once per battle per model, until the end of the phase, this unit gains the Fights First ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8754,7 +8745,7 @@ You cannot select this Detachment together with another COVENS Detachment.</desc
           <profiles>
             <profile name="Periapt of Torments" id="538f-f334-e251-9eae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Enemy units cannot target the unit with the Fire Overwatch Stratagem.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Enemy units cannot target this unit with the Fire Overwatch Stratagem.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8811,7 +8802,10 @@ Improve the Damage characteristic of melee weapons equipped by this model by 1.<
           <profiles>
             <profile name="Leechbite Plate" id="2923-dc8b-0bd0-cb2c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Save characteristic to 3+.
+At the start of the Command phase, you can use this ability:
+  - Spend 1 Pain token.
+  - This model regains all its lost wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8839,8 +8833,8 @@ Improve the Damage characteristic of melee weapons equipped by this model by 1.<
           <profiles>
             <profile name="Webway Awl" id="becd-59cc-b8a9-60c6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The unit gains the Deep Strike ability.
-The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: This unit gains the Deep Strike ability.
+The Rapid Ingress Stratagem that targets this unit costs 0 CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8868,8 +8862,7 @@ The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
           <profiles>
             <profile name="Informant Network" id="44a9-cb47-55f6-4bf6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations:
-  -&gt; Select up to 3 friendly units with the HAND OF THE ARCHON or KABALITE WARRIORS keyword: that unit gains the Infiltrators ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, select up to 3 friendly units with the HAND OF THE ARCHON or KABALITE WARRIORS keyword. Those units gain the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8898,8 +8891,8 @@ The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
             <profile name="Towering Arrogance" id="3469-665f-e0d1-727f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit:
-  -&gt; Improve the unit's Leadership characteristic by 1.
-  -&gt; Improve the unit's Objective Control characteristic by 1.</characteristic>
+  - Improve this unit's Leadership characteristic by 1.
+  - Improve this unit's Objective Control characteristic by 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8933,9 +8926,9 @@ The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
           <profiles>
             <profile name="Phantasmal Smoke" id="05f2-03a1-c7a1-c12e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is wholly within 6" of a friendly DRUKHARI TRANSPORT unit:
-  -&gt; The unit gains the Stealth ability.
-  -&gt; While making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is wholly within 6" of a friendly DRUKHARI TRANSPORT unit:
+  - This unit gains the Stealth ability.
+  - While making ranged attacks, this unit has the Benefit of Cover.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8970,9 +8963,9 @@ The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
             <profile name="Sadistic Fulcrum" id="1c87-6242-91ec-6b58" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time pain token pool is spent, until the end of the phase:
-  -&gt; Select one friendly DRUKHARI TRANSPORT unit if the selected unit is within 6" of the unit:
-    -&gt; During the Shooting phase, this unit is Empowered.
-    -&gt; You can re-roll the Hit roll for attacks made by that unit.</characteristic>
+  - Select one friendly DRUKHARI TRANSPORT unit that is within 6" of this unit:
+    - During the Shooting phase, this unit is Empowered.
+    - You can re-roll Hit rolls for attacks made by that unit.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9006,7 +8999,7 @@ The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
           <profiles>
             <profile name="Spiteful Raider" id="c0a1-027d-ca47-28de" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit destroys an enemy unit or when the unit is selected to fight, during the Fight phase, while the triggering unit is within range of an objective marker, you gain 1 Pain token.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit destroys an enemy unit or when this unit is selected to fight, during the Fight phase, while the triggering unit is within range of an objective marker, you gain 1 Pain token.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9040,7 +9033,7 @@ The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
           <profiles>
             <profile name="Nightmare Shroud" id="5231-46bc-3b88-12f8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit disembarks from a Transport, until the end of the turn, enemy units cannot target the unit with the Fire Overwatch Stratagem.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit disembarks from a Transport, until the end of the turn, enemy units cannot target this unit with the Fire Overwatch Stratagem.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9108,8 +9101,8 @@ The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
           <profiles>
             <profile name="Webway Walker" id="6227-830c-64c6-3ed8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Deep Strike ability.
--&gt; When the unit is set up, if the unit is using Deep Strike, until the end of the turn: while the unit is tagged losing the wager, you can re-roll the Charge roll.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Deep Strike ability.
+When this unit is set up, if this unit is using Deep Strike, until the end of the turn, while this unit is designated as Losing the Wager, you can re-roll the Charge roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9132,8 +9125,8 @@ The Rapid Ingress Stratagem that targets the unit costs 0CP.</characteristic>
           <profiles>
             <profile name="Reaper's Cowl" id="5b24-fc0f-7fbc-8489" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Stealth ability.
-The unit gains the Infiltrators ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Stealth ability.
+This unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9201,7 +9194,7 @@ The unit gains the Infiltrators ability.</characteristic>
           <profiles>
             <profile name="Dark Vitality" id="67b3-e394-f626-b003" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is Empowered.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9229,10 +9222,10 @@ The unit gains the Infiltrators ability.</characteristic>
           <profiles>
             <profile name="Labyrinthine Cunning" id="27a2-4664-f16d-66b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, you may use this ability, while this model is on the battlefield:
-  Select exactly 1 distinct options:
-    - Spend 1 Pain token; you gain 1CP.
-    - Roll one D6: on a 4+, you gain 1CP.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, you can use this ability, while this model is on the battlefield:
+  Choose one of the following:
+    - Spend 1 Pain token; you gain 1 CP.
+    - Roll one D6: on a 4+, you gain 1 CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9373,7 +9366,7 @@ The unit gains the Infiltrators ability.</characteristic>
             <profile name="Master Artisan" id="cc78-15f4-1817-3d45" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this model's Wounds characteristic.
-Add 1 to the unit's Toughness characteristic.</characteristic>
+Add 1 to this unit's Toughness characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9402,8 +9395,8 @@ Add 1 to the unit's Toughness characteristic.</characteristic>
             <profile name="Master Repugnomancer (Aura)" id="0786-a484-66c1-f327" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Increase the range of this model's Fear Incarnate ability by 3".
--&gt; When a friendly unit fails a Battle-shock test (the triggering unit must have DRUKHARI) within 9" of this model or each time a friendly DRUKHARI unit is destroyed within 9" of this model:
-  -&gt; Roll one D6: on a 4+, you gain 1 Pain token.</characteristic>
+When a friendly DRUKHARI unit fails a Battle-shock test within 9" of this model or each time a friendly DRUKHARI unit is destroyed within 9" of this model:
+  - Roll one D6: on a 4+, you gain 1 Pain token.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9431,7 +9424,7 @@ Add 1 to the unit's Toughness characteristic.</characteristic>
           <profiles>
             <profile name="Periapt of Torments" id="4b8a-5149-596e-50fc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Your opponent cannot target the unit with Overwatch.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Your opponent cannot target this unit with Overwatch.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9459,7 +9452,7 @@ Add 1 to the unit's Toughness characteristic.</characteristic>
           <profiles>
             <profile name="Hyperstimm Trafficker" id="bbac-0f04-e2e1-f1df" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to the unit's Toughness characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Toughness characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9487,8 +9480,8 @@ Add 1 to the unit's Toughness characteristic.</characteristic>
           <profiles>
             <profile name="Towering Arrogance" id="a9bd-55ac-8b24-eeb8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to the unit's Leadership characteristic.
-Add 1 to the unit's Objective Control characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Leadership characteristic.
+Add 1 to this unit's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9516,7 +9509,7 @@ Add 1 to the unit's Objective Control characteristic.</characteristic>
           <profiles>
             <profile name="Contempt for Rivals" id="749e-76bc-9087-7166" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit's weapons gain [PRECISION].</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit's weapons gain [PRECISION].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9544,7 +9537,7 @@ Add 1 to the unit's Objective Control characteristic.</characteristic>
           <profiles>
             <profile name="Gnarlskin Experimentor" id="1ba0-aceb-3a85-c52f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9577,7 +9570,7 @@ Add 1 to the unit's Objective Control characteristic.</characteristic>
           <profiles>
             <profile name="Elixir of the Corpse Courts (Upgrade)" id="0693-8d45-3d69-04b9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has a 5+ invulnerable save.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has a 5+ invulnerable save.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9595,8 +9588,8 @@ Add 1 to the unit's Objective Control characteristic.</characteristic>
     </rule>
     <rule name="Corsairs and Travelling Players" id="96a9-9b00-974d-4f41" hidden="false">
       <description>Your army can include at most 500 units with the HARLEQUINS or ANHRATHE keyword.
-All friendly units cannot be your Warlord.
-All friendly units cannot be given Enhancements.</description>
+Friendly units cannot be your Warlord.
+Friendly units cannot be given Enhancements.</description>
     </rule>
   </sharedRules>
   <catalogueLinks>

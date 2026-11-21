@@ -221,21 +221,20 @@
         </profile>
         <profile name="Deadly Demise" id="523a-1002-79aa-219e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Devoted to Destruction" id="d6dd-1795-9e2b-24f7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this model is equipped with one weapon named "Close combat weapon", if this model is equipped with exactly 2 melee weapons other than "Close combat weapon", improve the Attacks characteristic of melee weapons other than "Close combat weapon" equipped by this model by 2.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this model is equipped with one weapon named "Close combat weapon" and this model is equipped with exactly 2 melee weapons other than "Close combat weapon", improve the Attacks characteristic of melee weapons other than "Close combat weapon" equipped by this model by 2.</characteristic>
           </characteristics>
         </profile>
         <profile name="Terrifying Assault" id="ec31-bc7c-307a-b0a8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn or during the Fight phase, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; While the selected unit is within 9" of a friendly PSYKER THOUSAND SONS unit, that unit must take a Battle-shock test, applying -1 to that test.
-    -&gt; While the selected unit is not within 9" of a friendly PSYKER THOUSAND SONS unit, that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase or during the Fight phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:
+    - While the selected unit is within 9" of a friendly PSYKER THOUSAND SONS unit, that unit must take a Battle-shock test, applying -1 to that test.
+    - While the selected unit is not within 9" of a friendly PSYKER THOUSAND SONS unit, that unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1397,18 +1396,17 @@
         </profile>
         <profile name="Deadly Demise" id="a54c-397c-a7e2-b407" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="3aa9-75a7-ddb2-6823" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Immaterial Flare (Aura)" id="24c2-3dec-d133-44b1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly unit is within 6" of this model, if the unit has the PSYKER keyword, that unit gets +1 to Psychic rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly unit is within 6" of this model, if this unit has the PSYKER keyword, add 1 to that unit's Psychic rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Mutating Vortex (Aura)" id="26ee-5bf4-0349-a826" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1418,7 +1416,7 @@
         </profile>
         <profile name="Damaged" id="e93f-774e-2dd0-4022" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1503,13 +1501,12 @@
         </profile>
         <profile name="Deadly Demise" id="21ab-0e38-a48e-8f8f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="03f3-160b-14ed-0d44" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1672,20 +1669,20 @@
         </profile>
         <profile name="Bestial Prophet" id="4bbc-acad-4e8f-daed" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="4c54-3d68-c475-badc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sacrificial Blessing" id="c752-aeda-c027-db15" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit:
-  -&gt; Destroy 1 of the Bodyguard models in the unit.
-  -&gt; Add D3 to the Attacks characteristic of weapons with [PSYCHIC] equipped by this model.
-  -&gt; Add D3 to the Strength characteristic of weapons with [PSYCHIC] equipped by this model.</characteristic>
+  - Destroy 1 of the Bodyguard models in this unit.
+  - Add D3 to the Attacks characteristic of weapons with [PSYCHIC] equipped by this model.
+  - Add D3 to the Strength characteristic of weapons with [PSYCHIC] equipped by this model.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1767,12 +1764,12 @@
       <profiles>
         <profile name="Feel No Pain" id="051e-95d5-5437-9e3b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Regenerating Monstrosities" id="883d-24ee-96bb-96a8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Command phase, one model in the unit regains up to 3 lost wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Command phase, one model in this unit regains up to 3 lost wounds.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1876,19 +1873,19 @@
         </profile>
         <profile name="Empyric Guidance (Psychic)" id="aca2-e06e-324a-0b93" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit's weapons gain [LETHAL HITS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit's weapons gain [LETHAL HITS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="a77d-5e09-f34c-9a4f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Twisted Sorceries (Psychic)" id="61e7-29de-567f-5acc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per battle per unit, during the Shooting phase, in your turn or during the Fight phase, until the end of the phase:
-  -&gt; Improve the Attacks characteristic of weapons with [PSYCHIC] equipped by this model by 3.
-  -&gt; Improve the Strength characteristic of weapons with [PSYCHIC] equipped by this model by 3.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per battle per unit, during your Shooting phase or during the Fight phase, until the end of the phase, you can use this ability:
+  - Improve the Attacks characteristic of weapons with [PSYCHIC] equipped by this model by 3.
+  - Improve the Strength characteristic of weapons with [PSYCHIC] equipped by this model by 3.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2018,8 +2015,7 @@
         </profile>
         <profile name="Deadly Demise" id="d559-081e-f283-aacd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Siege Shield" id="bf78-bb59-a791-18b0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2030,7 +2026,7 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
         </profile>
         <profile name="Damaged" id="7f0a-35ad-e03b-c47c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2186,21 +2182,20 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
         </profile>
         <profile name="Firing Deck" id="c8df-fa36-9e66-d72f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sorcerous Support" id="2381-9e4b-5c58-53c4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Sorcerous Support Target). Until the end of the phase, each time a friendly unit makes an attack against it:
-    -&gt; If the attacking unit disembarked from this Transport this turn, while making psychic attacks, all friendly models get +1 to Hit rolls.
-    -&gt; If the attacking unit disembarked from this Transport this turn, while making psychic attacks, all friendly models get +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Sorcerous Support Target). Until the end of the phase, each time a friendly unit makes an attack against it:
+    - If the attacking unit disembarked from this Transport this turn, while making psychic attacks, add 1 to friendly models' Hit rolls.
+    - If the attacking unit disembarked from this Transport this turn, while making psychic attacks, add 1 to friendly models' Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="89bc-ce8a-6a91-40e3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2437,20 +2432,20 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
         </profile>
         <profile name="Arch-Sorcerer of Tzeentch (Psychic)" id="9d2b-eb22-a277-3171" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit attempts a Ritual, the unit gets +1 to Psychic rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit attempts a Ritual, add 1 to this unit's Psychic rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="d864-29d3-c144-1dde" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scryer of Fates (Psychic)" id="b5e1-45a6-b7ea-3cf9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you may use this ability:
-  -&gt; Select up to 3 friendly THOUSAND SONS units:
-    -&gt; For each selected unit:
-      Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you can use this ability:
+  - Select up to 3 friendly THOUSAND SONS units:
+    - For each selected unit:
+      Choose one of the following:
         - That unit can be set up on the battlefield.
         - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.</characteristic>
           </characteristics>
@@ -2544,7 +2539,7 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
       <profiles>
         <profile name="Bringers of Change" id="3e35-ca97-ab30-0fd6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, you can re-roll a Wound roll of 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, you can re-roll Wound rolls of 1.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2867,21 +2862,21 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
         </profile>
         <profile name="Glimpse of Eternity (Psychic)" id="bbae-9271-d94c-0526" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per turn per unit:
-  Select one of the following:
-    - One of the unit's Hit rolls counts as 6.
-    - One of the unit's Wound rolls counts as 6.
-    - One of the unit's saving throw rolls counts as 6.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per turn per unit, you can use this ability:
+  Choose one of the following:
+    - One of this unit's Hit rolls counts as 6.
+    - One of this unit's Wound rolls counts as 6.
+    - One of this unit's saving throw rolls counts as 6.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="eea6-fe7b-53d8-41b7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Malefic Maelstrom (Psychic)" id="b162-e681-100d-a1a8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit's weapons gain [SUSTAINED HITS 1].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit's weapons gain [SUSTAINED HITS 1].</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2972,8 +2967,7 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
       <profiles>
         <profile name="Prophesied Doom" id="dbce-cd23-2d89-8b1a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each friendly model in the unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move, select one enemy unit that is within Engagement Range of this unit. Roll one D6 for each friendly model in this unit that is within Engagement Range of the selected unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3191,7 +3185,7 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
       <profiles>
         <profile name="Malign Trickery" id="3079-b8c5-77cc-7f28" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the unit can make a Normal move of up to D6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during your opponent's Movement phase, while the triggering unit is within 8" of this unit and this unit is unengaged, this unit can make a Normal move of up to D6".</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3378,12 +3372,12 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
       <profiles>
         <profile name="Deep Strike" id="7534-b842-04e5-e12d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Rites of Coalescence" id="a044-697a-0be1-c224" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit contains 1+ PSYKER models, the attacking unit gets -1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit contains one or more PSYKER models, subtract 1 from the attacking unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3761,54 +3755,53 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
         <profile name="Lord of the Planet of the Sorcerers (Psychic)" id="49d9-3c14-28d2-7141" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The number of uses of each RITUAL ability of this model is 2, but it can be used at most 2 times per turn.
--&gt; Each time the unit attempts a Ritual: the unit gets +2 to Psychic rolls.</characteristic>
+Each time this unit attempts a Ritual, add 2 to this unit's Psychic rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Supreme Commander" id="8967-32f6-5c09-a376" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, the unit must be your Warlord.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, this unit must be your Warlord.</characteristic>
           </characteristics>
         </profile>
         <profile name="Unearthly Power" id="0120-4f83-5352-731a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, until the start of the next battle round:
-  -&gt; Select one:
-    - Impossible Form: unless against psychic attacks, subtract 1 from the attacking unit's Damage characteristic.
-    - Treason of Tzeentch: at the start of your opponent's Shooting phase, until the end of the phase: select one enemy unit if the selected unit is within 24" of this model: ranged weapons equipped by models in that unit gain [HAZARDOUS].
-    - Time Flux: while a friendly THOUSAND SONS unit is within 6" of this model, add 2 to that unit's Move characteristic.</characteristic>
+  - Select one:
+    - Impossible Form: Unless against psychic attacks, subtract 1 from the Damage characteristic of the attacking unit's attacks.
+    - Treason of Tzeentch: At the start of your opponent's Shooting phase, until the end of the phase, select one enemy unit that is within 24" of this model; ranged weapons equipped by models in that unit gain [HAZARDOUS].
+    - Time Flux: While a friendly THOUSAND SONS unit is within 6" of this model, add 2" to that unit's Move characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Impossible Form" id="50a1-86c0-fea8-d7df" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, unless against psychic attacks, until the start of the next battle round, subtract 1 from the attacking unit's Damage characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, unless against psychic attacks, until the start of the next battle round, subtract 1 from the Damage characteristic of the attacking unit's attacks.</characteristic>
           </characteristics>
         </profile>
         <profile name="Treason of Tzeentch" id="f772-cb91-4fc3-990c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, until the start of the next battle round:
-  -&gt; At the start of your opponent's Shooting phase, until the end of the phase:
-    -&gt; Select one enemy unit if the selected unit is within 24" of this model: ranged weapons equipped by models in that unit gain [HAZARDOUS].</characteristic>
+  - At the start of your opponent's Shooting phase, until the end of the phase:
+    - Select one enemy unit that is within 24" of this model. Ranged weapons equipped by models in that unit gain [HAZARDOUS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Time Flux" id="6fa1-8c5a-307a-0c6b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, until the start of the next battle round, while a friendly THOUSAND SONS unit is within 6" of this model, add 2 to that unit's Move characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, until the start of the next battle round, while a friendly THOUSAND SONS unit is within 6" of this model, add 2" to that unit's Move characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="d559-dafb-56bf-400d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="e17c-d521-d0d8-1965" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="f56e-40f7-0c37-9a8e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3900,18 +3893,17 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
         </profile>
         <profile name="Ensorcelled Destruction" id="feaa-7914-e4fe-29b2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase against a unit that is not a MONSTER or VEHICLE, improve the unit's Armour Penetration characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase against a unit that is not a MONSTER or VEHICLE, improve this unit's Armour Penetration characteristic by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="fe51-2755-6553-252d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="ff12-fef5-dd7e-7cc7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4115,30 +4107,29 @@ While making ranged attacks, this model ignores any negative modifiers to its Hi
         </profile>
         <profile name="Deadly Demise" id="a676-581f-7356-5233" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Destroyer of Futures" id="6e10-626e-432f-622b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The unit is eligible to be targeted with the Counteroffensive Stratagem even if it has already been targeted with that Stratagem this phase.
-Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-The unit's Counteroffensive ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: This unit is eligible to be targeted with the Counteroffensive Stratagem even if it has already been targeted with that Stratagem this phase.
+Reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+This unit's Counteroffensive ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scuttling Walker" id="6c34-f11b-4248-4e7a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal, Advance or Fall Back move:
-  -&gt; The unit can move over non-Titanic models as though they were not there.
-  -&gt; The unit can move over terrain features as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The unit automatically passes Desperate Escape tests.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal, Advance or Fall Back move:
+  - This unit can move over non-Titanic models as though they were not there.
+  - This unit can move over terrain features as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - This unit automatically passes Desperate Escape tests.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="8471-33eb-8bee-ce08" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4599,29 +4590,28 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         </profile>
         <profile name="Aetherstride (Psychic)" id="b943-f645-4651-baed" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is set up, you may use this ability, during the Movement phase, in your turn, if the triggering unit was set up this phase, if the triggering unit used the Deep Strike ability this phase, until the end of the turn:
-  -&gt; This model resolves the Aetherstride ability now.
-  -&gt; The unit can be set up on the battlefield more than 6" away from all enemy models.
-  -&gt; Dark Blessing weapons equipped by this model gain [SUSTAINED HITS D3].
-  -&gt; The triggering unit cannot declare a charge.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is set up, you can use this ability, during your Movement phase, if the triggering unit was set up this phase and the triggering unit used the Deep Strike ability this phase, until the end of the turn:
+  - This model resolves the Aetherstride ability now.
+  - This unit can be set up on the battlefield more than 6" away from all enemy models.
+  - Dark Blessing weapons equipped by this model gain [SUSTAINED HITS D3].
+  - The triggering unit cannot declare a charge.</characteristic>
           </characteristics>
         </profile>
         <profile name="Hunter of Souls" id="4b57-f0bd-be57-2633" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against CHARACTER targets:
-  -&gt; You can re-roll a Hit roll of 1.
-  -&gt; You can re-roll a Wound roll of 1.</characteristic>
+  - You can re-roll Hit rolls of 1.
+  - You can re-roll Wound rolls of 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="65fa-ab58-ff9e-bb02" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="56bd-1f05-00b7-ed9a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4803,12 +4793,12 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
       <profiles>
         <profile name="Ambushing Hunters" id="034a-d31b-dc64-d801" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you may use this ability, while the unit is not within 6" of an enemy unit, the unit can be placed into Strategic Reserves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you can use this ability, while this unit is not within 6" of an enemy unit, this unit can be placed into Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="c1a1-fe17-5219-91f4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5237,17 +5227,17 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
       <profiles>
         <profile name="Infiltrators" id="248e-7e55-2e7b-0d45" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Prophetic Sentinels" id="d7d7-50bb-1597-e9cc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target the unit with the Fire Overwatch Stratagem or when you target the unit with the Heroic Intervention Stratagem, once per turn per unit, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target this unit with the Fire Overwatch Stratagem or when you target this unit with the Heroic Intervention Stratagem, once per turn per unit, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="202a-d2dc-9c06-b837" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5431,21 +5421,21 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         </profile>
         <profile name="Binding Tendrils (Psychic)" id="0673-cf71-2da7-5c18" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:
-  -&gt; Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit by Arcane Fire during its just-finished shooting sequence:
-    -&gt; That unit is ensnared.
-    -&gt; While the selected unit is ensnared, subtract 2 from that unit's Move characteristic.
-    -&gt; While the selected unit is ensnared, that unit gets -2 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:
+  - Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit by Arcane Fire during that shooting sequence:
+    - That unit is ensnared.
+    - While the selected unit is ensnared, subtract 2" from that unit's Move characteristic.
+    - While the selected unit is ensnared, subtract 2 from that unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Illusions of Tzeentch (Psychic)" id="fa41-503f-a34a-f923" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while the attacking unit is within 18" of the unit, enemy units can target the unit with ranged weapons.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit and the attacking unit is within 18" of this unit, enemy units can target this unit with ranged weapons.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="8b57-3179-4705-ddf4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5583,13 +5573,12 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         </profile>
         <profile name="Deadly Demise" id="2f77-44de-a82b-0945" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="7509-867f-39a5-3a2b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5686,21 +5675,21 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         </profile>
         <profile name="Arcane Shield (Psychic)" id="42c4-1975-3ed7-2791" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit has a 4+ invulnerable save.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit has a 4+ invulnerable save.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="a8e1-ed10-9b52-1455" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Rebind Rubricae (Psychic)" id="c346-152e-0e6b-f609" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, while this model is leading a unit:
-  -&gt; Roll one D6:
-    - On 1: The unit suffers D3 mortal wounds.
-    - On 2-5: Return 1 destroyed BODYGUARD model to the unit, each with its full wounds remaining.
-    - On 6: Return 2 destroyed BODYGUARD models to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, while this model is leading a unit, you can use this ability:
+  - Roll one D6:
+    - On 1: This unit suffers D3 mortal wounds.
+    - On 2-5: Return 1 destroyed BODYGUARD model to this unit, each with its full wounds remaining.
+    - On 6: Return 2 destroyed BODYGUARD models to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5848,23 +5837,23 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         </profile>
         <profile name="Empyric Guidance (Psychic)" id="bc0b-79fc-b8fe-6e9b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit's weapons gain [LETHAL HITS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit's weapons gain [LETHAL HITS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="e91a-7421-d630-beca" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Marked by Fate (Psychic)" id="3943-7990-da55-2526" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase:
-  -&gt; Select one enemy unit if the selected unit is visible to this model (your Marked By Fate Target). Until the end of the phase, each time a friendly unit makes an attack against it, the unit gets +1 to Hit rolls.</characteristic>
+  - Select one enemy unit that is visible to this model (your Marked By Fate Target). Until the end of the phase, each time a friendly unit makes an attack against it, add 1 to this unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="1968-4f01-cebb-f5c5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5998,19 +5987,18 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         <profile name="Ensorcelled Annihilation" id="3c58-da7c-ab2a-5b0e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase:
-  -&gt; You can re-roll a failed Hit roll.
-  -&gt; You can re-roll a failed Damage roll.</characteristic>
+  - You can re-roll failed Hit rolls.
+  - You can re-roll failed Damage rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="dfd9-a8f0-12c7-c7e7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="af11-bfc3-dbc6-ee80" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6214,21 +6202,20 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         </profile>
         <profile name="Blazing Salvoes" id="a45d-c9b5-70dd-5d86" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; That unit is marked as suppressed.
-    -&gt; While the unit is tagged suppressed, that unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:
+    - That unit is Suppressed.
+    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="a955-7c4a-124a-94d2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="82c9-fba7-631c-42b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6384,19 +6371,17 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         </profile>
         <profile name="Flame-wreathed" id="6f79-d91a-5084-379f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, you may use this ability, until the end of the turn:
-  -&gt; Select one enemy unit if the selected unit was moved over by this model during that move: that unit cannot benefit from Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, you can use this ability, until the end of the turn, select one enemy unit that was moved over by this model during that move. That unit cannot benefit from Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="6af3-623f-1172-2b6a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="2c50-e4ec-ee0f-f3d0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6503,14 +6488,13 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         </profile>
         <profile name="Spirit Snare" id="e8c6-a446-2a75-23aa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When a friendly PSYKER THOUSAND SONS model with the Cabal of Sorcerers ability is destroyed:
-  -&gt; Select one friendly model within 9" of that model with the Spirit Snare ability: that model gains the following rules (each time the unit attempts a Ritual, for the rest of the battle: this model gets +1 to Psychic rolls (to a maximum of +2)).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly PSYKER THOUSAND SONS model with the Cabal of Sorcerers ability is destroyed:
+  - Select one friendly model within 9" of that model with the Spirit Snare ability. That model gains the following rules (each time this unit attempts a Ritual, for the rest of the battle, add 1 to this model's Psychic rolls, to a maximum of +2).</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="0c3b-7801-9db9-a7e4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6596,32 +6580,32 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
       <profiles>
         <profile name="Deep Strike" id="4a8e-197c-6b42-d03a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Exploding Horrors" id="ae0b-d1b5-562e-0605" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit, binding it as enemy:
-    -&gt; Select one or more friendly BRIMSTONE models in the unit, binding them as horrors:
-      -&gt; For each selected model:
-        -&gt; Roll one D6: on a 4+, destroy that model; the bound enemy suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability:
+  - Select one enemy unit that is within Engagement Range of this unit (referred to below as the enemy):
+    - Select one or more friendly BRIMSTONE models in this unit (referred to below as the horrors):
+      - For each selected model:
+        - Roll one D6: on a 4+, destroy that model; the chosen enemy suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="6d5e-3cef-14ec-a4b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Split" id="f597-d61c-339b-33eb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly BLUE model in the unit is destroyed, after the attacking unit has resolved its attacks, while the unit is on the battlefield:
-  -&gt; Roll one D6: on a 4+, add 1 Brimstone Horror model to the unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly BLUE model in this unit is destroyed, after the attacking unit has resolved its attacks, while this unit is on the battlefield:
+  - Roll one D6: on a 4+, add 1 Brimstone Horror model to this unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sullen Malevolence" id="15f6-b61f-aa43-f4f7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit contains 1+ BLUE models, while an enemy unit is within 6" of this unit, worsen that unit's Leadership characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit contains one or more BLUE models, while an enemy unit is within 6" of this unit, worsen that unit's Leadership characteristic by 1.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6729,12 +6713,12 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
       <profiles>
         <profile name="Bounding Leaps" id="49fe-aef5-ccea-930d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is eligible to shoot in a turn in which it Fell Back.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is eligible to shoot in a turn in which it Fell Back.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="5add-1cd1-d817-793c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6924,30 +6908,29 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         </profile>
         <profile name="Damaged" id="39be-0f2c-2651-6f1a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="e96a-8789-e008-d5d2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="1d02-6afc-5d73-c88a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="One Head Looks Back" id="925b-13c2-f3be-581c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time your opponent uses a Stratagem, while that unit is within 12" of this model, increase the CP cost of that use of the Stratagem by 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time your opponent uses a Stratagem, while that unit is within 12" of this model, increase the CP cost of that use of the Stratagem by 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="One Head Looks Forward" id="c2dd-0ca5-d55d-293e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this model is on the battlefield:
-  -&gt; This model must take a Leadership test.
-  -&gt; If the triggering leadership roll succeeded, you gain 1CP.</characteristic>
+  - This model must take a Leadership test.
+  - If the triggering leadership roll succeeded, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7034,24 +7017,23 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         </profile>
         <profile name="Damaged" id="ca76-004e-13ea-2682" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="9e6e-7c2a-8834-7487" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="6780-a8f3-9c37-bc23" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Master of Magicks" id="bbc2-675a-0710-d014" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn, until the end of the phase:
-  Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase, until the end of the phase:
+  Choose one of the following:
     - Ranged Bolt of Change weapons equipped by this model gain [IGNORES COVER].
     - Ranged Bolt of Change weapons equipped by this model gain [LETHAL HITS].
     - Ranged Bolt of Change weapons equipped by this model gain [SUSTAINED HITS D3].</characteristic>
@@ -7186,21 +7168,21 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
         </profile>
         <profile name="Deep Strike" id="a5aa-6f22-ace0-e6fc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="HORRORS ARE PINK. HORRORS ARE BLUE. WHERE ONCE THERE WAS ONE, NOW THERE ARE TWO." id="5f88-22ec-dd12-7e2f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit contains at most 0 PINK models:
-  -&gt; The unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position.
-  -&gt; If the unit contains 1+ PINK models, the unit loses the Sullen Malevolence ability.
-  -&gt; If the unit contains 1+ PINK models, the unit loses the Exploding Horrors ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit contains at most 0 PINK models:
+  - This unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position.
+  - If this unit contains one or more PINK models, this unit loses the Sullen Malevolence ability.
+  - If this unit contains one or more PINK models, this unit loses the Exploding Horrors ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Split" id="7aeb-91c4-35b5-0573" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly model with the BLUE or PINK keyword in the unit is destroyed, after the attacking unit has resolved its attacks, while the unit is on the battlefield:
-  -&gt; Roll one D6: on a 4+, if that model has the PINK keyword, add 2 Blue Horror models to the unit; if that model has the BLUE keyword, add 1 Brimstone Horror model to the unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly model with the BLUE or PINK keyword in this unit is destroyed, after the attacking unit has resolved its attacks, while this unit is on the battlefield:
+  - Roll one D6: on a 4+, if that model has the PINK keyword, add 2 Blue Horror models to this unit; if that model has the BLUE keyword, add 1 Brimstone Horror model to this unit.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7361,13 +7343,13 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
       <profiles>
         <profile name="Deep Strike" id="7dd3-67a1-12a3-1d61" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Slashing Dive" id="8413-1eb6-e110-44b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, you may use this ability, during the Movement phase, in your turn:
-  -&gt; Select one enemy unit if the selected unit was moved over by the unit during that move: roll one D6 for each model in the unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, you can use this ability, during your Movement phase:
+  - Select one enemy unit that was moved over by this unit during that move. Roll one D6 for each model in this unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8836,7 +8818,7 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
       <profiles>
         <profile name="Brayhorn" id="5f51-e93b-052e-ae8b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Choose one of the following:
   - You can re-roll the Charge roll.
   - You can re-roll the Advance roll.</characteristic>
           </characteristics>
@@ -8850,7 +8832,7 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
       <profiles>
         <profile name="Herd banner" id="34a6-e082-ab1f-a9c8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is within range of an objective marker you control, improve the unit's Leadership characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is within range of an objective marker you control, improve this unit's Leadership characteristic by 1.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9532,7 +9514,7 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
       <profiles>
         <profile name="Daemonic Icon" id="ba39-c8d6-9b54-23bf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set the unit's Leadership characteristic to 6.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this unit's Leadership characteristic to 6+.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9544,7 +9526,7 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
       <profiles>
         <profile name="Instrument of Chaos" id="a092-e4e7-cec2-d937" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gets +1 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9637,10 +9619,10 @@ The unit's Counteroffensive ability has no limit on its number of uses, and this
               </constraints>
               <rules>
                 <rule name="Infernal Pacts" id="03cb-8ef7-90ab-1e31" hidden="false">
-                  <description>All friendly SCINTILLATING LEGIONS units gain the Daemonic Illusions ability:
-  -&gt; While a friendly PSYKER THOUSAND SONS unit is within 6" of the unit, while that unit is visible to the unit, against ranged attacks, that unit has a 4+ invulnerable save.
-All friendly THOUSAND SONS units gain the Mortal Sorcery ability:
-  -&gt; While a friendly PSYKER SCINTILLATING LEGIONS unit is within 6" of the unit, while that unit is visible to the unit, that unit gains the Cabal of Sorcerers ability.</description>
+                  <description>Friendly SCINTILLATING LEGIONS units gain the Daemonic Illusions ability:
+  - While a friendly PSYKER THOUSAND SONS unit is within 6" of this unit and that unit is visible to this unit, against ranged attacks, that unit has a 4+ invulnerable save.
+Friendly THOUSAND SONS units gain the Mortal Sorcery ability:
+  - While a friendly PSYKER SCINTILLATING LEGIONS unit is within 6" of this unit and that unit is visible to this unit, that unit gains the Cabal of Sorcerers ability.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9658,17 +9640,17 @@ All friendly THOUSAND SONS units gain the Mortal Sorcery ability:
               <rules>
                 <rule name="Warpfire Infusion" id="bab7-8ce4-ada7-86c5" hidden="false">
                   <description>Until the end of the phase:
-  -&gt; When a friendly unit is selected to shoot (the triggering unit must have THOUSAND SONS and VEHICLE), you may use this ability or when a friendly unit is selected to fight (the triggering unit must have THOUSAND SONS and VEHICLE), you may use this ability:
-    While the triggering unit is within 6" of a friendly PSYKER THOUSAND SONS unit:
-      -&gt; You can re-roll one Hit roll.
-      -&gt; You can re-roll one Wound roll.
-      -&gt; You can re-roll one Damage roll.
-    While the triggering unit is not within 6" of a friendly PSYKER THOUSAND SONS unit:
-      Select one of the following:
+  - When a friendly THOUSAND SONS VEHICLE unit is selected to shoot, you can use this ability or when a friendly THOUSAND SONS VEHICLE unit is selected to fight, you can use this ability:
+    - While the triggering unit is within 6" of a friendly PSYKER THOUSAND SONS unit:
+      - You can re-roll one Hit roll.
+      - You can re-roll one Wound roll.
+      - You can re-roll one Damage roll.
+    - While the triggering unit is not within 6" of a friendly PSYKER THOUSAND SONS unit:
+      Choose one of the following:
         - You can re-roll one Hit roll.
         - You can re-roll one Wound roll.
         - You can re-roll one Damage roll.
-  -&gt; When a friendly THOUSAND SONS VEHICLE model in the unit is destroyed: while the triggering unit has the Deadly Demise ability, while that model is within 6" of a friendly PSYKER THOUSAND SONS unit, the threshold of this model's Deadly Demise ability is 5.</description>
+  - When a friendly THOUSAND SONS VEHICLE model in this unit is destroyed, while the triggering unit has the Deadly Demise ability and that model is within 6" of a friendly PSYKER THOUSAND SONS unit, the threshold of this model's Deadly Demise ability is 5.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9685,7 +9667,7 @@ All friendly THOUSAND SONS units gain the Mortal Sorcery ability:
               </constraints>
               <rules>
                 <rule name="Flow of Magic" id="8eca-330d-bf11-dfcf" hidden="false">
-                  <description>Your deployment zone is within Flow of Magic. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Flow of Magic until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Flow of Magic until the end of the phase (evaluated once at that time). You can re-roll a Wound roll of 1 with weapons with [PSYCHIC]. If this model is wholly within Flow of Magic, all friendly THOUSAND SONS units get +1 to Wound rolls with weapons with [PSYCHIC] instead.</description>
+                  <description>Your deployment zone is within Flow of Magic. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Flow of Magic until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Flow of Magic until the end of the phase (evaluated once at that time). You can re-roll Wound rolls of 1 with weapons with [PSYCHIC]. If this model is wholly within Flow of Magic, add 1 to friendly THOUSAND SONS units' Wound rolls with weapons with [PSYCHIC] instead.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9703,11 +9685,11 @@ All friendly THOUSAND SONS units gain the Mortal Sorcery ability:
               <rules>
                 <rule name="Kindred Sorcery" id="de20-736a-e032-e311" hidden="false">
                   <description>Until the start of your next Command phase:
-  -&gt; At the start of your Command phase:
-    -&gt; Select one (each may be chosen once per battle):
-      - Imbued Manifestation: add 6 to the Range characteristic of ranged weapons with [PSYCHIC] equipped by models in this unit.
-      - Psychic Maelstrom: the unit gets +1 to Wound rolls with weapons with [PSYCHIC].
-      - Wrath of the Immaterium: weapons with [PSYCHIC] equipped by models in this unit gain [DEVASTATING WOUNDS].</description>
+  - At the start of your Command phase:
+    - Select one (each can be chosen once per battle):
+      - Imbued Manifestation: Add 6" to the Range characteristic of ranged weapons with [PSYCHIC] equipped by models in this unit.
+      - Psychic Maelstrom: Add 1 to this unit's Wound rolls with weapons with [PSYCHIC].
+      - Wrath of the Immaterium: Weapons with [PSYCHIC] equipped by models in this unit gain [DEVASTATING WOUNDS].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9725,12 +9707,12 @@ All friendly THOUSAND SONS units gain the Mortal Sorcery ability:
               <rules>
                 <rule name="Warpmeld Sacrifice" id="a2f2-ea70-4522-498f" hidden="false">
                   <description>Until the end of the phase:
-  -&gt; When an enemy unit targets a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword, you may use this ability:
-    -&gt; If the target unit is the same unit as that unit, the attacking unit gets -1 to Wound rolls.
-    -&gt; At the end of each phase, until the end of the phase: that unit suffers D3 mortal wounds.
-  -&gt; When a friendly unit is selected to shoot (the triggering unit must have MUTANT and TZEENTCH) (the triggering unit must have INFANTRY or MOUNTED), you may use this ability or when a friendly unit is selected to fight (the triggering unit must have MUTANT and TZEENTCH) (the triggering unit must have INFANTRY or MOUNTED), you may use this ability:
-    -&gt; The triggering unit gets +1 to Wound rolls.
-    -&gt; At the end of each phase, until the end of the phase: the triggering unit suffers D3 mortal wounds.</description>
+  - When an enemy unit targets a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword, you can use this ability:
+    - If the target unit is the same unit as that unit, subtract 1 from the attacking unit's Wound rolls.
+    - At the end of each phase, until the end of the phase, that unit suffers D3 mortal wounds.
+  - When a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword is selected to shoot, you can use this ability or when a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword is selected to fight, you can use this ability:
+    - Add 1 to the triggering unit's Wound rolls.
+    - At the end of each phase, until the end of the phase, the triggering unit suffers D3 mortal wounds.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9748,7 +9730,7 @@ All friendly THOUSAND SONS units gain the Mortal Sorcery ability:
               </constraints>
               <rules>
                 <rule name="All is Dust" id="066c-2424-bc90-a455" hidden="false">
-                  <description>When damage is allocated to a friendly RUBRICAE model, the unit gets +1 to saving throw rolls.</description>
+                  <description>When damage is allocated to a friendly RUBRICAE model, add 1 to this unit's saving throw rolls.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9765,8 +9747,8 @@ All friendly THOUSAND SONS units gain the Mortal Sorcery ability:
               </constraints>
               <rules>
                 <rule name="Sorcerous Invigoration" id="3f73-9386-7134-276b" hidden="false">
-                  <description>Each time a friendly unit attempts a Ritual (the triggering unit must have PSYKER and THOUSAND SONS) (the triggering unit must not have MONSTER), once per turn per unit, the triggering unit regains up to D3 lost wounds.
-Applies to: units with THOUSAND SONS, PSYKER (excluding MONSTER).</description>
+                  <description>Each time a friendly PSYKER THOUSAND SONS unit (excluding MONSTER units) attempts a Ritual, once per turn per unit, that unit regains up to D3 lost wounds.
+Applies to: THOUSAND SONS PSYKER units (excluding MONSTER units).</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9783,10 +9765,10 @@ Applies to: units with THOUSAND SONS, PSYKER (excluding MONSTER).</description>
               </constraints>
               <rules>
                 <rule name="Ensorcelled Animus" id="e833-eded-1eb5-1033" hidden="false">
-                  <description>All friendly SEKHETAR ROBOTS units' weapons gain [PSYCHIC].
-All friendly PSYKER THOUSAND SONS units gain the Infusion ability:
-  -&gt; While a friendly SEKHETAR ROBOTS unit is within 12" of this unit, improve the Weapon Skill characteristic of melee weapons equipped by that unit by 1.
-Applies to: units with THOUSAND SONS.</description>
+                  <description>Friendly SEKHETAR ROBOTS units' weapons gain [PSYCHIC].
+Friendly PSYKER THOUSAND SONS units gain the Infusion ability:
+  - While a friendly SEKHETAR ROBOTS unit is within 12" of this unit, improve the Weapon Skill characteristic of melee weapons equipped by that unit by 1.
+Applies to: THOUSAND SONS units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9804,9 +9786,9 @@ Applies to: units with THOUSAND SONS.</description>
               <rules>
                 <rule name="All-Seeing Mutant Hordes" id="af44-8f8e-9462-5f04" hidden="false">
                   <description>For the rest of the battle:
-  -&gt; All friendly TZAANGORS units gain the BATTLELINE keyword.
-  -&gt; During the Shooting phase, in your turn, if the attacking unit has the MUTANT keyword, add 6 to all enemy units' detection range characteristic.
-Applies to: units with THOUSAND SONS.</description>
+  - Friendly TZAANGORS units gain the BATTLELINE keyword.
+  - During your Shooting phase, if the attacking unit has the MUTANT keyword, add 6" to enemy units' detection range.
+Applies to: THOUSAND SONS units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -9864,9 +9846,9 @@ Applies to: units with THOUSAND SONS.</description>
             <profile name="Nethershriek Mind-Eater" id="fed7-f1bf-e5e0-0cde" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, until the end of the phase:
-  -&gt; Select one enemy unit if the selected unit is within 12" of this model and the selected unit is visible to this model:
-    -&gt; That unit must take a Battle-shock test.
-    -&gt; If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds.</characteristic>
+  - Select one enemy unit that is within 12" of this model and visible to this model:
+    - That unit must take a Battle-shock test.
+    - If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9903,8 +9885,8 @@ Applies to: units with THOUSAND SONS.</description>
           <profiles>
             <profile name="Diabolic Savant" id="d572-166e-c033-e125" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit uses ability, while this model is within 6" of a friendly SCINTILLATING LEGIONS unit, the unit gets +1 to Psychic rolls.
-Applies to: units with THOUSAND SONS, INFANTRY.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit uses ability, while this model is within 6" of a friendly SCINTILLATING LEGIONS unit, add 1 to this unit's Psychic rolls.
+Applies to: THOUSAND SONS INFANTRY units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9944,11 +9926,11 @@ Applies to: units with THOUSAND SONS, INFANTRY.</characteristic>
           <profiles>
             <profile name="Duplicitous Malediction" id="ae2d-1907-f7dd-ab0f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you may use this ability:
-  -&gt; Select up to 3 friendly THOUSAND SONS units:
-    -&gt; For each selected unit:
-      -&gt; That unit can be set up on the battlefield.
-      -&gt; That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you can use this ability:
+  - Select up to 3 friendly THOUSAND SONS units:
+    - For each selected unit:
+      - That unit can be set up on the battlefield.
+      - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9985,8 +9967,8 @@ Applies to: units with THOUSAND SONS, INFANTRY.</characteristic>
           <profiles>
             <profile name="Tome of True Names" id="1d47-a4ae-6bf2-2f41" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per model, until the end of the phase, this model has a 2+ invulnerable save.
-Applies to: units with THOUSAND SONS, INFANTRY.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per model, until the end of the phase, this model has a 2+ invulnerable save.
+Applies to: THOUSAND SONS INFANTRY units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10025,11 +10007,11 @@ Applies to: units with THOUSAND SONS, INFANTRY.</characteristic>
           <profiles>
             <profile name="Warp Syphon" id="06c9-e937-29de-b744" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a Channel the Warp roll is made, you may use this ability, while this model is within 6" of a friendly THOUSAND SONS VEHICLE unit:
-  -&gt; Select one friendly THOUSAND SONS VEHICLE unit within 6" of this model:
-    -&gt; That unit suffers 1 mortal wound.
-    -&gt; You can re-roll one Psychic roll for this model.
-Applies to: units with THOUSAND SONS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a Channel the Warp roll is made, you can use this ability, while this model is within 6" of a friendly THOUSAND SONS VEHICLE unit:
+  - Select one friendly THOUSAND SONS VEHICLE unit within 6" of this model:
+    - That unit suffers 1 mortal wound.
+    - You can re-roll one Psychic roll for this model.
+Applies to: THOUSAND SONS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10067,7 +10049,7 @@ Applies to: units with THOUSAND SONS.</characteristic>
             <profile name="Perplexing Cloak" id="140f-4177-def4-2e3d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is within 3" of a friendly THOUSAND SONS VEHICLE unit, this model gains the Lone Operative ability.
-Applies to: units with THOUSAND SONS, INFANTRY.</characteristic>
+Applies to: THOUSAND SONS INFANTRY units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10106,9 +10088,9 @@ Applies to: units with THOUSAND SONS, INFANTRY.</characteristic>
           <profiles>
             <profile name="Biomechanical Mutation" id="940f-4f47-69e1-51b7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn:
-  -&gt; Select one friendly THOUSAND SONS VEHICLE model if the selected unit is within 6" of this model: that model regains up to D3 lost wounds.
-Applies to: units with THOUSAND SONS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, you can use this ability:
+  - Select one friendly THOUSAND SONS VEHICLE model that is within 6" of this model. That model regains up to D3 lost wounds.
+Applies to: THOUSAND SONS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10147,8 +10129,8 @@ Applies to: units with THOUSAND SONS.</characteristic>
           <profiles>
             <profile name="Warp-Cursed Runemaster" id="f291-e570-c5ef-e210" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit attempts a Ritual, while this model is within 6" of a friendly THOUSAND SONS VEHICLE unit, when resolving this use, increase the range of each RITUAL ability of this model by 6".
-Applies to: units with THOUSAND SONS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit attempts a Ritual, while this model is within 6" of a friendly THOUSAND SONS VEHICLE unit, for this activation, increase the range of each RITUAL ability of this model by 6".
+Applies to: THOUSAND SONS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10187,8 +10169,8 @@ Applies to: units with THOUSAND SONS.</characteristic>
           <profiles>
             <profile name="Arcane Might" id="8715-300c-77ee-a364" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless the unit is wholly within Flow of Magic, add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by models in this unit.
-While the unit is wholly within Flow of Magic, add 2 to the Strength characteristic of weapons with [PSYCHIC] equipped by models in this unit.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless this unit is wholly within Flow of Magic, add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by models in this unit.
+While this unit is wholly within Flow of Magic, add 2 to the Strength characteristic of weapons with [PSYCHIC] equipped by models in this unit.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10227,9 +10209,9 @@ While the unit is wholly within Flow of Magic, add 2 to the Strength characteris
           <profiles>
             <profile name="Empowered Manifestation" id="cd67-38f7-dc2c-820a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is within Flow of Magic, for the rest of the battle:
-  -&gt; Increase the range of each PSYCHIC ability of this model by 6".
-  -&gt; You can re-roll the Hazard roll with weapons with [PSYCHIC].</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is within Flow of Magic, for the rest of the battle:
+  - Increase the range of each PSYCHIC ability of this model by 6".
+  - You can re-roll the Hazard roll with weapons with [PSYCHIC].</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10268,7 +10250,7 @@ While the unit is wholly within Flow of Magic, add 2 to the Strength characteris
           <profiles>
             <profile name="Empyric Onslaught" id="c0f6-0070-261e-960b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is wholly within Flow of Magic, add 3 to the Attacks characteristic of ranged weapons equipped by this model.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is wholly within Flow of Magic, add 3 to the Attacks characteristic of ranged weapons equipped by this model.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10307,9 +10289,9 @@ While the unit is wholly within Flow of Magic, add 2 to the Strength characteris
           <profiles>
             <profile name="Noctilith Mantle" id="ebe6-7bcb-095b-1422" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is on the battlefield:
-  -&gt; The unit is marked as wholly within flow of magic.
-  -&gt; The unit cannot attempt Rituals.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is on the battlefield:
+  - This unit is designated as Wholly Within Flow of Magic.
+  - This unit cannot attempt Rituals.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10348,8 +10330,8 @@ While the unit is wholly within Flow of Magic, add 2 to the Strength characteris
           <profiles>
             <profile name="Lord of Forbidden Lore" id="2561-7228-c8dc-db12" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit attempts a Ritual, when resolving this use, increase the range of each RITUAL ability of this model by 6".
-Applies to: units with THOUSAND SONS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit attempts a Ritual, for this activation, increase the range of each RITUAL ability of this model by 6".
+Applies to: THOUSAND SONS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10383,7 +10365,7 @@ Applies to: units with THOUSAND SONS.</characteristic>
             <profile name="Incandaeum" id="bf77-0852-9266-6fee" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per battle per unit, until the end of the phase, this model is eligible to attempt Rituals.
-Applies to: units with EXALTED SORCERER.</characteristic>
+Applies to: EXALTED SORCERER units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10423,10 +10405,10 @@ Applies to: units with EXALTED SORCERER.</characteristic>
             <profile name="Umbralefic Crystal" id="304a-193b-a00b-9e93" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per battle per army, until the end of the turn:
-  -&gt; The unit can be placed into Strategic Reserves.
-  -&gt; The unit gains the Deep Strike ability.
-  -&gt; The unit can make an Ingress move.
-Applies to: units with THOUSAND SONS.</characteristic>
+  - This unit can be placed into Strategic Reserves.
+  - This unit gains the Deep Strike ability.
+  - This unit can make an Ingress move.
+Applies to: THOUSAND SONS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10467,7 +10449,7 @@ Applies to: units with THOUSAND SONS.</characteristic>
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to the Strength characteristic of weapons with [PSYCHIC] equipped by this model.
 Add 1 to the Damage characteristic of weapons with [PSYCHIC] equipped by this model.
-Applies to: units with THOUSAND SONS.</characteristic>
+Applies to: THOUSAND SONS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10495,11 +10477,11 @@ Applies to: units with THOUSAND SONS.</characteristic>
           <profiles>
             <profile name="Warpmeld Dagger" id="094d-fe55-8369-9691" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Before a Psychic test is made, if that test is for a Ritual the triggering unit is attempting, you may use this ability:
-  -&gt; Roll D3, then:
-    -&gt; This model suffers a number of mortal wounds equal to the result of that roll.
-    -&gt; While this model is on the battlefield, add the result of that roll to the unit's Psychic rolls.
-Applies to: units with TZAANGOR SHAMAN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Before a Psychic test is made, if that test is for a Ritual the triggering unit is attempting, you can use this ability:
+  - Roll D3, then:
+    - This model suffers a number of mortal wounds equal to the result of that roll.
+    - While this model is on the battlefield, add the result of that roll to this unit's Psychic rolls.
+Applies to: TZAANGOR SHAMAN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10527,8 +10509,8 @@ Applies to: units with TZAANGOR SHAMAN.</characteristic>
           <profiles>
             <profile name="Diamond of Distortion" id="fd5f-aebe-8d56-7e7f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the attacking unit gets -1 to Hit rolls.
-Applies to: units with TZAANGOR SHAMAN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, subtract 1 from the attacking unit's Hit rolls.
+Applies to: TZAANGOR SHAMAN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10590,9 +10572,9 @@ Applies to: units with TZAANGOR SHAMAN.</characteristic>
           <profiles>
             <profile name="Flowing Flesh" id="e906-e040-1858-1b05" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has the Feel No Pain 4+ ability.
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has Feel No Pain 4+.
 Set this model's Wounds characteristic to 5.
-Applies to: units with TZAANGOR SHAMAN.</characteristic>
+Applies to: TZAANGOR SHAMAN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10632,10 +10614,10 @@ Applies to: units with TZAANGOR SHAMAN.</characteristic>
             <profile name="Risen Rubricae" id="5e76-c32c-5ffe-2dc4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle:
-  Select one of the following:
-    - Select 2 friendly RUBRICAE BATTLELINE units: that unit gains the Infiltrators ability.
-    - Select one friendly RUBRICAE unit without the BATTLELINE keyword: that unit gains the Infiltrators ability.
-Applies to: units with THOUSAND SONS.</characteristic>
+  Choose one of the following:
+    - Select 2 friendly RUBRICAE BATTLELINE units; those units gain the Infiltrators ability.
+    - Select one friendly RUBRICAE unit without the BATTLELINE keyword; that unit gains the Infiltrators ability.
+Applies to: THOUSAND SONS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10675,7 +10657,7 @@ Applies to: units with THOUSAND SONS.</characteristic>
             <profile name="Arcane Thralls (Aura)" id="3177-0004-8c92-dcad" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly RUBRICAE unit is within 9" of this model, you can re-roll the Battle-shock roll for that unit.
-Applies to: units with THOUSAND SONS.</characteristic>
+Applies to: THOUSAND SONS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10714,8 +10696,8 @@ Applies to: units with THOUSAND SONS.</characteristic>
           <profiles>
             <profile name="Lord of the Rubricae" id="3bf0-87e2-207f-5416" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, RUBRICAE models in the unit get +1 to Hit rolls.
-Applies to: units with THOUSAND SONS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, add 1 to RUBRICAE models in this unit's Hit rolls.
+Applies to: THOUSAND SONS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10753,7 +10735,7 @@ Applies to: units with THOUSAND SONS.</characteristic>
             <profile name="Stave Abominus" id="7e7c-0db2-da71-4ea0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Melee weapons equipped by this model gain [SUSTAINED HITS D3] and [DEVASTATING WOUNDS].
-Applies to: units with THOUSAND SONS, INFANTRY.</characteristic>
+Applies to: THOUSAND SONS INFANTRY units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10790,9 +10772,8 @@ Applies to: units with THOUSAND SONS, INFANTRY.</characteristic>
           <profiles>
             <profile name="Eruption of Vitality" id="de27-49a8-1b7b-cc5d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if this model was destroyed this phase (1+ times), once per battle per army:
-  -&gt; Roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1" away from all enemy models, with 3 wounds remaining, as a separate unit with a Starting Strength of 1 (it is no longer part of its attached unit).
-Applies to: units with THOUSAND SONS, PSYKER (excluding MONSTER).</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if this model was destroyed this phase (one or more times), once per battle per army, roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1" away from all enemy models, with 3 wounds remaining, as a separate unit with a Starting Strength of 1 (it is no longer part of its attached unit).
+Applies to: THOUSAND SONS PSYKER units (excluding MONSTER units).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10830,7 +10811,7 @@ Applies to: units with THOUSAND SONS, PSYKER (excluding MONSTER).</characteristi
             <profile name="Curse of Life" id="bed5-f29e-092c-073f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model regains up to 3 lost wounds.
-Applies to: units with THOUSAND SONS, PSYKER (excluding MONSTER).</characteristic>
+Applies to: THOUSAND SONS PSYKER units (excluding MONSTER units).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10865,9 +10846,9 @@ Applies to: units with THOUSAND SONS, PSYKER (excluding MONSTER).</characteristi
           <profiles>
             <profile name="Walking Rampart" id="b1f4-58a7-079c-094e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, use Soul Bound: during the Movement phase, in your turn, select one friendly SEKHETAR ROBOTS unit within 3" of this model if the selected unit has the SEKHETAR ROBOTS keyword: that unit regains up to D3+1 lost wounds.
--&gt; Kine‑shielded Guardians: while this model is within 3" of a friendly SEKHETAR ROBOTS unit, this model gains the Lone Operative ability.
-Applies to: units with THOUSAND SONS, SORCERER.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, use Soul Bound: during your Movement phase, select one friendly SEKHETAR ROBOTS unit within 3" of this model with the SEKHETAR ROBOTS keyword; that unit regains up to D3+1 lost wounds.
+Kine‑shielded Guardians: while this model is within 3" of a friendly SEKHETAR ROBOTS unit, this model gains the Lone Operative ability.
+Applies to: THOUSAND SONS SORCERER units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10902,9 +10883,9 @@ Applies to: units with THOUSAND SONS, SORCERER.</characteristic>
           <profiles>
             <profile name="Occulus Infernum" id="834a-76e5-ef43-5bfe" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, during the Movement phase, in your turn, until the start of your next turn:
-  -&gt; Select one friendly SEKHETAR ROBOTS unit within 6" of the unit: improve the Ballistic Skill characteristic of ranged weapons equipped by models in that unit by 1.
-Applies to: units with THOUSAND SONS, SORCERER.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase, until the start of your next turn:
+  - Select one friendly SEKHETAR ROBOTS unit within 6" of this unit. Improve the Ballistic Skill characteristic of ranged weapons equipped by models in that unit by 1.
+Applies to: THOUSAND SONS SORCERER units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10932,9 +10913,9 @@ Applies to: units with THOUSAND SONS, SORCERER.</characteristic>
           <profiles>
             <profile name="Unravelled Fates" id="a357-5c77-2218-fc04" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit starts a move, you may use this ability or when the unit ends a move, you may use this ability, during the Movement phase, in your turn:
-  -&gt; Select one friendly MUTANT unit within 6" of this model that is Battle-shocked: that unit is no longer Battle-shocked.
-Applies to: units with THOUSAND SONS, TZAANGOR SHAMAN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase:
+  - Select one friendly MUTANT unit within 6" of this model that is Battle-shocked. That unit is no longer Battle-shocked.
+Applies to: THOUSAND SONS TZAANGOR SHAMAN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10964,7 +10945,7 @@ Applies to: units with THOUSAND SONS, TZAANGOR SHAMAN.</characteristic>
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1.
 Melee weapons equipped by models in this unit gain [CLEAVE 1].
-Applies to: units with SPAWN.</characteristic>
+Applies to: SPAWN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -10979,11 +10960,11 @@ Applies to: units with SPAWN.</characteristic>
   <sharedRules>
     <rule name="Cabal of Sorcerers" id="da67-e345-a357-4020" hidden="false">
       <description>At the start of your Shooting phase, once per turn per model, if your Army Faction is THOUSAND SONS:
-  -&gt; Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, the unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:
-    - Destiny’s Ruin (Warp Charge 5): Until the end of the phase: select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll a Hit roll of 1 for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll the Hit roll for attacks made by all friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.
-    - Temporal Surge (Warp Charge 6): Until the end of the turn: select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword if the selected unit is unengaged and the selected unit is within 24" of this model and the selected unit is visible to this model: unless the Psychic test result is 10+, that unit can make a Normal move of up to D6"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6"; that unit cannot declare a charge.
-    - Doombolt (Warp Charge 7): Select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model and (the selected unit does not have the Lone Operative ability or the selected unit is an attached unit or the selected unit is within 12" of this model): unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.
-    - Twist of Fate (Warp Charge 9): Until the end of the phase: select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 2 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.</description>
+  - Attempt one of the Rituals below (each Ritual can be attempted once per turn across your army). To do so, take a Psychic test: roll 2D6, and you can roll one additional D6; if any two of its dice show the same result, this unit suffers D3 mortal wounds; if this model is not destroyed and the total of all its dice equals or exceeds the Ritual's Warp Charge, this model manifests that Ritual:
+    - Destiny’s Ruin (Warp Charge 5): Select one enemy unit that is within 24" of this model and visible to this model (your Destinys Ruin Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 10+, you can re-roll Hit rolls of 1 for attacks made by friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 10+, you can re-roll Hit rolls for attacks made by friendly models with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.
+    - Temporal Surge (Warp Charge 6): Until the end of the turn, select one friendly unit with the SCINTILLATING LEGIONS or THOUSAND SONS keyword that is unengaged, within 24" of this model and visible to this model; unless the Psychic test result is 10+, that unit can make a Normal move of up to D6"; if the Psychic test result is 10+, that unit can make a Normal move of up to 6"; that unit cannot declare a charge.
+    - Doombolt (Warp Charge 7): Select one enemy unit that is within 24" of this model and visible to this model and (without the Lone Operative ability or that is an attached unit or within 12" of this model); unless the Psychic test result is 11+, that unit suffers D3 mortal wounds; if the Psychic test result is 11+, that unit suffers D3+3 mortal wounds.
+    - Twist of Fate (Warp Charge 9): Select one enemy unit that is within 24" of this model and visible to this model (your Twist of Fate Target); until the end of the phase, each time a friendly unit attacks it, unless the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword; if the Psychic test result is 12+, improve the Armour Penetration characteristic of that attack by 2 if it is made by a friendly model with the SCINTILLATING LEGIONS or THOUSAND SONS keyword.</description>
     </rule>
     <rule name="Pact of Sorcery" id="cb84-1d12-885e-45f9" hidden="false">
       <description>You cannot select Scintillating Legions as your Army Faction.</description>

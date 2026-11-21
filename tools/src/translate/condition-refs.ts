@@ -70,11 +70,19 @@ export function andList(items: string[]): string {
   return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
 }
 
+/** Phonetic indefinite article ("a unit", "an ASPECT WARRIORS unit", "an Advance", "an ability"). */
+export function withArticle(phrase: string): string {
+  const s = phrase.trimStart();
+  if (s.length === 0) return "a";
+  const vowel = /^(?:[aeio]|u(?!ni|se|t)|8\b|11\b|18\b)/i.test(s) && !/^one\b/i.test(s);
+  return `${vowel ? "an" : "a"} ${s}`;
+}
+
 /** Causal links name an exact bound event; sharing its actor is not enough. */
 export function eventRelationPhrase(filter: P): string {
   let phrase = "";
-  if (filter.caused_by != null) phrase += " as a result of the exact bound event";
-  if (filter.causes != null) phrase += " and causing the exact bound event";
+  if (filter.caused_by != null) phrase += " as a result of that event";
+  if (filter.causes != null) phrase += " triggering this ability";
   return phrase;
 }
 
@@ -87,7 +95,8 @@ export function countPhrase(value: unknown, defaultMin = 1): string {
   }
   if (c.max != null) return `at most ${diceCase(c.max)}`;
   const min = c.min ?? defaultMin;
-  return typeof min === "number" ? `${min}+` : `at least ${diceCase(min)}`;
+  if (typeof min === "number") return min === 1 ? "one or more" : `${min} or more`;
+  return `at least ${diceCase(min)}`;
 }
 
 /** A named rule or one immutable option of a named ability. */
@@ -174,7 +183,7 @@ function namesRole(trigger: unknown, role: "subject" | "object"): boolean {
 }
 
 const ROLE_PHRASES: Record<string, string> = {
-  "this-unit": "the unit",
+  "this-unit": "this unit",
   "this-model": "this model",
   "model-in-this-unit": "a model in this unit",
   attacker: "the attacking unit",
@@ -185,7 +194,7 @@ const ROLE_PHRASES: Record<string, string> = {
   "event-object-model": "that model",
   "stratagem-target": "the Stratagem's target",
   "selected-unit": "the selected unit",
-  recipient: "the unit",
+  recipient: "this unit",
   "bearer-transport": "the Transport this unit is embarked within",
   "ability-unit": "this unit",
 };
@@ -211,11 +220,13 @@ export function alternativeFilters(f: P): P[] {
 export function unitFilterPhrase(f: P): string {
   const owner = f.owner === "friendly" ? "friendly " : f.owner === "enemy" ? "enemy " : "";
   const all = Array.isArray(f.all_of) ? `${(f.all_of as unknown[]).map(str).join(" ")} ` : "";
-  const noun = f.level === "model" ? `${f.attachment_role != null ? `${str(f.attachment_role)} ` : ""}model` : "unit";
+  const unitIdNames = Array.isArray(f.unit_ids) ? orList(f.unit_ids.map((id) => titleCase(str(id)))) : "";
+  const inlineUnitIds = unitIdNames && !all && !Array.isArray(f.any_of_filters) ? `${unitIdNames} ` : "";
+  const noun = f.level === "model" ? `${f.attachment_role != null ? `${titleCase(str(f.attachment_role))} ` : ""}model` : "unit";
   // "a friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit": keyword-only alternatives.
   const compact = keywordAlternatives(f);
-  let s = compact ? `${owner}${orList(compact)} ${noun}` : `${owner}${all}${noun}`;
-  s = `${/^(?:[aeio]|u(?!ni))/i.test(s) ? "an" : "a"} ${s}`;
+  let s = compact ? `${owner}${orList(compact)} ${noun}` : `${owner}${all}${inlineUnitIds}${noun}`;
+  s = withArticle(s);
   // Any other alternatives: "a unit that is a PSYKER unit or a unit that is Battle-shocked".
   if (Array.isArray(f.any_of_filters) && !compact) s += ` that is ${orList(alternativeFilters(f).map(unitFilterPhrase))}`;
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(str))} keyword`;
@@ -229,7 +240,7 @@ export function unitFilterPhrase(f: P): string {
   }
   if (Array.isArray(f.lacks_ability)) s += ` without the ${orList((f.lacks_ability as unknown[]).map((a) => idLabel(a)))} ability`;
   if (Array.isArray(f.model_names)) s += ` named ${orList(f.model_names.map(str))}`;
-  if (Array.isArray(f.unit_ids)) s += ` with unit ID ${orList(f.unit_ids.map(str))}`;
+  if (unitIdNames && !inlineUnitIds) s += ` (${unitIdNames})`;
   if (f.embarked_in != null) s += ` embarked within ${unitRefPhrase(f.embarked_in)}`;
   if (f.member_of != null) s += ` in ${unitRefPhrase(f.member_of)}`;
   if (f.engaged_with != null) s += ` within Engagement Range of ${unitRefPhrase(f.engaged_with)}`;
@@ -240,19 +251,28 @@ export function unitFilterPhrase(f: P): string {
   if (Array.isArray(f.not_states)) s += ` that is ${andList((f.not_states as unknown[]).map((x) => statePhrase(str(x), true)))}`;
   if (f.visible != null) s += ` that is visible to ${unitRefPhrase((f.visible as P).to)}`;
   const within = f.within as P | undefined;
-  if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${within.of != null ? ` of ${placeRefPhrase(within.of)}` : ""}`;
+  if (within != null) s += withinClause(within);
   if (f.excluding != null) s += ` other than ${f.excluding === "this-unit" ? "this unit" : unitRefPhrase(f.excluding)}`;
   return s;
 }
 
+/** " within 6\" of this unit", or " in contact with a cult ambush marker" when range is 0". */
+export function withinClause(within: P, ofOverride?: string): string {
+  const r = within.range as P | string | undefined;
+  const zero = typeof r === "object" && r != null && r.inches === 0;
+  const of = ofOverride !== undefined ? ofOverride : within.of != null ? placeRefPhrase(within.of) : "";
+  if (zero && of) return ` in contact with ${of}`;
+  return ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${of ? ` of ${of}` : ""}`;
+}
+
 /** A unit-ref as a noun phrase; `fallback` names the default subject. */
-export function unitRefPhrase(ref: unknown, fallback = "the unit"): string {
+export function unitRefPhrase(ref: unknown, fallback = "this unit"): string {
   if (ref == null) return fallback;
   if (typeof ref === "string") return ROLE_PHRASES[ref] ?? dekebab(ref);
   if (typeof ref === "object") {
     const r = ref as P;
     if (typeof r.event_var === "string") return "that unit";
-    if (typeof r.selection_var === "string") return `the bound ${str(r.selection_var).replace(/_/g, " ")}`;
+    if (typeof r.selection_var === "string") return `the chosen ${str(r.selection_var).replace(/_/g, " ")}`;
     if (typeof r.stratagem_target === "string") return `the ${dekebab(r.stratagem_target.replace(/^the-/, ""))} target`;
     return unitFilterPhrase(r);
   }
@@ -260,7 +280,7 @@ export function unitRefPhrase(ref: unknown, fallback = "the unit"): string {
 }
 
 /** The subject of a predicate; `defender` reads "the target" in the keyword forms. */
-export function subjectOf(p: P, fallback = "the unit"): string {
+export function subjectOf(p: P, fallback = "this unit"): string {
   return unitRefPhrase(p.subject, fallback);
 }
 
@@ -331,7 +351,7 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
 const STATE_PHRASES: Record<string, string> = {
   engaged: "engaged", "battle-shocked": "Battle-shocked", embarked: "embarked",
   "in-strategic-reserves": "in Strategic Reserves", "in-cult-ambush": "in Cult Ambush", "on-battlefield": "on the battlefield",
-  hidden: "hidden", "fights-first": "a Fights First unit", "benefit-of-cover": "receiving the benefit of cover",
+  hidden: "hidden", "fights-first": "a Fights First unit", "benefit-of-cover": "receiving the Benefit of Cover",
 };
 const NEGATED_STATE: Record<string, string> = { engaged: "unengaged" };
 export function statePhrase(state: string, negated = false): string {
@@ -343,7 +363,7 @@ export function statePhrase(state: string, negated = false): string {
 export function designationPhrase(tag: string, plural = false): string {
   const label = designationLabel(tag, plural);
   if (label != null) return label;
-  return tag === tag.toUpperCase() ? tag : `tagged ${dekebab(tag)}`;
+  return tag === tag.toUpperCase() ? tag : `designated as ${titleCase(tag)}`;
 }
 
 const WINDOW_PHRASES: Record<string, string> = {
@@ -356,14 +376,14 @@ export const withWindow = (s: string, w: unknown): string => (windowPhrase(w) ? 
 /** Past tense of the verbs history predicates use. */
 const PAST: Record<string, string> = {
   charge: "charged", advance: "advanced", "fall back": "fell back", "remain stationary": "remained stationary",
-  "make an ingress move": "made an ingress move", move: "moved", disembark: "disembarked",
+  "make an Ingress move": "made an Ingress move", move: "moved", disembark: "disembarked",
   embark: "embarked",
 };
 export const pastOf = (verb: string): string => PAST[verb] ?? (verb.startsWith("make ") ? `made ${verb.slice(5)}` : verb);
 
 const MOVE_NAMES: Record<string, string> = {
   normal: "Normal", advance: "Advance", "remain-stationary": "Remain Stationary", "fall-back": "Fall Back", charge: "Charge",
-  "pile-in": "Pile-in", consolidation: "Consolidation", ingress: "ingress", surge: "Surge", scout: "Scout", disembark: "Disembark",
+  "pile-in": "Pile-in", consolidation: "Consolidation", ingress: "Ingress", surge: "Surge", scout: "Scout", disembark: "Disembark",
 };
 export function moveKinds(types: unknown): string {
   return orList((Array.isArray(types) ? types : []).map((t) => MOVE_NAMES[str(t)] ?? dekebab(str(t))));

@@ -26,30 +26,68 @@ fn selector_bounds(sel: &P) -> (Option<&Value>, Option<&Value>) {
     (nn(count, "min"), nn(count, "max"))
 }
 
-/// "the bound reprise beneficiary" for a selection/event reference, else `fallback`.
+/// "the chosen reprise beneficiary" for a selection/event reference, else `fallback`.
 pub(crate) fn selection_ref_name(r: Option<&Value>, fallback: &str) -> String {
     let value = r.and_then(Value::as_object).cloned().unwrap_or_default();
     let id = nn(&value, "selection_var").or_else(|| nn(&value, "event_var"));
     match id.and_then(Value::as_str).filter(|s| !s.is_empty()) {
-        Some(id) => format!("the bound {}", dekebab(&id.replace('_', "-"))),
+        Some(id) => format!("the chosen {}", dekebab(&id.replace('_', "-"))),
         None => fallback.to_string(),
     }
 }
 
-/// ", binding it as <name>" when a selector binds its pick.
-pub(crate) fn selection_binding(sel: &P) -> String {
-    match sv(sel, "bind_as").filter(|s| !s.is_empty()) {
-        Some(name) => format!(
-            ", binding {} as {}",
-            if select_units_plural(sel) {
-                "them"
-            } else {
-                "it"
-            },
-            dekebab(&name.replace('_', "-"))
-        ),
-        None => String::new(),
+/// Generic internal binding names that add no player-facing information when printed.
+const GENERIC_BINDINGS: &[&str] = &[
+    "objective",
+    "selected_objective",
+    "selected-objective",
+    "quarry_selection",
+    "mark_selection",
+    "selected_unit",
+    "selected-unit",
+    "enemy_unit",
+    "enemy-unit",
+    "target_unit",
+    "target-unit",
+    "friendly_unit",
+    "friendly-unit",
+    "unit",
+    "target",
+    "model",
+    "trap_objective",
+    "trap-objective",
+];
+
+fn normalize_binding_name(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    let mut in_sep = false;
+    for c in s.to_lowercase().chars() {
+        if c == '-' || c == '_' || c.is_whitespace() {
+            if !in_sep {
+                out.push('_');
+                in_sep = true;
+            }
+        } else {
+            out.push(c);
+            in_sep = false;
+        }
     }
+    out
+}
+
+/// " (referred to below as the <name>)" when a selector binds its pick to a non-generic name.
+pub(crate) fn selection_binding(sel: &P) -> String {
+    let Some(name) = sv(sel, "bind_as").filter(|s| !s.is_empty()) else {
+        return String::new();
+    };
+    let norm = normalize_binding_name(name);
+    if GENERIC_BINDINGS.contains(&norm.as_str()) {
+        return String::new();
+    }
+    format!(
+        " (referred to below as the {})",
+        dekebab(&name.replace('_', "-"))
+    )
 }
 
 pub(super) fn eligibility_clause(sel: &P, require_object: bool) -> String {
@@ -88,7 +126,7 @@ pub(super) fn selector_count(sel: &P) -> (String, bool) {
             (quantity(min), max.as_f64() != Some(1.0))
         }
         (Some(min), Some(max)) if min.as_f64() != Some(0.0) => (
-            format!("from {} through {}", quantity(min), quantity(max)),
+            format!("{} to {}", quantity(min), quantity(max)),
             max.as_f64() != Some(1.0),
         ),
         (_, Some(max)) => (
@@ -146,12 +184,41 @@ pub(crate) fn select_units_subject_in(sel: &P, each_model: bool) -> String {
             tail = format!(" ({})", paren_inner(&phrase));
         }
     }
+    let base = selector_subject(sel, plural, each_model);
+    let mut eligibility = String::new();
+    if let Some(e) = sel.get("eligibility").filter(|e| e.is_object()) {
+        let elig = describe_selection_eligibility_value(e);
+        let has_that_is = has_that_is_tail(&base);
+        if has_that_is && elig.starts_with("that is ") {
+            eligibility = format!(" and {}", &elig["that is ".len()..]);
+        } else if has_that_is && elig.starts_with("that ") {
+            eligibility = format!(" and {}", &elig["that ".len()..]);
+        } else {
+            eligibility = format!(" {elig}");
+        }
+    }
     format!(
-        "{quantity} {}{tail}{}{}",
-        selector_subject(sel, plural, each_model),
-        eligibility_clause(sel, true),
+        "{quantity} {base}{tail}{eligibility}{}",
         selection_limit(sel, selector_level(sel))
     )
+}
+
+/// `/\bthat is [^\n]+$/.test(base)`.
+fn has_that_is_tail(base: &str) -> bool {
+    let bytes = base.as_bytes();
+    let needle = "that is ";
+    let mut from = 0;
+    while let Some(pos) = base[from..].find(needle) {
+        let start = from + pos;
+        let after = start + needle.len();
+        let word_before =
+            start > 0 && (bytes[start - 1].is_ascii_alphanumeric() || bytes[start - 1] == b'_');
+        if !word_before && after < base.len() && !base[after..].contains('\n') {
+            return true;
+        }
+        from = after;
+    }
+    false
 }
 
 pub(crate) fn select_units_plural(sel: &P) -> bool {
@@ -162,15 +229,20 @@ pub(crate) fn select_units_plural(sel: &P) -> bool {
 pub(crate) fn each_context(ctx: &Ctx, sel: &P) -> Ctx {
     Ctx {
         each_model: selector_level(sel) == "model",
-        ..selected_context(ctx, sel)
+        ..selected_context_with_plural(ctx, sel, false)
     }
 }
 
 pub(crate) fn selected_context(ctx: &Ctx, sel: &P) -> Ctx {
+    selected_context_with_plural(ctx, sel, select_units_plural(sel))
+}
+
+pub(crate) fn selected_context_with_plural(ctx: &Ctx, sel: &P, plural: bool) -> Ctx {
     let model = selector_level(sel) == "model";
     Ctx {
         selected_unit: !model,
         selected_model: model,
+        selected_plural: plural,
         unit_subject: None,
         ..ctx.clone()
     }
@@ -180,7 +252,7 @@ pub(crate) fn select_units_inline(sel: &P, effect: &Value, ctx: &Ctx) -> String 
     let subject = select_units_subject_in(sel, ctx.each_model);
     let binding = selection_binding(sel);
     let nested = inline(effect, &selected_context(ctx, sel));
-    format!("select {subject}{binding}: {nested}")
+    format!("select {subject}{binding}; {nested}")
 }
 
 /// "enemy unit within 6\"" — the canonical all-matches selector phrase.

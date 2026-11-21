@@ -280,7 +280,7 @@ describe("Semantic authoring unit-has-ability own", () => {
 
   it("previews as \"this ability\", and refuses to lower before its record binds it", () => {
     expect(previewLeaf({ family_id: "unit-has-ability", parameters: { subject: "this-unit", own: true, negated: true } }))
-      .toEqual({ text: "the unit does not have this ability", problem: null });
+      .toEqual({ text: "this unit does not have this ability", problem: null });
     const version = currentFamilyVersion("unit-has-ability");
     expect(() => leafFragment({ role: familyRole("unit-has-ability", version), family_id: "unit-has-ability", family_version: version, parameters: { subject: "this-unit", own: true }, start_byte: 0 }))
       .toThrow(/binds to an id only when its record compiles/u);
@@ -318,7 +318,7 @@ describe("Semantic authoring unit-has-ability per model", () => {
     const filter = { has_ability: ["gloom-veil"], has_ability_models: { none_of: ["WARDEN"] } };
     expect(unitFilterPhrase(filter)).toContain("in which every model (excluding WARDEN models) has the Gloom Veil ability");
     expect(describeCondition({ operator: "not", operands: [{ type: "matches", parameters: { subject: "this-unit", filter } }] } as never))
-      .toContain("not every model in the unit (excluding WARDEN models) has the Gloom Veil ability");
+      .toContain("not every model in this unit (excluding WARDEN models) has the Gloom Veil ability");
   });
 });
 

@@ -8,19 +8,19 @@ func TestEveryModelObjectiveWithin(t *testing.T) {
 	every := map[string]any{"type": "within", "parameters": map[string]any{
 		"of": map[string]any{"objective": map[string]any{}}, "range": "objective-control", "models": "every",
 	}}
-	if got := describeCondition(every); got != "every model in the unit is within range of an objective marker" {
+	if got := describeCondition(every); got != "every model in this unit is within range of an objective marker" {
 		t.Fatalf("every: got %q", got)
 	}
 	plain := map[string]any{"type": "within", "parameters": map[string]any{
 		"of": map[string]any{"objective": map[string]any{}}, "range": "objective-control",
 	}}
-	if got := describeCondition(plain); got != "the unit is within range of an objective marker" {
+	if got := describeCondition(plain); got != "this unit is within range of an objective marker" {
 		t.Fatalf("plain: got %q", got)
 	}
 	selected := map[string]any{"type": "within", "parameters": map[string]any{
 		"of": map[string]any{"objective": map[string]any{"selection_var": "marker"}}, "range": "objective-control", "models": "every",
 	}}
-	if got := describeCondition(selected); got != "every model in the unit is within range of that objective marker" {
+	if got := describeCondition(selected); got != "every model in this unit is within range of that objective marker" {
 		t.Fatalf("selected: got %q", got)
 	}
 }

@@ -17,21 +17,20 @@
             </profile>
             <profile name="Firing Deck" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+                <characteristic name="Description">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Sorcerous Support" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Sorcerous Support Target). Until the end of the phase, each time a friendly unit makes an attack against it:
-    -&gt; If the attacking unit disembarked from this Transport this turn, while making psychic attacks, all friendly models get +1 to Hit rolls.
-    -&gt; If the attacking unit disembarked from this Transport this turn, while making psychic attacks, all friendly models get +1 to Wound rolls.</characteristic>
+                <characteristic name="Description">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Sorcerous Support Target). Until the end of the phase, each time a friendly unit makes an attack against it:
+    - If the attacking unit disembarked from this Transport this turn, while making psychic attacks, add 1 to friendly models' Hit rolls.
+    - If the attacking unit disembarked from this Transport this turn, while making psychic attacks, add 1 to friendly models' Wound rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -103,13 +102,12 @@
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>

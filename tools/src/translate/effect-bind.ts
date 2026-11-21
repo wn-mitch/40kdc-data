@@ -28,8 +28,19 @@ export function selectUnitsSubject(sel: P = {}, ctx: Pick<Ctx, "eachModel"> = {}
   const capPhrase = cap ? quantityPhrase(cap) : "";
   const phrase = cap ? cap.count_of != null ? "any number of" : `up to ${capPhrase.replace(/ \(.*\)$/, "")}` : count.phrase;
   const tail = cap ? cap.count_of != null ? ` (at most ${capPhrase})` : ` (${capPhrase.replace(/^.*\((.*)\)$/, "$1")})` : "";
-  const eligibility = sel.eligibility ? ` ${describeSelectionEligibility(sel.eligibility as Condition)}` : "";
-  return `${phrase} ${selectorSubject(sel, count.plural, ctx)}${tail}${eligibility}${selectionLimit(sel, selectorNoun(sel))}`;
+  const base = selectorSubject(sel, count.plural, ctx);
+  let eligibility = "";
+  if (sel.eligibility) {
+    const elig = describeSelectionEligibility(sel.eligibility as Condition);
+    if (/\bthat is [^\n]+$/.test(base) && elig.startsWith("that is ")) {
+      eligibility = ` and ${elig.slice("that is ".length)}`;
+    } else if (/\bthat is [^\n]+$/.test(base) && elig.startsWith("that ")) {
+      eligibility = ` and ${elig.slice("that ".length)}`;
+    } else {
+      eligibility = ` ${elig}`;
+    }
+  }
+  return `${phrase} ${base}${tail}${eligibility}${selectionLimit(sel, selectorNoun(sel))}`;
 }
 
 /** "Blessings of Khorne pool" from a pool id. */
@@ -52,17 +63,25 @@ export function selectorCount(sel: P): { phrase: string; plural: boolean } {
   const bounds = (sel.count ?? {}) as P;
   const quantity = (value: unknown): string => value != null && typeof value === "object" ? quantityPhrase(value as P) : Number(value) === 1 ? "one" : jstr(value);
   if (bounds.min != null && bounds.min === bounds.max) return { phrase: quantity(bounds.min), plural: bounds.max !== 1 };
-  if (bounds.min != null && bounds.max != null && bounds.min !== 0) return { phrase: `from ${quantity(bounds.min)} through ${quantity(bounds.max)}`, plural: bounds.max !== 1 };
+  if (bounds.min != null && bounds.max != null && bounds.min !== 0) return { phrase: `${quantity(bounds.min)} to ${quantity(bounds.max)}`, plural: bounds.max !== 1 };
   if (bounds.max != null) return { phrase: `up to ${quantity(bounds.max)}`, plural: bounds.max !== 1 };
   // "Select one or more models", not "at least one models".
   if (bounds.min != null) return { phrase: Number(bounds.min) === 1 ? "one or more" : `at least ${quantity(bounds.min)}`, plural: true };
   return { phrase: "each", plural: false };
 }
 
+/** Generic internal binding names that add no player-facing information when printed. */
+const GENERIC_BINDINGS = new Set([
+  "objective", "selected_objective", "selected-objective", "quarry_selection", "mark_selection",
+  "selected_unit", "selected-unit", "enemy_unit", "enemy-unit", "target_unit", "target-unit",
+  "friendly_unit", "friendly-unit", "unit", "target", "model", "trap_objective", "trap-objective",
+]);
+
 export function selectionBinding(sel: P): string {
-  return typeof sel.bind_as === "string" && sel.bind_as.length > 0
-    ? `, binding ${selectorCount(sel).plural ? "them" : "it"} as ${sel.bind_as.replace(/[-_]/g, " ")}`
-    : "";
+  if (typeof sel.bind_as !== "string" || sel.bind_as.length === 0) return "";
+  const norm = sel.bind_as.toLowerCase().replace(/[-_\s]+/g, "_");
+  if (GENERIC_BINDINGS.has(norm)) return "";
+  return ` (referred to below as the ${sel.bind_as.replace(/[-_]/g, " ")})`;
 }
 
 export function selectionLimit(sel: P, noun: string): string {

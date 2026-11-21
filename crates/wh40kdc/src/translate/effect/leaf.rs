@@ -101,6 +101,8 @@ fn stat_change(m: &P, what: &str) -> String {
 
 /// Characteristics a model rolls against, where a better value is a lower number ("3+").
 const ROLL_TARGET_STATS: [&str; 4] = ["Sv", "WS", "BS", "Ld"];
+/// Characteristics measured in inches.
+const DISTANCE_STATS: [&str; 3] = ["M", "Range", "detection-range"];
 
 fn bounds(m: &P) -> String {
     // An improved roll target is capped from below: "this cannot improve a model's Save to better than 3+".
@@ -113,14 +115,14 @@ fn bounds(m: &P) -> String {
         && nn(m, "maximum").is_none()
     {
         if let Some(minimum) = nn(m, "minimum") {
-            return format!(" (to no better than {}+)", jv(minimum));
+            return format!(", to no better than {}+", jv(minimum));
         }
     }
     let min = nn(m, "minimum")
-        .map(|v| format!(" (to a minimum of {})", jv(v)))
+        .map(|v| format!(", to a minimum of {}", jv(v)))
         .unwrap_or_default();
     let max = nn(m, "maximum")
-        .map(|v| format!(" (to a maximum of {})", jv(v)))
+        .map(|v| format!(", to a maximum of {}", jv(v)))
         .unwrap_or_default();
     min + &max
 }
@@ -187,23 +189,55 @@ fn attack_maker(target: Option<&Value>, m: &P, subj: &str) -> String {
 }
 
 fn stat_modifier(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
-    // AP is printed negative; the DSL stores its magnitude.
-    let mut owned;
-    let mut m = m;
-    if sv(m, "stat") == Some("AP")
+    let stat_key = jstr(m.get("stat"));
+    let owned;
+    let m = if stat_key == "AP"
         && sv(m, "operation") == Some("set")
         && m.get("value")
             .and_then(Value::as_f64)
             .is_some_and(|v| v > 0.0)
     {
-        owned = m.clone();
-        owned.insert(
+        // AP is printed negative; the DSL stores its magnitude.
+        let mut copy = m.clone();
+        copy.insert(
             "value".into(),
             Value::String(format!("-{}", jstr(m.get("value")))),
         );
-        m = &owned;
-    }
-    let stat = format!("{} characteristic", stat_name(m.get("stat")));
+        owned = copy;
+        &owned
+    } else if ROLL_TARGET_STATS.contains(&stat_key.as_str())
+        && sv(m, "operation") == Some("set")
+        && m.get("value").is_some_and(Value::is_number)
+    {
+        // Roll-target stats (Sv, WS, BS, Ld) set to a number print with a trailing "+" ("2+").
+        let mut copy = m.clone();
+        copy.insert(
+            "value".into(),
+            Value::String(format!("{}+", jstr(m.get("value")))),
+        );
+        owned = copy;
+        &owned
+    } else if DISTANCE_STATS.contains(&stat_key.as_str())
+        && matches!(sv(m, "operation"), Some("add" | "subtract" | "set"))
+        && m.get("value")
+            .is_some_and(|v| v.is_number() || v.as_str().is_some_and(|s| !s.ends_with('"')))
+    {
+        // Distance stats (M, Range, detection-range) print with inches on add/subtract/set.
+        let mut copy = m.clone();
+        copy.insert(
+            "value".into(),
+            Value::String(format!("{}\"", dice_case(m.get("value")))),
+        );
+        owned = copy;
+        &owned
+    } else {
+        m
+    };
+    let stat = if stat_key == "detection-range" {
+        "detection range".to_string()
+    } else {
+        format!("{} characteristic", stat_name(m.get("stat")))
+    };
     if is_true(m, "incoming") {
         return format!(
             "{}{}{}",
@@ -212,7 +246,7 @@ fn stat_modifier(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String
             bounds(m)
         );
     }
-    if ctx.attack_on_target && ATTACK_STATS.contains(&jstr(m.get("stat")).as_str()) {
+    if ctx.attack_on_target && ATTACK_STATS.contains(&stat_key.as_str()) {
         return format!(
             "{}{}{}",
             stat_change(m, &format!("the {stat} of that attack")),
@@ -227,6 +261,15 @@ fn stat_modifier(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String
             weapon_holder(target, ctx)
         );
         return format!("{}{}", stat_change(m, &what), bounds(m));
+    }
+    if target.and_then(Value::as_str) == Some("attacker")
+        && ATTACK_STATS.contains(&stat_key.as_str())
+    {
+        return format!(
+            "{}{}",
+            stat_change(m, &format!("the {stat} of the attacking unit's attacks")),
+            bounds(m)
+        );
     }
     format!(
         "{}{}",
@@ -280,55 +323,64 @@ fn ignore_modifiers(m: &P, subj: &str) -> String {
     )
 }
 
-fn roll_modifier(m: &P, subj: &str) -> String {
+const ATTACK_ROLLS: [&str; 3] = ["hit", "wound", "damage"];
+
+/// Whether a weapon filter only restates the enclosing `while making <type> attacks` condition.
+fn suppressed_weapon_scope(m: &P, ctx: &Ctx) -> String {
+    if !has_weapon(m) {
+        return String::new();
+    }
+    let w = obj(m.get("weapons"));
+    if let Some(sup) = ctx.suppress_weapon_type.as_deref() {
+        if sv(w, "type") == Some(sup) && w.len() == 1 {
+            return String::new();
+        }
+    }
+    weapon_roll_scope(m)
+}
+
+fn roll_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
     // A bound roll's result as the value ("add 1 for each of those mortal wounds", one roll for both).
     let bound = m.get("value").and_then(Value::as_object).is_some_and(|q| {
         q.get("roll_var").is_some_and(Value::is_string)
             && q.get("successes_on").is_none_or(Value::is_null)
     });
-    let value = (sv(m, "value_from") == Some("previous-roll") || bound)
+    let bound_value = (sv(m, "value_from") == Some("previous-roll") || bound)
         .then_some("the result of that roll");
     let cap = nn(m, "cap")
-        .map(|c| format!(" (to a maximum of {})", signed(m.get("operation"), Some(c))))
+        .map(|c| format!(", to a maximum of {}", signed(m.get("operation"), Some(c))))
         .unwrap_or_default();
     let rolls = format!("{} rolls", roll_name(m.get("roll")));
+    let scope = suppressed_weapon_scope(m, ctx);
     // "Halve Advance and Charge rolls made for that unit": the result is halved, with no value.
     if sv(m, "operation") == Some("halve") {
-        return format!(
-            "halve {}{}",
-            of_or_possessive(subj, &rolls),
-            weapon_roll_scope(m)
-        );
+        return format!("halve {}{scope}", of_or_possessive(subj, &rolls));
     }
-    let subtract = sv(m, "operation") == Some("subtract");
-    let (verb, prep) = if subtract {
+    let mut sub = matches!(sv(m, "operation"), Some("subtract" | "worsen"));
+    let n = num(m.get("value"));
+    let val = if let Some(bv) = bound_value {
+        bv.to_string()
+    } else if !n.is_nan() && n < 0.0 {
+        sub = !sub;
+        fnum(n.abs())
+    } else {
+        dice_case(m.get("value"))
+    };
+    let (verb, prep) = if sub {
         ("subtract", "from")
     } else {
         ("add", "to")
     };
     if is_true(m, "incoming") {
-        let change = match value {
-            Some(value) => format!("{verb} {value} {prep}"),
-            None => format!("apply {} to", signed(m.get("operation"), m.get("value"))),
-        };
         return format!(
-            "{}{change} the {} roll{cap}",
+            "{}{verb} {val} {prep} the {} roll{cap}",
             incoming_lead(m, subj),
             roll_name(m.get("roll"))
         );
     }
-    if let Some(value) = value {
-        return format!(
-            "{verb} {value} {prep} {}{}{cap}",
-            of_or_possessive(subj, &rolls),
-            weapon_roll_scope(m)
-        );
-    }
     format!(
-        "{subj} {} {} to {rolls}{}{cap}",
-        v(subj, "gets"),
-        signed(m.get("operation"), m.get("value")),
-        weapon_roll_scope(m)
+        "{verb} {val} {prep} {}{scope}{cap}",
+        of_or_possessive(subj, &rolls)
     )
 }
 
@@ -340,6 +392,7 @@ fn re_roll(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
     } else {
         format!("{} roll", roll_name(m.get("roll")))
     };
+    let is_attack_roll = ATTACK_ROLLS.contains(&rn.as_str());
     let cnt = m.get("count").filter(|c| c.is_number());
     let failed = if sv(m, "subset") == Some("all-failures") {
         "failed "
@@ -379,6 +432,17 @@ fn re_roll(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
                 }
             )
         }
+        None if is_attack_roll => {
+            if ones {
+                format!("{noun}s of 1")
+            } else if ones_and_twos {
+                format!("{noun}s of 1 or 2")
+            } else if sv(m, "subset") == Some("all-failures") {
+                format!("failed {noun}s")
+            } else {
+                format!("{noun}s")
+            }
+        }
         None if ones => format!("{} {noun} of 1", if any { "any" } else { "a" }),
         None if ones_and_twos => format!("{} {noun} of 1 or 2", if any { "any" } else { "a" }),
         None if sv(m, "subset") == Some("all-failures") => format!("a failed {noun}"),
@@ -393,6 +457,7 @@ fn re_roll(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
     } else {
         "can"
     };
+    let scope = suppressed_weapon_scope(m, ctx);
     if is_true(m, "incoming") {
         return format!(
             "{}the attacking player {can} re-roll {which}{pool}",
@@ -414,17 +479,14 @@ fn re_roll(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
     let owner = if own {
         String::new()
     } else {
-        let attacks = if ["hit", "wound", "damage"].contains(&rn.as_str()) {
+        let attacks = if is_attack_roll {
             "attacks made by "
         } else {
             ""
         };
         format!(" for {attacks}{holder}")
     };
-    format!(
-        "you {can} re-roll {which}{owner}{}{pool}",
-        weapon_roll_scope(m)
-    )
+    format!("you {can} re-roll {which}{owner}{scope}{pool}")
 }
 
 fn roll_result(m: &P, subj: &str) -> String {
@@ -571,7 +633,7 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
     match sv(e, "type").unwrap_or("") {
         "stat-modifier" => stat_modifier(target, m, subj, ctx),
         "ignore-modifiers" => ignore_modifiers(m, subj),
-        "roll-modifier" => roll_modifier(m, subj),
+        "roll-modifier" => roll_modifier(m, subj, ctx),
         "re-roll" => re_roll(target, m, subj, ctx),
         "roll-result" => roll_result(m, subj),
         "end-attack-sequence" => "the attack sequence ends".to_string(),
@@ -597,7 +659,7 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
         "ability-activate" => ability_activate(m, subj),
         "oath-modifier" => oath_modifier(m, subj, ctx),
         "permission" => permission(m, subj, ctx),
-        "targeting" => targeting(m, subj, ctx),
+        "targeting" => targeting(e, m, subj, ctx),
         "weapon-ability-range" => weapon_ability_range(m, subj),
         "counts-as" => counts_as(m, subj, ctx),
         "rule-state" => rule_state(m, subj),

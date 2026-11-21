@@ -4,17 +4,19 @@
  * ASCII-only; pinned byte-for-byte across the ports by `conformance/effect-translation`.
  */
 
-import { alternativeFilters, andList, designationPhrase, dekebab, idLabel, keywordAlternatives, orList, placeRefPhrase, rangePhrase, statePhrase, territoryPhrase, titleCase, type P } from "./condition-refs.js";
+import { alternativeFilters, andList, designationPhrase, dekebab, idLabel, keywordAlternatives, orList, placeRefPhrase, rangePhrase, statePhrase, territoryPhrase, titleCase, withArticle, withinClause, type P } from "./condition-refs.js";
 import { designationLabel } from "./designations.js";
 
-export { andList, dekebab, orList, rangePhrase, titleCase };
+export { andList, dekebab, orList, rangePhrase, titleCase, withArticle };
 
 /** Rendering context threaded down from the containers to the leaves. */
 export interface Ctx {
-  /** Inside a `select-units` / `for-each-unit`: the selected unit reads "that unit". */
+  /** Inside a `select-units` / `for-each-unit`: the selected unit reads "that unit" (or "those units" when plural). */
   selectedUnit?: boolean;
-  /** Inside a model-level selection: the selected model reads "that model". */
+  /** Inside a model-level selection: the selected model reads "that model" (or "those models" when plural). */
   selectedModel?: boolean;
+  /** Inside a plural `select-units` without an enclosing loop: selected-unit reads "those units" / "those models". */
+  selectedPlural?: boolean;
   /** Explicit beneficiary binding inside a designated attack. */
   unitSubject?: string;
   /** Inside an aura: the recipient reads "that unit". */
@@ -23,8 +25,12 @@ export interface Ctx {
   eachModel?: boolean;
   /** The ability's trigger already says a unit or model is destroyed; leaves must not repeat it. */
   destroyedTrigger?: boolean;
+  /** The ability's trigger already says damage/an attack is allocated; damage-reduction must not repeat it. */
+  allocatedTrigger?: boolean;
   /** Inside a designation's `attackers-of-target` entry: a characteristic change applies to each attack against the target. */
   attackOnTarget?: boolean;
+  /** An enclosing `attack-is` already stated this attack type ("ranged"/"melee"), so bare weapon-type filters don't repeat it. */
+  suppressWeaponType?: string;
 }
 
 /** `{rating: true}`: the rating the unit's datasheet prints for this rule (substituted when a unit is known). */
@@ -136,9 +142,9 @@ export function testName(test: unknown): string {
   return TEST_NAMES[t] ?? titleCase(t);
 }
 
-/** Does a subject noun phrase take a plural verb? (`enemy units within 6"`, `all friendly units`). */
+/** Does a subject noun phrase take a plural verb? (`enemy units within 6"`, `friendly units`, `those units`). */
 export function isPlural(subj: string): boolean {
-  return /(^| )(units|models)\b/.test(subj) || /^all /.test(subj) || /^targets /.test(subj);
+  return /(^| )(units|models)\b/.test(subj) || /^(all|those) /.test(subj) || /^targets /.test(subj);
 }
 
 const PLURAL_VERBS: Record<string, string> = {
@@ -328,23 +334,25 @@ const ROLE_SUBJECTS: Record<string, string> = {
 export function filterSubject(f: P, ctx: Ctx = {}): string {
   const owner = f.owner === "friendly" ? "friendly " : f.owner === "enemy" ? "enemy " : "";
   const all = Array.isArray(f.all_of) ? `${(f.all_of as unknown[]).map(jstr).join(" ")} ` : "";
+  const unitIdNames = Array.isArray(f.unit_ids) ? orList(f.unit_ids.map((id) => titleCase(jstr(id)))) : "";
+  const inlineUnitIds = unitIdNames && !all && !Array.isArray(f.any_of_filters) ? `${unitIdNames} ` : "";
   const noun = f.level === "model" ? `${f.attachment_role === "bodyguard" ? "Bodyguard " : f.attachment_role === "leader" ? "Leader " : ""}models` : "units";
   // "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
   const compact = keywordAlternatives(f);
-  let s = compact ? `${owner}${orList(compact)} ${noun}` : `${owner}${all}${noun}`;
+  let s = compact ? `${owner}${orList(compact)} ${noun}` : `${owner}${all}${inlineUnitIds}${noun}`;
   // Any other alternatives: "units that are PSYKER units or units that are Battle-shocked".
   if (Array.isArray(f.any_of_filters) && !compact) s += ` that are ${orList(alternativeFilters(f).map((a) => filterSubject(a, ctx).replace(/^all /, "")))}`;
   if (Array.isArray(f.any_of)) s += ` with the ${orList((f.any_of as unknown[]).map(jstr))} keyword`;
   if (Array.isArray(f.none_of)) s += ` (excluding ${orList((f.none_of as unknown[]).map(jstr))} ${noun})`;
   if (Array.isArray(f.not_all_of)) s += ` (excluding ${(f.not_all_of as unknown[]).map(jstr).join(" ")} ${noun})`;
   if (Array.isArray(f.model_names)) s += ` named ${orList(f.model_names.map(jstr))}`;
-  if (Array.isArray(f.unit_ids)) s += ` with unit ID ${orList(f.unit_ids.map(jstr))}`;
+  if (unitIdNames && !inlineUnitIds) s += ` (${unitIdNames})`;
   const within = f.within as P | undefined;
   // "each model in this unit within 3\" of an enemy unit": the models' unit comes before their range.
   const memberFirst = f.level === "model" && f.member_of != null && within != null;
   if (memberFirst) s += memberOf(f.member_of, ctx);
   const of = within?.of === "recipient" && ctx.eachModel ? "that model" : within?.of != null ? placeRefPhrase(within.of) : "";
-  if (within != null) s += ` ${within.wholly === true ? "wholly " : ""}within ${rangePhrase(within.range)}${of ? ` of ${of}` : ""}`;
+  if (within != null) s += withinClause(within, of);
   s += filterRelations(memberFirst ? { ...f, member_of: undefined } : f, ctx);
   if (f.visible != null) s += ` visible to ${effectSubject((f.visible as P).to, ctx)}`;
   if (f.designated != null) s += ` that are ${designationPhrase(jstr(f.designated), true)}${f.designated_by != null ? ` by ${effectSubject(f.designated_by, ctx)}` : ""}`;
@@ -352,9 +360,7 @@ export function filterSubject(f: P, ctx: Ctx = {}): string {
   if (f.state != null) s += ` that are ${statePhrase(jstr(f.state))}`;
   if (Array.isArray(f.not_states)) s += ` that are ${andList((f.not_states as unknown[]).map((x) => statePhrase(jstr(x), true)))}`;
   if (f.excluding != null) s += ` other than ${effectSubject(f.excluding, ctx)}`;
-  const bounded = within != null || f.visible != null || f.designated != null || f.not_designated != null || f.state != null || f.not_states != null ||
-    f.embarked_in != null || f.member_of != null || f.engaged_with != null || f.not_engaged_with != null;
-  return bounded ? s : `all ${s}`;
+  return s;
 }
 
 /** A unit filter's relations to other units and abilities: " embarked within this model", " with the Deep Strike ability". */
@@ -384,25 +390,30 @@ function filterRelations(f: P, ctx: Ctx): string {
   return s;
 }
 
-/** " in the unit": the unit a model-level filter's models are in. */
+/** " in this unit": the unit a model-level filter's models are in. */
 function memberOf(unit: unknown, ctx: Ctx): string {
-  return ` in ${unit === "this-unit" ? "the unit" : effectSubject(unit, ctx)}`;
+  return ` in ${unit === "this-unit" ? "this unit" : effectSubject(unit, ctx)}`;
 }
 
 function articled(s: string): string {
-  return `${/^[aeiou]/i.test(s) ? "an" : "a"} ${s}`;
+  return withArticle(s);
 }
 
 /** An effect target (a unit-ref) as the effect's subject. */
 export function effectSubject(target: unknown, ctx: Ctx = {}): string {
-  if (target == null || target === "this-unit") return ctx.unitSubject ?? (ctx.selectedUnit || ctx.selectedModel ? "this unit" : "the unit");
-  if (target === "selected-unit") return ctx.selectedModel ? "that model" : ctx.selectedUnit ? "that unit" : "the selected unit";
-  if (target === "recipient") return ctx.auraRecipient ? "that unit" : ctx.eachModel ? "that model" : "the unit";
-  if (target === "attacker") return ctx.unitSubject ?? "the attacking unit";
+  if (target == null || target === "this-unit") return ctx.unitSubject ?? "this unit";
+  if (target === "selected-unit") {
+    if (ctx.selectedModel) return ctx.selectedPlural ? "those models" : "that model";
+    if (ctx.selectedUnit) return ctx.selectedPlural ? "those units" : "that unit";
+    return "the selected unit";
+  }
+  if (target === "recipient") return ctx.eachModel || ctx.selectedModel ? "that model" : ctx.auraRecipient || ctx.selectedUnit ? "that unit" : "this unit";
+  if (target === "event-subject" && ctx.unitSubject === "that unit") return "that unit";
+  if (target === "attacker") return ctx.unitSubject && ctx.unitSubject !== "that unit" ? ctx.unitSubject : "the attacking unit";
   if (typeof target === "string") return ROLE_SUBJECTS[target] ?? dekebab(target);
   const r = target as P;
   if (typeof r.event_var === "string") return "that unit";
-  if (typeof r.selection_var === "string") return `the bound ${jstr(r.selection_var).replace(/_/g, " ")}`;
+  if (typeof r.selection_var === "string") return `the chosen ${jstr(r.selection_var).replace(/_/g, " ")}`;
   if (typeof r.stratagem_target === "string") return `the ${dekebab(r.stratagem_target.replace(/^the-/, ""))} target`;
   return filterSubject(r, ctx);
 }
@@ -411,9 +422,9 @@ export function effectSubject(target: unknown, ctx: Ctx = {}): string {
 export function weaponHolder(target: unknown, ctx: Ctx): string {
   if (target === "this-model") return "this model";
   if (ctx.unitSubject && (target == null || target === "this-unit" || target === "attacker")) return `models in ${ctx.unitSubject}`;
-  if (target === "selected-unit" && ctx.selectedModel) return "that model";
+  if (target === "selected-unit" && ctx.selectedModel) return ctx.selectedPlural ? "those models" : "that model";
   if (target == null || target === "this-unit") return "models in this unit";
-  if (target === "selected-unit") return ctx.selectedUnit ? "models in that unit" : "models in the selected unit";
+  if (target === "selected-unit") return ctx.selectedUnit ? (ctx.selectedPlural ? "models in those units" : "models in that unit") : "models in the selected unit";
   return effectSubject(target, ctx);
 }
 
@@ -428,11 +439,11 @@ export function regionPhrase(r: P): string {
   return where;
 }
 
-/** A tag an effect applies: a registered id prints the rules' term, a legacy upper-case tag stays as printed, others read "marked as …". */
+/** A tag an effect applies: a registered id prints the rules' term, a legacy upper-case tag stays as printed, others read "designated as …". */
 export function designationFor(tag: string): string {
   const label = designationLabel(tag);
   if (label != null) return label;
-  return tag === tag.toUpperCase() ? tag : `marked as ${dekebab(tag)}`;
+  return tag === tag.toUpperCase() ? tag : `designated as ${titleCase(tag)}`;
 }
 
 const MOVED: Record<string, string> = {

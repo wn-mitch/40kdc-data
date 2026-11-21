@@ -48,7 +48,7 @@ describe("Semantic authoring Lone Operative protection on a selection", () => {
         { type: "matches", parameters: { subject: "selected-unit", filter: { within: { range: { inches: 12 }, of: "this-model" } } } },
       ],
     });
-    expect(describeAbility(result.mechanics as never)).toContain("does not have the Lone Operative ability or the selected unit is an attached unit or the selected unit is within 12\" of this model");
+    expect(describeAbility(result.mechanics as never)).toContain("without the Lone Operative ability or that is an attached unit or within 12\" of this model");
   });
 
   it("refuses an exclusion for the other side", () => {

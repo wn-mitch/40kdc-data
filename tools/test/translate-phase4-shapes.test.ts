@@ -18,10 +18,10 @@ const BATTLE_SIZE = { incursion: 1, "strike-force": 2, onslaught: 3 };
 describe("describer: geometry and relations", () => {
   it("says wholly within for a wholly aura filter and a wholly selection", () => {
     expect(render(leaf("feel-no-pain", { threshold: 6, against: "mortal" }, { owner: "friendly", all_of: ["GREY KNIGHTS"], within: { range: { inches: 6 }, wholly: true } }))).toBe(
-      'Friendly GREY KNIGHTS units wholly within 6" have the Feel No Pain 6+ ability against mortal wounds.',
+      'Friendly GREY KNIGHTS units wholly within 6" have Feel No Pain 6+ against mortal wounds.',
     );
     expect(render({ type: "select-units", selector: { filter: { owner: "friendly", all_of: ["YNNARI", "INFANTRY"], within: { range: { inches: 6 }, wholly: true } }, count: { min: 1, max: 1 } }, effect: leaf("move", { move_type: "embark" }, "selected-unit") })).toBe(
-      'Select one friendly YNNARI INFANTRY unit wholly within 6": that unit can embark.',
+      'Select one friendly YNNARI INFANTRY unit wholly within 6". That unit can embark.',
     );
   });
 
@@ -34,23 +34,23 @@ describe("describer: geometry and relations", () => {
 
   it("names passengers, the bearer's Transport, the centre of the battlefield and abilities a unit lacks", () => {
     expect(render(leaf("move", { move_type: "disembark", mode: "assault" }, { owner: "friendly", embarked_in: "this-unit" }))).toBe(
-      "Friendly units embarked within the unit can disembark using the Assault Disembarkation rules.",
+      "Friendly units embarked within this unit can disembark using the Assault Disembarkation rules.",
     );
     expect(render(leaf("ability-grant", { ability: "scouts", value: 9 }, "bearer-transport"))).toBe('The Transport this unit is embarked within gains the Scouts 9" ability.');
     expect(render({ type: "conditional", condition: { type: "matches", parameters: { subject: "this-model", filter: { within: { of: "battlefield-centre", range: { inches: 6 } } } } }, effect: leaf("feel-no-pain", { threshold: 4 }, "this-model") })).toBe(
-      'While this model is within 6" of the centre of the battlefield, this model has the Feel No Pain 4+ ability.',
+      'While this model is within 6" of the centre of the battlefield, this model has Feel No Pain 4+.',
     );
     expect(describeCondition({ type: "matches", parameters: { filter: { within: { of: { owner: "friendly", all_of: ["INFANTRY"], lacks_ability: ["lone-operative"] }, range: { inches: 3 } } } } })).toBe(
-      'the unit is within 3" of a friendly INFANTRY unit without the Lone Operative ability',
+      'this unit is within 3" of a friendly INFANTRY unit without the Lone Operative ability',
     );
   });
 
   it("joins placement limits with 'and' and reads a bare enemy filter as all enemy models", () => {
     expect(render(leaf("set-up", { to: "battlefield", from: "strategic-reserves", via: "deep-strike", in_region: { region: { rule_region: { region_id: "flow-of-magic" } }, wholly: true }, away_from: [{ of: { owner: "enemy" }, range: { inches: 6 } }] }))).toBe(
-      'The unit can be set up on the battlefield from Strategic Reserves using the Deep Strike rules wholly within Flow of Magic and more than 6" away from all enemy models.',
+      'This unit can be set up on the battlefield from Strategic Reserves using the Deep Strike rules wholly within Flow of Magic and more than 6" away from all enemy models.',
     );
     expect(render(leaf("set-up", { to: "battlefield", from: "strategic-reserves", away_from: [{ of: { owner: "enemy", designated: "afflicted" }, range: { inches: 6 } }, { of: { owner: "enemy", not_designated: "afflicted" }, range: { inches: 8 } }] }))).toBe(
-      'The unit can be set up on the battlefield from Strategic Reserves more than 6" away from enemy units that are Afflicted and 8" away from enemy units that are not Afflicted.',
+      'This unit can be set up on the battlefield from Strategic Reserves more than 6" away from enemy units that are Afflicted and 8" away from enemy units that are not Afflicted.',
     );
     expect(render(leaf("return-models", { count: 1, wounds_remaining: "D3", placement: ["closest-to-destruction", "unengaged"], detach: true, starting_strength: 1 }, "this-model"))).toBe(
       "This model is set up again as close as possible to where it was destroyed and not within Engagement Range of any enemy units with D3 wounds remaining, as a separate unit with a Starting Strength of 1 (it is no longer part of its attached unit).",
@@ -62,9 +62,9 @@ describe("describer: the ability's own unit inside a selection (ability-unit)", 
   const hitBy = (subject: string) => ({ type: "select-units", selector: { filter: { owner: "enemy" }, count: { min: 1, max: 1 }, eligibility: { type: "happened", parameters: { event: "after-roll", subject, object: "this-unit", filter: { roll: "hit", result: "success" }, window: "phase" } } }, effect: leaf("test", { test: "battle-shock" }, "selected-unit") });
 
   it("names the attacking unit when it is the ability's unit, not the candidate", () => {
-    expect(render(hitBy("ability-unit"))).toBe("Select one enemy unit that was hit by an attack made by this unit this phase: that unit must take a Battle-shock test.");
+    expect(render(hitBy("ability-unit"))).toBe("Select one enemy unit that was hit by an attack made by this unit this phase. That unit must take a Battle-shock test.");
     // this-unit inside eligibility is the candidate itself: no attacker is named.
-    expect(render(hitBy("this-unit"))).toBe("Select one enemy unit that was hit by an attack this phase: that unit must take a Battle-shock test.");
+    expect(render(hitBy("this-unit"))).toBe("Select one enemy unit that was hit by an attack this phase. That unit must take a Battle-shock test.");
   });
 
   it("is the buffed unit for the cruncher", () => {
@@ -79,18 +79,18 @@ describe("describer: movement", () => {
       "That unit is eligible to disembark in a turn in which it Advanced; if it does, it counts as having made a Normal move this turn.",
     );
     expect(render(leaf("move", { move_type: "disembark", ends_within: { range: { inches: 6 }, of: "this-unit", wholly: true }, allow_engagement: true }, "selected-unit"))).toBe(
-      'The selected unit can disembark, ending that move wholly within 6" of the unit; it can end that move within Engagement Range of enemy units.',
+      'The selected unit can disembark, ending that move wholly within 6" of this unit; it can end that move within Engagement Range of enemy units.',
     );
     expect(render(leaf("set-up", { to: "strategic-reserves", mandatory: true }, "this-model"))).toBe("This model must be placed into Strategic Reserves.");
     expect(render(leaf("set-up", { to: "battlefield", from: "strategic-reserves", arrives: "next-movement-phase", allow_first_round: true }))).toBe(
-      "The unit can be set up on the battlefield from Strategic Reserves in the Reinforcements step of your next Movement phase (even in the first battle round).",
+      "This unit can be set up on the battlefield from Strategic Reserves in the Reinforcements step of your next Movement phase (even in the first battle round).",
     );
   });
 
   it("names the weapons a shoot permission allows, with the subject's own pronoun", () => {
     const leader = { level: "model", member_of: "this-unit", model_names: ["Squad Leader"] };
     expect(render(leaf("permission", { activity: "shoot", allow: true, weapons: [{ name: "drone blaster" }, { name: "drone net" }] }, leader))).toBe(
-      "Models named Squad Leader in the unit are eligible to shoot with their drone blaster or drone net.",
+      "Models named Squad Leader in this unit are eligible to shoot with their drone blaster or drone net.",
     );
     expect(render(leaf("permission", { activity: "shoot", allow: true, weapons: [{ name: "drone net" }] }, "this-model"))).toBe(
       "This model is eligible to shoot with its drone net.",
@@ -103,7 +103,7 @@ describe("describer: movement", () => {
 
   it("renders typed pass-through items and the moved-over predicate", () => {
     expect(render(leaf("move-modifier", { applies_to_moves: ["charge"], passthrough: [{ kind: "models", excluding: ["MONSTER", "VEHICLE"] }, { kind: "terrain", height: "up-to-4" }] }))).toBe(
-      'The unit can move over models (excluding MONSTER and VEHICLE models) and terrain features 4" or lower as though they were not there, during its Charge moves.',
+      'This unit can move over models (excluding MONSTER and VEHICLE models) and terrain features 4" or lower as though they were not there, during its Charge moves.',
     );
     expect(describeCondition({ type: "moved-over", parameters: { by: "this-model" } })).toBe("the unit was moved over by this model during that move");
   });
@@ -114,7 +114,7 @@ describe("describer: dice", () => {
     const effect = { type: "roll", dice: "D3", roll_var: "absorbed", effect: { type: "sequence", steps: [
       leaf("mortal-wounds", { count: { roll_var: "absorbed" } }, "selected-unit"), leaf("heal", { amount: { roll_var: "absorbed" } }, "this-model")] } };
     expect(render(effect)).toBe(
-      "Roll D3, then:\n  -> The selected unit suffers a number of mortal wounds equal to the result of that roll.\n  -> This model regains up to a number of lost wounds equal to the result of that roll.",
+      "Roll D3, then:\n  - The selected unit suffers a number of mortal wounds equal to the result of that roll.\n  - This model regains up to a number of lost wounds equal to the result of that roll.",
     );
   });
 
@@ -125,7 +125,7 @@ describe("describer: dice", () => {
         { type: "ability-part", name: "Total Carnage", effect: { type: "dice-gated", from: { roll_var: "bok" }, requirement: { any_of: [{ type: "pair", min_value: 6 }, { type: "triple", min_value: 3 }] }, on_success: { type: "no-effect" } } }] } };
     const text = render(effect);
     expect(text).toContain("Roll 8D6, plus one D6 for each die in your Blessings of Khorne pool (a Blessings of Khorne roll), then:");
-    expect(text).toContain("- Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, all friendly units get +1 to Charge rolls.");
+    expect(text).toContain("- Unbridled Bloodlust: using a pair of 1+ from that roll's unused dice, add 1 to friendly units' Charge rolls.");
     expect(text).toContain("using a pair of 6+ or triple of 3+ from that roll's unused dice");
   });
 
@@ -136,14 +136,14 @@ describe("describer: dice", () => {
   });
 
   it("renders an ability's own roll, unmodified results, fail thresholds and mandatory re-rolls", () => {
-    expect(render(leaf("roll-modifier", { roll: { of_ability: "reanimation-protocols-necrons" }, operation: "add", value: 1 }))).toBe("The unit gets +1 to Reanimation Protocols rolls.");
-    expect(render(leaf("roll-result", { roll: "hit", result: 6, unmodified: true }))).toBe("The unit's Hit rolls count as an unmodified 6.");
+    expect(render(leaf("roll-modifier", { roll: { of_ability: "reanimation-protocols-necrons" }, operation: "add", value: 1 }))).toBe("Add 1 to this unit's Reanimation Protocols rolls.");
+    expect(render(leaf("roll-result", { roll: "hit", result: 6, unmodified: true }))).toBe("This unit's Hit rolls count as an unmodified 6.");
     // The performing unit's own Agile Manoeuvre roll (compile-manoeuvre-own-roll.ts): the roll is named, not every roll.
-    expect(render(leaf("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, subject: "event-subject" }, "event-subject"))).toMatch(/the triggering unit gets \+1 to Agile Manoeuvre rolls/iu);
+    expect(render(leaf("roll-modifier", { roll: "manoeuvre", operation: "add", value: 1, subject: "event-subject" }, "event-subject"))).toMatch(/add 1 to the triggering unit's Agile Manoeuvre rolls/iu);
     expect(render(leaf("roll-result", { roll: "hit", fails_on: 3, weapons: { type: "ranged" }, incoming: true }))).toBe(
-      "Each time a ranged attack targets the unit, an unmodified Hit roll of 1-3 for that attack always fails.",
+      "Each time a ranged attack targets this unit, an unmodified Hit roll of 1-3 for that attack always fails.",
     );
-    expect(render(leaf("re-roll", { roll: "hit", subset: "ones", mandatory: true }, "event-subject"))).toBe("You must re-roll a Hit roll of 1 for attacks made by the triggering unit.");
+    expect(render(leaf("re-roll", { roll: "hit", subset: "ones", mandatory: true }, "event-subject"))).toBe("You must re-roll Hit rolls of 1 for attacks made by the triggering unit.");
     expect(render(leaf("resource-spend", { pool: "blessings-of-khorne-pool", amount: 3, requirement: { type: "triple", min_value: 6 } }))).toBe("Spend 3 Blessings of Khorne dice forming a triple of 6+.");
     expect(render(leaf("resource-spend", { pool: "fate-dice-pool", amount: 1, face: 4 }))).toBe("Spend 1 Fate die showing a 4.");
   });
@@ -155,7 +155,7 @@ describe("describer: battle size and counts", () => {
       "You gain 2/4/6 Battle Focus tokens (Incursion/Strike Force/Onslaught).",
     );
     expect(render({ type: "select-units", selector: { filter: { owner: "enemy" }, count: { max: BATTLE_SIZE } }, effect: leaf("designate", { subject: "selected-unit", tag: "afflicted" }, "selected-unit") })).toBe(
-      "Select up to 1/2/3 enemy units (Incursion/Strike Force/Onslaught): that unit is Afflicted.",
+      "Select up to 1/2/3 enemy units (Incursion/Strike Force/Onslaught). Those units are Afflicted.",
     );
     expect(render({ type: "conditional", condition: { type: "battle-size", parameters: { size: "incursion" } }, effect: leaf("add-unit", { datasheet: "poxwalkers", count: 1, starting_strength: 10, placement: "strategic-reserves" }) })).toBe(
       "If the battle size is Incursion, add a Poxwalkers unit with a Starting Strength of 10 to your army in Strategic Reserves.",
@@ -164,7 +164,7 @@ describe("describer: battle size and counts", () => {
 
   it("prints counts and board scaling sources", () => {
     expect(render({ type: "select-units", selector: { filter: { owner: "friendly", all_of: ["ORKS"] }, count: { max: { count_of: "battle-round" } } }, effect: { type: "no-effect" } })).toBe(
-      "Select any number of friendly ORKS units (at most the battle round number): nothing happens.",
+      "Select any number of friendly ORKS units (at most the battle round number). Nothing happens.",
     );
     expect(render(leaf("return-models", { count: { count_of: "models-in-bearer-unit", keyword: "SPYDER" } }, "selected-unit"))).toBe(
       "Return a number of destroyed models equal to the number of SPYDER models in this unit to the selected unit, each with its full wounds remaining.",
@@ -177,7 +177,7 @@ describe("describer: battle size and counts", () => {
 
 describe("describer: abilities, rules and army", () => {
   it("renders the ability-modifier limits and ability-activate selection", () => {
-    expect(render(leaf("ability-modifier", { ability: "killing-blow-tau-empire", aspect: "end-round", operation: "set", value: 4 }))).toBe("The last battle round of the unit's Killing Blow ability is 4.");
+    expect(render(leaf("ability-modifier", { ability: "killing-blow-tau-empire", aspect: "end-round", operation: "set", value: 4 }))).toBe("The last battle round of this unit's Killing Blow ability is 4.");
     expect(render(leaf("ability-modifier", { ability: "overkill", aspect: "uses", operation: "set", value: 2, cap_per: { count: 1, period: "battle-round" } }, "this-model"))).toBe(
       "The number of uses of this model's Overkill ability is 2, but it can be used at most once per battle round.",
     );
@@ -185,9 +185,9 @@ describe("describer: abilities, rules and army", () => {
       "Increase the number of uses of that ability by 1, but not in the same phase as the use that triggered this.",
     );
     expect(render(leaf("ability-activate", { ability: "blessings-of-khorne", select: { by: "roll" } }))).toBe(
-      "Make a new Blessings of Khorne roll and activate one result it allows for the unit, in addition to any already active.",
+      "Make a new Blessings of Khorne roll and activate one result it allows for this unit, in addition to any already active.",
     );
-    expect(render(leaf("ability-activate", { ability: "reanimation-protocols-necrons", override: { amount: "D6" } }))).toBe("The unit resolves the Reanimation Protocols ability now, using D6 in place of its usual amount.");
+    expect(render(leaf("ability-activate", { ability: "reanimation-protocols-necrons", override: { amount: "D6" } }))).toBe("This unit resolves the Reanimation Protocols ability now, using D6 in place of its usual amount.");
   });
 
   it("joins a usage list into one lead", () => {
@@ -200,14 +200,14 @@ describe("describer: abilities, rules and army", () => {
     expect(render(leaf("rule-state", { direction: "suppressed", rule_kind: "core-rule", rule: "engaged-shooting-hit-penalty" }, "this-model"))).toBe(
       "This model does not suffer the -1 to Hit for shooting while within Engagement Range.",
     );
-    expect(render(leaf("rule-state", { direction: "suppressed", rule_kind: "core-rule", rule: "orders-end-on-battle-shock" }))).toBe("The unit keeps its Orders when it becomes Battle-shocked.");
+    expect(render(leaf("rule-state", { direction: "suppressed", rule_kind: "core-rule", rule: "orders-end-on-battle-shock" }))).toBe("This unit keeps its Orders when it becomes Battle-shocked.");
     expect(render(leaf("stat-modifier", { stat: "Ld", operation: "subtract", value: 1 }, "selected-unit"), { scope: { duration: "until-next-shooting-phase" } })).toBe(
       "Until the start of your next Shooting phase, subtract 1 from the selected unit's Leadership characteristic.",
     );
     expect(render(leaf("designate", { subject: "selected-unit", tag: "assailed", clears_on: "until-end-of-opponent-next-turn" }))).toBe(
-      "The selected unit is marked as assailed until the end of your opponent's next turn.",
+      "The selected unit is Assailed until the end of your opponent's next turn.",
     );
-    expect(render(leaf("test-exemption", { test: "battle-shock", window: "phase" }))).toBe("The unit does not need to take any further Battle-shock tests this phase.");
+    expect(render(leaf("test-exemption", { test: "battle-shock", window: "phase" }))).toBe("This unit does not need to take any further Battle-shock tests this phase.");
   });
 
   it("renders the army rules and composition limits", () => {
@@ -216,24 +216,24 @@ describe("describer: abilities, rules and army", () => {
     );
     expect(render(leaf("army-rule", { rule: "detachment-forbidden", detachment: "1st-company-task-force" }))).toBe("You cannot select the 1st Company Task Force Detachment.");
     expect(render(leaf("army-rule", { rule: "attachment", attach_as: { all_of: ["BATTLE SISTERS SQUAD"] } }))).toBe(
-      "A Leader that can be attached to BATTLE SISTERS SQUAD units can also be attached to the unit.",
+      "A Leader that can be attached to BATTLE SISTERS SQUAD units can also be attached to this unit.",
     );
     expect(describeCondition({ type: "army-faction", parameters: { faction: "necrons" } })).toBe("your Army Faction is NECRONS");
   });
 
   it("renders the D18 shapes", () => {
-    expect(render(leaf("datasheet-swap", { datasheet: "blue-horrors" }))).toBe("The unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position.");
+    expect(render(leaf("datasheet-swap", { datasheet: "blue-horrors" }))).toBe("This unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position.");
     expect(render(leaf("characteristic-resolution", { stat: "T", rule: "majority", tie: "highest", applies_to: "wound-roll", incoming: true }))).toBe(
-      "Each time an attack targets the unit, use the Toughness characteristic of the majority of its models (if tied, the highest) to determine the Wound roll.",
+      "Each time an attack targets this unit, use the Toughness characteristic of the majority of its models (if tied, the highest) to determine the Wound roll.",
     );
     expect(render(leaf("borrow-weapons", { from: { embarked_in: "this-unit" }, max_models: 2, weapons: { type: "ranged", exclude_keyword: [{ keyword_id: "one-shot" }] }, until: "attack-sequence" }))).toBe(
-      "The unit can use one ranged weapon (excluding weapons with [ONE SHOT]) from each of up to 2 models embarked within the unit until that unit finishes resolving its attacks; those models cannot shoot.",
+      "This unit can use one ranged weapon (excluding weapons with [ONE SHOT]) from each of up to 2 models embarked within this unit until the attacking unit finishes resolving its attacks; those models cannot shoot.",
     );
     expect(render(leaf("roll-modifier", { roll: "hit", operation: "add", value: 1, weapons: { type: "ranged", ref: { selected_by: { ability: "firing-deck" } } } }))).toBe(
-      "The unit gets +1 to Hit rolls with the ranged weapons selected for Firing Deck.",
+      "Add 1 to this unit's Hit rolls with the ranged weapons selected for Firing Deck.",
     );
     expect(render(leaf("targeting", { by: "event-subject", may: "redirect", target: { owner: "friendly", all_of: ["ANATHEMA PSYKANA"] }, to: "this-unit", if_eligible: true, kind: "attack" }, "attacker"))).toBe(
-      "Attacks made by the triggering unit that target a friendly ANATHEMA PSYKANA unit must target the unit instead, if the unit is an eligible target.",
+      "Attacks made by the triggering unit that target a friendly ANATHEMA PSYKANA unit must target this unit instead, if this unit is an eligible target.",
     );
     expect(render(leaf("targeting", { by: { owner: "friendly" }, may: "cannot-target", target: "this-model", kind: "stratagem", except: "core-stratagems" }, "this-model"))).toBe(
       "Friendly units cannot target this model with Stratagems (Core Stratagems can still target it).",
@@ -242,7 +242,7 @@ describe("describer: abilities, rules and army", () => {
       "The war dogs target counts as being within its aura range of the abhorrent target.",
     );
     expect(render({ type: "select-objective", selector: { filter: { controlled_by: "friendly", within: { range: "objective-control", of: "this-unit" } }, count: { min: 1, max: 1 }, bind_as: "m" }, effect: leaf("designate", { subject: { objective: { selection_var: "m" } }, tag: "mutated", clears_on: "control-lost" }) })).toBe(
-      "Select one objective marker your unit controls, binding it as m: that objective marker is mutated until you no longer control it.",
+      "Select one objective marker your unit controls (referred to below as the m): that objective marker is mutated until you no longer control it.",
     );
     expect(render({ type: "aura", target: "enemy-within-aura", modifier: { range: { inches: 3 }, range_cap: { inches: 12 }, emitter_filter: { all_of: ["DEATH GUARD"] }, effect: leaf("designate", { subject: "recipient", tag: "afflicted" }, "recipient") } })).toBe(
       'While an enemy unit is within 3" (to a maximum of 12", extensions included) of this model with DEATH GUARD, that unit is Afflicted.',
@@ -250,7 +250,7 @@ describe("describer: abilities, rules and army", () => {
   });
 
   it("prints the rules' term for registered designations and the designator (D5, D14)", () => {
-    expect(render(leaf("designate", { subject: "selected-unit", tag: "spotted", by: "this-unit", clears_on: "phase" }))).toBe("The selected unit is Spotted by the unit until the end of the phase.");
+    expect(render(leaf("designate", { subject: "selected-unit", tag: "spotted", by: "this-unit", clears_on: "phase" }))).toBe("The selected unit is Spotted by this unit until the end of the phase.");
     expect(describeCondition({ type: "guided", parameters: {} })).toBe("the unit is Guided");
     expect(describeCondition({ type: "designated", parameters: { subject: "defender", tag: "spotted", by: { designated: "observer", all_of: ["MARKERLIGHT"] } } })).toBe(
       "the target unit is Spotted by a MARKERLIGHT unit that is an Observer",
@@ -259,7 +259,7 @@ describe("describer: abilities, rules and army", () => {
 
   it("names a Bondsman-keyword use, the same rule as a bound use, and the Reinforcements step", () => {
     expect(describeTrigger({ event: "used", subject: { owner: "friendly" }, filter: { kind: "ability", ability_keyword: "BONDSMAN" } } as never)).toBe("each time a friendly unit uses a Bondsman ability");
-    expect(describeCondition({ type: "happened", parameters: { event: "used", filter: { kind: "ability", same_rule_as: { event_var: "b" } }, window: "turn" } })).toBe("the unit used that same ability this turn");
+    expect(describeCondition({ type: "happened", parameters: { event: "used", filter: { kind: "ability", same_rule_as: { event_var: "b" } }, window: "turn" } })).toBe("this unit used that same ability this turn");
     expect(describeTrigger({ event: "step-started", filter: { step: "reinforcements" } } as never)).toBe("at the start of the Reinforcements step");
   });
 });

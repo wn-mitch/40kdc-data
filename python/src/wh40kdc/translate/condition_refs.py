@@ -24,9 +24,9 @@ def event_relation_phrase(filter_: P) -> str:
     """Render causal links to an exact bound event, never mere actor equality."""
     phrase = ""
     if filter_.get("caused_by") is not None:
-        phrase += " as a result of the exact bound event"
+        phrase += " as a result of that event"
     if filter_.get("causes") is not None:
-        phrase += " and causing the exact bound event"
+        phrase += " triggering this ability"
     return phrase
 
 
@@ -137,7 +137,7 @@ def count_phrase(value: Any, default_min: Any = 1) -> str:
         return f"at most {dice_case(maximum)}"
     minimum = default_min if minimum is None else minimum
     if _is_num(minimum):
-        return f"{minimum}+"
+        return "one or more" if minimum == 1 else f"{minimum} or more"
     from wh40kdc.translate.effect_words import dice_case
 
     return f"at least {dice_case(minimum)}"
@@ -227,6 +227,17 @@ def _and_list(items: list[str]) -> str:
     return f"{', '.join(items[:-1])} and {items[-1]}"
 
 
+def with_article(phrase: str) -> str:
+    """Phonetic indefinite article ('a unit', 'an ASPECT WARRIORS unit', 'an Advance')."""
+    s = phrase.lstrip()
+    if not s:
+        return "a"
+    vowel = bool(
+        re.match(r"^(?:[aeio]|u(?!ni|se|t)|8\b|11\b|18\b)", s, re.IGNORECASE)
+    ) and not bool(re.match(r"^one\b", s, re.IGNORECASE))
+    return f"{'an' if vowel else 'a'} {s}"
+
+
 def _list(v: Any) -> list[Any]:
     """``(v as unknown[]) ?? []`` for array-typed parameters."""
     return v if isinstance(v, list) else []
@@ -305,7 +316,7 @@ def model_event_refs(value: Any, triggers: list[Any]) -> Any:
 
 
 _ROLE_PHRASES: dict[str, str] = {
-    "this-unit": "the unit",
+    "this-unit": "this unit",
     "this-model": "this model",
     "model-in-this-unit": "a model in this unit",
     "attacker": "the attacking unit",
@@ -316,7 +327,7 @@ _ROLE_PHRASES: dict[str, str] = {
     "event-object-model": "that model",
     "stratagem-target": "the Stratagem's target",
     "selected-unit": "the selected unit",
-    "recipient": "the unit",
+    "recipient": "this unit",
     "bearer-transport": "the Transport this unit is embarked within",
     "ability-unit": "this unit",
 }
@@ -358,17 +369,30 @@ def unit_filter_phrase(f: Any) -> str:
     }.get(f.get("owner"), "")
     all_of = f.get("all_of")
     all_ = f"{' '.join(_str(k) for k in all_of)} " if isinstance(all_of, list) else ""
+    unit_id_names = (
+        _or_list([title_case(_str(uid)) for uid in f["unit_ids"]])
+        if isinstance(f.get("unit_ids"), list)
+        else ""
+    )
+    inline_unit_ids = (
+        f"{unit_id_names} "
+        if unit_id_names and not all_ and not isinstance(f.get("any_of_filters"), list)
+        else ""
+    )
     noun = (
-        f"{_str(f.get('attachment_role'))} model"
+        f"{title_case(_str(f.get('attachment_role')))} model"
         if f.get("level") == "model" and f.get("attachment_role") is not None
         else "model"
         if f.get("level") == "model"
         else "unit"
     )
     compact = keyword_alternatives(f)
-    s = f"{owner}{_or_list(compact)} {noun}" if compact is not None else f"{owner}{all_}{noun}"
-    article = "an" if re.match(r"(?:[aeio]|u(?!ni))", s, re.IGNORECASE) else "a"
-    s = f"{article} {s}"
+    s = (
+        f"{owner}{_or_list(compact)} {noun}"
+        if compact is not None
+        else f"{owner}{all_}{inline_unit_ids}{noun}"
+    )
+    s = with_article(s)
     if isinstance(f.get("any_of_filters"), list) and compact is None:
         s += f" that is {_or_list([unit_filter_phrase(a) for a in alternative_filters(f)])}"
     if isinstance(f.get("any_of"), list):
@@ -391,8 +415,8 @@ def unit_filter_phrase(f: Any) -> str:
         s += f" without the {_or_list([id_label(a) for a in f['lacks_ability']])} ability"
     if isinstance(f.get("model_names"), list):
         s += f" named {_or_list([_str(name) for name in f['model_names']])}"
-    if isinstance(f.get("unit_ids"), list) and f["unit_ids"]:
-        s += f" with unit ID {_or_list([_str(unit_id) for unit_id in f['unit_ids']])}"
+    if unit_id_names and not inline_unit_ids:
+        s += f" ({unit_id_names})"
     if f.get("embarked_in") is not None:
         s += f" embarked within {unit_ref_phrase(f['embarked_in'])}"
     if f.get("member_of") is not None:
@@ -427,10 +451,7 @@ def unit_filter_phrase(f: Any) -> str:
         s += f" that is visible to {unit_ref_phrase(visible['to'])}"
     within = f.get("within")
     if within is not None:
-        w = _obj(within)
-        of = f" of {place_ref_phrase(w['of'])}" if w.get("of") is not None else ""
-        wholly = "wholly " if w.get("wholly") is True else ""
-        s += f" {wholly}within {range_phrase(w.get('range'))}{of}"
+        s += within_clause(_obj(within))
     if f.get("excluding") is not None:
         excluded = (
             "this unit"
@@ -441,7 +462,23 @@ def unit_filter_phrase(f: Any) -> str:
     return s
 
 
-def unit_ref_phrase(ref: Any, fallback: str = "the unit") -> str:
+def within_clause(within: P, of_override: str | None = None) -> str:
+    """' within 6\" of this unit', or ' in contact with a cult ambush marker' when range is 0\"."""
+    r = within.get("range")
+    zero = isinstance(r, dict) and r.get("inches") == 0
+    if of_override is not None:
+        of = of_override
+    elif within.get("of") is not None:
+        of = place_ref_phrase(within["of"])
+    else:
+        of = ""
+    if zero and of:
+        return f" in contact with {of}"
+    wholly = "wholly " if within.get("wholly") is True else ""
+    return f" {wholly}within {range_phrase(r)}{f' of {of}' if of else ''}"
+
+
+def unit_ref_phrase(ref: Any, fallback: str = "this unit") -> str:
     """A unit/place ref as a noun phrase; fallback names the default subject."""
     if ref is None:
         return fallback
@@ -457,7 +494,7 @@ def unit_ref_phrase(ref: Any, fallback: str = "the unit") -> str:
         if isinstance(ref.get("event_var"), str):
             return "that unit"
         if isinstance(ref.get("selection_var"), str):
-            return f"the bound {_str(ref['selection_var']).replace('_', ' ')}"
+            return f"the chosen {_str(ref['selection_var']).replace('_', ' ')}"
         if isinstance(ref.get("stratagem_target"), str):
             return f"the {dekebab(re.sub(r'^the-', '', ref['stratagem_target']))} target"
         return unit_filter_phrase(ref)
@@ -488,7 +525,7 @@ def place_ref_phrase(ref: Any) -> str:
     return unit_ref_phrase(ref)
 
 
-def _subject_of(p: P, fallback: str = "the unit") -> str:
+def _subject_of(p: P, fallback: str = "this unit") -> str:
     return unit_ref_phrase(p.get("subject"), fallback)
 
 
@@ -593,7 +630,7 @@ _STATE_PHRASES: dict[str, str] = {
     "on-battlefield": "on the battlefield",
     "hidden": "hidden",
     "fights-first": "a Fights First unit",
-    "benefit-of-cover": "receiving the benefit of cover",
+    "benefit-of-cover": "receiving the Benefit of Cover",
 }
 _NEGATED_STATE: dict[str, str] = {"engaged": "unengaged"}
 
@@ -610,7 +647,7 @@ def _designation_phrase(tag: str, plural: bool = False) -> str:
     label = designation_label(tag, plural)
     if label is not None:
         return label
-    return tag if tag == tag.upper() else f"tagged {dekebab(tag)}"
+    return tag if tag == tag.upper() else f"designated as {title_case(tag)}"
 
 
 _WINDOW_PHRASES: dict[str, str] = {
@@ -641,7 +678,7 @@ _MOVE_NAMES: dict[str, str] = {
     "charge": "Charge",
     "pile-in": "Pile-in",
     "consolidation": "Consolidation",
-    "ingress": "ingress",
+    "ingress": "Ingress",
     "surge": "Surge",
     "scout": "Scout",
     "disembark": "Disembark",
@@ -658,7 +695,7 @@ _MOVE_VERBS: dict[str, str] = {
     "advance": "advance",
     "fall-back": "fall back",
     "remain-stationary": "remain stationary",
-    "ingress": "make an ingress move",
+    "ingress": "make an Ingress move",
     "embark": "embark",
 }
 
@@ -668,7 +705,7 @@ _PAST: dict[str, str] = {
     "advance": "advanced",
     "fall back": "fell back",
     "remain stationary": "remained stationary",
-    "make an ingress move": "made an ingress move",
+    "make an Ingress move": "made an Ingress move",
     "move": "moved",
     "disembark": "disembarked",
     "embark": "embarked",

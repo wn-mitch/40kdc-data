@@ -174,7 +174,7 @@ _TARGET_KINDS = {
 }
 
 
-def targeting(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
+def targeting(e: dict[str, Any], m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     if m.get("by") is not None:
         who = effect_subject(m["by"], ctx)
     else:
@@ -246,12 +246,15 @@ def targeting(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             f"{units} {be} not considered to be within Engagement Range of {of}"
             f" when targets are selected{kind}"
         )
+    range_text = range_phrase(m["range"]) if m.get("range") is not None else ""
     if m.get("range") is None:
         rng = ""
     elif may == "cannot-target":
-        rng = f" unless {attacking} is within {range_phrase(m['range'])}"
+        rng = f" unless {attacking} is within {range_text}"
+    elif f"within {range_text}" in whom:
+        rng = ""
     else:
-        rng = f" within {range_phrase(m['range'])}"
+        rng = f" within {range_text}"
     unless = ""
     if m.get("only_if_none") is not None:
         other = re.sub(
@@ -266,6 +269,31 @@ def targeting(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
     except_ = (
         " (Core Stratagems can still target it)" if m.get("except") == "core-stratagems" else ""
     )
+    # When no `by` is specified and `m.target` is the same entity as `e.target`, render passively
+    # ("this unit cannot be targeted ...") instead of "this unit cannot target this unit".
+    if (
+        m.get("by") is None
+        and m.get("target") is not None
+        and m.get("target") != "every-eligible"
+        and m.get("target") == e.get("target")
+    ):
+        passive = (
+            "cannot be targeted"
+            if may == "cannot-target"
+            else "must be targeted"
+            if may == "must-target"
+            else "can be targeted"
+        )
+        passive_range = (
+            ""
+            if m.get("range") is None
+            else (
+                f" unless the attacking unit is within {range_text}"
+                if may == "cannot-target"
+                else f" within {range_text}"
+            )
+        )
+        return f"{whom} {passive}{kind}{passive_range}{unless}{except_}"
     # "cannot target enemy units … if the target unit was engaged with this unit at the start of
     # the turn".
     if m.get("target_condition") is not None:

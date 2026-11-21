@@ -164,9 +164,9 @@ describe("Semantic authoring batch-7a describer round-trip", () => {
       ["model-profile", { profile: "szarekh" }, /Szarekh model/iu],
       ["loadout", { uniform: "ranged" }, /ranged weapons/iu],
       ["eligible", { to: "shoot" }, /eligible to shoot/iu],
-      ["resource", { pool: "cp", at_least: 3 }, /3\+ cp/iu],
+      ["resource", { pool: "cp", at_least: 3 }, /3 or more cp/iu],
       ["operation-markers", { count_min: 2 }, /operation markers/iu],
-      ["engagement-fronts", { count_min: 2 }, /engaged on 2\+ fronts/iu],
+      ["engagement-fronts", { count_min: 2 }, /engaged on 2 or more fronts/iu],
       ["destroyed-while-on-objective", { count_min: 1 }, /enemy units destroyed/iu],
       ["destroyed-in-tagged-terrain", { tag: "toxic" }, /toxic terrain/iu],
     ];

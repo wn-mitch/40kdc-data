@@ -39,18 +39,18 @@ describe("canonical leaf consumers", () => {
     const text = render({ type: "ability-grant", target: { level: "model", member_of: "this-unit", attachment_role: "leader" }, modifier: {
       definition: { type: "ability-part", name: "Practice ward", effect: { type: "feel-no-pain", target: "this-model", modifier: { threshold: 5 } } },
     } });
-    expect(text).toContain("Leader models in the unit gain the Practice ward ability");
+    expect(text).toContain("Leader models in this unit gain the Practice ward ability");
     expect(text).not.toContain("Units with one or more");
   });
 
   it("modifies an existing keyword's supplied range without inventing its rating", () => {
     const text = render({ type: "weapon-ability-range", target: "this-unit", modifier: { keyword: { keyword_id: "rapid-fire" }, range: { inches: 18 } } });
-    expect(text).toBe('The unit\'s attacks benefit from [RAPID FIRE] when the target is within 18".');
+    expect(text).toBe('This unit\'s attacks benefit from [RAPID FIRE] when the target is within 18".');
     expect(text).not.toContain("gain");
   });
 
   it("renders range refs for setup and marker relocation", () => {
-    expect(render({ type: "set-up", target: "this-unit", modifier: { from: "strategic-reserves", min_enemy_distance: { inches: 9 }, within_edge: { inches: 6 } } })).toBe('The unit can be set up on the battlefield from Strategic Reserves wholly within 6" of a battlefield edge more than 9" away from all enemy models.');
+    expect(render({ type: "set-up", target: "this-unit", modifier: { from: "strategic-reserves", min_enemy_distance: { inches: 9 }, within_edge: { inches: 6 } } })).toBe('This unit can be set up on the battlefield from Strategic Reserves wholly within 6" of a battlefield edge more than 9" away from all enemy models.');
     expect(render({ type: "marker", target: "this-unit", modifier: { operation: "relocate", label: "practice", distance: { inches: 6 } } })).toBe('Move the practice marker up to 6".');
   });
 
@@ -59,7 +59,7 @@ describe("canonical leaf consumers", () => {
     expect(text).toContain('within 3"');
     expect(text.match(/within 3"/g)).toHaveLength(1);
     expect(describeScope({ duration: "while-leading" })).toBe("Duration: while this model is leading a unit.");
-    expect(describeScope({ duration: "after-resolving" })).toBe("Duration: after resolving this use.");
+    expect(describeScope({ duration: "after-resolving" })).toBe("Duration: after resolving this ability.");
   });
 
   it("retains conditional death-roll bonuses, resolution and removal ordering", () => {

@@ -15,21 +15,27 @@ import (
 
 // effCtx is the rendering context threaded down from the containers to the leaves.
 type effCtx struct {
-	// selectedUnit: inside a select-units / for-each-unit, the selected unit reads "that unit".
+	// selectedUnit: inside a select-units / for-each-unit, the selected unit reads "that unit" (or "those units" when plural).
 	selectedUnit bool
-	// selectedModel: inside a model-level selection, the selected model reads "that model".
+	// selectedModel: inside a model-level selection, the selected model reads "that model" (or "those models" when plural).
 	selectedModel bool
+	// selectedPlural: inside a plural select-units without an enclosing loop, selected-unit reads "those units" / "those models".
+	selectedPlural bool
 	// unitSubject: an explicit beneficiary binding inside a designated attack ("" when unset).
 	unitSubject string
 	// auraRecipient: inside an aura, the recipient reads "that unit".
 	auraRecipient bool
 	// destroyedTrigger: the ability's trigger already says a unit or model is destroyed; leaves must not repeat it.
 	destroyedTrigger bool
+	// allocatedTrigger: the ability's trigger already says damage/an attack is allocated; damage-reduction must not repeat it.
+	allocatedTrigger bool
 	// attackOnTarget: inside a designation's attackers-of-target entry, a characteristic change applies
 	// to each attack against the target.
 	attackOnTarget bool
 	// eachModel: inside a for-each-unit over models, each pass's model (the recipient) reads "that model".
 	eachModel bool
+	// suppressWeaponType: an enclosing attack-is already stated this attack type ("ranged"/"melee"), so bare weapon-type filters don't repeat it.
+	suppressWeaponType string
 }
 
 // ejstr is JS-template stringification: null -> "?", arrays join with ", ",
@@ -215,7 +221,7 @@ var unitsWordRe = regexp.MustCompile(` units\b`)
 
 // isPlural reports whether a subject noun phrase takes a plural verb.
 func isPlural(subj string) bool {
-	return pluralUnitsRe.MatchString(subj) || strings.HasPrefix(subj, "all ") || strings.HasPrefix(subj, "targets ")
+	return pluralUnitsRe.MatchString(subj) || strings.HasPrefix(subj, "all ") || strings.HasPrefix(subj, "those ") || strings.HasPrefix(subj, "targets ")
 }
 
 var pluralVerbs = map[string]string{
@@ -514,6 +520,19 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	if l, ok := asList(f["all_of"]); ok {
 		all = strings.Join(jstrList(l), " ") + " "
 	}
+	unitIdNames := ""
+	if l, ok := asList(f["unit_ids"]); ok {
+		raw := jstrList(l)
+		titled := make([]string, len(raw))
+		for i, id := range raw {
+			titled[i] = titleCase(id)
+		}
+		unitIdNames = orList(titled)
+	}
+	inlineUnitIds := ""
+	if unitIdNames != "" && all == "" && !isList(f["any_of_filters"]) {
+		inlineUnitIds = unitIdNames + " "
+	}
 	noun := "units"
 	if f["level"] == "model" {
 		role := ""
@@ -527,7 +546,7 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	}
 	// "friendly LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE units": keyword-only alternatives.
 	compact, isCompact := keywordAlternatives(f)
-	s := owner + all + noun
+	s := owner + all + inlineUnitIds + noun
 	if isCompact {
 		s = owner + orList(compact) + " " + noun
 	}
@@ -551,8 +570,8 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	if l, ok := asList(f["model_names"]); ok {
 		s += " named " + orList(jstrList(l))
 	}
-	if l, ok := asList(f["unit_ids"]); ok {
-		s += " with unit ID " + orList(jstrList(l))
+	if unitIdNames != "" && inlineUnitIds == "" {
+		s += " (" + unitIdNames + ")"
 	}
 	within, hasWithin := asMap(f["within"])
 	// "each model in this unit within 3\" of an enemy unit": the models' unit comes before their range.
@@ -561,18 +580,13 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 		s += memberOf(f["member_of"], ctx)
 	}
 	if hasWithin && within != nil {
-		s += " "
-		if within["wholly"] == true {
-			s += "wholly "
-		}
-		s += "within " + rangePhrase(within["range"])
+		of := ""
 		if within["of"] == "recipient" && ctx.eachModel {
-			s += " of that model"
+			of = "that model"
 		} else if within["of"] != nil {
-			s += " of " + placeRefPhrase(within["of"])
+			of = placeRefPhrase(within["of"])
 		}
-	} else {
-		hasWithin = false
+		s += withinClause(within, &of)
 	}
 	if memberFirst {
 		rest := make(map[string]any, len(f))
@@ -610,12 +624,7 @@ func filterSubject(f map[string]any, ctx effCtx) string {
 	if f["excluding"] != nil {
 		s += " other than " + effectSubject(f["excluding"], ctx)
 	}
-	bounded := hasWithin || f["visible"] != nil || f["designated"] != nil || f["not_designated"] != nil || f["state"] != nil || f["not_states"] != nil ||
-		f["embarked_in"] != nil || f["member_of"] != nil || f["engaged_with"] != nil || f["not_engaged_with"] != nil
-	if bounded {
-		return s
-	}
-	return "all " + s
+	return s
 }
 
 // effectSubject renders an effect target (a unit-ref) as the effect's subject.
@@ -624,30 +633,37 @@ func effectSubject(target any, ctx effCtx) string {
 		if ctx.unitSubject != "" {
 			return ctx.unitSubject
 		}
-		if ctx.selectedUnit || ctx.selectedModel {
-			return "this unit"
-		}
-		return "the unit"
+		return "this unit"
 	}
 	switch target {
 	case "selected-unit":
 		if ctx.selectedModel {
+			if ctx.selectedPlural {
+				return "those models"
+			}
 			return "that model"
 		}
 		if ctx.selectedUnit {
+			if ctx.selectedPlural {
+				return "those units"
+			}
 			return "that unit"
 		}
 		return "the selected unit"
 	case "recipient":
-		if ctx.auraRecipient {
-			return "that unit"
-		}
-		if ctx.eachModel {
+		if ctx.eachModel || ctx.selectedModel {
 			return "that model"
 		}
-		return "the unit"
+		if ctx.auraRecipient || ctx.selectedUnit {
+			return "that unit"
+		}
+		return "this unit"
+	case "event-subject":
+		if ctx.unitSubject == "that unit" {
+			return "that unit"
+		}
 	case "attacker":
-		if ctx.unitSubject != "" {
+		if ctx.unitSubject != "" && ctx.unitSubject != "that unit" {
 			return ctx.unitSubject
 		}
 		return "the attacking unit"
@@ -663,7 +679,7 @@ func effectSubject(target any, ctx effCtx) string {
 		return "that unit"
 	}
 	if sv, ok := r["selection_var"].(string); ok {
-		return "the bound " + strings.ReplaceAll(sv, "_", " ")
+		return "the chosen " + strings.ReplaceAll(sv, "_", " ")
 	}
 	if st, ok := r["stratagem_target"].(string); ok {
 		return "the " + dekebab(strings.TrimPrefix(st, "the-")) + " target"
@@ -680,6 +696,9 @@ func weaponHolder(target any, ctx effCtx) string {
 		return "models in " + ctx.unitSubject
 	}
 	if target == "selected-unit" && ctx.selectedModel {
+		if ctx.selectedPlural {
+			return "those models"
+		}
 		return "that model"
 	}
 	if target == nil || target == "this-unit" {
@@ -687,6 +706,9 @@ func weaponHolder(target any, ctx effCtx) string {
 	}
 	if target == "selected-unit" {
 		if ctx.selectedUnit {
+			if ctx.selectedPlural {
+				return "models in those units"
+			}
 			return "models in that unit"
 		}
 		return "models in the selected unit"
@@ -725,7 +747,7 @@ func designationFor(tag string) string {
 	if tag == strings.ToUpper(tag) {
 		return tag
 	}
-	return "marked as " + dekebab(tag)
+	return "designated as " + titleCase(tag)
 }
 
 // replaceFirst mirrors JS String.replace with a non-global regex: only the

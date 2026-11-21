@@ -6,7 +6,9 @@ use serde_json::Value;
 
 use super::words::*;
 use super::{child, inline, items, ty};
-use crate::translate::condition::{describe_condition_value, nn, obj, truthy, unit_ref_phrase, P};
+use crate::translate::condition::{
+    describe_condition_value, nn, obj, truthy, unit_ref_phrase, with_article, P,
+};
 
 /// A dice-pool option requirement: `pair of 4+`, or an `any_of` set joined with " or ".
 pub(super) fn describe_requirement(req: Option<&Value>) -> String {
@@ -87,7 +89,7 @@ pub(super) fn roll_with_rider(steps: &[Value], ctx: &Ctx) -> Option<String> {
 
 pub(super) fn leadership_test(e: &P, ctx: &Ctx) -> String {
     let test = obj(e.get("test"));
-    let who = unit_ref_phrase(test.get("subject"), "the unit");
+    let who = unit_ref_phrase(test.get("subject"), "this unit");
     let battle_shock = sv(test, "kind") == Some("battle-shock");
     let kind = if battle_shock {
         "Battle-shock"
@@ -106,7 +108,8 @@ pub(super) fn leadership_test(e: &P, ctx: &Ctx) -> String {
         })
         .collect::<Vec<_>>()
         .join("; ");
-    let success = gated_success(e, ctx);
+    let on_success = e.get("on_success").filter(|s| truthy(Some(s)));
+    let has_success = on_success.is_some_and(|s| sv(obj(Some(s)), "type") != Some("no-effect"));
     let mut failures = Vec::new();
     if battle_shock {
         failures.push(format!("{who} becomes Battle-shocked"));
@@ -114,17 +117,28 @@ pub(super) fn leadership_test(e: &P, ctx: &Ctx) -> String {
     if let Some(f) = e.get("on_fail").filter(|f| truthy(Some(f))) {
         failures.push(inline(f, ctx));
     }
+    let mod_clause = if modifiers.is_empty() {
+        String::new()
+    } else {
+        format!(" ({modifiers})")
+    };
+    let base = format!(
+        "{who} takes {}{mod_clause}",
+        with_article(&format!("{kind} test"))
+    );
+    if !has_success && !failures.is_empty() {
+        return format!("{base}; if failed, {}", failures.join("; "));
+    }
+    let success = match on_success.filter(|_| has_success) {
+        Some(s) => inline(s, ctx),
+        None => "nothing happens".to_string(),
+    };
     let fail = if failures.is_empty() {
         String::new()
     } else {
         format!("; otherwise, {}", failures.join("; "))
     };
-    let modifiers = if modifiers.is_empty() {
-        String::new()
-    } else {
-        format!("; {modifiers}")
-    };
-    format!("{who} takes a {kind} test (2D6, passing on its current Leadership or higher{modifiers}); if passed, {success}{fail}")
+    format!("{base}; if passed, {success}{fail}")
 }
 
 pub(super) fn gated_success(e: &P, ctx: &Ctx) -> String {

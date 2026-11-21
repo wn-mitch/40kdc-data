@@ -465,7 +465,7 @@
       {
         "name": "Prioritised Efficiency",
         "id": "e8a2-a9a7-0c99-e17f",
-        "description": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  -> At the start of the battle:\n    -> Until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, the unit gets +1 to Hit rolls; you can re-roll the Charge roll; you can re-roll the Advance roll).\n  -> At the end of each phase:\n    During the Command phase:\n      -> If you control 1+ home objectives in your territory, you gain 1 YP.\n      From the second battle round onward:\n        -> If you control 1+ objectives (excluding home), you gain 1 YP.\n        -> If you control 2+ objectives (excluding home), you gain 1 YP.\n        -> If you hold more objectives than the opponent, you gain 1 YP.\n    During the Command phase, in your turn:\n      -> While you have at most 6 yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    During the Command phase, in your turn:\n      -> While you have 7+ yp pool, until the start of your next Command phase: all friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while the unit is within range of an objective marker you control, the unit gets +1 to Hit rolls; when the attack's S is more than the target's T, unless the unit has the VEHICLE keyword, the attacking unit gets -1 to Wound rolls).",
+        "description": "If your Army Faction is LEAGUES OF VOTANN, for the rest of the battle:\n  - At the start of the battle:\n    - Until the start of your next Command phase, friendly LEAGUES OF VOTANN units gain the Hostile Acquisition ability (while the target is within range of an objective marker, add 1 to this unit's Hit rolls; you can re-roll the Charge roll; you can re-roll the Advance roll).\n  - At the end of each phase:\n    - During the Command phase:\n      - If you control one or more home objectives in your territory, you gain 1 YP.\n      - From the second battle round onward:\n        - If you control one or more objectives (excluding home), you gain 1 YP.\n        - If you control 2 or more objectives (excluding home), you gain 1 YP.\n        - If you hold more objectives than your opponent, you gain 1 YP.\n    - During your Command phase:\n      - While you have at most 6 yp pool, until the start of your next Command phase, friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n    - During your Command phase:\n      - While you have 7 or more yp pool, until the start of your next Command phase, friendly LEAGUES OF VOTANN units gain the Fortify Takeover ability (while this unit is within range of an objective marker you control, add 1 to this unit's Hit rolls; when the attack's S is more than the target's T, unless this unit has the VEHICLE keyword, subtract 1 from the attacking unit's Wound rolls).",
         "hidden": false
       }
     ],
@@ -694,7 +694,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During the Command phase, while the unit is within range of an objective marker, if you control 1+ objectives, until the end of the phase:\n  Select one of the following (Spend or Gain Yp):\n    - Spend 1 YP.\n    - You gain 1 YP.",
+                "$text": "During the Command phase, while this unit is within range of an objective marker, if you control one or more objectives, until the end of the phase:\n  Choose one of the following (Spend or Gain Yp):\n    - Spend 1 YP.\n    - You gain 1 YP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -708,7 +708,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -722,7 +722,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When you target the unit with the Fire Overwatch Stratagem, you may use this ability or when you target the unit with the Heroic Intervention Stratagem, you may use this ability, once per battle round per unit, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).",
+                "$text": "When you target this unit with the Fire Overwatch Stratagem, you can use this ability or when you target this unit with the Heroic Intervention Stratagem, you can use this ability, once per battle round per unit, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -1061,7 +1061,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making ranged attacks, if the target is the closest eligible target, you can re-roll a Hit roll of 1.",
+                "$text": "While making ranged attacks, if the target is the closest eligible target, you can re-roll Hit rolls of 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -2788,7 +2788,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit has the Feel No Pain 5+ ability.",
+                "$text": "While this model is leading a unit, this unit has Feel No Pain 5+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -2802,7 +2802,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Select one friendly LEAGUES OF VOTANN unit within 12\" of this model that is Battle-shocked: that unit is no longer Battle-shocked.",
+                "$text": "Select one friendly LEAGUES OF VOTANN unit within 12\" of this model that is Battle-shocked. That unit is no longer Battle-shocked.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -2816,7 +2816,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3483,7 +3483,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your opponent's turn, you may use this ability, while the unit is wholly within 9\" of a battlefield edge, while the unit is unengaged, the unit can be placed into Strategic Reserves.",
+                "$text": "At the end of your opponent's turn, you can use this ability, while this unit is wholly within 9\" of a battlefield edge and this unit is unengaged, this unit can be placed into Strategic Reserves.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3497,7 +3497,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4548,7 +4548,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit by tremor shells during its just-finished shooting sequence: that unit must take a Battle-shock test, applying -1 to that test.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit by tremor shells during that shooting sequence. That unit must take a Battle-shock test, applying -1 to that test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4562,7 +4562,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to shoot, you may use this ability, twice per battle per unit, during the Shooting phase, in your turn, while making attacks made with breacher ordnance, until the end of the phase, you can re-roll the Wound roll.",
+                "$text": "When this unit is selected to shoot, you can use this ability, twice per battle per unit, during your Shooting phase, while making attacks made with breacher ordnance, until the end of the phase, you can re-roll Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5210,7 +5210,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5224,7 +5224,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5238,7 +5238,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:\n  -> Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n    -> That unit is marked as suppressed.\n    -> While the unit is tagged suppressed, that unit gets -1 to Hit rolls.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:\n  - Select one enemy unit without the MONSTER or VEHICLE keyword and that was hit by an attack made by the triggering unit during that shooting sequence:\n    - That unit is Suppressed.\n    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5252,7 +5252,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5758,7 +5758,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When you target the unit with the Fire Overwatch Stratagem, when resolving this use:\n  -> Unless the Fortify Takeover ability of Prioritised Efficiency is active, the unit's Hit rolls succeed only on an unmodified 5+.\n  -> While the Fortify Takeover ability of Prioritised Efficiency is active, the unit's Hit rolls succeed only on an unmodified 4+.",
+                "$text": "When you target this unit with the Fire Overwatch Stratagem, for this activation:\n  - Unless the Fortify Takeover ability of Prioritised Efficiency is active, this unit's Hit rolls succeed only on an unmodified 5+.\n  - While the Fortify Takeover ability of Prioritised Efficiency is active, this unit's Hit rolls succeed only on an unmodified 4+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6627,7 +6627,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6641,7 +6641,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: While making ranged attacks:\n  -> This model ignores any modifiers to its Ballistic Skill characteristics.\n  -> This model ignores any modifiers to its Hit rolls.",
+                "$text": "While making ranged attacks, you can use this ability:\n  - This model ignores any modifiers to its Ballistic Skill characteristics.\n  - This model ignores any modifiers to its Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6655,7 +6655,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7482,7 +7482,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of each phase, if this model was destroyed this phase (1+ times), the first time this battle per model:\n  -> Roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1\" away from all enemy models, with its full wounds remaining.",
+                "$text": "At the end of each phase, if this model was destroyed this phase (one or more times), the first time this battle per model, roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1\" away from all enemy models, with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7510,7 +7510,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7524,7 +7524,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After an enemy unit shoots, during the Shooting phase, in the opponent's turn, while the model has lost wounds, until the end of the phase:\n  -> The unit can make a Surge move of up to D6\".\n  -> Add 2\" to the unit's Surge moves.",
+                "$text": "After an enemy unit shoots, during your opponent's Shooting phase, while the model has lost wounds, until the end of the phase:\n  - This unit can make a Surge move of up to D6\".\n  - Add 2\" to this unit's Surge moves.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7832,7 +7832,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit is within 3\" of a friendly IRONKIN STEELJACKS or LEAGUES OF VOTANN VEHICLE unit, unless the unit is an attached unit, the unit gains the Lone Operative ability.",
+                "$text": "While this unit is within 3\" of a friendly IRONKIN STEELJACKS or LEAGUES OF VOTANN VEHICLE unit, unless this unit is an attached unit, this unit gains the Lone Operative ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7846,7 +7846,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Select one friendly unit within 3\" of the unit with the LEAGUES OF VOTANN and VEHICLE keywords or with the EXOFRAME or IRONKIN STEELJACKS keyword (each unit can be selected for this ability at most once per turn across your army): that unit regains up to D3 lost wounds.",
+                "$text": "Select one friendly unit within 3\" of this unit with the LEAGUES OF VOTANN and VEHICLE keywords or with the EXOFRAME or IRONKIN STEELJACKS keyword (each unit can be selected for this ability at most once per turn across your army). That unit regains up to D3 lost wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7860,7 +7860,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7874,7 +7874,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making ranged attacks, you can re-roll a Wound roll of 1.",
+                "$text": "While making ranged attacks, you can re-roll Wound rolls of 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9046,7 +9046,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9060,7 +9060,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9074,7 +9074,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\nThe unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
+                "$text": "You can use this ability: This unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.\nThis unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9413,7 +9413,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of the unit:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
+                "$text": "Each time an enemy unit (excluding MONSTER or VEHICLE units) starts a Fall Back move, while the triggering unit is within Engagement Range of this unit:\n  - While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  - While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10389,7 +10389,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: Once per turn per unit:\n  -> Spend 1 YP.\n  Select one of the following:\n    - One of the unit's Hit rolls counts as 6.\n    - One of the unit's Wound rolls counts as 6.\n    - One of the unit's saving throw rolls counts as 6.",
+                "$text": "Once per turn per unit, you can use this ability:\n  - Spend 1 YP.\n  Choose one of the following:\n    - One of this unit's Hit rolls counts as 6.\n    - One of this unit's Wound rolls counts as 6.\n    - One of this unit's saving throw rolls counts as 6.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10403,7 +10403,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a friendly LEAGUES OF VOTANN unit within 12\" of this model is targeted with a Stratagem, you may use this ability, once per battle round per model, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).",
+                "$text": "When a friendly LEAGUES OF VOTANN unit within 12\" of this model is targeted with a Stratagem, you can use this ability, once per battle round per model, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10417,7 +10417,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10680,7 +10680,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10694,7 +10694,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit ends a move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8\" of the unit, while the unit is unengaged, the unit can make a Normal move of up to D6\".",
+                "$text": "Each time an enemy unit ends a move, during your opponent's Movement phase, while the triggering unit is within 8\" of this unit and this unit is unengaged, this unit can make a Normal move of up to D6\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11908,7 +11908,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit:\n  -> The unit gets +1 to Advance rolls.\n  -> The unit gets +1 to Charge rolls.",
+                "$text": "While this model is leading a unit:\n  - Add 1 to this unit's Advance rolls.\n  - Add 1 to this unit's Charge rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11922,7 +11922,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11936,7 +11936,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Charge move, you may use this ability:\n  -> Select one enemy unit if the selected unit is within Engagement Range of this model:\n    -> Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
+                "$text": "When this unit ends a Charge move, you can use this ability:\n  - Select one enemy unit that is within Engagement Range of this model:\n    - Roll one D6:\n      - On 1: Nothing happens.\n      - On 2-5: That unit suffers D3 mortal wounds.\n      - On 6: That unit suffers D3+3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12535,7 +12535,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next Shooting phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit cannot benefit from Cover.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next Shooting phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit cannot benefit from Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13302,7 +13302,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Once per turn, during the Shooting phase, until the end of the phase, the unit's weapons gain [SUSTAINED HITS 1].",
+                "$text": "Once per turn, during the Shooting phase, until the end of the phase, this unit's weapons gain [SUSTAINED HITS 1].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13330,7 +13330,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13669,7 +13669,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, until the end of the turn:\n  -> The triggering unit can make a Normal move of up to D6\".\n  -> The unit cannot declare a charge.",
+                "$text": "After this unit resolves its attacks, you can use this ability, during your Shooting phase, until the end of the turn:\n  - The triggering unit can make a Normal move of up to D6\".\n  - This unit cannot declare a charge.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13683,7 +13683,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13697,7 +13697,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14470,7 +14470,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a model in the unit is destroyed:\n  -> Unless the triggering unit has fought this phase, while the Fortify Takeover ability of Prioritised Efficiency is active, roll one D6+1. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.\n  -> Unless the triggering unit has fought this phase, unless the Fortify Takeover ability of Prioritised Efficiency is active, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
+                "$text": "When a model in this unit is destroyed:\n  - Unless the triggering unit has fought this phase, while the Fortify Takeover ability of Prioritised Efficiency is active, roll one D6+1. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.\n  - Unless the triggering unit has fought this phase, unless the Fortify Takeover ability of Prioritised Efficiency is active, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14484,7 +14484,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next Shooting phase:\n  -> Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit by mole grenade launcher during its just-finished shooting sequence: that unit cannot be targeted with the Fire Overwatch Stratagem.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next Shooting phase:\n  - Select one enemy unit without the MONSTER or VEHICLE keyword and that was hit by an attack made by the triggering unit by mole grenade launcher during that shooting sequence. That unit cannot be targeted with the Fire Overwatch Stratagem.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14498,7 +14498,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15486,7 +15486,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Friendly units embarked within the unit are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.",
+                "$text": "Friendly units embarked within this unit are eligible to disembark even if their Transport Advanced this turn; if they do, they count as having made a Normal move that phase, and cannot declare a charge this turn.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15500,7 +15500,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16063,7 +16063,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit's weapons gain [LETHAL HITS].",
+                "$text": "While this model is leading a unit, this unit's weapons gain [LETHAL HITS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16077,7 +16077,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16091,7 +16091,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time the unit destroys an enemy unit, you may use this ability, once per phase per army, you gain 1 YP.",
+                "$text": "Each time this unit destroys an enemy unit, you can use this ability, once per phase per army, you gain 1 YP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16620,7 +16620,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16634,7 +16634,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
+                "$text": "At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16648,7 +16648,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making ranged attacks, you can re-roll a Hit roll of 1.",
+                "$text": "While making ranged attacks, you can re-roll Hit rolls of 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18990,7 +18990,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Deep Strike ability.",
+                "$text": "This unit gains the Deep Strike ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19020,7 +19020,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has a 5+ invulnerable save.",
+                "$text": "This unit has a 5+ invulnerable save.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19394,7 +19394,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target the unit with a Stratagem:\n  -> Roll one D6: on a 5+, you gain 1CP.",
+                "$text": "Each time you target this unit with a Stratagem, roll one D6: on a 5+, you gain 1 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19424,7 +19424,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making ranged attacks, you can re-roll a Hit roll of 1.",
+                "$text": "While making ranged attacks, you can re-roll Hit rolls of 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19454,7 +19454,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: While making ranged attacks, the unit ignores any modifiers to its Hit rolls.",
+                "$text": "You can use this ability: While making ranged attacks, this unit ignores any modifiers to its Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20174,7 +20174,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the target is within range of an objective marker, if the triggering wound roll was a critical, the unit's weapons gain [PRECISION].",
+                "$text": "While the target is within range of an objective marker, if the triggering wound roll was a critical, this unit's weapons gain [PRECISION].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21612,7 +21612,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit has a 5+ invulnerable save.",
+                "$text": "While this model is leading a unit, this unit has a 5+ invulnerable save.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22062,7 +22062,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit gains the Deep Strike ability.",
+                "$text": "While this model is leading a unit, this unit gains the Deep Strike ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23334,7 +23334,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit has a 5+ invulnerable save.",
+                "$text": "While this model is leading a unit, this unit has a 5+ invulnerable save.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23364,7 +23364,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit gains the Deep Strike ability.",
+                "$text": "While this model is leading a unit, this unit gains the Deep Strike ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24090,7 +24090,7 @@
                   {
                     "name": "Optimal Application",
                     "id": "cc85-b9e0-a797-36bb",
-                    "description": "For the rest of the battle:\n  -> During the Command phase, if you control 1+ objectives, you gain 1 YP.\n  During the Shooting phase:\n    -> Spend 1 YP.\n    -> You can re-roll a Hit roll of 1.",
+                    "description": "For the rest of the battle:\n  - During the Command phase, if you control one or more objectives, you gain 1 YP.\n  - During the Shooting phase:\n    - Spend 1 YP.\n    - You can re-roll Hit rolls of 1.",
                     "hidden": false
                   }
                 ]
@@ -24137,7 +24137,7 @@
                   {
                     "name": "Assailed From Every Angle",
                     "id": "4227-09e3-177d-c69c",
-                    "description": "When the unit is selected to shoot during the Shooting phase, until the end of the battle round:\n  -> Select one enemy unit (excluding MONSTER or VEHICLE units): this unit must target that unit with ranged attacks.\n  If the target was hit by an attack this phase:\n    While the target is tagged assailed:\n      -> Subtract 2 from the target's Move characteristic.\n      -> The target gets -2 to Charge rolls.\n    -> The target gains the assailed keyword.",
+                    "description": "When this unit is selected to shoot during the Shooting phase, until the end of the battle round:\n  - Select one enemy unit (excluding MONSTER or VEHICLE units). This unit must target that unit with ranged attacks.\n  - If the target was hit by an attack this phase:\n    - While the target is Assailed:\n      - Subtract 2\" from the target's Move characteristic.\n      - Subtract 2 from the target's Charge rolls.\n    - The target gains the assailed keyword.",
                     "hidden": false
                   }
                 ]
@@ -24231,7 +24231,7 @@
                   {
                     "name": "Fury From The Dêlve",
                     "id": "b92d-3df2-3450-9ed6",
-                    "description": "All friendly BESERKS CTHONIAN units gain the Deep Strike ability.",
+                    "description": "Friendly BESERKS CTHONIAN units gain the Deep Strike ability.",
                     "hidden": false
                   }
                 ]
@@ -24285,7 +24285,7 @@
                   {
                     "name": "Methodical Annihilation",
                     "id": "4fe3-d3f1-76a8-7957",
-                    "description": "If the target is the closest eligible target or while the target is within Engagement Range of the attacking unit:\n  -> You can re-roll a Wound roll of 1 for attacks made by all friendly LEAGUES OF VOTANN models.\n  -> If the attacking unit has the EINHYR HEARTHGUARD, KÂHL or ÛTHAR THE DESTINED keyword, improve all friendly LEAGUES OF VOTANN models' Armour Penetration characteristic by 1.",
+                    "description": "If the target is the closest eligible target or while the target is within Engagement Range of the attacking unit:\n  - You can re-roll Wound rolls of 1 for attacks made by friendly LEAGUES OF VOTANN models.\n  - If the attacking unit has the EINHYR HEARTHGUARD, KÂHL or ÛTHAR THE DESTINED keyword, improve friendly LEAGUES OF VOTANN models' Armour Penetration characteristic by 1.",
                     "hidden": false
                   }
                 ]
@@ -24332,7 +24332,7 @@
                   {
                     "name": "Ruthless Reinvestment",
                     "id": "8176-aa71-b372-5d28",
-                    "description": "All friendly LEAGUES OF VOTANN units lose the Hostile Acquisition (Prioritised Efficiency) ability and cannot gain it except from this ability.\nAll friendly LEAGUES OF VOTANN units lose the Fortify Takeover (Prioritised Efficiency) ability and cannot gain it except from this ability.\n-> At the start of the battle: all friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\n-> At the end of your Command phase, you may use this ability: while you have 3+ yp pool, spend 3 YP; if all friendly LEAGUES OF VOTANN units have exactly one of the Hostile Acquisition (Prioritised Efficiency) and Fortify Takeover (Prioritised Efficiency) abilities, all friendly LEAGUES OF VOTANN units simultaneously lose that ability and gain the other.",
+                    "description": "Friendly LEAGUES OF VOTANN units lose the Hostile Acquisition (Prioritised Efficiency) ability and cannot gain it except from this ability.\nFriendly LEAGUES OF VOTANN units lose the Fortify Takeover (Prioritised Efficiency) ability and cannot gain it except from this ability.\nAt the start of the battle, friendly LEAGUES OF VOTANN units gain the Hostile Acquisition (Prioritised Efficiency) ability.\nAt the end of your Command phase, you can use this ability: while you have 3 or more yp pool, spend 3 YP; if friendly LEAGUES OF VOTANN units have exactly one of the Hostile Acquisition (Prioritised Efficiency) and Fortify Takeover (Prioritised Efficiency) abilities, friendly LEAGUES OF VOTANN units simultaneously lose that ability and gain the other.",
                     "hidden": false
                   }
                 ]
@@ -24379,7 +24379,7 @@
                   {
                     "name": "Mobile Sensor Relays",
                     "id": "f5f1-1ac2-5209-b020",
-                    "description": "All friendly LEAGUES OF VOTANN TRANSPORT units gain the Firebase Control ability:\n  -> While a friendly INFANTRY LEAGUES OF VOTANN unit is wholly within 6\" of this unit, ranged weapons equipped by that unit gain [SUSTAINED HITS 1].",
+                    "description": "Friendly LEAGUES OF VOTANN TRANSPORT units gain the Firebase Control ability:\n  - While a friendly INFANTRY LEAGUES OF VOTANN unit is wholly within 6\" of this unit, ranged weapons equipped by that unit gain [SUSTAINED HITS 1].",
                     "hidden": false
                   }
                 ]
@@ -24426,7 +24426,7 @@
                   {
                     "name": "Sagitaur Spearhead",
                     "id": "a147-a5c9-9def-72ff",
-                    "description": "All friendly SAGITAUR units gain the Scouts 6\" ability.",
+                    "description": "Friendly SAGITAUR units gain the Scouts 6\" ability.",
                     "hidden": false
                   }
                 ]
@@ -24473,7 +24473,7 @@
                   {
                     "name": "Eye of the Hunt",
                     "id": "7b0c-d2d3-da07-d93d",
-                    "description": "While the target is within 12\" of the unit, all friendly HERNKYN units get +1 to Hit rolls with ranged weapons.",
+                    "description": "While the target is within 12\" of this unit, add 1 to friendly HERNKYN units' Hit rolls with ranged weapons.",
                     "hidden": false
                   }
                 ]
@@ -24527,7 +24527,7 @@
                   {
                     "name": "Avatars of the Ancestors",
                     "id": "1581-8c35-9df5-11a0",
-                    "description": "While making ranged attacks, while the target is within 9\" of the attacking unit, you can re-roll a Wound roll of 1 for attacks made by all friendly units with the EINHYR CHAMPION, EINHYR HEARTHGUARD, KÂHL or ÛTHAR THE DESTINED keyword.\nYou cannot select this Detachment together with another HEARTHGUARD Detachment.\nYou cannot select this Detachment together with another HEARTHGUARD Detachment.",
+                    "description": "While making ranged attacks, while the target is within 9\" of the attacking unit, you can re-roll Wound rolls of 1 for attacks made by friendly units with the EINHYR CHAMPION, EINHYR HEARTHGUARD, KÂHL or ÛTHAR THE DESTINED keyword.\nYou cannot select this Detachment together with another HEARTHGUARD Detachment.\nYou cannot select this Detachment together with another HEARTHGUARD Detachment.",
                     "hidden": false
                   }
                 ]
@@ -24640,7 +24640,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit gains the Deep Strike ability.",
+                    "$text": "This unit gains the Deep Strike ability.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -24734,7 +24734,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While this model is leading a unit, add 1 to the unit's Objective Control characteristic.",
+                    "$text": "While this model is leading a unit, add 1 to this unit's Objective Control characteristic.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -24815,7 +24815,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the unit is selected to shoot, you may use this ability, while the unit is using Optimal Application:\n  -> Roll one D6: on a 2+, you gain 1 YP.",
+                    "$text": "When this unit is selected to shoot, you can use this ability, while this unit is using Optimal Application:\n  - Roll one D6: on a 2+, you gain 1 YP.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -24896,7 +24896,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, during the Fight phase, until the start of your next turn:\n  -> Select one enemy unit with the MONSTER or VEHICLE keyword that was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n    -> That unit is marked as suppressed.\n    -> While the unit is tagged suppressed, that unit gets -1 to Hit rolls.",
+                    "$text": "After this unit resolves its attacks, during your Shooting phase, during the Fight phase, until the start of your next turn:\n  - Select one enemy unit with the MONSTER or VEHICLE keyword that was hit by an attack made by the triggering unit during that shooting sequence:\n    - That unit is Suppressed.\n    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25022,7 +25022,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While the unit is tagged assailed, the unit gets +1 to Wound rolls.",
+                    "$text": "While this unit is Assailed, add 1 to this unit's Wound rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25274,7 +25274,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next Shooting phase:\n  -> Select one enemy unit with the MONSTER or VEHICLE keyword that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit is marked as pinned.",
+                    "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next Shooting phase:\n  - Select one enemy unit with the MONSTER or VEHICLE keyword that was hit by an attack made by the triggering unit during that shooting sequence. That unit is Pinned.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25526,7 +25526,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can re-roll a Wound roll of 1.\n-> When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, until the end of the phase:\n  -> Spend 3 YP.\n  -> The unit gets +1 to Wound rolls.",
+                    "$text": "You can re-roll Wound rolls of 1.\nWhen this unit is selected to shoot, you can use this ability or when this unit is selected to fight, you can use this ability, until the end of the phase:\n  - Spend 3 YP.\n  - Add 1 to this unit's Wound rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25652,7 +25652,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the end of the turn, you may use this ability, while this model is on the battlefield, unless you spent YP this turn, you gain 1 YP.",
+                    "$text": "At the end of the turn, you can use this ability, while this model is on the battlefield, unless you spent YP this turn, you gain 1 YP.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25904,7 +25904,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When you target the unit with the Command Re Roll Stratagem, you may use this ability, once per turn per model:\n  -> Spend 1 YP.\n  -> Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).",
+                    "$text": "When you target this unit with the Command Re Roll Stratagem, you can use this ability, once per turn per model:\n  - Spend 1 YP.\n  - Reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26156,7 +26156,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: Once per battle per model, during the Movement phase, in your turn, while this model is on the battlefield, until the end of the phase:\n  -> Select one friendly CTHONIAN unit that is in Strategic Reserves: that unit can be set up on the battlefield, treating the battle round as 1 higher than it is.",
+                    "$text": "Once per battle per model, during your Movement phase, while this model is on the battlefield, until the end of the phase, you can use this ability:\n  - Select one friendly CTHONIAN unit that is in Strategic Reserves. That unit can be set up on the battlefield, treating the battle round as 1 higher than it is.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26282,7 +26282,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While this model is within 3\" of a friendly ARTILLERY LEAGUES OF VOTANN unit:\n  -> This model gains the Lone Operative ability.\n  -> While making ranged attacks, while the target unit is an enemy unit, while the target is visible to this model, friendly ARTILLERY LEAGUES OF VOTANN units within 3\" of this model get +1 to Hit rolls.",
+                    "$text": "While this model is within 3\" of a friendly ARTILLERY LEAGUES OF VOTANN unit:\n  - This model gains the Lone Operative ability.\n  - While making ranged attacks, while the target unit is an enemy unit and the target is visible to this model, add 1 to the Hit rolls of friendly ARTILLERY LEAGUES OF VOTANN units within 3\" of this model.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26534,7 +26534,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While making ranged attacks, until the end of the phase:\n  -> You can: while the unit is not tagged bastion shield yp spent, spend 1 YP; the unit is marked as bastion shield yp spent until the end of the phase.\n  -> While the attacking unit is within 12\" of the unit, unless the unit is tagged bastion shield yp spent and the attacking unit is within 18\" of the unit, worsen the attacking unit's Armour Penetration characteristic by 1.\n  -> While the unit is tagged bastion shield yp spent, while the attacking unit is within 18\" of the unit, worsen the attacking unit's Armour Penetration characteristic by 1.",
+                    "$text": "While making ranged attacks, until the end of the phase:\n  - You can: while this unit is not designated as Bastion Shield Yp Spent, spend 1 YP; this unit is designated as Bastion Shield Yp Spent until the end of the phase.\n  - While the attacking unit is within 12\" of this unit, unless this unit is designated as Bastion Shield Yp Spent and the attacking unit is within 18\" of this unit, worsen the Armour Penetration characteristic of the attacking unit's attacks by 1.\n  - While this unit is designated as Bastion Shield Yp Spent and the attacking unit is within 18\" of this unit, worsen the Armour Penetration characteristic of the attacking unit's attacks by 1.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26615,7 +26615,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:\n  -> Select one enemy unit if the selected unit does not have the TITANIC keyword and the unit was hit by an attack made by the triggering unit during its just-finished shooting sequence:\n    -> That unit is marked as suppressed.\n    -> While the unit is tagged suppressed, that unit gets -1 to Hit rolls.",
+                    "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:\n  - Select one enemy unit without the TITANIC keyword and that was hit by an attack made by the triggering unit during that shooting sequence:\n    - That unit is Suppressed.\n    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26822,7 +26822,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When a model in the unit is destroyed, while making melee attacks, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
+                    "$text": "When a model in this unit is destroyed, while making melee attacks, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27110,7 +27110,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can re-roll a Hit roll of 1.\n-> When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, until the end of the phase:\n  -> Spend 3 YP.\n  -> The unit's weapons gain [SUSTAINED HITS 1].",
+                    "$text": "You can re-roll Hit rolls of 1.\nWhen this unit is selected to shoot, you can use this ability or when this unit is selected to fight, you can use this ability, until the end of the phase:\n  - Spend 3 YP.\n  - This unit's weapons gain [SUSTAINED HITS 1].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27236,7 +27236,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of the Command phase, you may use this ability, until the end of the turn:\n  -> Spend 3 YP.\n  -> While an enemy unit is within 3\" of this model, subtract 1 from that unit's Objective Control characteristic.",
+                    "$text": "At the start of the Command phase, you can use this ability, until the end of the turn:\n  - Spend 3 YP.\n  - While an enemy unit is within 3\" of this model, subtract 1 from that unit's Objective Control characteristic.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27443,7 +27443,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the unit is selected to shoot, during the Shooting phase, in your turn, if the triggering unit disembarked from a Transport this turn or while the unit is tagged trivarg yp spent, until the end of the phase:\n  -> You can: while the unit is not tagged trivarg yp spent, unless the triggering unit disembarked from a Transport this turn, spend 2 YP; the unit is marked as trivarg yp spent until the end of the phase.\n  -> Ranged weapons equipped by models in this unit gain [SUSTAINED HITS 2].",
+                    "$text": "When this unit is selected to shoot, during your Shooting phase, if the triggering unit disembarked from a Transport this turn or while this unit is designated as Trivarg Yp Spent, until the end of the phase:\n  - You can: while this unit is not designated as Trivarg Yp Spent, unless the triggering unit disembarked from a Transport this turn, spend 2 YP; this unit is designated as Trivarg Yp Spent until the end of the phase.\n  - Ranged weapons equipped by models in this unit gain [SUSTAINED HITS 2].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27524,7 +27524,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: While the unit is wholly within 6\" of a friendly LEAGUES OF VOTANN TRANSPORT unit, when resolving this use:\n  -> The Fire Overwatch Stratagem that targets the unit costs 0CP.\n  -> The unit's Hit rolls succeed only on an unmodified 5+.",
+                    "$text": "While this unit is wholly within 6\" of a friendly LEAGUES OF VOTANN TRANSPORT unit, for this activation, you can use this ability:\n  - The Fire Overwatch Stratagem that targets this unit costs 0 CP.\n  - This unit's Hit rolls succeed only on an unmodified 5+.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27767,7 +27767,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit gains the MOBILE keyword.",
+                    "$text": "This unit gains the MOBILE keyword.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27848,7 +27848,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: During the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit within 12\" of the unit visible to this model:\n    -> That unit is Spotted.\n    -> While the selected unit is Spotted, add 3 to that unit's detection range characteristic.",
+                    "$text": "During your Shooting phase, until the end of the phase, you can use this ability:\n  - Select one enemy unit within 12\" of this unit visible to this model:\n    - That unit is Spotted.\n    - While the selected unit is Spotted, add 3\" to that unit's detection range.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27929,7 +27929,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Subtract 3 from the unit's detection range characteristic.",
+                    "$text": "Subtract 3\" from this unit's detection range.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -28010,7 +28010,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When a model in the unit is destroyed, until the end of the phase, during the Fight phase, unless the unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; when its unit is selected to fight, it can fight. Remove it after this unit has fought or at the end of the phase, whichever comes first.",
+                    "$text": "When a model in this unit is destroyed, until the end of the phase, during the Fight phase, unless this unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; when its unit is selected to fight, it can fight. Remove it after this unit has fought or at the end of the phase, whichever comes first.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

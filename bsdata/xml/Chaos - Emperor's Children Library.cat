@@ -202,13 +202,12 @@
         </profile>
         <profile name="Deadly Demise" id="0bb1-aac3-9ed1-0208" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="5b79-dd1f-66c9-8207" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -362,16 +361,16 @@
       <profiles>
         <profile name="Deep Strike" id="3af1-2501-7330-d7b9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lethal Obsession" id="2865-362e-8994-d20e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, until the end of the turn:
-  -&gt; Select one enemy unit that was hit by a ranged attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; When a Charge is declared:
-      -&gt; You can re-roll the Charge roll.
-      -&gt; The triggering unit must end its move where the triggering unit is within Engagement Range of the selected unit, during its Charge moves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, you can use this ability, during your Shooting phase, until the end of the turn:
+  - Select one enemy unit that was hit by a ranged attack made by the triggering unit during that shooting sequence:
+    - When a Charge is declared:
+      - You can re-roll the Charge roll.
+      - The triggering unit must end its move where the triggering unit is within Engagement Range of the selected unit, during its Charge moves.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1588,21 +1587,21 @@
         </profile>
         <profile name="Leader" id="4927-7428-0067-7e95" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Warped Interference (Psychic)" id="c4b1-18c2-8532-da35" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Wracking Agonies (Psychic)" id="b0c5-6b25-642b-db75" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:
-  -&gt; Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit by Agonising Energies during its just-finished shooting sequence:
-    -&gt; That unit is wracked with agonies.
-    -&gt; While the selected unit is wracked with agonies, subtract 2 from that unit's Move characteristic.
-    -&gt; While the selected unit is wracked with agonies, that unit gets -2 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:
+  - Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit by Agonising Energies during that shooting sequence:
+    - That unit is wracked with agonies.
+    - While the selected unit is wracked with agonies, subtract 2" from that unit's Move characteristic.
+    - While the selected unit is wracked with agonies, subtract 2 from that unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1700,26 +1699,26 @@
         </profile>
         <profile name="Euphoric Strikes" id="b177-022f-d0d9-7b23" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, once per battle per unit, until the end of the phase:
-  -&gt; Add 3 to the Attacks characteristic of melee weapons equipped by this model.
-  -&gt; Improve the Armour Penetration characteristic of melee weapons equipped by this model by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability, once per battle per unit, until the end of the phase:
+  - Add 3 to the Attacks characteristic of melee weapons equipped by this model.
+  - Improve the Armour Penetration characteristic of melee weapons equipped by this model by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="5e55-ee5d-dd06-422a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lord of the Host" id="4908-0c61-68ee-54a5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, while this model is attached to a BATTLELINE EMPEROR'S CHILDREN unit:
-  -&gt; The unit gains the Infiltrators ability.
-  -&gt; The unit gains the Scouts 6" ability.</characteristic>
+  - This unit gains the Infiltrators ability.
+  - This unit gains the Scouts 6" ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Perfectionists" id="774f-ec61-d412-f7dd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit's weapons gain [LETHAL HITS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit's weapons gain [LETHAL HITS].</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1922,15 +1921,15 @@
         </profile>
         <profile name="Doom Siren" id="4a3a-13d2-d5ea-31a1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn:
-  -&gt; Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; Roll 3 D6: for each 4+, that unit suffers 1 mortal wound.
-    -&gt; If the selected unit lost one or more wounds from mortal attacks from the triggering attacks, that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase:
+  - Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit during that shooting sequence:
+    - Roll 3 D6: for each 4+, that unit suffers 1 mortal wound.
+    - If the selected unit lost one or more wounds from the triggering mortal attacks, that unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="20cd-c2bf-f9dc-fcb5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Obsessive Annunciation" id="7ce2-87ee-0cff-1f3f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2036,12 +2035,12 @@
       <profiles>
         <profile name="Feel No Pain" id="021e-8f2e-4610-b059" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scuttling Horrors" id="af87-9134-cfb7-8c70" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, you may use this ability, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the unit can make a Normal move of up to 6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, you can use this ability, during your opponent's Movement phase, while the triggering unit is within 8" of this unit and this unit is unengaged, this unit can make a Normal move of up to 6".</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2144,20 +2143,19 @@
         </profile>
         <profile name="Deadly Demise" id="0008-6e71-a188-c518" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Ecstatic Death" id="082b-8e85-19c2-5214" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, unless this model has fought this phase, destroy this model.
 Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.
--&gt; After an enemy unit shoots: remove this model from play.</characteristic>
+After an enemy unit shoots, remove this model from play.</characteristic>
           </characteristics>
         </profile>
         <profile name="Excessive Vigour (Aura)" id="539b-ec36-89b3-a3af" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly SLAANESH unit is within 6" of this model, if the unit charged this turn, improve the Armour Penetration characteristic of melee weapons equipped by that unit by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly SLAANESH unit is within 6" of this model, if this unit charged this turn, improve the Armour Penetration characteristic of melee weapons equipped by that unit by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lord of Excess" id="fb55-b5f2-154e-79fe" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2241,10 +2239,10 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
       <profiles>
         <profile name="Terrifying Crescendo" id="6338-2064-2bbb-584e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next Shooting phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; That unit gets -1 to Battle-shock rolls.
-    -&gt; That unit gets -1 to Leadership rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the start of your next Shooting phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence:
+    - Subtract 1 from that unit's Battle-shock rolls.
+    - Subtract 1 from that unit's Leadership rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2508,12 +2506,12 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
       <profiles>
         <profile name="Infiltrators" id="f694-7441-86a8-0d10" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Objective Defiled" id="08ab-5216-86a3-93cd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2860,18 +2858,17 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         <profile name="Assault Vehicle" id="2bde-0607-a50a-53b3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model is eligible to disembark in a turn in which it Advanced.
--&gt; When a friendly unit disembarks from a Transport: if this model advanced this turn, the triggering unit cannot declare a charge.</characteristic>
+When a friendly unit disembarks from a Transport, if this model advanced this turn, the triggering unit cannot declare a charge.</characteristic>
           </characteristics>
         </profile>
         <profile name="Firing Deck" id="3267-f5f5-aa42-42fd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="7adf-cc8d-7ae1-6f8f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3118,26 +3115,25 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         </profile>
         <profile name="Daemonic Destruction" id="9fa3-95b6-b7a2-83b1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model:
-    -&gt; Roll D6, then:
-      -&gt; If the result of that roll is a 4+, that unit suffers 1 mortal wound (to a maximum of 6 mortal wounds).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move:
+  - Select one enemy unit that is within Engagement Range of this model:
+    - Roll D6, then:
+      - If the result of that roll is a 4+, that unit suffers 1 mortal wound, to a maximum of 6 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stimulated by Pain" id="bf10-89ea-9f7b-1a58" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 1 from the attacking unit's Damage characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 1 from the Damage characteristic of the attacking unit's attacks.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="aa00-a67e-2ad2-7b0d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="7e1d-ada1-6599-f9d1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3223,60 +3219,59 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         <profile name="Daemon Primarch of Slaanesh" id="3e4f-3050-ec28-5a57" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Command phase, until the end of the battle round:
-  -&gt; At the start of your opponent's Command phase:
-    -&gt; Select one:
-      - Beguiling Form: each time an attack targets this model, apply -1 to the Hit roll.
-      - Daemonic Speed: this model gains the Fights First ability.
-      - Enthralling Hypnosis: the triggering unit takes a Leadership test (2D6, passing on its current Leadership or higher); if passed, nothing happens; otherwise, enemy units within 6" of this model cannot Fall Back.</characteristic>
+  - At the start of your opponent's Command phase:
+    - Select one:
+      - Beguiling Form: Each time an attack targets this model, subtract 1 from the Hit roll.
+      - Daemonic Speed: This model gains the Fights First ability.
+      - Enthralling Hypnosis: The triggering unit takes a Leadership test; if failed, enemy units within 6" of this model cannot Fall Back.</characteristic>
           </characteristics>
         </profile>
         <profile name="Beguiling Form" id="7876-9d5d-dcd6-ec59" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Command phase, until the end of the battle round:
-  -&gt; At the start of your opponent's Command phase: each time an attack targets this model, apply -1 to the Hit roll.</characteristic>
+  - At the start of your opponent's Command phase, each time an attack targets this model, subtract 1 from the Hit roll.</characteristic>
           </characteristics>
         </profile>
         <profile name="Daemonic Speed" id="c3e2-1be5-a52f-07b7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Command phase, until the end of the battle round:
-  -&gt; At the start of your opponent's Command phase: this model gains the Fights First ability.</characteristic>
+  - At the start of your opponent's Command phase, this model gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Enthralling Hypnosis" id="6803-e720-09e4-b03b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Command phase, until the end of the battle round:
-  -&gt; At the start of your opponent's Command phase:
-    -&gt; The triggering unit takes a Leadership test (2D6, passing on its current Leadership or higher); if passed, nothing happens; otherwise, enemy units within 6" of this model cannot Fall Back.</characteristic>
+  - At the start of your opponent's Command phase:
+    - The triggering unit takes a Leadership test; if failed, enemy units within 6" of this model cannot Fall Back.</characteristic>
           </characteristics>
         </profile>
         <profile name="Daemonic Poisons" id="74a1-f17d-a395-3ca2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; After this model resolves its attacks during your Shooting phase or after this model resolves its attacks during the Fight phase, for the rest of the battle:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit this phase: that unit is poisoned.
--&gt; At the start of the Command phase:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this model resolves its attacks during your Shooting phase or after this model resolves its attacks during the Fight phase, for the rest of the battle:
+  - Select one enemy unit that was hit by an attack made by the triggering unit this phase. That unit is poisoned.
+At the start of the Command phase:
   For each enemy unit that is poisoned that is on the battlefield:
-    -&gt; Roll one D6: on a 4+, the unit suffers D3 mortal wounds.</characteristic>
+    - Roll one D6: on a 4+, that unit suffers D3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Supreme Commander" id="3aab-cfc2-1624-10b3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, the unit must be your Warlord.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, this unit must be your Warlord.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="c424-81ed-5c80-7327" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="09de-4e27-ed18-afcf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="9774-cc0c-65f2-8950" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3362,18 +3357,18 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         <profile name="A Challenge Worthy of Skill" id="db74-592d-c4cd-66cd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against CHARACTER, MONSTER or WALKER targets:
-  -&gt; You can re-roll the Hit roll for attacks made by this model.
-  -&gt; You can re-roll the Wound roll for attacks made by this model.</characteristic>
+  - You can re-roll Hit rolls for attacks made by this model.
+  - You can re-roll Wound rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Duellist's Hubris" id="afa8-a255-9c3f-aac4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, unless this model is leading a unit, until the end of the phase, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, unless this model is leading a unit, until the end of the phase, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="35d8-a089-51f6-89a7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="9476-1e45-b587-3a84" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3383,7 +3378,7 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         </profile>
         <profile name="Feel No Pain" id="ecc2-17e2-bedd-265a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3473,26 +3468,25 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         </profile>
         <profile name="Airborne Predator" id="1b98-bdb0-bf3b-2bd9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit was moved over by this model during that move:
-    -&gt; If the selected unit has the FLY keyword, roll 2 D6: for each 3+, that unit suffers D3 mortal wounds.
-    -&gt; Unless the selected unit has the FLY keyword, roll 2 D6: for each 4+, that unit suffers D3 mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, you can use this ability:
+  - Select one enemy unit that was moved over by this model during that move:
+    - If the selected unit has the FLY keyword, roll 2 D6: for each 3+, that unit suffers D3 mortal wounds.
+    - Unless the selected unit has the FLY keyword, roll 2 D6: for each 4+, that unit suffers D3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Hover" id="5c03-9f83-eca7-0564" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit uses ability, the unit's Takes to the Skies ability has no limit on its range.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit uses ability, this unit's Takes to the Skies ability has no limit on its range.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="987d-e392-f972-0da8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="afa5-a3e0-e9b8-2376" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3598,13 +3592,13 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         <profile name="Excessive Assault" id="a946-446e-7186-38c2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks:
-  -&gt; While the target is not within range of an objective marker, you can re-roll a Wound roll of 1.
-  -&gt; While the target is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
+  - While the target is not within range of an objective marker, you can re-roll Wound rolls of 1.
+  - While the target is within range of an objective marker, you can re-roll Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="8619-d548-1ee4-8c33" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3883,20 +3877,19 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         </profile>
         <profile name="Glutton for Punishment" id="7bd9-c7d8-2fc4-0bb0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is below its starting strength:
-  -&gt; This model gets +1 to Hit rolls.
-  -&gt; While the unit is below half strength, this model gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is below its Starting Strength:
+  - Add 1 to this model's Hit rolls.
+  - While this unit is Below Half-strength, add 1 to this model's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="669c-dbbd-a1eb-bb49" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="65ee-d1f8-7ff9-e4cc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4001,10 +3994,10 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
       <profiles>
         <profile name="Daemonic Patrons" id="a535-1f69-1f40-8a3a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When the unit is selected to fight, you may use this ability, until the end of the phase:
-  -&gt; The unit resolves the Daemonic Patrons ability now.
-  -&gt; The unit scores Critical Wounds on Wound rolls of 3+.
--&gt; At the end of the Fight phase: if the unit used the Daemonic Patrons ability this phase, unless the unit has destroyed 1+ enemy models this phase, destroy 1 model in the unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, until the end of the phase:
+  - This unit resolves the Daemonic Patrons ability now.
+  - This unit scores Critical Wounds on Wound rolls of 3+.
+At the end of the Fight phase, if this unit used the Daemonic Patrons ability this phase, unless this unit has destroyed one or more enemy models this phase, destroy 1 model in this unit.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4130,18 +4123,18 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
       <profiles>
         <profile name="Deep Strike" id="1372-60b7-eaae-3c63" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fights First" id="6447-d2db-c8fd-f12d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Fights First ability, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Horrifying Beauty" id="51e6-a21d-dd3b-113c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army, until the end of the phase:
-  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Horrifying Beauty ability, while the unit is below half strength, the unit must take a Battle-shock test, applying -1 to that test; unless the unit is below half strength, the unit must take a Battle-shock test.</characteristic>
+  For each enemy unit: While this unit is within Engagement Range of a friendly unit with the Horrifying Beauty ability, while this unit is Below Half-strength, that unit must take a Battle-shock test, applying -1 to that test; unless this unit is Below Half-strength, that unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4341,14 +4334,14 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
       <profiles>
         <profile name="Deep Strike" id="d46d-1363-aa8d-4617" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Soporific Musk" id="0d71-5ab3-5ef0-925f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the Soporific Musk ability:
-  -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
-  -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit (excluding MONSTER or VEHICLE units) starts a Fall Back move, while the triggering unit is within Engagement Range of a friendly unit with the Soporific Musk ability:
+  - While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
+  - While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4537,23 +4530,22 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
         </profile>
         <profile name="Damaged" id="949d-1b5c-f942-650c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="c094-df84-4c1d-e567" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="4a8f-8c3e-17bf-c478" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Mesmerising Form" id="01df-1cd5-cc4c-cb45" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The attacking unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 1 from the attacking unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4699,12 +4691,12 @@ Each time a model in this unit is destroyed, roll one D6. On a 2+, leave that mo
       <profiles>
         <profile name="Deep Strike" id="b338-5adc-99b6-ea11" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="b7e6-f253-a072-58ef" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Unholy Speed" id="3fe6-7056-6244-62fa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4951,24 +4943,23 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Damaged" id="e4cf-4b1c-1da8-13c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="0fa1-72e6-1c59-e433" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="cad6-242e-9a95-c760" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Monarch of the Hunt" id="1fa9-5792-c537-f1a1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the battle round, if during the first battle round:
-  -&gt; Select one enemy unit, binding it as quarry selection (your Quarry target). When your Quarry target is destroyed, you must select one enemy unit, binding it as quarry selection to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against it, while making melee attacks, while that unit is tagged quarry, you can re-roll the Hit roll for attacks made by this model; you can re-roll the Wound roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the first battle round:
+  - Select one enemy unit (your Quarry target). When your Quarry target is destroyed, you must select one enemy unit to replace it. Only one such designation can be active for this unit. For the rest of the battle, each time this model makes an attack against it, while making melee attacks, while that unit is a Quarry, you can re-roll Hit rolls for attacks made by this model; you can re-roll Wound rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="No Prey Can Evade" id="1bc5-8973-3036-6b13" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5067,28 +5058,27 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="b627-fcac-1859-dcc3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Revel in Desecration" id="0e52-877d-ce2a-2b54" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless the target unit is below half strength, this model gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless the target unit is Below Half-strength, add 1 to this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scuttling Walker" id="8ac9-dfa1-78a6-f881" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal, Advance or Fall Back move:
-  -&gt; The unit can move over non-Titanic models as though they were not there.
-  -&gt; The unit can move over terrain features as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The unit automatically passes Desperate Escape tests.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal, Advance or Fall Back move:
+  - This unit can move over non-Titanic models as though they were not there.
+  - This unit can move over terrain features as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - This unit automatically passes Desperate Escape tests.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="1265-41f6-cb03-a0d4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6233,9 +6223,9 @@ You can re-roll the Advance roll.</characteristic>
       <profiles>
         <profile name="Icon of Excess" id="1f28-47f3-f616-8286" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Shooting phase or at the end of the Fight phase, if the unit has destroyed 1+ enemy units this phase:
-  -&gt; The unit must take a Leadership test.
-  -&gt; If the triggering leadership roll succeeded, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Shooting phase or at the end of the Fight phase, if this unit has destroyed one or more enemy units this phase:
+  - This unit must take a Leadership test.
+  - If the triggering leadership roll succeeded, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6712,7 +6702,7 @@ You can re-roll the Advance roll.</characteristic>
       <profiles>
         <profile name="Daemonic Icon" id="9208-3e8a-c40c-831e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set the unit's Leadership characteristic to 6.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this unit's Leadership characteristic to 6+.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6724,7 +6714,7 @@ You can re-roll the Advance roll.</characteristic>
       <profiles>
         <profile name="Instrument of Chaos" id="3ff7-0f8e-5e95-5170" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gets +1 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6790,7 +6780,7 @@ You can re-roll the Advance roll.</characteristic>
       <profiles>
         <profile name="Shining Aegis" id="42ae-2674-bde2-ac76" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Save characteristic to 3.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Save characteristic to 3+.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7179,7 +7169,11 @@ You can re-roll the Advance roll.</characteristic>
               </constraints>
               <rules>
                 <rule name="Internal Rivalries" id="ad90-7445-cd3b-b001" hidden="false">
-                  <description>If the unit has the EMPEROR'S CHILDREN keyword, if the unit has the CHARACTER keyword, the unit ignores any modifiers to its characteristics; the unit ignores any modifiers to its Advance rolls; the unit ignores any modifiers to its Charge rolls; you can re-roll a failed Wound roll.</description>
+                  <description>If this unit has the EMPEROR'S CHILDREN keyword and this unit has the CHARACTER keyword:
+  - This unit ignores any modifiers to its characteristics.
+  - This unit ignores any modifiers to its Advance rolls.
+  - This unit ignores any modifiers to its Charge rolls.
+  - You can re-roll failed Wound rolls.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7196,7 +7190,7 @@ You can re-roll the Advance roll.</characteristic>
               </constraints>
               <rules>
                 <rule name="Daemonic Empowerment" id="9e8d-95b3-cae9-fa9e" hidden="false">
-                  <description>If the unit has the EMPEROR'S CHILDREN keyword, while the unit is within 6" of a friendly LEGIONS OF EXCESS unit, the unit's weapons gain [SUSTAINED HITS 1].</description>
+                  <description>If this unit has the EMPEROR'S CHILDREN keyword, while this unit is within 6" of a friendly LEGIONS OF EXCESS unit, this unit's weapons gain [SUSTAINED HITS 1].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7213,10 +7207,10 @@ You can re-roll the Advance roll.</characteristic>
               </constraints>
               <rules>
                 <rule name="Exquisite Swordsmanship" id="d85b-7d26-0129-e0a1" hidden="false">
-                  <description>When a friendly unit is selected to fight (the triggering unit must have EMPEROR'S CHILDREN), if the triggering unit charged this turn, until that unit finishes resolving its attacks:
-  Select one of the following:
-    - Melee weapons equipped by the triggering unit gain [LETHAL HITS].
-    - Melee weapons equipped by the triggering unit gain [SUSTAINED HITS 1].</description>
+                  <description>When a friendly EMPEROR'S CHILDREN unit is selected to fight, if the triggering unit charged this turn, until the attacking unit finishes resolving its attacks:
+  Choose one of the following:
+    - Melee weapons equipped by that unit gain [LETHAL HITS].
+    - Melee weapons equipped by that unit gain [SUSTAINED HITS 1].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7234,8 +7228,8 @@ You can re-roll the Advance roll.</characteristic>
               <rules>
                 <rule name="Mechanised Murder" id="1221-87fb-a01d-7613" hidden="false">
                   <description>If the attacking unit has the TRANSPORT keyword or if the attacking unit disembarked from a Transport this turn:
-  -&gt; You can re-roll a Hit roll of 1 for attacks made by all friendly EMPEROR'S CHILDREN models.
-  -&gt; You can re-roll a Wound roll of 1 for attacks made by all friendly EMPEROR'S CHILDREN models.</description>
+  - You can re-roll Hit rolls of 1 for attacks made by friendly EMPEROR'S CHILDREN models.
+  - You can re-roll Wound rolls of 1 for attacks made by friendly EMPEROR'S CHILDREN models.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7252,7 +7246,7 @@ You can re-roll the Advance roll.</characteristic>
               </constraints>
               <rules>
                 <rule name="Quicksilver Grace" id="32aa-787b-5ba0-72a0" hidden="false">
-                  <description>You can re-roll the Advance roll for all friendly EMPEROR'S CHILDREN units.</description>
+                  <description>You can re-roll the Advance roll for friendly EMPEROR'S CHILDREN units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7269,16 +7263,16 @@ You can re-roll the Advance roll.</characteristic>
               </constraints>
               <rules>
                 <rule name="Sensational Performance" id="f0f0-ade1-8ea6-af00" hidden="false">
-                  <description>All friendly EMPEROR'S CHILDREN units gain the Sensational Performance ability.
--&gt; When the unit is selected to fight, if the unit charged this turn, you may use this ability, until the end of the phase:
-  -&gt; The unit cannot target enemy units with attacks if the target unit was engaged with this unit at the start of the turn.
-  -&gt; The unit cannot target enemy units with attacks if a unit other than this unit has selected the target unit as a target this phase.
-  -&gt; Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.
-  -&gt; Improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1.
-Applies to: units with EMPEROR'S CHILDREN.</description>
+                  <description>Friendly EMPEROR'S CHILDREN units gain the Sensational Performance ability.
+When this unit is selected to fight, if this unit charged this turn, you can use this ability, until the end of the phase:
+  - This unit cannot target enemy units with attacks if the target unit was engaged with this unit at the start of the turn.
+  - This unit cannot target enemy units with attacks if a unit other than this unit has selected the target unit as a target this phase.
+  - Improve the Strength characteristic of melee weapons equipped by models in this unit by 1.
+  - Improve the Armour Penetration characteristic of melee weapons equipped by models in this unit by 1.
+Applies to: EMPEROR'S CHILDREN units.</description>
                 </rule>
                 <rule name="Master of the Pageant" id="7082-b1aa-1ef8-0450" hidden="false">
-                  <description>You gain 1CP.</description>
+                  <description>You gain 1 CP.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7295,15 +7289,15 @@ Applies to: units with EMPEROR'S CHILDREN.</description>
               </constraints>
               <rules>
                 <rule name="Pledges to the Dark Prince" id="a52b-02e6-6e4a-6167" hidden="false">
-                  <description>-&gt; At the start of the battle round: while a friendly model that is the Warlord is on the battlefield, declare a number as your pledge.
--&gt; At the end of the battle round:
-  -&gt; If you destroyed at least as many enemy units this battle round as your pledge, you gain a number of Pact points equal to your pledge.
-  -&gt; Unless you destroyed at least as many enemy units this battle round as your pledge, friendly models that are the Warlord suffer D3 mortal wounds.
-All friendly EMPEROR'S CHILDREN units gain the following rules:
-  -&gt; While you have 1+ pact points, you can re-roll a Hit roll of 1.
-  -&gt; While you have 3+ pact points, you can re-roll a Wound roll of 1.
-  -&gt; While you have 5+ pact points, melee weapons equipped by models in this unit gain [LETHAL HITS] and [SUSTAINED HITS 1].
-  -&gt; While you have 7+ pact points, the unit scores Critical Hits on Hit rolls of 5+.</description>
+                  <description>At the start of the battle round, while a friendly model that is the Warlord is on the battlefield, declare a number as your pledge.
+At the end of the battle round:
+  - If you destroyed at least as many enemy units this battle round as your pledge, you gain a number of Pact points equal to your pledge.
+  - Unless you destroyed at least as many enemy units this battle round as your pledge, friendly models that are the Warlord suffer D3 mortal wounds.
+Friendly EMPEROR'S CHILDREN units gain the following rules:
+  - While you have one or more pact points, you can re-roll Hit rolls of 1.
+  - While you have 3 or more pact points, you can re-roll Wound rolls of 1.
+  - While you have 5 or more pact points, melee weapons equipped by models in this unit gain [LETHAL HITS] and [SUSTAINED HITS 1].
+  - While you have 7 or more pact points, this unit scores Critical Hits on Hit rolls of 5+.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7320,8 +7314,8 @@ All friendly EMPEROR'S CHILDREN units gain the following rules:
               </constraints>
               <rules>
                 <rule name="Eager to Kill" id="d39c-ec8c-f9a9-665f" hidden="false">
-                  <description>When a friendly unit is set up (the triggering unit must have EMPEROR'S CHILDREN and TERMINATOR), until the end of the turn, the unit gets +1 to Charge rolls.
-Applies to: units with EMPEROR’S CHILDREN, TERMINATOR.</description>
+                  <description>When a friendly EMPEROR'S CHILDREN TERMINATOR unit is set up, until the end of the turn, add 1 to that unit's Charge rolls.
+Applies to: EMPEROR’S CHILDREN TERMINATOR units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7338,8 +7332,8 @@ Applies to: units with EMPEROR’S CHILDREN, TERMINATOR.</description>
               </constraints>
               <rules>
                 <rule name="Frantic Focus" id="3fa3-b676-e643-b431" hidden="false">
-                  <description>When a friendly unit is selected to make an Advance or Fall Back move (the triggering unit must have BATTLELINE and EMPEROR'S CHILDREN), until the end of the turn, friendly BATTLELINE models in the triggering unit's weapons gain [SUSTAINED HITS 1].
-Applies to: units with EMPEROR’S CHILDREN, BATTLELINE.</description>
+                  <description>When a friendly BATTLELINE EMPEROR'S CHILDREN unit is selected to make an Advance or Fall Back move, until the end of the turn, the weapons of friendly BATTLELINE models in that unit gain [SUSTAINED HITS 1].
+Applies to: EMPEROR’S CHILDREN BATTLELINE units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7356,8 +7350,8 @@ Applies to: units with EMPEROR’S CHILDREN, BATTLELINE.</description>
               </constraints>
               <rules>
                 <rule name="Entitled to Victory" id="d733-3f15-1662-4cda" hidden="false">
-                  <description>All friendly FLAWLESS BLADES units gain the Fights First ability.
-Applies to: units with EMPEROR’S CHILDREN, FLAWLESS BLADES.</description>
+                  <description>Friendly FLAWLESS BLADES units gain the Fights First ability.
+Applies to: EMPEROR’S CHILDREN FLAWLESS BLADES units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -7410,8 +7404,8 @@ Applies to: units with EMPEROR’S CHILDREN, FLAWLESS BLADES.</description>
             <profile name="Eager to Prove" id="07c7-dbf6-caa3-69c8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll the Charge roll.
-While the unit is tagged favoured champions, add 2 to the unit's Move characteristic.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+While this unit is designated as Favoured Champions, add 2" to this unit's Move characteristic.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7447,10 +7441,10 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Repulsed by Weakness" id="4701-48d9-9ecc-ac53" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of the unit:
-  -&gt; While the unit is tagged favoured champions, the triggering unit must take a Desperate Escape test, applying -1 to that test.
-  -&gt; While the unit is not tagged favoured champions, the triggering unit must take a Desperate Escape test.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit (excluding MONSTER or VEHICLE units) starts a Fall Back move, while the triggering unit is within Engagement Range of this unit:
+  - While this unit is designated as Favoured Champions, the triggering unit must take a Desperate Escape test, applying -1 to that test.
+  - While this unit is not designated as Favoured Champions, the triggering unit must take a Desperate Escape test.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7486,11 +7480,11 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Proud and Vainglorious" id="fe05-0c8a-923a-6a2f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Select one of the following:
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Choose one of the following:
   - You can re-roll the Leadership roll.
   - You can re-roll the Battle-shock roll.
-While the unit is tagged favoured champions, add 1 to the unit's Objective Control characteristic.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+While this unit is designated as Favoured Champions, add 1 to this unit's Objective Control characteristic.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7528,9 +7522,9 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Melee weapons equipped by this model gain [PRECISION].
 While making melee attacks against CHARACTER targets:
-  -&gt; Improve this model's Strength characteristic by 1.
-  -&gt; Improve this model's Armour Penetration characteristic by 1.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+  - Improve this model's Strength characteristic by 1.
+  - Improve this model's Armour Penetration characteristic by 1.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7566,8 +7560,8 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Empyric Suffusion" id="d2bd-ce69-740e-8e31" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target the unit with the Heroic Intervention Stratagem, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target this unit with the Heroic Intervention Stratagem, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7601,8 +7595,8 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Dark Blessings" id="f702-04ed-62ad-3702" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit targets this unit, you may use this ability, once per battle per model, until the end of the phase, this model has a 3+ invulnerable save.
-Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit targets this unit, you can use this ability, once per battle per model, until the end of the phase, this model has a 3+ invulnerable save.
+Applies to: EMPEROR’S CHILDREN INFANTRY units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7638,14 +7632,14 @@ Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
           <profiles>
             <profile name="Possessed Blade" id="982c-05e1-b409-73cd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the battle:
-  -&gt; Select one melee weapon equipped by this model; the effects below refer to it as the selected weapon.
-  -&gt; Add 1 to the Attacks characteristic of the selected weapon equipped by this model.
--&gt; When this model is selected to fight, you may use this ability, until that unit finishes resolving its attacks:
-  -&gt; Add 1 to the Damage characteristic of the selected weapon equipped by this model.
-  -&gt; The selected melee weapon equipped by this model gains [DEVASTATING WOUNDS].
-  -&gt; The selected melee weapon equipped by this model gains [HAZARDOUS].
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle:
+  - Select one melee weapon equipped by this model; the effects below refer to it as the selected weapon.
+  - Add 1 to the Attacks characteristic of the selected weapon equipped by this model.
+When this model is selected to fight, you can use this ability, until the attacking unit finishes resolving its attacks:
+  - Add 1 to the Damage characteristic of the selected weapon equipped by this model.
+  - The selected melee weapon equipped by this model gains [DEVASTATING WOUNDS].
+  - The selected melee weapon equipped by this model gains [HAZARDOUS].
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7682,12 +7676,12 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Warp Walker" id="415e-55a9-a929-6891" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When the unit ends an Advance move, until the end of the phase: the unit does not make an Advance roll; add 6" to its Move characteristic instead.
--&gt; When the unit ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over enemy models as though they were not there.
-  -&gt; This model is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; This model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The unit automatically passes Desperate Escape tests.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Advance move, until the end of the phase, this unit does not make an Advance roll; add 6" to its Move characteristic instead.
+When this unit ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over enemy models as though they were not there.
+  - This model is eligible to move even if it is within Engagement Range of enemy units.
+  - This model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - This unit automatically passes Desperate Escape tests.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7723,10 +7717,10 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Faultless Opportunist" id="4096-2b2b-4a21-fe93" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
-Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-The unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: This unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
+Reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+This unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7762,8 +7756,8 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Blinding Speed" id="7e00-b8fb-fa18-61cb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, once per battle per model, until the end of the phase, the unit gains the Fights First ability.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability, once per battle per model, until the end of the phase, this unit gains the Fights First ability.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7801,7 +7795,7 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to the Attacks characteristic of melee weapons equipped by this model.
 Add 1 to the Damage characteristic of melee weapons equipped by this model.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7835,10 +7829,10 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Rise to the Challenge" id="06fa-f495-908c-463c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per battle per unit, while 3+ models in this model are within Engagement Range of an enemy model, until the end of the phase:
-  -&gt; This model is eligible to fight even if it has already fought this phase.
-  -&gt; This model resolves the Exquisite Swordsmanship ability now.
-Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per battle per unit, while 3 or more models in this model are within Engagement Range of an enemy model, until the end of the phase:
+  - This model is eligible to fight even if it has already fought this phase.
+  - This model resolves the Exquisite Swordsmanship ability now.
+Applies to: EMPEROR’S CHILDREN INFANTRY units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7872,9 +7866,9 @@ Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
           <profiles>
             <profile name="Sublime Prescience" id="8014-e00f-6ee3-8d09" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per turn per model, during the Movement phase, in your turn, until the end of the phase:
-  -&gt; Select one friendly EMPEROR'S CHILDREN TRANSPORT unit that is in Strategic Reserves: that unit can be set up on the battlefield, treating the battle round as 1 higher than it is.
-Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per turn per model, during your Movement phase, until the end of the phase, you can use this ability:
+  - Select one friendly EMPEROR'S CHILDREN TRANSPORT unit that is in Strategic Reserves. That unit can be set up on the battlefield, treating the battle round as 1 higher than it is.
+Applies to: EMPEROR’S CHILDREN INFANTRY units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7908,10 +7902,10 @@ Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
           <profiles>
             <profile name="Spearhead Striker" id="8f81-9c5b-9c47-d343" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit disembarks from a Transport, you may use this ability, until the end of the turn:
-  -&gt; You can re-roll the Charge roll.
-  -&gt; Enemy units cannot target the unit with the Fire Overwatch Stratagem.
-Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit disembarks from a Transport, you can use this ability, until the end of the turn:
+  - You can re-roll the Charge roll.
+  - Enemy units cannot target this unit with the Fire Overwatch Stratagem.
+Applies to: EMPEROR’S CHILDREN INFANTRY units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7945,10 +7939,10 @@ Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
           <profiles>
             <profile name="Accomplished Tactician" id="89d0-87d9-3615-e5c5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After an enemy unit shoots, you may use this ability, once per turn per model, during the Shooting phase, in the opponent's turn, until the end of the phase:
-  -&gt; Select one friendly EMPEROR'S CHILDREN unit within 9" of this model that was hit by an attack made by the triggering unit during its just-finished shooting sequence, binding it as outer:
-    -&gt; Select one friendly TRANSPORT unit if the bound outer is wholly within 6" of the unit and the bound outer is able to embark within that Transport, binding it as inner: the bound outer is eligible to embark into the bound inner.
-Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After an enemy unit shoots, you can use this ability, once per turn per model, during your opponent's Shooting phase, until the end of the phase:
+  - Select one friendly EMPEROR'S CHILDREN unit within 9" of this model that was hit by an attack made by the triggering unit during that shooting sequence (referred to below as the outer):
+    - Select one friendly TRANSPORT unit if the chosen outer is wholly within 6" of this unit and the chosen outer is able to embark within that Transport (referred to below as the inner). The chosen outer is eligible to embark into the chosen inner.
+Applies to: EMPEROR’S CHILDREN INFANTRY units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -7982,8 +7976,8 @@ Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
           <profiles>
             <profile name="Heretek Adept" id="3266-acf7-1884-f11e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a saving throw made for a friendly model is failed (the triggering model must have EMPEROR'S CHILDREN and VEHICLE), you may use this ability, once per battle round per model, while the triggering model is within 6" of this model, each time an attack is allocated to the triggering model, change the Damage of that attack to 0.
-Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a saving throw made for a friendly EMPEROR'S CHILDREN VEHICLE model is failed, you can use this ability, once per battle round per model, while the triggering model is within 6" of this model, each time an attack is allocated to the triggering model, change the Damage of that attack to 0.
+Applies to: EMPEROR’S CHILDREN INFANTRY units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8019,10 +8013,10 @@ Applies to: units with EMPEROR’S CHILDREN, INFANTRY.</characteristic>
           <profiles>
             <profile name="Steeped in Suffering" id="8eae-be4c-5e83-b7c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target unit is below its starting strength:
-  -&gt; The unit gets +1 to Hit rolls.
-  -&gt; While the target unit is below half strength, the unit gets +1 to Wound rolls.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target unit is below its Starting Strength:
+  - Add 1 to this unit's Hit rolls.
+  - While the target unit is Below Half-strength, add 1 to this unit's Wound rolls.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8058,8 +8052,8 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Intoxicating Musk" id="af3d-bee8-0a08-2618" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against melee attacks, when the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against melee attacks, when the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8095,12 +8089,12 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Tactical Perfection" id="fe56-c386-8fa8-762b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you may use this ability:
-  -&gt; Select up to 2 friendly EMPEROR'S CHILDREN units:
-    -&gt; For each selected unit:
-      -&gt; That unit can be set up on the battlefield.
-      -&gt; That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After deployment, you can use this ability:
+  - Select up to 2 friendly EMPEROR'S CHILDREN units:
+    - For each selected unit:
+      - That unit can be set up on the battlefield.
+      - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8136,12 +8130,12 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Loathsome Dexterity" id="cb81-c189-21b6-0bbe" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over enemy models as though they were not there.
-  -&gt; This model is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; This model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The unit automatically passes Desperate Escape tests.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over enemy models as though they were not there.
+  - This model is eligible to move even if it is within Engagement Range of enemy units.
+  - This model cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - This unit automatically passes Desperate Escape tests.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8177,10 +8171,10 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Tears of the Phoenix" id="cf6c-6c75-0897-f5ed" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While making melee attacks:
-  -&gt; The unit ignores any modifiers to its Weapon Skill characteristics with melee weapons.
-  -&gt; The unit ignores any modifiers to its Hit and Wound rolls with melee weapons.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, you can use this ability:
+  - This unit ignores any modifiers to its Weapon Skill characteristics with melee weapons.
+  - This unit ignores any modifiers to its Hit and Wound rolls with melee weapons.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8208,8 +8202,8 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Exalted Patron" id="6b44-5d20-dbf0-6799" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this model's Move characteristic.
-Applies to: units with LORD EXULTANT.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1" to this model's Move characteristic.
+Applies to: LORD EXULTANT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8245,9 +8239,8 @@ Applies to: units with LORD EXULTANT.</characteristic>
           <profiles>
             <profile name="Soulstain Made Manifest" id="0ea7-af3e-febd-fbf3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model: that unit must take a Battle-shock test, applying -1 to that test.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability, select one enemy unit that is within Engagement Range of this model. That unit must take a Battle-shock test, applying -1 to that test.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8277,7 +8270,7 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to the Attacks characteristic of melee weapons equipped by this model.
 Add 1 to the Strength characteristic of melee weapons equipped by this model.
-Applies to: units with EMPEROR’S CHILDREN, DAEMON PRINCE.</characteristic>
+Applies to: EMPEROR’S CHILDREN DAEMON PRINCE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8313,9 +8306,8 @@ Applies to: units with EMPEROR’S CHILDREN, DAEMON PRINCE.</characteristic>
           <profiles>
             <profile name="Pledge of Eternal Servitude" id="bb90-37cd-19fe-8f69" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle:
-  -&gt; This model takes a Leadership test (2D6, passing on its current Leadership or higher); if passed, this model is set up again as close as possible to where it was destroyed with D6 wounds remaining.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle, this model takes a Leadership test; if passed, this model is set up again as close as possible to where it was destroyed with D6 wounds remaining.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8352,9 +8344,9 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
             <profile name="Pledge of Dark Glory" id="11c9-a4e0-8b3e-2262" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit:
-  -&gt; Improve the unit's Leadership characteristic by 1.
-  -&gt; Improve the unit's Objective Control characteristic by 1.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+  - Improve this unit's Leadership characteristic by 1.
+  - Improve this unit's Objective Control characteristic by 1.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8391,10 +8383,10 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
             <profile name="Pledge of Mortal Pain" id="a881-7660-687c-214d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, until the end of the phase:
-  -&gt; Select one enemy unit if the selected unit is within 12" of this model and the selected unit is visible to this model:
-    -&gt; While the selected unit is Battle-shocked, that unit must take a Leadership test, applying -2 to that test.
-    -&gt; If the triggering leadership roll was a failure, that unit suffers 3 mortal wounds.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+  - Select one enemy unit that is within 12" of this model and visible to this model:
+    - While the selected unit is Battle-shocked, that unit must take a Leadership test, applying -2 to that test.
+    - If the triggering leadership roll was a failure, that unit suffers 3 mortal wounds.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8430,12 +8422,12 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
           <profiles>
             <profile name="Pledge of Unholy Fortune" id="c471-a3cf-e19e-36fc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a Hit roll is made, you may use this ability or after a Wound roll is made, you may use this ability or after a saving throw is made, you may use this ability, once per turn per model, while the unit is not Battle-shocked:
-  Select one of the following:
-    - One of the unit's Hit rolls counts as 6.
-    - One of the unit's Wound rolls counts as 6.
-    - One of the unit's saving throw rolls counts as 6.
-Applies to: units with EMPEROR’S CHILDREN.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a Hit roll is made, you can use this ability or after a Wound roll is made, you can use this ability or after a saving throw is made, you can use this ability, once per turn per model, while this unit is not Battle-shocked:
+  Choose one of the following:
+    - One of this unit's Hit rolls counts as 6.
+    - One of this unit's Wound rolls counts as 6.
+    - One of this unit's saving throw rolls counts as 6.
+Applies to: EMPEROR’S CHILDREN units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8465,7 +8457,7 @@ Applies to: units with EMPEROR’S CHILDREN.</characteristic>
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model gains the Deep Strike ability.
 Ranged weapons equipped by models in this unit gain [IGNORES COVER].
-Applies to: units with EMPEROR’S CHILDREN, LORD KAKOPHONIST.</characteristic>
+Applies to: EMPEROR’S CHILDREN LORD KAKOPHONIST units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8493,8 +8485,8 @@ Applies to: units with EMPEROR’S CHILDREN, LORD KAKOPHONIST.</characteristic>
           <profiles>
             <profile name="Frenzied Ferocity (Upgrade)" id="27f7-9484-b278-c8e6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit's weapons gain [SUSTAINED HITS 1].
-Applies to: units with EMPEROR’S CHILDREN, TERMINATOR SQUAD.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit's weapons gain [SUSTAINED HITS 1].
+Applies to: EMPEROR’S CHILDREN TERMINATOR SQUAD units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8523,7 +8515,7 @@ Applies to: units with EMPEROR’S CHILDREN, TERMINATOR SQUAD.</characteristic>
             <profile name="Euphoric Crown" id="c80b-b934-cce3-83ec" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve the Strength characteristic of melee weapons equipped by this model by 1.
-Applies to: units with EMPEROR’S CHILDREN, LORD EXULTANT.</characteristic>
+Applies to: EMPEROR’S CHILDREN LORD EXULTANT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8552,7 +8544,7 @@ Applies to: units with EMPEROR’S CHILDREN, LORD EXULTANT.</characteristic>
             <profile name="Howling Plate" id="818a-9ec1-7906-5ca0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve the Armour Penetration characteristic of ranged weapons equipped by models in this unit by 1.
-Applies to: units with EMPEROR’S CHILDREN, LORD EXULTANT.</characteristic>
+Applies to: EMPEROR’S CHILDREN LORD EXULTANT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8580,8 +8572,8 @@ Applies to: units with EMPEROR’S CHILDREN, LORD EXULTANT.</characteristic>
           <profiles>
             <profile name="Eager Patrons (Upgrade)" id="f415-1db9-656f-03b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 2 to the unit's Move characteristic.
-Applies to: units with EMPEROR’S CHILDREN, FLAWLESS BLADES.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 2" to this unit's Move characteristic.
+Applies to: EMPEROR’S CHILDREN FLAWLESS BLADES units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8609,8 +8601,8 @@ Applies to: units with EMPEROR’S CHILDREN, FLAWLESS BLADES.</characteristic>
           <profiles>
             <profile name="Beguiling Grotesquerie (Upgrade)" id="fe9d-1c9f-6815-fedb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Your opponent cannot target the unit with Overwatch.
-Applies to: units with EMPEROR’S CHILDREN, FLAWLESS BLADES.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Your opponent cannot target this unit with Overwatch.
+Applies to: EMPEROR’S CHILDREN FLAWLESS BLADES units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8625,16 +8617,16 @@ Applies to: units with EMPEROR’S CHILDREN, FLAWLESS BLADES.</characteristic>
   <sharedRules>
     <rule name="Thrill Seekers" id="3e41-919c-e639-f8bf" hidden="false">
       <description>If your Army Faction is EMPERORS CHILDREN:
-  -&gt; Ranged weapons equipped by models in this unit gain [ASSAULT].
-  -&gt; The unit is eligible to declare a charge in a turn in which it Advanced.
-  -&gt; The unit is eligible to shoot in a turn in which it Fell Back.
-  -&gt; The unit is eligible to declare a charge in a turn in which it Fell Back.
-  If the unit advanced this turn or if the unit fell back this turn:
-    -&gt; The unit cannot target enemy units with ranged attacks if the target unit was engaged with this unit at the start of the turn.
-    -&gt; The unit cannot target enemy units with a charge if the target unit was engaged with this unit at the start of the turn.
-  If the unit advanced this turn or if the unit fell back this turn:
-    -&gt; The unit cannot target enemy units with ranged attacks if a unit other than this unit has selected the target unit as a target this phase or a unit other than this unit has selected the target unit as a charge target this phase.
-    -&gt; The unit cannot target enemy units with a charge if a unit other than this unit has selected the target unit as a target this phase or a unit other than this unit has selected the target unit as a charge target this phase.</description>
+  - Ranged weapons equipped by models in this unit gain [ASSAULT].
+  - This unit is eligible to declare a charge in a turn in which it Advanced.
+  - This unit is eligible to shoot in a turn in which it Fell Back.
+  - This unit is eligible to declare a charge in a turn in which it Fell Back.
+  - If this unit advanced this turn or if this unit fell back this turn:
+    - This unit cannot target enemy units with ranged attacks if the target unit was engaged with this unit at the start of the turn.
+    - This unit cannot target enemy units with a charge if the target unit was engaged with this unit at the start of the turn.
+  - If this unit advanced this turn or if this unit fell back this turn:
+    - This unit cannot target enemy units with ranged attacks if a unit other than this unit has selected the target unit as a target this phase or a unit other than this unit has selected the target unit as a charge target this phase.
+    - This unit cannot target enemy units with a charge if a unit other than this unit has selected the target unit as a target this phase or a unit other than this unit has selected the target unit as a charge target this phase.</description>
     </rule>
     <rule name="Pact of Excess" id="2ec9-1af5-cacd-4db7" hidden="false">
       <description>You cannot select Legions of Excess as your Army Faction.</description>

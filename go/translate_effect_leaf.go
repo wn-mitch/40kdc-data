@@ -77,40 +77,66 @@ func statChange(m map[string]any, what string) string {
 // number ("3+").
 var rollTargetStats = map[string]bool{"Sv": true, "WS": true, "BS": true, "Ld": true}
 
+// distanceStats are characteristics measured in inches.
+var distanceStats = map[string]bool{"M": true, "Range": true, "detection-range": true}
+
 func bounds(m map[string]any) string {
 	// An improved roll target is capped from below: "this cannot improve a model's Save to better than 3+".
 	if stat, _ := m["stat"].(string); m["operation"] == "improve" && rollTargetStats[stat] && m["minimum"] != nil && m["maximum"] == nil {
-		return " (to no better than " + ejstr(m["minimum"]) + "+)"
+		return ", to no better than " + ejstr(m["minimum"]) + "+"
 	}
 	s := ""
 	if m["minimum"] != nil {
-		s += " (to a minimum of " + ejstr(m["minimum"]) + ")"
+		s += ", to a minimum of " + ejstr(m["minimum"])
 	}
 	if m["maximum"] != nil {
-		s += " (to a maximum of " + ejstr(m["maximum"]) + ")"
+		s += ", to a maximum of " + ejstr(m["maximum"])
 	}
 	return s
 }
 
+func cloneModWithValue(m map[string]any, val any) map[string]any {
+	c := make(map[string]any, len(m))
+	for k, x := range m {
+		c[k] = x
+	}
+	c["value"] = val
+	return c
+}
+
 func statModifierLeaf(e, m map[string]any, subj string, ctx effCtx) string {
+	statKey := ejstr(m["stat"])
 	// AP is printed negative; the DSL stores its magnitude.
-	if v, ok := m["value"].(float64); ok && m["stat"] == "AP" && m["operation"] == "set" && v > 0 {
-		c := make(map[string]any, len(m))
-		for k, x := range m {
-			c[k] = x
+	if v, ok := m["value"].(float64); ok && statKey == "AP" && m["operation"] == "set" && v > 0 {
+		m = cloneModWithValue(m, "-"+numStr(v))
+	}
+	// Roll-target stats (Sv, WS, BS, Ld) set to a number print with a trailing "+" ("2+").
+	if v, ok := m["value"].(float64); ok && rollTargetStats[statKey] && m["operation"] == "set" {
+		m = cloneModWithValue(m, numStr(v)+"+")
+	}
+	// Distance stats (M, Range, detection-range) print with inches on add/subtract/set.
+	if distanceStats[statKey] && (m["operation"] == "add" || m["operation"] == "subtract" || m["operation"] == "set") {
+		if _, isNum := m["value"].(float64); isNum {
+			m = cloneModWithValue(m, diceCase(m["value"])+"\"")
+		} else if vs, isStr := m["value"].(string); isStr && !strings.HasSuffix(vs, "\"") {
+			m = cloneModWithValue(m, diceCase(vs)+"\"")
 		}
-		c["value"] = "-" + numStr(v)
-		m = c
 	}
 	stat := statName(m["stat"]) + " characteristic"
+	if statKey == "detection-range" {
+		stat = "detection range"
+	}
 	if m["incoming"] == true {
 		return incomingLead(m, subj) + statChange(m, "the "+stat+" of that attack") + bounds(m)
 	}
-	if ctx.attackOnTarget && attackStats[ejstr(m["stat"])] {
+	if ctx.attackOnTarget && attackStats[statKey] {
 		return statChange(m, "the "+stat+" of that attack") + bounds(m) + attackMaker(e["target"], m, subj)
 	}
 	if hasWeapon(m) {
 		return statChange(m, "the "+stat+" of "+weaponNoun(map[string]any{"weapons": m["weapons"]})+" equipped by "+weaponHolder(e["target"], ctx)) + bounds(m)
+	}
+	if e["target"] == "attacker" && attackStats[statKey] {
+		return statChange(m, "the "+stat+" of the attacking unit's attacks") + bounds(m)
 	}
 	return statChange(m, ofOrPossessive(subj, stat)) + bounds(m)
 }
@@ -214,38 +240,58 @@ func ignoreModifiersLeaf(m map[string]any, subj string) string {
 	return subj + " " + ev(subj, "ignores") + " any " + kind + "modifiers to " + pronoun(subj) + " " + things + except + weaponRollScope(m)
 }
 
-func rollModifierLeaf(m map[string]any, subj string) string {
-	value := ""
+var attackRolls = map[string]bool{"hit": true, "wound": true, "damage": true}
+
+// suppressedWeaponScope returns "" when a weapon filter only restates the enclosing `while making <type> attacks` condition.
+func suppressedWeaponScope(m map[string]any, ctx effCtx) string {
+	if !hasWeapon(m) {
+		return ""
+	}
+	w := mapOr(m["weapons"])
+	if ctx.suppressWeaponType != "" && w["type"] == ctx.suppressWeaponType && len(w) == 1 {
+		return ""
+	}
+	return weaponRollScope(m)
+}
+
+func rollModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
+	boundValue := ""
 	// A bound roll's result as the value ("add 1 for each of those mortal wounds", one roll for both).
 	raw, _ := m["value"].(map[string]any)
 	_, bound := raw["roll_var"].(string)
 	if m["value_from"] == "previous-roll" || (bound && raw["successes_on"] == nil) {
-		value = "the result of that roll"
+		boundValue = "the result of that roll"
 	}
 	cap := ""
 	if m["cap"] != nil {
-		cap = " (to a maximum of " + esigned(m["operation"], m["cap"]) + ")"
+		cap = ", to a maximum of " + esigned(m["operation"], m["cap"])
 	}
 	rolls := rollName(m["roll"]) + " rolls"
+	scope := suppressedWeaponScope(m, ctx)
 	// "Halve Advance and Charge rolls made for that unit": the result is halved, with no value.
 	if m["operation"] == "halve" {
-		return "halve " + ofOrPossessive(subj, rolls) + weaponRollScope(m)
+		return "halve " + ofOrPossessive(subj, rolls) + scope
+	}
+	sub := m["operation"] == "subtract" || m["operation"] == "worsen"
+	rawVal := m["value"]
+	if boundValue == "" {
+		if n := jsNumber(rawVal); !math.IsNaN(n) && n < 0 {
+			sub = !sub
+			rawVal = math.Abs(n)
+		}
 	}
 	verb, prep := "add", "to"
-	if m["operation"] == "subtract" {
+	if sub {
 		verb, prep = "subtract", "from"
 	}
+	val := boundValue
+	if val == "" {
+		val = diceCase(rawVal)
+	}
 	if m["incoming"] == true {
-		change := "apply " + esigned(m["operation"], m["value"]) + " to"
-		if value != "" {
-			change = verb + " " + value + " " + prep
-		}
-		return incomingLead(m, subj) + change + " the " + rollName(m["roll"]) + " roll" + cap
+		return incomingLead(m, subj) + verb + " " + val + " " + prep + " the " + rollName(m["roll"]) + " roll" + cap
 	}
-	if value != "" {
-		return verb + " " + value + " " + prep + " " + ofOrPossessive(subj, rolls) + weaponRollScope(m) + cap
-	}
-	return subj + " " + ev(subj, "gets") + " " + esigned(m["operation"], m["value"]) + " to " + rolls + weaponRollScope(m) + cap
+	return verb + " " + val + " " + prep + " " + ofOrPossessive(subj, rolls) + scope + cap
 }
 
 func reRollLeaf(e, m map[string]any, subj string, ctx effCtx) string {
@@ -254,6 +300,7 @@ func reRollLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	if rn == "any" {
 		noun = "roll"
 	}
+	isAttackRoll := attackRolls[rn]
 	failed := ""
 	if m["subset"] == "all-failures" {
 		failed = "failed "
@@ -275,6 +322,17 @@ func reRollLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 			qty, plural = "one", ""
 		}
 		which = qty + " " + failed + noun + plural + rerollFaceSuffix(m["subset"])
+	} else if isAttackRoll {
+		switch m["subset"] {
+		case "ones":
+			which = noun + "s of 1"
+		case "ones-and-twos":
+			which = noun + "s of 1 or 2"
+		case "all-failures":
+			which = "failed " + noun + "s"
+		default:
+			which = noun + "s"
+		}
 	} else if m["subset"] == "ones" || m["subset"] == "ones-and-twos" {
 		article := "a"
 		if rn == "any" {
@@ -296,6 +354,7 @@ func reRollLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	if m["mandatory"] == true {
 		can = "must"
 	}
+	scope := suppressedWeaponScope(m, ctx)
 	if m["incoming"] == true {
 		return incomingLead(m, subj) + "the attacking player " + can + " re-roll " + which + pool
 	}
@@ -310,12 +369,12 @@ func reRollLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	owner := ""
 	if !own {
 		attacks := ""
-		if rn == "hit" || rn == "wound" || rn == "damage" {
+		if isAttackRoll {
 			attacks = "attacks made by "
 		}
 		owner = " for " + attacks + holder
 	}
-	return "you " + can + " re-roll " + which + owner + weaponRollScope(m) + pool
+	return "you " + can + " re-roll " + which + owner + scope + pool
 }
 
 func rollResultLeaf(m map[string]any, subj string) string {
@@ -851,7 +910,7 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 	case "ignore-modifiers":
 		return ignoreModifiersLeaf(m, subj)
 	case "roll-modifier":
-		return rollModifierLeaf(m, subj)
+		return rollModifierLeaf(m, subj, ctx)
 	case "re-roll":
 		return reRollLeaf(e, m, subj, ctx)
 	case "roll-result":
@@ -887,7 +946,7 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 	case "permission":
 		return permissionLeaf(m, subj, ctx)
 	case "targeting":
-		return targetingLeaf(m, subj, ctx)
+		return targetingLeaf(e, m, subj, ctx)
 	case "weapon-ability-range":
 		return weaponAbilityRangeLeaf(m, subj)
 	case "counts-as":

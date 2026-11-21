@@ -9,7 +9,7 @@ import { EVENT_SUBJECT_MODEL, isEventObject, isEventSubject, objectivePhrase, ty
 import type { Inline, Leaf } from "./effect-leaf.js";
 import {
   amountOf, andList, orList, dekebab, designationFor, movedPhrase, noneOf, diceCase, effectSubject, formatComparison, isLiteral, jstr, ofOrPossessive, pronoun,
-  rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollName, signed, testName, titleCase, v, weaponNoun, type Ctx,
+  rangePhrase, regionPhrase, requirementPhrase, resourceNoun, rollName, signed, testName, titleCase, v, weaponNoun, withArticle, type Ctx,
   isRatingRef,
   isPlural,
   abilityLabel, possessive, quantityPhrase,
@@ -30,8 +30,8 @@ function mortalWounds(m: Record<string, unknown>, subj: string): string {
   // A range the target filter already states is not repeated ("enemy units within 9\" within 9\"").
   const range = m.range != null && !subj.includes(` within ${rangePhrase(m.range)}`) ? ` within ${rangePhrase(m.range)}` : "";
   const who = `${subj}${range}`;
-  // "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
-  const cap = m.max != null ? ` (to a maximum of ${jstr(m.max)} mortal ${m.max === 1 ? "wound" : "wounds"})` : "";
+  // ", to a maximum of 6 mortal wounds": a cap on the total, however many are rolled or counted.
+  const cap = m.max != null ? `, to a maximum of ${jstr(m.max)} mortal ${m.max === 1 ? "wound" : "wounds"}` : "";
   const roll = m.roll as P | undefined;
   if (roll != null) {
     const perAttack = roll.per_attack as P | undefined;
@@ -335,7 +335,7 @@ function marker(m: Record<string, unknown>, ctx: Ctx): string {
 
 function test(m: Record<string, unknown>, subj: string): string {
   const n = Number(m.count ?? 1);
-  const tests = n === 1 ? `a ${testName(m.test)} test` : `${n} ${testName(m.test)} tests`;
+  const tests = n === 1 ? withArticle(`${testName(m.test)} test`) : `${n} ${testName(m.test)} tests`;
   const per = m.per != null ? ` for each ${dekebab(jstr(m.per))}` : "";
   const mod = m.modifier != null ? `, applying ${signed("add", m.modifier)} to ${n === 1 && per === "" ? "that test" : "those tests"}` : "";
   return `${subj} must take ${tests}${per}${mod}`;
@@ -344,24 +344,24 @@ function test(m: Record<string, unknown>, subj: string): string {
 function costModifier(m: Record<string, unknown>, subj: string): string {
   const noun = m.of === "manoeuvre" ? "manoeuvre" : m.of === "ability" ? "ability" : "Stratagem";
   if (m.applies_to === "the-triggering-use") {
-    if (m.operation === "decrease") return `reduce the CP cost of that use of the ${noun} by ${jstr(m.amount)}CP (to a minimum of 0CP)`;
-    if (m.operation === "increase") return `increase the CP cost of that use of the ${noun} by ${jstr(m.amount)}CP`;
-    return m.operation === "waive" ? `that use of the ${noun} costs no CP` : `that use of the ${noun} costs ${jstr(m.amount)}CP`;
+    if (m.operation === "decrease") return `reduce the CP cost of that use of the ${noun} by ${jstr(m.amount)} CP, to a minimum of 0 CP`;
+    if (m.operation === "increase") return `increase the CP cost of that use of the ${noun} by ${jstr(m.amount)} CP`;
+    return m.operation === "waive" ? `that use of the ${noun} costs 0 CP (waiving its CP cost)` : `that use of the ${noun} costs ${jstr(m.amount)} CP`;
   }
   const which = m.id != null ? `the ${abilityLabel(m.id)} ${noun}` : `${noun === "ability" ? "abilities" : `${noun}s`}`;
   const whose = m.applies_to === "targeting-this-unit" ? ` that ${m.id != null ? "targets" : "target"} ${subj}` : m.applies_to === "used-by-this-unit" ? ` used by ${subj}` : "";
   const verb = m.id != null ? "costs" : "cost";
-  if (m.operation === "waive") return `${which}${whose} can be used without paying ${m.id != null ? "its" : "their"} CP cost`;
-  if (m.operation === "set") return `${which}${whose} ${verb} ${jstr(m.amount)}CP`;
+  if (m.operation === "waive") return `${which}${whose} can be used without spending CP`;
+  if (m.operation === "set") return `${which}${whose} ${verb} ${jstr(m.amount)} CP`;
   if (m.operation === "multiply") return `${which}${whose} ${verb} ${m.amount === 2 ? "twice" : m.amount === 3 ? "three times" : `${jstr(m.amount)} times`} ${m.id != null ? "its" : "their"} stated CP cost`;
-  return `${which}${whose} ${verb} ${jstr(m.amount ?? 1)}CP ${m.operation === "decrease" ? "less" : "more"}`;
+  return `${which}${whose} ${verb} ${jstr(m.amount ?? 1)} CP ${m.operation === "decrease" ? "less" : "more"}`;
 }
 
 function resourceDie(m: Record<string, unknown>): string {
   const pool = resourceNoun(m.pool, null);
   if (m.operation === "substitute") {
     const rolls = Array.isArray(m.rolls) ? (m.rolls as unknown[]).map(rollName) : ["dice"];
-    return `discard a die from your ${pool} and use its value in place of a ${rolls.join(" or ")} roll`;
+    return `discard a die from your ${pool} and use its value in place of ${withArticle(`${orList(rolls)} roll`)}`;
   }
   const shown = m.value === "highest" ? "the highest result" : jstr(m.value);
   if (m.count_per_pool != null) {
@@ -520,12 +520,13 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "damage-reduction": {
       const r = jstr(m.reduction);
       const how = r === "half" ? "halve the Damage of that attack" : r === "to-zero" ? "change the Damage of that attack to 0" : `subtract ${r} from the Damage characteristic of that attack`;
+      if (ctx.allocatedTrigger && m.weapons == null) return how;
       const attack = m.weapons != null ? `an attack with ${weaponNoun(m)}` : "an attack";
       return `each time ${attack} is allocated to ${subj}, ${how}`;
     }
     case "feel-no-pain": {
       const rated = isRatingRef(m.threshold);
-      return `${subj} ${v(subj, "has")} the Feel No Pain ${rated ? "X" : jstr(m.threshold)}+ ability${FNP_AGAINST[jstr(m.against)] ?? ""}${rated ? ", X being its rating" : ""}`;
+      return `${subj} ${v(subj, "has")} Feel No Pain ${rated ? "X" : jstr(m.threshold)}+${FNP_AGAINST[jstr(m.against)] ?? ""}${rated ? ", X being its rating" : ""}`;
     }
     case "invulnerable-save": {
       const scope = m.weapons as P | undefined;
@@ -562,7 +563,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "state-change": return m.set === false ? `${subj} ${v(subj, "is")} no longer Battle-shocked` : `${subj} ${v(subj, "is")} Battle-shocked`;
     case "cp-gain": {
       const n = Number(m.amount);
-      return n < 0 ? `you lose ${Math.abs(n)}CP` : `you gain ${jstr(m.amount)}CP`;
+      return n < 0 ? `you lose ${Math.abs(n)} CP` : `you gain ${jstr(m.amount)} CP`;
     }
     case "cost-modifier": return costModifier(m, subj);
     case "resource-gain": {

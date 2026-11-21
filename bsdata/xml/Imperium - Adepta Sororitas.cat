@@ -813,7 +813,7 @@
       <profiles>
         <profile name="Sworn Protectors" id="5452-9a1c-1e88-3449" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is being led by an ADEPTA SORORITAS CHARACTER model, the attacking unit gets -1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is being led by an ADEPTA SORORITAS CHARACTER model, subtract 1 from the attacking unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1136,18 +1136,17 @@
       <profiles>
         <profile name="Anguish of the Unredeemed" id="bb52-0d7b-a6b4-a782" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a model in the unit is destroyed, unless the triggering unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a model in this unit is destroyed, unless the triggering unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="210a-99e1-0d1a-67df" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="5045-fac7-710b-fb58" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1410,24 +1409,24 @@
         </profile>
         <profile name="Deep Strike" id="26ec-53ca-7f63-caf6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Divine Deliverance" id="d0b8-93ad-2462-9b20" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, once per battle per unit, until the end of the phase:
-  -&gt; Add 3 to the Attacks characteristic of melee weapons equipped by this model.
-  -&gt; Melee weapons equipped by this model gain [DEVASTATING WOUNDS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability, once per battle per unit, until the end of the phase:
+  - Add 3 to the Attacks characteristic of melee weapons equipped by this model.
+  - Melee weapons equipped by this model gain [DEVASTATING WOUNDS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="0715-b385-96e4-184b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sacred Command" id="ed1d-be49-1e90-cd07" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, while the unit has the Sacred Command ability, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model's unit is targeted with a Stratagem, you can use this ability, once per battle round per army, while this unit has the Sacred Command ability, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1552,19 +1551,19 @@
         </profile>
         <profile name="Fury of the Righteous" id="427d-7f94-07c6-b67b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit's weapons gain [LETHAL HITS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit's weapons gain [LETHAL HITS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="cc65-d2a7-6f1d-30b4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Rapturous Blows" id="6aee-e941-5d84-a046" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the phase:
-  -&gt; When the unit is selected to fight, you may use this ability: spend 1 Miracle die.
-  -&gt; Each time an attack made by this model scores a wound: while making melee attacks, the target suffers 1 mortal wound.</characteristic>
+  - When this unit is selected to fight, you can use this ability: spend 1 Miracle die.
+  - Each time an attack made by this model scores a wound, while making melee attacks, the target suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1664,8 +1663,8 @@
       <profiles>
         <profile name="Attached Unit" id="dbe6-d0c0-d7ce-241c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">A friendly MINISTORUM PRIEST unit with the Leader ability that can be attached to friendly BATTLE SISTERS SQUAD units can also be attached to the unit.
--&gt; When declaring Battle Formations: MINISTORUM PRIEST Leader models in the unit gain the following rules (while this model is leading a unit: this model gains the Scouts 6" ability).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">A friendly MINISTORUM PRIEST unit with the Leader ability that can be attached to friendly BATTLE SISTERS SQUAD units can also be attached to this unit.
+When declaring Battle Formations, MINISTORUM PRIEST Leader models in this unit gain the following rules (while this model is leading a unit, this model gains the Scouts 6" ability).</characteristic>
           </characteristics>
         </profile>
         <profile name="Cherub" id="623e-f074-5ff3-71f8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1675,12 +1674,12 @@
         </profile>
         <profile name="Ministorum Sermon" id="ff3e-889d-cff5-b2fa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit has the MINISTORUM PRIEST keyword, melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit has the MINISTORUM PRIEST keyword, melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="bf75-1052-2688-6307" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2480,14 +2479,14 @@
       <profiles>
         <profile name="Extremis Trigger Word" id="174f-5db5-51c5-f955" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability, until the end of the phase:
-  -&gt; Set the Attacks characteristic of melee Arco Flails weapons equipped by models in this unit to 6.
-  -&gt; Melee Arco Flails weapons equipped by models in this unit gain [HAZARDOUS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability, until the end of the phase:
+  - Set the Attacks characteristic of melee Arco Flails weapons equipped by models in this unit to 6.
+  - Melee Arco Flails weapons equipped by models in this unit gain [HAZARDOUS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="8ca3-4b54-7fca-0198" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2603,13 +2602,13 @@
       <profiles>
         <profile name="Rituale Nullificatus" id="97ec-58de-cfb2-5728" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain 4+ ability against Psychic Attacks and mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain 4+ against Psychic Attacks and mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Virtue of Intolerance" id="7e39-2e44-8d9e-533c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the battle:
-  -&gt; Select one enemy unit, binding it as quarry selection (your Quarry target). This selection can be made while this unit is embarked. For the rest of the battle, each time a model in this unit makes an attack against it, while the target is tagged quarry, the unit's weapons gain [PRECISION]; you can re-roll the Hit roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle:
+  - Select one enemy unit (your Quarry target). This selection can be made while this unit is embarked. For the rest of the battle, each time a model in this unit makes an attack against it, while the target is a Quarry, this unit's weapons gain [PRECISION]; you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2905,14 +2904,14 @@
         </profile>
         <profile name="Litany of Deeds" id="11d5-4d91-ce58-e324" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a Miracle die is generated, if 1+ friendly ADEPTA SORORITAS units destroyed and causing the exact bound event within 12" of this model or 1+ friendly ADEPTA SORORITAS models destroyed and causing the exact bound event within 12" of this model, you may use this ability, if 1+ friendly units destroyed within 12" of this model, if the unit has the ADEPTA SORORITAS keyword, until the end of the turn, you can re-roll the pool die roll for this model by spending a die from your Miracle Dice.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a Miracle die is generated, if one or more friendly ADEPTA SORORITAS units destroyed triggering this ability within 12" of this model or one or more friendly ADEPTA SORORITAS models destroyed triggering this ability within 12" of this model, you can use this ability and one or more friendly units destroyed within 12" of this model and this unit has the ADEPTA SORORITAS keyword, until the end of the turn, you can re-roll the pool die roll for this model by spending a die from your Miracle Dice.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stanchion of Holy Martyrs" id="172f-fe01-7698-369e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit:
-  -&gt; Set the unit's Save characteristic to 2.
-  -&gt; The unit has a 4+ invulnerable save.</characteristic>
+  - Set this unit's Save characteristic to 2+.
+  - This unit has a 4+ invulnerable save.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="d9c1-c04d-a710-e7ea" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3006,59 +3005,59 @@
         </profile>
         <profile name="Leader" id="0c01-7662-340b-dbfc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Relics of the Matriarchs" id="228b-4539-9b60-d162" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, until the end of the battle round:
-  -&gt; At the start of the battle round:
-    -&gt; Select up to two:
-      - The Fiery Heart: add 2 to the Move characteristic of friendly ADEPTA SORORITAS units within 6" of this model; friendly ADEPTA SORORITAS units within 6" of this model get +1 to Advance rolls; friendly ADEPTA SORORITAS units within 6" of this model get +1 to Charge rolls.
-      - Censer of the Sacred Rose: you can re-roll the Battle-shock roll for friendly ADEPTA SORORITAS units within 6" of this model.
-      - Simulacrum of the Ebon Chalice: the number of uses of the Acts of Faith ability of friendly ADEPTA SORORITAS units within 6" of this model is 2.
-      - Simulacrum of the Argent Shroud: you can re-roll a Wound roll of 1 for attacks made by friendly ADEPTA SORORITAS units within 6" of this model with ranged weapons.
-      - Icon of the Valorous Heart: friendly ADEPTA SORORITAS units within 6" of this model have the Feel No Pain 6+ ability.
-      - Petals of the Bloody Rose: improve the Armour Penetration characteristic of melee weapons equipped by friendly ADEPTA SORORITAS units within 6" of this model by 1.</characteristic>
+  - At the start of the battle round:
+    - Select up to two:
+      - The Fiery Heart: Add 2" to the Move characteristic of friendly ADEPTA SORORITAS units within 6" of this model; add 1 to the Advance rolls of friendly ADEPTA SORORITAS units within 6" of this model; add 1 to the Charge rolls of friendly ADEPTA SORORITAS units within 6" of this model.
+      - Censer of the Sacred Rose: You can re-roll the Battle-shock roll for friendly ADEPTA SORORITAS units within 6" of this model.
+      - Simulacrum of the Ebon Chalice: The number of uses of the Acts of Faith ability of friendly ADEPTA SORORITAS units within 6" of this model is 2.
+      - Simulacrum of the Argent Shroud: You can re-roll Wound rolls of 1 for attacks made by friendly ADEPTA SORORITAS units within 6" of this model with ranged weapons.
+      - Icon of the Valorous Heart: Friendly ADEPTA SORORITAS units within 6" of this model have Feel No Pain 6+.
+      - Petals of the Bloody Rose: Improve the Armour Penetration characteristic of melee weapons equipped by friendly ADEPTA SORORITAS units within 6" of this model by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="The Fiery Heart" id="ac49-7a76-71d2-3ea4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, until the end of the battle round:
-  -&gt; At the start of the battle round:
-    -&gt; Add 2 to the Move characteristic of friendly ADEPTA SORORITAS units within 6" of this model.
-    -&gt; Friendly ADEPTA SORORITAS units within 6" of this model get +1 to Advance rolls.
-    -&gt; Friendly ADEPTA SORORITAS units within 6" of this model get +1 to Charge rolls.</characteristic>
+  - At the start of the battle round:
+    - Add 2" to the Move characteristic of friendly ADEPTA SORORITAS units within 6" of this model.
+    - Add 1 to the Advance rolls of friendly ADEPTA SORORITAS units within 6" of this model.
+    - Add 1 to the Charge rolls of friendly ADEPTA SORORITAS units within 6" of this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Censer of the Sacred Rose" id="f6e2-e98e-5c98-61e1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, until the end of the battle round:
-  -&gt; At the start of the battle round: you can re-roll the Battle-shock roll for friendly ADEPTA SORORITAS units within 6" of this model.</characteristic>
+  - At the start of the battle round, you can re-roll the Battle-shock roll for friendly ADEPTA SORORITAS units within 6" of this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Simulacrum of the Ebon Chalice" id="0910-4536-e63b-2ab9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, until the end of the battle round:
-  -&gt; At the start of the battle round: the number of uses of the Acts of Faith ability of friendly ADEPTA SORORITAS units within 6" of this model is 2.</characteristic>
+  - At the start of the battle round, the number of uses of the Acts of Faith ability of friendly ADEPTA SORORITAS units within 6" of this model is 2.</characteristic>
           </characteristics>
         </profile>
         <profile name="Simulacrum of the Argent Shroud" id="cebf-694e-4e2d-5071" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, until the end of the battle round:
-  -&gt; At the start of the battle round: you can re-roll a Wound roll of 1 for attacks made by friendly ADEPTA SORORITAS units within 6" of this model with ranged weapons.</characteristic>
+  - At the start of the battle round, you can re-roll Wound rolls of 1 for attacks made by friendly ADEPTA SORORITAS units within 6" of this model with ranged weapons.</characteristic>
           </characteristics>
         </profile>
         <profile name="Icon of the Valorous Heart" id="822d-6b0b-0385-af1e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, until the end of the battle round:
-  -&gt; At the start of the battle round: friendly ADEPTA SORORITAS units within 6" of this model have the Feel No Pain 6+ ability.</characteristic>
+  - At the start of the battle round, friendly ADEPTA SORORITAS units within 6" of this model have Feel No Pain 6+.</characteristic>
           </characteristics>
         </profile>
         <profile name="Petals of the Bloody Rose" id="ef43-70e3-abb8-f5c6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, until the end of the battle round:
-  -&gt; At the start of the battle round: improve the Armour Penetration characteristic of melee weapons equipped by friendly ADEPTA SORORITAS units within 6" of this model by 1.</characteristic>
+  - At the start of the battle round, improve the Armour Penetration characteristic of melee weapons equipped by friendly ADEPTA SORORITAS units within 6" of this model by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Solemn Procession" id="6af2-122f-65ba-1e80" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3069,8 +3068,8 @@
         <profile name="DAMAGED: 1-6 WOUNDS REMAINING" id="0e7d-cfa9-4055-1afd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has 6 or fewer wounds remaining:
-  -&gt; Halve this model's Attacks characteristic.
-  -&gt; The number of selections of this model's Relics of the Matriarchs ability is 1.</characteristic>
+  - Halve this model's Attacks characteristic.
+  - The number of selections of this model's Relics of the Matriarchs ability is 1.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3153,14 +3152,14 @@
       <profiles>
         <profile name="Angelic Ascent" id="3628-d809-c24b-dab0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:
-  -&gt; The unit can make a Normal move of up to 6".
-  -&gt; The unit cannot declare a charge.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:
+  - This unit can make a Normal move of up to 6".
+  - This unit cannot declare a charge.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="d2ec-4a88-74a5-1adc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3527,14 +3526,14 @@
       <profiles>
         <profile name="Overseer of Redemption" id="cfeb-b37f-ecb9-59ed" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit contains 1+ REPENTIA SUPERIOR models, while making melee attacks:
-  -&gt; You can re-roll the Hit roll for attacks made by SISTERS REPENTIA models in the unit.
-  -&gt; You can re-roll the Wound roll for attacks made by SISTERS REPENTIA models in the unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit contains one or more REPENTIA SUPERIOR models, while making melee attacks:
+  - You can re-roll Hit rolls for attacks made by SISTERS REPENTIA models in this unit.
+  - You can re-roll Wound rolls for attacks made by SISTERS REPENTIA models in this unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="e830-f0d8-f034-070e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3723,8 +3722,7 @@
         </profile>
         <profile name="Laud Hailer" id="ca24-54dd-61c2-37af" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per unit:
-  -&gt; Select one friendly ADEPTA SORORITAS unit if the selected unit is Battle-shocked and the selected unit is within 12" of this model: that unit is no longer Battle-shocked.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per unit, select one friendly ADEPTA SORORITAS unit that is Battle-shocked and within 12" of this model. That unit is no longer Battle-shocked.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stirring Rhetoric" id="4ec3-a4d0-b579-c964" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3828,7 +3826,7 @@
         </profile>
         <profile name="Unflinching Determination" id="bc59-d469-35c1-cb91" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, add 1 to the unit's Objective Control characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, add 1 to this unit's Objective Control characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="78ba-aba3-20d4-55a8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3923,14 +3921,13 @@
         </profile>
         <profile name="Deadly Demise" id="e01d-3f98-481c-ee1f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Purge and Cleanse" id="4eee-4554-9581-1fed" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit cannot benefit from Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit cannot benefit from Cover.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4100,12 +4097,12 @@
         </profile>
         <profile name="Medicus Ministorum" id="965a-4b57-2d5b-92df" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit has the Feel No Pain 5+ ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit has Feel No Pain 5+.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sacred Healing" id="e921-1784-1924-a666" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, return 1 destroyed model to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, return 1 destroyed model to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
         <profile name="Support" id="02b2-215c-0cf0-d9eb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4193,33 +4190,32 @@
         <profile name="Abbess Sanctorum" id="9110-0ee6-ee0f-0a41" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit:
-  -&gt; You can re-roll the Hit roll.
-  -&gt; You can re-roll the Wound roll.</characteristic>
+  - You can re-roll Hit rolls.
+  - You can re-roll Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="f0dd-ac69-9165-5062" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Righteous Repugnance" id="1783-934e-0906-1473" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, until the end of the phase:
-  -&gt; Spend 1 Miracle die.
-  -&gt; Add 3 to the Attacks characteristic of Fidelis weapons equipped by models in this unit.
-  -&gt; Add 3 to the Attacks characteristic of Lance of Illumination weapons equipped by models in this unit.
--&gt; Each time this model destroys an enemy unit: you gain 1 Miracle die.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability or when this unit is selected to fight, you can use this ability, until the end of the phase:
+  - Spend 1 Miracle die.
+  - Add 3 to the Attacks characteristic of Fidelis weapons equipped by models in this unit.
+  - Add 3 to the Attacks characteristic of Lance of Illumination weapons equipped by models in this unit.
+Each time this model destroys an enemy unit, you gain 1 Miracle die.</characteristic>
           </characteristics>
         </profile>
         <profile name="Supreme Commander" id="a43e-10d4-7704-13b1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, the unit must be your Warlord.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, this unit must be your Warlord.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="141b-cbf7-46fa-a915" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4301,11 +4297,11 @@
         </profile>
         <profile name="Storm of Retribution" id="9e9e-7cbe-8842-0fff" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While making ranged attacks:
-  -&gt; You can re-roll a Hit roll of 1.
-  -&gt; You can re-roll a Wound roll of 1.
-  -&gt; If the target unit has destroyed 1+ friendly ADEPTA SORORITAS units this battle, the unit gets +1 to Hit rolls.
-  -&gt; If the target unit has destroyed 1+ friendly ADEPTA SORORITAS units this battle, the unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, you can use this ability:
+  - You can re-roll Hit rolls of 1.
+  - You can re-roll Wound rolls of 1.
+  - If the target unit has destroyed one or more friendly ADEPTA SORORITAS units this battle, add 1 to this unit's Hit rolls.
+  - If the target unit has destroyed one or more friendly ADEPTA SORORITAS units this battle, add 1 to this unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4732,13 +4728,13 @@
       <profiles>
         <profile name="Impetuous Fervour" id="041e-b4bc-195e-690a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless the target unit is an enemy unit and the target is within range of an objective marker, you can re-roll a Hit roll of 1.
-While the target unit is an enemy unit, while the target is within range of an objective marker, you can re-roll the Hit roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless the target unit is an enemy unit and the target is within range of an objective marker, you can re-roll Hit rolls of 1.
+While the target unit is an enemy unit and the target is within range of an objective marker, you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="58b8-0965-7a45-0461" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5062,16 +5058,16 @@ While the target unit is an enemy unit, while the target is within range of an o
       <profiles>
         <profile name="Fights First" id="6b81-4ea7-9ad5-7ac0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Fights First ability, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Holy Judgement" id="6f8c-2707-fbe5-369e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, until the end of the phase:
-  -&gt; Select one enemy unit if the selected unit is within 12" of this model and the selected unit is visible to this model:
-    -&gt; If the selected unit has the CHAOS keyword, that unit must take a Battle-shock test, applying -2 to that test.
-    -&gt; Unless the selected unit has the CHAOS keyword, that unit must take a Battle-shock test.
-    -&gt; If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds.</characteristic>
+  - Select one enemy unit that is within 12" of this model and visible to this model:
+    - If the selected unit has the CHAOS keyword, that unit must take a Battle-shock test, applying -2 to that test.
+    - Unless the selected unit has the CHAOS keyword, that unit must take a Battle-shock test.
+    - If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="f067-61a7-ee75-3175" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5081,14 +5077,14 @@ While the target unit is an enemy unit, while the target is within range of an o
         </profile>
         <profile name="Mysterious Saviours" id="980d-0f43-57b5-b6f7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
-Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-The unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: This unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
+Reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+This unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="a827-de2f-fd39-8fe9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5259,7 +5255,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         </profile>
         <profile name="Firing Deck" id="cff7-5835-155f-e29e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Self Repair" id="0f3b-44b3-5fda-71f5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5269,8 +5265,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         </profile>
         <profile name="Deadly Demise" id="f289-34f3-c93b-1530" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5370,8 +5365,8 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         <profile name="Righteous Paragons" id="c9af-3dee-0ea4-e427" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against MONSTER or VEHICLE targets:
-  -&gt; The unit gets +1 to Hit rolls.
-  -&gt; The unit gets +1 to Wound rolls.</characteristic>
+  - Add 1 to this unit's Hit rolls.
+  - Add 1 to this unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5802,19 +5797,18 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         </profile>
         <profile name="Rites of Castigation" id="85d2-e486-0c32-3597" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Rites of Castigation Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly ADEPTA SORORITAS unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, once per turn per unit, during your Shooting phase, until the end of the turn:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Rites of Castigation Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly ADEPTA SORORITAS unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="1204-1247-6eed-2574" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="8974-8fb7-1cdc-625e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6000,13 +5994,12 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         </profile>
         <profile name="Deadly Demise" id="04bb-bd47-b2e0-5863" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="163f-0a70-213d-45b1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6151,18 +6144,17 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
       <profiles>
         <profile name="Endless Suffering" id="03e6-d69d-144f-b5bf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="7f63-ed28-b061-d23c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="d59d-c2cb-80f4-6f34" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6346,27 +6338,26 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
         </profile>
         <profile name="Fiery Conviction" id="0363-119b-7cc7-2cbd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, you may use this ability, while this model is on the battlefield, until the end of the phase:
-  Select exactly 1 distinct options:
-    - Spend 1 Miracle die; you gain 1CP.
-    - This model must take a Leadership test; if the triggering leadership roll succeeded, you gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, you can use this ability, while this model is on the battlefield, until the end of the phase:
+  Choose one of the following:
+    - Spend 1 Miracle die; you gain 1 CP.
+    - This model must take a Leadership test; if the triggering leadership roll succeeded, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="352f-33e2-c3d2-2f8d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="The Pulpit of Saint Holline's Basilica" id="03da-5c14-9396-97d6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, the unit gains the Stealth ability.
-Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, this unit gains the Stealth ability.
+Against melee attacks, subtract 1 from the attacking unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="94ca-7f5c-7170-10e7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6456,25 +6447,25 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
         </profile>
         <profile name="Holy Mission" id="98ca-54f6-3570-f864" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When declaring Battle Formations: while this model is attached to a DOMINION SQUAD unit, the unit gains the Scouts 6" ability.
--&gt; When declaring Battle Formations: while this model is attached to a SISTERS NOVITIATE SQUAD unit, the unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, while this model is attached to a DOMINION SQUAD unit, this unit gains the Scouts 6" ability.
+When declaring Battle Formations, while this model is attached to a SISTERS NOVITIATE SQUAD unit, this unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="8416-b183-6529-9e8f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Righteous Smiting" id="be0e-d9e2-227e-7e70" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while making melee attacks, the unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while making melee attacks, add 1 to this unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Zealot" id="fbd8-8ed1-6ef9-984a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Once per battle per unit, during the Fight phase, until the end of the phase:
-  -&gt; Improve the Attacks characteristic of melee weapons equipped by this model by 3.
-  -&gt; Improve the Strength characteristic of melee weapons equipped by this model by 3.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Once per battle per unit, during the Fight phase, until the end of the phase, you can use this ability:
+  - Improve the Attacks characteristic of melee weapons equipped by this model by 3.
+  - Improve the Strength characteristic of melee weapons equipped by this model by 3.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6573,17 +6564,17 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Embodied Prophecy" id="faaf-4494-6b9d-d0fc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, until the end of the phase:
-  Unless the unit charged this turn:
-    Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, until the end of the phase:
+  - Unless this unit charged this turn:
+    Choose one of the following:
       - Melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].
       - Melee weapons equipped by models in this unit gain [LETHAL HITS].
-  -&gt; If the unit charged this turn, melee weapons equipped by models in this unit gain [SUSTAINED HITS 1] and [LETHAL HITS].</characteristic>
+  - If this unit charged this turn, melee weapons equipped by models in this unit gain [SUSTAINED HITS 1] and [LETHAL HITS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="5385-0514-fa93-1133" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6833,17 +6824,17 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Holy Vanguard" id="54a7-a5c2-9257-a485" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, while this unit is being led by a model, while the unit is embarked, if the Transport this unit is embarked within has the TRANSPORT keyword, friendly Leader models in the unit gain the Scouts 6" ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When declaring Battle Formations, while this unit is being led by a model and this unit is embarked, if the Transport this unit is embarked within has the TRANSPORT keyword, friendly Leader models in this unit gain the Scouts 6" ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Righteous Awareness" id="5dbc-0ab9-c492-683c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of the unit, while the unit is unengaged, the triggering unit can make a Normal move of up to D6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, during your opponent's Movement phase, while the triggering unit is within 8" of this unit and this unit is unengaged, the triggering unit can make a Normal move of up to D6".</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="d654-0e43-a6e3-d5aa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Cherub" id="aa83-7d86-7f68-16ab" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7371,29 +7362,29 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Healing Tears" id="b587-428d-4d5d-831d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: If the unit is the Celestine model, during the Command phase, in your turn, return 1 destroyed model named Geminae Superia to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit is the Celestine model, during your Command phase, you can return 1 destroyed model named Geminae Superia to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="7276-9734-319c-202a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lifewards" id="4151-05d5-4c95-09ad" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit contains 1+ GEMINAE SUPERIA models, this model has the Feel No Pain 4+ ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit contains one or more GEMINAE SUPERIA models, this model has Feel No Pain 4+.</characteristic>
           </characteristics>
         </profile>
         <profile name="Miraculous Intervention" id="d693-74fd-7863-afda" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly CELESTINE model in the unit is destroyed, the first time this battle per model:
-  -&gt; At the end of each phase, until the end of the phase:
-    -&gt; Roll one D6: on a 2+, that model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly CELESTINE model in this unit is destroyed, the first time this battle per model:
+  - At the end of each phase, until the end of the phase:
+    - Roll one D6: on a 2+, that model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="a869-c399-a4a7-4abd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7555,7 +7546,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Defenders of the Faith" id="eaf5-81ce-88a1-3e30" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
           </characteristics>
         </profile>
         <profile name="Cherub" id="51aa-c0ac-5b38-377a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -8091,17 +8082,17 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
         </profile>
         <profile name="Leader" id="c462-4fae-9ac0-dd93" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="The Emperor's Grace" id="637f-eeac-66e7-2de3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per unit, until the end of the phase, this model has a 2+ invulnerable save.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per unit, until the end of the phase, this model has a 2+ invulnerable save.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sacred Command" id="93eb-39d1-2d3b-aa7e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, while the unit has the Sacred Command ability, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model's unit is targeted with a Stratagem, you can use this ability, once per battle round per army, while this unit has the Sacred Command ability, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8666,19 +8657,19 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Auto-Tapestry of the Emperor's Judgement" id="d23c-fd07-041d-78b7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, if the unit is the Aestred Thurga model, the unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, if this unit is the Aestred Thurga model, this unit's weapons gain [DEVASTATING WOUNDS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="8a34-71f8-96ca-a7a3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Recount the Deeds of the Saints" id="4fd7-0866-8db0-c83b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the turn:
-  -&gt; While this model is leading a unit, if the unit has the AGATHE DOLAN keyword, if the unit has destroyed 1+ enemy units with its just-resolved attacks, you gain 1 Miracle die.
-  -&gt; If the unit has the AGATHE DOLAN keyword, when destroyed by any attack, you gain 1D3 Miracle dice.</characteristic>
+  - While this model is leading a unit, if this unit has the AGATHE DOLAN keyword and this unit has destroyed one or more enemy units with those attacks, you gain 1 Miracle die.
+  - If this unit has the AGATHE DOLAN keyword, when destroyed by any attack, you gain 1D3 Miracle dice.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8851,13 +8842,12 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="78e7-404a-874a-6fe1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="efec-829e-2321-cb36" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Righteous Denunciation" id="1168-dda4-474f-e13b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -8867,8 +8857,8 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
         </profile>
         <profile name="Judged for Execution" id="bb68-7fde-d0ab-255e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is within 18" of this model and the selected unit is visible to this model (your Judged for Execution Target). Until the start of your next Command phase, each time a friendly unit makes an attack against it, all friendly ADEPTA SORORITAS models' weapons gain [LETHAL HITS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, you can use this ability:
+  - Select one enemy unit that is within 18" of this model and visible to this model (your Judged for Execution Target). Until the start of your next Command phase, each time a friendly unit makes an attack against it, friendly ADEPTA SORORITAS models' weapons gain [LETHAL HITS].</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9091,8 +9081,8 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Anchorite Sarcophagus" id="5a47-6ca2-1b78-4675" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Move characteristic to 7.
-Set this model's Save characteristic to 3.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Move characteristic to 7".
+Set this model's Save characteristic to 3+.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9468,7 +9458,7 @@ Set this model's Save characteristic to 3.</characteristic>
       <profiles>
         <profile name="Salvationist Medikit" id="767b-d608-b1b5-407a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, while this model is on the battlefield, return D3 destroyed models (excluding CHARACTER models) to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, while this model is on the battlefield, you can return D3 destroyed models (excluding CHARACTER models) to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9498,8 +9488,8 @@ Set this model's Save characteristic to 3.</characteristic>
       <profiles>
         <profile name="Simulacrum Imperialis" id="b61b-e97f-e221-fafa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Command phase, if you control 1+ objectives, while the unit is within range of an objective marker, until the end of the phase:
-  -&gt; Roll one D6: on a 4+, you gain 1 Miracle die.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Command phase, if you control one or more objectives, while this unit is within range of an objective marker, until the end of the phase:
+  - Roll one D6: on a 4+, you gain 1 Miracle die.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9583,8 +9573,8 @@ Set this model's Save characteristic to 3.</characteristic>
       <profiles>
         <profile name="Denuncia oratory" id="3aa1-f4e2-f727-7051" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time a unit that is tagged quarry is destroyed, you may use this ability, if 1+ enemy units QUARRY destroyed, for the rest of the battle:
-  -&gt; Select one enemy unit: that unit is QUARRY.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time a unit that is a Quarry is destroyed, you can use this ability, if one or more enemy units QUARRY destroyed, for the rest of the battle:
+  - Select one enemy unit. That unit is QUARRY.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10194,7 +10184,7 @@ Set this model's Save characteristic to 3.</characteristic>
       <profiles>
         <profile name="Sacred Banner" id="fc78-5949-5f00-e61a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Choose one of the following:
   - You can re-roll the Charge roll.
   - You can re-roll the Advance roll.</characteristic>
           </characteristics>
@@ -11069,7 +11059,7 @@ Set this model's Save characteristic to 3.</characteristic>
       <profiles>
         <profile name="Null Rod" id="22a7-c021-9abb-9caf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain 4+ ability against Psychic Attacks and mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain 4+ against Psychic Attacks and mortal wounds.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11081,7 +11071,7 @@ Set this model's Save characteristic to 3.</characteristic>
       <profiles>
         <profile name="Rod of Office" id="a1e5-d6ab-440d-d770" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll a Hit roll of 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll Hit rolls of 1.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -11228,11 +11218,11 @@ Set this model's Save characteristic to 3.</characteristic>
               </constraints>
               <rules>
                 <rule name="Desperate For Redemption" id="4917-3a79-7634-ddb9" hidden="false">
-                  <description>At the start of your Command phase, you may use this ability, until the start of your next Command phase:
-  -&gt; Select one (each may be chosen once per battle):
-    - The Path of the Penitent: add 3 to all friendly PENITENT models' Move characteristic.
-    - Absolution in Battle: when a friendly unit is selected to fight, until the end of the phase: if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by PENITENT models in the triggering unit; add 1 to the Strength characteristic of melee weapons equipped by PENITENT models in the triggering unit.
-    - Death Before Disgrace: when a friendly PENITENT model is destroyed: each time a model in this unit is destroyed, while making melee attacks, unless that model has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</description>
+                  <description>At the start of your Command phase, you can use this ability, until the start of your next Command phase:
+  - Select one (each can be chosen once per battle):
+    - The Path of the Penitent: Add 3" to friendly PENITENT models' Move characteristic.
+    - Absolution in Battle: When a friendly unit is selected to fight, until the end of the phase, if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by PENITENT models in the triggering unit; add 1 to the Strength characteristic of melee weapons equipped by PENITENT models in the triggering unit.
+    - Death Before Disgrace: When a friendly PENITENT model is destroyed, while making melee attacks, unless that model has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11249,8 +11239,8 @@ Set this model's Save characteristic to 3.</characteristic>
               </constraints>
               <rules>
                 <rule name="The Blood of Martyrs" id="08bf-fa5e-e8df-3509" hidden="false">
-                  <description>While the triggering unit is below its starting strength, all friendly ADEPTA SORORITAS models get +1 to Hit rolls.
-While the triggering unit is below half strength, all friendly ADEPTA SORORITAS models get +1 to Wound rolls.</description>
+                  <description>While the triggering unit is below its Starting Strength, add 1 to friendly ADEPTA SORORITAS models' Hit rolls.
+While the triggering unit is Below Half-strength, add 1 to friendly ADEPTA SORORITAS models' Wound rolls.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11267,8 +11257,8 @@ While the triggering unit is below half strength, all friendly ADEPTA SORORITAS 
               </constraints>
               <rules>
                 <rule name="Fervent Purgation" id="4e39-66e0-6e78-62a6" hidden="false">
-                  <description>Ranged weapons equipped by all friendly ADEPTA SORORITAS models gain [ASSAULT].
-While making ranged attacks made with [ASSAULT] weapons, while the target is within 6" of the attacking unit, add 1 to all friendly ADEPTA SORORITAS models' Strength characteristic.</description>
+                  <description>Ranged weapons equipped by friendly ADEPTA SORORITAS models gain [ASSAULT].
+While making ranged attacks made with [ASSAULT] weapons, while the target is within 6" of the attacking unit, add 1 to friendly ADEPTA SORORITAS models' Strength characteristic.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11286,10 +11276,10 @@ While making ranged attacks made with [ASSAULT] weapons, while the target is wit
               <rules>
                 <rule name="Righteous Purpose" id="cd2f-f38d-dbf0-294b" hidden="false">
                   <description>Until the end of the turn:
-  -&gt; Select up to 3 friendly ADEPTA SORORITAS units:
-    -&gt; For each selected unit:
-      -&gt; Add 1 to that unit's Move characteristic.
-      -&gt; That unit gets +1 to Battle-shock rolls.</description>
+  - Select up to 3 friendly ADEPTA SORORITAS units:
+    - For each selected unit:
+      - Add 1" to that unit's Move characteristic.
+      - Add 1 to that unit's Battle-shock rolls.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11307,7 +11297,7 @@ While making ranged attacks made with [ASSAULT] weapons, while the target is wit
               </constraints>
               <rules>
                 <rule name="Sacred Rites" id="638f-1125-5b82-1b78" hidden="false">
-                  <description>For each friendly ADEPTA SORORITAS unit: The number of uses of the unit's Acts of Faith ability is 2.</description>
+                  <description>For each friendly ADEPTA SORORITAS unit: The number of uses of that unit's Acts of Faith ability is 2.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11324,9 +11314,9 @@ While making ranged attacks made with [ASSAULT] weapons, while the target is wit
               </constraints>
               <rules>
                 <rule name="Angelic Judgement" id="2d11-90a2-fe9b-2d7f" hidden="false">
-                  <description>All friendly ADEPTA SORORITAS FLY INFANTRY units gain the Condemnatory Psalms ability:
-  -&gt; You can, until the end of the phase: during the Shooting phase, in your turn, select one enemy unit visible to this model if the selected unit is within 12" of the unit: that unit is marked as condemned; while the selected unit is tagged condemned, add 3 to that unit's detection range characteristic.
-Applies to: units with ADEPTA SORORITAS, INFANTRY, FLY.</description>
+                  <description>Friendly ADEPTA SORORITAS FLY INFANTRY units gain the Condemnatory Psalms ability:
+  - Until the end of the phase, you can: during your Shooting phase, select one enemy unit visible to this model that is within 12" of this unit; that unit is Condemned; while the selected unit is Condemned, add 3" to that unit's detection range.
+Applies to: ADEPTA SORORITAS INFANTRY FLY units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11343,10 +11333,10 @@ Applies to: units with ADEPTA SORORITAS, INFANTRY, FLY.</description>
               </constraints>
               <rules>
                 <rule name="Holy Quest" id="567d-1be1-17f1-f7ca" hidden="false">
-                  <description>Improve the Weapon Skill characteristic of all friendly units with the CELESTIAN INSIDIANTS or CELESTIAN SACRESANTS keyword by 1.
-Improve the Ballistic Skill characteristic of all friendly units with the CELESTIAN INSIDIANTS or CELESTIAN SACRESANTS keyword by 1.
+                  <description>Improve the Weapon Skill characteristic of friendly units with the CELESTIAN INSIDIANTS or CELESTIAN SACRESANTS keyword by 1.
+Improve the Ballistic Skill characteristic of friendly units with the CELESTIAN INSIDIANTS or CELESTIAN SACRESANTS keyword by 1.
 You cannot select this Detachment together with another REVEREND Detachment.
-Applies to: units with CELESTIAN SACRESANTS.</description>
+Applies to: CELESTIAN SACRESANTS units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11365,8 +11355,8 @@ Applies to: units with CELESTIAN SACRESANTS.</description>
               <rules>
                 <rule name="Hymns of Battle" id="5786-51f0-0020-8a66" hidden="false">
                   <description>Enhancements from this Detachment do not count toward your army's Enhancement limit.
-Improve all friendly ADEPTA SORORITAS CHARACTER units' Leadership characteristic by 1.
-Applies to: units with ADEPTA SORORITAS, CHARACTER.</description>
+Improve friendly ADEPTA SORORITAS CHARACTER units' Leadership characteristic by 1.
+Applies to: ADEPTA SORORITAS CHARACTER units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11421,10 +11411,10 @@ Applies to: units with ADEPTA SORORITAS, CHARACTER.</description>
           <profiles>
             <profile name="Psalm of Righteous Judgement" id="7d80-7f67-b1e6-8081" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time a friendly unit destroys an enemy unit (the triggering unit must have PENITENT), you may use this ability, while this model is on the battlefield:
-  -&gt; Spend 1 Miracle die.
-  -&gt; Add a die showing 6 to your Miracle dice.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time a friendly PENITENT unit destroys an enemy unit, you can use this ability, while this model is on the battlefield:
+  - Spend 1 Miracle die.
+  - Add a die showing 6 to your Miracle dice.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11452,8 +11442,8 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
           <profiles>
             <profile name="Verse of Holy Piety" id="015f-4a0a-88c1-c964" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, once per battle per model, until the start of the next battle round, select one option of Desperate for Redemption for the unit, in addition to any already active, even if it has already been selected this battle.
-Applies to: units with PENITENT.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, once per battle per model, until the start of the next battle round, select one option of Desperate for Redemption for this unit, in addition to any already active, even if it has already been selected this battle.
+Applies to: PENITENT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11481,8 +11471,8 @@ Applies to: units with PENITENT.</characteristic>
           <profiles>
             <profile name="Refrain of Enduring Faith" id="2c0c-697e-194c-f650" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit has a 5+ invulnerable save.
-Applies to: units with PENITENT.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit has a 5+ invulnerable save.
+Applies to: PENITENT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11518,7 +11508,7 @@ Applies to: units with PENITENT.</characteristic>
             <profile name="Catechism of Divine Penitence" id="b113-341c-01c2-6362" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model gains the PENITENT keyword.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11558,7 +11548,7 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
             <profile name="Saintly Example" id="e4ae-455d-b305-235e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Before this model is removed from play, you gain D3 Miracle dice.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11598,14 +11588,14 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
             <profile name="Through Suffering, Strength" id="3cc7-4bb9-6eab-6487" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless the model has lost wounds:
-  -&gt; Add 1 to the Attacks characteristic of melee weapons equipped by this model.
-  -&gt; Add 1 to the Strength characteristic of melee weapons equipped by this model.
-  -&gt; Add 1 to the Damage characteristic of melee weapons equipped by this model.
+  - Add 1 to the Attacks characteristic of melee weapons equipped by this model.
+  - Add 1 to the Strength characteristic of melee weapons equipped by this model.
+  - Add 1 to the Damage characteristic of melee weapons equipped by this model.
 While the model has lost wounds:
-  -&gt; Add 2 to the Attacks characteristic of melee weapons equipped by this model.
-  -&gt; Add 2 to the Strength characteristic of melee weapons equipped by this model.
-  -&gt; Add 2 to the Damage characteristic of melee weapons equipped by this model.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+  - Add 2 to the Attacks characteristic of melee weapons equipped by this model.
+  - Add 2 to the Strength characteristic of melee weapons equipped by this model.
+  - Add 2 to the Damage characteristic of melee weapons equipped by this model.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11644,11 +11634,11 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
           <profiles>
             <profile name="Chaplet of Sacrifice" id="0247-e3c2-83e7-3878" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, you may use this ability, while this model is on the battlefield:
-  -&gt; Unless the unit is below its starting strength, discard a die from your Miracle dice and use its value in place of a dice roll.
-  -&gt; You gain 1 Miracle die.
-  -&gt; While the unit is below its starting strength, discard a die from your Miracle dice and use its value in place of a dice roll.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, you can use this ability, while this model is on the battlefield:
+  - Unless this unit is below its Starting Strength, discard a die from your Miracle dice and use its value in place of a dice roll.
+  - You gain 1 Miracle die.
+  - While this unit is below its Starting Strength, discard a die from your Miracle dice and use its value in place of a dice roll.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11683,7 +11673,7 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
             <profile name="Mantle of Ophelia" id="0e74-190f-7f6d-cb1b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an attack targets this model, set the Damage characteristic of that attack to 1.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11723,10 +11713,10 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
             <profile name="Righteous Rage" id="0459-28bf-a17d-e8d6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the phase:
-  -&gt; Spend 1 Miracle die.
-  -&gt; Add 1 to the Attacks characteristic of melee weapons equipped by this model.
-  -&gt; Add 1 to the Strength characteristic of melee weapons equipped by this model.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+  - Spend 1 Miracle die.
+  - Add 1 to the Attacks characteristic of melee weapons equipped by this model.
+  - Add 1 to the Strength characteristic of melee weapons equipped by this model.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11766,9 +11756,9 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
             <profile name="Manual of Saint Griselda" id="c1d4-f760-e38c-5485" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle:
-  -&gt; Spend 2 Miracle dice.
-  -&gt; You gain 1 Miracle die.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+  - Spend 2 Miracle dice.
+  - You gain 1 Miracle die.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11808,9 +11798,9 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
             <profile name="Fire and Fury" id="dcfc-2d61-a5ff-9492" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit:
-  -&gt; Add 1 to the Attacks characteristic of weapons with [TORRENT] equipped by models in this unit.
-  -&gt; Ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+  - Add 1 to the Attacks characteristic of weapons with [TORRENT] equipped by models in this unit.
+  - Ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11844,9 +11834,9 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
           <profiles>
             <profile name="Iron Surplice of Saint Istalela" id="ba83-5c9e-0137-95c8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Save characteristic to 2.
-This model has the Feel No Pain 5+ ability.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Save characteristic to 2+.
+This model has Feel No Pain 5+.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11885,9 +11875,9 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
           <profiles>
             <profile name="Triptych of Judgement" id="22df-89ef-8bb5-74ae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The unit ignores any modifiers to its Weapon Skill and Ballistic Skill characteristics.
-The unit ignores any modifiers to its Hit rolls.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: This unit ignores any modifiers to its Weapon Skill and Ballistic Skill characteristics.
+This unit ignores any modifiers to its Hit rolls.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11926,10 +11916,10 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
           <profiles>
             <profile name="Mark of Devotion" id="9a1c-2790-bf99-2e19" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is not tagged righteous, add 1 to the Attacks characteristic of melee weapons equipped by this model.
-While the unit is tagged righteous, add 2 to the Attacks characteristic of melee weapons equipped by this model.
-While the unit is tagged righteous, add 1 to the Damage characteristic of melee weapons equipped by this model.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is not designated as Righteous, add 1 to the Attacks characteristic of melee weapons equipped by this model.
+While this unit is designated as Righteous, add 2 to the Attacks characteristic of melee weapons equipped by this model.
+While this unit is designated as Righteous, add 1 to the Damage characteristic of melee weapons equipped by this model.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11969,8 +11959,8 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
             <profile name="Eyes of the Oracle" id="765a-be28-5d97-2d6a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model's weapons gain [PRECISION].
--&gt; Each time the unit destroys an enemy CHARACTER model: you gain 1CP.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+Each time this unit destroys an enemy CHARACTER model, you gain 1 CP.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12010,7 +12000,7 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
             <profile name="Sanctified Amulet" id="3377-0670-1488-b788" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Enemy units cannot be set up on the battlefield from Strategic Reserves within 12" of this model.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12045,9 +12035,9 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
             <profile name="Litanies of Faith" id="b163-3434-d717-00dc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Command phase, while this model is on the battlefield, until the end of the phase:
-  -&gt; This model must take a Leadership test.
-  -&gt; If the triggering leadership roll succeeded, you gain 1 Miracle die.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+  - This model must take a Leadership test.
+  - If the triggering leadership roll succeeded, you gain 1 Miracle die.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12089,8 +12079,8 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve the Strength characteristic of melee weapons equipped by this model by 1.
 Improve the Armour Penetration characteristic of melee weapons equipped by this model by 1.
 Melee weapons equipped by this model gain [PRECISION].
--&gt; After this model resolves its attacks in a fight: if this model has destroyed 1+ enemy models with its just-resolved attacks, you gain 1 Miracle die.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+After this model resolves its attacks in a fight, if this model has destroyed one or more enemy models with those attacks, you gain 1 Miracle die.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12129,11 +12119,11 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
           <profiles>
             <profile name="Divine Aspect" id="a79b-c52e-0ca0-696c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Movement phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit if the selected unit is within 12" of this model:
-    -&gt; That unit must take a Battle-shock test.
-    -&gt; If the triggering battle shock roll was a failure, you gain 1 Miracle die.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Movement phase, until the end of the phase, you can use this ability:
+  - Select one enemy unit that is within 12" of this model:
+    - That unit must take a Battle-shock test.
+    - If the triggering battle shock roll was a failure, you gain 1 Miracle die.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12172,8 +12162,8 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
           <profiles>
             <profile name="Triptych of the Macharian Crusade" id="c695-71e3-1666-d90f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an Act of Faith is performed, one of the unit's saving throw rolls automatically succeeds.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an Act of Faith is performed, one of this unit's saving throw rolls automatically succeeds.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12201,8 +12191,8 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
           <profiles>
             <profile name="Clarion of Urgency" id="a62e-4890-b6d6-7da5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase, you may use this ability, while the unit is unengaged, the unit can be placed into Strategic Reserves.
-Applies to: units with Canoness with Jump Pack.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's Fight phase, you can use this ability, while this unit is unengaged, this unit can be placed into Strategic Reserves.
+Applies to: Canoness with Jump Pack units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12231,7 +12221,7 @@ Applies to: units with Canoness with Jump Pack.</characteristic>
             <profile name="Symphonic Payload (Upgrade)" id="b4a5-71ba-0413-6a97" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll the Attacks roll.
-Applies to: units with EXORCIST.</characteristic>
+Applies to: EXORCIST units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12259,8 +12249,8 @@ Applies to: units with EXORCIST.</characteristic>
           <profiles>
             <profile name="Writ of Compunction (Upgrade)" id="dd48-0420-aa14-57b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to the unit's Objective Control characteristic.
-Applies to: units with CELESTIAN SACRESANTS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Objective Control characteristic.
+Applies to: CELESTIAN SACRESANTS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12299,8 +12289,8 @@ Applies to: units with CELESTIAN SACRESANTS.</characteristic>
           <profiles>
             <profile name="Perfervid Haste" id="5a2b-c49b-d899-ccc2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to the unit's Move characteristic.
-Applies to: units with ADEPTA SORORITAS.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1" to this unit's Move characteristic.
+Applies to: ADEPTA SORORITAS units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12339,13 +12329,13 @@ Applies to: units with ADEPTA SORORITAS.</characteristic>
             <profile name="Hagiomnifex (Upgrade)" id="cbe7-4e69-2863-2b77" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the phase:
-  Select one of the following (Hagiomnifex Sermon):
-    - If the attacking unit is the same unit as this unit, while making ranged attacks, add 6 to the target's detection range characteristic.
-    - The unit is marked as battle shock auto succeed.
-    - Add 1 to the unit's Move characteristic.
-    - Add 1 to the unit's Strength characteristic.
-    - When the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.
-Applies to: units with ADEPTA SORORITAS, CHARACTER (excluding PENITENT).</characteristic>
+  Choose one of the following (Hagiomnifex Sermon):
+    - If the attacking unit is the same unit as this unit, while making ranged attacks, add 6" to the target's detection range.
+    - This unit is designated as Battle Shock Auto Succeed.
+    - Add 1" to this unit's Move characteristic.
+    - Add 1 to this unit's Strength characteristic.
+    - When the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.
+Applies to: ADEPTA SORORITAS CHARACTER units (excluding PENITENT units).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12359,7 +12349,7 @@ Applies to: units with ADEPTA SORORITAS, CHARACTER (excluding PENITENT).</charac
   </sharedSelectionEntryGroups>
   <sharedRules>
     <rule name="Acts of Faith" id="fd17-e5fe-9e2b-1163" hidden="false">
-      <description>Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.</description>
+      <description>Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit, Wound, saving throw, Advance, Charge, Desperate Escape, Hazard or Leadership roll.</description>
     </rule>
   </sharedRules>
   <catalogueLinks>

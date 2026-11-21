@@ -86,7 +86,7 @@ describe("a choice the opponent makes for each unit, with the roll printed befor
       ] },
     ] });
     expect(first.effect.effect.effect.condition).toEqual({ type: "in-region", parameters: { subject: "recipient", region: { territory: "enemy-deployment-zone" } } });
-    expect(describeAbility({ id: "sample", name: "Sample", effect: choice } as any)).toMatch(/^Your opponent selects one of the following/u);
+    expect(describeAbility({ id: "sample", name: "Sample", effect: choice } as any)).toMatch(/^Your opponent chooses one of the following/u);
   });
 
   it("leaves the choice to the player without chosen_by", () => {

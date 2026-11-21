@@ -380,8 +380,8 @@ describe("describer output for the trigger shapes", () => {
     const text = describeAbility({ effect: mechanics.effect, scope: mechanics.scope, trigger: mechanics.trigger } as never);
     expect(text).toContain("You can: ");
     expect(text).toContain("spend 1 Pain token");
-    expect(text).toContain("tagged eye of spite pain spent");
-    expect(text).toContain("improve the unit's Armour Penetration characteristic by 2");
+    expect(text).toContain("designated as Eye of Spite Pain Spent");
+    expect(text).toContain("improve this unit's Armour Penetration characteristic by 2");
   });
 });
 

@@ -3460,7 +3460,7 @@
       {
         "name": "Cult Ambush",
         "id": "3db3-80e4-899c-debf",
-        "description": "If your Army Faction is GENESTEALER CULTS, you gain 6/10/14 Resurgence points (Incursion/Strike Force/Onslaught).\n-> Each time a friendly unit is destroyed, if every model in that unit (excluding CHARACTER models) has the Cult Ambush ability, you may use this ability:\n  -> Spend the Resurgence points the cost table gives for the datasheet and Starting Strength of that unit (Aberrants: 4 for 5 models, 8 for 10 models; Acolyte Hybrids with Autopistols, Acolyte Hybrids with Hand Flamers or Hybrid Metamorphs: 2 for 5 models, 4 for 10 models; Atalan Jackals: 2 for 5 models, 6 for 10 models; Neophyte Hybrids: 3 for 10 models, 6 for 20 models; Purestrain Genestealers: 2 for 5 models, 6 for 10 models).\n  -> Add a new unit identical to that unit (excluding CHARACTER models) to your army in Cult Ambush, at its Starting Strength and with all of its wounds remaining, with its [ONE SHOT] weapons counted as not having been shot.\n  -> Place a cult ambush marker (32mm) more than 9\" horizontally away from all enemy units.\nIf your Army Faction is GENESTEALER CULTS:\n  -> Friendly units that are in Cult Ambush cannot be targeted with the Rapid Ingress Stratagem.\n  -> Friendly units that are in Cult Ambush are not destroyed for still being in Strategic Reserves at the end of the third battle round.\n-> Each time an enemy model ends a move (the triggering model must not have AIRCRAFT): if your Army Faction is GENESTEALER CULTS, while the triggering model is within 8\" of a cult ambush marker, remove that cult ambush marker from the battlefield.\n-> At the end of your opponent's Movement phase, you may use this ability: if your Army Faction is GENESTEALER CULTS, select any number of friendly units that are in Cult Ambush (at most the number of your cult ambush markers on the battlefield): that unit can make an Ingress move; that unit can be set up on the battlefield using a Cult Ambush marker, wholly within 3\" of that marker, even in the first battle round.",
+        "description": "If your Army Faction is GENESTEALER CULTS, you gain 6/10/14 Resurgence points (Incursion/Strike Force/Onslaught).\nEach time a friendly unit is destroyed, if every model in that unit (excluding CHARACTER models) has the Cult Ambush ability, you can use this ability:\n  - Spend the Resurgence points the cost table gives for the datasheet and Starting Strength of that unit (Aberrants: 4 for 5 models, 8 for 10 models; Acolyte Hybrids with Autopistols, Acolyte Hybrids with Hand Flamers or Hybrid Metamorphs: 2 for 5 models, 4 for 10 models; Atalan Jackals: 2 for 5 models, 6 for 10 models; Neophyte Hybrids: 3 for 10 models, 6 for 20 models; Purestrain Genestealers: 2 for 5 models, 6 for 10 models).\n  - Add a new unit identical to that unit (excluding CHARACTER models) to your army in Cult Ambush, at its Starting Strength and with all of its wounds remaining, with its [ONE SHOT] weapons counted as not having been shot.\n  - Place a cult ambush marker (32mm) more than 9\" horizontally away from all enemy units.\nIf your Army Faction is GENESTEALER CULTS:\n  - Friendly units that are in Cult Ambush cannot be targeted with the Rapid Ingress Stratagem.\n  - Friendly units that are in Cult Ambush are not destroyed for still being in Strategic Reserves at the end of the third battle round.\nEach time an enemy model (excluding AIRCRAFT models) ends a move, if your Army Faction is GENESTEALER CULTS, while the triggering model is within 8\" of a cult ambush marker, remove that cult ambush marker from the battlefield.\nAt the end of your opponent's Movement phase, you can use this ability: if your Army Faction is GENESTEALER CULTS, select any number of friendly units that are in Cult Ambush (at most the number of your cult ambush markers on the battlefield); those units can make an Ingress move; those units can be set up on the battlefield using a Cult Ambush marker, wholly within 3\" of that marker, even in the first battle round.",
         "hidden": false
       }
     ],
@@ -3759,7 +3759,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends a Normal, Advance or Fall Back move, you may use this ability, once per turn per unit, during the Movement phase, in your turn:\n  -> Select one enemy unit if the selected unit is within 6\" of the unit and the selected unit is visible to the unit: roll one D6 for each friendly ATALAN JACKALS model in the unit: for each 4+, that unit suffers 1 mortal wound (to a maximum of 6 mortal wounds).",
+                "$text": "When this unit ends a Normal, Advance or Fall Back move, you can use this ability, once per turn per unit, during your Movement phase:\n  - Select one enemy unit that is within 6\" of this unit and visible to this unit. Roll one D6 for each friendly ATALAN JACKALS model in this unit: for each 4+, that unit suffers 1 mortal wound, to a maximum of 6 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3773,7 +3773,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit arrives from Strategic Reserves, while the unit is within 0\" of a cult ambush marker, for the rest of the battle:\n  -> This model can be removed from the battlefield and set up again.\n  -> Spend 1 Cult Ambush marker.",
+                "$text": "When this unit arrives from Strategic Reserves, while this unit is in contact with a cult ambush marker, for the rest of the battle:\n  - This model can be removed from the battlefield and set up again.\n  - Spend 1 Cult Ambush marker.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3787,7 +3787,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -3801,7 +3801,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4970,7 +4970,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4984,7 +4984,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After a friendly model with the Heroic Fusillade ability shoots, you may use this ability, once per turn per army:\n  -> Select one enemy INFANTRY unit that was hit by an attack made by the triggering model during its just-finished shooting sequence: that unit must take a Battle-shock test.",
+                "$text": "After a friendly model with the Heroic Fusillade ability shoots, you can use this ability, once per turn per army, select one enemy INFANTRY unit that was hit by an attack made by the triggering model during that shooting sequence. That unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4998,7 +4998,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit ends a move, you may use this ability, once per turn, while the triggering unit is within 8\" of this model, while the unit is unengaged:\n  -> This model is eligible to shoot as if it were your Shooting phase.\n  -> This model must target the triggering unit with ranged attacks.\n  -> This model can make a Normal move of up to D6\".",
+                "$text": "Each time an enemy unit ends a move, you can use this ability, once per turn, while the triggering unit is within 8\" of this model and this unit is unengaged:\n  - This model is eligible to shoot as if it were your Shooting phase.\n  - This model must target the triggering unit with ranged attacks.\n  - This model can make a Normal move of up to D6\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5283,7 +5283,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
+                "$text": "At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5297,7 +5297,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -7738,7 +7738,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8094,7 +8094,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8108,7 +8108,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit ends a Normal, Advance or Fall Back move, you may use this ability, once per battle per unit and once per battle round per army, while the triggering unit is within 8\" of this model:\n  -> Roll one D6: on a 2+, the triggering unit suffers D3+3 mortal wounds.",
+                "$text": "Each time an enemy unit ends a Normal, Advance or Fall Back move, you can use this ability, once per battle per unit and once per battle round per army, while the triggering unit is within 8\" of this model:\n  - Roll one D6: on a 2+, the triggering unit suffers D3+3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8122,7 +8122,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: Once per phase per model, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one friendly unit if the selected unit has the Primed and Ready ability: the Grenade Stratagem costs 0CP.",
+                "$text": "Once per phase per model, during your Shooting phase, until the end of the phase, you can use this ability:\n  - Select one friendly unit with the Primed and Ready ability. The Grenade Stratagem costs 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8136,7 +8136,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8164,7 +8164,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8547,7 +8547,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase:\n  For each enemy unit within 6\" of this model: The unit must take a Battle-shock test.",
+                "$text": "At the start of the Fight phase:\n  For each enemy unit within 6\" of this model: That unit must take a Battle-shock test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8561,7 +8561,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8589,7 +8589,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, you may use this ability, once per battle per unit, until the end of the phase:\n  -> This model resolves the Psychic Familiar ability now.\n  -> Increase the range of this model's Cosmic Horror ability by 6\".",
+                "$text": "At the start of the Fight phase, you can use this ability, once per battle per unit, until the end of the phase:\n  - This model resolves the Psychic Familiar ability now.\n  - Increase the range of this model's Cosmic Horror ability by 6\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8603,7 +8603,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Your army can include only one friendly PATRIARCH model.\nWhile this model is friendly, the unit must be your Warlord.",
+                "$text": "Your army can include only one friendly PATRIARCH model.\nWhile this model is friendly, this unit must be your Warlord.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8617,7 +8617,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8631,7 +8631,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8915,7 +8915,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8929,7 +8929,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit this phase (your Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll the Wound roll for attacks made by all friendly models.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the end of the phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit this phase (your Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, you can re-roll Wound rolls for attacks made by friendly models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -8943,7 +8943,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9367,7 +9367,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability, once per battle per unit, until the end of the phase:\n  -> Add 3 to the Attacks characteristic of melee injector goad weapons equipped by this model.\n  -> Add 3 to the Damage characteristic of melee injector goad weapons equipped by this model.",
+                "$text": "When this unit is selected to fight, you can use this ability, once per battle per unit, until the end of the phase:\n  - Add 3 to the Attacks characteristic of melee injector goad weapons equipped by this model.\n  - Add 3 to the Damage characteristic of melee injector goad weapons equipped by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9395,7 +9395,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9831,7 +9831,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9845,7 +9845,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit:\n  -> Unless the unit has the HYBRID METAMORPHS keyword, the unit has the Feel No Pain 5+ ability.\n  -> If the unit has the HYBRID METAMORPHS keyword, the unit has the Feel No Pain 4+ ability.",
+                "$text": "While this model is leading a unit:\n  - Unless this unit has the HYBRID METAMORPHS keyword, this unit has Feel No Pain 5+.\n  - If this unit has the HYBRID METAMORPHS keyword, this unit has Feel No Pain 4+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9859,7 +9859,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9887,7 +9887,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10196,7 +10196,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Crossfire Target). Until the end of the turn, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly GENESTEALER CULTS unit.",
+                "$text": "After this unit resolves its attacks, once per turn per unit, during your Shooting phase, until the end of the turn:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Crossfire Target). Until the end of the turn, each time a friendly unit makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly GENESTEALER CULTS unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10210,7 +10210,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -10224,7 +10224,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11157,7 +11157,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit gets +1 to Hit rolls.",
+                "$text": "While this model is leading a unit, add 1 to this unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11171,7 +11171,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After deployment, you may use this ability, once per battle per army:\n  -> Select up to 3 friendly GENESTEALER CULTS units:\n    -> For each selected unit:\n      Select one of the following:\n        - That unit can be set up on the battlefield.\n        - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
+                "$text": "After deployment, you can use this ability, once per battle per army:\n  - Select up to 3 friendly GENESTEALER CULTS units:\n    - For each selected unit:\n      Choose one of the following:\n        - That unit can be set up on the battlefield.\n        - That unit can be placed into Strategic Reserves, ignoring any limits on units in Strategic Reserves.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11185,7 +11185,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11199,7 +11199,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11599,7 +11599,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11613,7 +11613,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11627,7 +11627,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of each phase, if this model was destroyed this phase (1+ times), the first time this battle per model:\n  -> Roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.",
+                "$text": "At the end of each phase, if this model was destroyed this phase (one or more times), the first time this battle per model, roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11641,7 +11641,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a model in the unit is destroyed, while this model is leading a unit, while making melee attacks, unless the triggering unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
+                "$text": "When a model in this unit is destroyed, while this model is leading a unit, while making melee attacks, unless the triggering unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11655,7 +11655,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11986,7 +11986,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time you target the unit with a Stratagem, you may use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).",
+                "$text": "Each time you target this unit with a Stratagem, you can use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12000,7 +12000,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Command phase, you may use this ability, while this model is on the battlefield, move the cult ambush marker that has not been moved this turn up to 6\".",
+                "$text": "At the start of the Command phase, you can use this ability, while this model is on the battlefield, move the cult ambush marker that has not been moved this turn up to 6\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12014,7 +12014,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12323,7 +12323,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Your opponent cannot target the unit with Overwatch.",
+                "$text": "Your opponent cannot target this unit with Overwatch.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12337,7 +12337,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit ends a move, you may use this ability, if this model is equipped with one weapon named \"Cult sniper rifle\", during the Movement phase, in the opponent's turn, while the triggering unit is within 8\" of the unit, while the unit is unengaged, the unit can make a Normal move of up to 6\".",
+                "$text": "Each time an enemy unit ends a move, you can use this ability, if this model is equipped with one weapon named \"Cult sniper rifle\", during your opponent's Movement phase, while the triggering unit is within 8\" of this unit and this unit is unengaged, this unit can make a Normal move of up to 6\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12351,7 +12351,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> At the start of the battle round, if during the first battle round:\n  -> Select one enemy unit, binding it as prey selection (your Prey target). For the rest of the battle, each time this model makes an attack against it, while the target is a prey, you can re-roll the Hit roll for attacks made by this model; you can re-roll the Wound roll for attacks made by this model.",
+                "$text": "At the start of the first battle round:\n  - Select one enemy unit (referred to below as the prey selection) (your Prey target). For the rest of the battle, each time this model makes an attack against it, while the target is a prey, you can re-roll Hit rolls for attacks made by this model; you can re-roll Wound rolls for attacks made by this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12365,7 +12365,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12379,7 +12379,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12407,7 +12407,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12801,7 +12801,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12815,7 +12815,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:\n  -> The triggering unit can make a Normal move of up to 6\" as if it were your Movement phase.\n  -> The triggering unit cannot declare a charge.",
+                "$text": "After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:\n  - The triggering unit can make a Normal move of up to 6\" as if it were your Movement phase.\n  - The triggering unit cannot declare a charge.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12829,7 +12829,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit by cult sniper rifle during its just-finished shooting sequence (your Priority Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll a Hit roll of 1 for attacks made by all friendly GENESTEALER CULTS models.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the end of the phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit by cult sniper rifle during that shooting sequence (your Priority Target). Until the end of the phase, each time a friendly unit makes an attack against it, you can re-roll Hit rolls of 1 for attacks made by friendly GENESTEALER CULTS models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12843,7 +12843,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.",
+                "$text": "While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -12857,7 +12857,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13234,7 +13234,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this unit is being led by a CHARACTER model, when the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.",
+                "$text": "While this unit is being led by a CHARACTER model, when the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13248,7 +13248,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13262,7 +13262,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13897,7 +13897,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You gain 1CP.",
+                "$text": "You gain 1 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13911,7 +13911,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14956,7 +14956,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After an enemy unit shoots, during the Shooting phase, in the opponent's turn, if the triggering unit has destroyed 1+ models with its just-resolved attacks, the unit can make a Surge move of up to D6\".",
+                "$text": "After an enemy unit shoots, during your opponent's Shooting phase, if the triggering unit has destroyed one or more models with those attacks, this unit can make a Surge move of up to D6\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14970,7 +14970,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14984,7 +14984,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14998,7 +14998,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15956,7 +15956,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can re-roll a Wound roll of 1.\nWhile the target is within range of an objective marker, you can re-roll the Wound roll.",
+                "$text": "You can re-roll Wound rolls of 1.\nWhile the target is within range of an objective marker, you can re-roll Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15970,7 +15970,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17046,7 +17046,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit has the Feel No Pain 4+ ability.",
+                "$text": "While this model is leading a unit, this unit has Feel No Pain 4+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17060,7 +17060,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Fights First ability, the unit gains the Fights First ability.",
+                "$text": "While this unit has the Fights First ability, this unit gains the Fights First ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17074,7 +17074,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit gains the Fights First ability.",
+                "$text": "While this model is leading a unit, this unit gains the Fights First ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17088,7 +17088,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17379,7 +17379,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of this model:\n  -> While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  -> While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
+                "$text": "Each time an enemy unit (excluding MONSTER or VEHICLE units) starts a Fall Back move, while the triggering unit is within Engagement Range of this model:\n  - While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.\n  - While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17393,7 +17393,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17407,7 +17407,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17421,7 +17421,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18021,7 +18021,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18035,7 +18035,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of each phase, you may use this ability, once per battle per unit, until the end of the phase, this model has a 4+ invulnerable save.",
+                "$text": "At the start of each phase, you can use this ability, once per battle per unit, until the end of the phase, this model has a 4+ invulnerable save.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18049,7 +18049,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18398,7 +18398,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit is eligible to declare a charge in a turn in which it Advanced.",
+                "$text": "This unit is eligible to declare a charge in a turn in which it Advanced.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18412,7 +18412,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18426,7 +18426,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18947,7 +18947,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18961,7 +18961,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your opponent's Shooting phase, you may use this ability, once per turn per army, if this model has the PSYKER keyword, until the end of the phase:\n  -> Select one enemy unit if the selected unit is within 18\" of this model:\n    -> Roll one D6:\n      - On 1: This model suffers D3 mortal wounds.\n      - On 2-5: That unit gets -1 to Hit rolls.\n      - On 6: That unit gets -1 to Hit rolls; that unit gets -1 to Wound rolls.",
+                "$text": "At the start of your opponent's Shooting phase, you can use this ability, once per turn per army, if this model has the PSYKER keyword, until the end of the phase:\n  - Select one enemy unit that is within 18\" of this model:\n    - Roll one D6:\n      - On 1: This model suffers D3 mortal wounds.\n      - On 2-5: Subtract 1 from that unit's Hit rolls.\n      - On 6: Subtract 1 from that unit's Hit rolls; subtract 1 from that unit's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18975,7 +18975,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of each phase, you may use this ability, once per battle per unit:\n  -> Select one friendly GENESTEALER CULTS unit if the selected unit is Battle-shocked and the selected unit is within 12\" of this model: that unit is no longer Battle-shocked.",
+                "$text": "At the start of each phase, you can use this ability, once per battle per unit, select one friendly GENESTEALER CULTS unit that is Battle-shocked and within 12\" of this model. That unit is no longer Battle-shocked.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -18989,7 +18989,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19003,7 +19003,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your opponent's Shooting phase, you may use this ability, once per battle per unit, until the end of the phase:\n  -> This model resolves the Psychic Familiar ability now.\n  -> Increase the range of this model's Mind Control ability by 6\".",
+                "$text": "At the start of your opponent's Shooting phase, you can use this ability, once per battle per unit, until the end of the phase:\n  - This model resolves the Psychic Familiar ability now.\n  - Increase the range of this model's Mind Control ability by 6\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20089,7 +20089,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Return 3 destroyed models to the unit, each with its full wounds remaining.",
+                "$text": "Return 3 destroyed models to this unit, each with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21079,7 +21079,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability, once per battle per unit, against INFANTRY targets, until the end of the phase, the unit gets +1 to Wound rolls.",
+                "$text": "When this unit is selected to fight, you can use this ability, once per battle per unit, against INFANTRY targets, until the end of the phase, add 1 to this unit's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21709,7 +21709,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: The unit gains the SMOKE keyword.\nThe Smokescreen Stratagem that targets the unit costs 0CP.",
+                "$text": "You can use this ability: This unit gains the SMOKE keyword.\nThe Smokescreen Stratagem that targets this unit costs 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21739,7 +21739,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Set the Ballistic Skill characteristic of ranged weapons equipped by this model to 3.",
+                "$text": "Set the Ballistic Skill characteristic of ranged weapons equipped by this model to 3+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21769,7 +21769,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Survey Augur Target). Until the end of the phase, each time a friendly unit makes an attack against it, all friendly GENESTEALER CULTS models' weapons gain [IGNORES COVER].",
+                "$text": "After this unit resolves its attacks:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Survey Augur Target). Until the end of the phase, each time a friendly unit makes an attack against it, friendly GENESTEALER CULTS models' weapons gain [IGNORES COVER].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23829,13 +23829,13 @@
                   {
                     "name": "Integrated Tactics",
                     "id": "9b1d-7ab7-e0fe-b511",
-                    "description": "When a friendly unit is selected to shoot (the triggering unit must have ASTRA MILITARUM), you may use this ability, until the end of the phase:\n  -> Select one enemy unit if the selected unit is within 18\" of the triggering unit and the selected unit is visible to the triggering unit:\n    -> The triggering unit must target that unit with ranged weapons.\n    -> That unit is caught in overlapping fire.\n    -> While the target is caught in overlapping fire, while making ranged attacks, all friendly GENESTEALER CULTS models get +1 to Hit rolls.",
+                    "description": "When a friendly ASTRA MILITARUM unit is selected to shoot, you can use this ability, until the end of the phase:\n  - Select one enemy unit that is within 18\" of the triggering unit and visible to the triggering unit:\n    - The triggering unit must target that unit with ranged weapons.\n    - That unit is caught in overlapping fire.\n    - While the target is caught in overlapping fire, while making ranged attacks, add 1 to friendly GENESTEALER CULTS models' Hit rolls.",
                     "hidden": false
                   },
                   {
                     "name": "Brood Brothers",
                     "id": "8475-3762-f8ab-287d",
-                    "description": "Your army can include ASTRA MILITARUM units (excluding AIRCRAFT, COMMISSAR, EPIC HERO, MILITARUM TEMPESTUS, OGRYN, RATLING, TECH-PRIEST ENGINSEER or MINISTORUM PRIEST units).\nThe unit must be your Warlord.\nAll friendly ASTRA MILITARUM units lose the Voice of Command ability.",
+                    "description": "Your army can include ASTRA MILITARUM units (excluding AIRCRAFT, COMMISSAR, EPIC HERO, MILITARUM TEMPESTUS, OGRYN, RATLING, TECH-PRIEST ENGINSEER or MINISTORUM PRIEST units).\nThis unit must be your Warlord.\nFriendly ASTRA MILITARUM units lose the Voice of Command ability.",
                     "hidden": false
                   }
                 ]
@@ -23882,7 +23882,7 @@
                   {
                     "name": "Hypermorphic Fury",
                     "id": "41b4-fe22-3b28-b6a2",
-                    "description": "The unit gets +1 to Charge rolls.\n-> When a friendly unit is selected to fight (the triggering unit must have ABERRANTS, BIOPHAGUS or PURESTRAIN GENESTEALERS), until the end of the phase: if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by the triggering unit.",
+                    "description": "Add 1 to this unit's Charge rolls.\nWhen a friendly ABERRANTS, BIOPHAGUS or PURESTRAIN GENESTEALERS unit is selected to fight, until the end of the phase, if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by the triggering unit.",
                     "hidden": false
                   }
                 ]
@@ -23929,7 +23929,7 @@
                   {
                     "name": "Rapid Takeover",
                     "id": "e963-4dc5-867b-4cfe",
-                    "description": "While the unit is not Battle-shocked, add 1 to this model's Objective Control characteristic.\n-> At the end of the Command phase: if you control 1+ objectives, while a friendly ATALAN JACKALS unit is within range of an objective marker you control, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
+                    "description": "While this unit is not Battle-shocked, add 1 to this model's Objective Control characteristic.\nAt the end of the Command phase, if you control one or more objectives, while a friendly ATALAN JACKALS unit is within range of an objective marker you control, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
                     "hidden": false
                   }
                 ]
@@ -23976,7 +23976,7 @@
                   {
                     "name": "Psionic Parasitism",
                     "id": "61ff-d3d0-513b-8fc3",
-                    "description": "-> At the end of your Movement phase, until the start of your next Movement phase:\n  For each friendly SYNAPSE TYRANIDS unit:\n    -> You can:\n      -> Select one friendly GENESTEALER CULTS unit (excluding PATRIARCH or PURESTRAIN GENESTEALERS units) if the selected unit is within 9\" of the unit and the selected unit is visible to the unit, binding it as cult:\n        -> Select one friendly TYRANIDS unit if the selected unit is within 9\" of the unit and the selected unit is visible to the unit, binding it as brood:\n          -> Roll D3+1, then:\n            -> The bound cult suffers a number of mortal wounds equal to the result of that roll.\n            -> One model in the bound brood regains up to a number of lost wounds equal to the result of that roll.\n          -> The bound brood gets +1 to Hit rolls.\nAll friendly TYRANIDS units gain the Catalyst ability:\n  -> While an enemy unit is within 6\" of this unit, if the attack targets that unit, all friendly GENESTEALER CULTS units get +1 to Hit rolls.",
+                    "description": "At the end of your Movement phase, until the start of your next Movement phase:\n  For each friendly SYNAPSE TYRANIDS unit:\n    - You can:\n      - Select one friendly GENESTEALER CULTS unit (excluding PATRIARCH or PURESTRAIN GENESTEALERS units) that is within 9\" of this unit and visible to this unit (referred to below as the cult):\n        - Select one friendly TYRANIDS unit that is within 9\" of this unit and visible to this unit (referred to below as the brood):\n          - Roll D3+1, then:\n            - The chosen cult suffers a number of mortal wounds equal to the result of that roll.\n            - One model in the chosen brood regains up to a number of lost wounds equal to the result of that roll.\n          - Add 1 to the chosen brood's Hit rolls.\nFriendly TYRANIDS units gain the Catalyst ability:\n  - While an enemy unit is within 6\" of this unit, if the attack targets that unit, add 1 to friendly GENESTEALER CULTS units' Hit rolls.",
                     "hidden": false
                   }
                 ]
@@ -24023,7 +24023,7 @@
                   {
                     "name": "Unquestioning Fanaticism",
                     "id": "97e2-3699-42af-d3d0",
-                    "description": "While this model is leading a unit:\n  -> You can re-roll a failed Advance roll.\n  -> You can re-roll a failed Charge roll.\n  -> If the unit has the MAGUS, PRIMUS or ACOLYTE ICONWARD keywords, this model has the Feel No Pain 3+ ability.",
+                    "description": "While this model is leading a unit:\n  - You can re-roll a failed Advance roll.\n  - You can re-roll a failed Charge roll.\n  - If this unit has the MAGUS, PRIMUS or ACOLYTE ICONWARD keywords, this model has Feel No Pain 3+.",
                     "hidden": false
                   }
                 ]
@@ -24077,7 +24077,7 @@
                   {
                     "name": "A Perfect Ambush",
                     "id": "d7b1-737f-8e74-b4b6",
-                    "description": "Each time a friendly unit ends an ingress move (the triggering unit must have GENESTEALER CULTS), until the end of your next Fight phase, the triggering unit's weapons gain [SUSTAINED HITS 1] and [IGNORES COVER].",
+                    "description": "Each time a friendly GENESTEALER CULTS unit ends an Ingress move, until the end of your next Fight phase, that unit's weapons gain [SUSTAINED HITS 1] and [IGNORES COVER].",
                     "hidden": false
                   }
                 ]
@@ -24124,7 +24124,7 @@
                   {
                     "name": "Killer Reputation",
                     "id": "8f01-bd5d-87f8-70c3",
-                    "description": "All friendly models with the KELERMORPH, LOCUS, REDUCTUS SABOTEUR or SANCTUS keyword gain the KILLER keyword.\nYou can re-roll a Hit roll of 1 for attacks made by all friendly KILLER models.\nYou can re-roll a Wound roll of 1 for attacks made by all friendly KILLER models.",
+                    "description": "Friendly models with the KELERMORPH, LOCUS, REDUCTUS SABOTEUR or SANCTUS keyword gain the KILLER keyword.\nYou can re-roll Hit rolls of 1 for attacks made by friendly KILLER models.\nYou can re-roll Wound rolls of 1 for attacks made by friendly KILLER models.",
                     "hidden": false
                   }
                 ]
@@ -24171,7 +24171,7 @@
                   {
                     "name": "Enemy Within",
                     "id": "1f68-6185-f829-7497",
-                    "description": "-> At the end of your opponent's Fight phase: friendly PURESTRAIN GENESTEALERS units that are unengaged can be placed into Strategic Reserves.\nYou cannot select this Detachment together with another PURESTRAIN Detachment.",
+                    "description": "At the end of your opponent's Fight phase, friendly PURESTRAIN GENESTEALERS units that are unengaged can be placed into Strategic Reserves.\nYou cannot select this Detachment together with another PURESTRAIN Detachment.",
                     "hidden": false
                   }
                 ]
@@ -24225,7 +24225,7 @@
                   {
                     "name": "Hordes of the Faithful",
                     "id": "15e0-cf4d-32a0-8ce3",
-                    "description": "During the Command phase, in your turn, while a friendly NEOPHYTE HYBRIDS unit is within the terrain area terrain area, that unit regains up to 3 lost wounds.\nYou cannot select this Detachment together with another HOSTS Detachment.",
+                    "description": "During your Command phase, while a friendly NEOPHYTE HYBRIDS unit is within the terrain area terrain area, that unit regains up to 3 lost wounds.\nYou cannot select this Detachment together with another HOSTS Detachment.",
                     "hidden": false
                   }
                 ]
@@ -24426,7 +24426,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When a friendly ASTRA MILITARUM unit with the INFANTRY or MOUNTED keyword within 9\" of this model is selected to shoot, you may use this ability, once per turn per model, until the end of the phase, while a friendly ASTRA MILITARUM unit with the INFANTRY or MOUNTED keyword is within 9\" of this model, improve the Armour Penetration characteristic of ranged weapons equipped by the triggering unit by 1.",
+                    "$text": "When a friendly ASTRA MILITARUM unit with the INFANTRY or MOUNTED keyword within 9\" of this model is selected to shoot, you can use this ability, once per turn per model, until the end of the phase, while a friendly ASTRA MILITARUM unit with the INFANTRY or MOUNTED keyword is within 9\" of this model, improve the Armour Penetration characteristic of ranged weapons equipped by the triggering unit by 1.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -24608,7 +24608,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When you target the unit with the Heroic Intervention Stratagem, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).",
+                    "$text": "When you target this unit with the Heroic Intervention Stratagem, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -24790,7 +24790,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Improve the unit's Leadership characteristic by 1.\nImprove the unit's Objective Control characteristic by 1.",
+                    "$text": "Improve this unit's Leadership characteristic by 1.\nImprove this unit's Objective Control characteristic by 1.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -24972,7 +24972,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When you target the unit with the Fire Overwatch Stratagem, when resolving this use, the unit's Hit rolls succeed only on an unmodified 5+.",
+                    "$text": "When you target this unit with the Fire Overwatch Stratagem, for this activation, this unit's Hit rolls succeed only on an unmodified 5+.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25074,7 +25074,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: The unit gains the Infiltrators ability.\nThe unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\nThe unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
+                    "$text": "You can use this ability: This unit gains the Infiltrators ability.\nThis unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.\nThis unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25270,7 +25270,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "During the Command phase, one model in the unit regains up to 1 lost wound.",
+                    "$text": "During the Command phase, one model in this unit regains up to 1 lost wound.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25372,7 +25372,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While an enemy unit is within Engagement Range of the unit, subtract 1 from that unit's Objective Control characteristic.",
+                    "$text": "While an enemy unit is within Engagement Range of this unit, subtract 1 from that unit's Objective Control characteristic.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25453,7 +25453,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit is eligible to shoot in a turn in which it Fell Back.",
+                    "$text": "This unit is eligible to shoot in a turn in which it Fell Back.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25724,7 +25724,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next Shooting phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit by cult sniper rifle during its just-finished shooting sequence: that unit gets -1 to Hit rolls.",
+                    "$text": "After this unit resolves its attacks, during your Shooting phase, until the start of your next Shooting phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit by cult sniper rifle during that shooting sequence. Subtract 1 from that unit's Hit rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25914,7 +25914,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While making ranged attacks, if the unit disembarked from a Transport this turn, you can re-roll the Hit roll.",
+                    "$text": "While making ranged attacks, if this unit disembarked from a Transport this turn, you can re-roll Hit rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26170,7 +26170,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Enemy units cannot target the unit with the Fire Overwatch Stratagem.",
+                    "$text": "Enemy units cannot target this unit with the Fire Overwatch Stratagem.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26426,7 +26426,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While the target unit is an enemy unit, while the target is within 6\" of a friendly TYRANIDS unit, the unit's weapons gain [SUSTAINED HITS 1].",
+                    "$text": "While the target unit is an enemy unit and the target is within 6\" of a friendly TYRANIDS unit, this unit's weapons gain [SUSTAINED HITS 1].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26630,7 +26630,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Against CHARACTER targets:\n  -> The unit gets +1 to Hit rolls.\n  -> The unit gets +1 to Wound rolls.",
+                    "$text": "Against CHARACTER targets:\n  - Add 1 to this unit's Hit rolls.\n  - Add 1 to this unit's Wound rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26834,7 +26834,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "The unit is eligible to declare a charge in a turn in which it Advanced.",
+                    "$text": "This unit is eligible to declare a charge in a turn in which it Advanced.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27024,7 +27024,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time an enemy unit ends a move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8\" of the unit, while the unit is unengaged, the unit can make a Normal move of up to D6\".",
+                    "$text": "Each time an enemy unit ends a move, during your opponent's Movement phase, while the triggering unit is within 8\" of this unit and this unit is unengaged, this unit can make a Normal move of up to D6\".",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27214,7 +27214,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When the unit ends an ingress move, until the end of your next Fight phase, ranged weapons equipped by models in this unit gain [LETHAL HITS].",
+                    "$text": "When this unit ends an Ingress move, until the end of your next Fight phase, ranged weapons equipped by models in this unit gain [LETHAL HITS].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27404,7 +27404,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When a Charge is declared, you may use this ability, once per battle per model, until the end of the phase, the unit gets +2 to Charge rolls.",
+                    "$text": "When a Charge is declared, you can use this ability, once per battle per model, until the end of the phase, add 2 to this unit's Charge rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27594,7 +27594,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Against CHARACTER targets, the unit gets +1 to Hit rolls.",
+                    "$text": "Against CHARACTER targets, add 1 to this unit's Hit rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27863,7 +27863,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Improve the unit's Toughness characteristic by 1.\nSet the unit's Save characteristic to 4.\nImprove the Strength characteristic of melee weapons equipped by models in this unit by 1.",
+                    "$text": "Improve this unit's Toughness characteristic by 1.\nSet this unit's Save characteristic to 4+.\nImprove the Strength characteristic of melee weapons equipped by models in this unit by 1.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -27944,7 +27944,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can re-roll a Wound roll of 1.",
+                    "$text": "You can re-roll Wound rolls of 1.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -28038,7 +28038,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can re-roll the Damage roll.",
+                    "$text": "You can re-roll Damage rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -28119,7 +28119,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Subtract 3 from the unit's detection range characteristic.",
+                    "$text": "Subtract 3\" from this unit's detection range.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

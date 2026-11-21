@@ -37,7 +37,7 @@ func TestWithRatingSubstitutesOnlyTheRatingRef(t *testing.T) {
 
 func TestRatedRuleRenders(t *testing.T) {
 	cases := []struct{ effect, want string }{
-		{fnpRated, "Feel No Pain X+ ability, X being its rating"},
+		{fnpRated, "Feel No Pain X+, X being its rating"},
 		{scoutsRated, `Scouts X" ability, X being its rating`},
 		{demiseRated, "equal to its rating"},
 	}
@@ -47,7 +47,7 @@ func TestRatedRuleRenders(t *testing.T) {
 		}
 	}
 	rated := describeAbility(map[string]any{"effect": withRating(j(t, fnpRated), 5.0, true)})
-	if !strings.Contains(rated, "Feel No Pain 5+ ability") || strings.Contains(rated, "X") {
+	if !strings.Contains(rated, "Feel No Pain 5+") || strings.Contains(rated, "X") {
 		t.Errorf("rated fnp = %q", rated)
 	}
 	demise := describeAbility(map[string]any{"effect": withRating(j(t, demiseRated), "D3", true)})

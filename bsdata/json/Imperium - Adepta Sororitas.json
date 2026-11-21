@@ -3181,7 +3181,7 @@
       {
         "name": "Acts of Faith",
         "id": "fd17-e5fe-9e2b-1163",
-        "description": "Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit or Wound or saving throw or Advance or Charge or Desperate Escape or Hazard or Leadership roll.",
+        "description": "Until the end of the phase, discard a die from your Miracle dice and use its value in place of a Hit, Wound, saving throw, Advance, Charge, Desperate Escape, Hazard or Leadership roll.",
         "hidden": false
       }
     ],
@@ -3440,7 +3440,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this unit is being led by an ADEPTA SORORITAS CHARACTER model, the attacking unit gets -1 to Wound rolls.",
+                "$text": "While this unit is being led by an ADEPTA SORORITAS CHARACTER model, subtract 1 from the attacking unit's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4542,7 +4542,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a model in the unit is destroyed, unless the triggering unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
+                "$text": "When a model in this unit is destroyed, unless the triggering unit has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4556,7 +4556,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -4570,7 +4570,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5586,7 +5586,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5600,7 +5600,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the Fight phase, you may use this ability, once per battle per unit, until the end of the phase:\n  -> Add 3 to the Attacks characteristic of melee weapons equipped by this model.\n  -> Melee weapons equipped by this model gain [DEVASTATING WOUNDS].",
+                "$text": "At the start of the Fight phase, you can use this ability, once per battle per unit, until the end of the phase:\n  - Add 3 to the Attacks characteristic of melee weapons equipped by this model.\n  - Melee weapons equipped by this model gain [DEVASTATING WOUNDS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5614,7 +5614,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -5628,7 +5628,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, while the unit has the Sacred Command ability, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).",
+                "$text": "When this model's unit is targeted with a Stratagem, you can use this ability, once per battle round per army, while this unit has the Sacred Command ability, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6131,7 +6131,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit's weapons gain [LETHAL HITS].",
+                "$text": "While this model is leading a unit, this unit's weapons gain [LETHAL HITS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6145,7 +6145,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6159,7 +6159,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Until the end of the phase:\n  -> When the unit is selected to fight, you may use this ability: spend 1 Miracle die.\n  -> Each time an attack made by this model scores a wound: while making melee attacks, the target suffers 1 mortal wound.",
+                "$text": "Until the end of the phase:\n  - When this unit is selected to fight, you can use this ability: spend 1 Miracle die.\n  - Each time an attack made by this model scores a wound, while making melee attacks, the target suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6480,7 +6480,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "A friendly MINISTORUM PRIEST unit with the Leader ability that can be attached to friendly BATTLE SISTERS SQUAD units can also be attached to the unit.\n-> When declaring Battle Formations: MINISTORUM PRIEST Leader models in the unit gain the following rules (while this model is leading a unit: this model gains the Scouts 6\" ability).",
+                "$text": "A friendly MINISTORUM PRIEST unit with the Leader ability that can be attached to friendly BATTLE SISTERS SQUAD units can also be attached to this unit.\nWhen declaring Battle Formations, MINISTORUM PRIEST Leader models in this unit gain the following rules (while this model is leading a unit, this model gains the Scouts 6\" ability).",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6508,7 +6508,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit has the MINISTORUM PRIEST keyword, melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].",
+                "$text": "If this unit has the MINISTORUM PRIEST keyword, melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -6522,7 +6522,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9375,7 +9375,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, you may use this ability, until the end of the phase:\n  -> Set the Attacks characteristic of melee Arco Flails weapons equipped by models in this unit to 6.\n  -> Melee Arco Flails weapons equipped by models in this unit gain [HAZARDOUS].",
+                "$text": "When this unit is selected to fight, you can use this ability, until the end of the phase:\n  - Set the Attacks characteristic of melee Arco Flails weapons equipped by models in this unit to 6.\n  - Melee Arco Flails weapons equipped by models in this unit gain [HAZARDOUS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9389,7 +9389,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9789,7 +9789,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain 4+ ability against Psychic Attacks and mortal wounds.",
+                "$text": "This unit has Feel No Pain 4+ against Psychic Attacks and mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -9803,7 +9803,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> At the start of the battle:\n  -> Select one enemy unit, binding it as quarry selection (your Quarry target). This selection can be made while this unit is embarked. For the rest of the battle, each time a model in this unit makes an attack against it, while the target is tagged quarry, the unit's weapons gain [PRECISION]; you can re-roll the Hit roll.",
+                "$text": "At the start of the battle:\n  - Select one enemy unit (your Quarry target). This selection can be made while this unit is embarked. For the rest of the battle, each time a model in this unit makes an attack against it, while the target is a Quarry, this unit's weapons gain [PRECISION]; you can re-roll Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11009,7 +11009,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a Miracle die is generated, if 1+ friendly ADEPTA SORORITAS units destroyed and causing the exact bound event within 12\" of this model or 1+ friendly ADEPTA SORORITAS models destroyed and causing the exact bound event within 12\" of this model, you may use this ability, if 1+ friendly units destroyed within 12\" of this model, if the unit has the ADEPTA SORORITAS keyword, until the end of the turn, you can re-roll the pool die roll for this model by spending a die from your Miracle Dice.",
+                "$text": "When a Miracle die is generated, if one or more friendly ADEPTA SORORITAS units destroyed triggering this ability within 12\" of this model or one or more friendly ADEPTA SORORITAS models destroyed triggering this ability within 12\" of this model, you can use this ability and one or more friendly units destroyed within 12\" of this model and this unit has the ADEPTA SORORITAS keyword, until the end of the turn, you can re-roll the pool die roll for this model by spending a die from your Miracle Dice.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11023,7 +11023,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit:\n  -> Set the unit's Save characteristic to 2.\n  -> The unit has a 4+ invulnerable save.",
+                "$text": "While this model is leading a unit:\n  - Set this unit's Save characteristic to 2+.\n  - This unit has a 4+ invulnerable save.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11394,7 +11394,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11408,7 +11408,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, until the end of the battle round:\n  -> At the start of the battle round:\n    -> Select up to two:\n      - The Fiery Heart: add 2 to the Move characteristic of friendly ADEPTA SORORITAS units within 6\" of this model; friendly ADEPTA SORORITAS units within 6\" of this model get +1 to Advance rolls; friendly ADEPTA SORORITAS units within 6\" of this model get +1 to Charge rolls.\n      - Censer of the Sacred Rose: you can re-roll the Battle-shock roll for friendly ADEPTA SORORITAS units within 6\" of this model.\n      - Simulacrum of the Ebon Chalice: the number of uses of the Acts of Faith ability of friendly ADEPTA SORORITAS units within 6\" of this model is 2.\n      - Simulacrum of the Argent Shroud: you can re-roll a Wound roll of 1 for attacks made by friendly ADEPTA SORORITAS units within 6\" of this model with ranged weapons.\n      - Icon of the Valorous Heart: friendly ADEPTA SORORITAS units within 6\" of this model have the Feel No Pain 6+ ability.\n      - Petals of the Bloody Rose: improve the Armour Penetration characteristic of melee weapons equipped by friendly ADEPTA SORORITAS units within 6\" of this model by 1.",
+                "$text": "At the start of the battle round, until the end of the battle round:\n  - At the start of the battle round:\n    - Select up to two:\n      - The Fiery Heart: Add 2\" to the Move characteristic of friendly ADEPTA SORORITAS units within 6\" of this model; add 1 to the Advance rolls of friendly ADEPTA SORORITAS units within 6\" of this model; add 1 to the Charge rolls of friendly ADEPTA SORORITAS units within 6\" of this model.\n      - Censer of the Sacred Rose: You can re-roll the Battle-shock roll for friendly ADEPTA SORORITAS units within 6\" of this model.\n      - Simulacrum of the Ebon Chalice: The number of uses of the Acts of Faith ability of friendly ADEPTA SORORITAS units within 6\" of this model is 2.\n      - Simulacrum of the Argent Shroud: You can re-roll Wound rolls of 1 for attacks made by friendly ADEPTA SORORITAS units within 6\" of this model with ranged weapons.\n      - Icon of the Valorous Heart: Friendly ADEPTA SORORITAS units within 6\" of this model have Feel No Pain 6+.\n      - Petals of the Bloody Rose: Improve the Armour Penetration characteristic of melee weapons equipped by friendly ADEPTA SORORITAS units within 6\" of this model by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11422,7 +11422,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, until the end of the battle round:\n  -> At the start of the battle round:\n    -> Add 2 to the Move characteristic of friendly ADEPTA SORORITAS units within 6\" of this model.\n    -> Friendly ADEPTA SORORITAS units within 6\" of this model get +1 to Advance rolls.\n    -> Friendly ADEPTA SORORITAS units within 6\" of this model get +1 to Charge rolls.",
+                "$text": "At the start of the battle round, until the end of the battle round:\n  - At the start of the battle round:\n    - Add 2\" to the Move characteristic of friendly ADEPTA SORORITAS units within 6\" of this model.\n    - Add 1 to the Advance rolls of friendly ADEPTA SORORITAS units within 6\" of this model.\n    - Add 1 to the Charge rolls of friendly ADEPTA SORORITAS units within 6\" of this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11436,7 +11436,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, until the end of the battle round:\n  -> At the start of the battle round: you can re-roll the Battle-shock roll for friendly ADEPTA SORORITAS units within 6\" of this model.",
+                "$text": "At the start of the battle round, until the end of the battle round:\n  - At the start of the battle round, you can re-roll the Battle-shock roll for friendly ADEPTA SORORITAS units within 6\" of this model.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11450,7 +11450,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, until the end of the battle round:\n  -> At the start of the battle round: the number of uses of the Acts of Faith ability of friendly ADEPTA SORORITAS units within 6\" of this model is 2.",
+                "$text": "At the start of the battle round, until the end of the battle round:\n  - At the start of the battle round, the number of uses of the Acts of Faith ability of friendly ADEPTA SORORITAS units within 6\" of this model is 2.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11464,7 +11464,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, until the end of the battle round:\n  -> At the start of the battle round: you can re-roll a Wound roll of 1 for attacks made by friendly ADEPTA SORORITAS units within 6\" of this model with ranged weapons.",
+                "$text": "At the start of the battle round, until the end of the battle round:\n  - At the start of the battle round, you can re-roll Wound rolls of 1 for attacks made by friendly ADEPTA SORORITAS units within 6\" of this model with ranged weapons.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11478,7 +11478,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, until the end of the battle round:\n  -> At the start of the battle round: friendly ADEPTA SORORITAS units within 6\" of this model have the Feel No Pain 6+ ability.",
+                "$text": "At the start of the battle round, until the end of the battle round:\n  - At the start of the battle round, friendly ADEPTA SORORITAS units within 6\" of this model have Feel No Pain 6+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11492,7 +11492,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of the battle round, until the end of the battle round:\n  -> At the start of the battle round: improve the Armour Penetration characteristic of melee weapons equipped by friendly ADEPTA SORORITAS units within 6\" of this model by 1.",
+                "$text": "At the start of the battle round, until the end of the battle round:\n  - At the start of the battle round, improve the Armour Penetration characteristic of melee weapons equipped by friendly ADEPTA SORORITAS units within 6\" of this model by 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11520,7 +11520,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has 6 or fewer wounds remaining:\n  -> Halve this model's Attacks characteristic.\n  -> The number of selections of this model's Relics of the Matriarchs ability is 1.",
+                "$text": "While the model has 6 or fewer wounds remaining:\n  - Halve this model's Attacks characteristic.\n  - The number of selections of this model's Relics of the Matriarchs ability is 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11880,7 +11880,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:\n  -> The unit can make a Normal move of up to 6\".\n  -> The unit cannot declare a charge.",
+                "$text": "After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:\n  - This unit can make a Normal move of up to 6\".\n  - This unit cannot declare a charge.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -11894,7 +11894,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13191,7 +13191,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit contains 1+ REPENTIA SUPERIOR models, while making melee attacks:\n  -> You can re-roll the Hit roll for attacks made by SISTERS REPENTIA models in the unit.\n  -> You can re-roll the Wound roll for attacks made by SISTERS REPENTIA models in the unit.",
+                "$text": "If this unit contains one or more REPENTIA SUPERIOR models, while making melee attacks:\n  - You can re-roll Hit rolls for attacks made by SISTERS REPENTIA models in this unit.\n  - You can re-roll Wound rolls for attacks made by SISTERS REPENTIA models in this unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13205,7 +13205,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -13986,7 +13986,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of each phase, you may use this ability, once per battle per unit:\n  -> Select one friendly ADEPTA SORORITAS unit if the selected unit is Battle-shocked and the selected unit is within 12\" of this model: that unit is no longer Battle-shocked.",
+                "$text": "At the start of each phase, you can use this ability, once per battle per unit, select one friendly ADEPTA SORORITAS unit that is Battle-shocked and within 12\" of this model. That unit is no longer Battle-shocked.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14412,7 +14412,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, add 1 to the unit's Objective Control characteristic.",
+                "$text": "While this model is leading a unit, add 1 to this unit's Objective Control characteristic.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14754,7 +14754,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -14768,7 +14768,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit cannot benefit from Cover.",
+                "$text": "After this unit resolves its attacks, during your Shooting phase, until the end of the phase:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit cannot benefit from Cover.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15500,7 +15500,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, the unit has the Feel No Pain 5+ ability.",
+                "$text": "While this model is leading a unit, this unit has Feel No Pain 5+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15514,7 +15514,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, return 1 destroyed model to the unit, each with its full wounds remaining.",
+                "$text": "While this model is leading a unit, return 1 destroyed model to this unit, each with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15845,7 +15845,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit:\n  -> You can re-roll the Hit roll.\n  -> You can re-roll the Wound roll.",
+                "$text": "While this model is leading a unit:\n  - You can re-roll Hit rolls.\n  - You can re-roll Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15859,7 +15859,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15873,7 +15873,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, until the end of the phase:\n  -> Spend 1 Miracle die.\n  -> Add 3 to the Attacks characteristic of Fidelis weapons equipped by models in this unit.\n  -> Add 3 to the Attacks characteristic of Lance of Illumination weapons equipped by models in this unit.\n-> Each time this model destroys an enemy unit: you gain 1 Miracle die.",
+                "$text": "When this unit is selected to shoot, you can use this ability or when this unit is selected to fight, you can use this ability, until the end of the phase:\n  - Spend 1 Miracle die.\n  - Add 3 to the Attacks characteristic of Fidelis weapons equipped by models in this unit.\n  - Add 3 to the Attacks characteristic of Lance of Illumination weapons equipped by models in this unit.\nEach time this model destroys an enemy unit, you gain 1 Miracle die.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15887,7 +15887,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is friendly, the unit must be your Warlord.",
+                "$text": "While this model is friendly, this unit must be your Warlord.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -15901,7 +15901,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -16232,7 +16232,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: While making ranged attacks:\n  -> You can re-roll a Hit roll of 1.\n  -> You can re-roll a Wound roll of 1.\n  -> If the target unit has destroyed 1+ friendly ADEPTA SORORITAS units this battle, the unit gets +1 to Hit rolls.\n  -> If the target unit has destroyed 1+ friendly ADEPTA SORORITAS units this battle, the unit gets +1 to Wound rolls.",
+                "$text": "While making ranged attacks, you can use this ability:\n  - You can re-roll Hit rolls of 1.\n  - You can re-roll Wound rolls of 1.\n  - If the target unit has destroyed one or more friendly ADEPTA SORORITAS units this battle, add 1 to this unit's Hit rolls.\n  - If the target unit has destroyed one or more friendly ADEPTA SORORITAS units this battle, add 1 to this unit's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17804,7 +17804,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Unless the target unit is an enemy unit and the target is within range of an objective marker, you can re-roll a Hit roll of 1.\nWhile the target unit is an enemy unit, while the target is within range of an objective marker, you can re-roll the Hit roll.",
+                "$text": "Unless the target unit is an enemy unit and the target is within range of an objective marker, you can re-roll Hit rolls of 1.\nWhile the target unit is an enemy unit and the target is within range of an objective marker, you can re-roll Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -17818,7 +17818,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Infiltrators ability.",
+                "$text": "This unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19107,7 +19107,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the unit has the Fights First ability, the unit gains the Fights First ability.",
+                "$text": "While this unit has the Fights First ability, this unit gains the Fights First ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19121,7 +19121,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your Shooting phase, until the end of the phase:\n  -> Select one enemy unit if the selected unit is within 12\" of this model and the selected unit is visible to this model:\n    -> If the selected unit has the CHAOS keyword, that unit must take a Battle-shock test, applying -2 to that test.\n    -> Unless the selected unit has the CHAOS keyword, that unit must take a Battle-shock test.\n    -> If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds.",
+                "$text": "At the start of your Shooting phase, until the end of the phase:\n  - Select one enemy unit that is within 12\" of this model and visible to this model:\n    - If the selected unit has the CHAOS keyword, that unit must take a Battle-shock test, applying -2 to that test.\n    - Unless the selected unit has the CHAOS keyword, that unit must take a Battle-shock test.\n    - If the triggering battle shock roll was a failure, that unit suffers 3 mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19149,7 +19149,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).\nThe unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
+                "$text": "You can use this ability: This unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.\nReduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.\nThis unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19163,7 +19163,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19770,7 +19770,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Firing Deck X ability, X being its rating.",
+                "$text": "This unit gains the Firing Deck X ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -19798,7 +19798,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -20191,7 +20191,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Against MONSTER or VEHICLE targets:\n  -> The unit gets +1 to Hit rolls.\n  -> The unit gets +1 to Wound rolls.",
+                "$text": "Against MONSTER or VEHICLE targets:\n  - Add 1 to this unit's Hit rolls.\n  - Add 1 to this unit's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21702,7 +21702,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "After the unit resolves its attacks, once per turn per unit, during the Shooting phase, in your turn, until the end of the turn:\n  -> Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Rites of Castigation Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly ADEPTA SORORITAS unit.",
+                "$text": "After this unit resolves its attacks, once per turn per unit, during your Shooting phase, until the end of the turn:\n  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Rites of Castigation Target). Until the end of the turn, each time a friendly unit makes an attack against it, while making ranged attacks, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly ADEPTA SORORITAS unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21716,7 +21716,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -21730,7 +21730,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22419,7 +22419,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22433,7 +22433,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.",
+                "$text": "While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22918,7 +22918,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit is eligible to declare a charge in a turn in which it Advanced.",
+                "$text": "This unit is eligible to declare a charge in a turn in which it Advanced.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22932,7 +22932,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -22946,7 +22946,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23695,7 +23695,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of your Command phase, you may use this ability, while this model is on the battlefield, until the end of the phase:\n  Select exactly 1 distinct options:\n    - Spend 1 Miracle die; you gain 1CP.\n    - This model must take a Leadership test; if the triggering leadership roll succeeded, you gain 1CP.",
+                "$text": "At the start of your Command phase, you can use this ability, while this model is on the battlefield, until the end of the phase:\n  Choose one of the following:\n    - Spend 1 Miracle die; you gain 1 CP.\n    - This model must take a Leadership test; if the triggering leadership roll succeeded, you gain 1 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23709,7 +23709,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23723,7 +23723,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While making melee attacks, the unit gains the Stealth ability.\nAgainst melee attacks, the attacking unit gets -1 to Hit rolls.",
+                "$text": "While making melee attacks, this unit gains the Stealth ability.\nAgainst melee attacks, subtract 1 from the attacking unit's Hit rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -23737,7 +23737,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24130,7 +24130,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "-> When declaring Battle Formations: while this model is attached to a DOMINION SQUAD unit, the unit gains the Scouts 6\" ability.\n-> When declaring Battle Formations: while this model is attached to a SISTERS NOVITIATE SQUAD unit, the unit gains the Infiltrators ability.",
+                "$text": "When declaring Battle Formations, while this model is attached to a DOMINION SQUAD unit, this unit gains the Scouts 6\" ability.\nWhen declaring Battle Formations, while this model is attached to a SISTERS NOVITIATE SQUAD unit, this unit gains the Infiltrators ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24144,7 +24144,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24158,7 +24158,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, while making melee attacks, the unit gets +1 to Wound rolls.",
+                "$text": "While this model is leading a unit, while making melee attacks, add 1 to this unit's Wound rolls.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24172,7 +24172,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: Once per battle per unit, during the Fight phase, until the end of the phase:\n  -> Improve the Attacks characteristic of melee weapons equipped by this model by 3.\n  -> Improve the Strength characteristic of melee weapons equipped by this model by 3.",
+                "$text": "Once per battle per unit, during the Fight phase, until the end of the phase, you can use this ability:\n  - Improve the Attacks characteristic of melee weapons equipped by this model by 3.\n  - Improve the Strength characteristic of melee weapons equipped by this model by 3.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24587,7 +24587,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit is selected to fight, until the end of the phase:\n  Unless the unit charged this turn:\n    Select one of the following:\n      - Melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n      - Melee weapons equipped by models in this unit gain [LETHAL HITS].\n  -> If the unit charged this turn, melee weapons equipped by models in this unit gain [SUSTAINED HITS 1] and [LETHAL HITS].",
+                "$text": "When this unit is selected to fight, until the end of the phase:\n  - Unless this unit charged this turn:\n    Choose one of the following:\n      - Melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n      - Melee weapons equipped by models in this unit gain [LETHAL HITS].\n  - If this unit charged this turn, melee weapons equipped by models in this unit gain [SUSTAINED HITS 1] and [LETHAL HITS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -24601,7 +24601,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25529,7 +25529,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When declaring Battle Formations, while this unit is being led by a model, while the unit is embarked, if the Transport this unit is embarked within has the TRANSPORT keyword, friendly Leader models in the unit gain the Scouts 6\" ability.",
+                "$text": "When declaring Battle Formations, while this unit is being led by a model and this unit is embarked, if the Transport this unit is embarked within has the TRANSPORT keyword, friendly Leader models in this unit gain the Scouts 6\" ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25543,7 +25543,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time an enemy unit ends a move, during the Movement phase, in the opponent's turn, while the triggering unit is within 8\" of the unit, while the unit is unengaged, the triggering unit can make a Normal move of up to D6\".",
+                "$text": "Each time an enemy unit ends a move, during your opponent's Movement phase, while the triggering unit is within 8\" of this unit and this unit is unengaged, the triggering unit can make a Normal move of up to D6\".",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -25557,7 +25557,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Scouts X\" ability, X being its rating.",
+                "$text": "This unit gains the Scouts X\" ability, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27574,7 +27574,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: If the unit is the Celestine model, during the Command phase, in your turn, return 1 destroyed model named Geminae Superia to the unit, each with its full wounds remaining.",
+                "$text": "If this unit is the Celestine model, during your Command phase, you can return 1 destroyed model named Geminae Superia to this unit, each with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27588,7 +27588,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27602,7 +27602,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "If the unit contains 1+ GEMINAE SUPERIA models, this model has the Feel No Pain 4+ ability.",
+                "$text": "If this unit contains one or more GEMINAE SUPERIA models, this model has Feel No Pain 4+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27616,7 +27616,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a friendly CELESTINE model in the unit is destroyed, the first time this battle per model:\n  -> At the end of each phase, until the end of the phase:\n    -> Roll one D6: on a 2+, that model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.",
+                "$text": "When a friendly CELESTINE model in this unit is destroyed, the first time this battle per model:\n  - At the end of each phase, until the end of the phase:\n    - Roll one D6: on a 2+, that model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -27630,7 +27630,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
+                "$text": "When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8\" away from all enemy models.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -28154,7 +28154,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
+                "$text": "At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -30263,7 +30263,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -30277,7 +30277,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the start of each phase, you may use this ability, once per battle per unit, until the end of the phase, this model has a 2+ invulnerable save.",
+                "$text": "At the start of each phase, you can use this ability, once per battle per unit, until the end of the phase, this model has a 2+ invulnerable save.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -30291,7 +30291,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model's unit is targeted with a Stratagem, you may use this ability, once per battle round per army, while the unit has the Sacred Command ability, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).",
+                "$text": "When this model's unit is targeted with a Stratagem, you can use this ability, once per battle round per army, while this unit has the Sacred Command ability, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -32542,7 +32542,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "While this model is leading a unit, if the unit is the Aestred Thurga model, the unit's weapons gain [DEVASTATING WOUNDS].",
+                "$text": "While this model is leading a unit, if this unit is the Aestred Thurga model, this unit's weapons gain [DEVASTATING WOUNDS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -32556,7 +32556,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit gains the Leader ability.",
+                "$text": "This unit gains the Leader ability.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -32570,7 +32570,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Until the end of the turn:\n  -> While this model is leading a unit, if the unit has the AGATHE DOLAN keyword, if the unit has destroyed 1+ enemy units with its just-resolved attacks, you gain 1 Miracle die.\n  -> If the unit has the AGATHE DOLAN keyword, when destroyed by any attack, you gain 1D3 Miracle dice.",
+                "$text": "Until the end of the turn:\n  - While this model is leading a unit, if this unit has the AGATHE DOLAN keyword and this unit has destroyed one or more enemy units with those attacks, you gain 1 Miracle die.\n  - If this unit has the AGATHE DOLAN keyword, when destroyed by any attack, you gain 1D3 Miracle dice.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -33176,7 +33176,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves:\n  -> Roll one D6: on a 6+, for each unit: while the unit is within 6\" of this model, the unit suffers a number of mortal wounds equal to its rating.",
+                "$text": "When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6\" of this model, that unit suffers a number of mortal wounds equal to its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -33190,7 +33190,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain X+ ability, X being its rating.",
+                "$text": "This unit has Feel No Pain X+, X being its rating.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -33218,7 +33218,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of your Movement phase, you may use this ability:\n  -> Select one enemy unit if the selected unit is within 18\" of this model and the selected unit is visible to this model (your Judged for Execution Target). Until the start of your next Command phase, each time a friendly unit makes an attack against it, all friendly ADEPTA SORORITAS models' weapons gain [LETHAL HITS].",
+                "$text": "At the end of your Movement phase, you can use this ability:\n  - Select one enemy unit that is within 18\" of this model and visible to this model (your Judged for Execution Target). Until the start of your next Command phase, each time a friendly unit makes an attack against it, friendly ADEPTA SORORITAS models' weapons gain [LETHAL HITS].",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -33908,7 +33908,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Set this model's Move characteristic to 7.\nSet this model's Save characteristic to 3.",
+                "$text": "Set this model's Move characteristic to 7\".\nSet this model's Save characteristic to 3+.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -35166,7 +35166,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: During the Command phase, in your turn, while this model is on the battlefield, return D3 destroyed models (excluding CHARACTER models) to the unit, each with its full wounds remaining.",
+                "$text": "During your Command phase, while this model is on the battlefield, you can return D3 destroyed models (excluding CHARACTER models) to this unit, each with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -35256,7 +35256,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "At the end of the Command phase, if you control 1+ objectives, while the unit is within range of an objective marker, until the end of the phase:\n  -> Roll one D6: on a 4+, you gain 1 Miracle die.",
+                "$text": "At the end of the Command phase, if you control one or more objectives, while this unit is within range of an objective marker, until the end of the phase:\n  - Roll one D6: on a 4+, you gain 1 Miracle die.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -35526,7 +35526,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time a unit that is tagged quarry is destroyed, you may use this ability, if 1+ enemy units QUARRY destroyed, for the rest of the battle:\n  -> Select one enemy unit: that unit is QUARRY.",
+                "$text": "Each time a unit that is a Quarry is destroyed, you can use this ability, if one or more enemy units QUARRY destroyed, for the rest of the battle:\n  - Select one enemy unit. That unit is QUARRY.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -37564,7 +37564,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can: Select one of the following:\n  - You can re-roll the Charge roll.\n  - You can re-roll the Advance roll.",
+                "$text": "Choose one of the following:\n  - You can re-roll the Charge roll.\n  - You can re-roll the Advance roll.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -40486,7 +40486,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "The unit has the Feel No Pain 4+ ability against Psychic Attacks and mortal wounds.",
+                "$text": "This unit has Feel No Pain 4+ against Psychic Attacks and mortal wounds.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -40516,7 +40516,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "You can re-roll a Hit roll of 1.",
+                "$text": "You can re-roll Hit rolls of 1.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -41018,7 +41018,7 @@
                   {
                     "name": "Desperate For Redemption",
                     "id": "4917-3a79-7634-ddb9",
-                    "description": "At the start of your Command phase, you may use this ability, until the start of your next Command phase:\n  -> Select one (each may be chosen once per battle):\n    - The Path of the Penitent: add 3 to all friendly PENITENT models' Move characteristic.\n    - Absolution in Battle: when a friendly unit is selected to fight, until the end of the phase: if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by PENITENT models in the triggering unit; add 1 to the Strength characteristic of melee weapons equipped by PENITENT models in the triggering unit.\n    - Death Before Disgrace: when a friendly PENITENT model is destroyed: each time a model in this unit is destroyed, while making melee attacks, unless that model has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
+                    "description": "At the start of your Command phase, you can use this ability, until the start of your next Command phase:\n  - Select one (each can be chosen once per battle):\n    - The Path of the Penitent: Add 3\" to friendly PENITENT models' Move characteristic.\n    - Absolution in Battle: When a friendly unit is selected to fight, until the end of the phase, if the triggering unit charged this turn, add 1 to the Attacks characteristic of melee weapons equipped by PENITENT models in the triggering unit; add 1 to the Strength characteristic of melee weapons equipped by PENITENT models in the triggering unit.\n    - Death Before Disgrace: When a friendly PENITENT model is destroyed, while making melee attacks, unless that model has fought this phase, roll one D6. On a 2+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
                     "hidden": false
                   }
                 ]
@@ -41065,7 +41065,7 @@
                   {
                     "name": "The Blood of Martyrs",
                     "id": "08bf-fa5e-e8df-3509",
-                    "description": "While the triggering unit is below its starting strength, all friendly ADEPTA SORORITAS models get +1 to Hit rolls.\nWhile the triggering unit is below half strength, all friendly ADEPTA SORORITAS models get +1 to Wound rolls.",
+                    "description": "While the triggering unit is below its Starting Strength, add 1 to friendly ADEPTA SORORITAS models' Hit rolls.\nWhile the triggering unit is Below Half-strength, add 1 to friendly ADEPTA SORORITAS models' Wound rolls.",
                     "hidden": false
                   }
                 ]
@@ -41112,7 +41112,7 @@
                   {
                     "name": "Fervent Purgation",
                     "id": "4e39-66e0-6e78-62a6",
-                    "description": "Ranged weapons equipped by all friendly ADEPTA SORORITAS models gain [ASSAULT].\nWhile making ranged attacks made with [ASSAULT] weapons, while the target is within 6\" of the attacking unit, add 1 to all friendly ADEPTA SORORITAS models' Strength characteristic.",
+                    "description": "Ranged weapons equipped by friendly ADEPTA SORORITAS models gain [ASSAULT].\nWhile making ranged attacks made with [ASSAULT] weapons, while the target is within 6\" of the attacking unit, add 1 to friendly ADEPTA SORORITAS models' Strength characteristic.",
                     "hidden": false
                   }
                 ]
@@ -41166,7 +41166,7 @@
                   {
                     "name": "Righteous Purpose",
                     "id": "cd2f-f38d-dbf0-294b",
-                    "description": "Until the end of the turn:\n  -> Select up to 3 friendly ADEPTA SORORITAS units:\n    -> For each selected unit:\n      -> Add 1 to that unit's Move characteristic.\n      -> That unit gets +1 to Battle-shock rolls.",
+                    "description": "Until the end of the turn:\n  - Select up to 3 friendly ADEPTA SORORITAS units:\n    - For each selected unit:\n      - Add 1\" to that unit's Move characteristic.\n      - Add 1 to that unit's Battle-shock rolls.",
                     "hidden": false
                   }
                 ]
@@ -41213,7 +41213,7 @@
                   {
                     "name": "Sacred Rites",
                     "id": "638f-1125-5b82-1b78",
-                    "description": "For each friendly ADEPTA SORORITAS unit: The number of uses of the unit's Acts of Faith ability is 2.",
+                    "description": "For each friendly ADEPTA SORORITAS unit: The number of uses of that unit's Acts of Faith ability is 2.",
                     "hidden": false
                   }
                 ]
@@ -41260,7 +41260,7 @@
                   {
                     "name": "Angelic Judgement",
                     "id": "2d11-90a2-fe9b-2d7f",
-                    "description": "All friendly ADEPTA SORORITAS FLY INFANTRY units gain the Condemnatory Psalms ability:\n  -> You can, until the end of the phase: during the Shooting phase, in your turn, select one enemy unit visible to this model if the selected unit is within 12\" of the unit: that unit is marked as condemned; while the selected unit is tagged condemned, add 3 to that unit's detection range characteristic.\nApplies to: units with ADEPTA SORORITAS, INFANTRY, FLY.",
+                    "description": "Friendly ADEPTA SORORITAS FLY INFANTRY units gain the Condemnatory Psalms ability:\n  - Until the end of the phase, you can: during your Shooting phase, select one enemy unit visible to this model that is within 12\" of this unit; that unit is Condemned; while the selected unit is Condemned, add 3\" to that unit's detection range.\nApplies to: ADEPTA SORORITAS INFANTRY FLY units.",
                     "hidden": false
                   }
                 ]
@@ -41314,7 +41314,7 @@
                   {
                     "name": "Holy Quest",
                     "id": "567d-1be1-17f1-f7ca",
-                    "description": "Improve the Weapon Skill characteristic of all friendly units with the CELESTIAN INSIDIANTS or CELESTIAN SACRESANTS keyword by 1.\nImprove the Ballistic Skill characteristic of all friendly units with the CELESTIAN INSIDIANTS or CELESTIAN SACRESANTS keyword by 1.\nYou cannot select this Detachment together with another REVEREND Detachment.\nApplies to: units with CELESTIAN SACRESANTS.",
+                    "description": "Improve the Weapon Skill characteristic of friendly units with the CELESTIAN INSIDIANTS or CELESTIAN SACRESANTS keyword by 1.\nImprove the Ballistic Skill characteristic of friendly units with the CELESTIAN INSIDIANTS or CELESTIAN SACRESANTS keyword by 1.\nYou cannot select this Detachment together with another REVEREND Detachment.\nApplies to: CELESTIAN SACRESANTS units.",
                     "hidden": false
                   }
                 ]
@@ -41361,7 +41361,7 @@
                   {
                     "name": "Hymns of Battle",
                     "id": "5786-51f0-0020-8a66",
-                    "description": "Enhancements from this Detachment do not count toward your army's Enhancement limit.\nImprove all friendly ADEPTA SORORITAS CHARACTER units' Leadership characteristic by 1.\nApplies to: units with ADEPTA SORORITAS, CHARACTER.",
+                    "description": "Enhancements from this Detachment do not count toward your army's Enhancement limit.\nImprove friendly ADEPTA SORORITAS CHARACTER units' Leadership characteristic by 1.\nApplies to: ADEPTA SORORITAS CHARACTER units.",
                     "hidden": false
                   }
                 ]
@@ -41522,7 +41522,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time a friendly unit destroys an enemy unit (the triggering unit must have PENITENT), you may use this ability, while this model is on the battlefield:\n  -> Spend 1 Miracle die.\n  -> Add a die showing 6 to your Miracle dice.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "Each time a friendly PENITENT unit destroys an enemy unit, you can use this ability, while this model is on the battlefield:\n  - Spend 1 Miracle die.\n  - Add a die showing 6 to your Miracle dice.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -41603,7 +41603,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of the battle round, once per battle per model, until the start of the next battle round, select one option of Desperate for Redemption for the unit, in addition to any already active, even if it has already been selected this battle.\nApplies to: units with PENITENT.",
+                    "$text": "At the start of the battle round, once per battle per model, until the start of the next battle round, select one option of Desperate for Redemption for this unit, in addition to any already active, even if it has already been selected this battle.\nApplies to: PENITENT units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -41684,7 +41684,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While this model is leading a unit, the unit has a 5+ invulnerable save.\nApplies to: units with PENITENT.",
+                    "$text": "While this model is leading a unit, this unit has a 5+ invulnerable save.\nApplies to: PENITENT units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -41794,7 +41794,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "This model gains the PENITENT keyword.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "This model gains the PENITENT keyword.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -41936,7 +41936,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Before this model is removed from play, you gain D3 Miracle dice.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "Before this model is removed from play, you gain D3 Miracle dice.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -42078,7 +42078,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Unless the model has lost wounds:\n  -> Add 1 to the Attacks characteristic of melee weapons equipped by this model.\n  -> Add 1 to the Strength characteristic of melee weapons equipped by this model.\n  -> Add 1 to the Damage characteristic of melee weapons equipped by this model.\nWhile the model has lost wounds:\n  -> Add 2 to the Attacks characteristic of melee weapons equipped by this model.\n  -> Add 2 to the Strength characteristic of melee weapons equipped by this model.\n  -> Add 2 to the Damage characteristic of melee weapons equipped by this model.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "Unless the model has lost wounds:\n  - Add 1 to the Attacks characteristic of melee weapons equipped by this model.\n  - Add 1 to the Strength characteristic of melee weapons equipped by this model.\n  - Add 1 to the Damage characteristic of melee weapons equipped by this model.\nWhile the model has lost wounds:\n  - Add 2 to the Attacks characteristic of melee weapons equipped by this model.\n  - Add 2 to the Strength characteristic of melee weapons equipped by this model.\n  - Add 2 to the Damage characteristic of melee weapons equipped by this model.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -42220,7 +42220,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the end of your Command phase, you may use this ability, while this model is on the battlefield:\n  -> Unless the unit is below its starting strength, discard a die from your Miracle dice and use its value in place of a dice roll.\n  -> You gain 1 Miracle die.\n  -> While the unit is below its starting strength, discard a die from your Miracle dice and use its value in place of a dice roll.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "At the end of your Command phase, you can use this ability, while this model is on the battlefield:\n  - Unless this unit is below its Starting Strength, discard a die from your Miracle dice and use its value in place of a dice roll.\n  - You gain 1 Miracle die.\n  - While this unit is below its Starting Strength, discard a die from your Miracle dice and use its value in place of a dice roll.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -42322,7 +42322,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Each time an attack targets this model, set the Damage characteristic of that attack to 1.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "Each time an attack targets this model, set the Damage characteristic of that attack to 1.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -42464,7 +42464,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Until the end of the phase:\n  -> Spend 1 Miracle die.\n  -> Add 1 to the Attacks characteristic of melee weapons equipped by this model.\n  -> Add 1 to the Strength characteristic of melee weapons equipped by this model.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "Until the end of the phase:\n  - Spend 1 Miracle die.\n  - Add 1 to the Attacks characteristic of melee weapons equipped by this model.\n  - Add 1 to the Strength characteristic of melee weapons equipped by this model.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -42606,7 +42606,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "For the rest of the battle:\n  -> Spend 2 Miracle dice.\n  -> You gain 1 Miracle die.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "For the rest of the battle:\n  - Spend 2 Miracle dice.\n  - You gain 1 Miracle die.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -42748,7 +42748,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While this model is leading a unit:\n  -> Add 1 to the Attacks characteristic of weapons with [TORRENT] equipped by models in this unit.\n  -> Ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "While this model is leading a unit:\n  - Add 1 to the Attacks characteristic of weapons with [TORRENT] equipped by models in this unit.\n  - Ranged weapons equipped by models in this unit gain [SUSTAINED HITS 1].\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -42850,7 +42850,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Set this model's Save characteristic to 2.\nThis model has the Feel No Pain 5+ ability.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "Set this model's Save characteristic to 2+.\nThis model has Feel No Pain 5+.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -42992,7 +42992,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: The unit ignores any modifiers to its Weapon Skill and Ballistic Skill characteristics.\nThe unit ignores any modifiers to its Hit rolls.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "You can use this ability: This unit ignores any modifiers to its Weapon Skill and Ballistic Skill characteristics.\nThis unit ignores any modifiers to its Hit rolls.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -43134,7 +43134,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "While the unit is not tagged righteous, add 1 to the Attacks characteristic of melee weapons equipped by this model.\nWhile the unit is tagged righteous, add 2 to the Attacks characteristic of melee weapons equipped by this model.\nWhile the unit is tagged righteous, add 1 to the Damage characteristic of melee weapons equipped by this model.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "While this unit is not designated as Righteous, add 1 to the Attacks characteristic of melee weapons equipped by this model.\nWhile this unit is designated as Righteous, add 2 to the Attacks characteristic of melee weapons equipped by this model.\nWhile this unit is designated as Righteous, add 1 to the Damage characteristic of melee weapons equipped by this model.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -43276,7 +43276,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "This model's weapons gain [PRECISION].\n-> Each time the unit destroys an enemy CHARACTER model: you gain 1CP.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "This model's weapons gain [PRECISION].\nEach time this unit destroys an enemy CHARACTER model, you gain 1 CP.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -43418,7 +43418,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Enemy units cannot be set up on the battlefield from Strategic Reserves within 12\" of this model.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "Enemy units cannot be set up on the battlefield from Strategic Reserves within 12\" of this model.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -43520,7 +43520,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the start of your Command phase, while this model is on the battlefield, until the end of the phase:\n  -> This model must take a Leadership test.\n  -> If the triggering leadership roll succeeded, you gain 1 Miracle die.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "At the start of your Command phase, while this model is on the battlefield, until the end of the phase:\n  - This model must take a Leadership test.\n  - If the triggering leadership roll succeeded, you gain 1 Miracle die.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -43662,7 +43662,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Improve the Strength characteristic of melee weapons equipped by this model by 1.\nImprove the Armour Penetration characteristic of melee weapons equipped by this model by 1.\nMelee weapons equipped by this model gain [PRECISION].\n-> After this model resolves its attacks in a fight: if this model has destroyed 1+ enemy models with its just-resolved attacks, you gain 1 Miracle die.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "Improve the Strength characteristic of melee weapons equipped by this model by 1.\nImprove the Armour Penetration characteristic of melee weapons equipped by this model by 1.\nMelee weapons equipped by this model gain [PRECISION].\nAfter this model resolves its attacks in a fight, if this model has destroyed one or more enemy models with those attacks, you gain 1 Miracle die.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -43804,7 +43804,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can: During the Movement phase, in your turn, until the end of the phase:\n  -> Select one enemy unit if the selected unit is within 12\" of this model:\n    -> That unit must take a Battle-shock test.\n    -> If the triggering battle shock roll was a failure, you gain 1 Miracle die.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "During your Movement phase, until the end of the phase, you can use this ability:\n  - Select one enemy unit that is within 12\" of this model:\n    - That unit must take a Battle-shock test.\n    - If the triggering battle shock roll was a failure, you gain 1 Miracle die.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -43946,7 +43946,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When an Act of Faith is performed, one of the unit's saving throw rolls automatically succeeds.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "When an Act of Faith is performed, one of this unit's saving throw rolls automatically succeeds.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -44027,7 +44027,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "At the end of your opponent's Fight phase, you may use this ability, while the unit is unengaged, the unit can be placed into Strategic Reserves.\nApplies to: units with Canoness with Jump Pack.",
+                    "$text": "At the end of your opponent's Fight phase, you can use this ability, while this unit is unengaged, this unit can be placed into Strategic Reserves.\nApplies to: Canoness with Jump Pack units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -44108,7 +44108,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "You can re-roll the Attacks roll.\nApplies to: units with EXORCIST.",
+                    "$text": "You can re-roll the Attacks roll.\nApplies to: EXORCIST units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -44189,7 +44189,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Add 1 to the unit's Objective Control characteristic.\nApplies to: units with CELESTIAN SACRESANTS.",
+                    "$text": "Add 1 to this unit's Objective Control characteristic.\nApplies to: CELESTIAN SACRESANTS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -44331,7 +44331,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Add 1 to the unit's Move characteristic.\nApplies to: units with ADEPTA SORORITAS.",
+                    "$text": "Add 1\" to this unit's Move characteristic.\nApplies to: ADEPTA SORORITAS units.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -44465,7 +44465,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Until the end of the phase:\n  Select one of the following (Hagiomnifex Sermon):\n    - If the attacking unit is the same unit as this unit, while making ranged attacks, add 6 to the target's detection range characteristic.\n    - The unit is marked as battle shock auto succeed.\n    - Add 1 to the unit's Move characteristic.\n    - Add 1 to the unit's Strength characteristic.\n    - When the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.\nApplies to: units with ADEPTA SORORITAS, CHARACTER (excluding PENITENT).",
+                    "$text": "Until the end of the phase:\n  Choose one of the following (Hagiomnifex Sermon):\n    - If the attacking unit is the same unit as this unit, while making ranged attacks, add 6\" to the target's detection range.\n    - This unit is designated as Battle Shock Auto Succeed.\n    - Add 1\" to this unit's Move characteristic.\n    - Add 1 to this unit's Strength characteristic.\n    - When the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.\nApplies to: ADEPTA SORORITAS CHARACTER units (excluding PENITENT units).",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

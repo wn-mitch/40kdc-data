@@ -16,21 +16,87 @@ export function describeSelectionEligibility(c: Condition): string {
     return inner === c ? "that is Battle-shocked" : "that is not Battle-shocked";
   if (c.operator === "and" && c.operands) {
     const flat = (n: Condition): Condition[] => (n.operator === "and" && n.operands ? n.operands.flatMap(flat) : [n]);
-    const parts = flat(c).map(candidateClause);
-    if (parts.every((part): part is string => part !== null)) return parts.join(" and ");
+    const leaves = flat(c);
+    const parts: string[] = [];
+    for (const op of leaves) {
+      if (op.operator === "or" && op.operands) {
+        const orParts = op.operands.map(candidateClause);
+        if (orParts.every((part): part is string => part !== null)) {
+          parts.push(`that (${joinRelative(orParts, "or")})`);
+          continue;
+        }
+        return `if ${describeCondition(c)}`;
+      }
+      const clause = candidateClause(op);
+      if (clause === null) return `if ${describeCondition(c)}`;
+      parts.push(clause);
+    }
+    return joinRelative(parts, "and");
   }
   if (c.operator === "or" && c.operands) {
     const parts = c.operands.map(candidateClause);
-    if (parts.every((part): part is string => part !== null)) return parts.join(" or ");
+    if (parts.every((part): part is string => part !== null)) return joinRelative(parts, "or");
   }
   return candidateClause(c) ?? `if ${describeCondition(c)}`;
 }
 
-/** A condition on the candidate as a relative clause ("that was hit…", "without \"MONSTER\""), else null. */
+/** Join relative clauses cleanly, collapsing repeated "that is " / "without the X keyword" runs. */
+function joinRelative(parts: string[], conj: "and" | "or"): string {
+  if (parts.length <= 1) return parts[0] ?? "";
+  // Collapse consecutive "without the X keyword" under "and" -> "without the X or Y keyword".
+  const merged: string[] = [];
+  if (conj === "and") {
+    for (let i = 0; i < parts.length; ) {
+      const kw = /^without the ([A-Z0-9 -]+) keyword$/.exec(parts[i]!);
+      if (kw) {
+        const kws = [kw[1]!];
+        let j = i + 1;
+        while (j < parts.length) {
+          const next = /^without the ([A-Z0-9 -]+) keyword$/.exec(parts[j]!);
+          if (!next) break;
+          kws.push(next[1]!);
+          j++;
+        }
+        merged.push(kws.length > 1 ? `without the ${orList(kws)} keyword` : parts[i]!);
+        i = j;
+        continue;
+      }
+      merged.push(parts[i]!);
+      i++;
+    }
+  } else {
+    merged.push(...parts);
+  }
+  // If every clause starts with "that is ", keep it once: "that is unengaged, within 24\" ... and visible to ...".
+  if (merged.every((p) => p.startsWith("that is "))) {
+    const rest = merged.map((p) => p.slice("that is ".length));
+    return `that is ${conj === "and" ? andList(rest) : orList(rest)}`;
+  }
+  // If a subsequent clause repeats "that is " right after another "that is ", drop the duplicate prefix.
+  const deduped = merged.map((p, idx) => {
+    if (idx > 0 && p.startsWith("that is ") && merged[idx - 1]!.startsWith("that is ")) return p.slice("that is ".length);
+    if (idx > 0 && p.startsWith("that ") && merged[idx - 1]!.startsWith("that ")) return p.slice("that ".length);
+    return p;
+  });
+  return deduped.join(` ${conj} `);
+}
+
+/** A condition on the candidate as a relative clause ("that was hit…", "without the MONSTER keyword"), else null. */
 function candidateClause(c: Condition): string | null {
+  // Never strip prefixes off compound `and`/`or` nodes — that would lose logical grouping.
+  if (c.operator === "and" || c.operator === "or") return null;
   const phrase = describeCondition(c);
-  for (const [from, to] of [["the unit is not the same unit as ", "other than "], ["the unit does not have ", "without "], ["the unit has not ", "that has not "], ["the unit has ", "with "], ["not the unit is ", "that is not "], ["the unit ", "that "]] as const) {
-    if (phrase.startsWith(from)) return `${to}${phrase.slice(from.length)}`;
+  for (const subj of ["this unit", "the unit", "the selected unit", "the selected model"]) {
+    for (const [from, to] of [
+      [`${subj} is not the same unit as `, "other than "],
+      [`${subj} does not have `, "without "],
+      [`${subj} has not `, "that has not "],
+      [`${subj} has `, "with "],
+      [`not ${subj} is `, "that is not "],
+      [`${subj} `, "that "],
+    ] as const) {
+      if (phrase.startsWith(from)) return `${to}${phrase.slice(from.length)}`;
+    }
   }
   return null;
 }
@@ -116,14 +182,14 @@ export function conditionLeadIn(c: Condition, defending = false): string {
     case "happened": {
       const f = (p.filter ?? {}) as P;
       const types = (f.move_types as string[] | undefined) ?? [];
-      // A phase filter reads in the full history phrase ("the unit charged in the Charge phase this turn").
+      // A phase filter reads in the full history phrase ("this unit charged in the Charge phase this turn").
       if (p.event === "move-ended" && p.window === "turn" && types.length === 1 && p.subject == null && f.phase == null) {
-        if (types[0] === "charge") return "if the unit charged this turn";
-        if (types[0] === "advance") return "if the unit Advanced this turn";
-        if (types[0] === "remain-stationary") return "if the unit Remained Stationary this turn";
+        if (types[0] === "charge") return "if this unit charged this turn";
+        if (types[0] === "advance") return "if this unit Advanced this turn";
+        if (types[0] === "remain-stationary") return "if this unit Remained Stationary this turn";
       }
-      if (p.event === "disembarked" && p.subject == null && f.transport == null && f.phase == null) return `if the unit disembarked from a Transport ${windowPhrase(p.window)}`.trimEnd();
-      // "while the unit is performing an Agile Manoeuvre": the use is being resolved now.
+      if (p.event === "disembarked" && p.subject == null && f.transport == null && f.phase == null) return `if this unit disembarked from a Transport ${windowPhrase(p.window)}`.trimEnd();
+      // "while this unit is performing an Agile Manoeuvre": the use is being resolved now.
       if (p.event === "used" && p.window === "event" && f.ability_keyword == null && f.same_rule_as == null) return `while ${describeHappened(p, false)}`;
       if ((p.event === "destroyed" || p.event === "model-destroyed") && isEventObject(p.object) && p.window === "event")
         return `when ${describeHappened(p, false)}`;
@@ -132,7 +198,7 @@ export function conditionLeadIn(c: Condition, defending = false): string {
     case "resource":
       return p.below_max === true ? `if ${describePredicate(c, false)}` : `while ${describePredicate(c, false)}`;
     case "strength":
-      return `while ${describePredicate(c, false).replace(/ is below starting strength$/, " is below its starting strength")}`;
+      return `while ${describePredicate(c, false).replace(/ is below Starting Strength$/, " is below its Starting Strength").replace(/ is below Half-strength$/, " is Below Half-strength")}`;
     case "designated":
       if (p.subject === "defender" && str(p.tag) === str(p.tag).toUpperCase()) return `against ${str(p.tag)} targets`;
       return `while ${describePredicate(c, false)}`;
@@ -200,33 +266,60 @@ function matchesLeadIn(c: Condition, negated: boolean): string {
   if (keys.length === 1 && (f.all_of != null || f.any_of != null)) {
     if (p.subject === "defender" && negated && Array.isArray(f.all_of) && f.all_of.length > 1) return `against a unit that does not have all of ${andList(f.all_of.map(str))}`;
     if (p.subject === "defender") return negated ? negatedTargetKeywords(((f.any_of ?? f.all_of) as unknown[]).map(str)) : `against ${keywordNames(f)} targets`;
-    if (p.subject == null || (negated && p.subject === "recipient")) return `${negated ? "unless" : "if"} the unit has the ${keywordNames(f)} keyword${!negated && (Array.isArray(f.any_of) || ((f.all_of as unknown[]) ?? []).length > 1) ? "s" : ""}`;
+    if (p.subject == null || (negated && p.subject === "recipient")) return `${negated ? "unless" : "if"} this unit has the ${keywordNames(f)} keyword${!negated && (Array.isArray(f.any_of) || ((f.all_of as unknown[]) ?? []).length > 1) ? "s" : ""}`;
     return `${negated ? "unless" : "if"} ${describePredicate(c, false)}`;
   }
   if (keys.length === 1 && f.designated != null && p.subject === "defender" && str(f.designated) === str(f.designated).toUpperCase() && !negated) return `against ${str(f.designated)} targets`;
   return `while ${describePredicate(c, negated)}`;
 }
 
+const TURN_OWNERS: Record<string, string> = { "your-turn": "your", "opponent-turn": "your opponent's", either: "either player's" };
+
 /**
- * Join the operands of an `and` lead-in. Runs of keyword exclusions collapse into one clause:
- * on the attack's target, "against a unit that is not a X or Y"; on the unit an aura or effect
- * is applied to, "(excluding X or Y units)". Either attaches to the preceding clause with a
- * space; a run of the unit's own keywords reads "if the unit is a X Y unit"; all other operands
- * join with ", ".
+ * Join the operands of an `and` lead-in. Merges `phase-is` + `player-turn-is` into one timing
+ * window ("during your Shooting phase"), collapses runs of keyword exclusions, and avoids doubled
+ * openers ("while A, while B" -> "while A and B").
  */
 function joinLeadIns(operands: Condition[], defending: boolean): string {
+  // Flatten nested `and` operands so phase+turn fusion and opener deduplication work across nesting.
+  const flat: Condition[] = [];
+  const flatten = (list: Condition[]) => {
+    for (const op of list) {
+      if (op.operator === "and" && op.operands) flatten(op.operands);
+      else flat.push(op);
+    }
+  };
+  flatten(operands);
+
+  // Fuse one `phase-is` + one `player-turn-is` into a single natural window ("during your Shooting phase").
+  const phaseIdx = flat.findIndex((o) => !o.operator && o.type === "phase-is" && typeof o.parameters?.phase === "string");
+  const turnIdx = flat.findIndex((o) => !o.operator && o.type === "player-turn-is" && String(o.parameters?.turn) in TURN_OWNERS);
+  let fusedWindow: string | null = null;
+  if (phaseIdx >= 0 && turnIdx >= 0) {
+    const pp = flat[phaseIdx]!.parameters as P;
+    const owner = TURN_OWNERS[String(flat[turnIdx]!.parameters?.turn)]!;
+    fusedWindow = pp.step != null
+      ? stepWindow(pp, owner)
+      : `during ${owner} ${titleCase(str(pp.phase))} phase`;
+  }
+
   const parts: string[] = [];
   const run = (i: number, pick: (op: Condition) => string | null): [string[], number] => {
     const kws: string[] = [];
     let kw: string | null;
-    while (i < operands.length && (kw = pick(operands[i]!)) != null) {
+    while (i < flat.length && (kw = pick(flat[i]!)) != null) {
       kws.push(kw);
       i++;
     }
     return [kws, i];
   };
-  for (let i = 0; i < operands.length; ) {
-    const op = operands[i]!;
+  for (let i = 0; i < flat.length; ) {
+    if (fusedWindow != null && (i === phaseIdx || i === turnIdx)) {
+      if (i === Math.min(phaseIdx, turnIdx)) parts.push(fusedWindow);
+      i++;
+      continue;
+    }
+    const op = flat[i]!;
     if (notKeyword(op, "defender") != null) {
       const [kws, next] = run(i, (o) => notKeyword(o, "defender"));
       parts.push(negatedTargetKeywords(kws));
@@ -241,7 +334,7 @@ function joinLeadIns(operands: Condition[], defending: boolean): string {
     }
     if (ownKeyword(op) != null) {
       const [kws, next] = run(i, ownKeyword);
-      parts.push(kws.length >= 2 ? `if the unit is ${/^[AEIOU]/i.test(kws[0]!) ? "an" : "a"} ${kws.join(" ")} unit` : `if the unit has the ${kws[0]} keyword`);
+      parts.push(kws.length >= 2 ? `if this unit is ${/^[AEIOU]/i.test(kws[0]!) ? "an" : "a"} ${kws.join(" ")} unit` : `if this unit has the ${kws[0]} keyword`);
       i = next;
       continue;
     }
@@ -253,6 +346,16 @@ function joinLeadIns(operands: Condition[], defending: boolean): string {
     // A second keyword gate on the same target narrows it: "against ORKS targets that are also VEHICLE".
     const target = /^against (.+) targets$/.exec(part);
     if (target && / targets$/.test(acc) && /(^|, )against /.test(acc)) return `${acc} that are also ${target[1]}`;
+    // "while making melee attacks" + "while the target is an enemy X unit" -> "while making melee attacks against an enemy X unit".
+    const targetIs = /^while the target is (an? .+)$/.exec(part);
+    if (targetIs && /while making [a-z -]*attacks$/.test(acc)) return `${acc} against ${targetIs[1]}`;
+    // Merge consecutive clauses sharing the same opener ("while A" + "while B" -> "while A and B").
+    for (const opener of ["while ", "if ", "when "] as const) {
+      const lastClause = acc.split(", ").at(-1) ?? "";
+      if (lastClause.startsWith(opener) && part.startsWith(opener) && !part.startsWith("while making ") && !lastClause.startsWith("while making ")) {
+        return `${acc} and ${part.slice(opener.length)}`;
+      }
+    }
     // A target narrowing attaches to the clause before it; an incoming attack ("against ranged attacks") is its own clause.
     const narrows = (part.startsWith("against ") && !/^against [a-z -]*attacks( |$)/.test(part)) || part.startsWith("(excluding ");
     return narrows ? `${acc} ${part}` : `${acc}, ${part}`;

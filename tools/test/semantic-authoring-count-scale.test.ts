@@ -254,8 +254,8 @@ describe("Semantic authoring per-model dice: one die for each counted model", ()
       roll: { dice: 1, threshold: 3, for_each: { filter: { owner: "friendly", all_of: ["ALPHA"], level: "model", member_of: "this-unit" } } },
     } });
     const words = rendered(list, text);
-    expect(words).toMatch(/roll one D6 for each.*ALPHA.*model/u);
-    expect(words).toContain("in the unit");
+    expect(words).toMatch(/Roll one D6 for each.*ALPHA.*model/u);
+    expect(words).toContain("in this unit");
     expect(words).toContain("for each 3+");
   });
 
@@ -277,7 +277,7 @@ describe("Semantic authoring per-model dice: one die for each counted model", ()
       eligibility: { type: "matches", parameters: { filter: { engaged_with: "selected-unit" } } },
     } });
     const words = rendered(list, text);
-    expect(words).toMatch(/for each.*model.*in the unit/u);
+    expect(words).toMatch(/for each.*model.*in this unit/u);
     expect(words).toContain("within Engagement Range of the selected unit");
     expect(words).toContain("for each 4+");
   });
@@ -335,7 +335,7 @@ describe("Semantic authoring per-model dice: one die for each counted model", ()
       ["for each 1", "roll-result", band],
       ["that unit suffers 1 mortal wound", "mortal-wounds", { recipient: "that-unit", count: "1" }]);
     expect(mechanicsOf(leaves({ from: 1, to: 1 }), text).effect.effect.modifier.roll).toEqual({ dice: 1, threshold: 1, comparison: "lte", per_model: "selected-unit" });
-    expect(rendered(leaves({ from: 1, to: 1 }), text)).toMatch(/roll one D6 for each model in the selected unit: for each 1, /u);
+    expect(rendered(leaves({ from: 1, to: 1 }), text)).toMatch(/Roll one D6 for each model in the selected unit: for each 1, /u);
     expect(errorsOf(leaves({ from: 2, to: 4 }), text)).toMatch(/must reach 6 .* or start at 1/u);
   });
 });

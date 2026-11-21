@@ -19,7 +19,7 @@ func testLeaf(m map[string]any, subj string) string {
 	n := jsNumber(c)
 	tests := numStr(n) + " " + testName(m["test"]) + " tests"
 	if n == 1 {
-		tests = "a " + testName(m["test"]) + " test"
+		tests = withArticle(testName(m["test"]) + " test")
 	}
 	per := ""
 	if m["per"] != nil {
@@ -47,13 +47,13 @@ func costModifierLeaf(m map[string]any, subj string) string {
 	if m["applies_to"] == "the-triggering-use" {
 		switch m["operation"] {
 		case "decrease":
-			return "reduce the CP cost of that use of the " + noun + " by " + ejstr(m["amount"]) + "CP (to a minimum of 0CP)"
+			return "reduce the CP cost of that use of the " + noun + " by " + ejstr(m["amount"]) + " CP, to a minimum of 0 CP"
 		case "increase":
-			return "increase the CP cost of that use of the " + noun + " by " + ejstr(m["amount"]) + "CP"
+			return "increase the CP cost of that use of the " + noun + " by " + ejstr(m["amount"]) + " CP"
 		case "waive":
-			return "that use of the " + noun + " costs no CP"
+			return "that use of the " + noun + " costs 0 CP (waiving its CP cost)"
 		}
-		return "that use of the " + noun + " costs " + ejstr(m["amount"]) + "CP"
+		return "that use of the " + noun + " costs " + ejstr(m["amount"]) + " CP"
 	}
 	hasID := m["id"] != nil
 	which := noun + "s"
@@ -81,9 +81,9 @@ func costModifierLeaf(m map[string]any, subj string) string {
 	}
 	switch m["operation"] {
 	case "waive":
-		return which + whose + " can be used without paying " + its + " CP cost"
+		return which + whose + " can be used without spending CP"
 	case "set":
-		return which + whose + " " + verb + " " + ejstr(m["amount"]) + "CP"
+		return which + whose + " " + verb + " " + ejstr(m["amount"]) + " CP"
 	}
 	if m["operation"] == "multiply" {
 		times := ejstr(m["amount"]) + " times"
@@ -103,7 +103,7 @@ func costModifierLeaf(m map[string]any, subj string) string {
 	if m["operation"] == "decrease" {
 		dir = "less"
 	}
-	return which + whose + " " + verb + " " + ejstr(amount) + "CP " + dir
+	return which + whose + " " + verb + " " + ejstr(amount) + " CP " + dir
 }
 
 func resourceDieLeaf(m map[string]any) string {
@@ -116,7 +116,7 @@ func resourceDieLeaf(m map[string]any) string {
 				rolls[i] = rollName(r)
 			}
 		}
-		return "discard a die from your " + pool + " and use its value in place of a " + strings.Join(rolls, " or ") + " roll"
+		return "discard a die from your " + pool + " and use its value in place of " + withArticle(orList(rolls)+" roll")
 	}
 	shown := ejstr(m["value"])
 	if m["value"] == "highest" {

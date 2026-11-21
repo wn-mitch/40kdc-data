@@ -29,8 +29,8 @@ describe("regain-wounds per one-model", () => {
 
   it("renders \"one model in\" for one-model and \"each model in\" for model", () => {
     const text = (per: string) => describeEffect({ type: "heal", target: "this-unit", modifier: { amount: 3, per } } as never);
-    expect(text("one-model")).toBe("One model in the unit regains up to 3 lost wounds.");
-    expect(text("model")).toBe("Each model in the unit regains up to 3 lost wounds.");
+    expect(text("one-model")).toBe("One model in this unit regains up to 3 lost wounds.");
+    expect(text("model")).toBe("Each model in this unit regains up to 3 lost wounds.");
   });
 });
 

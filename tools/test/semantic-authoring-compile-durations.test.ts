@@ -488,9 +488,9 @@ describe("a bound duration renders as its own clause", () => {
   it("advance fold: the folded phase part and the turn part each name their lifetime in the describer", () => {
     const mechanics = recordMechanics("advance fold");
     const text = describeAbility({ effect: mechanics.effect, scope: mechanics.scope, trigger: mechanics.trigger } as never);
-    expect(text).toContain("-> Until the end of the phase: the triggering unit does not make an Advance roll; add 6\" to its Move characteristic instead.");
+    expect(text).toContain("- Until the end of the phase, that unit does not make an Advance roll; add 6\" to its Move characteristic instead.");
     expect(text).not.toContain("Move characteristic.");
-    expect(text).toContain("Until the end of the turn: ranged weapons equipped by the triggering unit gain [ASSAULT].");
+    expect(text).toContain("Until the end of the turn, ranged weapons equipped by that unit gain [ASSAULT].");
   });
 });
 

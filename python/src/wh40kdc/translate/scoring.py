@@ -28,7 +28,7 @@ def describe_trigger(t: dict[str, Any]) -> str:
     """
     player_turn = t.get("player_turn")
     if player_turn == "opponent-turn":
-        turn = "the opponent's"
+        turn = "your opponent's"
     elif player_turn == "either":
         turn = "any"
     else:

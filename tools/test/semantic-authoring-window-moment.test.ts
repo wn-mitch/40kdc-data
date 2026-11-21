@@ -55,7 +55,7 @@ describe("a moment within an earlier moment's window, narrowed to unmodified fac
     } });
     const render = describeAbility({ id: "sample", name: "Sample", ...mechanics });
     expect(render).toContain("After a saving throw is made, on an unmodified 6:");
-    expect(render).toContain("After that unit shoots, until the end of the phase:");
+    expect(render).toContain("After that unit shoots, until the end of the phase, the triggering unit suffers 1 mortal wound.");
   });
 
   it("keeps the moments as alternatives with no duration between them", () => {

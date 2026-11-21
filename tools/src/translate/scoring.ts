@@ -50,7 +50,7 @@ function capitalize(s: string): string {
 export function describeTrigger(t: ScoringTrigger): string {
   const turn =
     t.player_turn === "opponent-turn"
-      ? "the opponent's"
+      ? "your opponent's"
       : t.player_turn === "either"
         ? "any"
         : "your";

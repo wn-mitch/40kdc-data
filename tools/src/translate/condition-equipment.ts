@@ -39,5 +39,15 @@ function modelsSubject(models: P): string {
 }
 
 function unitLevel(phrase: string, negated: boolean): string {
-  return negated ? `it is not the case that ${phrase}` : phrase;
+  if (!negated) return phrase;
+  if (phrase.startsWith("one or more models in this unit are ")) {
+    return `no model in this unit is ${phrase.slice("one or more models in this unit are ".length)}`;
+  }
+  if (phrase.startsWith("one or more models in this unit have ")) {
+    return `no model in this unit has ${phrase.slice("one or more models in this unit have ".length)}`;
+  }
+  if (phrase.startsWith("at least ")) {
+    return `fewer than ${phrase.slice("at least ".length)}`;
+  }
+  return `it is not the case that ${phrase}`;
 }

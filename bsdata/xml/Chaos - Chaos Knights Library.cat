@@ -224,18 +224,17 @@
         </profile>
         <profile name="Deadly Demise" id="8538-5901-a672-4650" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Huntsman" id="c55b-39c3-a439-7566" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against MONSTER or VEHICLE targets, you can re-roll the Wound roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against MONSTER or VEHICLE targets, you can re-roll Wound rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="d577-8c53-5b17-fe29" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="1ebc-0a9d-001e-0a56" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -429,13 +428,12 @@
         </profile>
         <profile name="Deadly Demise" id="6092-bcff-0af1-7773" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="a924-5a08-24ec-dd99" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="5f9e-1ab4-414c-1535" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -609,19 +607,18 @@
         </profile>
         <profile name="Executioner" id="e0a6-052b-60ec-ee34" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target unit is below half strength, the unit gets +1 to Hit rolls.
-If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target unit is Below Half-strength, add 1 to this unit's Hit rolls.
+If this model has destroyed one or more enemy units with those attacks, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="e016-d8e4-c6e2-3852" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="4d09-41bf-3bd7-e748" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="a535-c724-d900-919e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -810,23 +807,22 @@ If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy
         </profile>
         <profile name="Scouts" id="82ff-cd56-ac5a-9574" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stalker" id="7695-744b-fdac-50bc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is not within 6" of an enemy unit other than the target unit, this model gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is not within 6" of an enemy unit other than the target unit, add 1 to this model's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="4d04-2337-2543-d85d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6d5c-173e-9c7a-016e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="39ec-d294-ac44-4b8b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1044,20 +1040,19 @@ If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy
         </profile>
         <profile name="Protection Protocols" id="c0c8-4868-a30d-74e5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
-Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-The unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: This unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
+Reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+This unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="8128-a658-b39d-23e7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="391e-b4ec-a40f-6bc5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="d1bb-9045-2971-5a2a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1279,13 +1274,12 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="5e32-a4df-860d-e6ab" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="3ea5-b527-a122-e671" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="6ddb-e2e6-5bc8-77a3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1408,8 +1402,7 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="5952-2071-2d1d-2c00" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Dread Dominion (Aura)" id="f708-5741-9aca-de1c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1420,15 +1413,15 @@ Improve the Objective Control characteristic of friendly WAR DOG models within 9
         </profile>
         <profile name="Seething Hatred" id="fa11-80a3-fee7-4513" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, you may use this ability or when the unit is selected to fight, you may use this ability, until that unit finishes resolving its attacks:
-  Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, you can use this ability or when this unit is selected to fight, you can use this ability, until the attacking unit finishes resolving its attacks:
+  Choose one of the following:
     - You can re-roll one Hit roll.
     - You can re-roll one Wound roll.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="be60-82e6-9b91-02ac" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="c70a-3e7a-1624-1bee" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1841,14 +1834,13 @@ Improve the Objective Control characteristic of friendly WAR DOG models within 9
         </profile>
         <profile name="Deadly Demise" id="320e-ebcd-46e6-af45" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Searing Flames" id="4572-6425-37fe-6754" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit by Acheron flame cannon during its just-finished shooting sequence: that unit cannot benefit from Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit by Acheron flame cannon during that shooting sequence. That unit cannot benefit from Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Unrestrained Terror (Aura)" id="71a6-3705-8c5c-9cbf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1858,7 +1850,7 @@ Improve the Objective Control characteristic of friendly WAR DOG models within 9
         </profile>
         <profile name="Damaged" id="3864-98be-4e09-c469" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="bba6-d010-b42a-99e8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2005,19 +1997,18 @@ Improve the Objective Control characteristic of friendly WAR DOG models within 9
         </profile>
         <profile name="Methodical Destruction" id="0059-940a-7fd7-517f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the battle round, if during the first battle round:
-  -&gt; Select one enemy unit, binding it as victim selection (your Victim target). When your Victim target is destroyed, you must select one enemy unit, binding it as victim selection to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against it, while the unit is a victim, you can re-roll the Wound roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the first battle round:
+  - Select one enemy unit (referred to below as the victim selection) (your Victim target). When your Victim target is destroyed, you must select one enemy unit (referred to below as the victim selection) to replace it. Only one such designation can be active for this unit. For the rest of the battle, each time this model makes an attack against it, while this unit is a victim, you can re-roll Wound rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="0196-053c-67e9-e899" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="a241-6930-5935-3b73" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="3a9f-ccf7-e10c-eec8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2159,24 +2150,23 @@ Improve the Objective Control characteristic of friendly WAR DOG models within 9
         <profile name="Obsessive Ruthlessness" id="b583-ff18-c050-6872" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against MONSTER or VEHICLE targets:
-  -&gt; The unit ignores any modifiers to its Ballistic Skill characteristics.
-  -&gt; The unit ignores any modifiers to its Hit and Wound rolls.</characteristic>
+  - This unit ignores any modifiers to its Ballistic Skill characteristics.
+  - This unit ignores any modifiers to its Hit and Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Taskmaster (Aura)" id="daa6-eff9-149c-ae09" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, you can re-roll a Hit roll of 1 for attacks made by friendly WAR DOG models within 9" of this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks, you can re-roll Hit rolls of 1 for attacks made by friendly WAR DOG models within 9" of this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="58d2-9d8f-94e8-7e27" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="cc35-91a6-982a-7ede" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="0263-8bca-6bff-7692" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2356,13 +2346,12 @@ Improve the Objective Control characteristic of friendly WAR DOG models within 9
         </profile>
         <profile name="Deadly Demise" id="3132-d875-24de-4035" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="46e0-507f-dd1a-bad6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="c276-b1c5-c6a6-4289" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2551,26 +2540,25 @@ Improve the Objective Control characteristic of friendly WAR DOG models within 9
         </profile>
         <profile name="Consumed with Hunger (Aura)" id="4d82-96d4-17c6-debd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against TITANIC or TOWERING targets, you can re-roll the Hit roll for attacks made by friendly WAR DOG models within 6" of this model.
-Applies to: units with WAR DOG.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against TITANIC or TOWERING targets, you can re-roll Hit rolls for attacks made by friendly WAR DOG models within 6" of this model.
+Applies to: WAR DOG units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Macro-extinction Protocols" id="efcf-70e6-98a0-2ad3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against MONSTER or VEHICLE targets:
-  -&gt; This model gets +1 to Hit rolls.
-  -&gt; Against TITANIC or TOWERING targets, this model gets +1 to Wound rolls.</characteristic>
+  - Add 1 to this model's Hit rolls.
+  - Against TITANIC or TOWERING targets, add 1 to this model's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="15a5-b197-1be9-d059" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="9f78-ba94-8179-c123" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="7d8e-c1e8-f1c5-d223" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2707,23 +2695,22 @@ Applies to: units with WAR DOG.</characteristic>
         <profile name="Sunderer of Fortresses" id="9c77-1202-834e-dc06" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against VEHICLE targets:
-  Against a unit that is not a FORTIFICATION:
-    -&gt; Improve this model's Strength characteristic by 1.
-    -&gt; Improve this model's Damage characteristic by 1.
-  Against FORTIFICATION targets:
-    -&gt; Improve this model's Strength characteristic by 2.
-    -&gt; Improve this model's Damage characteristic by 2.</characteristic>
+  - Against a unit that is not a FORTIFICATION:
+    - Improve this model's Strength characteristic by 1.
+    - Improve this model's Damage characteristic by 1.
+  - Against FORTIFICATION targets:
+    - Improve this model's Strength characteristic by 2.
+    - Improve this model's Damage characteristic by 2.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="52ef-4e64-e42f-ae77" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="e9bd-6561-0831-4e21" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="bbd4-94d8-f9b0-81bd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2827,21 +2814,20 @@ Applies to: units with WAR DOG.</characteristic>
         </profile>
         <profile name="Storm of Bolts" id="7472-3ee9-5f06-5828" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:
-  -&gt; Select one enemy unit (excluding MONSTER or VEHICLE units) that was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; While this model is on the battlefield, that unit is marked as suppressed.
-    -&gt; While the unit is tagged suppressed, that unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:
+  - Select one enemy unit (excluding MONSTER or VEHICLE units) that was hit by an attack made by the triggering unit during that shooting sequence:
+    - While this model is on the battlefield, that unit is Suppressed.
+    - While this unit is Suppressed, subtract 1 from that unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="afcf-f674-b07e-b194" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6a32-ec5f-a70d-3983" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="0372-90db-70a2-9989" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2982,19 +2968,18 @@ Applies to: units with WAR DOG.</characteristic>
         </profile>
         <profile name="Shock Charge" id="5f88-c488-def6-3b3a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The Crushing Impact Stratagem that targets the unit costs 0CP.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: The Crushing Impact Stratagem that targets this unit costs 0 CP.
 This model's Crushing Impact ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="f2a4-b07c-df7e-0950" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="1bca-4ce1-8805-aba7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="b420-fea2-0e15-4452" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3124,23 +3109,22 @@ This model's Crushing Impact ability has no limit on its number of uses, and thi
         </profile>
         <profile name="Bloodlust" id="1f21-2c2c-576d-3b3e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, until the end of the turn, melee weapons equipped by this model gain [DEVASTATING WOUNDS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move, until the end of the turn, melee weapons equipped by this model gain [DEVASTATING WOUNDS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Frenzied Rampage (Aura)" id="c7d6-bca3-d431-ee2c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, you can re-roll a Hit roll of 1 for attacks made by friendly WAR DOG models within 9" of this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, you can re-roll Hit rolls of 1 for attacks made by friendly WAR DOG models within 9" of this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="9f32-9a56-da07-8942" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="9fca-f114-b40b-95fa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="cd58-f151-429d-8188" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3291,13 +3275,12 @@ This model's Crushing Impact ability has no limit on its number of uses, and thi
         </profile>
         <profile name="Deadly Demise" id="6d98-0324-b68f-da21" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="e473-b808-f4e7-4904" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="49d8-5dff-1693-8557" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3484,18 +3467,17 @@ This model's Crushing Impact ability has no limit on its number of uses, and thi
         </profile>
         <profile name="Infernal Aegis (Aura)" id="a1a7-4998-6981-986d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit selects its targets, while a friendly WAR DOG unit is within 6" of this model, that unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit selects its targets, while a friendly WAR DOG unit is within 6" of this model, that unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="cf22-b05c-2130-4903" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="2577-4ed3-84c0-d951" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="549a-9d21-5735-5283" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3733,25 +3715,23 @@ This model's Crushing Impact ability has no limit on its number of uses, and thi
         </profile>
         <profile name="Vortex Terrors (Psychic)" id="7c4e-7808-4df0-47f2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase:
-  -&gt; Select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model: that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, select one enemy unit that is within 24" of this model and visible to this model. That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Warp Storms (Psychic)" id="fd94-d339-ef91-8b40" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, once per phase per army:
-  For each enemy unit: While the unit is within 9" of a friendly model with the Warp Storms ability, roll one D6: on a 3+, the unit suffers D3 mortal wounds.</characteristic>
+  For each enemy unit: While this unit is within 9" of a friendly model with the Warp Storms ability, roll one D6: on a 3+, that unit suffers D3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="8af8-5794-2296-0a52" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="ffc0-24d4-1155-6b54" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="91a1-34f6-500e-d4e7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3899,11 +3879,11 @@ This model's Crushing Impact ability has no limit on its number of uses, and thi
         </profile>
         <profile name="Grav-pinned" id="49a0-c03d-987d-fde2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of your opponent's next turn:
-  For each enemy INFANTRY unit that was hit by an attack made by the triggering unit by graviton crusher during its just-finished shooting sequence:
-    -&gt; The unit is grav-pinned.
-    -&gt; While the Grav Pinned is active, subtract 2 from the unit's Move characteristic.
-    -&gt; While the Grav Pinned is active, the unit gets -2 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of your opponent's next turn:
+  For each enemy INFANTRY unit that was hit by an attack made by the triggering unit by graviton crusher during that shooting sequence:
+    - That unit is grav-pinned.
+    - While the Grav Pinned is active, subtract 2" from that unit's Move characteristic.
+    - While the Grav Pinned is active, subtract 2 from that unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Preysight (Aura)" id="0b3e-a7b2-184e-4f64" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3913,13 +3893,12 @@ This model's Crushing Impact ability has no limit on its number of uses, and thi
         </profile>
         <profile name="Deadly Demise" id="ec7f-173f-b5f6-277c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6a18-25a7-e8e9-b8e6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="9a18-e18e-633c-9b09" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -5507,8 +5486,8 @@ This model's Crushing Impact ability has no limit on its number of uses, and thi
               <rules>
                 <rule name="Wretched Thralls" id="0b39-9f0b-35ef-314f" hidden="false">
                   <description>Your army can include at most 500 points of Damned units.
-You can re-roll the Leadership roll for all friendly DAMNED units.
-Applies to: units with DAMNED.</description>
+You can re-roll the Leadership roll for friendly DAMNED units.
+Applies to: DAMNED units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -5525,9 +5504,9 @@ Applies to: units with DAMNED.</description>
               </constraints>
               <rules>
                 <rule name="Tyrannical Court" id="41a5-98f0-74a1-b486" hidden="false">
-                  <description>Add 2 to all friendly units' Objective Control characteristic.
-The Claimed for the Dark Gods Lords of Dread Stratagem that targets this model costs 0CP.
-Applies to: units with CHAOS KNIGHTS, CHARACTER.</description>
+                  <description>Add 2 to friendly units' Objective Control characteristic.
+The Claimed for the Dark Gods Lords of Dread Stratagem that targets this model costs 0 CP.
+Applies to: CHAOS KNIGHTS CHARACTER units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -5544,17 +5523,17 @@ Applies to: units with CHAOS KNIGHTS, CHARACTER.</description>
               </constraints>
               <rules>
                 <rule name="Malefic Surge" id="4539-8e8b-36d3-397f" hidden="false">
-                  <description>You can: During the Command phase, in your turn, until the start of your next Command phase:
-  -&gt; Select one or more friendly CHAOS KNIGHTS units:
-    -&gt; For each selected unit:
-      -&gt; This unit must take a Leadership test.
-      -&gt; If the triggering leadership roll was a failure, that unit suffers D3 mortal wounds.
-      -&gt; That unit is Empowered.
-      While the unit is Empowered:
-        -&gt; Select one:
-          - Unholy Hunger: when the unit ends a Normal, Advance or Fall Back move, until the end of the phase: this unit is no longer Empowered; add 3 to this unit's Move characteristic.
-          - Diabolic Power: when the unit is selected to shoot or when the unit is selected to fight, until the end of the phase: this unit is no longer Empowered; select one of the following: this unit's weapons gain [LETHAL HITS] / this unit's weapons gain [SUSTAINED HITS 1].
-          - Unnatural Fortitude: when an enemy unit targets this unit, until the end of the phase: this unit is no longer Empowered; select exactly 1 distinct options (One of the Following): this unit has a 5+ invulnerable save / this unit has the Feel No Pain 6+ ability.</description>
+                  <description>During your Command phase, until the start of your next Command phase, you can use this ability:
+  - Select one or more friendly CHAOS KNIGHTS units:
+    - For each selected unit:
+      - This unit must take a Leadership test.
+      - If the triggering leadership roll was a failure, that unit suffers D3 mortal wounds.
+      - That unit is Empowered.
+      - While this unit is Empowered:
+        - Select one:
+          - Unholy Hunger: When this unit ends a Normal, Advance or Fall Back move, until the end of the phase, this unit is no longer Empowered; add 3" to this unit's Move characteristic.
+          - Diabolic Power: When this unit is selected to shoot or when this unit is selected to fight, until the end of the phase, this unit is no longer Empowered; choose one of the following: this unit's weapons gain [LETHAL HITS] / this unit's weapons gain [SUSTAINED HITS 1].
+          - Unnatural Fortitude: When an enemy unit targets this unit, until the end of the phase, this unit is no longer Empowered; choose one of the following: this unit has a 5+ invulnerable save / this unit has Feel No Pain 6+.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -5572,7 +5551,7 @@ Applies to: units with CHAOS KNIGHTS, CHARACTER.</description>
               <rules>
                 <rule name="Marked Prey" id="4de5-0df1-f12a-dd59" hidden="false">
                   <description>At the start of your Command phase:
-  -&gt; Select one enemy unit if the selected unit is visible to the attacking model (your Marked Prey target). Until the start of your next Command phase, each time a friendly unit makes an attack against it, all friendly WAR DOG models' weapons gain [SUSTAINED HITS 1].</description>
+  - Select one enemy unit that is visible to the attacking model (your Marked Prey target). Until the start of your next Command phase, each time a friendly unit makes an attack against it, friendly WAR DOG models' weapons gain [SUSTAINED HITS 1].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -5589,7 +5568,7 @@ Applies to: units with CHAOS KNIGHTS, CHARACTER.</description>
               </constraints>
               <rules>
                 <rule name="Paragons of Terror" id="26b2-586e-c323-a937" hidden="false">
-                  <description>For the rest of the battle, increase the number of selections of all friendly units' Harbingers of Dread ability by 1.</description>
+                  <description>For the rest of the battle, increase the number of selections of friendly units' Harbingers of Dread ability by 1.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -5606,8 +5585,8 @@ Applies to: units with CHAOS KNIGHTS, CHARACTER.</description>
               </constraints>
               <rules>
                 <rule name="Annihilate the Unworthy" id="7832-1a2e-3e2c-af73" hidden="false">
-                  <description>While the target is Battle-shocked, all friendly KNIGHT TYRANT units get +1 to Hit rolls.
-Applies to: units with KNIGHT TYRANT.</description>
+                  <description>While the target is Battle-shocked, add 1 to friendly KNIGHT TYRANT units' Hit rolls.
+Applies to: KNIGHT TYRANT units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -5624,7 +5603,7 @@ Applies to: units with KNIGHT TYRANT.</description>
               </constraints>
               <rules>
                 <rule name="Scenting Fear" id="5e87-043d-7028-6032" hidden="false">
-                  <description>-&gt; Once per battle round per army, until the end of the phase: during the Shooting phase, in your turn, select one enemy unit visible to this model if the selected unit is within 12" of a friendly WAR DOG unit: add 6 to that unit's detection range characteristic.
+                  <description>Once per battle round per army, until the end of the phase, during your Shooting phase, select one enemy unit visible to this model that is within 12" of a friendly WAR DOG unit; add 6" to that unit's detection range.
 You cannot select this Detachment together with another WAR DOGS Detachment.</description>
                 </rule>
               </rules>
@@ -5642,7 +5621,7 @@ You cannot select this Detachment together with another WAR DOGS Detachment.</de
               </constraints>
               <rules>
                 <rule name="Masters of the Pack" id="d68c-cb38-04a6-14aa" hidden="false">
-                  <description>Each ability of all friendly TITANIC CHAOS KNIGHTS units that affects WAR DOG units can also affect all friendly TITANIC CHAOS KNIGHTS units.</description>
+                  <description>Each ability of friendly TITANIC CHAOS KNIGHTS units that affects WAR DOG units can also affect friendly TITANIC CHAOS KNIGHTS units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -5701,7 +5680,7 @@ You cannot select this Detachment together with another WAR DOGS Detachment.</de
           <profiles>
             <profile name="Cruel Lashmaster (Aura)" id="32f8-0b54-6305-d38d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly DAMNED unit within 6" of this model is selected to make a Normal, Advance or Fall Back move, until the end of the phase, while a friendly DAMNED unit is within 6" of this model, add 2 to that unit's Move characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly DAMNED unit within 6" of this model is selected to make a Normal, Advance or Fall Back move, until the end of the phase, while a friendly DAMNED unit is within 6" of this model, add 2" to that unit's Move characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -5744,7 +5723,7 @@ You cannot select this Detachment together with another WAR DOGS Detachment.</de
           <profiles>
             <profile name="Iconoclast Idol (Aura)" id="29b5-8a83-80b7-be6b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you use a Stratagem, while a friendly DAMNED unit is within 6" of this model, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you use a Stratagem, while a friendly DAMNED unit is within 6" of this model, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -5788,7 +5767,7 @@ You cannot select this Detachment together with another WAR DOGS Detachment.</de
             <profile name="Throne Mechanicum of Skulls" id="40bc-5251-b7d1-4d33" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll the Charge roll.
--&gt; Once per battle per model, until the end of the phase: during the Charge phase, in your turn, the unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
+Once per battle per model, until the end of the phase, during your Charge phase, this unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -5832,7 +5811,7 @@ You cannot select this Detachment together with another WAR DOGS Detachment.</de
             <profile name="Blade of Celerity" id="b459-0da9-e19c-03a9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Ranged weapons equipped by this model gain [ASSAULT].
--&gt; Once per battle per model, until the end of the phase: during the Fight phase, the unit gains the Fights First ability.</characteristic>
+Once per battle per model, until the end of the phase, during the Fight phase, this unit gains the Fights First ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -5876,7 +5855,7 @@ You cannot select this Detachment together with another WAR DOGS Detachment.</de
             <profile name="Warp-borne Stalker" id="b6fb-3018-b530-bdbe" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model gains the Deep Strike ability.
--&gt; At the end of your opponent's turn, you may use this ability, once per battle per model: while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
+At the end of your opponent's turn, you can use this ability, once per battle per model, while this unit is unengaged, this unit can be placed into Strategic Reserves.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -5919,8 +5898,8 @@ You cannot select this Detachment together with another WAR DOGS Detachment.</de
           <profiles>
             <profile name="Putrid Carapace" id="d032-480b-81fe-9d44" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Save characteristic to 2.
--&gt; At the start of the Command phase, you may use this ability, once per battle per model: this model regains up to D6 lost wounds.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Save characteristic to 2+.
+At the start of the Command phase, you can use this ability, once per battle per model, this model regains up to D6 lost wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -5963,7 +5942,7 @@ You cannot select this Detachment together with another WAR DOGS Detachment.</de
           <profiles>
             <profile name="Mirror of Fates" id="913d-cd1c-b1ec-d83e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit within 12" of this model is targeted with a Stratagem, you may use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1CP.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit within 12" of this model is targeted with a Stratagem, you can use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1 CP.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6007,7 +5986,7 @@ You cannot select this Detachment together with another WAR DOGS Detachment.</de
             <profile name="Blessing of the Dark Master" id="942f-2872-5e28-e03e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model gains the Stealth ability.
--&gt; After a saving throw is made, you may use this ability, once per battle per model: each time an attack is allocated to the unit, change the Damage of that attack to 0.</characteristic>
+After a saving throw is made, you can use this ability, once per battle per model, each time an attack is allocated to this unit, change the Damage of that attack to 0.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6095,7 +6074,7 @@ While this model has the Diabolic Power ability, melee weapons equipped by this 
             <profile name="Blasphemous Engine" id="b017-7761-8645-43fe" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 2 to this model's Wounds characteristic.
--&gt; Each time the unit uses ability, you may use this ability: you can re-roll the Leadership roll.</characteristic>
+Each time this unit uses ability, you can use this ability: you can re-roll the Leadership roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6139,7 +6118,7 @@ While this model has the Diabolic Power ability, melee weapons equipped by this 
             <profile name="Fleshmetal Fusion" id="b55c-0985-463b-b5d5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this model's Toughness characteristic.
--&gt; When damage is allocated: while the Unnatural Fortitude option of Malefic Surge is active, the unit gets +1 to saving throw rolls.</characteristic>
+When damage is allocated, while the Unnatural Fortitude option of Malefic Surge is active, add 1 to this unit's saving throw rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6230,7 +6209,7 @@ While this model has the Unholy Hunger ability, this model ignores any modifiers
           <profiles>
             <profile name="Final Howl (Aura)" id="e4c6-09f9-cd22-5107" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll a Wound roll of 1 for attacks made by friendly WAR DOG models within 6" of this model.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll Wound rolls of 1 for attacks made by friendly WAR DOG models within 6" of this model.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6276,7 +6255,7 @@ While this model has the Unholy Hunger ability, this model ignores any modifiers
           <profiles>
             <profile name="Panoply of the Cursed Knights" id="7fca-48bf-4727-64e4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Worsen the attacking unit's Armour Penetration characteristic by 1.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Worsen the Armour Penetration characteristic of the attacking unit's attacks by 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6320,7 +6299,7 @@ While this model has the Unholy Hunger ability, this model ignores any modifiers
             <profile name="Nightmare's Master" id="6cbc-d15f-5fc7-391a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase:
-  For each enemy unit within Engagement Range of this model: The unit must take a Battle-shock test.</characteristic>
+  For each enemy unit within Engagement Range of this model: That unit must take a Battle-shock test.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6363,7 +6342,7 @@ While this model has the Unholy Hunger ability, this model ignores any modifiers
           <profiles>
             <profile name="Tyrant's Shadow" id="3fe5-0302-9fa1-253a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6478,8 +6457,7 @@ This model has a 5+ invulnerable save against melee attacks.</characteristic>
           <profiles>
             <profile name="Pterrorshade Rookery" id="263f-df57-b48e-cdff" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, until this unit has resolved its ranged attacks:
-  -&gt; Select one enemy unit if the selected unit is within 24" of the unit: add 6 to that unit's detection range characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, until this unit has resolved its ranged attacks, select one enemy unit that is within 24" of this unit. Add 6" to that unit's detection range.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6535,7 +6513,7 @@ This model has a 5+ invulnerable save against melee attacks.</characteristic>
           <profiles>
             <profile name="Soul-spoor Auspicator (Upgrade)" id="d8ae-5377-a002-0d14" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 6 to the Range characteristic of ranged weapons equipped by models in this unit.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 6" to the Range characteristic of ranged weapons equipped by models in this unit.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6606,7 +6584,7 @@ This model has a 5+ invulnerable save against melee attacks.</characteristic>
           <profiles>
             <profile name="Hunter's Helm" id="42da-97f1-3eb1-461d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: Select one of the following:
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Choose one of the following:
   - You can re-roll the Charge roll.
   - You can re-roll the Advance roll.</characteristic>
               </characteristics>
@@ -6636,9 +6614,9 @@ This model has a 5+ invulnerable save against melee attacks.</characteristic>
           <profiles>
             <profile name="Octagram of Conjuration" id="ac39-bf34-68da-3de5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a friendly model shoots (the triggering model must have WAR DOG), you may use this ability, while the triggering model is within 9" of this model:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering model during its just-finished shooting sequence: that unit must take a Battle-shock test.
-Applies to: units with KNIGHT ABOMINANT.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a friendly WAR DOG model shoots, you can use this ability, while the triggering model is within 9" of this model:
+  - Select one enemy unit that was hit by an attack made by the triggering model during that shooting sequence. That unit must take a Battle-shock test.
+Applies to: KNIGHT ABOMINANT units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6725,8 +6703,8 @@ Applies to: units with KNIGHT ABOMINANT.</characteristic>
             <profile name="Throne Tyrannicus" id="afaa-d81a-9f78-9778" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the start of your next Command phase:
-  -&gt; Select one friendly CHAOS KNIGHTS CHARACTER unit within 9" of this model other than this unit: that unit is marked as throne tyrannicus.
-  -&gt; Each ability of this model that affects WAR DOG units can also affect friendly units that are tagged throne tyrannicus.</characteristic>
+  - Select one friendly CHAOS KNIGHTS CHARACTER unit within 9" of this model other than this unit. That unit is designated as Throne Tyrannicus.
+  - Each ability of this model that affects WAR DOG units can also affect friendly units that are designated as Throne Tyrannicus.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -6740,37 +6718,37 @@ Applies to: units with KNIGHT ABOMINANT.</characteristic>
   </sharedSelectionEntryGroups>
   <sharedRules>
     <rule name="Harbingers of Dread" id="8265-ea2e-0549-6dd3" hidden="false">
-      <description>At the start of the battle round, you may use this ability, if your Army Faction is CHAOS KNIGHTS, during the first battle round or during the third battle round or during the fifth battle round, for the rest of the battle:
-  -&gt; At the start of the battle, Deathly Terror is active.
-  -&gt; Select one (each may be chosen once per battle) (in addition to any already active):
-    - Deathly Terror: while an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
-    - Despair: while an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
-    - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
-    - Darkness: this model gains the Stealth ability.
-    - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
-    - Dominion: increase the range of each AURA ability of this model by 3".
-  -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</description>
+      <description>At the start of the battle round, you can use this ability, if your Army Faction is CHAOS KNIGHTS, during the first battle round or during the third battle round or during the fifth battle round, for the rest of the battle:
+  - At the start of the battle, Deathly Terror is active.
+  - Select one (each can be chosen once per battle) (in addition to any already active):
+    - Deathly Terror: While an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
+    - Despair: While an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
+    - Doom: While the target is Battle-shocked, add 1 to this model's Wound rolls.
+    - Darkness: This model gains the Stealth ability.
+    - Dismay: At the start of the Battle Shock step in your opponent's turn, for each enemy unit: while this unit is below its Starting Strength and this unit is within 9" of this model, that unit must take a Battle-shock test.
+    - Delirium: When an enemy unit within 9" of this model fails a Battle-shock test, while an enemy unit is within 9" of this model, while this unit is Below Half-strength, that unit suffers D3 mortal wounds.
+    - Dominion: Increase the range of each AURA ability of this model by 3".
+  - Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</description>
     </rule>
     <rule name="Super-heavy Walker" id="3431-b503-f58f-5cf2" hidden="false">
-      <description>-&gt; When this model ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over non-Titanic models as though they were not there.
-  -&gt; The triggering unit can move over terrain features 4" or lower as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The triggering unit can move over terrain features over 4" as though they were not there.
--&gt; When this model moves through terrain over 4" tall:
-  -&gt; Roll one D6:
-    - On 1: The unit is Battle-shocked.
+      <description>When this model ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over non-Titanic models as though they were not there.
+  - The triggering unit can move over terrain features 4" or lower as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - The triggering unit can move over terrain features over 4" as though they were not there.
+When this model moves through terrain over 4" tall:
+  - Roll one D6:
+    - On 1: This unit is Battle-shocked.
     - On 2-6: Nothing happens.</description>
     </rule>
     <rule name="Dreadblades" id="4f9f-100a-111e-c163" hidden="false">
-      <description>You can: If every model in your army has the CHAOS keyword:
-  Select one of the following:
+      <description>If every model in your army has the CHAOS keyword, you can use this ability:
+  Choose one of the following:
     - Your army can include at most 1 models from TITANIC CHAOS KNIGHTS units.
     - Your army can include at most 3 models from WAR DOG units.
-  -&gt; All friendly TITANIC CHAOS KNIGHTS or WAR DOG units cannot be your Warlord.
-  -&gt; All friendly TITANIC CHAOS KNIGHTS or WAR DOG units cannot be given Enhancements.</description>
+  - Friendly TITANIC CHAOS KNIGHTS or WAR DOG units cannot be your Warlord.
+  - Friendly TITANIC CHAOS KNIGHTS or WAR DOG units cannot be given Enhancements.</description>
     </rule>
   </sharedRules>
 </catalogue>

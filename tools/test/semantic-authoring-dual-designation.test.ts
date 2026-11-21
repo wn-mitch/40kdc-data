@@ -96,7 +96,7 @@ describe("A designation that acts on the unit and on attacks against it", () => 
       "select one enemy unit (your Combined Fire Target); until the end of the phase, while it is your target, the selected unit cannot benefit from Cover; and each time a friendly unit attacks it, improve the Strength characteristic of that attack by 2 if it is made by a friendly ALPHA unit",
     );
     expect(describeAbility({ effect: DESIGNATION as never, scope: { duration: "phase" } })).toContain(
-      "Select one enemy unit (your Combined Fire Target). Until the end of the phase:\n  -> While it is your target, the selected unit cannot benefit from Cover.\n  -> Each time a friendly unit makes an attack against it, improve the Strength characteristic of that attack by 2 if it is made by a friendly ALPHA unit.",
+      "Select one enemy unit (your Combined Fire Target). Until the end of the phase:\n  - While it is your target, the selected unit cannot benefit from Cover.\n  - Each time a friendly unit makes an attack against it, improve the Strength characteristic of that attack by 2 if it is made by a friendly ALPHA unit.",
     );
   });
 

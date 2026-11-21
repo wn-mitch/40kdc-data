@@ -61,7 +61,7 @@ describe("one pool of dice paying out to two units", () => {
     });
     const text = describeAbility({ id: "sample", name: "Sample", ...(result.mechanics as object) } as any);
     expect(text).toContain("Roll a number of D6 equal to the W characteristic of the selected unit");
-    expect(text).toContain("the number of those dice that rolled a 1 (");
+    expect(text).toContain("the number of those dice that rolled a 1, to a maximum of 6 mortal wounds");
     expect(text).toContain("the number of those dice that rolled a 5+");
   });
 

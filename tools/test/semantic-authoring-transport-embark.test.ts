@@ -229,7 +229,7 @@ describe("Semantic authoring transport eligibility: describing the predicate", (
     expect(describeCondition({ type: "eligible", parameters: { subject: "this-unit", to: "embark-within", transport: "ability-unit" } } as never))
       .toContain("is able to embark within");
     expect(describeCondition({ type: "eligible", parameters: { subject: "this-unit", to: "embark-within", transport: "ability-unit" } } as never))
-      .toBe("the unit is able to embark within this unit");
+      .toBe("this unit is able to embark within this unit");
   });
 
   it("negates it with the not operator", () => {

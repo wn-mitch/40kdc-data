@@ -26,13 +26,15 @@ from wh40kdc.translate.condition_refs import (
     range_phrase,
     territory_phrase,
     title_case,
+    with_article,
+    within_clause,
 )
 from wh40kdc.translate.condition_refs import (
     _or_list as or_list,
 )
 from wh40kdc.translate.designations import designation_label
 
-__all__ = ["and_list", "dekebab", "or_list", "range_phrase", "title_case"]
+__all__ = ["and_list", "dekebab", "or_list", "range_phrase", "title_case", "with_article"]
 
 # Rendering context threaded from the containers to the leaves. Keys:
 # ``selectedUnit`` / ``selectedModel`` (inside a selection), ``unitSubject`` (explicit
@@ -157,6 +159,7 @@ def is_plural(subj: str) -> bool:
     return (
         bool(re.search(r"(^| )(units|models)\b", subj))
         or subj.startswith("all ")
+        or subj.startswith("those ")
         or subj.startswith("targets ")
     )
 
@@ -462,6 +465,16 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
     )
     all_of = f.get("all_of")
     all_s = f"{' '.join(jstr(x) for x in all_of)} " if isinstance(all_of, list) else ""
+    unit_id_names = (
+        or_list([title_case(jstr(uid)) for uid in f["unit_ids"]])
+        if isinstance(f.get("unit_ids"), list)
+        else ""
+    )
+    inline_unit_ids = (
+        f"{unit_id_names} "
+        if unit_id_names and not all_s and not isinstance(f.get("any_of_filters"), list)
+        else ""
+    )
     noun = (
         f"{'Bodyguard' if f.get('attachment_role') == 'bodyguard' else 'Leader'} models"
         if f.get("level") == "model" and f.get("attachment_role") in ("bodyguard", "leader")
@@ -470,11 +483,11 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
         else "units"
     )
     compact = keyword_alternatives(f)
-    s = f"{owner}{or_list(compact)} {noun}" if compact is not None else f"{owner}{all_s}{noun}"
-    if isinstance(f.get("model_names"), list):
-        s += f" named {or_list([jstr(name) for name in f['model_names']])}"
-    if isinstance(f.get("unit_ids"), list) and f["unit_ids"]:
-        s += f" with unit ID {or_list([jstr(unit_id) for unit_id in f['unit_ids']])}"
+    s = (
+        f"{owner}{or_list(compact)} {noun}"
+        if compact is not None
+        else f"{owner}{all_s}{inline_unit_ids}{noun}"
+    )
     if isinstance(f.get("any_of_filters"), list) and compact is None:
         alts = [
             re.sub(r"^all ", "", filter_subject(a, ctx), count=1) for a in alternative_filters(f)
@@ -486,6 +499,10 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
         s += f" (excluding {or_list([jstr(x) for x in f['none_of']])} {noun})"
     if isinstance(f.get("not_all_of"), list):
         s += f" (excluding {' '.join(jstr(x) for x in f['not_all_of'])} {noun})"
+    if isinstance(f.get("model_names"), list):
+        s += f" named {or_list([jstr(name) for name in f['model_names']])}"
+    if unit_id_names and not inline_unit_ids:
+        s += f" ({unit_id_names})"
     within = f.get("within")
     # "each model in this unit within 3\" of an enemy unit": the unit comes before the range.
     member_first = (
@@ -496,11 +513,12 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
     if within is not None:
         w = within if isinstance(within, dict) else {}
         if w.get("of") == "recipient" and ctx.get("each_model"):
-            of = " of that model"
+            of = "that model"
+        elif w.get("of") is not None:
+            of = place_ref_phrase(w["of"])
         else:
-            of = f" of {place_ref_phrase(w['of'])}" if w.get("of") is not None else ""
-        wholly = "wholly " if w.get("wholly") is True else ""
-        s += f" {wholly}within {range_phrase(w.get('range'))}{of}"
+            of = ""
+        s += within_clause(w, of)
     s += _filter_relations({**f, "member_of": None} if member_first else f, ctx)
     visible = f.get("visible")
     if isinstance(visible, dict) and visible.get("to") is not None:
@@ -520,24 +538,12 @@ def filter_subject(f: dict[str, Any], ctx: Ctx | None = None) -> str:
         s += f" that are {and_list([_state_phrase(jstr(x), True) for x in f['not_states']] )}"
     if f.get("excluding") is not None:
         s += f" other than {effect_subject(f['excluding'], ctx)}"
-    bounded = (
-        within is not None
-        or visible is not None
-        or f.get("designated") is not None
-        or f.get("not_designated") is not None
-        or f.get("state") is not None
-        or f.get("not_states") is not None
-        or f.get("embarked_in") is not None
-        or f.get("member_of") is not None
-        or f.get("engaged_with") is not None
-        or f.get("not_engaged_with") is not None
-    )
-    return s if bounded else f"all {s}"
+    return s
 
 
 def _member_of(unit: Any, ctx: Ctx) -> str:
-    """\" in the unit\": the unit a model-level filter's models are in."""
-    return f" in {'the unit' if unit == 'this-unit' else effect_subject(unit, ctx)}"
+    """\" in this unit\": the unit a model-level filter's models are in."""
+    return f" in {'this unit' if unit == 'this-unit' else effect_subject(unit, ctx)}"
 
 
 def _filter_relations(f: dict[str, Any], ctx: Ctx) -> str:
@@ -568,33 +574,41 @@ def _filter_relations(f: dict[str, Any], ctx: Ctx) -> str:
         )
     return s
 def _articled(s: str) -> str:
-    return f"{'an' if s[:1].lower() in ('a', 'e', 'i', 'o', 'u') and s else 'a'} {s}"
+    return with_article(s)
 
 
 def effect_subject(target: Any, ctx: Ctx | None = None) -> str:
     """An effect target (a unit-ref) as the effect's subject."""
     ctx = ctx or {}
     if target is None or target == "this-unit":
-        if ctx.get("unit_subject"):
-            return ctx["unit_subject"]
-        return "this unit" if ctx.get("selected_unit") or ctx.get("selected_model") else "the unit"
+        return ctx.get("unit_subject") or "this unit"
     if target == "selected-unit":
         if ctx.get("selected_model"):
-            return "that model"
-        return "that unit" if ctx.get("selected_unit") else "the selected unit"
+            return "those models" if ctx.get("selected_plural") else "that model"
+        if ctx.get("selected_unit"):
+            return "those units" if ctx.get("selected_plural") else "that unit"
+        return "the selected unit"
     if target == "recipient":
-        if ctx.get("aura_recipient"):
+        if ctx.get("each_model") or ctx.get("selected_model"):
+            return "that model"
+        if ctx.get("aura_recipient") or ctx.get("selected_unit"):
             return "that unit"
-        return "that model" if ctx.get("each_model") else "the unit"
+        return "this unit"
+    if target == "event-subject" and ctx.get("unit_subject") == "that unit":
+        return "that unit"
     if target == "attacker":
-        return ctx.get("unit_subject") or "the attacking unit"
+        return (
+            ctx["unit_subject"]
+            if ctx.get("unit_subject") and ctx.get("unit_subject") != "that unit"
+            else "the attacking unit"
+        )
     if isinstance(target, str):
         return _ROLE_SUBJECTS.get(target, dekebab(target))
     r = target if isinstance(target, dict) else {}
     if isinstance(r.get("event_var"), str):
         return "that unit"
     if isinstance(r.get("selection_var"), str):
-        return f"the bound {jstr(r['selection_var']).replace('_', ' ')}"
+        return f"the chosen {jstr(r['selection_var']).replace('_', ' ')}"
     if isinstance(r.get("stratagem_target"), str):
         return f"the {dekebab(re.sub(r'^the-', '', r['stratagem_target']))} target"
     return filter_subject(r, ctx)
@@ -607,11 +621,13 @@ def weapon_holder(target: Any, ctx: Ctx) -> str:
     if ctx.get("unit_subject") and (target is None or target in ("this-unit", "attacker")):
         return f"models in {ctx['unit_subject']}"
     if target == "selected-unit" and ctx.get("selected_model"):
-        return "that model"
+        return "those models" if ctx.get("selected_plural") else "that model"
     if target is None or target == "this-unit":
         return "models in this unit"
     if target == "selected-unit":
-        return "models in that unit" if ctx.get("selected_unit") else "models in the selected unit"
+        if ctx.get("selected_unit"):
+            return "models in those units" if ctx.get("selected_plural") else "models in that unit"
+        return "models in the selected unit"
     return effect_subject(target, ctx)
 
 
@@ -638,11 +654,11 @@ def region_phrase(r: dict[str, Any]) -> str:
 
 def designation_for(tag: str) -> str:
     """A tag an effect applies: a registered id prints the rules' term, a legacy upper-case
-    tag stays as printed, others read "marked as …"."""
+    tag stays as printed, others read "designated as …"."""
     label = designation_label(tag)
     if label is not None:
         return label
-    return tag if tag == tag.upper() else f"marked as {dekebab(tag)}"
+    return tag if tag == tag.upper() else f"designated as {title_case(tag)}"
 
 
 def dice_table_result_label(results: Any) -> str:

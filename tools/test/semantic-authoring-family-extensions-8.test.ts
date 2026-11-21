@@ -230,13 +230,13 @@ describe("a move starting", () => {
     ]));
     expect(mechanics.trigger).toEqual({ event: "move-started", filter: { move_types: ["normal"] } });
     expect(schemaErrors(mechanics)).toEqual([]);
-    expect(describeTrigger(mechanics.trigger as never)).toBe("when the unit starts a Normal move");
+    expect(describeTrigger(mechanics.trigger as never)).toBe("when this unit starts a Normal move");
     expect(describeTrigger({ event: "move-started", subject: { owner: "enemy" }, filter: { move_types: ["consolidation"] } })).toBe("each time an enemy unit starts a Consolidation move");
   });
 
   it("keeps move-ended's own reading", () => {
     expect(normalize("event", { kind: "move-started", move_types: ["advance"] })).toEqual({ kind: "move-started", move_types: ["advance"] });
-    expect(describeTrigger({ event: "move-ended", filter: { move_types: ["normal"] } })).toBe("when the unit ends a Normal move");
+    expect(describeTrigger({ event: "move-ended", filter: { move_types: ["normal"] } })).toBe("when this unit ends a Normal move");
   });
 });
 
@@ -248,7 +248,7 @@ describe("a mortal-wound cap", () => {
     expect(nodes(mechanics, (node) => node.type === "mortal-wounds")[0]!.modifier).toEqual({ count: "D6", max: 3 });
     expect(schemaErrors(mechanics)).toEqual([]);
     expect(describeAbility({ effect: { type: "mortal-wounds", target: "this-unit", modifier: { count: "D6", max: 3 } }, scope: { duration: "resolution" } } as never))
-      .toContain("(to a maximum of 3 mortal wounds)");
+      .toContain(", to a maximum of 3 mortal wounds");
   });
 
   it("refuses a cap that is not a whole number from 1 to 20", () => {
@@ -271,7 +271,7 @@ describe("Reserves states", () => {
         .toMatchObject({ filter: { state: lowered } });
       expect(schemaErrors(mechanics)).toEqual([]);
     }
-    expect(describeCondition({ type: "matches", parameters: { filter: { state: "in-cult-ambush" } } } as never)).toBe("the unit is in Cult Ambush");
+    expect(describeCondition({ type: "matches", parameters: { filter: { state: "in-cult-ambush" } } } as never)).toBe("this unit is in Cult Ambush");
   });
 
   it("checks a Stratagem target held in Reserves as being in Strategic Reserves", () => {
@@ -381,7 +381,7 @@ describe("Reserves states", () => {
     expect(schemaErrors(mechanics)).toEqual([]);
     const [effect] = nodes(mechanics, (node) => node.type === "marker");
     expect(effect!.modifier).toEqual({ label: "beta-marker", operation: "place", near: [{ of: "this-unit", range: { inches: 1 } }], size_mm: 40 });
-    expect(describeAbility(mechanics as never)).toBe('Place a beta marker (40mm) within 1" of the unit.');
+    expect(describeAbility(mechanics as never)).toBe('Place a beta marker (40mm) within 1" of this unit.');
     expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "remove", size_mm: 40 })).toThrow(/sizes a placed marker/u);
     expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "relocate", distance: 6, size_mm: 40 })).toThrow(/sizes a placed marker/u);
     expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", size_mm: 0 })).toThrow(/at least 1/u);
@@ -411,7 +411,7 @@ describe("negated filter states and all-of exclusions", () => {
     ]));
     expect((mechanics.trigger as { subject: unknown }).subject).toEqual({ owner: "enemy", not_all_of: ["CHARACTER", "MONSTER"] });
     expect(schemaErrors(mechanics)).toEqual([]);
-    expect(describeTrigger(mechanics.trigger as never)).toBe("each time an enemy unit ends a move (the triggering unit must not have all of CHARACTER and MONSTER)");
+    expect(describeTrigger(mechanics.trigger as never)).toBe("each time an enemy unit (excluding CHARACTER MONSTER units) ends a move");
     expect(describeTrigger({ event: "move-ended", subject: { owner: "enemy", not_states: ["engaged", "battle-shocked"] } })).toBe("each time an enemy unit that is unengaged and not Battle-shocked ends a move");
   });
 
@@ -440,30 +440,30 @@ describe("disembarking from a named Transport", () => {
     const happened = nodes(mechanics, (node) => node.type === "happened")[0]!;
     expect(happened.parameters).toMatchObject({ event: "disembarked", filter: { transport: "this-unit" }, window: "turn" });
     expect(schemaErrors(mechanics)).toEqual([]);
-    expect(describeCondition(happened as never)).toBe("the unit disembarked from this Transport this turn");
-    expect(describeTrigger({ event: "disembarked", filter: { transport: "this-model" } })).toBe("when the unit disembarks from this Transport");
+    expect(describeCondition(happened as never)).toBe("this unit disembarked from this Transport this turn");
+    expect(describeTrigger({ event: "disembarked", filter: { transport: "this-model" } })).toBe("when this unit disembarks from this Transport");
   });
 });
 
 describe("describer readings the earlier rounds pinned as collisions", () => {
   it("tells whose roll and how it came out", () => {
-    expect(describeTrigger({ event: "after-roll", filter: { roll: "battle-shock", result: "failure" } })).toBe("when the unit fails a Battle-shock test");
-    expect(describeTrigger({ event: "after-roll", filter: { roll: "battle-shock", result: "success" } })).toBe("when the unit passes a Battle-shock test");
+    expect(describeTrigger({ event: "after-roll", filter: { roll: "battle-shock", result: "failure" } })).toBe("when this unit fails a Battle-shock test");
+    expect(describeTrigger({ event: "after-roll", filter: { roll: "battle-shock", result: "success" } })).toBe("when this unit passes a Battle-shock test");
     expect(describeTrigger({ event: "after-roll", subject: "this-model", filter: { roll: "save", result: "failure" } })).toBe("after a saving throw made for this model is failed");
     expect(describeTrigger({ event: "after-roll", filter: { roll: "charge", result: "success" } })).toBe("after a successful Charge roll");
     expect(describeTrigger({ event: "before-roll", filter: { roll: "deadly-demise" } })).toBe("before a Deadly Demise roll is made");
   });
 
   it("names the destroyer and the opponent", () => {
-    expect(describeTrigger({ event: "destroyed", subject: "this-unit", object: { owner: "enemy" } })).toBe("each time the unit destroys an enemy unit");
+    expect(describeTrigger({ event: "destroyed", subject: "this-unit", object: { owner: "enemy" } })).toBe("each time this unit destroys an enemy unit");
     expect(describeTrigger({ event: "used", subject: { owner: "enemy" }, filter: { kind: "stratagem" } })).toBe("each time your opponent uses a Stratagem");
     expect(describeTrigger({ event: "used", filter: { kind: "stratagem" } })).toBe("each time you use a Stratagem");
   });
 
   it("says how a unit was set up and what a unit is attached to", () => {
-    expect(describeCondition({ type: "happened", parameters: { event: "set-up", filter: { from: "deep-strike" }, window: "turn" } } as never)).toBe("the unit was set up using Deep Strike this turn");
-    expect(describeCondition({ type: "happened", parameters: { event: "set-up", window: "turn" } } as never)).toBe("the unit was set up this turn");
-    expect(describeCondition({ type: "attachment", parameters: { role: "attached", with: { all_of: ["ALPHA SQUAD"] } } } as never)).toBe("the unit is attached to an ALPHA SQUAD unit");
+    expect(describeCondition({ type: "happened", parameters: { event: "set-up", filter: { from: "deep-strike" }, window: "turn" } } as never)).toBe("this unit was set up using Deep Strike this turn");
+    expect(describeCondition({ type: "happened", parameters: { event: "set-up", window: "turn" } } as never)).toBe("this unit was set up this turn");
+    expect(describeCondition({ type: "attachment", parameters: { role: "attached", with: { all_of: ["ALPHA SQUAD"] } } } as never)).toBe("this unit is attached to an ALPHA SQUAD unit");
   });
 
   it("counts a two-dice table and names an allied faction", () => {

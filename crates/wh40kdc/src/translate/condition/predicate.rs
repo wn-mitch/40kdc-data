@@ -67,7 +67,10 @@ pub(crate) fn negate_phrase(phrase: &str) -> String {
             return format!("{to}{rest}");
         }
     }
-    if let Some(rest) = phrase.strip_prefix("1+ ") {
+    if let Some(rest) = phrase
+        .strip_prefix("1+ ")
+        .or_else(|| phrase.strip_prefix("one or more "))
+    {
         return format!("no {rest}");
     }
     // `^(.*?) (is|was|contains|has) (.*)$`: the earliest verb wins.
@@ -143,7 +146,7 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             let turn = if is(p, "turn", "your-turn") {
                 "your"
             } else if is(p, "turn", "opponent-turn") {
-                "the opponent's"
+                "your opponent's"
             } else {
                 "either player's"
             };
@@ -173,7 +176,7 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             let who = if is(p, "subject", "defender") {
                 "the target".to_string()
             } else {
-                subject_of(p, "the unit")
+                subject_of(p, "this unit")
             };
             let verb = if negated { "does not have" } else { "has" };
             format!(
@@ -208,11 +211,11 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
         }
         "same-unit" => format!(
             "{} is {not_}the same unit as {}",
-            subject_of(p, "the unit"),
+            subject_of(p, "this unit"),
             if is(p, "as", "this-unit") {
                 "this unit".to_string()
             } else {
-                unit_ref_phrase(p.get("as"), "the unit")
+                unit_ref_phrase(p.get("as"), "this unit")
             }
         ),
         "model-profile" => format!(
@@ -229,7 +232,7 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                     let who = if is(p, "subject", "this-model") || nn(p, "subject").is_none() {
                         "the model".to_string()
                     } else {
-                        subject_of(p, "the unit")
+                        subject_of(p, "this unit")
                     };
                     return format!("{neg}{who} is leading {}", unit_filter_phrase(w));
                 }
@@ -244,7 +247,7 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                 }
                 return format!(
                     "{neg}{} is attached to {}",
-                    subject_of(p, "the unit"),
+                    subject_of(p, "this unit"),
                     unit_filter_phrase(w)
                 );
             }
@@ -253,62 +256,64 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                 .unwrap_or_default();
             if is(p, "role", "leading") {
                 let who = if is(p, "subject", "this-model") || nn(p, "subject").is_none() {
-                    "the model".to_string()
+                    "this model".to_string()
                 } else {
-                    subject_of(p, "the unit")
+                    subject_of(p, "this unit")
                 };
-                return format!("{neg}{who} is leading a {kw}unit");
+                return format!(
+                    "{neg}{who} is leading {}",
+                    with_article(&format!("{kw}unit"))
+                );
             }
             if is(p, "role", "led") {
                 return format!(
-                    "{neg}{} is being led by {} {kw}model",
+                    "{neg}{} is being led by {}",
                     subject_of(p, "this unit"),
-                    article(&kw)
+                    with_article(&format!("{kw}model"))
                 );
             }
             // Attached to a named unit: "this model is attached to a DOMINION SQUAD unit".
             if !kw.is_empty() {
                 return format!(
-                    "{neg}{} is attached to {} {kw}unit",
-                    subject_of(p, "the unit"),
-                    article(&kw)
+                    "{neg}{} is attached to {}",
+                    subject_of(p, "this unit"),
+                    with_article(&format!("{kw}unit"))
                 );
             }
-            format!("{neg}{} is an attached unit", subject_of(p, "the unit"))
+            format!("{neg}{} is an attached unit", subject_of(p, "this unit"))
         }
         "strength" => format!(
             "{neg}{} is {} {}",
-            subject_of(p, "the unit"),
+            subject_of(p, "this unit"),
             if p.get("at_or_below") == Some(&Value::Bool(true)) {
                 "at or below"
             } else {
                 "below"
             },
             if is(p, "below", "half") {
-                "half strength"
+                "Half-strength"
             } else {
-                "starting strength"
+                "Starting Strength"
             }
         ),
         "model-count" => {
             let kw = nn(p, "keyword")
                 .map(|k| format!("{} ", st(Some(k))))
                 .unwrap_or_default();
-            let range = match (nn(p, "min"), nn(p, "max")) {
-                (Some(mn), Some(mx)) => format!("{}-{}", st(Some(mn)), st(Some(mx))),
-                (Some(mn), None) => format!("{}+", st(Some(mn))),
-                _ => format!("at most {}", st(p.get("max"))),
-            };
+            let range = count_phrase(Some(&serde_json::json!({
+                "min": p.get("min"),
+                "max": p.get("max"),
+            })));
             format!(
                 "{neg}{} contains {range} {kw}models",
-                subject_of(p, "the unit")
+                subject_of(p, "this unit")
             )
         }
         "wounds" => {
             let who = if is(p, "subject", "this-model") || nn(p, "subject").is_none() {
                 "the model".to_string()
             } else {
-                subject_of(p, "the unit")
+                subject_of(p, "this unit")
             };
             let mut parts: Vec<String> = Vec::new();
             if p.get("lost") == Some(&Value::Bool(true)) {
@@ -353,9 +358,9 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             )
         }
         "unit-state" => {
-            let who = subject_of(p, "the unit");
+            let who = subject_of(p, "this unit");
             let with_ref = nn(p, "with")
-                .map(|w| format!(" with {}", unit_ref_phrase(Some(w), "the unit")))
+                .map(|w| format!(" with {}", unit_ref_phrase(Some(w), "this unit")))
                 .unwrap_or_default();
             if is(p, "at", "phase-start") || is(p, "at", "turn-start") {
                 return format!(
@@ -383,13 +388,13 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
                 };
                 return format!(
                     "{} is {not_}able to embark within {transport}",
-                    subject_of(p, "the unit")
+                    subject_of(p, "this unit")
                 );
             }
             if is(p, "to", "be-selected") {
                 let source = obj(p.get("source_ability")).get("ability_id");
                 return format!(
-                    "{neg}the candidate was eligible for the {} ability at the end of the opponent's previous turn",
+                    "{neg}the candidate was eligible for the {} ability at the end of your opponent's previous turn",
                     dekebab(&st(source))
                 );
             }
@@ -403,7 +408,7 @@ pub(crate) fn describe_predicate(c: &Value, negated: bool) -> String {
             };
             format!(
                 "{} is {not_}eligible to {to_phrase}",
-                subject_of(p, "the unit")
+                subject_of(p, "this unit")
             )
         }
         "happened" => describe_happened(p, negated),
@@ -417,7 +422,7 @@ fn describe_matches(p: &P, negated: bool) -> String {
     let who = if is(p, "subject", "defender") {
         "the target".to_string()
     } else {
-        subject_of(p, "the unit")
+        subject_of(p, "this unit")
     };
     let not = if negated { "not " } else { "" };
     let has = if negated { "does not have" } else { "has" };
@@ -455,7 +460,7 @@ fn describe_matches(p: &P, negated: bool) -> String {
             } else {
                 "a unit of either player"
             };
-            return format!("{} is {not}{owner}", subject_of(p, "the unit"));
+            return format!("{} is {not}{owner}", subject_of(p, "this unit"));
         }
         if let Some(state) = nn(f, "state") {
             return if state.as_str() == Some("fights-first") {
@@ -526,7 +531,7 @@ fn describe_matches(p: &P, negated: bool) -> String {
             let observer = if to.and_then(Value::as_str) == Some("attacker") {
                 "the attacking model".to_string()
             } else {
-                unit_ref_phrase(to, "the unit")
+                unit_ref_phrase(to, "this unit")
             };
             return format!("{who} is {not}visible to {observer}");
         }
@@ -538,16 +543,11 @@ fn describe_matches(p: &P, negated: bool) -> String {
             ) {
                 String::new()
             } else {
-                format!(" of {}", place_ref_phrase(within.get("of")))
+                place_ref_phrase(within.get("of"))
             };
             return format!(
-                "{who} is {not}{}within {}{to}",
-                if within.get("wholly").and_then(Value::as_bool) == Some(true) {
-                    "wholly "
-                } else {
-                    ""
-                },
-                range_phrase(within.get("range"))
+                "{who} is {not}{}",
+                within_clause(within, Some(&to)).trim_start()
             );
         }
     }

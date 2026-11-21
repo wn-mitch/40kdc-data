@@ -11,7 +11,7 @@ fn bodyguard_filter_preserves_membership_and_character_eligibility() {
     }}});
     assert_eq!(
         describe_condition_value(&condition),
-        "the selected unit is a CHARACTER bodyguard model in the selected unit"
+        "the selected unit is a CHARACTER Bodyguard model in the selected unit"
     );
 }
 
@@ -21,7 +21,7 @@ fn exact_engagement_visibility_and_objective_origins_are_named() {
         "engaged_with":"this-model","visible":{"to":"selected-unit"},
         "within":{"range":{"inches":6},"of":{"objective":{"home_of":"enemy"}},"wholly":true}
     }}});
-    assert_eq!(describe_condition_value(&condition), "the unit is a unit within Engagement Range of this model that is visible to the selected unit wholly within 6\" of an objective marker (opponent home)");
+    assert_eq!(describe_condition_value(&condition), "this unit is a unit within Engagement Range of this model that is visible to the selected unit wholly within 6\" of an objective marker (opponent home)");
 }
 
 #[test]
@@ -32,7 +32,7 @@ fn ordinary_keyword_and_state_negation_remain_natural() {
         "against a unit that is not a MONSTER or VEHICLE"
     );
     let state = json!({"operator":"not","operands":[{"type":"matches","parameters":{"filter":{"state":"engaged"}}}]});
-    assert_eq!(describe_condition_value(&state), "the unit is unengaged");
+    assert_eq!(describe_condition_value(&state), "this unit is unengaged");
 }
 
 #[test]
@@ -52,7 +52,7 @@ fn supplied_control_fraction_and_count_are_not_recipe_constants() {
 #[test]
 fn tiered_ranges_explain_final_round_persistence() {
     let condition = json!({"type":"matches","parameters":{"filter":{"within":{"range":{"per_battle_round":[{"inches":3},{"inches":6}]},"of":"this-model"}}}});
-    assert_eq!(describe_condition_value(&condition), "the unit is within 3\", 6\" in battle rounds 1, 2 respectively (using the final range in later battle rounds) of this model");
+    assert_eq!(describe_condition_value(&condition), "this unit is within 3\", 6\" in battle rounds 1, 2 respectively (using the final range in later battle rounds) of this model");
 }
 
 #[test]
@@ -77,7 +77,7 @@ fn structured_weapon_history_preserves_parameters_and_bounds() {
     let condition = json!({"type":"happened","parameters":{"event":"after-roll","window":"phase","count":{"min":2,"max":3},"filter":{"roll":"hit","result":"success","weapons":{"keyword":{"keyword_id":"anti","parameters":{"target_keyword":"INFANTRY","threshold":4}}}}}});
     assert_eq!(
         describe_condition_value(&condition),
-        "the unit was hit by 2-3 attacks made with a [ANTI-INFANTRY 4+] weapon this phase"
+        "this unit was hit by 2-3 attacks made with a [ANTI-INFANTRY 4+] weapon this phase"
     );
 }
 
@@ -97,7 +97,7 @@ fn negating_a_conjunction_does_not_exclude_each_keyword() {
 #[test]
 fn counted_model_proximity_preserves_snapshot_and_whole_model_quantifier() {
     let condition = json!({"type":"within","parameters":{"models":"every","count":{"min":2,"max":3},"range":"weapon","of":"attacker","at":"phase-start","wholly":true}});
-    assert_eq!(describe_condition_value(&condition), "every model in the unit (2-3 models) was wholly within the attacking weapon's range at the start of the phase");
+    assert_eq!(describe_condition_value(&condition), "every model in this unit (2-3 models) was wholly within the attacking weapon's range at the start of the phase");
 }
 
 #[test]
@@ -105,7 +105,7 @@ fn negating_control_conjunction_negates_the_whole_predicate() {
     let condition = json!({"operator":"not","operands":[{"type":"controls","parameters":{"count":{"min":2},"compare":{"comparison":"gt","owner":"enemy"}}}]});
     assert_eq!(
         describe_condition_value(&condition),
-        "not (you control 2+ objectives and you hold more objectives than the opponent)"
+        "not (you control 2 or more objectives and you hold more objectives than your opponent)"
     );
 }
 
@@ -115,7 +115,7 @@ fn correlated_mission_history_keeps_destroyer_and_victim_positions() {
         "count":{"min":1},"objective_role":"central","destroyer_on_objective":true,
         "victim_on_objective":true,"victim_started_turn_on_objective":true
     }});
-    assert_eq!(describe_condition_value(&condition), "1+ enemy units destroyed by a unit on a central objective while on a central objective that started the turn on a central objective");
+    assert_eq!(describe_condition_value(&condition), "one or more enemy units destroyed by a unit on a central objective while on a central objective that started the turn on a central objective");
 }
 
 #[test]
@@ -171,15 +171,13 @@ fn used_ability_trigger_keeps_source_and_usage_limit() {
 }
 
 #[test]
-fn exact_unit_identity_filter_renders_ids_without_name_normalization() {
+fn exact_unit_identity_filter_renders_unit_names() {
     let condition = json!({"type":"matches","parameters":{"filter":{
         "level":"unit","unit_ids":["example-unit","other-unit"]}}});
-    let text = describe_condition_value(&condition);
-    assert!(
-        text.contains("with unit ID example-unit or other-unit"),
-        "{text}"
+    assert_eq!(
+        describe_condition_value(&condition),
+        "this unit is an Example Unit or Other Unit unit"
     );
-    assert!(!text.contains("Example Unit"), "{text}");
 }
 
 #[test]
@@ -187,12 +185,12 @@ fn at_or_below_half_strength_names_the_inclusive_boundary() {
     let at_or_below = json!({"type":"strength","parameters":{"subject":"this-unit","below":"half","at_or_below":true}});
     assert_eq!(
         describe_condition_value(&at_or_below),
-        "the unit is at or below half strength"
+        "this unit is at or below Half-strength"
     );
     let below = json!({"type":"strength","parameters":{"subject":"this-unit","below":"half"}});
     assert_eq!(
         describe_condition_value(&below),
-        "the unit is below half strength"
+        "this unit is below Half-strength"
     );
 }
 

@@ -215,12 +215,12 @@ describe("DSL schema and describer for activations", () => {
   });
 
   it("says which options are active and whether they replace or join the others", () => {
-    expect(render(activate({ options: ["aegis", "zeal"], exclusive: true }))).toBe("The Aegis and Zeal options of Rite X are active for the unit (and no other option is).");
-    expect(render(activate({ options: ["aegis", "zeal"] }))).toBe("The Aegis and Zeal options of Rite X are active for the unit.");
-    expect(render(activate({ all_options: true }))).toBe("Every option of Rite X is active for the unit.");
-    expect(render(activate({ select: { by: "player", from: ["aegis", "zeal"] }, exclusive: true }))).toBe("Select one of the Aegis or Zeal options of Rite X for the unit, in place of any already active.");
-    expect(render(activate({ select: { by: "player", count: 2 } }))).toBe("Select 2 options of Rite X for the unit, in addition to any already active.");
-    expect(render(activate({ select: { by: "roll" }, exclusive: true }))).toBe("Make a new Rite X roll and activate one result it allows for the unit, in place of any already active.");
+    expect(render(activate({ options: ["aegis", "zeal"], exclusive: true }))).toBe("The Aegis and Zeal options of Rite X are active for this unit (and no other option is).");
+    expect(render(activate({ options: ["aegis", "zeal"] }))).toBe("The Aegis and Zeal options of Rite X are active for this unit.");
+    expect(render(activate({ all_options: true }))).toBe("Every option of Rite X is active for this unit.");
+    expect(render(activate({ select: { by: "player", from: ["aegis", "zeal"] }, exclusive: true }))).toBe("Select one of the Aegis or Zeal options of Rite X for this unit, in place of any already active.");
+    expect(render(activate({ select: { by: "player", count: 2 } }))).toBe("Select 2 options of Rite X for this unit, in addition to any already active.");
+    expect(render(activate({ select: { by: "roll" }, exclusive: true }))).toBe("Make a new Rite X roll and activate one result it allows for this unit, in place of any already active.");
     expect(render({ type: "stance-selection-capacity", modifier: { ability_id: "rite-x", additional_selections: 1, allocation: "choose-one-option", options: [{ ability_id: "rite-x", option_id: "aegis" }, { ability_id: "rite-x", option_id: "zeal" }] } }))
       .toBe("You can select Aegis or Zeal one additional time per battle, shared between them.");
     const stance = { type: "stance-select", mode: "re-selectable", options: [{ name: "Aegis", effect: activate({}) }, { name: "Zeal", effect: activate({}) }] };

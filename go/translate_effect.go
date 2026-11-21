@@ -75,28 +75,68 @@ func scalingWording(s map[string]any) string {
 func auraEmitter(filter map[string]any, origin string) string {
 	owner, ok := filter["owner"].(string)
 	if !ok {
-		return auraRoleFilter(filter, origin)
+		return auraRoleFilter(filter, origin, nil)
+	}
+	allList := jstrList(filter["all_of"])
+	noneList := jstrList(filter["none_of"])
+	anyList := jstrList(filter["any_of"])
+	hasOverlap := false
+	for _, k := range anyList {
+		if containsStr(allList, k) {
+			hasOverlap = true
+			break
+		}
+	}
+	if hasOverlap {
+		anyList = nil
+	} else if len(noneList) > 0 {
+		filtered := make([]string, 0, len(anyList))
+		for _, k := range anyList {
+			if !containsStr(noneList, k) {
+				filtered = append(filtered, k)
+			}
+		}
+		anyList = filtered
+	}
+	// If narrowing `any_of` by `none_of` leaves a single keyword, fold it inline with `all_of`.
+	if len(anyList) == 1 {
+		allList = append(allList, anyList[0])
+		anyList = nil
 	}
 	side := ""
 	if owner != "any" {
 		side = " " + owner
 	}
 	keywords := ""
-	if values, ok := asList(filter["all_of"]); ok {
-		for _, keyword := range cstrList(values) {
-			keywords += " " + keyword
-		}
+	for _, keyword := range allList {
+		keywords += " " + keyword
 	}
-	rest := map[string]any{}
+	remaining := map[string]any{}
 	for key, value := range filter {
-		if key != "owner" && key != "all_of" {
-			rest[key] = value
+		switch key {
+		case "owner", "all_of", "any_of", "none_of":
+		default:
+			remaining[key] = value
 		}
 	}
-	return auraRoleFilter(rest, "one or more"+side+keywords+" models")
+	if len(anyList) > 0 {
+		anyAny := make([]any, len(anyList))
+		for i, k := range anyList {
+			anyAny[i] = k
+		}
+		remaining["any_of"] = anyAny
+	}
+	if len(noneList) > 0 {
+		noneAny := make([]any, len(noneList))
+		for i, k := range noneList {
+			noneAny[i] = k
+		}
+		remaining["none_of"] = noneAny
+	}
+	return auraRoleFilter(remaining, "one or more"+side+keywords+" models", allList)
 }
 
-func auraRoleFilter(filter map[string]any, noun string) string {
+func auraRoleFilter(filter map[string]any, noun string, alreadyAll []string) string {
 	relations := map[string]any{}
 	for key, value := range filter {
 		switch key {
@@ -105,18 +145,49 @@ func auraRoleFilter(filter map[string]any, noun string) string {
 			relations[key] = value
 		}
 	}
+	extraAll := jstrList(filter["all_of"])
+	allList := make([]string, 0, len(alreadyAll)+len(extraAll))
+	allList = append(allList, alreadyAll...)
+	allList = append(allList, extraAll...)
+	noneList := jstrList(filter["none_of"])
+	anyList := jstrList(filter["any_of"])
+	// Boolean simplification:
+	// 1) If `all_of` already satisfies `any_of`, `any_of` is redundant.
+	// 2) Any keyword in both `any_of` and `none_of` cannot match; strip it from `any_of`.
+	hasOverlap := false
+	for _, k := range anyList {
+		if containsStr(allList, k) {
+			hasOverlap = true
+			break
+		}
+	}
+	if hasOverlap {
+		anyList = nil
+	} else if len(noneList) > 0 {
+		filtered := make([]string, 0, len(anyList))
+		for _, k := range anyList {
+			if !containsStr(noneList, k) {
+				filtered = append(filtered, k)
+			}
+		}
+		anyList = filtered
+	}
+	if len(anyList) == 1 {
+		extraAll = append(extraAll, anyList[0])
+		anyList = nil
+	}
 	s := noun
-	if values, ok := asList(filter["all_of"]); ok {
-		s += " with " + strings.Join(cstrList(values), " and ")
+	if len(extraAll) > 0 {
+		s += " with " + strings.Join(extraAll, " and ")
 	}
-	if values, ok := asList(filter["any_of"]); ok {
-		s += " with at least one of " + orList(cstrList(values))
+	if len(anyList) > 0 {
+		s += " with the " + orList(anyList) + " keyword"
 	}
-	if values, ok := asList(filter["none_of"]); ok {
-		s += " without " + orList(cstrList(values))
+	if len(noneList) > 0 {
+		s += " (excluding " + orList(noneList) + " models)"
 	}
 	if values, ok := asList(filter["not_all_of"]); ok {
-		s += " without all of " + strings.Join(cstrList(values), " and ")
+		s += " without all of " + strings.Join(jstrList(values), " and ")
 	}
 	if len(relations) > 0 {
 		s += " matching " + filterSubject(relations, effCtx{})
@@ -168,7 +239,7 @@ func auraReach(e, m map[string]any) (string, string) {
 	eligibleWho := article(subject) + " " + subject
 	recipient := eligibleWho
 	if m["eligible"] != nil && m["recipient_filter"] != nil {
-		recipient = auraRoleFilter(mapOr(m["recipient_filter"]), eligibleWho)
+		recipient = auraRoleFilter(mapOr(m["recipient_filter"]), eligibleWho, nil)
 	}
 	// Without a range bonus, of names the unit the range is measured from; this model by default.
 	origin := "this model"
@@ -322,6 +393,54 @@ func diceGate(e map[string]any, ctx effCtx) string {
 	return "roll " + one + dice + kind + ": on " + formatComparison(comp, e["threshold"]) + ", " + success + fail
 }
 
+// flattenConditional flattens nested `conditional(c1, conditional(c2, inner))` when neither is a `recipientGate`.
+func flattenConditional(e map[string]any, ctx effCtx) (map[string]any, map[string]any) {
+	var conds []any
+	cur := e
+	for cur["type"] == "conditional" && cur["condition"] != nil && cur["effect"] != nil {
+		if _, gated := recipientGate(cur, ctx); gated {
+			break
+		}
+		conds = append(conds, cur["condition"])
+		cur = mapOr(cur["effect"])
+	}
+	if len(conds) == 0 {
+		return mapOr(e["condition"]), mapOr(e["effect"])
+	}
+	if len(conds) == 1 {
+		return mapOr(conds[0]), cur
+	}
+	return map[string]any{"operator": "and", "operands": conds}, cur
+}
+
+// attackTypeFromCondition extracts bare `ranged` / `melee` attack_type from a condition so nested leaves don't repeat it.
+func attackTypeFromCondition(c map[string]any) string {
+	if c == nil {
+		return ""
+	}
+	if ops, ok := conditionOperands(c, "and"); ok {
+		for _, op := range ops {
+			if found := attackTypeFromCondition(op); found != "" {
+				return found
+			}
+		}
+		return ""
+	}
+	if c["type"] == "attack-is" && paramsOf(c)["weapons"] == nil {
+		if t, ok := paramsOf(c)["attack_type"].(string); ok && (t == "ranged" || t == "melee") {
+			return t
+		}
+	}
+	return ""
+}
+
+func withSuppressedWeaponType(ctx effCtx, c map[string]any) effCtx {
+	if atkType := attackTypeFromCondition(c); atkType != "" {
+		ctx.suppressWeaponType = atkType
+	}
+	return ctx
+}
+
 func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 	m := mod(e)
 	switch e["type"] {
@@ -339,7 +458,9 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		if gate, ok := recipientGate(e, ctx); ok {
 			return gate.lead + ", " + describeEffectInline(gate.inner, gate.ctx)
 		}
-		return conditionLeadInFor(mapOr(e["condition"]), isDefensiveEffect(inner)) + ", " + describeEffectInline(inner, ctx)
+		flatCond, flatInner := flattenConditional(e, ctx)
+		childCtx := withSuppressedWeaponType(ctx, flatCond)
+		return conditionLeadInFor(flatCond, isDefensiveEffect(flatInner)) + ", " + describeEffectInline(flatInner, childCtx)
 	case "rules-bundle", "sequence":
 		steps := getList(e, "steps")
 		if rider, ok := rollWithRider(steps, ctx); ok {
@@ -403,7 +524,7 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		}
 		consum := ""
 		if e["mode"] == "consumable" {
-			consum = " (each may be chosen once per battle)"
+			consum = " (each can be chosen once per battle)"
 		}
 		initial := ""
 		if s := stanceInitial(e); s != "" {
@@ -430,7 +551,7 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 			}
 			return "you can select " + orList(names) + " " + times + " per battle, shared between them"
 		}
-		subject := "one option of " + titleCase(ejstr(m["ability_id"]))
+		subject := "one option of " + abilityLabel(m["ability_id"])
 		if m["allocation"] == "fixed-option" {
 			if option, ok := asMap(m["option"]); ok && option != nil {
 				subject = titleCase(ejstr(option["option_id"]))
@@ -567,6 +688,9 @@ func choicePrompt(e map[string]any) string {
 	if by, _ := e["chosen_by"].(string); by != "opponent" {
 		return own
 	}
+	if rest, ok := strings.CutPrefix(own, "choose "); ok {
+		return "your opponent chooses " + rest
+	}
 	if rest, ok := strings.CutPrefix(own, "select "); ok {
 		return "your opponent selects " + rest
 	}
@@ -577,28 +701,35 @@ func ownChoicePrompt(e map[string]any) string {
 	if p, ok := e["choice_prompt"].(string); ok && strings.TrimSpace(p) != "" {
 		return p
 	}
-	label := ""
+	rawLabel := ""
 	if l, ok := e["choice_label"].(string); ok && l != "" {
-		label = " (" + titleCase(l) + ")"
+		rawLabel = titleCase(l)
+	}
+	label := ""
+	if rawLabel != "" && strings.ToLower(rawLabel) != "one of the following" {
+		label = " (" + rawLabel + ")"
 	}
 	if e["min_choices"] != nil && e["max_choices"] != nil {
 		minC, maxC := e["min_choices"], e["max_choices"]
+		if jsNumber(minC) == 1 && jsNumber(maxC) == 1 {
+			return "choose one of the following" + label
+		}
 		var quantity string
 		if numEq(minC, maxC) {
-			quantity = "exactly " + ejstr(maxC)
+			quantity = ejstr(maxC)
 		} else if minC == 0.0 {
 			quantity = "up to " + ejstr(maxC)
 		} else {
-			quantity = "from " + ejstr(minC) + " through " + ejstr(maxC)
+			quantity = ejstr(minC) + " to " + ejstr(maxC)
 		}
-		return "select " + quantity + " distinct options" + label
+		return "choose " + quantity + " of the following" + label
 	}
-	return "select one of the following" + label
+	return "choose one of the following" + label
 }
 
 func leadershipTest(e map[string]any, ctx effCtx) string {
 	test := mapOr(e["test"])
-	who := unitRefPhrase(test["subject"], "the unit")
+	who := unitRefPhrase(test["subject"], "this unit")
 	kind := "Leadership"
 	if test["kind"] == "battle-shock" {
 		kind = "Battle-shock"
@@ -609,10 +740,7 @@ func leadershipTest(e map[string]any, ctx effCtx) string {
 		mods = append(mods, "apply "+esigned("add", xm["value"])+" if "+describeCondition(mapOr(xm["condition"])))
 	}
 	modifiers := strings.Join(mods, "; ")
-	success := "nothing happens"
-	if jsTruthy(e["on_success"]) {
-		success = describeEffectInline(mapOr(e["on_success"]), ctx)
-	}
+	hasSuccess := e["on_success"] != nil && mapOr(e["on_success"])["type"] != "no-effect"
 	var failures []string
 	if test["kind"] == "battle-shock" {
 		failures = append(failures, who+" becomes Battle-shocked")
@@ -620,14 +748,22 @@ func leadershipTest(e map[string]any, ctx effCtx) string {
 	if jsTruthy(e["on_fail"]) {
 		failures = append(failures, describeEffectInline(mapOr(e["on_fail"]), ctx))
 	}
+	base := who + " takes " + withArticle(kind+" test")
+	if modifiers != "" {
+		base += " (" + modifiers + ")"
+	}
+	if !hasSuccess && len(failures) > 0 {
+		return base + "; if failed, " + strings.Join(failures, "; ")
+	}
+	success := "nothing happens"
+	if hasSuccess {
+		success = describeEffectInline(mapOr(e["on_success"]), ctx)
+	}
 	fail := ""
 	if len(failures) > 0 {
 		fail = "; otherwise, " + strings.Join(failures, "; ")
 	}
-	if modifiers != "" {
-		modifiers = "; " + modifiers
-	}
-	return who + " takes a " + kind + " test (2D6, passing on its current Leadership or higher" + modifiers + "); if passed, " + success + fail
+	return base + "; if passed, " + success + fail
 }
 
 // describeEffect renders a container effect tree as a block (multi-line,
@@ -636,23 +772,23 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 	indent := strings.Repeat("  ", depth)
 	arrow := ""
 	if depth > 0 {
-		arrow = "-> "
+		arrow = "- "
 	}
 	switch e["type"] {
 	case "conditional":
-		inner := mapOr(e["effect"])
-		lead := capitalize(conditionLeadInFor(mapOr(e["condition"]), isDefensiveEffect(inner)))
 		gate, gated := recipientGate(e, ctx)
 		if gated && gate.inner["type"] == "sequence" {
-			return indent + capitalize(gate.lead) + ":\n" + describeEffect(gate.inner, depth+1, gate.ctx)
-		}
-		if containerTypes[ejstrType(inner)] {
-			return indent + lead + ":\n" + describeEffect(inner, depth+1, ctx)
+			return indent + arrow + capitalize(gate.lead) + ":\n" + describeEffect(gate.inner, depth+1, gate.ctx)
 		}
 		if gated {
 			return indent + arrow + capitalize(gate.lead) + ", " + describeEffectInline(gate.inner, gate.ctx) + "."
 		}
-		return indent + arrow + lead + ", " + describeEffectInline(inner, ctx) + "."
+		flatCond, inner := flattenConditional(e, ctx)
+		childCtx := withSuppressedWeaponType(ctx, flatCond)
+		if containerTypes[ejstrType(inner)] {
+			return indent + arrow + capitalize(conditionLeadIn(flatCond)) + ":\n" + describeEffect(inner, depth+1, childCtx)
+		}
+		return indent + arrow + capitalize(conditionLeadInFor(flatCond, isDefensiveEffect(inner))) + ", " + describeEffectInline(inner, childCtx) + "."
 	case "rules-bundle", "sequence":
 		steps := getList(e, "steps")
 		if rider, ok := rollWithRider(steps, ctx); ok {
@@ -666,15 +802,16 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 	case "ability-part":
 		e = partWithModelRefs(e)
 		inner := mapOr(e["effect"])
+		childCtx := partTriggerCtx(e, ctx)
 		// A part with nothing to head it (a printed grant's body) lists its container's steps in its place.
 		if containerTypes[ejstrType(inner)] {
 			head := partHead(e)
 			if head == "" {
-				return describeEffect(inner, depth, ctx)
+				return describeEffect(inner, depth, childCtx)
 			}
-			return indent + "-> " + capitalize(head) + ":\n" + describeEffect(inner, depth+1, ctx)
+			return indent + arrow + capitalize(head) + ":\n" + describeEffect(inner, depth+1, childCtx)
 		}
-		return indent + "-> " + capitalize(partInline(e, ctx)) + "."
+		return indent + arrow + capitalize(partInline(e, childCtx)) + "."
 	case "ability-grant":
 		// A grant printed with its ability: the holder and name, then the ability one level deeper.
 		if isDefinedGrant(e) {
@@ -758,7 +895,7 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 	case "stance-select":
 		consum := ""
 		if e["mode"] == "consumable" {
-			consum = " (each may be chosen once per battle)"
+			consum = " (each can be chosen once per battle)"
 		}
 		lines := []string{indent + arrow + capitalize(stancePick(e)) + consum + stanceAdditive(e) + ":"}
 		if initial := stanceInitial(e); initial != "" {
@@ -766,7 +903,7 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		}
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
-			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+describeEffectInline(mapOr(om["effect"]), ctx)+".")
+			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+capitalize(describeEffectInline(mapOr(om["effect"]), ctx))+".")
 		}
 		if random := stanceRandom(e); random != "" {
 			lines = append(lines, indent+arrow+capitalize(random)+".")
@@ -816,7 +953,7 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		lines := []string{indent + arrow + issue + " up to " + n + " Orders to " + orderTo(e, units) + rng + notStates + orderLimit(e) + ", each one of:"}
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
-			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+describeEffectInline(mapOr(om["effect"]), ctx)+".")
+			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+capitalize(describeEffectInline(mapOr(om["effect"]), ctx))+".")
 		}
 		for _, rule := range orderRuleSentences(e, ctx) {
 			lines = append(lines, indent+rule)
@@ -831,18 +968,18 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 func selectUnitsBlock(e map[string]any, indent, arrow string, depth int, ctx effCtx) string {
 	sel := mapOr(e["selector"])
 	inner := mapOr(e["effect"])
-	selectedCtx := selectedContext(ctx, sel)
+	plural := selectUnitsPlural(sel)
 	lead := "Select " + selectUnitsSubjectIn(sel, ctx.eachModel) + selectionBinding(sel)
 	header := indent + arrow + lead
 	if containerTypes[ejstrType(inner)] {
-		if selectUnitsPlural(sel) {
+		if plural {
 			noun := selectorNoun(sel)
-			return header + ":\n" + indent + "  -> For each selected " + noun + ":\n" + describeEffect(inner, depth+2, selectedCtx)
+			return header + ":\n" + indent + "  - For each selected " + noun + ":\n" + describeEffect(inner, depth+2, selectedContextPlural(ctx, sel, false))
 		}
-		return strings.TrimSuffix(header, ".") + ":\n" + describeEffect(inner, depth+1, selectedCtx)
+		return strings.TrimSuffix(header, ".") + ":\n" + describeEffect(inner, depth+1, selectedContextPlural(ctx, sel, false))
 	}
-	nested := describeEffectInline(inner, selectedCtx)
-	return header + ": " + nested + "."
+	nested := describeEffectInline(inner, selectedContextPlural(ctx, sel, plural))
+	return header + ". " + capitalize(nested) + "."
 }
 
 // orderStates renders each unit state an issue-orders rule names ("Battle-shocked").
@@ -886,7 +1023,7 @@ func orderRecipient(e map[string]any) string {
 	if e["recipient"] == nil {
 		return ""
 	}
-	return " to " + unitRefPhrase(e["recipient"], "the unit")
+	return " to " + unitRefPhrase(e["recipient"], "this unit")
 }
 
 // orderTo is "the triggering unit (if it is one of the eligible … units)", else "eligible … units".
@@ -894,7 +1031,7 @@ func orderTo(e map[string]any, units string) string {
 	if e["recipient"] == nil {
 		return "eligible " + units
 	}
-	return unitRefPhrase(e["recipient"], "the unit") + " (if it is one of the eligible " + units + ")"
+	return unitRefPhrase(e["recipient"], "this unit") + " (if it is one of the eligible " + units + ")"
 }
 
 // orderLimit is ", not counting toward the Orders it can issue this turn": an Order outside the limit.

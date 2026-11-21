@@ -33,14 +33,14 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 		rng = " within " + rangePhrase(m["range"])
 	}
 	who := subj + rng
-	// "(to a maximum of 6 mortal wounds)": a cap on the total, however many are rolled or counted.
+	// ", to a maximum of 6 mortal wounds": a cap on the total, however many are rolled or counted.
 	cap := ""
 	if m["max"] != nil {
 		noun := "wounds"
 		if f, ok := m["max"].(float64); ok && f == 1 {
 			noun = "wound"
 		}
-		cap = " (to a maximum of " + ejstr(m["max"]) + " mortal " + noun + ")"
+		cap = ", to a maximum of " + ejstr(m["max"]) + " mortal " + noun
 	}
 	if roll, ok := asMap(m["roll"]); ok && roll != nil {
 		each := ""
@@ -713,6 +713,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		case "to-zero":
 			how = "change the Damage of that attack to 0"
 		}
+		if ctx.allocatedTrigger && m["weapons"] == nil {
+			return how
+		}
 		attack := "an attack"
 		if hasWeapon(m) {
 			attack = "an attack with " + weaponNoun(m)
@@ -720,9 +723,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return "each time " + attack + " is allocated to " + subj + ", " + how
 	case "feel-no-pain":
 		if describerRatingRef(m["threshold"]) {
-			return subj + " " + ev(subj, "has") + " the Feel No Pain X+ ability" + fnpAgainst[ejstr(m["against"])] + ", X being its rating"
+			return subj + " " + ev(subj, "has") + " Feel No Pain X+" + fnpAgainst[ejstr(m["against"])] + ", X being its rating"
 		}
-		return subj + " " + ev(subj, "has") + " the Feel No Pain " + ejstr(m["threshold"]) + "+ ability" + fnpAgainst[ejstr(m["against"])]
+		return subj + " " + ev(subj, "has") + " Feel No Pain " + ejstr(m["threshold"]) + "+" + fnpAgainst[ejstr(m["against"])]
 	case "invulnerable-save":
 		vs := ""
 		if m["weapons"] != nil {
@@ -791,9 +794,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	case "cp-gain":
 		n := jsNumber(m["amount"])
 		if n < 0 {
-			return "you lose " + numStr(math.Abs(n)) + "CP"
+			return "you lose " + numStr(math.Abs(n)) + " CP"
 		}
-		return "you gain " + ejstr(m["amount"]) + "CP"
+		return "you gain " + ejstr(m["amount"]) + " CP"
 	case "cost-modifier":
 		return costModifierLeaf(m, subj)
 	case "resource-gain":

@@ -23,13 +23,12 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged Objective Control" typeName="Abilities">
@@ -39,17 +38,17 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Harbingers of Dread" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the battle round, you may use this ability, if your Army Faction is CHAOS KNIGHTS, during the first battle round or during the third battle round or during the fifth battle round, for the rest of the battle:
-  -&gt; At the start of the battle, Deathly Terror is active.
-  -&gt; Select one (each may be chosen once per battle) (in addition to any already active):
-    - Deathly Terror: while an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
-    - Despair: while an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
-    - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
-    - Darkness: this model gains the Stealth ability.
-    - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
-    - Dominion: increase the range of each AURA ability of this model by 3".
-  -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
+                <characteristic name="Description">At the start of the battle round, you can use this ability, if your Army Faction is CHAOS KNIGHTS, during the first battle round or during the third battle round or during the fifth battle round, for the rest of the battle:
+  - At the start of the battle, Deathly Terror is active.
+  - Select one (each can be chosen once per battle) (in addition to any already active):
+    - Deathly Terror: While an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
+    - Despair: While an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
+    - Doom: While the target is Battle-shocked, add 1 to this model's Wound rolls.
+    - Darkness: This model gains the Stealth ability.
+    - Dismay: At the start of the Battle Shock step in your opponent's turn, for each enemy unit: while this unit is below its Starting Strength and this unit is within 9" of this model, that unit must take a Battle-shock test.
+    - Delirium: When an enemy unit within 9" of this model fails a Battle-shock test, while an enemy unit is within 9" of this model, while this unit is Below Half-strength, that unit suffers D3 mortal wounds.
+    - Dominion: Increase the range of each AURA ability of this model by 3".
+  - Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -134,13 +133,12 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged Objective Control" typeName="Abilities">
@@ -150,17 +148,17 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Harbingers of Dread" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the battle round, you may use this ability, if your Army Faction is CHAOS KNIGHTS, during the first battle round or during the third battle round or during the fifth battle round, for the rest of the battle:
-  -&gt; At the start of the battle, Deathly Terror is active.
-  -&gt; Select one (each may be chosen once per battle) (in addition to any already active):
-    - Deathly Terror: while an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
-    - Despair: while an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
-    - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
-    - Darkness: this model gains the Stealth ability.
-    - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
-    - Dominion: increase the range of each AURA ability of this model by 3".
-  -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
+                <characteristic name="Description">At the start of the battle round, you can use this ability, if your Army Faction is CHAOS KNIGHTS, during the first battle round or during the third battle round or during the fifth battle round, for the rest of the battle:
+  - At the start of the battle, Deathly Terror is active.
+  - Select one (each can be chosen once per battle) (in addition to any already active):
+    - Deathly Terror: While an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
+    - Despair: While an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
+    - Doom: While the target is Battle-shocked, add 1 to this model's Wound rolls.
+    - Darkness: This model gains the Stealth ability.
+    - Dismay: At the start of the Battle Shock step in your opponent's turn, for each enemy unit: while this unit is below its Starting Strength and this unit is within 9" of this model, that unit must take a Battle-shock test.
+    - Delirium: When an enemy unit within 9" of this model fails a Battle-shock test, while an enemy unit is within 9" of this model, while this unit is Below Half-strength, that unit suffers D3 mortal wounds.
+    - Dominion: Increase the range of each AURA ability of this model by 3".
+  - Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -239,19 +237,18 @@ You can re-roll the Advance roll.</characteristic>
             </profile>
             <profile name="Executioner" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the target unit is below half strength, the unit gets +1 to Hit rolls.
-If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
+                <characteristic name="Description">While the target unit is Below Half-strength, add 1 to this unit's Hit rolls.
+If this model has destroyed one or more enemy units with those attacks, enemy units within 3" of that unit must take a Battle-shock test.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deadly Demise" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+                <characteristic name="Description">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Damaged Objective Control" typeName="Abilities">
@@ -261,17 +258,17 @@ If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy
             </profile>
             <profile name="Harbingers of Dread" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">At the start of the battle round, you may use this ability, if your Army Faction is CHAOS KNIGHTS, during the first battle round or during the third battle round or during the fifth battle round, for the rest of the battle:
-  -&gt; At the start of the battle, Deathly Terror is active.
-  -&gt; Select one (each may be chosen once per battle) (in addition to any already active):
-    - Deathly Terror: while an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
-    - Despair: while an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
-    - Doom: while the target is Battle-shocked, this model gets +1 to Wound rolls.
-    - Darkness: this model gains the Stealth ability.
-    - Dismay: at the start of the Battle Shock step in your opponent's turn: for each enemy unit: while the unit is below its starting strength, while the unit is within 9" of this model, the unit must take a Battle-shock test.
-    - Delirium: when an enemy unit within 9" of this model fails a Battle-shock test: while an enemy unit is within 9" of this model, while the unit is below half strength, that unit suffers D3 mortal wounds.
-    - Dominion: increase the range of each AURA ability of this model by 3".
-  -&gt; Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
+                <characteristic name="Description">At the start of the battle round, you can use this ability, if your Army Faction is CHAOS KNIGHTS, during the first battle round or during the third battle round or during the fifth battle round, for the rest of the battle:
+  - At the start of the battle, Deathly Terror is active.
+  - Select one (each can be chosen once per battle) (in addition to any already active):
+    - Deathly Terror: While an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
+    - Despair: While an enemy unit is within 9" of this model, worsen that unit's Leadership characteristic by 1.
+    - Doom: While the target is Battle-shocked, add 1 to this model's Wound rolls.
+    - Darkness: This model gains the Stealth ability.
+    - Dismay: At the start of the Battle Shock step in your opponent's turn, for each enemy unit: while this unit is below its Starting Strength and this unit is within 9" of this model, that unit must take a Battle-shock test.
+    - Delirium: When an enemy unit within 9" of this model fails a Battle-shock test, while an enemy unit is within 9" of this model, while this unit is Below Half-strength, that unit suffers D3 mortal wounds.
+    - Dominion: Increase the range of each AURA ability of this model by 3".
+  - Or, instead of selecting, roll two D6: each result applies the option it numbers (1 Despair, 2 Doom, 3 Darkness, 4 Dismay, 5 Delirium, 6 Dominion); a result already active has no additional effect.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -355,24 +352,24 @@ If this model has destroyed 1+ enemy units with its just-resolved attacks, enemy
             </profile>
             <profile name="Infiltrators" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">The unit gains the Infiltrators ability.</characteristic>
+                <characteristic name="Description">This unit gains the Infiltrators ability.</characteristic>
               </characteristics>
             </profile>
             <profile name="Mischief Makers" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
+                <characteristic name="Description">When an enemy unit (excluding TITANIC units) is selected to fight, while the triggering unit is within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, subtract 1 from the triggering unit's Hit rolls.</characteristic>
               </characteristics>
             </profile>
             <profile name="Deep Strike" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+                <characteristic name="Description">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
               </characteristics>
             </profile>
             <profile name="The Shadow of Chaos" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description">If your Army Faction is CHAOS DAEMONS, your deployment zone is within The Shadow of Chaos. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within The Shadow of Chaos until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within The Shadow of Chaos until the end of the phase (evaluated once at that time).
--&gt; When a friendly unit takes a Battle-shock test (the triggering unit must have LEGIONES DAEMONICA): if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, the triggering unit gets +1 to Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword and the triggering battle shock roll succeeded, one model in the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.
--&gt; When an enemy unit takes a Battle-shock test: if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, the triggering unit gets -1 to Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds.</characteristic>
+When a friendly LEGIONES DAEMONICA unit takes a Battle-shock test, if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, add 1 to the triggering unit's Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword and the triggering battle shock roll succeeded, one model in the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword and the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.
+When an enemy unit takes a Battle-shock test, if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, subtract 1 from the triggering unit's Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>

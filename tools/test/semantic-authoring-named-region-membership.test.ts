@@ -182,7 +182,7 @@ describe("a terrain feature a rule tags: apply-mark visible-terrain and in-regio
     expect(json).toContain('"region":{"terrain_area":{"designated":"identified"}}');
     const check = checkEntry(entryWithMechanics(base(), result.mechanics as never));
     expect(check.errors).toEqual([]);
-    expect(check.rendered_text).toContain("One visible terrain area is marked as identified");
+    expect(check.rendered_text).toContain("One visible terrain area is Identified.");
   });
 
   it("refuses a terrain tag with an applier, a designation outside the registry, and a designation on another region kind", () => {

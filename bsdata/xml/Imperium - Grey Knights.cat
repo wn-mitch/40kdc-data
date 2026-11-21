@@ -804,13 +804,12 @@
         </profile>
         <profile name="Deadly Demise" id="0a32-be64-f65f-9170" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="c97e-7d69-a0b1-3827" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -990,31 +989,30 @@
         </profile>
         <profile name="Deadly Demise" id="cae2-8b92-47c4-6e61" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="54c9-a9ca-4855-45e3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Surge of Wrath (Psychic)" id="3caa-56f9-f23c-70c4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While making melee attacks against MONSTER or VEHICLE targets:
-  -&gt; You can re-roll the Hit roll for attacks made by this model.
-  -&gt; You can re-roll the Wound roll for attacks made by this model.
-  -&gt; You can re-roll the Damage roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks against MONSTER or VEHICLE targets, you can use this ability:
+  - You can re-roll Hit rolls for attacks made by this model.
+  - You can re-roll Wound rolls for attacks made by this model.
+  - You can re-roll Damage rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="57dd-b5b5-1048-8840" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Warrior Strategist" id="7cd3-313d-f001-fb73" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, you may use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, you can use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1435,13 +1433,12 @@
         </profile>
         <profile name="Deadly Demise" id="477a-7ddc-058a-3e4c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="d051-e94e-1896-3e13" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1621,24 +1618,24 @@
         </profile>
         <profile name="Leader" id="b27a-8597-08bd-2627" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Might of Titan (Psychic)" id="9c47-e410-17bc-986f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, once per battle per unit, until the end of the phase:
-  -&gt; Improve the Attacks characteristic of melee weapons equipped by this model by 3.
-  -&gt; Improve the Strength characteristic of melee weapons equipped by this model by 3.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability, once per battle per unit, until the end of the phase:
+  - Improve the Attacks characteristic of melee weapons equipped by this model by 3.
+  - Improve the Strength characteristic of melee weapons equipped by this model by 3.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="4573-9ce6-e383-a087" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Warrior Strategist" id="effa-5578-f362-cfdb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, you may use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, you can use this ability, once per battle round per army, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1796,14 +1793,13 @@
         </profile>
         <profile name="Fire Focus" id="9008-b551-c2eb-956e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (each unit can be selected for this ability at most once per turn across your army) (your Fire Focus Target). Until the end of the turn, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, improve the Armour Penetration characteristic of that attack by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the turn:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (each unit can be selected for this ability at most once per turn across your army) (your Fire Focus Target). Until the end of the turn, each time a friendly unit makes an attack against it, if the attacking unit disembarked from this Transport this turn, improve the Armour Penetration characteristic of that attack by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="00d7-88ad-058e-e707" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1970,13 +1966,13 @@
       <profiles>
         <profile name="Sanctity of Purpose" id="69e2-98c1-dda2-4157" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is not within range of an objective marker, you can re-roll a Wound roll of 1.
-While the target is within range of an objective marker, you can re-roll the Wound roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is not within range of an objective marker, you can re-roll Wound rolls of 1.
+While the target is within range of an objective marker, you can re-roll Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="9bd0-781a-b257-5b02" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2275,18 +2271,17 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deep Strike" id="bc0a-9987-78c5-c46d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="2c32-bd8e-46e8-754b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="e0fe-3de6-fcee-22ec" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2464,18 +2459,17 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deadly Demise" id="d1c6-9d4c-53ad-b414" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Hover" id="8848-d8f4-3443-ff5c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit uses ability, the unit's Takes to the Skies ability has no limit on its range.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit uses ability, this unit's Takes to the Skies ability has no limit on its range.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="a233-ed75-affc-3e9c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2637,18 +2631,17 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Firing Deck" id="f811-ea01-6aa4-ceda" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Firing Deck X ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Truesilver Aegis (Aura)" id="a926-4c33-0949-1f21" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly GREY KNIGHTS unit is wholly within 6" of this unit, that unit has the Feel No Pain 6+ ability against mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly GREY KNIGHTS unit is wholly within 6" of this unit, that unit has Feel No Pain 6+ against mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="5da3-c426-3ce3-3cf7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2788,7 +2781,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Eye of Judgement (Psychic)" id="4443-2b60-bcfe-7e16" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll the Wound roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can re-roll Wound rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Hammerhand (Psychic)" id="8bbb-21b4-6eee-2f0c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2798,12 +2791,12 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Leader" id="cb43-f9f7-19f1-b70d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="a50b-af09-3d7c-9728" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2961,19 +2954,18 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deadly Demise" id="4f0d-7415-afe6-1a33" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Guidance of the Ancients (Psychic)" id="4474-c237-5101-1576" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Guidance of the Ancients target). Until the end of the phase, each time a friendly unit makes an attack against it, all friendly GREY KNIGHTS models get +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Guidance of the Ancients target). Until the end of the phase, each time a friendly unit makes an attack against it, add 1 to friendly GREY KNIGHTS models' Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="4f44-d3ab-010e-2950" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3140,17 +3132,17 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Foesight (Psychic)" id="3bad-0e33-5893-964f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against CHARACTER targets, you can re-roll the Hit roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against CHARACTER targets, you can re-roll Hit rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="b088-ee6b-143a-1f38" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="ffba-4bea-f9c9-7396" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3240,17 +3232,17 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
       <profiles>
         <profile name="Sanctifying Ritual (Psychic)" id="4758-71aa-a392-1088" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="39ad-8d91-cf9c-c89c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="e252-aaef-9c8a-f359" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3512,23 +3504,23 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Blessing of the Omnissiah" id="d037-bf36-81d9-050e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, until the start of your next Command phase:
-  -&gt; Select one friendly GREY KNIGHTS VEHICLE model if the selected unit is within 3" of this model (each model can be selected for this ability at most once per turn across your army):
-    -&gt; That model regains up to D3 lost wounds.
-    -&gt; That model gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, until the start of your next Command phase, you can use this ability:
+  - Select one friendly GREY KNIGHTS VEHICLE model that is within 3" of this model (each model can be selected for this ability at most once per turn across your army):
+    - That model regains up to D3 lost wounds.
+    - Add 1 to that model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Guardians of the Machine" id="ad3e-0d92-47f2-f501" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a Charge move, you may use this ability, while the triggering unit is within Engagement Range of a friendly GREY KNIGHTS VEHICLE unit, while the triggering unit is within 6" of the unit:
-  -&gt; The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
-  -&gt; Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-  -&gt; The unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a Charge move, you can use this ability, while the triggering unit is within Engagement Range of a friendly GREY KNIGHTS VEHICLE unit and the triggering unit is within 6" of this unit:
+  - This unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
+  - Reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+  - This unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="1840-4dd5-34a4-cb26" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Techmarine" id="b547-79f4-2033-e47c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3538,7 +3530,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deep Strike" id="b8e8-bafc-ab81-c0bb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3641,22 +3633,22 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Haloed in Soulfire (Psychic)" id="58f7-12b7-97b1-7968" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while the attacking unit is within 18" of the unit, enemy units can target the unit with attacks.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit and the attacking unit is within 18" of this unit, enemy units can target this unit with attacks.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="b957-f052-d2d0-91da" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sanctic Hood" id="03d1-3e58-ab82-2835" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit has the Feel No Pain 4+ ability against Psychic Attacks.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit has Feel No Pain 4+ against Psychic Attacks.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="633b-43a1-9b84-8ed0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3795,24 +3787,24 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Clarion of Haste (Psychic)" id="7d6a-3a3d-96b6-d0a6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
           </characteristics>
         </profile>
         <profile name="Inspiring Exemplar" id="68c0-5c3d-2e57-40c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this model destroys an enemy CHARACTER model, during the Fight phase, for the rest of the battle:
-  -&gt; You gain 1CP.
-  -&gt; Add 1 to the Attacks characteristic of melee nemesis force weapons equipped by this model.</characteristic>
+  - You gain 1 CP.
+  - Add 1 to the Attacks characteristic of melee nemesis force weapons equipped by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="0f0c-ba2b-c225-b928" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="dc48-640d-5b22-7f2d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3896,16 +3888,16 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
       <profiles>
         <profile name="Righteous Persecution" id="5713-8a19-f908-cc2d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the start of your next turn:
-  -&gt; Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; That unit is marked as pinned.
-    -&gt; While the selected unit is tagged pinned, subtract 2 from that unit's Move characteristic.
-    -&gt; While the selected unit is tagged pinned, that unit gets -2 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the start of your next turn:
+  - Select one enemy unit without the MONSTER or VEHICLE keyword and that was hit by an attack made by the triggering unit during that shooting sequence:
+    - That unit is Pinned.
+    - While the selected unit is Pinned, subtract 2" from that unit's Move characteristic.
+    - While the selected unit is Pinned, subtract 2 from that unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="27d4-e905-dd30-a9a1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4172,13 +4164,12 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Strafing Run" id="ef7d-062e-054e-9534" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against a unit that is not a FLY, this model gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against a unit that is not a FLY, add 1 to this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="6b36-d59b-aea6-ea33" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4317,14 +4308,14 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
       <profiles>
         <profile name="Personal Teleporters" id="2f3d-722f-dbf7-e579" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, you may use this ability, during the Shooting phase, in your turn, while the unit is unengaged, until the end of the turn:
-  -&gt; The unit can make a Normal move of up to 6" as if it were your Movement phase.
-  -&gt; The unit cannot declare a charge.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, you can use this ability, during your Shooting phase, while this unit is unengaged, until the end of the turn:
+  - This unit can make a Normal move of up to 6" as if it were your Movement phase.
+  - This unit cannot declare a charge.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="bd5b-e065-6c32-8343" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4589,13 +4580,12 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Leader" id="d812-feef-debc-0742" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Litanies of Sanctity" id="6e45-2ad4-6307-5b5d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per unit:
-  -&gt; Select one friendly GREY KNIGHTS unit if the selected unit is Battle-shocked and the selected unit is within 12" of this model: that unit is no longer Battle-shocked.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per unit, select one friendly GREY KNIGHTS unit that is Battle-shocked and within 12" of this model. That unit is no longer Battle-shocked.</characteristic>
           </characteristics>
         </profile>
         <profile name="Zealous Path" id="92e5-58e3-5a98-9738" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4605,7 +4595,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deep Strike" id="2cb8-621d-680b-ccd4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4699,12 +4689,12 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
       <profiles>
         <profile name="Attuned Onslaught (Psychic)" id="2599-10b9-698a-165a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, until the end of the turn, add 1 to the Damage characteristic of melee weapons equipped by PALADIN SQUAD models in the unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move, until the end of the turn, add 1 to the Damage characteristic of melee weapons equipped by PALADIN SQUAD models in this unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="bb00-3be0-469d-56cb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5362,13 +5352,12 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deadly Demise" id="ceca-66f4-cc03-8ce1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="b1d9-a9c2-2666-fc53" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5538,9 +5527,9 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Hammer Aflame (Psychic)" id="84c6-f80b-b7c9-5531" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit:
-    -&gt; Roll one D6:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability:
+  - Select one enemy unit that is within Engagement Range of this unit:
+    - Roll one D6:
       - On 1: Nothing happens.
       - On 2-3: That unit suffers 1 mortal wound.
       - On 4-5: That unit suffers D3 mortal wounds.
@@ -5549,18 +5538,18 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Leader" id="f0e2-3054-9902-13b4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sanctuary (Psychic)" id="7961-ac5d-48b1-a88c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Stealth ability.
-Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Stealth ability.
+Against melee attacks, subtract 1 from the attacking unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="3e34-95ad-d8d8-e4ba" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5660,12 +5649,12 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Force Edge (Psychic)" id="1eb7-aa20-70bb-e9e8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while the target does not have the MONSTER or VEHICLE keyword, improve the unit's Armour Penetration characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while the target does not have the MONSTER or VEHICLE keyword, improve this unit's Armour Penetration characteristic by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="f8b0-bd04-7c4f-9634" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6307,13 +6296,12 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
         </profile>
         <profile name="Interceptor" id="e329-c53a-8a79-b520" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against FLY targets, this model gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making ranged attacks against FLY targets, add 1 to this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="d1a6-f451-7d72-15fa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6484,23 +6472,22 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
         </profile>
         <profile name="Armoured Resilience" id="cfa7-2219-a7ce-9cf0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 1 from the attacking unit's Damage characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 1 from the Damage characteristic of the attacking unit's attacks.</characteristic>
           </characteristics>
         </profile>
         <profile name="Hover" id="cbd2-e88c-4a65-2305" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time the unit uses ability, the unit's Takes to the Skies ability has no limit on its range.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this unit uses ability, this unit's Takes to the Skies ability has no limit on its range.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="4286-36e4-6efe-c003" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="b7f8-1aac-e585-38ab" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7358,8 +7345,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Thunderhawk Cluster Bombs" id="b700-b479-65c8-58bf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit was moved over by this model during that move: roll 6 D6: for each 3+, that unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, you can use this ability, select one enemy unit that was moved over by this model during that move. Roll 6 D6: for each 3+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8167,7 +8153,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Apothecary's Narthecium" id="32fe-126c-4a63-79fd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: During the Command phase, in your turn, while this model is on the battlefield, return 1 destroyed model (excluding CHARACTER models) to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Command phase, while this model is on the battlefield, you can return 1 destroyed model (excluding CHARACTER models) to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8179,7 +8165,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Ancient's Banner" id="bfae-ffa3-7306-4063" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to the unit's Objective Control characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Objective Control characteristic.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8499,8 +8485,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
               </constraints>
               <rules>
                 <rule name="Prescient Redeployment" id="1306-145d-e869-aea1" hidden="false">
-                  <description>At the start of your Movement phase, if during the second battle round onward and the gate of infinity grey knights ability had unused selection capacity at the end of the opponent's previous turn, you may use this ability, when resolving this use:
-  -&gt; Select one friendly GREY KNIGHTS unit that is on the battlefield and the candidate was eligible for the gate of infinity grey knights ability at the end of the opponent's previous turn: that unit can be placed into Strategic Reserves.</description>
+                  <description>At the start of your Movement phase, if during the second battle round onward and the gate of infinity grey knights ability had unused selection capacity at the end of your opponent's previous turn, you can use this ability, for this activation, select one friendly GREY KNIGHTS unit if this unit is on the battlefield and the candidate was eligible for the gate of infinity grey knights ability at the end of your opponent's previous turn. That unit can be placed into Strategic Reserves.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8517,8 +8502,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
               </constraints>
               <rules>
                 <rule name="Channelled Force" id="fe3b-9653-6099-06f7" hidden="false">
-                  <description>When a friendly unit is selected to fight, if the unit has the GREY KNIGHTS keyword, you may use this ability, until the end of the phase:
-  -&gt; The triggering unit takes a Leadership test (2D6, passing on its current Leadership or higher); if passed, select one of the following: melee weapons with [PSYCHIC] equipped by the triggering unit gain [SUSTAINED HITS 1] / melee weapons with [PSYCHIC] equipped by the triggering unit gain [LETHAL HITS].</description>
+                  <description>When a friendly unit is selected to fight, if this unit has the GREY KNIGHTS keyword, you can use this ability, until the end of the phase, the triggering unit takes a Leadership test; if passed, choose one of the following: melee weapons with [PSYCHIC] equipped by that unit gain [SUSTAINED HITS 1] / melee weapons with [PSYCHIC] equipped by that unit gain [LETHAL HITS].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8535,7 +8519,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
               </constraints>
               <rules>
                 <rule name="Hallowed Ground" id="8cf0-eca8-b3ec-5c94" hidden="false">
-                  <description>Your deployment zone is within Hallowed Ground. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Hallowed Ground until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Hallowed Ground until the end of the phase (evaluated once at that time). The area within 6" of one or more friendly PURIFIER SQUAD units is within Hallowed Ground, continuously as those units move. For each qualifying attack (for melee attacks or (for ranged attacks and the target is visible to the attacking model)): You can re-roll a Hit roll of 1. If the unit has the PURIFIER SQUAD keyword or every model in the unit is wholly within Hallowed Ground, you can re-roll the Hit roll instead.</description>
+                  <description>Your deployment zone is within Hallowed Ground. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within Hallowed Ground until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within Hallowed Ground until the end of the phase (evaluated once at that time). The area within 6" of one or more friendly PURIFIER SQUAD units is within Hallowed Ground, continuously as those units move. For each qualifying attack (for melee attacks or (for ranged attacks and the target is visible to the attacking model)): You can re-roll Hit rolls of 1. If this unit has the PURIFIER SQUAD keyword or every model in this unit is wholly within Hallowed Ground, you can re-roll Hit rolls instead.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8553,8 +8537,8 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
               <rules>
                 <rule name="Fury of Titan" id="d1f5-6ced-2862-2d9a" hidden="false">
                   <description>When a friendly unit is set up, if the triggering unit is using Deep Strike, until the end of the turn:
-  -&gt; You can re-roll a Hit roll of 1 for attacks made by the triggering unit.
-  -&gt; You can re-roll a Wound roll of 1 for attacks made by the triggering unit.</description>
+  - You can re-roll Hit rolls of 1 for attacks made by that unit.
+  - You can re-roll Wound rolls of 1 for attacks made by that unit.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8571,8 +8555,8 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
               </constraints>
               <rules>
                 <rule name="Duty Before All" id="e466-2875-80ee-da94" hidden="false">
-                  <description>All friendly GREY KNIGHTS TERMINATOR units are eligible to shoot in a turn in which they Fell Back.
-All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a turn in which they Fell Back.</description>
+                  <description>Friendly GREY KNIGHTS TERMINATOR units are eligible to shoot in a turn in which they Fell Back.
+Friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a turn in which they Fell Back.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8589,9 +8573,9 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
               </constraints>
               <rules>
                 <rule name="Mailed Fist" id="46a7-73d2-68af-1c4d" hidden="false">
-                  <description>Each time a friendly unit starts an Advance move (the triggering unit must have GREY KNIGHTS and VEHICLE):
-  -&gt; Until the end of the phase: the triggering unit does not make an Advance roll; add 6" to its Move characteristic instead.
-  -&gt; Until the end of the turn: ranged weapons equipped by the triggering unit gain [ASSAULT].</description>
+                  <description>Each time a friendly GREY KNIGHTS VEHICLE unit starts an Advance move:
+  - Until the end of the phase, that unit does not make an Advance roll; add 6" to its Move characteristic instead.
+  - Until the end of the turn, ranged weapons equipped by that unit gain [ASSAULT].</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8608,7 +8592,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
               </constraints>
               <rules>
                 <rule name="DAUNTLESS CHAMPIONS" id="57a6-57a4-9f2f-cf4a" hidden="false">
-                  <description>When a friendly unit is selected to fight (the triggering unit must have PALADIN SQUAD), when the attack's S is less than the target's T, until the end of the phase, the unit gets +1 to Wound rolls.</description>
+                  <description>When a friendly PALADIN SQUAD unit is selected to fight, when the attack's S is less than the target's T, until the end of the phase, add 1 to that unit's Wound rolls.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8642,9 +8626,9 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
               </constraints>
               <rules>
                 <rule name="ECHOJUMP" id="e20c-6c94-f406-709a" hidden="false">
-                  <description>After a friendly unit shoots (the triggering unit must have INTERCEPTOR SQUAD), you may use this ability, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; The triggering unit loses the Personal Teleporters ability.
-  -&gt; The triggering unit can make a Surge move of up to D6+1".</description>
+                  <description>After a friendly INTERCEPTOR SQUAD unit shoots, you can use this ability, during your Shooting phase, until the end of the phase:
+  - That unit loses the Personal Teleporters ability.
+  - That unit can make a Surge move of up to D6+1".</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -8699,7 +8683,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Grimoire of Conjunctions" id="676f-cb10-9d22-9156" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, once per battle per model, until the end of the phase, add 4 to the Strength characteristic of melee weapons equipped by this model.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability, once per battle per model, until the end of the phase, add 4 to the Strength characteristic of melee weapons equipped by this model.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8738,7 +8722,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Shield of Prophecy" id="14bc-11dd-2bec-32a3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, you may use this ability, once per battle per model, until the end of the battle round, add 2 to the unit's Toughness characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the battle round, you can use this ability, once per battle per model, until the end of the battle round, add 2 to this unit's Toughness characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8777,9 +8761,9 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="One Foot in the Future" id="3970-d837-e14b-e1b3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, you may use this ability, until the end of the turn:
-  -&gt; The unit can make a Normal move of up to D6".
-  -&gt; The unit cannot declare a charge.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, you can use this ability, until the end of the turn:
+  - This unit can make a Normal move of up to D6".
+  - This unit cannot declare a charge.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8818,8 +8802,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Doomseer's Amulet" id="c870-24e5-d981-7e6e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is within 12" of this model and the selected unit is visible to this model: that unit must take a Battle-shock test, applying -1 to that test.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, you can use this ability, select one enemy unit that is within 12" of this model and visible to this model. That unit must take a Battle-shock test, applying -1 to that test.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8858,7 +8841,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Sigil of the Hunt" id="fac7-3215-9d72-c48f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn, you can re-roll a Hit roll of 1.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase, you can re-roll Hit rolls of 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8895,9 +8878,9 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Ephemeral Tome" id="7757-6ee2-13f4-20a5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, you may use this ability, while the unit is unengaged, until the end of the turn:
-  -&gt; The unit can make a Normal move of up to D6".
-  -&gt; The unit cannot declare a charge.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, you can use this ability, while this unit is unengaged, until the end of the turn:
+  - This unit can make a Normal move of up to D6".
+  - This unit cannot declare a charge.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8936,7 +8919,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Sixty-sixth Seal" id="c68c-01cb-aa86-a6d8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn, improve the unit's Armour Penetration characteristic by 1.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase, improve this unit's Armour Penetration characteristic by 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -8975,8 +8958,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Pyresoul (Psychic)" id="b16d-1651-b11a-dfa1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is within 24" of this model and the selected unit is visible to this model: that unit suffers D3 mortal wounds.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, you can use this ability, select one enemy unit that is within 24" of this model and visible to this model. That unit suffers D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9015,7 +8997,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Mandulian Reliquary" id="3ad1-b109-9150-29dc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit is not Battle-shocked, add 3 to this model's Objective Control characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit is not Battle-shocked, add 3 to this model's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9053,7 +9035,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
             <profile name="Radiant Champion" id="5bed-0828-1729-4a49" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Melee weapons equipped by this model gain [PRECISION].
--&gt; Each time an attack made by this model scores a wound: while this model is wholly within Hallowed Ground, while making melee attacks, the target suffers 1 mortal wound.</characteristic>
+Each time an attack made by this model scores a wound, while this model is wholly within Hallowed Ground, while making melee attacks, the target suffers 1 mortal wound.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9090,7 +9072,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Phial of the Abyss" id="62a3-6041-88a2-8158" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Stealth ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Stealth ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9129,8 +9111,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Paragon of Sanctity" id="06b7-7040-924f-cea8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per model, until the end of the phase:
-  -&gt; Select one friendly GREY KNIGHTS unit if the selected unit is within 18" of this model and the selected unit is visible to this model: that unit counts as being within Hallowed Ground.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per model, until the end of the phase, select one friendly GREY KNIGHTS unit that is within 18" of this model and visible to this model. That unit counts as being within Hallowed Ground.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9169,12 +9150,12 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Banishing Wave (Psychic)" id="67ad-0867-d3b8-0140" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is set up, if the unit is using Deep Strike:
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is set up, if this unit is using Deep Strike:
   For each enemy unit within 12" of this model:
-    -&gt; Roll one D6:
+    - Roll one D6:
       - On 1: Nothing happens.
-      - On 2-5: The unit suffers 1 mortal wound.
-      - On 6: The unit suffers D3 mortal wounds.</characteristic>
+      - On 2-5: That unit suffers 1 mortal wound.
+      - On 6: That unit suffers D3 mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9213,7 +9194,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Blinding Aura" id="f4ea-83be-0d00-8bf5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is set up, if the unit is using Deep Strike, until the end of the turn, enemy units cannot target the unit with the Fire Overwatch Stratagem.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is set up, if this unit is using Deep Strike, until the end of the turn, enemy units cannot target this unit with the Fire Overwatch Stratagem.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9252,7 +9233,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Purity of Purpose" id="c577-5f45-30b6-b5f3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is set up, if the unit is using Deep Strike, you may use this ability, until the end of the turn, you can re-roll the Charge roll.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is set up, if this unit is using Deep Strike, you can use this ability, until the end of the turn, you can re-roll the Charge roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9291,7 +9272,7 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Tome of Forbidden Ways" id="acf6-ed30-492b-6c4d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While this model is on the battlefield or while this model is in Strategic Reserves, increase the number of selections of this model's Gate of Infinity ability by 1.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is on the battlefield or while this model is in Strategic Reserves, you can increase the number of selections of this model's Gate of Infinity ability by 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9330,9 +9311,9 @@ All friendly GREY KNIGHTS TERMINATOR units are eligible to declare a charge in a
           <profiles>
             <profile name="Eye of the Augurium" id="88b2-f242-e926-f785" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
-Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-The unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can use this ability: This unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
+Reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+This unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9441,7 +9422,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
           <profiles>
             <profile name="Nemesis Rounds" id="5e65-2796-fced-f164" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target the unit with the Fire Overwatch Stratagem, when resolving this use, the unit's Hit rolls succeed only on an unmodified 5+.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target this unit with the Fire Overwatch Stratagem, for this activation, this unit's Hit rolls succeed only on an unmodified 5+.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9474,7 +9455,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
           <profiles>
             <profile name="Driven by Duty" id="061c-6eaf-eca4-31a4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit starts a Pile-in or Consolidation move, add 3" to this model's Pile-in and Consolidation moves.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit starts a Pile-in or Consolidation move, add 3" to this model's Pile-in and Consolidation moves.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9511,7 +9492,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
           <profiles>
             <profile name="Quickening Foci" id="0fcc-7e23-5f97-9b3c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit disembarks from a Transport, during the Movement phase, in your turn, until the end of the turn, you can re-roll the Charge roll.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit disembarks from a Transport, during your Movement phase, until the end of the turn, you can re-roll the Charge roll.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9587,7 +9568,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
           <profiles>
             <profile name="Spiritus Machina" id="825a-8d40-ddd5-67ce" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to shoot, during the Shooting phase, in your turn, if the unit disembarked from a Transport this turn, until the end of the phase, you can re-roll the Wound roll.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, during your Shooting phase, if this unit disembarked from a Transport this turn, until the end of the phase, you can re-roll Wound rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9622,7 +9603,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
           <profiles>
             <profile name="Psychic Celerity" id="9043-3cba-526f-c825" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gets +1 to Charge rolls.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Charge rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9657,8 +9638,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
           <profiles>
             <profile name="Vigilance of Titan" id="59e0-74c8-3da3-e6e2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, you may use this ability, until the end of the phase:
-  -&gt; Select one enemy unit within 12" of the unit visible to this model: add 6 to that unit's detection range characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your Shooting phase, you can use this ability, until the end of the phase, select one enemy unit within 12" of this unit visible to this model. Add 6" to that unit's detection range.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9686,7 +9666,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
           <profiles>
             <profile name="Precognicient Volleys (Upgrade)" id="6ebd-77a2-d5c2-e3bf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making snap shooting attacks, the unit's Hit rolls succeed only on an unmodified 5+.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making snap shooting attacks, this unit's Hit rolls succeed only on an unmodified 5+.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9742,7 +9722,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
           <profiles>
             <profile name="Predestined Coordinates (Upgrade)" id="a2f3-3faa-4c6b-d412" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the first battle round, during the Movement phase, in your turn, the unit can make an Ingress move.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the first battle round, during your Movement phase, this unit can make an Ingress move.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9770,7 +9750,7 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
           <profiles>
             <profile name="Astral Overlap (Upgrade)" id="3b43-463d-fa09-da2c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Stealth ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Stealth ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -9784,8 +9764,8 @@ The unit's Heroic Intervention ability has no limit on its number of uses, and t
   </sharedSelectionEntryGroups>
   <sharedRules>
     <rule name="Gate of Infinity" id="1426-6657-b497-fa07" hidden="false">
-      <description>At the end of your opponent's Fight phase, you may use this ability, if your Army Faction is GREY KNIGHTS:
-  -&gt; Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) if the selected unit is on the battlefield and the selected unit is unengaged and the selected unit has the Gate of Infinity Crowes Sanctifiers ability: that unit can be placed into Strategic Reserves; it arrives in the Reinforcements step of your next Movement phase, even in the first battle round.</description>
+      <description>At the end of your opponent's Fight phase, you can use this ability, if your Army Faction is GREY KNIGHTS:
+  - Select up to 2/3/4 friendly units (Incursion/Strike Force/Onslaught) that is on the battlefield and unengaged and with the Gate of Infinity Crowes Sanctifiers ability. Those units can be placed into Strategic Reserves; they arrive in the Reinforcements step of your next Movement phase, even in the first battle round.</description>
     </rule>
   </sharedRules>
   <catalogueLinks>

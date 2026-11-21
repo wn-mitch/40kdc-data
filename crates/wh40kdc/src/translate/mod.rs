@@ -66,7 +66,7 @@ fn phase_word(p: Phase) -> &'static str {
 /// fifth-round moment: "End of your Command phase (round 2+), or end of your turn in round 5".
 pub fn describe_trigger(t: &ScoringTrigger) -> String {
     let turn = match t.player_turn {
-        Some(PlayerTurn::OpponentTurn) => "the opponent's",
+        Some(PlayerTurn::OpponentTurn) => "your opponent's",
         Some(PlayerTurn::Either) => "any",
         _ => "your",
     };
@@ -234,14 +234,14 @@ mod tests {
                 "type": "controls",
                 "parameters": { "objective": { "role": "central" }, "count": { "min": 1 } }
             }))),
-            "you control 1+ central objectives"
+            "you control one or more central objectives"
         );
         assert_eq!(
             describe_condition(&condition(serde_json::json!({
                 "type": "controls",
                 "parameters": { "compare": { "comparison": "gt", "owner": "enemy" } }
             }))),
-            "you hold more objectives than the opponent"
+            "you hold more objectives than your opponent"
         );
         assert_eq!(
             describe_condition(&condition(serde_json::json!({
@@ -253,7 +253,7 @@ mod tests {
                     "count": { "min": 1 }
                 }
             }))),
-            "1+ enemy units destroyed this turn"
+            "one or more enemy units destroyed this turn"
         );
         // Negation is only the `not` operator; a single negated predicate reads inline.
         assert_eq!(
@@ -261,7 +261,7 @@ mod tests {
                 "operator": "not",
                 "operands": [{ "type": "matches", "parameters": { "filter": { "state": "engaged" } } }]
             }))),
-            "the unit is unengaged"
+            "this unit is unengaged"
         );
     }
 }

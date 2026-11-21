@@ -382,26 +382,26 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Striding Colossus" id="9041-006f-ebd9-b8b3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, Stratagems that target the unit cost three times their stated CP cost.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, Stratagems that target this unit cost three times their stated CP cost.</characteristic>
           </characteristics>
         </profile>
         <profile name="Super-heavy Walker" id="fac1-4545-f3e4-fc42" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When this model ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over non-Titanic models as though they were not there.
-  -&gt; The triggering unit can move over terrain features 4" or lower as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The triggering unit can move over terrain features over 4" as though they were not there.
--&gt; When this model moves through terrain over 4" tall:
-  -&gt; Roll one D6:
-    - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over non-Titanic models as though they were not there.
+  - The triggering unit can move over terrain features 4" or lower as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - The triggering unit can move over terrain features over 4" as though they were not there.
+When this model moves through terrain over 4" tall:
+  - Roll one D6:
+    - On 1: This unit is Battle-shocked.
     - On 2-6: Nothing happens.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="388b-5f6f-ddcc-7499" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="f37b-8bc8-012d-6300" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -411,8 +411,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deadly Demise" id="2c03-a5e9-a6c3-d8e4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -822,32 +821,32 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Striding Colossus" id="a200-f566-39e9-83fc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, Stratagems that target the unit cost three times their stated CP cost.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, Stratagems that target this unit cost three times their stated CP cost.</characteristic>
           </characteristics>
         </profile>
         <profile name="Super-heavy Walker" id="ef77-f0e0-84b1-9110" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When this model ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over non-Titanic models as though they were not there.
-  -&gt; The triggering unit can move over terrain features 4" or lower as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The triggering unit can move over terrain features over 4" as though they were not there.
--&gt; When this model moves through terrain over 4" tall:
-  -&gt; Roll one D6:
-    - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over non-Titanic models as though they were not there.
+  - The triggering unit can move over terrain features 4" or lower as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - The triggering unit can move over terrain features over 4" as though they were not there.
+When this model moves through terrain over 4" tall:
+  - Roll one D6:
+    - On 1: This unit is Battle-shocked.
     - On 2-6: Nothing happens.</characteristic>
           </characteristics>
         </profile>
         <profile name="Titanic Fire Support" id="0b52-b0dc-3ca5-92b9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly IMPERIUM unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly IMPERIUM unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="af3b-5e5c-8b95-cc30" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="a585-60bd-339b-3ca9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -857,8 +856,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deadly Demise" id="1499-fb33-9202-58bf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1094,26 +1092,26 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Flank Speed" id="4755-e061-01ab-f485" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an Advance move, until the end of the phase, the unit does not make an Advance roll; add 8" to its Move characteristic instead.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Advance move, until the end of the phase, this unit does not make an Advance roll; add 8" to its Move characteristic instead.</characteristic>
           </characteristics>
         </profile>
         <profile name="Super-heavy Walker" id="0714-f70c-5374-2c0c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When this model ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over non-Titanic models as though they were not there.
-  -&gt; The triggering unit can move over terrain features 4" or lower as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The triggering unit can move over terrain features over 4" as though they were not there.
--&gt; When this model moves through terrain over 4" tall:
-  -&gt; Roll one D6:
-    - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over non-Titanic models as though they were not there.
+  - The triggering unit can move over terrain features 4" or lower as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - The triggering unit can move over terrain features over 4" as though they were not there.
+When this model moves through terrain over 4" tall:
+  - Roll one D6:
+    - On 1: This unit is Battle-shocked.
     - On 2-6: Nothing happens.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="ea40-5deb-d6cf-b68d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="5404-9d6f-7625-be82" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1123,13 +1121,12 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deadly Demise" id="fe58-ee83-a849-1c3e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Striding Colossus" id="80a1-1017-ffac-e493" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, Stratagems that target the unit cost twice their stated CP cost.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, Stratagems that target this unit cost twice their stated CP cost.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1313,27 +1310,27 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Super-heavy Walker" id="27be-4534-91d5-bf64" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When this model ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over non-Titanic models as though they were not there.
-  -&gt; The triggering unit can move over terrain features 4" or lower as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The triggering unit can move over terrain features over 4" as though they were not there.
--&gt; When this model moves through terrain over 4" tall:
-  -&gt; Roll one D6:
-    - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over non-Titanic models as though they were not there.
+  - The triggering unit can move over terrain features 4" or lower as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - The triggering unit can move over terrain features over 4" as though they were not there.
+When this model moves through terrain over 4" tall:
+  - Roll one D6:
+    - On 1: This unit is Battle-shocked.
     - On 2-6: Nothing happens.</characteristic>
           </characteristics>
         </profile>
         <profile name="Wrath of the Omnissiah" id="f0bb-1ac7-cc0d-7634" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6566-a8c4-82cf-37e2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="c33f-be0f-6bca-16e4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -1343,13 +1340,12 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deadly Demise" id="bedc-bedc-4374-d039" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Striding Colossus" id="f155-8f8d-b0fc-8e04" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, Stratagems that target the unit cost 4 times their stated CP cost.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, Stratagems that target this unit cost 4 times their stated CP cost.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2141,26 +2137,26 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Striding Colossus" id="e840-8393-fe89-5359" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, Stratagems that target the unit cost three times their stated CP cost.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, Stratagems that target this unit cost three times their stated CP cost.</characteristic>
           </characteristics>
         </profile>
         <profile name="Super-heavy Walker" id="99ba-5bd4-6ec7-0807" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When this model ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over non-Titanic models as though they were not there.
-  -&gt; The triggering unit can move over terrain features 4" or lower as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The triggering unit can move over terrain features over 4" as though they were not there.
--&gt; When this model moves through terrain over 4" tall:
-  -&gt; Roll one D6:
-    - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over non-Titanic models as though they were not there.
+  - The triggering unit can move over terrain features 4" or lower as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - The triggering unit can move over terrain features over 4" as though they were not there.
+When this model moves through terrain over 4" tall:
+  - Roll one D6:
+    - On 1: This unit is Battle-shocked.
     - On 2-6: Nothing happens.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6fe1-de2c-e681-f96e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="4c76-0b99-9628-d999" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2170,8 +2166,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deadly Demise" id="bf9e-57e6-e18a-5ef8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2570,32 +2565,32 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Striding Colossus" id="8c93-850f-780f-05f8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, Stratagems that target the unit cost three times their stated CP cost.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, Stratagems that target this unit cost three times their stated CP cost.</characteristic>
           </characteristics>
         </profile>
         <profile name="Super-heavy Walker" id="1560-a1ae-554c-6d29" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When this model ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over non-Titanic models as though they were not there.
-  -&gt; The triggering unit can move over terrain features 4" or lower as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The triggering unit can move over terrain features over 4" as though they were not there.
--&gt; When this model moves through terrain over 4" tall:
-  -&gt; Roll one D6:
-    - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over non-Titanic models as though they were not there.
+  - The triggering unit can move over terrain features 4" or lower as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - The triggering unit can move over terrain features over 4" as though they were not there.
+When this model moves through terrain over 4" tall:
+  - Roll one D6:
+    - On 1: This unit is Battle-shocked.
     - On 2-6: Nothing happens.</characteristic>
           </characteristics>
         </profile>
         <profile name="Titanic Fire Support" id="a9eb-b2ed-8d93-b15f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly CHAOS unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Titanic Fire Support Target). Until the end of the phase, each time a friendly unit makes an attack against it, if the triggering wound roll was a critical, improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly CHAOS unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="a7f2-3203-1075-a519" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="eebe-2ea1-ca81-17fa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2605,8 +2600,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deadly Demise" id="bd23-1d80-5916-542b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2831,26 +2825,26 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Flank Speed" id="948a-cd85-9ef0-b4fd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an Advance move, until the end of the phase, the unit does not make an Advance roll; add 8" to its Move characteristic instead.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Advance move, until the end of the phase, this unit does not make an Advance roll; add 8" to its Move characteristic instead.</characteristic>
           </characteristics>
         </profile>
         <profile name="Super-heavy Walker" id="002a-8e5c-f8e0-d412" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When this model ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over non-Titanic models as though they were not there.
-  -&gt; The triggering unit can move over terrain features 4" or lower as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The triggering unit can move over terrain features over 4" as though they were not there.
--&gt; When this model moves through terrain over 4" tall:
-  -&gt; Roll one D6:
-    - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over non-Titanic models as though they were not there.
+  - The triggering unit can move over terrain features 4" or lower as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - The triggering unit can move over terrain features over 4" as though they were not there.
+When this model moves through terrain over 4" tall:
+  - Roll one D6:
+    - On 1: This unit is Battle-shocked.
     - On 2-6: Nothing happens.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="4d8b-077b-f282-c37b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="e720-1676-4ea7-003f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2860,13 +2854,12 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deadly Demise" id="9d63-f391-5972-3221" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Striding Colossus" id="f2fc-e83b-be5a-686c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, Stratagems that target the unit cost twice their stated CP cost.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, Stratagems that target this unit cost twice their stated CP cost.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3039,27 +3032,27 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Super-heavy Walker" id="f054-b3ae-6dc4-d873" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; When this model ends a Normal, Advance or Fall Back move:
-  -&gt; The triggering unit can move over non-Titanic models as though they were not there.
-  -&gt; The triggering unit can move over terrain features 4" or lower as though they were not there.
-  -&gt; The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
-  -&gt; The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
-  -&gt; The triggering unit can move over terrain features over 4" as though they were not there.
--&gt; When this model moves through terrain over 4" tall:
-  -&gt; Roll one D6:
-    - On 1: The unit is Battle-shocked.
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model ends a Normal, Advance or Fall Back move:
+  - The triggering unit can move over non-Titanic models as though they were not there.
+  - The triggering unit can move over terrain features 4" or lower as though they were not there.
+  - The triggering unit is eligible to move even if it is within Engagement Range of enemy units.
+  - The triggering unit cannot end a move within Engagement Range of any enemy unit, during its Normal, Advance and Fall Back moves.
+  - The triggering unit can move over terrain features over 4" as though they were not there.
+When this model moves through terrain over 4" tall:
+  - Roll one D6:
+    - On 1: This unit is Battle-shocked.
     - On 2-6: Nothing happens.</characteristic>
           </characteristics>
         </profile>
         <profile name="Wrath of the Omnissiah" id="ca81-dcc6-667b-049e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="b9af-9ee6-dc7d-0d9e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged Objective Control" id="c925-0167-c60e-8e30" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3069,13 +3062,12 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Deadly Demise" id="1b25-fd04-9e48-3a36" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Striding Colossus" id="487f-006e-f193-d9b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target the unit with a Stratagem, Stratagems that target the unit cost 4 times their stated CP cost.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time you target this unit with a Stratagem, Stratagems that target this unit cost 4 times their stated CP cost.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3830,7 +3822,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
       <description>Nothing happens.</description>
     </rule>
     <rule name="Titanic Support" id="a407-eff5-9a8c-b356" hidden="false">
-      <description>Nothing happens.</description>
+      <description>You can use this ability: If every model in your army has the IMPERIUM keyword, your army can include at most 1 models from ADEPTUS TITANICUS units.</description>
     </rule>
     <rule name="Titanicus Traitoris" id="82bf-cf9b-26f4-5827" hidden="false">
       <description>Nothing happens.</description>
@@ -3839,7 +3831,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
       <description>Nothing happens.</description>
     </rule>
     <rule name="Titanic Support" id="b79e-850e-3289-356d" hidden="false">
-      <description>Nothing happens.</description>
+      <description>You can use this ability: If every model in your army has the CHAOS keyword, your army can include at most 1 models from TITANICUS TRAITORIS units.</description>
     </rule>
     <rule name="Titanicus Traitoris" id="1adf-ed78-05e6-3d37" hidden="false">
       <description>Nothing happens.</description>

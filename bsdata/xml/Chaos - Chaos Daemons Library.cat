@@ -221,68 +221,67 @@
         <profile name="Daemonic Allegiance" id="2cf9-33be-59eb-cf31" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle:
-  -&gt; When selecting your army:
-    -&gt; Select one (each may be chosen once per battle):
-      - Khorne: this model gains the KHORNE keyword; this model gains 1 Torrent of Burning Blood weapon.
-      - Tzeentch: this model gains the TZEENTCH keyword; this model gains 1 Warp Gaze weapon.
-      - Nurgle: this model gains the NURGLE keyword; this model gains 1 Phlegm Bombardment weapon.
-      - Slaanesh: this model gains the SLAANESH keyword; this model gains 1 Scream of Despair weapon.</characteristic>
+  - When selecting your army:
+    - Select one (each can be chosen once per battle):
+      - Khorne: This model gains the KHORNE keyword; this model gains 1 Torrent of Burning Blood weapon.
+      - Tzeentch: This model gains the TZEENTCH keyword; this model gains 1 Warp Gaze weapon.
+      - Nurgle: This model gains the NURGLE keyword; this model gains 1 Phlegm Bombardment weapon.
+      - Slaanesh: This model gains the SLAANESH keyword; this model gains 1 Scream of Despair weapon.</characteristic>
           </characteristics>
         </profile>
         <profile name="Khorne" id="a63a-9667-f4f3-c0e8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle:
-  -&gt; When selecting your army:
-    -&gt; This model gains the KHORNE keyword.
-    -&gt; This model gains 1 Torrent of Burning Blood weapon.</characteristic>
+  - When selecting your army:
+    - This model gains the KHORNE keyword.
+    - This model gains 1 Torrent of Burning Blood weapon.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tzeentch" id="dab0-c1bf-f964-99f5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle:
-  -&gt; When selecting your army:
-    -&gt; This model gains the TZEENTCH keyword.
-    -&gt; This model gains 1 Warp Gaze weapon.</characteristic>
+  - When selecting your army:
+    - This model gains the TZEENTCH keyword.
+    - This model gains 1 Warp Gaze weapon.</characteristic>
           </characteristics>
         </profile>
         <profile name="Nurgle" id="ab79-8f9f-3c41-ba9e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle:
-  -&gt; When selecting your army:
-    -&gt; This model gains the NURGLE keyword.
-    -&gt; This model gains 1 Phlegm Bombardment weapon.</characteristic>
+  - When selecting your army:
+    - This model gains the NURGLE keyword.
+    - This model gains 1 Phlegm Bombardment weapon.</characteristic>
           </characteristics>
         </profile>
         <profile name="Slaanesh" id="9b28-df0e-2505-12b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">For the rest of the battle:
-  -&gt; When selecting your army:
-    -&gt; This model gains the SLAANESH keyword.
-    -&gt; This model gains 1 Scream of Despair weapon.</characteristic>
+  - When selecting your army:
+    - This model gains the SLAANESH keyword.
+    - This model gains 1 Scream of Despair weapon.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="d4a0-53e1-5332-1d53" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="479c-ffd1-140e-b2e6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scuttling Walker" id="381b-8cff-a418-7905" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal or Advance move:
-  -&gt; This model can move over friendly Monster models as though they were not there.
-  -&gt; This model can move over friendly Vehicle models as though they were not there.
-  -&gt; This model can move over terrain features 4" or lower as though they were not there.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal or Advance move:
+  - This model can move over friendly Monster models as though they were not there.
+  - This model can move over friendly Vehicle models as though they were not there.
+  - This model can move over terrain features 4" or lower as though they were not there.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="6e4e-fb84-b05e-8af7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -497,8 +496,8 @@
         </profile>
         <profile name="Harbinger of Death" id="2356-1f79-e83f-14ae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, until the end of the phase:
-  Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, until the end of the phase:
+  Choose one of the following:
     - Hellforged weapons equipped by this model gain [LETHAL HITS].
     - Hellforged weapons equipped by this model gain [PRECISION].
     - Hellforged weapons equipped by this model gain [SUSTAINED HITS 1].</characteristic>
@@ -506,18 +505,17 @@
         </profile>
         <profile name="Malefic Destruction" id="02ed-fce3-870b-c3f9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you may use this ability, once per battle per unit, until the end of the phase, add 3 to the Attacks characteristic of melee hellforged weapons equipped by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, you can use this ability, once per battle per unit, until the end of the phase, add 3 to the Attacks characteristic of melee hellforged weapons equipped by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="0471-4c8b-c54e-9660" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="8061-b961-fc01-4df7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Daemonic Allegiance" id="8260-15a4-4675-7566" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -653,18 +651,17 @@
         </profile>
         <profile name="Unholy Vigour" id="7136-57b9-c524-5c1b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, once per battle per unit, until the end of the phase, this model has a 3+ invulnerable save.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, once per battle per unit, until the end of the phase, this model has a 3+ invulnerable save.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="e4e9-e097-3547-beb6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="46f9-6a2e-013d-f343" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Daemonic Allegiance" id="c262-5316-a515-f8bb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -784,18 +781,17 @@
         </profile>
         <profile name="Deadly Demise" id="4a8b-570a-fde9-8fda" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deluge of Nurgle (Aura)" id="3ba4-370a-a16a-66d9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within 6" of this model, subtract 2 from that unit's Move characteristic; subtract 1 from that unit's Objective Control characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within 6" of this model, subtract 2" from that unit's Move characteristic; subtract 1 from that unit's Objective Control characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="f8e6-8d21-dd55-8e38" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Greater Daemon of Nurgle (Aura)" id="dc56-1a5a-7865-bf4d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -806,17 +802,17 @@
         <profile name="Virulent Blessing (Psychic)" id="6bc0-58e3-1d19-b06f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Fight phase, until the end of the phase:
-  -&gt; Select up to one enemy unit within 24" of this model visible to this model: if the target unit is the same unit as the selected unit, add 1 to all friendly NURGLE LEGIONES DAEMONICA units' Damage characteristic.</characteristic>
+  - Select up to one enemy unit within 24" of this model visible to this model. If the target unit is the same unit as the selected unit, add 1 to friendly NURGLE LEGIONES DAEMONICA units' Damage characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="c136-3b8b-fdb2-4fa4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="2229-3341-134b-beda" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -940,7 +936,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Fights First" id="fc07-f42d-f40b-785e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Fights First ability, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="443b-9fbd-a4da-1b4e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -951,14 +947,14 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         <profile name="The Eternal Dance" id="513b-7978-7fb9-f5a2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase:
-  -&gt; Select one enemy unit within 6" of this model (your The Eternal Dance Target). Until the end of the phase:
-    -&gt; Each time a friendly unit makes an attack against it, while making melee attacks, all friendly LEGIONES DAEMONICA SLAANESH models get +1 to Wound rolls.
-    -&gt; While it is your target, while making melee attacks, the selected unit gets -1 to Wound rolls.</characteristic>
+  - Select one enemy unit within 6" of this model (your The Eternal Dance Target). Until the end of the phase:
+    - Each time a friendly unit makes an attack against it, while making melee attacks, add 1 to friendly LEGIONES DAEMONICA SLAANESH models' Wound rolls.
+    - While it is your target, while making melee attacks, subtract 1 from the selected unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="7f8d-d3a9-b9ec-5c6a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1046,17 +1042,17 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         <profile name="Horrifying Beauty" id="a42a-f503-c51f-d5ec" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase, once per phase per army, until the end of the phase:
-  For each enemy unit: While the unit is within Engagement Range of a friendly unit with the Horrifying Beauty ability, while the unit is below half strength, the unit must take a Battle-shock test, applying -1 to that test; unless the unit is below half strength, the unit must take a Battle-shock test.</characteristic>
+  For each enemy unit: While this unit is within Engagement Range of a friendly unit with the Horrifying Beauty ability, while this unit is Below Half-strength, that unit must take a Battle-shock test, applying -1 to that test; unless this unit is Below Half-strength, that unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="6e29-bfbf-eceb-a193" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fights First" id="5921-3d90-7fea-10cb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Fights First ability, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1271,17 +1267,17 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
       <profiles>
         <profile name="Infiltrators" id="80fe-9953-bd25-4727" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Mischief Makers" id="0c5c-2bf7-a5c1-8bd2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit is selected to fight (the triggering unit must not have TITANIC), while the triggering unit is within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, the triggering unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit (excluding TITANIC units) is selected to fight, while the triggering unit is within Engagement Range of a friendly unit with the Mischief Makers ability, while making melee attacks, until the end of the phase, subtract 1 from the triggering unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="393b-68ec-19ee-40e9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1440,22 +1436,22 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="A Gory Path" id="4b9b-88a6-c411-3652" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Consolidation move, the triggering unit can Consolidate up to 6".</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Consolidation move, the triggering unit can Consolidate up to 6".</characteristic>
           </characteristics>
         </profile>
         <profile name="Bloodmaster" id="11ee-cee1-872a-7e4f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit gets +1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, add 1 to this unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="53d0-d97a-4af3-9589" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="3786-9b2f-7c56-bc08" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1580,31 +1576,31 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
         </profile>
         <profile name="Leader" id="bc9e-47c7-4e33-dea2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Symphony of Pain (Psychic)" id="aa49-6d8d-7d0f-4615" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is Battle-shocked and the selected unit is within 12" of this model (your Symphony of Pain Target). Until the end of the turn, each time a friendly unit makes an attack against it:
-    -&gt; You can re-roll the Hit roll for attacks made by all friendly LEGIONES DAEMONICA SLAANESH models.
-    -&gt; You can re-roll the Wound roll for attacks made by all friendly LEGIONES DAEMONICA SLAANESH models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, you can use this ability:
+  - Select one enemy unit that is Battle-shocked and within 12" of this model (your Symphony of Pain Target). Until the end of the turn, each time a friendly unit makes an attack against it:
+    - You can re-roll Hit rolls for attacks made by friendly LEGIONES DAEMONICA SLAANESH models.
+    - You can re-roll Wound rolls for attacks made by friendly LEGIONES DAEMONICA SLAANESH models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tranceweaver" id="06fa-ba3f-0ac4-7f24" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is not within range of an objective marker, you can re-roll a Hit roll of 1.
-While the target is within range of an objective marker, you can re-roll the Hit roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target is not within range of an objective marker, you can re-roll Hit rolls of 1.
+While the target is within range of an objective marker, you can re-roll Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="8d2c-c332-12f6-86ae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fights First" id="20e8-88a1-821b-be3c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Fights First ability, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1717,13 +1713,13 @@ While the target is within range of an objective marker, you can re-roll the Hit
         </profile>
         <profile name="Eldritch Flames (Psychic)" id="3a89-d621-9869-fa19" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the phase:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit cannot benefit from Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit cannot benefit from Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="ced2-07ad-6ded-a496" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -1823,18 +1819,18 @@ While the target is within range of an objective marker, you can re-roll the Hit
         </profile>
         <profile name="HORRORS ARE PINK. HORRORS ARE BLUE. WHERE ONCE THERE WAS ONE, NOW THERE ARE TWO." id="605e-a2e8-bc89-40ac" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit contains at most 0 PINK models, the unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit contains at most 0 PINK models, this unit uses the Blue Horrors datasheet from now on, keeping its lost wounds and its position.</characteristic>
           </characteristics>
         </profile>
         <profile name="Split" id="572b-f3c2-f4b2-a7e3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly model with the BLUE or PINK keyword in the unit is destroyed, after the attacking unit has resolved its attacks, while the unit is on the battlefield:
-  -&gt; Roll one D6: on a 4+, if that model has the PINK keyword, add 2 Blue Horror models to the unit; if that model has the BLUE keyword, add 1 Brimstone Horror model to the unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly model with the BLUE or PINK keyword in this unit is destroyed, after the attacking unit has resolved its attacks, while this unit is on the battlefield:
+  - Roll one D6: on a 4+, if that model has the PINK keyword, add 2 Blue Horror models to this unit; if that model has the BLUE keyword, add 1 Brimstone Horror model to this unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="7945-935f-31c8-1c1a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2035,22 +2031,22 @@ While the target is within range of an objective marker, you can re-roll the Hit
         </profile>
         <profile name="Harmonic Alignment" id="dc83-d6c1-ad82-9e4a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While this model is leading a unit, during the Command phase, in your turn, return D3 destroyed Bodyguard models to the unit, each with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, during your Command phase, you can return D3 destroyed Bodyguard models to this unit, each with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="2ea6-af12-58ea-637f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="d56f-b1ae-c2d5-b991" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fights First" id="0123-4b1f-5135-4af0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Fights First ability, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2156,12 +2152,12 @@ While the target is within range of an objective marker, you can re-roll the Hit
       <profiles>
         <profile name="Infected Outbreak" id="d7b9-5fcc-d409-ee60" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while the unit is within range of an objective marker you control, objective markers the unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this unit is within range of an objective marker you control, objective markers this unit controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="5a0d-e747-9b91-60d8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2406,23 +2402,22 @@ While the target is within range of an objective marker, you can re-roll the Hit
         </profile>
         <profile name="Mesmerising Form" id="19f7-566f-9a30-32f8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The attacking unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Subtract 1 from the attacking unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="e180-e3fc-4542-0b05" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="ec5c-9c49-7c3a-5af5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="4dd4-541d-6a73-b439" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2623,8 +2618,8 @@ While the target is within range of an objective marker, you can re-roll the Hit
         </profile>
         <profile name="Monarch of the Hunt" id="cf4d-c5e4-0450-39a3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the battle round, if during the first battle round:
-  -&gt; Select one enemy unit, binding it as quarry selection (your Quarry target). When your Quarry target is destroyed, you must select one enemy unit, binding it as quarry selection to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time this model makes an attack against it, while making melee attacks, while that unit is tagged quarry, you can re-roll the Hit roll for attacks made by this model; you can re-roll the Wound roll for attacks made by this model.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the first battle round:
+  - Select one enemy unit (your Quarry target). When your Quarry target is destroyed, you must select one enemy unit to replace it. Only one such designation can be active for this unit. For the rest of the battle, each time this model makes an attack against it, while making melee attacks, while that unit is a Quarry, you can re-roll Hit rolls for attacks made by this model; you can re-roll Wound rolls for attacks made by this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="No Prey Can Evade" id="48f3-afee-881e-c95f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2635,13 +2630,12 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Deep Strike" id="8ead-13f7-8a53-7a8b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="15b9-5c2b-7790-eab0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Greater Daemon of Slaanesh (Aura)" id="a2a9-fdc0-3564-8896" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2651,7 +2645,7 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Damaged" id="5575-116d-5657-e22f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -2761,7 +2755,7 @@ You can re-roll the Advance roll.</characteristic>
       <profiles>
         <profile name="Scouts" id="05ed-6888-bcbf-ac39" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Unholy Speed" id="fe2b-0fae-5400-7587" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -2772,7 +2766,7 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Deep Strike" id="3448-9326-5360-11a6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3048,23 +3042,22 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Leader" id="d9fa-7ddf-5de0-46aa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="5538-1ddb-4591-3673" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Delightful Agonies" id="165b-c9d1-2d5e-58ad" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if this model was destroyed this phase (1+ times), the first time this battle per model:
-  -&gt; Roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if this model was destroyed this phase (one or more times), the first time this battle per model, roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.</characteristic>
           </characteristics>
         </profile>
         <profile name="Prince of Slaanesh" id="3ace-9565-0edc-0162" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while making melee attacks, the unit scores Critical Wounds on Wound rolls of 5+.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, while making melee attacks, this unit scores Critical Wounds on Wound rolls of 5+.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3169,13 +3162,13 @@ You can re-roll the Advance roll.</characteristic>
       <profiles>
         <profile name="Slashing Dive" id="f2c5-881a-0a8e-d708" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Normal move, you may use this ability, during the Movement phase, in your turn:
-  -&gt; Select one enemy unit if the selected unit was moved over by this model during that move: roll one D6 for each model in the unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Normal move, you can use this ability, during your Movement phase:
+  - Select one enemy unit that was moved over by this model during that move. Roll one D6 for each model in this unit: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="aa2b-b35c-e4a7-6940" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3293,14 +3286,14 @@ You can re-roll the Advance roll.</characteristic>
       <profiles>
         <profile name="Bane of Cowards" id="8bbb-b656-4459-260d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the Bane of Cowards ability:
-  -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
-  -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit (excluding MONSTER or VEHICLE units) starts a Fall Back move, while the triggering unit is within Engagement Range of a friendly unit with the Bane of Cowards ability:
+  - While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
+  - While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="4f33-b643-5d28-fd07" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3545,8 +3538,8 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Master of Magicks (Psychic)" id="ba5e-2bd7-4f00-5327" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, in your turn, until the end of the phase:
-  Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During your Shooting phase, until the end of the phase:
+  Choose one of the following:
     - Ranged Bolt of Change weapons equipped by this model gain [IGNORES COVER].
     - Ranged Bolt of Change weapons equipped by this model gain [LETHAL HITS].
     - Ranged Bolt of Change weapons equipped by this model gain [SUSTAINED HITS D3].</characteristic>
@@ -3554,18 +3547,17 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Deep Strike" id="5eac-0dfd-4b3b-4ee7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="d9e0-d7d4-e514-9db7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="0aef-ace1-b6f2-7c71" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3750,18 +3742,18 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Leader" id="87ed-1d71-8508-ea1f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Storm of Mutating Sorcery (Psychic)" id="e55d-d6f6-542f-06af" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn:
-  -&gt; Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase:
+  - Select one enemy INFANTRY unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="e458-4a94-a4d2-108d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3885,7 +3877,7 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Fortification" id="9107-5866-614f-ae64" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, the attacking unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, subtract 1 from the attacking unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Shroud of Flies" id="cdcf-d00d-7b6e-436f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -3895,7 +3887,7 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Infiltrators" id="164a-2d4a-5fbf-5a3f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -3977,24 +3969,22 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Nurgle's Rot (Psychic)" id="723c-0dd5-c49f-9904" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, you may use this ability, until the start of your next Movement phase:
-  -&gt; Select one enemy unit within 12" of this model: subtract 1 from that unit's Toughness characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase, you can use this ability, until the start of your next Movement phase, select one enemy unit within 12" of this model. Subtract 1 from that unit's Toughness characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="5181-435a-551d-e290" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="ef84-d62d-8db0-2f32" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="223d-3dd7-6f6f-c211" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Greater Daemon of Nurgle (Aura)" id="d454-93a2-d833-103e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4004,7 +3994,7 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Damaged" id="7e80-4029-5fde-0835" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4189,13 +4179,12 @@ You can re-roll the Advance roll.</characteristic>
       <profiles>
         <profile name="Brass Stampede" id="8525-7286-6c17-f2b6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit: roll one D6 for each model in the unit: for each 4+, that unit suffers D3 mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move, select one enemy unit that is within Engagement Range of this unit. Roll one D6 for each model in this unit: for each 4+, that unit suffers D3 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="a81b-2c77-ab6e-69fd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4451,14 +4440,14 @@ You can re-roll the Advance roll.</characteristic>
       <profiles>
         <profile name="Soporific Musk" id="44be-e756-1745-660d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit starts a Fall Back move (the triggering unit must not have MONSTER or VEHICLE), while the triggering unit is within Engagement Range of a friendly unit with the Soporific Musk ability:
-  -&gt; While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
-  -&gt; While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit (excluding MONSTER or VEHICLE units) starts a Fall Back move, while the triggering unit is within Engagement Range of a friendly unit with the Soporific Musk ability:
+  - While the triggering unit is Battle-shocked, the triggering unit must take a Desperate Escape test, applying -1 to that test.
+  - While the triggering unit is not Battle-shocked, the triggering unit must take a Desperate Escape test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="11a2-ceb2-e144-d8e3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4659,7 +4648,7 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Murderlust" id="01b8-6ae4-ce2e-d49c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is eligible to declare a charge in a turn in which it Advanced.</characteristic>
           </characteristics>
         </profile>
         <profile name="Rage Embodied (Aura)" id="715e-ac83-6d7c-b809" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4669,13 +4658,12 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Deep Strike" id="a748-98d9-62cc-aa2f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="f0c1-64a3-be2c-aaf0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="DAMAGED: 1-7 WOUNDS REMAINING" id="acda-e898-3e50-c6c9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -4792,63 +4780,62 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Deadly Demise" id="d44f-6223-1641-4124" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="07f5-71f5-9a19-3b44" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Shadow Form Abilities" id="38c8-dc89-3393-da5f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the battle round:
-  -&gt; At the start of the battle round:
-    -&gt; Select one:
-      - Wreathed in Shadows: enemy models cannot target friendly units with the LEGIONES DAEMONICA or SHADOW LEGION keyword within 6" of this model with ranged attacks unless the attacking model is within 18".
-      - Pall of Despair: enemy units within 9" of this model must take a Battle-shock test; this model regains up to D3 lost wounds.
-      - Shadow Lord: you can re-roll a Hit roll of 1 for attacks made by friendly units with the LEGIONES DAEMONICA or SHADOW LEGION keyword within 6" of this model.</characteristic>
+  - At the start of the battle round:
+    - Select one:
+      - Wreathed in Shadows: Enemy models cannot target friendly units with the LEGIONES DAEMONICA or SHADOW LEGION keyword within 6" of this model with ranged attacks unless the attacking model is within 18".
+      - Pall of Despair: Enemy units within 9" of this model must take a Battle-shock test; this model regains up to D3 lost wounds.
+      - Shadow Lord: You can re-roll Hit rolls of 1 for attacks made by friendly units with the LEGIONES DAEMONICA or SHADOW LEGION keyword within 6" of this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Wreathed in Shadows" id="1e67-d083-fbf1-fb4d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the battle round:
-  -&gt; At the start of the battle round: enemy models cannot target friendly units with the LEGIONES DAEMONICA or SHADOW LEGION keyword within 6" of this model with ranged attacks unless the attacking model is within 18".</characteristic>
+  - At the start of the battle round, enemy models cannot target friendly units with the LEGIONES DAEMONICA or SHADOW LEGION keyword within 6" of this model with ranged attacks unless the attacking model is within 18".</characteristic>
           </characteristics>
         </profile>
         <profile name="Pall of Despair" id="71cc-d6e0-b688-2de0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the battle round:
-  -&gt; At the start of the battle round:
-    -&gt; Enemy units within 9" of this model must take a Battle-shock test.
-    -&gt; This model regains up to D3 lost wounds.</characteristic>
+  - At the start of the battle round:
+    - Enemy units within 9" of this model must take a Battle-shock test.
+    - This model regains up to D3 lost wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Shadow Lord" id="db43-ae83-fceb-6ea6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Until the end of the battle round:
-  -&gt; At the start of the battle round: you can re-roll a Hit roll of 1 for attacks made by friendly units with the LEGIONES DAEMONICA or SHADOW LEGION keyword within 6" of this model.</characteristic>
+  - At the start of the battle round, you can re-roll Hit rolls of 1 for attacks made by friendly units with the LEGIONES DAEMONICA or SHADOW LEGION keyword within 6" of this model.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="a48c-b4b4-e100-04dd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Supreme Commander" id="0ab0-de3a-6ae7-f65d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, the unit must be your Warlord.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is friendly, this unit must be your Warlord.</characteristic>
           </characteristics>
         </profile>
         <profile name="The Dark Master (Aura)" id="6698-9e49-d4bb-b03e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">A terrain area is marked as shadow of chaos.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">A terrain area is designated as Shadow of Chaos.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="5585-4c5e-dd2d-d54c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -4963,25 +4950,25 @@ You can re-roll the Advance roll.</characteristic>
         <profile name="Beast Handler" id="f3fa-e0a4-d057-2986" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, you can re-roll the Charge roll.
--&gt; Once per battle per unit:
-  -&gt; The unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
-  -&gt; Reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-  -&gt; The unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
+Once per battle per unit:
+  - This unit is eligible to be targeted with the Heroic Intervention Stratagem even if it has already been targeted with that Stratagem this phase.
+  - Reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+  - This unit's Heroic Intervention ability has no limit on its number of uses, and this use does not count toward that ability's limit for other units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="8ed4-a3f5-de67-92ca" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Seed the Garden of Nurgle" id="e5e5-6feb-4a7f-5420" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the turn during your Movement phase, while the unit is within a terrain area, for the rest of the battle, a terrain area is marked as shadow of chaos.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the turn during your Movement phase, while this unit is within a terrain area, for the rest of the battle, a terrain area is designated as Shadow of Chaos.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="c206-be8e-dc68-deca" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5099,32 +5086,32 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Horrible Fascination (Psychic)" id="9c8a-6be5-16df-bf05" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Shooting phase, you may use this ability, once per phase per army, if this model has the PSYKER keyword, while this model is friendly, while this model has the Horrible Fascination ability, until the end of the phase:
-  -&gt; Select one enemy unit if the selected unit is within 12" of this model and the selected unit is visible to this model:
-    -&gt; Roll one D6:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Shooting phase, you can use this ability, once per phase per army, if this model has the PSYKER keyword, while this model is friendly and this model has the Horrible Fascination ability, until the end of the phase:
+  - Select one enemy unit that is within 12" of this model and visible to this model:
+    - Roll one D6:
       - On 1: This model suffers D3 mortal wounds.
-      - On 2-5: That unit gets -1 to Hit rolls.
+      - On 2-5: Subtract 1 from that unit's Hit rolls.
       - On 6: That unit cannot shoot.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="d692-b1fa-04be-6b37" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Swallow Energy (Psychic)" id="8d4b-c773-22c9-68c4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit has the Feel No Pain 4+ ability against Psychic Attacks and mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit has Feel No Pain 4+ against Psychic Attacks and mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="e861-acc6-fb37-18fa" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fights First" id="d105-65e4-038a-c711" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Fights First ability, the unit gains the Fights First ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Fights First ability, this unit gains the Fights First ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5255,27 +5242,27 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Feculent Despair (Aura, Psychic)" id="6d78-85da-4fba-7aec" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit takes a Battle-shock test, while an enemy unit is within 6" of this model, that unit gets -1 to Battle-shock rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit takes a Battle-shock test, while an enemy unit is within 6" of this model, subtract 1 from that unit's Battle-shock rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Feel No Pain" id="1ac9-a49d-da44-fd0e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit has the Feel No Pain X+ ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain X+, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="efb7-8c79-8706-2871" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Poxbringer" id="939c-16dc-91b4-6741" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit scores Critical Hits on Hit rolls of 5+.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit scores Critical Hits on Hit rolls of 5+.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="ada2-170a-292e-0860" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5403,17 +5390,17 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Leader" id="7ca2-81d3-bae3-98af" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Rider of the Immaterial Winds" id="01ea-eb8b-5454-793b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you may use this ability, once per battle per unit, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you can use this ability, once per battle per unit, while this unit is unengaged, this unit can be placed into Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="5753-f104-a38c-33b2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5532,14 +5519,14 @@ You can re-roll the Advance roll.</characteristic>
       <profiles>
         <profile name="Cutting Down the Foe" id="7d8b-263f-3929-41cb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, if the unit charged this turn:
-  -&gt; Improve the unit's Strength characteristic by 1.
-  -&gt; Improve the unit's Damage characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, if this unit charged this turn:
+  - Improve this unit's Strength characteristic by 1.
+  - Improve this unit's Damage characteristic by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="8f1b-9e66-22ea-fed6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5689,13 +5676,13 @@ You can re-roll the Advance roll.</characteristic>
       <profiles>
         <profile name="Death's Heads" id="74bf-7d26-917a-5127" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of the turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence (your Deaths Heads Target). Until the end of the turn, each time a friendly unit makes an attack against it, you can re-roll the Wound roll for attacks made by all friendly LEGIONES DAEMONICA NURGLE units.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of the turn:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence (your Deaths Heads Target). Until the end of the turn, each time a friendly unit makes an attack against it, you can re-roll Wound rolls for attacks made by friendly LEGIONES DAEMONICA NURGLE units.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="5977-add0-0f26-b149" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -5984,29 +5971,27 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Daemon Lord of Khorne (Aura)" id="6162-fc67-a2da-d61d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while a friendly KHORNE LEGIONES DAEMONICA unit is within 6" of this model, that unit gets +1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while a friendly KHORNE LEGIONES DAEMONICA unit is within 6" of this model, add 1 to that unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Relentless Carnage" id="f3df-8281-c595-5422" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of this model: roll 8 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, you can use this ability, select one enemy unit that is within Engagement Range of this model. Roll 8 D6: for each 4+, that unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="fc9a-338d-3c3f-c2bc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="4326-f44a-6fea-4dd9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Damaged" id="171b-6c64-ed7d-b27d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Greater Daemon of Khorne (Aura)" id="4755-de5c-0cd5-1852" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -6209,29 +6194,29 @@ You can re-roll the Advance roll.</characteristic>
         </profile>
         <profile name="Flames of Change (Psychic)" id="6926-3444-9df5-9bfc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn, until the end of your opponent's next turn:
-  -&gt; Select one enemy unit if the selected unit does not have the MONSTER keyword and the selected unit does not have the VEHICLE keyword and the unit was hit by an attack made by the triggering unit during its just-finished shooting sequence:
-    -&gt; Roll one D6: on a 4+, that unit is marked as aflame.
-    -&gt; While the selected unit is tagged aflame, subtract 2 from that unit's Move characteristic.
-    While the selected unit is tagged aflame:
-      -&gt; This unit gets -2 to Advance rolls.
-      -&gt; This unit gets -2 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase, until the end of your opponent's next turn:
+  - Select one enemy unit without the MONSTER or VEHICLE keyword and that was hit by an attack made by the triggering unit during that shooting sequence:
+    - Roll one D6: on a 4+, that unit is Aflame.
+    - While the selected unit is Aflame, subtract 2" from that unit's Move characteristic.
+    - While the selected unit is Aflame:
+      - Subtract 2 from this unit's Advance rolls.
+      - Subtract 2 from this unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="fa81-0299-e651-1e84" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Manifestation of Destruction" id="ac20-b66b-af8a-7906" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit cannot be your Warlord.
-The unit cannot be given Enhancements.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit cannot be your Warlord.
+This unit cannot be given Enhancements.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="9161-4341-36ae-4e3d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6324,23 +6309,23 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="Devastating Charge" id="ca52-80b7-d3e0-0516" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move:
-  For each enemy unit within Engagement Range of the unit: The unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move:
+  For each enemy unit within Engagement Range of this unit: That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="b459-34ec-7366-79e9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Skullmaster's Fury" id="63dc-9b28-f056-9ab2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends a Charge move, while this model is leading a unit, until the end of the turn, melee Juggernaut’s bladed horns weapons equipped by models in this unit gain [DEVASTATING WOUNDS].</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends a Charge move, while this model is leading a unit, until the end of the turn, melee Juggernaut’s bladed horns weapons equipped by models in this unit gain [DEVASTATING WOUNDS].</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="f1d7-9ef5-97f0-cccf" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6471,22 +6456,22 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="Blessed by the Plague God" id="3c67-077d-e138-aeae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, the unit has a 4+ invulnerable save.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, this unit has a 4+ invulnerable save.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="229b-1ccb-0bcc-cdf0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tally of Pestilence" id="1178-dd2a-c815-566d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You gain 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You gain 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="bdc5-f66b-ab53-2498" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6598,26 +6583,26 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="Leader" id="d2bb-aa29-abdc-e4c1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Pack Leader" id="62f2-5fea-771e-8ee8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While this model is leading a unit:
-  Select one of the following:
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, you can use this ability:
+  Choose one of the following:
     - You can re-roll the Charge roll.
     - You can re-roll the Advance roll.</characteristic>
           </characteristics>
         </profile>
         <profile name="Prey of the Blood God" id="db26-b0d5-fa29-d8e2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">-&gt; At the start of the battle round, if during the first battle round:
-  -&gt; Select one enemy unit, binding it as prey selection (your Prey target). When your Prey target is destroyed, you must select one enemy unit, binding it as prey selection to replace it. Only one such designation can be active for this bearer unit. For the rest of the battle, each time a model in this unit makes an attack against it, while making melee attacks, while the unit is a prey, you can re-roll the Wound roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the first battle round:
+  - Select one enemy unit (referred to below as the prey selection) (your Prey target). When your Prey target is destroyed, you must select one enemy unit (referred to below as the prey selection) to replace it. Only one such designation can be active for this unit. For the rest of the battle, each time a model in this unit makes an attack against it, while making melee attacks, while this unit is a prey, you can re-roll Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="0d33-3537-06cb-6cfc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6746,17 +6731,17 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="Leader" id="496e-3b8d-abba-c5bb" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Meet Your Quota!" id="bd53-1f87-a7fc-06ce" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, add 1 to the unit's Objective Control characteristic.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, add 1 to this unit's Objective Control characteristic.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="9433-1fe4-6903-7e48" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -6887,12 +6872,12 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="Hysterical Frenzy" id="7267-3b0e-3a9c-5f40" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a model in the unit is destroyed, unless the triggering unit has fought this phase, do not remove that model yet; after the attacking unit has finished making its attacks, it can fight; then remove it.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a model in this unit is destroyed, unless the triggering unit has fought this phase, do not remove that model yet; after the attacking unit has finished making its attacks, it can fight; then remove it.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="24f1-52c7-cb8b-bfc3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Tormentbringer (Aura)" id="153d-cc17-ab32-3d47" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -6902,7 +6887,7 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="Deep Strike" id="a2bc-9eb6-c77c-e621" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7041,7 +7026,7 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="Leader" id="630e-ed58-0ffc-67dc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lord of Decapitations" id="8164-4685-bc06-a503" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7052,14 +7037,14 @@ The unit cannot be given Enhancements.</characteristic>
         <profile name="Skulls for Khorne" id="4f61-471c-1491-bc6c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Against CHARACTER targets:
-  -&gt; You can re-roll the Hit roll for attacks made by this model.
-  -&gt; You can re-roll the Wound roll for attacks made by this model.
--&gt; Each time this model destroys an enemy CHARACTER unit: you gain 1CP.</characteristic>
+  - You can re-roll Hit rolls for attacks made by this model.
+  - You can re-roll Wound rolls for attacks made by this model.
+Each time this model destroys an enemy CHARACTER unit, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="23f3-86fc-b02e-2d29" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7172,21 +7157,21 @@ The unit cannot be given Enhancements.</characteristic>
         <profile name="Blood Throne" id="e066-7cc6-df92-f5b7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase:
-  -&gt; Select one enemy unit if the selected unit is within 18" of this model and the selected unit is visible to this model (your Blood Throne Target). Until the end of the phase, each time a friendly unit makes an attack against it:
-    -&gt; Improve the Strength characteristic of that attack by 1 if it is made by a friendly KHORNE LEGIONES DAEMONICA unit.
-    -&gt; Improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly KHORNE LEGIONES DAEMONICA unit.
-    -&gt; Improve the Damage characteristic of that attack by 1 if it is made by a friendly KHORNE LEGIONES DAEMONICA unit.</characteristic>
+  - Select one enemy unit that is within 18" of this model and visible to this model (your Blood Throne Target). Until the end of the phase, each time a friendly unit makes an attack against it:
+    - Improve the Strength characteristic of that attack by 1 if it is made by a friendly KHORNE LEGIONES DAEMONICA unit.
+    - Improve the Armour Penetration characteristic of that attack by 1 if it is made by a friendly KHORNE LEGIONES DAEMONICA unit.
+    - Improve the Damage characteristic of that attack by 1 if it is made by a friendly KHORNE LEGIONES DAEMONICA unit.</characteristic>
           </characteristics>
         </profile>
         <profile name="Champion Slayer" id="737c-2f59-beb9-0ce9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks against CHARACTER or MONSTER targets, you can re-roll the Wound roll for attacks made by this model.
--&gt; Each time this model destroys an enemy unit with the CHARACTER or MONSTER keyword: this model regains up to D6 lost wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks against CHARACTER or MONSTER targets, you can re-roll Wound rolls for attacks made by this model.
+Each time this model destroys an enemy unit with the CHARACTER or MONSTER keyword, this model regains up to D6 lost wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="f3ca-5347-8316-ad86" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7309,17 +7294,17 @@ The unit cannot be given Enhancements.</characteristic>
         <profile name="Shadow of Khorne" id="4225-e7e1-225f-d143" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Units within 6" of this model count as being within The Shadow of Chaos.
--&gt; After a friendly unit takes a Battle-shock test (the triggering unit must have KHORNE and LEGIONES DAEMONICA) within 6" of this model, you may use this ability: you can re-roll the Battle-shock roll.</characteristic>
+After a friendly KHORNE LEGIONES DAEMONICA unit takes a Battle-shock test within 6" of this model, you can use this ability: you can re-roll the Battle-shock roll.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fortification" id="1aec-c3f7-c52a-ee07" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, the attacking unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">During the Shooting phase, subtract 1 from the attacking unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="1309-116b-90fc-3084" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7401,19 +7386,19 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="Jolly Gutpipes" id="4cb0-a667-6b74-a169" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">You can: While this model is leading a unit:
-  -&gt; Add 1 to the unit's Move characteristic.
-  -&gt; You can re-roll the Advance roll.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a unit, you can use this ability:
+  - Add 1" to this unit's Move characteristic.
+  - You can re-roll the Advance roll.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="ca3f-2d88-a141-d938" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="fa85-3c6b-4a46-1469" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7538,25 +7523,24 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="One Head Looks Back (Aura)" id="db6b-f200-68cd-8a8f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit within 12" of this model is targeted with a Stratagem, you may use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1CP.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit within 12" of this model is targeted with a Stratagem, you can use this ability, once per turn per model, increase the CP cost of that use of the Stratagem by 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="One Head Looks Forward" id="c30f-4467-efd8-5af7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Command phase, while this model is on the battlefield:
-  -&gt; This model must take a Leadership test.
-  -&gt; If the triggering leadership roll succeeded, you gain 1CP.</characteristic>
+  - This model must take a Leadership test.
+  - If the triggering leadership roll succeeded, you gain 1 CP.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="abe1-ce9a-5e11-402a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deadly Demise" id="0880-4624-168f-7464" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Greater Daemon of Tzeentch (Aura)" id="d410-ec52-78df-b248" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7566,7 +7550,7 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="Damaged" id="760b-65a7-d010-cba8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, this model gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the model has X or fewer wounds remaining, X being its rating, subtract 1 from this model's Hit rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7660,32 +7644,32 @@ The unit cannot be given Enhancements.</characteristic>
       <profiles>
         <profile name="Exploding Horrors" id="e1de-c5d8-6257-2b4a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit is selected to fight, you may use this ability:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit, binding it as enemy:
-    -&gt; Select one or more friendly BRIMSTONE models in the unit, binding them as horrors:
-      -&gt; For each selected model:
-        -&gt; Roll one D6: on a 4+, destroy that model; the bound enemy suffers 1 mortal wound.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to fight, you can use this ability:
+  - Select one enemy unit that is within Engagement Range of this unit (referred to below as the enemy):
+    - Select one or more friendly BRIMSTONE models in this unit (referred to below as the horrors):
+      - For each selected model:
+        - Roll one D6: on a 4+, destroy that model; the chosen enemy suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Sullen Malevolence (Aura)" id="604f-1de5-661a-93b1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit contains 1+ BLUE models, while an enemy unit is within 6" of this unit, worsen that unit's Leadership characteristic by 1.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit contains one or more BLUE models, while an enemy unit is within 6" of this unit, worsen that unit's Leadership characteristic by 1.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="f634-015c-7c8d-dadd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Infiltrators" id="e681-bd97-8734-29c0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Infiltrators ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Infiltrators ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Split" id="5a17-d909-9426-0f05" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly BLUE model in the unit is destroyed, after the attacking unit has resolved its attacks, while the unit is on the battlefield:
-  -&gt; Roll one D6: on a 4+, add 1 Brimstone Horror model to the unit.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When a friendly BLUE model in this unit is destroyed, after the attacking unit has resolved its attacks, while this unit is on the battlefield:
+  - Roll one D6: on a 4+, add 1 Brimstone Horror model to this unit.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -7828,23 +7812,23 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="P'tarix's Sorcerous Syphon (Aura)" id="fbca-b287-af27-9163" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making psychic attacks, while an enemy unit is within 12" of this model, that unit gets -1 to Wound rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making psychic attacks, while an enemy unit is within 12" of this model, subtract 1 from that unit's Wound rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Xirat'p's Sorcerous Barrages (Psychic)" id="3f63-01fe-62f8-e907" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your Movement phase:
   For each enemy unit within 6" of this model:
-    -&gt; Roll one D6:
+    - Roll one D6:
       - On 1: Nothing happens.
-      - On 2-3: The unit suffers 1 mortal wound.
-      - On 4-5: The unit suffers D3 mortal wounds.
-      - On 6: The unit suffers D6 mortal wounds.</characteristic>
+      - On 2-3: That unit suffers 1 mortal wound.
+      - On 4-5: That unit suffers D3 mortal wounds.
+      - On 6: That unit suffers D6 mortal wounds.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="bd7f-1bbf-6662-880d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="c2b8-a524-a4c9-155e" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -7962,28 +7946,28 @@ The unit cannot be given Enhancements.</characteristic>
         <profile name="Formless Horror" id="20fb-f799-d4b0-e1ab" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When an enemy unit selects its targets, until the end of the phase:
-  -&gt; The triggering unit must take a Battle-shock test.
-  -&gt; If the triggering battle shock roll was a failure, the triggering unit cannot target this model with attacks.</characteristic>
+  - The triggering unit must take a Battle-shock test.
+  - If the triggering battle shock roll was a failure, the triggering unit cannot target this model with attacks.</characteristic>
           </characteristics>
         </profile>
         <profile name="Mischief and Confusion" id="4594-ebc4-b3a4-918d" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of your opponent's Shooting phase, until the end of the phase:
-  -&gt; Select one enemy unit if the selected unit is within 12" of this model and the selected unit is visible to this model:
-    -&gt; Roll one D6:
+  - Select one enemy unit that is within 12" of this model and visible to this model:
+    - Roll one D6:
       - On 1: Nothing happens.
-      - On 2-5: That unit gets -1 to Hit rolls.
+      - On 2-5: Subtract 1 from that unit's Hit rolls.
       - On 6: That unit cannot shoot.</characteristic>
           </characteristics>
         </profile>
         <profile name="Stealth" id="1ec4-b6ee-f6e2-e154" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the unit has the Stealth ability, while making ranged attacks, the unit has the Benefit of Cover.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this unit has the Stealth ability, while making ranged attacks, this unit has the Benefit of Cover.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="4c73-d41c-4a48-b4e1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
         <profile name="Lone Operative" id="00c9-44af-f70b-c9d3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
@@ -8106,23 +8090,23 @@ The unit cannot be given Enhancements.</characteristic>
         </profile>
         <profile name="Altered Reality (Psychic)" id="d8cc-0032-f5f2-3072" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a Hit roll is made, you may use this ability or after a Wound roll is made, you may use this ability or after a saving throw is made, you may use this ability, once per battle round per unit, the unit's Any rolls count as 6.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After a Hit roll is made, you can use this ability or after a Wound roll is made, you can use this ability or after a saving throw is made, you can use this ability, once per battle round per unit, this unit's Any rolls count as 6.</characteristic>
           </characteristics>
         </profile>
         <profile name="Fluxmaster" id="be3e-567e-6dfd-9916" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Stealth ability.
-Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Stealth ability.
+Against melee attacks, subtract 1 from the attacking unit's Hit rolls.</characteristic>
           </characteristics>
         </profile>
         <profile name="Leader" id="0307-a019-76be-8da2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Leader ability.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Leader ability.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="5579-e5ec-7d70-6ad6" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8235,12 +8219,12 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Bounding Leaps" id="2566-6e02-e46b-b025" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit is eligible to shoot in a turn in which it Fell Back.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit is eligible to shoot in a turn in which it Fell Back.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="de89-91de-bffc-600a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8429,23 +8413,22 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Deadly Demise" id="3aee-42b3-2c15-a875" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves:
-  -&gt; Roll one D6: on a 6+, for each unit: while the unit is within 6" of this model, the unit suffers a number of mortal wounds equal to its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is destroyed, after the units embarked within it have made their emergency disembark moves, roll one D6: on a 6+, for each unit: while this unit is within 6" of this model, that unit suffers a number of mortal wounds equal to its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Grotesque Regeneration" id="5471-1d9c-431b-db06" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if the unit has the BEASTS OF NURGLE keyword, while the model has lost wounds, unless this model was destroyed this phase, until the end of the phase, set this model's Wounds characteristic to 7.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of each phase, if this unit has the BEASTS OF NURGLE keyword, while the model has lost wounds, unless this model was destroyed this phase, until the end of the phase, set this model's Wounds characteristic to 7.</characteristic>
           </characteristics>
         </profile>
         <profile name="Scouts" id="e532-80b7-677f-78a4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts X" ability, X being its rating.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts X" ability, X being its rating.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="3f97-10ee-f57e-cee9" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8567,12 +8550,12 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Hunters from the Warp" id="707d-c997-b466-8d47" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you may use this ability, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of your opponent's turn, you can use this ability, while this unit is unengaged, this unit can be placed into Strategic Reserves.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="fe96-d939-5c0e-0975" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -8773,13 +8756,13 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
         </profile>
         <profile name="Skulls of the Fallen" id="4f18-5a00-6013-3775" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After the unit resolves its attacks, during the Shooting phase, in your turn:
-  -&gt; Select one enemy unit that was hit by an attack made by the triggering unit during its just-finished shooting sequence: that unit must take a Battle-shock test.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">After this unit resolves its attacks, during your Shooting phase:
+  - Select one enemy unit that was hit by an attack made by the triggering unit during that shooting sequence. That unit must take a Battle-shock test.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="6b48-796c-7c30-7a1b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the unit ends an ingress move, while the unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit ends an Ingress move, while this unit has the Deep Strike ability, the triggering unit can be set up on the battlefield more than 8" away from all enemy models.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9130,7 +9113,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Daemonic Icon" id="550f-8d3f-3688-a8f3" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set the unit's Leadership characteristic to 6.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this unit's Leadership characteristic to 6+.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9142,7 +9125,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Instrument of Chaos" id="3fe1-6f66-713a-0196" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gets +1 to Charge rolls.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to this unit's Charge rolls.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -9410,7 +9393,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Shining Aegis" id="b1f3-bafa-8e90-2bf8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Save characteristic to 3.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Set this model's Save characteristic to 3+.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10393,7 +10376,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Brass Collar of Bloody Vengeance" id="0e3a-3a15-f5b8-8225" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has the Feel No Pain 3+ ability against Psychic Attacks and mortal wounds.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has Feel No Pain 3+ against Psychic Attacks and mortal wounds.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10798,7 +10781,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
       <profiles>
         <profile name="Collar of Khorne" id="db39-7784-dc66-3a29" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has the Feel No Pain 3+ ability against Psychic Attacks.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has Feel No Pain 3+ against Psychic Attacks.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -10891,11 +10874,11 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
               </constraints>
               <rules>
                 <rule name="Murdercall" id="f082-1dc4-8532-1b17" hidden="false">
-                  <description>Each time an enemy unit ends a move (the triggering unit must not have AIRCRAFT), during the Movement phase, in the opponent's turn, while the triggering unit is within 8" of a friendly KHORNE LEGIONES DAEMONICA unit:
-  -&gt; Select one friendly KHORNE LEGIONES DAEMONICA unit within 8" of the triggering unit: that unit can make a Surge move of up to D6".</description>
+                  <description>Each time an enemy unit (excluding AIRCRAFT units) ends a move, during your opponent's Movement phase, while the triggering unit is within 8" of a friendly KHORNE LEGIONES DAEMONICA unit:
+  - Select one friendly KHORNE LEGIONES DAEMONICA unit within 8" of the triggering unit. That unit can make a Surge move of up to D6".</description>
                 </rule>
                 <rule name="Blood Tainted" id="2a37-5635-2a44-47ce" hidden="false">
-                  <description>At the end of each phase, if 1+ enemy units destroyed this phase, while the unit is within range of an objective marker, if you control 1+ objectives, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</description>
+                  <description>At the end of each phase, if one or more enemy units destroyed this phase, while this unit is within range of an objective marker, if you control one or more objectives, objective markers this model controls remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -10912,7 +10895,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
               </constraints>
               <rules>
                 <rule name="Warp Rifts" id="c1f9-218d-e0fd-7331" hidden="false">
-                  <description>When a friendly unit is set up (the triggering unit must have LEGIONES DAEMONICA), if the triggering unit is using Deep Strike, while the triggering unit is wholly within The Shadow of Chaos or while the triggering unit is wholly within 6" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword that shares the KHORNE, NURGLE, SLAANESH or TZEENTCH keyword with it, the triggering unit can be set up on the battlefield more than 6" away from all enemy models.</description>
+                  <description>When a friendly LEGIONES DAEMONICA unit is set up, if the triggering unit is using Deep Strike, while the triggering unit is wholly within The Shadow of Chaos or while the triggering unit is wholly within 6" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword that shares the KHORNE, NURGLE, SLAANESH or TZEENTCH keyword with it, that unit can be set up on the battlefield more than 6" away from all enemy models.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -10930,7 +10913,7 @@ Against melee attacks, the attacking unit gets -1 to Hit rolls.</characteristic>
               <rules>
                 <rule name="Melancholic Miasma" id="c72d-3007-76cd-050a" hidden="false">
                   <description>While an enemy unit is within 9" of a friendly LEGIONES DAEMONICA NURGLE unit, that unit counts as being within The Shadow of Chaos.
-Select one enemy unit if the selected unit is within The Shadow of Chaos: during the Command phase, that unit must take a Battle-shock test.</description>
+Select one enemy unit that is within The Shadow of Chaos. During the Command phase, that unit must take a Battle-shock test.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -10948,20 +10931,20 @@ Select one enemy unit if the selected unit is within The Shadow of Chaos: during
               <rules>
                 <rule name="First Prince of Chaos" id="c764-ae83-7699-0add" hidden="false">
                   <description>If your Army Faction is CHAOS DAEMONS:
-  -&gt; All friendly KHORNE SHADOW LEGION units gain the Murderer’s Cowl ability:
-    -&gt; Ranged weapons equipped by models in this unit gain [ASSAULT].
-    -&gt; The unit is eligible to declare a charge in a turn in which it Advanced.
-  -&gt; All friendly SHADOW LEGION TZEENTCH units gain the Penumbral Puppetry ability:
-    -&gt; The unit gains the Stealth ability.
-    -&gt; Against melee attacks, the attacking unit gets -1 to Hit rolls.
-  -&gt; All friendly NURGLE SHADOW LEGION units gain the Gloam Rot ability:
-    -&gt; When the attack's S is more than the target's T, the attacking unit gets -1 to Wound rolls.
-  -&gt; All friendly SHADOW LEGION SLAANESH units gain the Shadow’s Caress ability:
-    -&gt; Your opponent cannot target the unit with Overwatch.
-  -&gt; All friendly SHADOW LEGION UNDIVIDED units gain the Disciples of Be’lakor ability:
-    -&gt; The unit gains Dark Pacts, whatever your Army Faction is.
-    -&gt; If the unit has the BE'LAKOR keyword, the unit's Dark Pact rolls automatically succeed.
-    -&gt; If the unit is a SHADOW LEGION HERETIC ASTARTES unit, the unit gains the Deep Strike ability.</description>
+  - Friendly KHORNE SHADOW LEGION units gain the Murderer’s Cowl ability:
+    - Ranged weapons equipped by models in this unit gain [ASSAULT].
+    - This unit is eligible to declare a charge in a turn in which it Advanced.
+  - Friendly SHADOW LEGION TZEENTCH units gain the Penumbral Puppetry ability:
+    - This unit gains the Stealth ability.
+    - Against melee attacks, subtract 1 from the attacking unit's Hit rolls.
+  - Friendly NURGLE SHADOW LEGION units gain the Gloam Rot ability:
+    - When the attack's S is more than the target's T, subtract 1 from the attacking unit's Wound rolls.
+  - Friendly SHADOW LEGION SLAANESH units gain the Shadow’s Caress ability:
+    - Your opponent cannot target this unit with Overwatch.
+  - Friendly SHADOW LEGION UNDIVIDED units gain the Disciples of Be’lakor ability:
+    - This unit gains Dark Pacts, whatever your Army Faction is.
+    - If this unit has the BE'LAKOR keyword, this unit's Dark Pact rolls automatically succeed.
+    - If this unit is a SHADOW LEGION HERETIC ASTARTES unit, this unit gains the Deep Strike ability.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -10978,7 +10961,7 @@ Select one enemy unit if the selected unit is within The Shadow of Chaos: during
               </constraints>
               <rules>
                 <rule name="Fates In Flux" id="41c2-7127-0df2-4d38" hidden="false">
-                  <description>If the unit has the LEGIONES DAEMONICA and TZEENTCH keywords, until the end of the phase, discard a die from your Flux tokens and use its value in place of a Advance or Hit or Wound or Damage or saving throw or Hazard roll.</description>
+                  <description>If this unit has the LEGIONES DAEMONICA and TZEENTCH keywords, until the end of the phase, discard a die from your Flux tokens and use its value in place of an Advance, Hit, Wound, Damage, saving throw or Hazard roll.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -10995,15 +10978,15 @@ Select one enemy unit if the selected unit is within The Shadow of Chaos: during
               </constraints>
               <rules>
                 <rule name="Beguiling Aura" id="b608-3b9e-7b7e-e62d" hidden="false">
-                  <description>All friendly LEGIONES DAEMONICA SLAANESH units are eligible to declare a charge even if they Fell Back this turn.</description>
+                  <description>Friendly LEGIONES DAEMONICA SLAANESH units are eligible to declare a charge even if they Fell Back this turn.</description>
                 </rule>
                 <rule name="Seductive Gambit" id="9161-421f-3e2d-b7f4" hidden="false">
-                  <description>All friendly LEGIONES DAEMONICA SLAANESH units gain the Seductive Gambit ability.
--&gt; When the unit ends a Charge move, you may use this ability, until the end of the turn:
-  -&gt; The unit loses the Fights First rule.
-  -&gt; You can re-roll the Hit roll.
-  -&gt; You can re-roll a Wound roll of 1.
-Applies to: units with LEGIONES DAEMONICA, SLAANESH.</description>
+                  <description>Friendly LEGIONES DAEMONICA SLAANESH units gain the Seductive Gambit ability.
+When this unit ends a Charge move, you can use this ability, until the end of the turn:
+  - This unit loses the Fights First rule.
+  - You can re-roll Hit rolls.
+  - You can re-roll Wound rolls of 1.
+Applies to: LEGIONES DAEMONICA SLAANESH units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11022,7 +11005,7 @@ Applies to: units with LEGIONES DAEMONICA, SLAANESH.</description>
                 <rule name="Unholy Avalanche" id="a69d-3a3e-023b-3d54" hidden="false">
                   <description>If a friendly LEGIONES DAEMONICA MOUNTED unit fell back this turn, that unit is eligible to shoot even if it Fell Back this turn.
 If a friendly LEGIONES DAEMONICA MOUNTED unit fell back this turn, that unit is eligible to declare a charge even if it Fell Back this turn.
-Applies to: units with LEGIONES DAEMONICA, MOUNTED.</description>
+Applies to: LEGIONES DAEMONICA MOUNTED units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11039,9 +11022,9 @@ Applies to: units with LEGIONES DAEMONICA, MOUNTED.</description>
               </constraints>
               <rules>
                 <rule name="Loci of Power" id="1def-48a6-a40e-0312" hidden="false">
-                  <description>Improve all friendly CHARACTER LEGIONES DAEMONICA units (excluding MONSTER units)'s Leadership characteristic by 1.
-Improve all friendly CHARACTER LEGIONES DAEMONICA units (excluding MONSTER units)'s Objective Control characteristic by 1.
-Applies to: units with LEGIONES DAEMONICA, CHARACTER (excluding MONSTER).</description>
+                  <description>Improve friendly CHARACTER LEGIONES DAEMONICA units (excluding MONSTER units)'s Leadership characteristic by 1.
+Improve friendly CHARACTER LEGIONES DAEMONICA units (excluding MONSTER units)'s Objective Control characteristic by 1.
+Applies to: LEGIONES DAEMONICA CHARACTER units (excluding MONSTER units).</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11058,10 +11041,10 @@ Applies to: units with LEGIONES DAEMONICA, CHARACTER (excluding MONSTER).</descr
               </constraints>
               <rules>
                 <rule name="Shudderblink" id="14e3-4fb2-f76c-2251" hidden="false">
-                  <description>When a friendly unit is selected to make an Advance move (the triggering unit must have BATTLELINE and LEGIONES DAEMONICA), until the end of the turn:
-  -&gt; Ranged weapons equipped by the triggering unit gain [ASSAULT].
-  -&gt; The triggering unit is eligible to declare a charge.
-Applies to: units with LEGIONES DAEMONICA, BATTLELINE.</description>
+                  <description>When a friendly BATTLELINE LEGIONES DAEMONICA unit is selected to make an Advance move, until the end of the turn:
+  - Ranged weapons equipped by that unit gain [ASSAULT].
+  - That unit is eligible to declare a charge.
+Applies to: LEGIONES DAEMONICA BATTLELINE units.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11140,10 +11123,10 @@ Applies to: units with LEGIONES DAEMONICA, BATTLELINE.</description>
           <profiles>
             <profile name="Fury's Cage" id="ae5a-d83f-208e-5aa7" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is selected to fight, you may use this ability, until the end of the phase:
-  -&gt; This model suffers D3+1 mortal wounds.
-  -&gt; You can re-roll the Hit roll for attacks made by this model.
-  -&gt; You can re-roll the Wound roll for attacks made by this model.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this model is selected to fight, you can use this ability, until the end of the phase:
+  - This model suffers D3+1 mortal wounds.
+  - You can re-roll Hit rolls for attacks made by this model.
+  - You can re-roll Wound rolls for attacks made by this model.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11178,7 +11161,7 @@ Applies to: units with LEGIONES DAEMONICA, BATTLELINE.</description>
           <profiles>
             <profile name="Brazenmaw" id="7b88-133b-f1b9-2d9c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gets +2 to Charge rolls.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 2 to this unit's Charge rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11242,11 +11225,11 @@ Applies to: units with LEGIONES DAEMONICA, BATTLELINE.</description>
             <profile name="A'rgath, The King of Blades" id="37b2-18a8-b145-9966" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless the The Shadow of Chaos is active:
-  -&gt; Add 1 to the Attacks characteristic of melee weapons equipped by this model.
-  -&gt; Add 1 to the Strength characteristic of melee weapons equipped by this model.
+  - Add 1 to the Attacks characteristic of melee weapons equipped by this model.
+  - Add 1 to the Strength characteristic of melee weapons equipped by this model.
 While the The Shadow of Chaos is active:
-  -&gt; Add 2 to the Attacks characteristic of melee weapons equipped by this model.
-  -&gt; Add 2 to the Strength characteristic of melee weapons equipped by this model.</characteristic>
+  - Add 2 to the Attacks characteristic of melee weapons equipped by this model.
+  - Add 2 to the Strength characteristic of melee weapons equipped by this model.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11282,9 +11265,9 @@ While the The Shadow of Chaos is active:
             <profile name="The Everstave" id="d8a7-ff8f-b294-14f8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Unless the The Shadow of Chaos is active, add 1 to the Strength characteristic of ranged weapons equipped by this model.
-Unless the The Shadow of Chaos is active, add 3 to the Range characteristic of ranged weapons equipped by this model.
+Unless the The Shadow of Chaos is active, add 3" to the Range characteristic of ranged weapons equipped by this model.
 While the The Shadow of Chaos is active, add 2 to the Strength characteristic of ranged weapons equipped by this model.
-While the The Shadow of Chaos is active, add 6 to the Range characteristic of ranged weapons equipped by this model.</characteristic>
+While the The Shadow of Chaos is active, add 6" to the Range characteristic of ranged weapons equipped by this model.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11319,7 +11302,7 @@ While the The Shadow of Chaos is active, add 6 to the Range characteristic of ra
           <profiles>
             <profile name="The Endless Gift" id="46cb-c6ac-962f-46ba" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has the Feel No Pain 5+ ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This model has Feel No Pain 5+.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11356,10 +11339,10 @@ While the The Shadow of Chaos is active, add 6 to the Range characteristic of ra
             <profile name="Soulstealer" id="1b16-0ae3-5d23-f0c4" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time this model destroys an enemy model, while making melee attacks:
-  While the The Shadow of Chaos is active:
-    -&gt; Roll one D6+1: on a 4+, this model regains up to 1 lost wound.
-  Unless the The Shadow of Chaos is active:
-    -&gt; Roll one D6: on a 4+, this model regains up to 1 lost wound.</characteristic>
+  - While the The Shadow of Chaos is active:
+    - Roll one D6+1: on a 4+, this model regains up to 1 lost wound.
+  - Unless the The Shadow of Chaos is active:
+    - Roll one D6: on a 4+, this model regains up to 1 lost wound.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11457,7 +11440,7 @@ While the The Shadow of Chaos is active, add 6 to the Range characteristic of ra
           <profiles>
             <profile name="Droning Shroud (Aura)" id="973e-c65e-945a-9940" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly LEGIONES DAEMONICA NURGLE unit is within 6" of this model, while the attacking unit is within 18" of the unit, enemy units can target that unit with ranged weapons.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly LEGIONES DAEMONICA NURGLE unit is within 6" of this model, while the attacking unit is within 18" of this unit, enemy units can target that unit with ranged weapons.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11533,7 +11516,7 @@ While the The Shadow of Chaos is active, add 6 to the Range characteristic of ra
           <profiles>
             <profile name="Leaping Shadows" id="5e4a-3460-c1a4-5d87" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">The unit gains the Scouts 9" ability.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Scouts 9" ability.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11581,7 +11564,7 @@ While the The Shadow of Chaos is active, add 6 to the Range characteristic of ra
           <profiles>
             <profile name="Mantle of Gloom (Aura)" id="d07c-3b83-70b0-01a0" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within Engagement Range of the unit, subtract 1 from that unit's Objective Control characteristic.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While an enemy unit is within Engagement Range of this unit, subtract 1 from that unit's Objective Control characteristic.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11629,7 +11612,7 @@ While the The Shadow of Chaos is active, add 6 to the Range characteristic of ra
           <profiles>
             <profile name="Fade to Darkness" id="83ed-3948-1095-2eea" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, you may use this ability, if the unit has destroyed 1+ enemy units this phase, while the unit is unengaged, the unit can be placed into Strategic Reserves.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, you can use this ability, if this unit has destroyed one or more enemy units this phase, while this unit is unengaged, this unit can be placed into Strategic Reserves.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11678,8 +11661,8 @@ While the The Shadow of Chaos is active, add 6 to the Range characteristic of ra
             <profile name="Malice Made Manifest" id="2bfd-4150-e1fb-9b80" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of the Fight phase:
-  -&gt; Select one enemy unit if the selected unit is within Engagement Range of the unit:
-    -&gt; Roll one D6:
+  - Select one enemy unit that is within Engagement Range of this unit:
+    - Roll one D6:
       - On 1: Nothing happens.
       - On 2-5: That unit suffers D3 mortal wounds.
       - On 6: That unit suffers 3 mortal wounds.</characteristic>
@@ -11745,7 +11728,8 @@ While the The Shadow of Chaos is active, add 6 to the Range characteristic of ra
           <profiles>
             <profile name="Infernal Puppeteer" id="e7f4-b685-a394-de56" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When this unit is selected to shoot, during your Shooting phase, until this unit has resolved its ranged attacks:
+  For each enemy unit: While this unit is visible to a friendly LEGIONES DAEMONICA TZEENTCH unit, add 9" to that unit's detection range.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11776,7 +11760,7 @@ While the The Shadow of Chaos is active, add 6 to the Range characteristic of ra
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve the Strength characteristic of melee weapons equipped by this model by 2.
 Improve the Attacks characteristic of melee weapons equipped by this model by 1.
 Improve the Armour Penetration characteristic of melee weapons equipped by this model by 1.
-While making melee attacks, this model gets +1 to Hit rolls.</characteristic>
+While making melee attacks, add 1 to this model's Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11811,7 +11795,7 @@ While making melee attacks, this model gets +1 to Hit rolls.</characteristic>
           <profiles>
             <profile name="Improbable Shield (Aura)" id="8158-a901-93ca-6860" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly LEGIONES DAEMONICA TZEENTCH unit is within 6" of this model, that unit has the Feel No Pain 4+ ability against Psychic Attacks and mortal wounds.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly LEGIONES DAEMONICA TZEENTCH unit is within 6" of this model, that unit has Feel No Pain 4+ against Psychic Attacks and mortal wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11847,7 +11831,7 @@ While making melee attacks, this model gets +1 to Hit rolls.</characteristic>
           <profiles>
             <profile name="False Majesty (Aura)" id="d1c7-d2e6-8946-4bfd" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while a friendly LEGIONES DAEMONICA SLAANESH unit (excluding MONSTER units) is within 6" of this model, that unit gets +1 to Wound rolls.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while a friendly LEGIONES DAEMONICA SLAANESH unit (excluding MONSTER units) is within 6" of this model, add 1 to that unit's Wound rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11883,7 +11867,7 @@ While making melee attacks, this model gets +1 to Hit rolls.</characteristic>
           <profiles>
             <profile name="Dreaming Crown (Aura)" id="d517-4ff1-698e-530b" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while a friendly LEGIONES DAEMONICA SLAANESH unit (excluding MONSTER units) is within 6" of this model, that unit gets +1 to Hit rolls.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While making melee attacks, while a friendly LEGIONES DAEMONICA SLAANESH unit (excluding MONSTER units) is within 6" of this model, add 1 to that unit's Hit rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11911,11 +11895,11 @@ While making melee attacks, this model gets +1 to Hit rolls.</characteristic>
           <profiles>
             <profile name="Avatar of Perfection" id="4dfc-86ad-542a-0dd2" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you may use this ability, while a friendly unit other than this unit is not within 6" of this model:
-  -&gt; You can re-roll the Advance roll.
-  -&gt; You can re-roll the Charge roll.
-  -&gt; This model ignores any modifiers to its Move characteristics.
-  -&gt; This model ignores any modifiers to its Charge and Advance rolls.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the start of each phase, you can use this ability, while a friendly unit other than this unit is not within 6" of this model:
+  - You can re-roll the Advance roll.
+  - You can re-roll the Charge roll.
+  - This model ignores any modifiers to its Move characteristics.
+  - This model ignores any modifiers to its Charge and Advance rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11943,7 +11927,7 @@ While making melee attacks, this model gets +1 to Hit rolls.</characteristic>
           <profiles>
             <profile name="Soul Glutton" id="6ba2-5d04-4531-e8ba" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, you may use this ability, if this model has destroyed 1+ enemy models this phase, this model regains up to D3 lost wounds.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">At the end of the Fight phase, you can use this ability, if this model has destroyed one or more enemy models this phase, this model regains up to D3 lost wounds.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11985,8 +11969,8 @@ While making melee attacks, this model gets +1 to Hit rolls.</characteristic>
           <profiles>
             <profile name="Apocalyptic Steeds (Upgrade)" id="0eae-ba12-1b78-b125" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1 to the unit's Move characteristic.
-Applies to: units with LEGIONES DAEMONICA, MOUNTED.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 1" to this unit's Move characteristic.
+Applies to: LEGIONES DAEMONICA MOUNTED units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12028,8 +12012,8 @@ Applies to: units with LEGIONES DAEMONICA, MOUNTED.</characteristic>
           <profiles>
             <profile name="Soul-shattering Charge (Upgrade)" id="0f39-263a-91d4-e7cc" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If the unit charged this turn, until the end of the phase, the unit is eligible to fight from up to 3" away.
-Applies to: units with LEGIONES DAEMONICA, MOUNTED.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">If this unit charged this turn, until the end of the phase, this unit is eligible to fight from up to 3" away.
+Applies to: LEGIONES DAEMONICA MOUNTED units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12074,7 +12058,7 @@ Applies to: units with LEGIONES DAEMONICA, MOUNTED.</characteristic>
             <profile name="Swollen with Power (Upgrade)" id="31d4-6b77-6161-8d58" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
                 <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Add 2 to this model's Wounds characteristic.
-Applies to: units with LEGIONES DAEMONICA, CHARACTER (excluding MONSTER).</characteristic>
+Applies to: LEGIONES DAEMONICA CHARACTER units (excluding MONSTER units).</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12111,8 +12095,8 @@ Applies to: units with LEGIONES DAEMONICA, CHARACTER (excluding MONSTER).</chara
           <profiles>
             <profile name="Bane-forged Weapons (Upgrade)" id="8d92-0a2a-6315-f5d1" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve the unit's Strength characteristic by 1.
-Applies to: units with LEGIONES DAEMONICA, BATTLELINE.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Improve this unit's Strength characteristic by 1.
+Applies to: LEGIONES DAEMONICA BATTLELINE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12149,8 +12133,8 @@ Applies to: units with LEGIONES DAEMONICA, BATTLELINE.</characteristic>
           <profiles>
             <profile name="Soul-hungry Slaughterers (Upgrade)" id="3d50-f031-e9f9-39a5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target the unit with the Heroic Intervention Stratagem or when you target the unit with the Fire Overwatch Stratagem, reduce the CP cost of that use of the Stratagem by 1CP (to a minimum of 0CP).
-Applies to: units with LEGIONES DAEMONICA, BATTLELINE.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When you target this unit with the Heroic Intervention Stratagem or when you target this unit with the Fire Overwatch Stratagem, reduce the CP cost of that use of the Stratagem by 1 CP, to a minimum of 0 CP.
+Applies to: LEGIONES DAEMONICA BATTLELINE units.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -12165,13 +12149,13 @@ Applies to: units with LEGIONES DAEMONICA, BATTLELINE.</characteristic>
   <sharedRules>
     <rule name="The Shadow of Chaos" id="1d05-942b-7d36-e2af" hidden="false">
       <description>If your Army Faction is CHAOS DAEMONS, your deployment zone is within The Shadow of Chaos. At the start of each phase, if you control at least half of the objectives in no man's land, no man's land is within The Shadow of Chaos until the end of the phase (evaluated once at that time). At the start of each phase, if you control at least half of the objectives in your opponent's deployment zone, your opponent's deployment zone is within The Shadow of Chaos until the end of the phase (evaluated once at that time).
--&gt; When a friendly unit takes a Battle-shock test (the triggering unit must have LEGIONES DAEMONICA): if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, the triggering unit gets +1 to Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword and the triggering battle shock roll succeeded, one model in the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword, if the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.
--&gt; When an enemy unit takes a Battle-shock test: if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, the triggering unit gets -1 to Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds.</description>
+When a friendly LEGIONES DAEMONICA unit takes a Battle-shock test, if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos, add 1 to the triggering unit's Battle-shock rolls; if the triggering battle shock roll succeeded, unless the triggering unit has the BATTLELINE keyword and the triggering battle shock roll succeeded, one model in the triggering unit regains up to D3 lost wounds; if the triggering unit has the BATTLELINE keyword and the triggering battle shock roll succeeded, return D3 destroyed models (excluding CHARACTER models) to the triggering unit, each with its full wounds remaining.
+When an enemy unit takes a Battle-shock test, if your Army Faction is CHAOS DAEMONS, while the triggering unit is within The Shadow of Chaos or while the triggering unit is within 6" of a friendly unit with the BLOODTHIRSTER, GREAT UNCLEAN ONE, KAIROS FATEWEAVER, KEEPER OF SECRETS, LORD OF CHANGE, ROTIGUS, SHALAXI HELBANE or SKARBRAND keyword, subtract 1 from the triggering unit's Battle-shock rolls; if the triggering battle shock roll was a failure, the triggering unit suffers D3 mortal wounds.</description>
     </rule>
     <rule name="Daemonic Pact" id="6df8-0ebc-1351-d78f" hidden="false">
       <description>Your army can include LEGIONES DAEMONICA units.
-All friendly LEGIONES DAEMONICA units cannot be your Warlord.
-All friendly LEGIONES DAEMONICA units cannot be given Enhancements.</description>
+Friendly LEGIONES DAEMONICA units cannot be your Warlord.
+Friendly LEGIONES DAEMONICA units cannot be given Enhancements.</description>
     </rule>
   </sharedRules>
 </catalogue>
