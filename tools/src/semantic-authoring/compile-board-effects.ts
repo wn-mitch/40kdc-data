@@ -185,6 +185,13 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     }
     case "army-construction":
       return armyRuleEffect(leaf);
+    case "reserves-schedule": {
+      // The rows folded by compile-reserves-schedule.ts.
+      if (leaf.parameters.entries === undefined) throw new CompileError(`The reserves schedule at byte ${leaf.start_byte} has no rows.`);
+      const modifier: Node = { entries: structuredClone(leaf.parameters.entries) };
+      if (leaf.parameters.set_up !== undefined) modifier.set_up = closed(leaf, "set_up");
+      return { type: "reserves-schedule", target: { owner: "friendly" }, modifier };
+    }
     case "return-models": {
       const modifier: Node = { count: countValue(closed(leaf, "count")) };
       if (leaf.parameters.wounds_remaining !== undefined) {

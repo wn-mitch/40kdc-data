@@ -140,6 +140,7 @@ const OUTSIDE_CRUNCHER_SCOPE: ReadonlyArray<{ reason: RegExp; why: string }> = [
   { reason: /^effect type "order-share" is not modelled by the buff layer$/u, why: "an Order shared from another unit resolves through that Order's own lever" },
   { reason: /^effect type "dice-table" is not modelled by the buff layer$/u, why: "a rolled outcome table is not a fixed buff" },
   { reason: /^effect type "test-exemption" is not modelled by the buff layer$/u, why: "a test exemption changes no attack" },
+  { reason: /^effect type "reserves-schedule" is not modelled by the buff layer$/u, why: "an arrival schedule changes deployment, not an attack" },
   { reason: /^ignore-modifiers: only hit and wound rolls and WS\/BS are modelled$/u, why: "ignoring modifiers to other rolls or characteristics is not modelled" },
   { reason: /^stat-modifier: operation "set" not supported$/u, why: "setting a characteristic has no single delta" },
   { reason: /^roll-result on "(hit|wound|save)": only a critical threshold on hit or wound rolls is modelled$/u, why: "fixed roll outcomes beyond a critical threshold are not modelled" },

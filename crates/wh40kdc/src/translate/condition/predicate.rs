@@ -35,6 +35,7 @@ pub(crate) fn verb_negated(t: &str) -> bool {
             | "army-state"
             | "oath-state"
             | "battle-size"
+            | "game-mode"
     )
 }
 

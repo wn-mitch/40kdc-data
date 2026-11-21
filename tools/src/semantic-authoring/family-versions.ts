@@ -37,6 +37,10 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // Every earlier leaf keeps its meaning.
   { family: "attack", from: 9, to: 10, map: (parameters) => ({ ...parameters }) },
   { family: "stratagem-target", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
+  // resource-gain v7 and army-construction v5 accept a combat-patrol value in a battle-size table;
+  // every earlier leaf keeps its meaning.
+  { family: "resource-gain", from: 6, to: 7, map: (parameters) => ({ ...parameters }) },
+  { family: "army-construction", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
   // instead v3 adds the optional `secondary` marker; every v2 leaf keeps its meaning.
   { family: "instead", from: 2, to: 3, map: (parameters) => ({ ...parameters }) },
   // named-option v5 adds the optional `secondary` marker, targeting-restriction v10 the charged-this-phase

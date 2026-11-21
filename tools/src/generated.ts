@@ -480,6 +480,7 @@ export type SimpleCondition =
   | DestroyedWhileOnObjectiveCondition
   | DestroyedInTaggedTerrainCondition
   | BattleSizeCondition
+  | GameModeCondition
   | ArmyFactionCondition
   | ArmyIncludesCondition
   | MovedOverCondition
@@ -794,7 +795,8 @@ export type SingleEffect =
   | SelectWeaponEffect
   | WeaponAbilityRangeEffect
   | OrdersModifierEffect
-  | OrderShareEffect;
+  | OrderShareEffect
+  | ReservesScheduleEffect;
 /**
  * How long an effect, a part or a designation lasts; resolution lasts only while resolving this activation; while-leading ends when the bearer stops leading; after-resolving ends after this activation resolves. The remaining values are phase, turn, battle-round, battle, explicit phase edges, attack-sequence, permanent, and domain-specific expiry windows.
  *
@@ -1215,12 +1217,16 @@ export interface CountBounds {
   max?: Quantity;
 }
 /**
- * One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.
+ * One value per battle size (Incursion, Strike Force, Onslaught), plus an optional value for a Combat Patrol battle. Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "battle-size-value".
  */
 export interface BattleSizeValue {
+  /**
+   * The value when playing a Combat Patrol battle.
+   */
+  "combat-patrol"?: number;
   incursion: number;
   "strike-force": number;
   onslaught: number;
@@ -2751,6 +2757,18 @@ export interface BattleSizeCondition {
   type: "battle-size";
   parameters: {
     size: "incursion" | "strike-force" | "onslaught";
+  };
+}
+/**
+ * [clock] The battle is being played in one of these game modes ("When playing a Combat Patrol battle").
+ */
+export interface GameModeCondition {
+  type: "game-mode";
+  parameters: {
+    /**
+     * @minItems 1
+     */
+    modes: [GameModeId, ...GameModeId[]];
   };
 }
 /**
@@ -7739,6 +7757,44 @@ export interface OrderShareEffect {
   modifier: {
     with: UnitRef;
     mutual?: true;
+  };
+}
+/**
+ * [army] Each listed datasheet's units must start the battle in Strategic Reserves and cannot be set up on the battlefield before that entry's battle round (a Combat Patrol detachment's arrival schedule). `set_up` is where they must be set up when they arrive.
+ */
+export interface ReservesScheduleEffect {
+  type: "reserves-schedule";
+  target: UnitRef;
+  modifier: {
+    /**
+     * @minItems 1
+     */
+    entries: [
+      {
+        /**
+         * Kebab-case identifier
+         */
+        unit_id: string;
+        /**
+         * The first battle round in which those units can be set up on the battlefield.
+         */
+        battle_round: number;
+      },
+      ...{
+        /**
+         * Kebab-case identifier
+         */
+        unit_id: string;
+        /**
+         * The first battle round in which those units can be set up on the battlefield.
+         */
+        battle_round: number;
+      }[]
+    ];
+    /**
+     * Where the units must be set up when they arrive.
+     */
+    set_up?: "wholly-within-deployment-zone";
   };
 }
 /**

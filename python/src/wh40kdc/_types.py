@@ -345,6 +345,7 @@ RollOutcome: TypeAlias = Literal["success", "failure", "critical"]
 BattleSizeValue = TypedDict(
     "BattleSizeValue",
     {
+        "combat-patrol": NotRequired[int],
         "incursion": int,
         "strike-force": int,
         "onslaught": int,
@@ -1240,41 +1241,50 @@ class SimpleCondition36(TypedDict):
 
 
 class Parameters45(TypedDict):
-    faction: EntityId
+    modes: list[GameModeId]
 
 
 class SimpleCondition37(TypedDict):
-    type: Literal["army-faction"]
+    type: Literal["game-mode"]
     parameters: Parameters45
 
 
-class Parameters49(TypedDict):
-    during: Literal["deployment"]
+class Parameters46(TypedDict):
+    faction: EntityId
 
 
-class SimpleCondition41(TypedDict):
-    type: Literal["deployment-window"]
-    parameters: Parameters49
+class SimpleCondition38(TypedDict):
+    type: Literal["army-faction"]
+    parameters: Parameters46
 
 
 class Parameters50(TypedDict):
-    owner: DefiniteOwner
-    state: Literal["honoured"]
+    during: Literal["deployment"]
 
 
 class SimpleCondition42(TypedDict):
-    type: Literal["army-state"]
+    type: Literal["deployment-window"]
     parameters: Parameters50
 
 
 class Parameters51(TypedDict):
+    owner: DefiniteOwner
+    state: Literal["honoured"]
+
+
+class SimpleCondition43(TypedDict):
+    type: Literal["army-state"]
+    parameters: Parameters51
+
+
+class Parameters52(TypedDict):
     ability: EntityId
     state: Literal["fulfilled"]
 
 
-class SimpleCondition43(TypedDict):
+class SimpleCondition44(TypedDict):
     type: Literal["oath-state"]
-    parameters: Parameters51
+    parameters: Parameters52
 
 
 class EventBoundReference(TypedDict):
@@ -1531,6 +1541,16 @@ class Modifier62(TypedDict):
     off_battlefield: NotRequired[Literal[True]]
 
 
+class Entry(TypedDict):
+    unit_id: EntityId
+    battle_round: int
+
+
+class Modifier64(TypedDict):
+    entries: list[Entry]
+    set_up: NotRequired[Literal["wholly-within-deployment-zone"]]
+
+
 Result: TypeAlias = int
 
 
@@ -1553,7 +1573,7 @@ class Option4(TypedDict):
     option_id: EntityId
 
 
-class Modifier66(TypedDict):
+class Modifier67(TypedDict):
     option: NotRequired[Option4]
     options: NotRequired[list[Option4]]
     additional_selections: int
@@ -1563,7 +1583,7 @@ class Modifier66(TypedDict):
 
 class StanceSelectionCapacityEffect(TypedDict):
     type: Literal["stance-selection-capacity"]
-    modifier: Modifier66
+    modifier: Modifier67
 
 
 TransportOccupancySubjectKind: TypeAlias = Literal["unit-models", "single-model"]
@@ -2922,35 +2942,35 @@ class SimpleCondition32(TypedDict):
     parameters: NotRequired[Parameters40]
 
 
-class Parameters46(TypedDict):
+class Parameters47(TypedDict):
     filter: UnitFilter
     min: NotRequired[int]
     every: NotRequired[Literal[True]]
 
 
-class SimpleCondition38(TypedDict):
-    type: Literal["army-includes"]
-    parameters: Parameters46
-
-
-class Parameters47(TypedDict):
-    subject: NotRequired[UnitRef]
-    by: UnitRef
-    window: NotRequired[HistoryWindow]
-
-
 class SimpleCondition39(TypedDict):
-    type: Literal["moved-over"]
+    type: Literal["army-includes"]
     parameters: Parameters47
 
 
 class Parameters48(TypedDict):
     subject: NotRequired[UnitRef]
+    by: UnitRef
+    window: NotRequired[HistoryWindow]
 
 
 class SimpleCondition40(TypedDict):
-    type: Literal["guided"]
+    type: Literal["moved-over"]
     parameters: Parameters48
+
+
+class Parameters49(TypedDict):
+    subject: NotRequired[UnitRef]
+
+
+class SimpleCondition41(TypedDict):
+    type: Literal["guided"]
+    parameters: Parameters49
 
 
 SimpleCondition: TypeAlias = (
@@ -2997,6 +3017,7 @@ SimpleCondition: TypeAlias = (
     | SimpleCondition41
     | SimpleCondition42
     | SimpleCondition43
+    | SimpleCondition44
 )
 
 
@@ -4066,6 +4087,12 @@ class SingleEffect50(TypedDict):
     modifier: Modifier63
 
 
+class SingleEffect51(TypedDict):
+    type: Literal["reserves-schedule"]
+    target: UnitRef
+    modifier: Modifier64
+
+
 SingleEffect: TypeAlias = (
     SingleEffect1
     | SingleEffect2
@@ -4117,6 +4144,7 @@ SingleEffect: TypeAlias = (
     | SingleEffect48
     | SingleEffect49
     | SingleEffect50
+    | SingleEffect51
 )
 
 
@@ -4154,7 +4182,7 @@ class AbilityPart(TypedDict):
     usage: NotRequired[AbilityUsage]
 
 
-class Modifier64(TypedDict):
+class Modifier65(TypedDict):
     condition: Condition
     value: int
 
@@ -4162,7 +4190,7 @@ class Modifier64(TypedDict):
 class Test(TypedDict):
     kind: TestKind
     subject: UnitRef
-    modifiers: NotRequired[list[Modifier64]]
+    modifiers: NotRequired[list[Modifier65]]
 
 
 DiceGatedEffect = TypedDict(
@@ -4229,7 +4257,7 @@ class ForEachUnitEffect(TypedDict):
     max_affected: NotRequired[Quantity]
 
 
-class Modifier65(TypedDict):
+class Modifier66(TypedDict):
     range: NotRequired[RangeRef]
     range_bonus: NotRequired[RangeRef]
     of: NotRequired[str]
@@ -4244,7 +4272,7 @@ class Modifier65(TypedDict):
 class AuraEffect(TypedDict):
     type: Literal["aura"]
     target: Literal["enemy-within-aura", "friendly-within-aura"]
-    modifier: Modifier65
+    modifier: Modifier66
 
 
 class Select1(TypedDict):
@@ -4483,7 +4511,7 @@ class RitualMenuEffect(TypedDict):
     rituals: list[Ritual]
 
 
-class Modifier67(TypedDict):
+class Modifier68(TypedDict):
     condition: Condition
     value: Quantity
 
@@ -4492,7 +4520,7 @@ class DeathGate(TypedDict):
     dice: DiceExpression
     comparison: Comparison
     threshold: Quantity
-    modifiers: list[Modifier67]
+    modifiers: list[Modifier68]
 
 
 class DesignationApplies(TypedDict):

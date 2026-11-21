@@ -4244,6 +4244,13 @@ function genEffectTranslation(): void {
     // A Stratagem that can target its unit while that unit is embarked within a Transport.
     { caseId: "fidelity/permission-despite-embarked", effect: { type: "permission", target: "this-unit", modifier: { activity: "use-stratagem", allow: true, despite: ["embarked"] } } },
     { caseId: "fidelity/permission-despite-embarked-plural", effect: { type: "permission", target: { owner: "friendly", all_of: ["ALPHA"] }, modifier: { activity: "use-stratagem", allow: true, despite: ["embarked", "battle-shocked"] } } },
+    // Combat Patrol: a rule gated on the game mode, a reserves arrival schedule, and an amount with a
+    // Combat Patrol row.
+    { caseId: "fidelity/condition-game-mode-combat-patrol", effect: { type: "conditional", condition: { type: "game-mode", parameters: { modes: ["combat-patrol"] } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
+    { caseId: "fidelity/condition-game-mode-negated-two", effect: { type: "conditional", condition: { operator: "not", operands: [{ type: "game-mode", parameters: { modes: ["matched-play", "combat-patrol"] } }] }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } } },
+    { caseId: "fidelity/reserves-schedule-wholly-within-deployment-zone", effect: { type: "reserves-schedule", target: { owner: "friendly" }, modifier: { entries: [{ unit_id: "alpha-squad", battle_round: 2 }, { unit_id: "beta-walker", battle_round: 3 }], set_up: "wholly-within-deployment-zone" } } },
+    { caseId: "fidelity/reserves-schedule-one-unit", effect: { type: "reserves-schedule", target: { owner: "friendly" }, modifier: { entries: [{ unit_id: "alpha-squad", battle_round: 2 }] } } },
+    { caseId: "fidelity/resource-gain-combat-patrol-table", effect: { type: "resource-gain", target: "this-model", modifier: { pool: "resurgence-points", amount: { "combat-patrol": 2, incursion: 6, "strike-force": 10, onslaught: 14 } } } },
     { caseId: "fidelity/trigger-used-by-opponent", trigger: { event: "used", subject: { owner: "enemy" }, filter: { kind: "stratagem" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
     { caseId: "fidelity/trigger-after-roll-failed-test", trigger: { event: "after-roll", filter: { roll: "battle-shock", result: "failure" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },
     { caseId: "fidelity/trigger-after-roll-save-failed-for-model", trigger: { event: "after-roll", subject: "this-model", filter: { roll: "save", result: "failure" } }, effect: { type: "feel-no-pain", target: "this-unit", modifier: { threshold: 6 } } },

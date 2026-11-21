@@ -58,6 +58,14 @@ export function diceCase(v: unknown): string {
 
 const BATTLE_SIZES = ["incursion", "strike-force", "onslaught"] as const;
 
+/** A battle-size table's sizes in print order, a Combat Patrol row first when it has one; null when it is not a full table. */
+function tableSizes(q: P): { keys: string[]; names: string } | null {
+  if (!BATTLE_SIZES.every((k) => q[k] != null)) return null;
+  return q["combat-patrol"] != null
+    ? { keys: ["combat-patrol", ...BATTLE_SIZES], names: "Combat Patrol/Incursion/Strike Force/Onslaught" }
+    : { keys: [...BATTLE_SIZES], names: "Incursion/Strike Force/Onslaught" };
+}
+
 /** What a count-of / scaling source counts, as a noun phrase. */
 export const SCALE_OF: Record<string, string> = {
   "enemy-models-in-range": "enemy models",
@@ -92,7 +100,8 @@ export function quantityPhrase(q: P): string {
   if (isRatingRef(q)) return "its rating";
   // A characteristic of the effect's target unit: "its Psyker Level characteristic".
   if (q.characteristic != null) return `its ${statName(q.characteristic)} characteristic`;
-  if (BATTLE_SIZES.every((k) => q[k] != null)) return `${BATTLE_SIZES.map((k) => jstr(q[k])).join("/")} (Incursion/Strike Force/Onslaught)`;
+  const sized = tableSizes(q);
+  if (sized) return `${sized.keys.map((k) => jstr(q[k])).join("/")} (${sized.names})`;
   if (typeof q.roll_var === "string") {
     if (q.successes_on == null) return "the result of that roll";
     // "for each 1": the dice at or under the face.
@@ -117,7 +126,8 @@ export function amountOf(q: unknown, one: string, many: string): string {
     return `${n} ${n === "1" ? one : many}`;
   }
   const p = q as P;
-  if (BATTLE_SIZES.every((k) => p[k] != null)) return `${BATTLE_SIZES.map((k) => jstr(p[k])).join("/")} ${many} (Incursion/Strike Force/Onslaught)`;
+  const sized = tableSizes(p);
+  if (sized) return `${sized.keys.map((k) => jstr(p[k])).join("/")} ${many} (${sized.names})`;
   return `a number of ${many} equal to ${quantityPhrase(p)}`;
 }
 

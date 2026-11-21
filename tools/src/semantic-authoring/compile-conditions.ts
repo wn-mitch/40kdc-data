@@ -601,6 +601,8 @@ export function condition(leaf: CompileLeaf): Node {
       return armyIncludesCondition(leaf);
     case "battle-size":
       return polarity(leaf, { type: "battle-size", parameters: { size: closed(leaf, "size") } });
+    case "game-mode":
+      return polarity(leaf, { type: "game-mode", parameters: { modes: closed(leaf, "modes") } });
     // "If the Psychic test result for this Ritual was 10+": the ritual menu's test roll (compile-ritual-menu.ts).
     case "roll-total":
       return { type: "roll-total", parameters: { roll_var: closed(leaf, "roll_var"), min: closed(leaf, "min") } };

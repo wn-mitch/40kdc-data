@@ -13,6 +13,39 @@ use crate::translate::condition::{
     and_list, condition_lead_in_value, nn, obj, or_list, place_ref_phrase, range_phrase, P,
 };
 
+/// A Combat Patrol arrival schedule: "the following friendly units must start the battle in
+/// Strategic Reserves and cannot be set up on the battlefield before the battle round stated:
+/// Emperors Champion Vedrenn (battle round 2)".
+fn reserves_schedule(m: &P) -> String {
+    let rows: Vec<String> = m
+        .get("entries")
+        .and_then(Value::as_array)
+        .map(|entries| {
+            entries
+                .iter()
+                .map(|entry| {
+                    let entry = obj(Some(entry));
+                    format!(
+                        "{} (battle round {})",
+                        title_case(&jstr(entry.get("unit_id"))),
+                        jstr(entry.get("battle_round"))
+                    )
+                })
+                .collect()
+        })
+        .unwrap_or_default();
+    let set_up = if m.get("set_up").and_then(Value::as_str) == Some("wholly-within-deployment-zone")
+    {
+        "; when they are set up, they must be set up wholly within your deployment zone"
+    } else {
+        ""
+    };
+    format!(
+        "the following friendly units must start the battle in Strategic Reserves and cannot be set up on the battlefield before the battle round stated: {}{set_up}",
+        and_list(&rows)
+    )
+}
+
 fn wounds(n: &str, noun: &str) -> String {
     if n == "1" {
         noun.to_string()
@@ -655,6 +688,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
         ),
         Some("designate") => designate(m, subj, ctx),
         Some("army-rule") => army_rule(m, subj, ctx, e.get("target")),
+        Some("reserves-schedule") => reserves_schedule(m),
         Some(t) => format!("[{t}]"),
         None => "[unknown]".to_string(),
     }

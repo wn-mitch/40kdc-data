@@ -36,7 +36,7 @@ export const LEAF_TYPES = new Set([
   "destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
   "transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
   "objective-sticky", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons", "select-weapon",
-  "oath-modifier", "orders-modifier", "order-share",
+  "oath-modifier", "orders-modifier", "order-share", "reserves-schedule",
 ]);
 
 /** "each time an attack targets the unit, " — the lead of an `incoming` change. */

@@ -15,6 +15,7 @@ import { NAMED_ABILITIES_FAMILIES } from "./named-abilities.js";
 import { NAMED_REGIONS_FAMILIES } from "./named-regions.js";
 import { ORDERS_FAMILIES } from "./orders.js";
 import { PSYCHIC_AND_OATHS_FAMILIES } from "./psychic-and-oaths.js";
+import { RESERVES_SCHEDULE_FAMILIES } from "./reserves-schedule.js";
 import { RESOURCE_MENUS_AND_OBJECTIVES_FAMILIES } from "./resource-menus-and-objectives.js";
 import { RESOURCES_AND_DESIGNATIONS_FAMILIES } from "./resources-and-designations.js";
 import { RESTRICTIONS_FAMILIES } from "./restrictions.js";
@@ -86,6 +87,7 @@ const FAMILY_ORDER: readonly string[] = [
   "characteristic-modifier", "event", "turn-start", "add-unit", "target-is-selected",
   "regain-wounds", "return-models", "for-each-unit-select", "apply-mark", "designated-filter",
   "orders-modifier", "order-share",
+  "game-mode", "reserves-schedule",
 ];
 
 const ALL: readonly FlatFamily[] = [
@@ -106,6 +108,7 @@ const ALL: readonly FlatFamily[] = [
   ...NAMED_REGIONS_FAMILIES,
   ...ORDERS_FAMILIES,
   ...PSYCHIC_AND_OATHS_FAMILIES,
+  ...RESERVES_SCHEDULE_FAMILIES,
   ...RESOURCE_MENUS_AND_OBJECTIVES_FAMILIES,
   ...RESOURCES_AND_DESIGNATIONS_FAMILIES,
   ...RESTRICTIONS_FAMILIES,

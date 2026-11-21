@@ -236,11 +236,23 @@ func isBattleSizeValue(q map[string]any) bool {
 }
 
 func battleSizeValues(q map[string]any) string {
-	parts := make([]string, len(battleSizeKeys))
-	for i, k := range battleSizeKeys {
+	keys := battleSizeKeys
+	if q["combat-patrol"] != nil {
+		keys = append([]string{"combat-patrol"}, battleSizeKeys...)
+	}
+	parts := make([]string, len(keys))
+	for i, k := range keys {
 		parts[i] = ejstr(q[k])
 	}
 	return strings.Join(parts, "/")
+}
+
+// battleSizeNames names the sizes battleSizeValues prints, a Combat Patrol row first when q has one.
+func battleSizeNames(q map[string]any) string {
+	if q["combat-patrol"] != nil {
+		return "Combat Patrol/Incursion/Strike Force/Onslaught"
+	}
+	return "Incursion/Strike Force/Onslaught"
 }
 
 // scaleOf is what a count-of / scaling source counts, as a noun phrase.
@@ -298,7 +310,7 @@ func quantityPhrase(q map[string]any) string {
 		return "its " + statName(c) + " characteristic"
 	}
 	if isBattleSizeValue(q) {
-		return battleSizeValues(q) + " (Incursion/Strike Force/Onslaught)"
+		return battleSizeValues(q) + " (" + battleSizeNames(q) + ")"
 	}
 	if _, ok := q["roll_var"].(string); ok {
 		if q["successes_on"] != nil {
@@ -347,7 +359,7 @@ func amountOf(q any, one, many string) string {
 	}
 	p := mapOr(q)
 	if isBattleSizeValue(p) {
-		return battleSizeValues(p) + " " + many + " (Incursion/Strike Force/Onslaught)"
+		return battleSizeValues(p) + " " + many + " (" + battleSizeNames(p) + ")"
 	}
 	return "a number of " + many + " equal to " + quantityPhrase(p)
 }

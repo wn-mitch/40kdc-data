@@ -62,14 +62,31 @@ pub(crate) fn scale_source(q: &P) -> String {
     s
 }
 
-fn battle_sized(q: &P) -> Option<String> {
-    BATTLE_SIZES.iter().all(|k| nn(q, k).is_some()).then(|| {
-        BATTLE_SIZES
-            .iter()
-            .map(|k| jstr(q.get(*k)))
-            .collect::<Vec<_>>()
-            .join("/")
-    })
+/// A battle-size table's values in print order and their size names, a Combat Patrol row first
+/// when it has one; `None` when it is not a full table.
+fn battle_sized(q: &P) -> Option<(String, &'static str)> {
+    if !BATTLE_SIZES.iter().all(|k| nn(q, k).is_some()) {
+        return None;
+    }
+    let patrol = nn(q, "combat-patrol").is_some();
+    let keys: Vec<&str> = if patrol {
+        std::iter::once("combat-patrol")
+            .chain(BATTLE_SIZES.iter().copied())
+            .collect()
+    } else {
+        BATTLE_SIZES.to_vec()
+    };
+    let values = keys
+        .iter()
+        .map(|k| jstr(q.get(*k)))
+        .collect::<Vec<_>>()
+        .join("/");
+    let names = if patrol {
+        "Combat Patrol/Incursion/Strike Force/Onslaught"
+    } else {
+        "Incursion/Strike Force/Onslaught"
+    };
+    Some((values, names))
 }
 
 /// A non-literal quantity as a noun phrase: one value per battle size, a bound roll's result,
@@ -82,8 +99,8 @@ pub(crate) fn quantity_phrase(q: &P) -> String {
     if let Some(c) = nn(q, "characteristic") {
         return format!("its {} characteristic", stat_name(Some(c)));
     }
-    if let Some(sizes) = battle_sized(q) {
-        return format!("{sizes} (Incursion/Strike Force/Onslaught)");
+    if let Some((sizes, names)) = battle_sized(q) {
+        return format!("{sizes} ({names})");
     }
     if q.get("roll_var").is_some_and(Value::is_string) {
         return match nn(q, "successes_on") {
@@ -119,8 +136,8 @@ pub(crate) fn amount_of(q: Option<&Value>, one: &str, many: &str) -> String {
         return format!("{n} {}", if n == "1" { one } else { many });
     }
     let p = obj(q);
-    if let Some(sizes) = battle_sized(p) {
-        return format!("{sizes} {many} (Incursion/Strike Force/Onslaught)");
+    if let Some((sizes, names)) = battle_sized(p) {
+        return format!("{sizes} {many} ({names})");
     }
     format!("a number of {many} equal to {}", quantity_phrase(p))
 }

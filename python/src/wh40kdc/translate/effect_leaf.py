@@ -79,6 +79,7 @@ LEAF_TYPES = frozenset(
         "oath-modifier",
         "orders-modifier",
         "order-share",
+        "reserves-schedule",
         "ability-activate",
         "permission",
         "targeting",

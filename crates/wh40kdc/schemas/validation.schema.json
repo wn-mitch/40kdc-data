@@ -1602,8 +1602,13 @@
     "battle-size-value": {
       "type": "object",
       "additionalProperties": false,
-      "description": "One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
+      "description": "One value per battle size (Incursion, Strike Force, Onslaught), plus an optional value for a Combat Patrol battle. Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
       "properties": {
+        "combat-patrol": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The value when playing a Combat Patrol battle."
+        },
         "incursion": {
           "type": "integer",
           "minimum": 0
@@ -8340,6 +8345,38 @@
         {
           "type": "object",
           "additionalProperties": false,
+          "title": "game-mode condition",
+          "description": "[clock] The battle is being played in one of these game modes (\"When playing a Combat Patrol battle\").",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "game-mode"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "modes": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "$ref": "#/$defs/game-mode-id"
+                  }
+                }
+              },
+              "required": [
+                "modes"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
           "title": "army-faction condition",
           "description": "[army] Your Army Faction is this faction.",
           "required": [
@@ -14210,6 +14247,64 @@
                   "const": true
                 }
               }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "reserves-schedule effect",
+          "description": "[army] Each listed datasheet's units must start the battle in Strategic Reserves and cannot be set up on the battlefield before that entry's battle round (a Combat Patrol detachment's arrival schedule). `set_up` is where they must be set up when they arrive.",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "reserves-schedule"
+            },
+            "target": {
+              "$ref": "#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "entries": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "unit_id": {
+                        "$ref": "#/$defs/entity-id",
+                        "description": "The datasheet (unit id) whose units the entry schedules."
+                      },
+                      "battle_round": {
+                        "type": "integer",
+                        "minimum": 2,
+                        "maximum": 5,
+                        "description": "The first battle round in which those units can be set up on the battlefield."
+                      }
+                    },
+                    "required": [
+                      "unit_id",
+                      "battle_round"
+                    ]
+                  }
+                },
+                "set_up": {
+                  "enum": [
+                    "wholly-within-deployment-zone"
+                  ],
+                  "description": "Where the units must be set up when they arrive."
+                }
+              },
+              "required": [
+                "entries"
+              ]
             }
           }
         }

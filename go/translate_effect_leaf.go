@@ -17,7 +17,7 @@ var leafTypes = map[string]bool{}
 func init() {
 	for _, t := range []string{
 		"stat-modifier", "ignore-modifiers", "roll-modifier", "re-roll", "roll-result", "end-attack-sequence", "ability-grant",
-		"keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "oath-modifier", "orders-modifier", "order-share", "permission", "targeting",
+		"keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "oath-modifier", "orders-modifier", "order-share", "reserves-schedule", "permission", "targeting",
 		"counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
 		"destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
 		"transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",

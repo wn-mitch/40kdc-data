@@ -874,10 +874,28 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return designateLeaf(m, subj, ctx)
 	case "army-rule":
 		return armyRuleLeaf(m, subj, ctx, e["target"])
+	case "reserves-schedule":
+		return reservesScheduleLeaf(m)
 	}
 	t := "unknown"
 	if e["type"] != nil {
 		t = ejstr(e["type"])
 	}
 	return "[" + t + "]"
+}
+
+// reservesScheduleLeaf is a Combat Patrol arrival schedule: the units that must start in
+// Strategic Reserves and the first battle round each can be set up in.
+func reservesScheduleLeaf(m map[string]any) string {
+	entries, _ := m["entries"].([]any)
+	rows := make([]string, 0, len(entries))
+	for _, raw := range entries {
+		entry := mapOr(raw)
+		rows = append(rows, titleCase(ejstr(entry["unit_id"]))+" (battle round "+ejstr(entry["battle_round"])+")")
+	}
+	setUp := ""
+	if m["set_up"] == "wholly-within-deployment-zone" {
+		setUp = "; when they are set up, they must be set up wholly within your deployment zone"
+	}
+	return "the following friendly units must start the battle in Strategic Reserves and cannot be set up on the battlefield before the battle round stated: " + andList(rows) + setUp
 }

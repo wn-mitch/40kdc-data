@@ -937,4 +937,28 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
         return _designate(m, subj, ctx)
     if t == "army-rule":
         return army_rule(m, subj, ctx, e.get("target"))
+    if t == "reserves-schedule":
+        return _reserves_schedule(m)
     return f"[{t if t is not None else 'unknown'}]"
+
+
+def _reserves_schedule(m: dict[str, Any]) -> str:
+    """A Combat Patrol arrival schedule: the units that must start in Strategic Reserves and
+    the first battle round each can be set up in."""
+    raw_entries = m.get("entries")
+    entries = raw_entries if isinstance(raw_entries, list) else []
+    rows = and_list(
+        [
+            f"{title_case(jstr(row.get('unit_id')))} (battle round {jstr(row.get('battle_round'))})"
+            for row in (e if isinstance(e, dict) else {} for e in entries)
+        ]
+    )
+    set_up = (
+        "; when they are set up, they must be set up wholly within your deployment zone"
+        if m.get("set_up") == "wholly-within-deployment-zone"
+        else ""
+    )
+    return (
+        "the following friendly units must start the battle in Strategic Reserves and cannot "
+        f"be set up on the battlefield before the battle round stated: {rows}{set_up}"
+    )

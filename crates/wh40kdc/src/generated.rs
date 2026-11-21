@@ -7813,13 +7813,13 @@ for BattleSizeConditionParametersSize {
         value.parse()
     }
 }
-///One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.
+///One value per battle size (Incursion, Strike Force, Onslaught), plus an optional value for a Combat Patrol battle. Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
+///  "description": "One value per battle size (Incursion, Strike Force, Onslaught), plus an optional value for a Combat Patrol battle. Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
 ///  "type": "object",
 ///  "required": [
 ///    "incursion",
@@ -7827,6 +7827,11 @@ for BattleSizeConditionParametersSize {
 ///    "strike-force"
 ///  ],
 ///  "properties": {
+///    "combat-patrol": {
+///      "description": "The value when playing a Combat Patrol battle.",
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
 ///    "incursion": {
 ///      "type": "integer",
 ///      "minimum": 0.0
@@ -7847,6 +7852,13 @@ for BattleSizeConditionParametersSize {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct BattleSizeValue {
+    ///The value when playing a Combat Patrol battle.
+    #[serde(
+        rename = "combat-patrol",
+        default,
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub combat_patrol: ::std::option::Option<u64>,
     pub incursion: u64,
     pub onslaught: u64,
     #[serde(rename = "strike-force")]
@@ -20621,6 +20633,35 @@ pub struct GameMode {
     ///Whether this mode counts toward the dataset's headline competitive-coverage metric. Only matched-play is competitive; non-competitive modes are tracked on their own coverage dimension.
     pub is_competitive: bool,
     pub name: GameModeName,
+}
+///`GameModeConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "modes"
+///  ],
+///  "properties": {
+///    "modes": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/game-mode-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct GameModeConditionParameters {
+    pub modes: Vec<GameModeId>,
 }
 ///Community-authored summary of the mode (original prose only — no reproduced rules text).
 ///
@@ -36021,6 +36062,170 @@ impl ::std::convert::TryFrom<::std::string::String> for RegionRefTerritory {
         value.parse()
     }
 }
+///`ReservesScheduleEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "entries"
+///  ],
+///  "properties": {
+///    "entries": {
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "battle_round",
+///          "unit_id"
+///        ],
+///        "properties": {
+///          "battle_round": {
+///            "description": "The first battle round in which those units can be set up on the battlefield.",
+///            "type": "integer",
+///            "maximum": 5.0,
+///            "minimum": 2.0
+///          },
+///          "unit_id": {
+///            "description": "The datasheet (unit id) whose units the entry schedules.",
+///            "$ref": "#/$defs/entity-id"
+///          }
+///        },
+///        "additionalProperties": false
+///      },
+///      "minItems": 1
+///    },
+///    "set_up": {
+///      "description": "Where the units must be set up when they arrive.",
+///      "enum": [
+///        "wholly-within-deployment-zone"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ReservesScheduleEffectModifier {
+    pub entries: ::std::vec::Vec<ReservesScheduleEffectModifierEntriesItem>,
+    ///Where the units must be set up when they arrive.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub set_up: ::std::option::Option<ReservesScheduleEffectModifierSetUp>,
+}
+///`ReservesScheduleEffectModifierEntriesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "battle_round",
+///    "unit_id"
+///  ],
+///  "properties": {
+///    "battle_round": {
+///      "description": "The first battle round in which those units can be set up on the battlefield.",
+///      "type": "integer",
+///      "maximum": 5.0,
+///      "minimum": 2.0
+///    },
+///    "unit_id": {
+///      "description": "The datasheet (unit id) whose units the entry schedules.",
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ReservesScheduleEffectModifierEntriesItem {
+    ///The first battle round in which those units can be set up on the battlefield.
+    pub battle_round: i64,
+    ///The datasheet (unit id) whose units the entry schedules.
+    pub unit_id: EntityId,
+}
+///Where the units must be set up when they arrive.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Where the units must be set up when they arrive.",
+///  "enum": [
+///    "wholly-within-deployment-zone"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ReservesScheduleEffectModifierSetUp {
+    #[serde(rename = "wholly-within-deployment-zone")]
+    WhollyWithinDeploymentZone,
+}
+impl ::std::fmt::Display for ReservesScheduleEffectModifierSetUp {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::WhollyWithinDeploymentZone => {
+                f.write_str("wholly-within-deployment-zone")
+            }
+        }
+    }
+}
+impl ::std::str::FromStr for ReservesScheduleEffectModifierSetUp {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "wholly-within-deployment-zone" => Ok(Self::WhollyWithinDeploymentZone),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ReservesScheduleEffectModifierSetUp {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ReservesScheduleEffectModifierSetUp {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ReservesScheduleEffectModifierSetUp {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`ResourceActionMenuEffect`
 ///
 /// <details><summary>JSON schema</summary>
@@ -47634,6 +47839,24 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///      "additionalProperties": false
 ///    },
 ///    {
+///      "title": "game-mode condition",
+///      "description": "[clock] The battle is being played in one of these game modes (\"When playing a Combat Patrol battle\").",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/game-mode-condition-parameters"
+///        },
+///        "type": {
+///          "const": "game-mode"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
 ///      "title": "army-faction condition",
 ///      "description": "[army] Your Army Faction is this faction.",
 ///      "type": "object",
@@ -47958,6 +48181,11 @@ pub enum SimpleCondition {
 [clock] The battle is being played at this battle size.*/
     #[serde(rename = "battle-size")]
     BattleSize { parameters: BattleSizeConditionParameters },
+    /**game-mode condition
+
+[clock] The battle is being played in one of these game modes ("When playing a Combat Patrol battle").*/
+    #[serde(rename = "game-mode")]
+    GameMode { parameters: GameModeConditionParameters },
     /**army-faction condition
 
 [army] Your Army Faction is this faction.*/
@@ -49240,6 +49468,28 @@ pub enum SimpleCondition {
 ///        }
 ///      },
 ///      "additionalProperties": false
+///    },
+///    {
+///      "title": "reserves-schedule effect",
+///      "description": "[army] Each listed datasheet's units must start the battle in Strategic Reserves and cannot be set up on the battlefield before that entry's battle round (a Combat Patrol detachment's arrival schedule). `set_up` is where they must be set up when they arrive.",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/reserves-schedule-effect-modifier"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "reserves-schedule"
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
@@ -49735,6 +49985,11 @@ pub enum SingleEffect {
 [orders] Orders affecting the target also affect `modifier.with`; `mutual`: and vice versa.*/
     #[serde(rename = "order-share")]
     OrderShare { modifier: OrderShareEffectModifier, target: UnitRef },
+    /**reserves-schedule effect
+
+[army] Each listed datasheet's units must start the battle in Strategic Reserves and cannot be set up on the battlefield before that entry's battle round (a Combat Patrol detachment's arrival schedule). `set_up` is where they must be set up when they arrive.*/
+    #[serde(rename = "reserves-schedule")]
+    ReservesSchedule { modifier: ReservesScheduleEffectModifier, target: UnitRef },
 }
 ///`Snapshot`
 ///
@@ -65983,7 +66238,8 @@ fn effect_node_from_value(
             | "resource-spend" | "resource-die" | "objective-sticky" | "designate"
             | "army-rule" | "test-exemption" | "datasheet-swap"
             | "characteristic-resolution" | "borrow-weapons" | "select-weapon"
-            | "weapon-ability-range" | "orders-modifier" | "order-share",
+            | "weapon-ability-range" | "orders-modifier" | "order-share"
+            | "reserves-schedule",
         ) => |v| ::serde_json::from_value(v).map(EffectNode::SingleEffect),
         Some("stance-select") => {
             |v| ::serde_json::from_value(v).map(EffectNode::StanceSelectEffect)

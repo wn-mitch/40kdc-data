@@ -1907,6 +1907,10 @@
       {
         "path": "/effect/modifier/with",
         "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/entries",
+        "code": "REQUIRED_MISSING"
       }
     ]
   },

@@ -43,7 +43,7 @@ var verbNegated = map[string]bool{
 	"strength": true, "model-count": true, "wounds": true, "loadout": true, "equipped-weapon-count": true, "attachment": true, "has-ability": true,
 	"controls": true, "resource": true, "attack-compare": true, "happened-compare": true, "roll-total": true, "operation-markers": true,
 	"engagement-fronts": true, "destroyed-while-on-objective": true, "destroyed-in-tagged-terrain": true,
-	"army-faction": true, "battle-size": true,
+	"army-faction": true, "battle-size": true, "game-mode": true,
 }
 
 var negatePrefixes = [][2]string{
@@ -866,6 +866,13 @@ func describePredicate(c map[string]any, negated bool) string {
 		return neg + controlCountPhrase(p["count"]) + " enemy units destroyed " + where + " " + terrain
 	case "battle-size":
 		return "the battle size is " + neg + titleCase(cstr(p["size"]))
+	case "game-mode":
+		modes := cstrList(p["modes"])
+		names := make([]string, len(modes))
+		for i, mode := range modes {
+			names[i] = titleCase(mode)
+		}
+		return "the battle is " + neg + "a " + strings.Join(names, " or ") + " battle"
 	case "army-faction":
 		return "your Army Faction is " + neg + strings.ToUpper(strings.ReplaceAll(cstr(p["faction"]), "-", " "))
 	case "army-includes":

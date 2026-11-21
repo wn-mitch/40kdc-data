@@ -133,15 +133,21 @@ function normalizeResourceSpend(input: Params): Params {
 const UNIT_CHARACTERISTICS = ["M", "T", "Sv", "W", "Ld", "OC", "psyker-level"] as const;
 const POOL_OWNERS = ["this-unit", ANTECEDENT] as const;
 
-/** One value per battle size ("6 / 10 / 14 Resurgence points"), each within 0..maximum. */
+/**
+ * One value per battle size ("6 / 10 / 14 Resurgence points"), each within 0..maximum, plus an
+ * optional combat-patrol value for a table that prints a Combat Patrol row.
+ */
 function battleSizeValue(value: unknown, maximum: number, label: string): Record<string, number> {
   if (!isObject(value)) throw new TypeError(`${label} is a number, or an object with incursion, strike-force and onslaught.`);
-  const keys = Object.keys(value);
+  const keys = Object.keys(value).filter((key) => key !== COMBAT_PATROL);
   if (keys.length !== BATTLE_SIZES.length || !BATTLE_SIZES.every((size) => keys.includes(size))) {
-    throw new TypeError(`${label} names exactly incursion, strike-force and onslaught.`);
+    throw new TypeError(`${label} names exactly incursion, strike-force and onslaught, and optionally combat-patrol.`);
   }
-  return Object.fromEntries(BATTLE_SIZES.map((size) => [size, boundedInteger(value[size], 0, maximum, `${label}.${size}`)]));
+  const sizes = COMBAT_PATROL in value ? [COMBAT_PATROL, ...BATTLE_SIZES] : [...BATTLE_SIZES];
+  return Object.fromEntries(sizes.map((size) => [size, boundedInteger(value[size], 0, maximum, `${label}.${size}`)]));
 }
+
+const COMBAT_PATROL = "combat-patrol";
 
 function gainAmount(amount: unknown, pool: unknown): unknown {
   if (amount === "variable" || amount === "any") return amount;
@@ -393,16 +399,16 @@ export const RESOURCES_AND_DESIGNATIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "resource-gain",
-    version: 6,
+    version: 7,
     role: "EFFECT",
     label: "Gain a resource",
-    description: "Gains an amount of a named resource pool (any kebab-case pool id, or an exact source snippet; command-point becomes CP): a fixed number, a variable or any amount the rules don't fix, one value per battle size ({incursion, strike-force, onslaught}), a dice amount (D3, D6, 2D6, D3+1, normalized to uppercase) for a gain rolled on the bearer's ability, as many as another pool holds ({pool}), or as many as one of the unit's own characteristics ({characteristic}: M, T, Sv, W, Ld, OC or psyker-level). set: true makes the pool become the amount instead of gaining it (amount any is a number the player picks); it takes neither a variable amount nor a {pool} amount. With a characteristic amount the pool belongs to that unit: subject names it (this-unit, or antecedent for the units a unit-filter before it names; this-unit when omitted), and subject needs a characteristic amount. label is the player-facing singular noun for one unit of the pool (Aeldari's \"Battle Focus token\"), only when the rules give the pool one.",
+    description: "Gains an amount of a named resource pool (any kebab-case pool id, or an exact source snippet; command-point becomes CP): a fixed number, a variable or any amount the rules don't fix, one value per battle size ({incursion, strike-force, onslaught}, plus combat-patrol when the table prints a Combat Patrol row), a dice amount (D3, D6, 2D6, D3+1, normalized to uppercase) for a gain rolled on the bearer's ability, as many as another pool holds ({pool}), or as many as one of the unit's own characteristics ({characteristic}: M, T, Sv, W, Ld, OC or psyker-level). set: true makes the pool become the amount instead of gaining it (amount any is a number the player picks); it takes neither a variable amount nor a {pool} amount. With a characteristic amount the pool belongs to that unit: subject names it (this-unit, or antecedent for the units a unit-filter before it names; this-unit when omitted), and subject needs a characteristic amount. label is the player-facing singular noun for one unit of the pool (Aeldari's \"Battle Focus token\"), only when the rules give the pool one.",
     starter: { pool: "", amount: null },
     parameterSchema: {
       type: "object", required: ["pool", "amount"], additionalProperties: false,
       properties: {
         pool: { anyOf: [{ enum: [...KNOWN_POOL_IDS] }, SOURCE_QUALIFIED_SCHEMA, { type: "string", pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" }] },
-        amount: { anyOf: [{ type: "integer" }, SOURCE_QUALIFIED_SCHEMA, { const: "variable" }, { const: "any" }, { type: "object", required: ["incursion", "strike-force", "onslaught"], properties: { incursion: { type: "integer", minimum: 0, maximum: 100 }, "strike-force": { type: "integer", minimum: 0, maximum: 100 }, onslaught: { type: "integer", minimum: 0, maximum: 100 } }, additionalProperties: false }, { type: "string", pattern: "^\\d*D(3|6)(\\+\\d+)?$", examples: ["D3"] }, { type: "object", required: ["pool"], properties: { pool: { type: "string", pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" } }, additionalProperties: false }, { type: "object", required: ["characteristic"], properties: { characteristic: { enum: ["M", "T", "Sv", "W", "Ld", "OC", "psyker-level"] } }, additionalProperties: false }] },
+        amount: { anyOf: [{ type: "integer" }, SOURCE_QUALIFIED_SCHEMA, { const: "variable" }, { const: "any" }, { type: "object", required: ["incursion", "strike-force", "onslaught"], properties: { "combat-patrol": { type: "integer", minimum: 0, maximum: 100, "x-optional": true }, incursion: { type: "integer", minimum: 0, maximum: 100 }, "strike-force": { type: "integer", minimum: 0, maximum: 100 }, onslaught: { type: "integer", minimum: 0, maximum: 100 } }, additionalProperties: false }, { type: "string", pattern: "^\\d*D(3|6)(\\+\\d+)?$", examples: ["D3"] }, { type: "object", required: ["pool"], properties: { pool: { type: "string", pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" } }, additionalProperties: false }, { type: "object", required: ["characteristic"], properties: { characteristic: { enum: ["M", "T", "Sv", "W", "Ld", "OC", "psyker-level"] } }, additionalProperties: false }] },
         label: { type: "string", minLength: 1 },
         set: { const: true, "x-optional": true },
         subject: { enum: ["this-unit", "antecedent"], "x-optional": true },
@@ -412,17 +418,17 @@ export const RESOURCES_AND_DESIGNATIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "army-construction",
-    version: 4,
+    version: 5,
     role: "EFFECT",
     label: "Army-construction rule",
-    description: "A roster-building rule: warlord/enhancement/composition/attachment limits that apply when mustering the army. max is a count (units by default) or one value per battle size ({incursion, strike-force, onslaught}); measure says what max counts (units, models or points; above 20 it counts points); per_keywords applies max once per unit with those keywords (\"one per INQUISITOR\"); faction names the allied faction a composition rule admits (kebab-case faction id); measure and per_keywords go with composition. Rule enhancement-source: the subject can only be given Enhancements from this Detachment; limit-exemption: the subject does not count toward a limit, named by exempt_from; warlord-allowed: the subject can be your Warlord although another rule forbids it. with following-filter: the group is the unit-filter right after the leaf. subject is this-unit, this-model or antecedent (the units an earlier leaf named: the group of the nearest earlier composition rule, else the unit-filter right before the leaf). object this-unit or following-filter (attachment only): the unit the subject can be attached to. exempt_from: retinue-limit with composition; enhancement-limit or strategic-reserves-points with limit-exemption. enhancement_kind: a kind of Enhancement, with enhancement-slot or unique. One group source at most: with_keywords, with or an antecedent subject.",
+    description: "A roster-building rule: warlord/enhancement/composition/attachment limits that apply when mustering the army. max is a count (units by default) or one value per battle size ({incursion, strike-force, onslaught}, plus combat-patrol when the rule prints a Combat Patrol row); measure says what max counts (units, models or points; above 20 it counts points); per_keywords applies max once per unit with those keywords (\"one per INQUISITOR\"); faction names the allied faction a composition rule admits (kebab-case faction id); measure and per_keywords go with composition. Rule enhancement-source: the subject can only be given Enhancements from this Detachment; limit-exemption: the subject does not count toward a limit, named by exempt_from; warlord-allowed: the subject can be your Warlord although another rule forbids it. with following-filter: the group is the unit-filter right after the leaf. subject is this-unit, this-model or antecedent (the units an earlier leaf named: the group of the nearest earlier composition rule, else the unit-filter right before the leaf). object this-unit or following-filter (attachment only): the unit the subject can be attached to. exempt_from: retinue-limit with composition; enhancement-limit or strategic-reserves-points with limit-exemption. enhancement_kind: a kind of Enhancement, with enhancement-slot or unique. One group source at most: with_keywords, with or an antecedent subject.",
     starter: { rule: "" },
     parameterSchema: {
       type: "object", required: ["rule"], additionalProperties: false,
       properties: {
         rule: { enum: ["warlord-required", "warlord-forbidden", "unique", "enhancement-forbidden", "enhancement-slot", "attachment", "composition", "faction-forbidden", "single-chapter", "detachment-forbidden", "detachment-tag-exclusive", "enhancement-source", "limit-exemption", "warlord-allowed"] },
         with_keywords: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1, uniqueItems: true },
-        max: { anyOf: [{ type: "integer", minimum: 0, maximum: 5000 }, { type: "object", required: ["incursion", "strike-force", "onslaught"], properties: { incursion: { type: "integer", minimum: 0, maximum: 5000 }, "strike-force": { type: "integer", minimum: 0, maximum: 5000 }, onslaught: { type: "integer", minimum: 0, maximum: 5000 } }, additionalProperties: false }] },
+        max: { anyOf: [{ type: "integer", minimum: 0, maximum: 5000 }, { type: "object", required: ["incursion", "strike-force", "onslaught"], properties: { "combat-patrol": { type: "integer", minimum: 0, maximum: 5000, "x-optional": true }, incursion: { type: "integer", minimum: 0, maximum: 5000 }, "strike-force": { type: "integer", minimum: 0, maximum: 5000 }, onslaught: { type: "integer", minimum: 0, maximum: 5000 } }, additionalProperties: false }] },
         led_by: { anyOf: [{ enum: ["Chapter Master"] }, { type: "string", minLength: 1 }] },
         measure: { enum: ["units", "models", "points"], "x-optional": true },
         per_keywords: { type: "array", items: { type: "string", minLength: 1 }, minItems: 1, uniqueItems: true, "x-optional": true },

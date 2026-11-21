@@ -55,8 +55,19 @@ def scale_source(q: dict[str, Any]) -> str:
     return s
 
 
-def _battle_sized(q: dict[str, Any]) -> bool:
-    return all(q.get(k) is not None for k in _BATTLE_SIZES)
+def _battle_sized(q: dict[str, Any]) -> tuple[str, str] | None:
+    """A battle-size table's values in print order and their size names, a Combat Patrol
+    row first when it has one; ``None`` when it is not a full table."""
+    if not all(q.get(k) is not None for k in _BATTLE_SIZES):
+        return None
+    keys: tuple[str, ...]
+    if q.get("combat-patrol") is not None:
+        keys = ("combat-patrol", *_BATTLE_SIZES)
+        names = "Combat Patrol/Incursion/Strike Force/Onslaught"
+    else:
+        keys = _BATTLE_SIZES
+        names = "Incursion/Strike Force/Onslaught"
+    return "/".join(jstr(q[k]) for k in keys), names
 
 
 def quantity_phrase(q: dict[str, Any]) -> str:
@@ -67,9 +78,10 @@ def quantity_phrase(q: dict[str, Any]) -> str:
     # A characteristic of the effect's target unit: "its Psyker Level characteristic".
     if q.get("characteristic") is not None:
         return f"its {stat_name(q['characteristic'])} characteristic"
-    if _battle_sized(q):
-        values = "/".join(jstr(q[k]) for k in _BATTLE_SIZES)
-        return f"{values} (Incursion/Strike Force/Onslaught)"
+    sized = _battle_sized(q)
+    if sized is not None:
+        values, names = sized
+        return f"{values} ({names})"
     if isinstance(q.get("roll_var"), str):
         if q.get("successes_on") is not None:
             # "for each 1": the dice at or under the face.
@@ -99,9 +111,10 @@ def amount_of(q: Any, one: str, many: str) -> str:
         n = dice_case(q)
         return f"{n} {one if n == '1' else many}"
     p = q if isinstance(q, dict) else {}
-    if _battle_sized(p):
-        values = "/".join(jstr(p[k]) for k in _BATTLE_SIZES)
-        return f"{values} {many} (Incursion/Strike Force/Onslaught)"
+    sized = _battle_sized(p)
+    if sized is not None:
+        values, names = sized
+        return f"{values} {many} ({names})"
     return f"a number of {many} equal to {quantity_phrase(p)}"
 
 

@@ -409,6 +409,18 @@ function oneOf(group: string): string {
   return `${/^[aeiou]/i.test(one) ? "an" : "a"} ${one}`;
 }
 
+/**
+ * A Combat Patrol arrival schedule: "the following friendly units must start the battle in Strategic
+ * Reserves and cannot be set up on the battlefield before the battle round stated: Emperors Champion
+ * Vedrenn (battle round 2)".
+ */
+function reservesSchedule(m: Record<string, unknown>): string {
+  const entries = Array.isArray(m.entries) ? m.entries as Array<Record<string, unknown>> : [];
+  const rows = andList(entries.map((entry) => `${titleCase(jstr(entry.unit_id))} (battle round ${jstr(entry.battle_round)})`));
+  const setUp = m.set_up === "wholly-within-deployment-zone" ? "; when they are set up, they must be set up wholly within your deployment zone" : "";
+  return `the following friendly units must start the battle in Strategic Reserves and cannot be set up on the battlefield before the battle round stated: ${rows}${setUp}`;
+}
+
 function armyRule(m: Record<string, unknown>, subj: string, ctx: Ctx, target?: unknown): string {
   const withF = m.with != null ? effectSubject(m.with, ctx).replace(/^all /, "") : null;
   const group = groupWhat(m, withF);
@@ -595,6 +607,7 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       return `objective markers ${subj} ${v(subj, "controls")} remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase`;
     case "designate": return designate(m, subj, ctx);
     case "army-rule": return armyRule(m, subj, ctx, e.target);
+    case "reserves-schedule": return reservesSchedule(m);
     default: {
       void inline;
       return `[${e.type ?? "unknown"}]`;

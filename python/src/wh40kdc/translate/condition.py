@@ -221,6 +221,7 @@ _VERB_NEGATED = frozenset(
         "destroyed-in-tagged-terrain",
         "army-faction",
         "battle-size",
+        "game-mode",
     }
 )
 
@@ -721,6 +722,10 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         )
     if ctype == "battle-size":
         return f"the battle size is {nt}{title_case(_str(p.get('size')))}"
+    if ctype == "game-mode":
+        raw_modes = p.get("modes")
+        modes = raw_modes if isinstance(raw_modes, list) else []
+        return f"the battle is {nt}a {' or '.join(title_case(_str(mode)) for mode in modes)} battle"
     if ctype == "army-faction":
         faction = _str(p.get("faction")).replace("-", " ").upper()
         return f"your Army Faction is {nt}{faction}"

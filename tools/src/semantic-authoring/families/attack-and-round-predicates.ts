@@ -155,6 +155,19 @@ function normalizeBattleSize(input: Params): Params {
   return { size: enumValue(input.size, BATTLE_SIZES, "battle-size.size"), ...negated };
 }
 
+/** The game modes a battle can be played in (common.schema.json game-mode-id). */
+const GAME_MODES = ["matched-play", "combat-patrol", "boarding-actions", "crusade"] as const;
+
+function normalizeGameMode(input: Params): Params {
+  const negated = negation(input, "game-mode");
+  exactKeys(input, ["modes", ...present(input, ["negated"])], "game-mode");
+  const modes = input.modes;
+  if (!Array.isArray(modes) || modes.length === 0) throw new TypeError("game-mode.modes lists one or more game modes.");
+  const list = modes.map((mode) => enumValue(mode, GAME_MODES, "game-mode.modes"));
+  if (new Set(list).size !== list.length) throw new TypeError("game-mode.modes lists a game mode twice.");
+  return { modes: GAME_MODES.filter((mode) => list.includes(mode)), ...negated };
+}
+
 function normalizeGuided(input: Params): Params {
   const negated = negation(input, "guided");
   const subject = subjectOf(input, SUBJECTS_OR_ANTECEDENT);
@@ -217,6 +230,22 @@ export const ATTACK_AND_ROUND_PREDICATES_FAMILIES: readonly FlatFamily[] = [
       },
     },
     normalize: normalizeAttackCompare,
+  },
+  {
+    id: "game-mode",
+    version: 1,
+    role: "CONDITION",
+    label: "Game mode is",
+    description: "Requires the battle to be played in one of the named game modes (\"When playing a Combat Patrol battle\"): matched-play, combat-patrol, boarding-actions or crusade.",
+    starter: { modes: ["combat-patrol"] },
+    parameterSchema: {
+      type: "object", required: ["modes"], additionalProperties: false,
+      properties: {
+        modes: { type: "array", minItems: 1, uniqueItems: true, items: { enum: [...GAME_MODES] } },
+        negated: { type: "boolean" },
+      },
+    },
+    normalize: normalizeGameMode,
   },
   {
     id: "battle-size",

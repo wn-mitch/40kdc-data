@@ -31,7 +31,7 @@ export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPh
 /** Predicates whose phrase negates by turning its verb (see `negatePhrase`). */
 const VERB_NEGATED = new Set([
   "strength", "model-count", "wounds", "loadout", "equipped-weapon-count", "attachment", "controls", "resource", "attack-compare",
-  "happened-compare", "roll-total", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "army-faction", "battle-size",
+  "happened-compare", "roll-total", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "army-faction", "battle-size", "game-mode",
 ]);
 
 /** "X is Y" → "X is not Y", "X has Y" → "X does not have Y", "you control" → "you do not control"; else a leading "not". */
@@ -327,6 +327,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
     }
     case "battle-size":
       return `the battle size is ${negated ? "not " : ""}${titleCase(str(p.size))}`;
+    case "game-mode":
+      return `the battle is ${negated ? "not " : ""}a ${(Array.isArray(p.modes) ? p.modes : []).map((mode) => titleCase(str(mode))).join(" or ")} battle`;
     case "army-faction":
       return `your Army Faction is ${negated ? "not " : ""}${str(p.faction).replace(/-/g, " ").toUpperCase()}`;
     case "army-state":

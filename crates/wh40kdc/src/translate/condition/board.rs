@@ -546,6 +546,17 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
             "the battle size is {not_}{}",
             title_case(&st(p.get("size")))
         ),
+        "game-mode" => format!(
+            "the battle is {not_}a {} battle",
+            p.get("modes")
+                .and_then(Value::as_array)
+                .map(|modes| modes
+                    .iter()
+                    .map(|mode| title_case(&st(Some(mode))))
+                    .collect::<Vec<_>>()
+                    .join(" or "))
+                .unwrap_or_default()
+        ),
         "army-faction" => format!(
             "your Army Faction is {not_}{}",
             st(p.get("faction")).replace('-', " ").to_uppercase()

@@ -64,6 +64,7 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
     "characteristic-resolution",
     "borrow-weapons",
     "select-weapon",
+    "reserves-schedule",
 ];
 
 /// "each time an attack targets the unit, " — the lead of an `incoming` change.

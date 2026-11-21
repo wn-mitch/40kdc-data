@@ -39292,6 +39292,139 @@
     }
   },
   {
+    "caseId": "fidelity/condition-game-mode-combat-patrol",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "game-mode",
+        "parameters": {
+          "modes": [
+            "combat-patrol"
+          ]
+        }
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "If the battle is a Combat Patrol battle, for this activation, this unit has Feel No Pain 6+."
+    }
+  },
+  {
+    "caseId": "fidelity/condition-game-mode-negated-two",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "operator": "not",
+        "operands": [
+          {
+            "type": "game-mode",
+            "parameters": {
+              "modes": [
+                "matched-play",
+                "combat-patrol"
+              ]
+            }
+          }
+        ]
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "Unless the battle is a Matched Play or Combat Patrol battle, for this activation, this unit has Feel No Pain 6+."
+    }
+  },
+  {
+    "caseId": "fidelity/reserves-schedule-wholly-within-deployment-zone",
+    "effect": {
+      "type": "reserves-schedule",
+      "target": {
+        "owner": "friendly"
+      },
+      "modifier": {
+        "entries": [
+          {
+            "unit_id": "alpha-squad",
+            "battle_round": 2
+          },
+          {
+            "unit_id": "beta-walker",
+            "battle_round": 3
+          }
+        ],
+        "set_up": "wholly-within-deployment-zone"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, the following friendly units must start the battle in Strategic Reserves and cannot be set up on the battlefield before the battle round stated: Alpha Squad (battle round 2) and Beta Walker (battle round 3); when they are set up, they must be set up wholly within your deployment zone."
+    }
+  },
+  {
+    "caseId": "fidelity/reserves-schedule-one-unit",
+    "effect": {
+      "type": "reserves-schedule",
+      "target": {
+        "owner": "friendly"
+      },
+      "modifier": {
+        "entries": [
+          {
+            "unit_id": "alpha-squad",
+            "battle_round": 2
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, the following friendly units must start the battle in Strategic Reserves and cannot be set up on the battlefield before the battle round stated: Alpha Squad (battle round 2)."
+    }
+  },
+  {
+    "caseId": "fidelity/resource-gain-combat-patrol-table",
+    "effect": {
+      "type": "resource-gain",
+      "target": "this-model",
+      "modifier": {
+        "pool": "resurgence-points",
+        "amount": {
+          "combat-patrol": 2,
+          "incursion": 6,
+          "strike-force": 10,
+          "onslaught": 14
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, you gain 2/6/10/14 Resurgence points (Combat Patrol/Incursion/Strike Force/Onslaught)."
+    }
+  },
+  {
     "caseId": "fidelity/trigger-used-by-opponent",
     "trigger": {
       "event": "used",

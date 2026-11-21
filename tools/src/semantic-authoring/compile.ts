@@ -1,6 +1,7 @@
 import { foldStepWindow } from "./compile-step-window.js";
 import { hasUnboundSelectedUnit, unscopedRecipientEffect } from "./compile-recipient-scope.js";
 import { resolveUnitNames, type UnitNameContext } from "./compile-unit-names.js";
+import { foldReservesSchedules } from "./compile-reserves-schedule.js";
 import { resolveRuleReferences, ruleScopeContext } from "./compile-rule-refs.js";
 import { foldAuraEmitter, lowerConditionalAuras } from "./compile-aura-emitter.js";
 import { foldNamedRanges, requireNamedRangeAuras } from "./compile-named-range.js";
@@ -304,10 +305,10 @@ function compileUnchecked(record: readonly CompileLeaf[], sourceText?: string, o
   // Printed rule and ability names resolve to their records first (compile-rule-refs.ts). Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient and a floor after its change (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), an ignore-modifier list after its lead-in (compile-ignore-list.ts), a named range's defined values onto its aura (compile-named-range.ts), and a cost table's headings and rows onto its by-table spend (compile-cost-table.ts).
   let bound: CompileLeaf[];
   try {
-    bound = foldCostTables(foldNamedRanges(foldAuraEmitter(bindIgnoreLists(
+    bound = foldReservesSchedules(foldCostTables(foldNamedRanges(foldAuraEmitter(bindIgnoreLists(
       bindAdditiveOptions(bindCharacteristicFloors(bindCharacteristicAmounts(resolveRuleReferences(resolveUnitNames(leaves, options.units), ruleScopeContext(options.units, options.abilityId)))), sourceText),
       sourceText,
-    )), options.abilityId));
+    )), options.abilityId)), options.units);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };

@@ -1601,8 +1601,13 @@
     "battle-size-value": {
       "type": "object",
       "additionalProperties": false,
-      "description": "One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
+      "description": "One value per battle size (Incursion, Strike Force, Onslaught), plus an optional value for a Combat Patrol battle. Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
       "properties": {
+        "combat-patrol": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The value when playing a Combat Patrol battle."
+        },
         "incursion": {
           "type": "integer",
           "minimum": 0

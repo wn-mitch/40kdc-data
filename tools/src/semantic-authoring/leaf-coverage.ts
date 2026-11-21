@@ -374,6 +374,11 @@ export const COMPOSED: readonly ComposedEntry[] = [
     reason: "Needs ritual-menu-open plus the Psychic test's dice-roll, a ritual-manifest, a per-army once-per-turn usage-limit and named-options carrying warp_charge; the opener alone has no test or Rituals.",
     pinnedTest: "tools/test/semantic-authoring-ritual-menu.test.ts:83",
   },
+  {
+    type: "reserves-schedule",
+    reason: "Needs the reserves-schedule (EFFECT) leaf plus its unit-filter and battle-round rows, and resolves each row's datasheet against the units context the sweep does not supply.",
+    pinnedTest: "tools/test/semantic-authoring-combat-patrol.test.ts (rows fold into reserves-schedule entries)",
+  },
 ];
 
 // ------------------------------------------------------------------------------------------
