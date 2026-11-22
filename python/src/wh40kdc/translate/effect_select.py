@@ -235,11 +235,10 @@ def select_units_plural(sel: Any) -> bool:
 
 
 def each_context(ctx: Ctx, sel: Any) -> Ctx:
-    """A ``for-each-unit`` body: a loop over models names each pass's model "that model"."""
-    return {
-        **selected_context(ctx, sel, False),
-        "each_model": _selector_level(_obj(sel)) == "model",
-    }
+    """A ``for-each-unit`` body: a loop over models names each pass's model "that model", a loop
+    over units its unit "that unit"."""
+    model = _selector_level(_obj(sel)) == "model"
+    return {**selected_context(ctx, sel, False), "each_model": model, "each_unit": not model}
 
 
 def selected_context(ctx: Ctx, sel: Any, plural: bool | None = None) -> Ctx:

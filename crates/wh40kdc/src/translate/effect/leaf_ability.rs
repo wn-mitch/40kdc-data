@@ -436,6 +436,16 @@ fn permission_consequences(m: &P, it: &str) -> String {
 }
 
 pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
+    // "You cannot use this Stratagem": a Stratagem's restriction on its own use.
+    if sv(m, "activity") == Some("use-stratagem")
+        && is_false(m, "allow")
+        && ctx
+            .self_id
+            .as_deref()
+            .is_some_and(|me| sv(m, "stratagem") == Some(me))
+    {
+        return "you cannot use this Stratagem".to_string();
+    }
     let it = if subj.starts_with("all ") || has_word_end(subj, " units") {
         "they"
     } else {

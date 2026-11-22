@@ -17,13 +17,14 @@ const SETUP_TO = ["battlefield", "strategic-reserves"] as const;
 const SETUP_FROM = ["strategic-reserves", "transport", "battlefield"] as const;
 const SETUP_PLACEMENTS = ["closest-to-destruction", "closest-to-original", "deployment-zone", "wholly-within", "anywhere"] as const;
 /** set-up parameters that place a permitted set-up; a forbidden one names its zone through a folded limit. */
-const SETUP_PLACING_KEYS = ["via", "marker_inches", "marker_wholly", "placement", "ignore_limits", "min_enemy_distance", "within_edge"] as const;
+const SETUP_PLACING_KEYS = ["via", "marker_inches", "marker_wholly", "placement", "ignore_limits", "min_enemy_distance", "within_edge", "unengaged"] as const;
 
 function setUp(input: Params): Params {
   keySet(input, ["subject", "to"], [
-    "from", "min_enemy_distance", "within_edge", "round_offset", "placement", "ignore_limits", "via", "marker_inches", "marker_wholly", "allow", "mandatory",
+    "from", "min_enemy_distance", "within_edge", "round_offset", "placement", "ignore_limits", "via", "marker_inches", "marker_wholly", "allow", "mandatory", "unengaged",
   ], "set-up");
-  const { placement, ignore_limits: ignore, via, marker_inches: inches, marker_wholly: wholly, allow, mandatory, ...rest } = input;
+  const { placement, ignore_limits: ignore, via, marker_inches: inches, marker_wholly: wholly, allow, mandatory, unengaged, ...rest } = input;
+  if (unengaged !== undefined && unengaged !== true) throw new TypeError("set-up.unengaged is true or absent.");
   if (allow !== undefined && allow !== false) throw new TypeError("set-up.allow is false or absent.");
   if (mandatory !== undefined && mandatory !== true) throw new TypeError("set-up.mandatory is true or absent.");
   if (allow === false && mandatory === true) throw new TypeError("set-up cannot be both forbidden (allow false) and required (mandatory).");
@@ -62,6 +63,11 @@ function setUp(input: Params): Params {
     result.via = via;
     if (inches !== undefined) result.marker_inches = inches;
     if (wholly === true) result.marker_wholly = true;
+  }
+  // "set it up on the battlefield, unengaged and as close as possible to …": not within Engagement Range of enemy units.
+  if (unengaged === true) {
+    if (result.to !== "battlefield") throw new TypeError("set-up.unengaged places a set-up on the battlefield.");
+    result.unengaged = true;
   }
   if (allow === false) result.allow = false;
   if (mandatory === true) result.mandatory = true;
@@ -230,10 +236,10 @@ export const SET_UP_AND_MARKERS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "set-up",
-    version: 6,
+    version: 7,
     role: "EFFECT",
     label: "Set up",
-    description: "Set the target up on the battlefield or into Strategic Reserves; from, min_enemy_distance, within_edge and round_offset are optional. The target can be the unit an earlier leaf introduced (antecedent). placement says where: as close as possible to where it was destroyed or to where it was, wholly within its deployment zone, anywhere, or (within, on a disembark from transport to battlefield) within the set-up distance of the Transport instead of wholly within it. ignore_limits: the set-up ignores the limits on units in or arriving from Strategic Reserves. via cult-ambush-marker sets the unit up using a Cult Ambush marker (touching it, and the marker is removed), or with marker_inches and marker_wholly (wholly) within that many inches of the marker. allow false (\"cannot be set up\") forbids the set-up this leaf names, with any placement limit after it, and takes no placing parameters; mandatory (\"must be set up\") requires it.",
+    description: "Set the target up on the battlefield or into Strategic Reserves; from, min_enemy_distance, within_edge and round_offset are optional. The target can be the unit an earlier leaf introduced (antecedent). placement says where: as close as possible to where it was destroyed or to where it was, wholly within its deployment zone, anywhere, or (within, on a disembark from transport to battlefield) within the set-up distance of the Transport instead of wholly within it. ignore_limits: the set-up ignores the limits on units in or arriving from Strategic Reserves. via cult-ambush-marker sets the unit up using a Cult Ambush marker (touching it, and the marker is removed), or with marker_inches and marker_wholly (wholly) within that many inches of the marker. allow false (\"cannot be set up\") forbids the set-up this leaf names, with any placement limit after it, and takes no placing parameters; mandatory (\"must be set up\") requires it. unengaged (true, to battlefield): not within Engagement Range of any enemy units, printed inside the set-up's own wording (\"set up … on the battlefield, unengaged and as close as possible to where it was destroyed\").",
     starter: {"subject":"this-unit","to":""},
     parameterSchema: {
       "type": "object",
@@ -360,6 +366,10 @@ export const SET_UP_AND_MARKERS_FAMILIES: readonly FlatFamily[] = [
           "x-optional": true
         },
         "mandatory": {
+          "const": true,
+          "x-optional": true
+        },
+        "unengaged": {
           "const": true,
           "x-optional": true
         }

@@ -433,6 +433,8 @@ def iter_effect_translation_cases(corpus: Path) -> Iterator[Case]:
             args["trigger"] = entry["trigger"]
         if entry.get("applies_to") is not None:
             args["applies_to"] = entry["applies_to"]
+        if entry.get("ability_id") is not None:
+            args["ability_id"] = entry["ability_id"]
         yield Case(
             area="effect-translation",
             case_id=f"effect-translation/{entry['caseId']}",

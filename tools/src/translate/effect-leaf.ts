@@ -5,7 +5,7 @@
  */
 
 import { describeBoardLeaf } from "./effect-leaf-board.js";
-import { describeShapeLeaf } from "./effect-leaf-shapes.js";
+import { abilityClassState, describeShapeLeaf } from "./effect-leaf-shapes.js";
 import {
   abilityLabel, andList, bracketKeyword, dekebab, diceCase, effectSubject, hasWeapon, isPlural, jstr, ofOrPossessive, orList, pronoun,
   movedPhrase, noneOf, rangePhrase, regionPhrase, rollName, signed, statName, titleCase, v, weaponHolder, weaponLabel, weaponNoun,
@@ -419,6 +419,8 @@ function permissionConsequences(m: Record<string, unknown>, it: string): string 
 }
 
 function permission(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
+  // "You cannot use this Stratagem": a Stratagem's restriction on its own use.
+  if (m.activity === "use-stratagem" && m.allow === false && ctx.self !== undefined && m.stratagem === ctx.self) return "you cannot use this Stratagem";
   const it = subj.startsWith("all ") || / units\b/.test(subj) ? "they" : "it";
   const act =
     m.activity === "use-stratagem" && m.stratagem != null
@@ -656,7 +658,7 @@ export function describeLeaf(e: Leaf, ctx: Ctx, inline: Inline): string {
     case "permission": return permission(m, subj, ctx);
     case "targeting": return targeting(e, m, subj, ctx);
     case "counts-as": return countsAs(m, subj, ctx);
-    case "rule-state": return ruleState(m, subj);
+    case "rule-state": return abilityClassState(e.target, m, subj) ?? ruleState(m, subj);
     case "orders-modifier": return ordersModifier(m, subj, ctx);
     case "order-share": return orderShare(m, subj, ctx);
     default: return describeShapeLeaf(e, m, subj, ctx) ?? describeBoardLeaf(e, m, subj, ctx, inline);

@@ -5,6 +5,7 @@
  */
 
 import type { Leaf } from "./effect-leaf.js";
+import { designationPhrase } from "./condition-refs.js";
 import { expiryTrail } from "./expiry.js";
 import { diceCase, effectSubject, jstr, statName, testName, titleCase, v, weaponNoun, type Ctx } from "./effect-words.js";
 
@@ -34,6 +35,32 @@ function selectWeapon(m: Record<string, unknown>, subj: string): string {
   const n = Number(m.count ?? 1);
   const weapon = n === 1 ? weaponNoun(m).replace(/\bweapons\b/, "weapon") : weaponNoun(m);
   return `select ${n === 1 ? "one" : jstr(n)} ${weapon} equipped by ${subj}; the effects below refer to ${n === 1 ? "it as the selected weapon" : "them as the selected weapons"}`;
+}
+
+/** "PAIN" → "Pain", "BLOOD RITE" → "Blood Rite": an ability tag as the rules print it. */
+function abilityTag(keyword: string): string {
+  return keyword.toLowerCase().split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+}
+
+/**
+ * A suppression of every ability with a tag ({rule: {ability_keyword}}). On the units neither carrying a tag nor part of
+ * a unit that carries it, it is the two sentences the rules print: "Pain abilities only apply to a unit while it is
+ * Empowered. While an Attached unit is Empowered, the Pain abilities of all its Leader and Bodyguard units take effect".
+ * `undefined` when the rule names one ability.
+ */
+export function abilityClassState(target: unknown, m: Record<string, unknown>, subj: string): string | undefined {
+  const rule = m.rule as Record<string, unknown> | null | undefined;
+  if (rule == null || typeof rule !== "object" || typeof rule.ability_keyword !== "string") return undefined;
+  const tag = abilityTag(rule.ability_keyword);
+  const t = (target ?? {}) as Record<string, unknown>;
+  const mark = typeof t.not_designated === "string" ? t.not_designated : null;
+  const excluding = t.excluding as Record<string, unknown> | undefined;
+  const memberOf = excluding?.member_of as Record<string, unknown> | undefined;
+  const unmarked = mark !== null && Object.keys(t).length === 2 && excluding != null && Object.keys(excluding).length === 1
+    && memberOf != null && Object.keys(memberOf).length === 1 && memberOf.designated === mark;
+  if (!unmarked) return `${subj} cannot use ${tag} abilities`;
+  const state = designationPhrase(mark);
+  return `${tag} abilities only apply to a unit while it is ${state}. While an Attached unit is ${state}, the ${tag} abilities of all its Leader and Bodyguard units take effect, with no additional spend`;
 }
 
 /** The phase-4 leaves, or undefined for any other type. */

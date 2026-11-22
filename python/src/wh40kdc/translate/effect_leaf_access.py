@@ -115,6 +115,14 @@ def _permission_consequences(m: dict[str, Any], it: str) -> str:
 
 
 def permission(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
+    # "You cannot use this Stratagem": a Stratagem's restriction on its own use.
+    if (
+        m.get("activity") == "use-stratagem"
+        and m.get("allow") is False
+        and ctx.get("self") is not None
+        and m.get("stratagem") == ctx.get("self")
+    ):
+        return "you cannot use this Stratagem"
     it = "they" if subj.startswith("all ") or re.search(r" units\b", subj) else "it"
     activity = m.get("activity")
     if activity == "use-stratagem" and m.get("stratagem") is not None:

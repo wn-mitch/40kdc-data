@@ -283,7 +283,7 @@ pub(crate) fn effect_subject(target: Option<&Value>, ctx: &Ctx) -> String {
         .to_string(),
         Some((_, Some("recipient"))) => if ctx.each_model || ctx.selected_model {
             "that model"
-        } else if ctx.aura_recipient || ctx.selected_unit {
+        } else if ctx.aura_recipient || ctx.selected_unit || ctx.each_unit {
             "that unit"
         } else {
             "this unit"

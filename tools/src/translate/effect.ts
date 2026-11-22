@@ -213,6 +213,8 @@ export type { AbilityTrigger, AbilityTriggerSpec } from "./trigger.js";
 
 /** Minimal ability view for `describeAbility`. */
 export interface AbilityLike {
+  /** The record's own id: a restriction naming it reads "this Stratagem". */
+  ability_id?: string;
   name?: string;
   effect?: Effect;
   scope?: AbilityScope;
@@ -263,9 +265,10 @@ function selectedContext(ctx: Ctx, sel: Record<string, unknown>, plural = select
   return { ...ctx, selectedUnit: !selectedModel, selectedModel, selectedPlural: plural, unitSubject: undefined };
 }
 
-/** A `for-each-unit` body: a loop over models names each pass's model "that model". */
+/** A `for-each-unit` body: a loop over models names each pass's model "that model", a loop over units its unit "that unit". */
 function eachContext(ctx: Ctx, sel: Record<string, unknown>): Ctx {
-  return { ...selectedContext(ctx, sel, false), eachModel: selectorNoun(sel) === "model" };
+  const model = selectorNoun(sel) === "model";
+  return { ...selectedContext(ctx, sel, false), eachModel: model, eachUnit: !model };
 }
 
 function selectUnitsInline(sel: Record<string, unknown>, effect: Effect, ctx: Ctx): string {
@@ -970,7 +973,9 @@ function describeNamedRegionConditional(m: Record<string, unknown>, condition: C
  * the choice to use it and its cost ("at the end of your Movement phase, once per battle, you can").
  */
 function partHead(e: Effect): string {
-  const moment = normalizeTriggers(e.trigger).map((t) => describeTrigger(withAuraRecipient(t, e.effect, {}))).filter(Boolean).join(" or ");
+  // A part armed for the phase that fires when the phase ends fires once, at the end of this phase.
+  const thisPhaseEnd = e.duration === "phase" && isBarePhaseEnd(e.trigger);
+  const moment = thisPhaseEnd ? "at the end of the phase" : normalizeTriggers(e.trigger).map((t) => describeTrigger(withAuraRecipient(t, e.effect, {}))).filter(Boolean).join(" or ");
   const level = e.kind === "psychic" && e.level != null ? ` (Psychic level ${jstr(e.level)})` : "";
   // A named part that always applies is a labelled rule ("Kine Shield: …"), not one to use.
   const label = e.name && !moment && !e.optional ? `${jstr(e.name)}${level}` : "";
@@ -979,7 +984,7 @@ function partHead(e: Effect): string {
   // A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
   // Skip when the inner designate-target / persistent-designation already prints the same duration.
   const ownDesigDur = (e.effect?.type === "designate-target" || e.effect?.type === "persistent-designation") && e.effect.duration === e.duration;
-  const trail = ownDesigDur ? "" : durationClauses(e.duration).trail.replace(/control it$/u, "control that objective marker");
+  const trail = ownDesigDur || thisPhaseEnd ? "" : durationClauses(e.duration).trail.replace(/control it$/u, "control that objective marker");
   return [label, moment, e.usage ? usageClause(e.usage) : "", trail, named, cost].filter(Boolean).join(", ");
 }
 
@@ -990,6 +995,13 @@ function partTriggerCtx(e: Effect, ctx: Ctx): Ctx {
   const allocated = ts.some((t) => t.event === "damage-allocated");
   if (!destroyed && !allocated) return ctx;
   return { ...ctx, ...(destroyed ? { destroyedTrigger: true } : {}), ...(allocated ? { allocatedTrigger: true } : {}) };
+}
+
+/** A trigger that is only the end of a phase: no phase, turn or other gate named. */
+function isBarePhaseEnd(trigger: unknown): boolean {
+  if (trigger == null || typeof trigger !== "object" || Array.isArray(trigger)) return false;
+  const t = trigger as Record<string, unknown>;
+  return t.event === "phase-ended" && Object.keys(t).length === 1;
 }
 
 /** A part with its own trigger: its effect's event refs read as that trigger's model, if it names one. */
@@ -1320,7 +1332,7 @@ function withOptionality(rendered: string): string {
  * carries no rules prose.
  */
 export function describeAbility(a: AbilityLike): string {
-  const rendered = a.effect ? renderTopLevel(a.effect, a.scope, a.usage, a.trigger, a.optional === true) : "";
+  const rendered = a.effect ? renderTopLevel(a.effect, a.scope, a.usage, a.trigger, a.optional === true, a.ability_id) : "";
   const core = a.optional === true ? withOptionality(rendered) : rendered;
   const applies = describeAppliesTo(a.applies_to);
   return [core, applies].filter(Boolean).join("\n");
@@ -1339,8 +1351,9 @@ function renderTopLevel(
   usage?: AbilityUsage | AbilityUsage[] | null,
   trigger?: AbilityTriggerSpec | null,
   optional = false,
+  self?: string,
 ): string {
-  const ctx: Ctx = {};
+  const ctx: Ctx = typeof self === "string" ? { self } : {};
   const { lead: durLead, trail } = durationClauses(scope?.duration);
   // An explicit usage limit supersedes the duration's coarse "once per battle" lead.
   const lead = usage && (Array.isArray(usage) || usage.frequency != null) ? usageClause(usage) : durLead;

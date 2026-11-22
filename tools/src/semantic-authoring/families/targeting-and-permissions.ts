@@ -268,21 +268,36 @@ const RULE_KINDS = ["core-rule", "keyword", "ability", "faction-rule"] as const;
 const RULE_STATE_OTHER_SUBJECTS = ["selected-unit", "event-subject", "target", ANTECEDENT];
 
 function ruleStateCore(input: Params): Params {
-  exactKeys(input, ["subject", "direction", "rule_kind", "rule"], "rule-state");
+  const named = "ability_keyword" in input ? "ability_keyword" : "rule";
+  exactKeys(input, ["subject", "direction", "rule_kind", named, ...("tag" in input ? ["tag"] : [])], "rule-state");
   const ruleKind = enumValue(input.rule_kind, RULE_KINDS, "rule-state.rule_kind");
+  const direction = enumValue(input.direction, ["granted", "suppressed"], "rule-state.direction");
+  const subject = enumValue(input.subject, [...SUBJECTS, ...RULE_STATE_OTHER_SUBJECTS, UNMARKED], "rule-state.subject");
+  // "the unit while it is Empowered": the units neither carrying the tag nor part of a unit that does.
+  const unmarked = subject === UNMARKED ? { tag: markTag(input.tag) } : {};
+  if (subject !== UNMARKED && "tag" in input) throw new TypeError("rule-state.tag goes only with subject unmarked.");
+  if (named === "ability_keyword") {
+    // "Pain abilities only apply to a unit while it is Empowered": every ability tagged with the keyword.
+    const keyword = typeof input.ability_keyword === "string" ? input.ability_keyword : "";
+    if (!ASCII_KEYWORD.test(keyword)) throw new TypeError("rule-state.ability_keyword must be an uppercase keyword.");
+    if (ruleKind !== "ability" || direction !== "suppressed") throw new TypeError("rule-state.ability_keyword names suppressed abilities (rule_kind ability).");
+    return { subject, direction, rule_kind: ruleKind, ability_keyword: keyword, ...unmarked };
+  }
   const rule = typeof input.rule === "string" ? input.rule : "";
   if (ruleKind === "keyword") {
     if (!ASCII_KEYWORD.test(rule)) throw new TypeError("rule-state.rule must be an uppercase keyword when rule_kind is keyword.");
   } else if (!KEBAB_ID.test(rule)) {
     throw new TypeError("rule-state.rule must be a kebab-case id when rule_kind is not keyword.");
   }
-  const subject = enumValue(input.subject, [...SUBJECTS, ...RULE_STATE_OTHER_SUBJECTS], "rule-state.subject");
-  return {
-    subject,
-    direction: enumValue(input.direction, ["granted", "suppressed"], "rule-state.direction"),
-    rule_kind: ruleKind,
-    rule,
-  };
+  return { subject, direction, rule_kind: ruleKind, rule, ...unmarked };
+}
+
+/** The subject of a rule that holds for units not carrying a tag, directly or through the unit they are part of. */
+const UNMARKED = "unmarked";
+
+function markTag(tag: unknown): string {
+  if (typeof tag !== "string" || !KEBAB_ID.test(tag)) throw new TypeError("rule-state.tag must be a kebab-case designation id.");
+  return tag;
 }
 
 /** "no mortal wounds are inflicted by your army's Daemonic Terror rule": one aspect of a named section of a faction rule is switched off. */
@@ -355,19 +370,21 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "rule-state",
-    version: 5,
+    version: 6,
     role: "EFFECT",
     label: "Grant or suppress a named rule",
-    description: "A unit or model gains or loses a core rule, keyword, ability, or faction rule (a core-rule slug such as the -1 to Hit for shooting in Engagement Range, or a keyword or ability by its own id). The subject is this unit or model, a selected unit, the triggering unit, the attack's target, or an earlier leaf's unit (antecedent): \"that enemy unit cannot have the Benefit of Cover\". A keyword can start with an apostrophe as the rules print it ('ARDMOB). any_army_faction: a granted faction rule the subject can use whatever your Army Faction is (\"even though your Army Faction is not X\"). sub_rule and aspect (together, with a suppressed faction rule): only that aspect of the named section of the rule is off for the subject (\"no mortal wounds are inflicted by your army's Daemonic Terror rule\" is sub_rule daemonic-terror, aspect mortal-wounds, on the unit it would inflict them on).",
+    description: "A unit or model gains or loses a core rule, keyword, ability, or faction rule (a core-rule slug such as the -1 to Hit for shooting in Engagement Range, or a keyword or ability by its own id). The subject is this unit or model, a selected unit, the triggering unit, the attack's target, or an earlier leaf's unit (antecedent): \"that enemy unit cannot have the Benefit of Cover\". A keyword can start with an apostrophe as the rules print it ('ARDMOB). any_army_faction: a granted faction rule the subject can use whatever your Army Faction is (\"even though your Army Faction is not X\"). sub_rule and aspect (together, with a suppressed faction rule): only that aspect of the named section of the rule is off for the subject (\"no mortal wounds are inflicted by your army's Daemonic Terror rule\" is sub_rule daemonic-terror, aspect mortal-wounds, on the unit it would inflict them on). ability_keyword, in place of rule, names every ability tagged with that keyword (suppressed abilities only: \"Pain abilities\" is PAIN). Subject unmarked with tag: every unit that carries neither the tag nor is part of a unit that carries it (\"Pain abilities only apply to a unit while it is Empowered. While an Attached unit is Empowered, the Pain abilities of all Leader and Bodyguard units in that unit take effect\" is one suppression of PAIN for subject unmarked, tag empowered).",
     starter: { subject: "", direction: "", rule_kind: "", rule: "" },
     parameterSchema: {
       type: "object",
-      required: ["subject", "direction", "rule_kind", "rule"],
+      required: ["subject", "direction", "rule_kind"],
       properties: {
-        subject: { enum: ["this-unit", "this-model", "selected-unit", "event-subject", "target", "antecedent"] },
+        subject: { enum: ["this-unit", "this-model", "selected-unit", "event-subject", "target", "antecedent", "unmarked"] },
         direction: { enum: ["granted", "suppressed"] },
         rule_kind: { enum: ["core-rule", "keyword", "ability", "faction-rule"] },
-        rule: { type: "string", minLength: 1 },
+        rule: { type: "string", minLength: 1, "x-optional": true },
+        ability_keyword: { type: "string", pattern: "^[A-Z][A-Z0-9 -]*[A-Z0-9]$", "x-optional": true },
+        tag: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-only-when": { subject: ["unmarked"] } },
         any_army_faction: { const: true, "x-optional": true },
         sub_rule: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-optional": true },
         aspect: { enum: ["mortal-wounds"], "x-optional": true },

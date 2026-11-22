@@ -62,6 +62,7 @@ import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { splitHeldGrants } from "./compile-held-grants.js";
 import { foldConditionExclusions } from "./compile-condition-exclusions.js";
 import { refuseMomentUnderBareUse } from "./compile-nested-moment.js";
+import { bindOwnStratagemDenials } from "./compile-own-stratagem.js";
 import { refuseSelectionAcrossMoment } from "./compile-selection-moment.js";
 import { foldUnitFilters } from "./compile-unit-filters.js";
 import { mergeStackedFilters } from "./compile-unit-filter-merge.js";
@@ -321,7 +322,7 @@ function compileUnchecked(record: readonly CompileLeaf[], sourceText?: string, o
   let bound: CompileLeaf[];
   try {
     bound = foldReservesSchedules(foldCostTables(foldNamedRanges(foldAuraEmitter(bindIgnoreLists(
-      bindAdditiveOptions(bindCharacteristicFloors(bindCharacteristicAmounts(resolveRuleReferences(resolveUnitNames(leaves, options.units), ruleScopeContext(options.units, options.abilityId)))), sourceText),
+      bindAdditiveOptions(bindCharacteristicFloors(bindCharacteristicAmounts(resolveRuleReferences(resolveUnitNames(bindOwnStratagemDenials(leaves, options.abilityId), options.units), ruleScopeContext(options.units, options.abilityId)))), sourceText),
       sourceText,
     )), options.abilityId)), options.units);
   } catch (error) {

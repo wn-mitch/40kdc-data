@@ -601,13 +601,21 @@ def _own_choice_prompt(e: Effect) -> str:
 def part_head(e: Effect) -> str:
     """What leads a part: moment, usage limit, duration, name, optionality and cost."""
     effect = _obj(e.get("effect"))
-    moment = " or ".join(
-        s
-        for s in (
-            describe_trigger(with_aura_recipient(t, effect))
-            for t in normalize_triggers(e.get("trigger"))
+    # A part armed for the phase that fires when the phase ends (a trigger naming no phase, turn
+    # or other gate) fires once, at the end of this phase.
+    trig = e.get("trigger")
+    this_phase_end = e.get("duration") == "phase" and trig == {"event": "phase-ended"}
+    moment = (
+        "at the end of the phase"
+        if this_phase_end
+        else " or ".join(
+            s
+            for s in (
+                describe_trigger(with_aura_recipient(t, effect))
+                for t in normalize_triggers(trig)
+            )
+            if s
         )
-        if s
     )
     level = (
         f" (Psychic level {jstr(e['level'])})"
@@ -634,7 +642,11 @@ def part_head(e: Effect) -> str:
     )
     # A part's own control-lost duration leads it, with no objective marker before it for "it"
     # to name.
-    trail = "" if own_desig_dur else re.sub(r"control it$", "control that objective marker", trail)
+    trail = (
+        ""
+        if own_desig_dur or this_phase_end
+        else re.sub(r"control it$", "control that objective marker", trail)
+    )
     return ", ".join(p for p in (label, moment, usage, trail, named, cost) if p)
 
 

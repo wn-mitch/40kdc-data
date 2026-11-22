@@ -505,7 +505,12 @@ def describe_ability(a: dict[str, Any]) -> str:
     is_optional = a.get("optional") is True
     rendered = (
         _render_top_level(
-            a["effect"], a.get("scope"), a.get("usage"), a.get("trigger"), is_optional
+            a["effect"],
+            a.get("scope"),
+            a.get("usage"),
+            a.get("trigger"),
+            is_optional,
+            a.get("ability_id"),
         )
         if a.get("effect")
         else ""
@@ -525,9 +530,15 @@ def _condition_within_range(c: Any) -> Any:
 
 
 def _render_top_level(
-    e: Effect, scope: Any, usage: Any = None, trigger: Any = None, optional: bool = False
+    e: Effect,
+    scope: Any,
+    usage: Any = None,
+    trigger: Any = None,
+    optional: bool = False,
+    self_id: Any = None,
 ) -> str:
-    ctx: Ctx = {}
+    # The record's own id: a permission naming it reads "this Stratagem".
+    ctx: Ctx = {"self": self_id} if isinstance(self_id, str) else {}
     dur_lead, trail = duration_clauses(_obj(scope).get("duration"))
     # An explicit usage limit supersedes the duration's coarse "once per battle" lead.
     lead = (

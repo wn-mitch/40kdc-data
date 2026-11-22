@@ -6049,7 +6049,13 @@ export interface RuleStateEffect {
   modifier: {
     direction: "granted" | "suppressed" | "exchanged";
     rule_kind: "core-rule" | "keyword" | "ability" | "faction-rule";
-    rule: string | NamedAbilityRef | StanceOptionRef;
+    rule:
+      | string
+      | NamedAbilityRef
+      | StanceOptionRef
+      | {
+          ability_keyword: string;
+        };
     exchange_with?: NamedAbilityRef;
     except_from?: "this-ability";
     /**

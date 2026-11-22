@@ -5675,5 +5675,221 @@
     "scope": {
       "duration": "permanent"
     }
+  },
+  {
+    "caseId": "rule-state-ability-class-unmarked",
+    "effect": {
+      "type": "rule-state",
+      "target": {
+        "not_designated": "empowered",
+        "excluding": {
+          "member_of": {
+            "designated": "empowered"
+          }
+        }
+      },
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "ability",
+        "rule": {
+          "ability_keyword": "GLIM RITE"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "rule-state-ability-class-unit",
+    "effect": {
+      "type": "rule-state",
+      "target": "this-unit",
+      "modifier": {
+        "direction": "suppressed",
+        "rule_kind": "ability",
+        "rule": {
+          "ability_keyword": "PAIN"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "part-at-the-end-of-this-phase",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "pain-token-pool",
+            "amount": 1
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended"
+          },
+          "duration": "phase",
+          "effect": {
+            "type": "set-up",
+            "target": "this-model",
+            "modifier": {
+              "to": "battlefield",
+              "placement": [
+                "closest-to-destruction",
+                "unengaged"
+              ],
+              "mandatory": true
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "model-in-this-unit"
+    }
+  },
+  {
+    "caseId": "part-at-the-end-of-each-phase-gated",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "phase-ended",
+        "condition": {
+          "type": "phase-is",
+          "parameters": {
+            "phase": "fight"
+          }
+        }
+      },
+      "duration": "phase",
+      "effect": {
+        "type": "heal",
+        "target": "this-unit",
+        "modifier": {
+          "amount": "D3"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "for-each-unit-names-the-pass",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            }
+          },
+          "effect": {
+            "type": "test",
+            "target": "recipient",
+            "modifier": {
+              "test": "battle-shock"
+            }
+          }
+        },
+        {
+          "type": "resource-gain-cap",
+          "target": "this-model",
+          "modifier": {
+            "pool": "pain-token-pool",
+            "max": 3,
+            "source": "failed-battle-shock"
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    }
+  },
+  {
+    "caseId": "own-stratagem-denial",
+    "ability_id": "example-glim-rite",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "pain-token-pool",
+            "amount": {
+              "up_to": 3,
+              "at_least": 1
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "resource",
+            "parameters": {
+              "pool": "pain-token-pool",
+              "count": {
+                "max": 0
+              }
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-model",
+            "modifier": {
+              "activity": "use-stratagem",
+              "allow": false,
+              "stratagem": "example-glim-rite"
+            }
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    }
+  },
+  {
+    "caseId": "other-stratagem-denial",
+    "ability_id": "example-glim-rite",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "resource",
+        "parameters": {
+          "pool": "pain-token-pool",
+          "count": {
+            "max": 0
+          }
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-model",
+        "modifier": {
+          "activity": "use-stratagem",
+          "allow": false,
+          "stratagem": "fire-overwatch"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    }
   }
 ]

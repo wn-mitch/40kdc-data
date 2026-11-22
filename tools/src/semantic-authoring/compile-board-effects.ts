@@ -292,7 +292,7 @@ function foldedPlacement(leaf: CompileLeaf, placement: unknown): Node {
   if (leaf.parameters.folded_away_from !== undefined) result.away_from = structuredClone(leaf.parameters.folded_away_from);
   if (leaf.parameters.folded_in_region !== undefined) result.in_region = structuredClone(leaf.parameters.folded_in_region);
   const keywords = placement === undefined ? [] : Array.isArray(placement) ? [...placement] : [placement];
-  if (leaf.parameters.folded_unengaged === true && !keywords.includes("unengaged")) keywords.push("unengaged");
+  if ((leaf.parameters.folded_unengaged === true || leaf.parameters.unengaged === true) && !keywords.includes("unengaged")) keywords.push("unengaged");
   if (keywords.length) result.placement = keywords.length === 1 ? keywords[0] : keywords;
   return result;
 }

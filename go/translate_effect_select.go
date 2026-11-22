@@ -164,10 +164,13 @@ func selectUnitsPlural(sel map[string]any) bool {
 	return jsNumber(max) != 1
 }
 
-// eachContext is a for-each-unit body's context: a loop over models names each pass's model "that model".
+// eachContext is a for-each-unit body's context: a loop over models names each pass's model "that
+// model", a loop over units its unit "that unit".
 func eachContext(ctx effCtx, sel map[string]any) effCtx {
 	ctx = selectedContextPlural(ctx, sel, false)
-	ctx.eachModel = selectorNoun(sel) == "model"
+	model := selectorNoun(sel) == "model"
+	ctx.eachModel = model
+	ctx.eachUnit = !model
 	return ctx
 }
 

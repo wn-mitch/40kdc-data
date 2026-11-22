@@ -287,6 +287,9 @@ export function describePredicate(c: Condition, negated: boolean): string {
       if (p.gained === "turn") return `you ${negated ? "did not gain" : "gained"} ${amount} ${resourceNoun(p.pool, undefined, 2)} this turn`;
       // "if your opponent has one or more Flux tokens": the opponent's holding of a pool both players hold.
       if (p.holder === "opponent") return `your opponent ${negated ? "does not have" : "has"} ${amount} ${resourceNoun(p.pool, undefined, 2)}`;
+      // "while you have 0 Pain tokens": an empty pool of the player's.
+      const count = (p.count ?? {}) as P;
+      if (count.max === 0 && count.min == null) return `you ${negated ? "do not have" : "have"} 0 ${resourceNoun(p.pool, undefined, 2)}`;
       // A pool is the player's ("If you have 3 or more Pact points").
       return `you have ${amount} ${dekebab(str(p.pool))}`;
     }

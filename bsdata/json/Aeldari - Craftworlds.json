@@ -38391,7 +38391,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During your Movement phase, until the end of the turn:\n  - When this unit is selected to make a Normal move, you can use this ability:\n    - This unit cannot declare a charge.\n    - Set this unit's Move characteristic to 24\".\n    - At the end of each phase, until the end of the phase, roll one D6 for each model in this unit: for each 1, this unit suffers 1 mortal wound.",
+                "$text": "During your Movement phase, until the end of the turn:\n  - When this unit is selected to make a Normal move, you can use this ability:\n    - This unit cannot declare a charge.\n    - Set this unit's Move characteristic to 24\".\n    - At the end of the phase, roll one D6 for each model in this unit: for each 1, this unit suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

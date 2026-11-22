@@ -212,11 +212,11 @@ export function assemblePart(
   // A second loop in a later part leaves the record's own part its first loop.
   const recordLoop = forEachPart > 0 ? firstPartLoop(list, (leaf) => partOf(list.indexOf(leaf))) : null;
   if (forEachPart > 0) {
-    const own = pieces[forEachPart]!;
+    const [own, caps] = splitUseCaps(pieces[forEachPart]!);
     const each = forEachLeaf!;
-    const looped = attempt(() => wrapForEachUnit(each, own.length === 1 ? own[0]! : { type: "sequence", steps: own }));
-    if (looped === null) return { ok: false, signature, errors };
-    pieces[forEachPart] = [looped];
+    const looped = own.length === 0 ? null : attempt(() => wrapForEachUnit(each, own.length === 1 ? own[0]! : { type: "sequence", steps: own }));
+    if (looped === null) return { ok: false, signature, errors: own.length === 0 ? [...errors, "A for-each loop holds only a cap on the ability's own gains."] : errors };
+    pieces[forEachPart] = [looped, ...caps];
   }
   let steps = pieces[0]!;
   // Under a window, the effects that last within it sit in one window part, which takes the moment as its trigger below.
@@ -368,10 +368,14 @@ export function assemblePart(
     const firstItems = pieceItems.filter((item) => partOf(item.index) === 0);
     const outside = !recordLoop && partStarts.length === 0 && window === null && body === unwrapped && body.type === "sequence" && steps.length === firstItems.length
       ? stepsBeforeLoop(steps, firstItems.map((item) => places[item.index]!.sentence), places[list.indexOf(each)]!.sentence) : 0;
-    const looped: Node = outside === 0 ? body! : steps.length - outside === 1 ? steps[outside]! : { type: "sequence", steps: steps.slice(outside) };
+    const whole: Node = outside === 0 ? body! : steps.length - outside === 1 ? steps[outside]! : { type: "sequence", steps: steps.slice(outside) };
+    const [inLoop, caps] = splitUseCaps(whole.type === "sequence" ? whole.steps as Node[] : [whole]);
+    if (inLoop.length === 0) return { ok: false, signature, errors: [...errors, "A for-each loop holds only a cap on the ability's own gains."] };
+    const looped: Node = caps.length === 0 ? whole : inLoop.length === 1 ? inLoop[0]! : { type: "sequence", steps: inLoop };
     // "Roll one D6. On a 6, …; each unit within 6\" …": the loop runs in the band's outcome (compile-band-loop.ts).
     body = attempt(() => loopUnderBand(list, each, sourceText) ? wrapBandLoop(each, looped) : wrapForEachUnit(each, looped));
-    if (body && outside > 0) body = { type: "sequence", steps: [...steps.slice(0, outside), body] };
+    if (body && caps.length) body = { type: "sequence", steps: [body, ...caps] };
+    if (body && outside > 0) body = { type: "sequence", steps: [...steps.slice(0, outside), ...(body.type === "sequence" && caps.length ? body.steps as Node[] : [body])] };
     // "The maximum number of units that can be … depends on the battle size": the loop's cap on the units it affects.
     if (body && battleSizeCount && selections.length === 0) body = { ...body, max_affected: maxCount };
     if (body && afterLoop.length) body = { type: "sequence", steps: [body, ...afterLoop.map((item) => gated(item.gate, item.node))] };
@@ -487,7 +491,8 @@ export function assemblePart(
   });
   moments.forEach((moment, position) => { if (list[triggerIndexes[position]!]!.fragment === "WHEN") moments[position] = gatedMoment(moment, usabilityNodes); });
   const asTrigger = (nodes: Node[]) => nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : nodes;
-  const leading = moments.filter((_, position) => !delayed.dropped.has(position) && !partStarts.some((part) => part.moments.includes(position)));
+  const leadingPositions = moments.map((_, position) => position).filter((position) => !delayed.dropped.has(position) && !partStarts.some((part) => part.moments.includes(position)));
+  const leading = leadingPositions.map((position) => moments[position]!);
   let entryTrigger = asTrigger(leading);
   // The end of the phase in which a named model was destroyed: the destruction's part holds the phase end for that phase.
   for (const position of delayed.nested) body = { type: "ability-part", trigger: moments[position]!, effect: body, duration: "phase" };
@@ -592,8 +597,13 @@ export function assemblePart(
       scopeDuration = "permanent";
     }
     if (usagePart !== -1) usages.splice(0);
-    body = partSteps.length === 1 ? partSteps[0]! : { type: "sequence", steps: partSteps };
-    entryTrigger = null;
+    // A Stratagem's TARGET destruction ("one model from your army that was just destroyed") is the moment it is used:
+    // when every later moment nests in that moment's part, the part is the whole record and its moment the record's trigger.
+    const targetEntry = entryPart !== null && partSteps.length === 1 && partSteps[0]!.trigger === entryPart.trigger
+      && Object.keys(partSteps[0]!).every((key) => key === "type" || key === "trigger" || key === "effect")
+      && leadingPositions.length > 0 && leadingPositions.every((position) => list[triggerIndexes[position]!]!.fragment === "TARGET");
+    body = targetEntry ? partSteps[0]!.effect as Node : partSteps.length === 1 ? partSteps[0]! : { type: "sequence", steps: partSteps };
+    if (!targetEntry) entryTrigger = null;
   }
   let resolved: ReturnType<typeof resolveEntry>;
   try {
@@ -634,6 +644,14 @@ export function assemblePart(
  * A selection's eligibility condition as the DSL reads it. "This unit" in a hit's eligibility is the
  * candidate being selected, so a hit-by-attacks names its unit as this-unit; the leaf is otherwise unchanged.
  */
+/**
+ * A cap on what one use of the ability gains ("You cannot gain more than 3 Pain tokens as a result of … caused by
+ * this Stratagem") limits that use as a whole, so a for-each loop never repeats it: it follows the loop.
+ */
+function splitUseCaps(nodes: readonly Node[]): [Node[], Node[]] {
+  return [nodes.filter((node) => node.type !== "resource-gain-cap"), nodes.filter((node) => node.type === "resource-gain-cap")];
+}
+
 /** Lifetimes that end within the phase they start in. */
 const WITHIN_PHASE = new Set(["attack-sequence", "resolution", "after-resolving", "one-use", "until-this-unit-has-shot"]);
 

@@ -27616,7 +27616,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a friendly CELESTINE model in this unit is destroyed, the first time this battle per model:\n  - At the end of each phase, until the end of the phase:\n    - Roll one D6: on a 2+, that model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.",
+                "$text": "When a friendly CELESTINE model in this unit is destroyed, the first time this battle per model:\n  - At the end of the phase:\n    - Roll one D6: on a 2+, that model can be set up on the battlefield as close as possible to where it was destroyed and not within Engagement Range of any enemy units, with its full wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

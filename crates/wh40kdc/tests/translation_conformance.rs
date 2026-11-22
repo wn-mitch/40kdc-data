@@ -9,9 +9,8 @@ use std::path::PathBuf;
 
 use serde_json::Value;
 use wh40kdc::{
-    describe_ability_parts_with_optional, describe_ability_value_with_optional,
-    describe_scoring_card, AbilityTrigger, AbilityUsage, Dataset, EffectNode, KeywordPredicate,
-    Scope,
+    describe_ability_parts_for, describe_ability_value_for, describe_scoring_card, AbilityTrigger,
+    AbilityUsage, Dataset, EffectNode, KeywordPredicate, Scope,
 };
 
 fn corpus(path: &str) -> Value {
@@ -45,25 +44,28 @@ fn effect_translation_matches_goldens() {
         let usage = part::<AbilityUsage>(case, "usage");
         let trigger = part::<AbilityTrigger>(case, "trigger");
         let optional = case["optional"] == Value::Bool(true);
+        let ability_id = case["ability_id"].as_str();
         // The generated types model only authored conditions; a case with the cruncher's
         // generated `dice-table-result` leaf is rendered from its JSON form.
         let text = match serde_json::from_value::<EffectNode>(case["effect"].clone()) {
-            Ok(effect) => describe_ability_parts_with_optional(
+            Ok(effect) => describe_ability_parts_for(
                 &effect,
                 scope.as_ref(),
                 applies_to.as_ref(),
                 usage.as_ref(),
                 trigger.as_ref(),
                 optional,
+                ability_id,
             ),
             Err(_) if case["effect"].to_string().contains("\"dice-table-result\"") => {
-                describe_ability_value_with_optional(
+                describe_ability_value_for(
                     &case["effect"],
                     scope.map(|s| serde_json::to_value(s).unwrap()).as_ref(),
                     applies_to.as_ref(),
                     usage.map(|u| serde_json::to_value(u).unwrap()).as_ref(),
                     trigger.map(|t| serde_json::to_value(t).unwrap()).as_ref(),
                     optional,
+                    ability_id,
                 )
             }
             Err(e) => panic!("{id}: effect does not parse: {e}"),

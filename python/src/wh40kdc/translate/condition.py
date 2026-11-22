@@ -670,6 +670,13 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         if p.get("holder") == "opponent":
             verb = "does not have" if negated else "has"
             return f"your opponent {verb} {amount} {resource_noun(p.get('pool'), None, 2)}"
+        # "while you have 0 Pain tokens": an empty pool of the player's.
+        bounds = _obj(p.get("count"))
+        minimum = bounds.get("min")
+        maximum = bounds.get("max")
+        if maximum == 0 and not isinstance(maximum, bool) and minimum is None:
+            verb = "do not have" if negated else "have"
+            return f"you {verb} 0 {resource_noun(p.get('pool'), None, 2)}"
         # A pool is the player's ("If you have 3 or more Pact points").
         return f"you have {amount} {dekebab(_str(p.get('pool')))}"
     if ctype == "roll-total":

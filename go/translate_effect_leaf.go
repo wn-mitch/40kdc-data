@@ -979,6 +979,9 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 	case "counts-as":
 		return countsAsLeaf(m, subj, ctx)
 	case "rule-state":
+		if s, ok := abilityClassState(e["target"], m, subj); ok {
+			return s
+		}
 		return ruleStateLeaf(m, subj)
 	case "orders-modifier":
 		return ordersModifierLeaf(m, subj, ctx)

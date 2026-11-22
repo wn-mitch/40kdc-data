@@ -392,9 +392,14 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
       return compileNamedRegionProducer(leaf);
     case "rule-state":
       return {
-        type: "rule-state", target: target(leaf.parameters.subject),
+        // "a unit while it is Empowered": units that carry neither the tag nor belong to a unit that does (an Attached unit's Leader and Bodyguard units).
+        type: "rule-state", target: leaf.parameters.subject === "unmarked"
+          ? { not_designated: closed(leaf, "tag"), excluding: { member_of: { designated: closed(leaf, "tag") } } }
+          : target(leaf.parameters.subject),
         modifier: {
-          direction: closed(leaf, "direction"), rule_kind: closed(leaf, "rule_kind"), rule: closed(leaf, "rule"),
+          direction: closed(leaf, "direction"), rule_kind: closed(leaf, "rule_kind"),
+          // "Pain abilities": every ability tagged with the keyword.
+          rule: leaf.parameters.ability_keyword !== undefined ? { ability_keyword: closed(leaf, "ability_keyword") } : closed(leaf, "rule"),
           // The attacks a shooting moment bound ("those attacks"), folded by compile-bound-attacks.ts.
           ...(leaf.parameters.attacks_var !== undefined ? { attacks: { event_var: closed(leaf, "attacks_var") } } : {}),
           ...(leaf.parameters.any_army_faction === true ? { any_army_faction: true } : {}),

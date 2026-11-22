@@ -818,6 +818,14 @@ func describePredicate(c map[string]any, negated bool) string {
 			}
 			return "your opponent " + verb + " " + controlCountPhrase(p["count"]) + " " + resourceNoun(p["pool"], nil, 2.0)
 		}
+		// "while you have 0 Pain tokens": an empty pool of the player's.
+		if count := mapOr(p["count"]); count["max"] == 0.0 && count["min"] == nil {
+			verb := "have"
+			if negated {
+				verb = "do not have"
+			}
+			return "you " + verb + " 0 " + resourceNoun(p["pool"], nil, 2.0)
+		}
 		// A pool is the player's ("If you have 3 or more Pact points").
 		return "you have " + controlCountPhrase(p["count"]) + " " + dekebab(cstr(p["pool"]))
 	// -- Mission-card predicates --

@@ -17,6 +17,7 @@ from wh40kdc.translate.effect_leaf_access import permission, targeting
 from wh40kdc.translate.effect_leaf_board import describe_board_leaf
 from wh40kdc.translate.effect_leaf_shapes import (
     ability_activate,
+    ability_class_state,
     ability_limits,
     describe_shape_leaf,
 )
@@ -885,7 +886,8 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
     if t == "counts-as":
         return _counts_as(m, subj, ctx)
     if t == "rule-state":
-        return _rule_state(m, subj)
+        ability_class = ability_class_state(e.get("target"), m, subj)
+        return ability_class if ability_class is not None else _rule_state(m, subj)
     if t == "orders-modifier":
         return orders_modifier(m, subj, ctx)
     if t == "order-share":

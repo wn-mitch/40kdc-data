@@ -7,7 +7,7 @@ use serde_json::Value;
 
 use super::leaf_ability::*;
 use super::leaf_board::describe_board_leaf;
-use super::leaf_shapes::describe_shape_leaf;
+use super::leaf_shapes::{ability_class_state, describe_shape_leaf};
 use super::words::*;
 use crate::translate::condition::{and_list, nn, obj, or_list, P};
 
@@ -667,7 +667,7 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
         "targeting" => targeting(e, m, subj, ctx),
         "weapon-ability-range" => weapon_ability_range(m, subj),
         "counts-as" => counts_as(m, subj, ctx),
-        "rule-state" => rule_state(m, subj),
+        "rule-state" => ability_class_state(target, m, subj).unwrap_or_else(|| rule_state(m, subj)),
         "orders-modifier" => super::orders::orders_modifier(m, subj, ctx),
         "order-share" => super::orders::order_share(m, subj, ctx),
         _ => describe_shape_leaf(e, m, subj, ctx)

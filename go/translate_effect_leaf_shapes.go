@@ -186,3 +186,45 @@ func optionNames(options any) []string {
 	}
 	return names
 }
+
+// abilityTag is an ability tag as the rules print it: "PAIN" -> "Pain", "BLOOD RITE" -> "Blood Rite".
+func abilityTag(keyword string) string {
+	words := strings.Split(strings.ToLower(keyword), " ")
+	for i, w := range words {
+		if w == "" {
+			continue
+		}
+		r := []rune(w)
+		words[i] = strings.ToUpper(string(r[0])) + string(r[1:])
+	}
+	return strings.Join(words, " ")
+}
+
+// abilityClassState is a suppression of every ability with a tag ({rule: {ability_keyword}}). On the
+// units neither carrying a tag nor part of a unit that carries it, it is the two sentences the rules
+// print: "Pain abilities only apply to a unit while it is Empowered. While an Attached unit is
+// Empowered, the Pain abilities of all its Leader and Bodyguard units take effect". ok is false when
+// the rule names one ability.
+func abilityClassState(target any, m map[string]any, subj string) (string, bool) {
+	rule, isMap := m["rule"].(map[string]any)
+	if !isMap {
+		return "", false
+	}
+	keyword, isStr := rule["ability_keyword"].(string)
+	if !isStr {
+		return "", false
+	}
+	tag := abilityTag(keyword)
+	t := mapOr(target)
+	mark, hasMark := t["not_designated"].(string)
+	excluding, hasExcluding := t["excluding"].(map[string]any)
+	memberOf, hasMemberOf := excluding["member_of"].(map[string]any)
+	unmarked := hasMark && len(t) == 2 && hasExcluding && len(excluding) == 1 &&
+		hasMemberOf && len(memberOf) == 1 && memberOf["designated"] == mark
+	if !unmarked {
+		return subj + " cannot use " + tag + " abilities", true
+	}
+	state := designationPhrase(mark, false)
+	return tag + " abilities only apply to a unit while it is " + state + ". While an Attached unit is " + state +
+		", the " + tag + " abilities of all its Leader and Bodyguard units take effect, with no additional spend", true
+}

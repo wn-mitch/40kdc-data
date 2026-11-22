@@ -80,7 +80,7 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "resource", from: 2, to: 3, map: (parameters) => ({ ...parameters }) },
   { family: "optional-cost-paid", from: 2, to: 3, map: (parameters) => ({ ...parameters }) },
   { family: "destroy-models", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
-  { family: "rule-state", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
+  { family: "rule-state", from: 4, to: 6, map: (parameters) => ({ ...parameters }) },
   { family: "sticky-objective", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
   // apply-mark v10: the registry gains pyrogenesis-flux-spent.
   { family: "apply-mark", from: 9, to: 10, map: (parameters) => ({ ...parameters }) },
@@ -100,6 +100,11 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "objective-criterion", from: 2, to: 3, map: (parameters) => ({ ...parameters }) },
   // resource-die v2: value roll-result ("with a value equal to that result").
   { family: "resource-die", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
+  // rule-state v6: ability_keyword names every ability with that tag, and subject unmarked (with tag) the units neither
+  // carrying the tag nor part of a unit that does ("Pain abilities only apply to a unit while it is Empowered").
+  { family: "rule-state", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
+  // set-up v7: unengaged, printed inside the set-up's own wording.
+  { family: "set-up", from: 6, to: 7, map: (parameters) => ({ ...parameters }) },
   // resource-spend v6: {up_to} takes at_least ("spend 1-3 Pain tokens").
   { family: "resource-spend", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
 ];

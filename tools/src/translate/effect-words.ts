@@ -23,6 +23,10 @@ export interface Ctx {
   auraRecipient?: boolean;
   /** Inside a `for-each-unit` over models: each pass's model (the recipient) reads "that model". */
   eachModel?: boolean;
+  /** Inside a `for-each-unit` over units: each pass's unit (the recipient) reads "that unit". */
+  eachUnit?: boolean;
+  /** The id of the record being described: a permission naming it is "this Stratagem". */
+  self?: string;
   /** The ability's trigger already says a unit or model is destroyed; leaves must not repeat it. */
   destroyedTrigger?: boolean;
   /** The ability's trigger already says damage/an attack is allocated; damage-reduction must not repeat it. */
@@ -423,7 +427,7 @@ export function effectSubject(target: unknown, ctx: Ctx = {}): string {
     if (ctx.selectedUnit) return ctx.selectedPlural ? "those units" : "that unit";
     return "the selected unit";
   }
-  if (target === "recipient") return ctx.eachModel || ctx.selectedModel ? "that model" : ctx.auraRecipient || ctx.selectedUnit ? "that unit" : "this unit";
+  if (target === "recipient") return ctx.eachModel || ctx.selectedModel ? "that model" : ctx.auraRecipient || ctx.selectedUnit || ctx.eachUnit ? "that unit" : "this unit";
   if (target === "event-subject" && ctx.unitSubject === "that unit") return "that unit";
   if (target === "attacker") return ctx.unitSubject && ctx.unitSubject !== "that unit" ? ctx.unitSubject : "the attacking unit";
   if (typeof target === "string") return ROLE_SUBJECTS[target] ?? dekebab(target);

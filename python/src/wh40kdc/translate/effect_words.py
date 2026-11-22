@@ -591,7 +591,7 @@ def effect_subject(target: Any, ctx: Ctx | None = None) -> str:
     if target == "recipient":
         if ctx.get("each_model") or ctx.get("selected_model"):
             return "that model"
-        if ctx.get("aura_recipient") or ctx.get("selected_unit"):
+        if ctx.get("aura_recipient") or ctx.get("selected_unit") or ctx.get("each_unit"):
             return "that unit"
         return "this unit"
     if target == "event-subject" and ctx.get("unit_subject") == "that unit":

@@ -106,6 +106,10 @@ func permissionConsequences(m map[string]any, it string) string {
 }
 
 func permissionLeaf(m map[string]any, subj string, ctx effCtx) string {
+	// "You cannot use this Stratagem": a Stratagem's restriction on its own use.
+	if m["activity"] == "use-stratagem" && m["allow"] == false && ctx.self != "" && m["stratagem"] == ctx.self {
+		return "you cannot use this Stratagem"
+	}
 	it := "it"
 	if strings.HasPrefix(subj, "all ") || unitsWordRe.MatchString(subj) {
 		it = "they"

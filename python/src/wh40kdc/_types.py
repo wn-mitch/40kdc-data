@@ -1391,10 +1391,14 @@ Select = TypedDict(
 )
 
 
+class Rule(TypedDict):
+    ability_keyword: str
+
+
 class Modifier21(TypedDict):
     direction: Literal["granted", "suppressed", "exchanged"]
     rule_kind: Literal["core-rule", "keyword", "ability", "faction-rule"]
-    rule: str | NamedAbilityRef | StanceOptionRef
+    rule: str | NamedAbilityRef | StanceOptionRef | Rule
     exchange_with: NotRequired[NamedAbilityRef]
     except_from: NotRequired[Literal["this-ability"]]
     any_army_faction: NotRequired[Literal[True]]

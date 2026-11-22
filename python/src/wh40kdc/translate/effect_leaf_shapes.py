@@ -14,7 +14,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from wh40kdc.translate.condition_refs import _and_list, _obj, _or_list
+from wh40kdc.translate.condition_refs import _and_list, _designation_phrase, _obj, _or_list
 from wh40kdc.translate.effect_words import (
     Ctx,
     ability_label,
@@ -96,6 +96,42 @@ def _select_weapon(m: dict[str, Any], subj: str) -> str:
     return (
         f"select {count} {kind}weapon{'' if one else 's'}{kw} equipped by {subj}; "
         f"the effects below refer to {refer}"
+    )
+
+
+def _ability_tag(keyword: str) -> str:
+    """"PAIN" -> "Pain", "BLOOD RITE" -> "Blood Rite": an ability tag as the rules print it."""
+    return " ".join(w[:1].upper() + w[1:] for w in keyword.lower().split(" "))
+
+
+def ability_class_state(target: Any, m: dict[str, Any], subj: str) -> str | None:
+    """A suppression of every ability with a tag (``{rule: {ability_keyword}}``). On the units
+    neither carrying a tag nor part of a unit that carries it, it is the two sentences the rules
+    print. ``None`` when the rule names one ability."""
+    rule = m.get("rule")
+    if not isinstance(rule, dict) or not isinstance(rule.get("ability_keyword"), str):
+        return None
+    tag = _ability_tag(rule["ability_keyword"])
+    t = target if isinstance(target, dict) else {}
+    mark = t.get("not_designated") if isinstance(t.get("not_designated"), str) else None
+    excluding = t.get("excluding")
+    member_of = excluding.get("member_of") if isinstance(excluding, dict) else None
+    unmarked = (
+        mark is not None
+        and len(t) == 2
+        and isinstance(excluding, dict)
+        and len(excluding) == 1
+        and isinstance(member_of, dict)
+        and len(member_of) == 1
+        and member_of.get("designated") == mark
+    )
+    if not unmarked or mark is None:
+        return f"{subj} cannot use {tag} abilities"
+    state = _designation_phrase(mark)
+    return (
+        f"{tag} abilities only apply to a unit while it is {state}. While an Attached unit is "
+        f"{state}, the {tag} abilities of all its Leader and Bodyguard units take effect, with no "
+        "additional spend"
     )
 
 

@@ -11070,6 +11070,20 @@
                     },
                     {
                       "$ref": "#/$defs/stance-option-ref"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "ability_keyword"
+                      ],
+                      "properties": {
+                        "ability_keyword": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9 -]*[A-Z0-9]$"
+                        }
+                      },
+                      "description": "Every ability tagged with this keyword (\"Pain abilities\" is PAIN). Only with direction suppressed and rule_kind ability."
                     }
                   ]
                 },
@@ -11122,6 +11136,31 @@
                 }
               },
               "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "rule": {
+                        "type": "object",
+                        "required": [
+                          "ability_keyword"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "rule"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "direction": {
+                        "const": "suppressed"
+                      },
+                      "rule_kind": {
+                        "const": "ability"
+                      }
+                    }
+                  }
+                },
                 {
                   "if": {
                     "properties": {

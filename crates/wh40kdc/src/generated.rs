@@ -43294,6 +43294,20 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 ///        },
 ///        {
 ///          "$ref": "#/$defs/stance-option-ref"
+///        },
+///        {
+///          "description": "Every ability tagged with this keyword (\"Pain abilities\" is PAIN). Only with direction suppressed and rule_kind ability.",
+///          "type": "object",
+///          "required": [
+///            "ability_keyword"
+///          ],
+///          "properties": {
+///            "ability_keyword": {
+///              "type": "string",
+///              "pattern": "^[A-Z][A-Z0-9 -]*[A-Z0-9]$"
+///            }
+///          },
+///          "additionalProperties": false
 ///        }
 ///      ]
 ///    },
@@ -43514,17 +43528,32 @@ for RuleStateEffectModifierDirection {
 ///    },
 ///    {
 ///      "$ref": "#/$defs/stance-option-ref"
+///    },
+///    {
+///      "description": "Every ability tagged with this keyword (\"Pain abilities\" is PAIN). Only with direction suppressed and rule_kind ability.",
+///      "type": "object",
+///      "required": [
+///        "ability_keyword"
+///      ],
+///      "properties": {
+///        "ability_keyword": {
+///          "type": "string",
+///          "pattern": "^[A-Z][A-Z0-9 -]*[A-Z0-9]$"
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-#[serde(untagged)]
+#[serde(untagged, deny_unknown_fields)]
 pub enum RuleStateEffectModifierRule {
     String(RuleStateEffectModifierRuleString),
     NamedAbilityRef(NamedAbilityRef),
     StanceOptionRef(StanceOptionRef),
+    Object { ability_keyword: RuleStateEffectModifierRuleObjectAbilityKeyword },
 }
 impl ::std::convert::From<RuleStateEffectModifierRuleString>
 for RuleStateEffectModifierRule {
@@ -43626,6 +43655,83 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateEffectModifierR
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///`RuleStateEffectModifierRuleObjectAbilityKeyword`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^[A-Z][A-Z0-9 -]*[A-Z0-9]$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct RuleStateEffectModifierRuleObjectAbilityKeyword(::std::string::String);
+impl ::std::ops::Deref for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<RuleStateEffectModifierRuleObjectAbilityKeyword>
+for ::std::string::String {
+    fn from(value: RuleStateEffectModifierRuleObjectAbilityKeyword) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[A-Z][A-Z0-9 -]*[A-Z0-9]$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[A-Z][A-Z0-9 -]*[A-Z0-9]$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`RuleStateEffectModifierRuleString`

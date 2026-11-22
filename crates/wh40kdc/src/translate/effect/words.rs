@@ -30,6 +30,10 @@ pub(crate) struct Ctx {
     pub aura_recipient: bool,
     /// Inside a `for-each-unit` over models: each pass's model (the recipient) reads "that model".
     pub each_model: bool,
+    /// Inside a `for-each-unit` over units: each pass's unit (the recipient) reads "that unit".
+    pub each_unit: bool,
+    /// The id of the record being described: a permission naming it is "this Stratagem".
+    pub self_id: Option<String>,
     /// The ability's trigger already says a unit or model is destroyed; leaves must not repeat it.
     pub destroyed_trigger: bool,
     /// The ability's trigger already says damage/an attack is allocated; damage-reduction must not repeat it.

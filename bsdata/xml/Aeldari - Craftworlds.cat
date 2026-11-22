@@ -10455,7 +10455,7 @@ While the target is within range of an objective marker, you can re-roll Hit rol
   - When this unit is selected to make a Normal move, you can use this ability:
     - This unit cannot declare a charge.
     - Set this unit's Move characteristic to 24".
-    - At the end of each phase, until the end of the phase, roll one D6 for each model in this unit: for each 1, this unit suffers 1 mortal wound.</characteristic>
+    - At the end of the phase, roll one D6 for each model in this unit: for each 1, this unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
         <profile name="Deep Strike" id="a0ef-80db-cd1c-6c9f" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">

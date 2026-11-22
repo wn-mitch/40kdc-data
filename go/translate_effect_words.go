@@ -36,6 +36,10 @@ type effCtx struct {
 	eachModel bool
 	// suppressWeaponType: an enclosing attack-is already stated this attack type ("ranged"/"melee"), so bare weapon-type filters don't repeat it.
 	suppressWeaponType string
+	// eachUnit: inside a for-each-unit over units, each pass's unit (the recipient) reads "that unit".
+	eachUnit bool
+	// self: the id of the record being described; a permission naming it is "this Stratagem".
+	self string
 }
 
 // ejstr is JS-template stringification: null -> "?", arrays join with ", ",
@@ -654,7 +658,7 @@ func effectSubject(target any, ctx effCtx) string {
 		if ctx.eachModel || ctx.selectedModel {
 			return "that model"
 		}
-		if ctx.auraRecipient || ctx.selectedUnit {
+		if ctx.auraRecipient || ctx.selectedUnit || ctx.eachUnit {
 			return "that unit"
 		}
 		return "this unit"

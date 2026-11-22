@@ -188,10 +188,16 @@ func usageClause(usage any) string {
 // partHead renders what leads an ability part: its moment, usage limit, name,
 // the choice to use it and its cost.
 func partHead(e map[string]any) string {
+	// A part armed for the phase that fires when the phase ends fires once, at the end of this phase.
+	thisPhaseEnd := e["duration"] == "phase" && isBarePhaseEnd(e["trigger"])
 	var moments []string
-	for _, t := range normalizeTriggers(e["trigger"]) {
-		if s := describeReactiveTrigger(withAuraRecipient(t, mapOr(e["effect"]))); s != "" {
-			moments = append(moments, s)
+	if thisPhaseEnd {
+		moments = []string{"at the end of the phase"}
+	} else {
+		for _, t := range normalizeTriggers(e["trigger"]) {
+			if s := describeReactiveTrigger(withAuraRecipient(t, mapOr(e["effect"]))); s != "" {
+				moments = append(moments, s)
+			}
 		}
 	}
 	level := ""
@@ -224,12 +230,13 @@ func partHead(e map[string]any) string {
 	if isObject(e["usage"]) {
 		usage = usageClause(e["usage"])
 	}
+
 	// A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
 	// Skip when the inner designate-target / persistent-designation already prints the same duration.
 	innerEff := mapOr(e["effect"])
 	ownDesigDur := (innerEff["type"] == "designate-target" || innerEff["type"] == "persistent-designation") && innerEff["duration"] == e["duration"]
 	trail := ""
-	if !ownDesigDur {
+	if !ownDesigDur && !thisPhaseEnd {
 		_, trail = durationClauses(e["duration"])
 		if strings.HasSuffix(trail, "control it") {
 			trail = strings.TrimSuffix(trail, "it") + "that objective marker"
@@ -249,6 +256,12 @@ func partTriggerCtx(e map[string]any, ctx effCtx) effCtx {
 		}
 	}
 	return ctx
+}
+
+// isBarePhaseEnd is a trigger that is only the end of a phase: no phase, turn or other gate named.
+func isBarePhaseEnd(trigger any) bool {
+	t, ok := trigger.(map[string]any)
+	return ok && t["event"] == "phase-ended" && len(t) == 1
 }
 
 // partWithModelRefs is a part with its own trigger, its effect's event refs read as that trigger's
@@ -406,7 +419,8 @@ func describeAbility(a map[string]any) string {
 	rendered := ""
 	if e, ok := asMap(a["effect"]); ok && e != nil {
 		scope, _ := asMap(a["scope"])
-		rendered = renderTopLevel(e, scope, a["usage"], a["trigger"], optional)
+		self, _ := a["ability_id"].(string)
+		rendered = renderTopLevel(e, scope, a["usage"], a["trigger"], optional, self)
 	}
 	core := rendered
 	if optional {
@@ -426,8 +440,8 @@ func conditionWithinRange(c map[string]any) (float64, bool) {
 	return f, ok
 }
 
-func renderTopLevel(e, scope map[string]any, usage, trigger any, optional bool) string {
-	ctx := effCtx{}
+func renderTopLevel(e, scope map[string]any, usage, trigger any, optional bool, self string) string {
+	ctx := effCtx{self: self}
 	var scopeDuration any
 	if scope != nil {
 		scopeDuration = scope["duration"]

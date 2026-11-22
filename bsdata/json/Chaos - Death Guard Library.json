@@ -4268,7 +4268,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "When a model in this unit is destroyed, once per battle per model:\n  - At the end of each phase, until the end of the phase:\n    - Roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1\" away from all enemy models, with 3 wounds remaining.",
+                "$text": "When a model in this unit is destroyed, once per battle per model:\n  - At the end of the phase:\n    - Roll one D6: on a 2+, this model can be set up on the battlefield as close as possible to where it was destroyed more than 1\" away from all enemy models, with 3 wounds remaining.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

@@ -7,7 +7,7 @@ use super::history::destroyed_count;
 use super::js::*;
 use super::refs::*;
 use crate::translate::dekebab;
-use crate::translate::effect::{dice_case, dice_table_result_label, resource_noun, title_case};
+use crate::translate::effect::{dice_case, dice_table_result_label, title_case};
 
 /// The predicate phrase for the history-count, position, board, attack,
 /// visibility, designation, resource and mission-card predicates (the rest of
@@ -432,39 +432,7 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 designation_phrase(&st(p.get("tag")), false)
             )
         }
-        "resource" => {
-            if p.get("below_max") == Some(&Value::Bool(true)) {
-                let source = obj(p.get("source_ability")).get("ability_id");
-                return format!(
-                    "{neg}the {} ability had unused selection capacity at the end of your opponent's previous turn",
-                    dekebab(&st(source))
-                );
-            }
-            // "you gained fewer than 3YP this turn": this turn's gains, not what the pool holds.
-            if p.get("gained").and_then(Value::as_str) == Some("turn") {
-                return format!(
-                    "you {} {} {} this turn",
-                    if negated { "did not gain" } else { "gained" },
-                    count_phrase(p.get("count")),
-                    resource_noun(p.get("pool"), None, Some(&Value::from(2)))
-                );
-            }
-            // "if your opponent has one or more Flux tokens": the opponent's holding of a pool both players hold.
-            if p.get("holder").and_then(Value::as_str) == Some("opponent") {
-                return format!(
-                    "your opponent {} {} {}",
-                    if negated { "does not have" } else { "has" },
-                    count_phrase(p.get("count")),
-                    resource_noun(p.get("pool"), None, Some(&Value::from(2)))
-                );
-            }
-            // A pool is the player's ("If you have 3 or more Pact points").
-            format!(
-                "you have {} {}",
-                count_phrase(p.get("count")),
-                dekebab(&st(p.get("pool")))
-            )
-        }
+        "resource" => super::resource::resource_predicate(p, negated),
         // "the Psychic test result is 10+": the total of a roll an enclosing step bound.
         "roll-total" => {
             let roll = st(p.get("roll_var"));

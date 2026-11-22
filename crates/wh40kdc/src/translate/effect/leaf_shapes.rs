@@ -3,9 +3,53 @@
 //! weapon binding. One lowercase-initial clause, no period; `None` for any other type.
 //! Mirrors `tools/src/translate/effect-leaf-shapes.ts`.
 
+use serde_json::Value;
+
 use super::words::*;
-use crate::translate::condition::{nn, P};
+use crate::translate::condition::{designation_phrase, key_count, nn, obj, P};
 use crate::translate::expiry::expiry_trail;
+
+/// "PAIN" → "Pain", "BLOOD RITE" → "Blood Rite": an ability tag as the rules print it.
+fn ability_tag(keyword: &str) -> String {
+    keyword
+        .to_lowercase()
+        .split(' ')
+        .map(capitalize)
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
+/// A suppression of every ability with a tag (`{rule: {ability_keyword}}`). On the units neither
+/// carrying a tag nor part of a unit that carries it, it is the two sentences the rules print;
+/// otherwise "<subject> cannot use <Tag> abilities". `None` when the rule names one ability.
+pub(super) fn ability_class_state(target: Option<&Value>, m: &P, subj: &str) -> Option<String> {
+    let keyword = m
+        .get("rule")?
+        .as_object()?
+        .get("ability_keyword")?
+        .as_str()?;
+    let tag = ability_tag(keyword);
+    let t = obj(target);
+    let mark = t.get("not_designated").and_then(Value::as_str);
+    let excluding = nn(t, "excluding").and_then(Value::as_object);
+    let member_of = excluding
+        .and_then(|x| nn(x, "member_of"))
+        .and_then(Value::as_object);
+    let unmarked = match (mark, excluding, member_of) {
+        (Some(mark), Some(x), Some(mo)) => {
+            key_count(t) == 2
+                && key_count(x) == 1
+                && key_count(mo) == 1
+                && mo.get("designated").and_then(Value::as_str) == Some(mark)
+        }
+        _ => false,
+    };
+    let Some(mark) = mark.filter(|_| unmarked) else {
+        return Some(format!("{subj} cannot use {tag} abilities"));
+    };
+    let state = designation_phrase(mark, false);
+    Some(format!("{tag} abilities only apply to a unit while it is {state}. While an Attached unit is {state}, the {tag} abilities of all its Leader and Bodyguard units take effect, with no additional spend"))
+}
 
 fn test_exemption(m: &P, subj: &str) -> String {
     format!(

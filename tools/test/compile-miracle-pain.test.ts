@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileLeaves } from "../src/semantic-authoring/compile.js";
 import { normalizeFingerprintParameters } from "../src/semantic-authoring/contracts.js";
 import { mapToLatest } from "../src/semantic-authoring/family-versions.js";
-import { describeEffect } from "../src/translate/effect.js";
+import { describeAbility, describeEffect } from "../src/translate/effect.js";
 import { describeTrigger } from "../src/translate/trigger.js";
 import { expectCompiled, expectRefused, placed } from "./semantic-authoring-connective-fixture.js";
 
@@ -183,6 +183,100 @@ describe("a destroyed Stratagem target set back up at the end of the phase", () 
     expect(json).toContain('"modifier":{"pool":"pain-token-pool","amount":{"up_to":3,"at_least":1}');
     expect(json).toContain('"wounds_remaining":{"spent":"glim"}');
     expect(json).toContain('"trigger":{"event":"phase-ended"}');
+  });
+});
+
+describe("a Stratagem that sets its just-destroyed target back up", () => {
+  const text = "WHEN: Any phase. TARGET: One GLIM model from your army that was just destroyed. You can use this Stratagem on that model even though it was just destroyed. EFFECT: Spend 1-3 Glim tokens. At the end of the phase, set up the destroyed model on the battlefield, unengaged and as close as possible to where it was destroyed. RESTRICTIONS: You cannot use this Stratagem while you have 0 Glim tokens, and you cannot target the same GLIM model with this Stratagem more than once per battle.";
+  const leaves = placed(text,
+    ["Any phase", "use-window", { your_phases: [], opponent_phases: [], either_phases: ["command", "movement", "shooting", "charge", "fight"] }, "WHEN"],
+    ["One", "stratagem-target", { count: "one" }, "TARGET"],
+    ["GLIM model", "unit-filter", { side: "friendly", keywords: ["GLIM"], level: "model" }, "TARGET"],
+    ["from your army", "unit-owner", { owner: "friendly" }, "TARGET"],
+    ["was just destroyed", "event", { kind: "model-destroyed" }, "TARGET"],
+    ["You can use this Stratagem on that model even though it was just destroyed", "eligibility-permission", { subject: "this-model", activity: "use-stratagem", allow: true, despite: ["destroyed"] }, "TARGET"],
+    ["Spend 1-3 Glim tokens", "resource-spend", { pool: "pain-token-pool", amount: { up_to: 3, at_least: 1 } }, "EFFECT"],
+    ["At the end of the phase", "event", { kind: "phase-end", phase: "any", turn: "either" }, "EFFECT"],
+    ["set up the destroyed model on the battlefield, unengaged and as close as possible to where it was destroyed", "set-up", { subject: "this-model", to: "battlefield", placement: "closest-to-destruction", unengaged: true, mandatory: true }, "EFFECT"],
+    ["You cannot use this Stratagem", "eligibility-permission", { subject: "this-model", activity: "use-stratagem", allow: false }, "RESTRICTIONS"],
+    ["you have 0 Glim tokens", "resource", { pool: "pain-token-pool", at_most: 0 }, "RESTRICTIONS"],
+    ["you cannot target the same GLIM model with this Stratagem more than once per battle", "usage-limit", { frequency: "once-per-battle", per: "model" }, "RESTRICTIONS"]);
+
+  it("is used when its target is destroyed, and sets it up once, at the end of that phase", () => {
+    const result = compileLeaves(leaves, text, { abilityId: "example-glim-rite" });
+    expectCompiled(result);
+    // The destruction is when the Stratagem is used: the record's trigger, not a part under the phase's duration.
+    expect(result.mechanics.trigger).toEqual({ event: "model-destroyed", object: "model-in-this-unit" });
+    const steps = (result.mechanics.effect as Record<string, any>).steps as Record<string, any>[];
+    expect(steps.at(-1)).toEqual({
+      type: "ability-part", trigger: { event: "phase-ended" }, duration: "phase",
+      effect: { type: "set-up", target: "this-model", modifier: { to: "battlefield", placement: ["closest-to-destruction", "unengaged"], mandatory: true } },
+    });
+    // "You cannot use this Stratagem" names this Stratagem, not every Stratagem.
+    expect(steps).toContainEqual({
+      type: "conditional", condition: { type: "resource", parameters: { pool: "pain-token-pool", count: { max: 0 } } },
+      effect: { type: "permission", target: "this-model", modifier: { activity: "use-stratagem", allow: false, stratagem: "example-glim-rite" } },
+    });
+    const text_ = describeAbility({ ...result.mechanics, ability_id: "example-glim-rite" } as never);
+    expect(text_).toMatch(/^When a model in this unit is destroyed, /u);
+    expect(text_).toContain("- At the end of the phase, this model must be set up on the battlefield");
+    expect(text_).toContain("- While you have 0 Pain tokens, you cannot use this Stratagem.");
+  });
+
+  it("refuses a restriction on its own use when the record's id is unknown", () => {
+    expectRefused(compileLeaves(leaves, text));
+  });
+});
+
+describe("a cap on what one use gains", () => {
+  const text = "WHEN: Fight phase. TARGET: One GLIM unit from your army. EFFECT: Until the end of the phase, each time a model in your unit makes an attack, add 1 to the Hit roll. If your Glim unit is destroyed as a result of those attacks, every unit in your opponent's army must take a Battle-shock test. You cannot gain more than 3 Glim tokens as a result of failed Battle-shock tests caused by this Stratagem.";
+  const leaves = placed(text,
+    ["Fight phase", "use-window", { your_phases: [], opponent_phases: [], either_phases: ["fight"] }, "WHEN"],
+    ["One", "stratagem-target", { count: "one" }, "TARGET"],
+    ["GLIM unit", "unit-filter", { side: "friendly", keywords: ["GLIM"] }, "TARGET"],
+    ["from your army", "unit-owner", { owner: "friendly" }, "TARGET"],
+    ["Until the end of the phase", "duration", { endpoint: "end-of-phase" }, "EFFECT"],
+    ["each time a model in your unit makes an attack", "attack", { direction: "makes", unit: "this-unit", attack_type: "any" }, "EFFECT"],
+    ["add 1 to the Hit roll", "roll-modifier", { operation: "add", value: 1, roll: "hit" }, "EFFECT"],
+    ["If your Glim unit is destroyed as a result of those attacks", "event", { kind: "unit-destroyed", by: "this-unit", object_designated: "contract-unit" }, "EFFECT"],
+    ["every", "for-each-unit-select", {}, "EFFECT"],
+    ["unit in your opponent's army", "unit-filter", { side: "enemy" }, "EFFECT"],
+    ["must take a Battle-shock test", "test", { target: "recipient", test: "battle-shock" }, "EFFECT"],
+    ["You cannot gain more than 3 Glim tokens as a result of failed Battle-shock tests caused by this Stratagem", "resource-gain-cap", { pool: "pain-token-pool", max: 3, source: "failed-battle-shock" }, "EFFECT"]);
+
+  it("caps the use once, after the loop, never once per unit the loop reaches", () => {
+    const result = compileLeaves(leaves, text);
+    expectCompiled(result);
+    const json = JSON.stringify(result.mechanics.effect);
+    const loop = json.indexOf('"type":"for-each-unit"');
+    const cap = json.indexOf('"type":"resource-gain-cap"');
+    expect(loop).toBeGreaterThan(-1);
+    expect(json).toContain('{"type":"for-each-unit","selector":{"filter":{"owner":"enemy"}},"effect":{"type":"test","target":"recipient","modifier":{"test":"battle-shock"}}}');
+    expect(cap).toBeGreaterThan(loop);
+    expect(describeAbility(result.mechanics as never)).toContain("For each enemy unit: That unit must take a Battle-shock test.");
+  });
+});
+
+describe("abilities with a tag, off for a unit while it is not marked", () => {
+  const tagged = { subject: "unmarked", tag: "empowered", direction: "suppressed", rule_kind: "ability", ability_keyword: "PAIN" };
+
+  it("names every ability with the tag, suppressed only, and the unmarked subject only with its tag", () => {
+    expect(normalize("rule-state", tagged)).toEqual(tagged);
+    expect(() => normalize("rule-state", { ...tagged, direction: "granted" })).toThrow(/suppressed abilities/u);
+    expect(() => normalize("rule-state", { ...tagged, rule: "pain" })).toThrow();
+    expect(() => normalize("rule-state", { ...tagged, subject: "this-unit" })).toThrow(/tag goes only with subject unmarked/u);
+    expect(() => normalize("rule-state", { subject: "unmarked", direction: "suppressed", rule_kind: "ability", ability_keyword: "PAIN" })).toThrow(/tag/u);
+  });
+
+  it("lowers to the units neither marked nor part of a marked unit, and reads as the printed rule", () => {
+    const text = "Glim abilities only apply to a unit while it is Empowered.";
+    const result = compileLeaves(placed(text, ["Glim abilities only apply to a unit while it is Empowered", "rule-state", { ...tagged, ability_keyword: "GLIM" }]), text);
+    expectCompiled(result);
+    expect(result.mechanics.effect).toEqual({
+      type: "rule-state", target: { not_designated: "empowered", excluding: { member_of: { designated: "empowered" } } },
+      modifier: { direction: "suppressed", rule_kind: "ability", rule: { ability_keyword: "GLIM" } },
+    });
+    expect(describeAbility(result.mechanics as never)).toBe("Glim abilities only apply to a unit while it is Empowered. While an Attached unit is Empowered, the Glim abilities of all its Leader and Bodyguard units take effect, with no additional spend.");
   });
 });
 
