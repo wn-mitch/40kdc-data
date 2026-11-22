@@ -9810,19 +9810,28 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
     "detachment_id": "data-psalm-conclave",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "damage-reduction",
+      "target": "this-model",
+      "modifier": {
+        "reduction": "to-one"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "damage-allocated",
+      "object": "this-model"
+    },
+    "source_digest": "19b031f7e885912e55f25e2bcfbdce5b6e291e89bf05ace7b8c9af7a4b3c42fe"
   },
   {
     "ability_id": "mechanical-guidance-adeptus-mechanicus",

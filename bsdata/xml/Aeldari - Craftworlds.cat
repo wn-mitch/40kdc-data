@@ -22325,7 +22325,8 @@ Subtract 1 from the Damage characteristic of the attacking unit's attacks.</char
       <profiles>
         <profile name="Drakolithe (Once per battle, per token)" id="7ddd-f59a-61ec-816a" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Each time an enemy unit ends a move, you can use this ability, once per battle for each copy of this wargear its unit is equipped with, while the triggering unit is within 8" of this unit and this unit is unengaged or while the triggering unit is within Engagement Range of this unit:
+  - Roll one D6: on a 3+, the triggering unit suffers 1 mortal wound.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -22834,7 +22835,7 @@ You cannot select this Detachment together with another ACROBATIC Detachment.</d
           <profiles>
             <profile name="Murder's Jest" id="5dc2-edda-4864-0e74" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While the target unit is Below Half-strength, each successful Hit roll made by this model is a Critical Hit.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -23974,7 +23975,7 @@ This unit's Battle Focus ability has no limit on its number of uses, and this us
           <profiles>
             <profile name="Runes of Warding" id="9f81-309d-a32e-2309" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit has Feel No Pain 4+ against mortal wounds, Psychic Attacks and Critical Wounds caused by attacks with [DEVASTATING WOUNDS].</characteristic>
               </characteristics>
             </profile>
           </profiles>

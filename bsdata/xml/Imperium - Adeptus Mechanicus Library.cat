@@ -9645,7 +9645,7 @@ At the start of each phase, you can use this ability, once per battle per model:
           <profiles>
             <profile name="Mantle of the Gnosticarch" id="a8da-9957-8d62-e0ae" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When damage is allocated to this model, change the Damage characteristic of that attack to 1.</characteristic>
               </characteristics>
             </profile>
           </profiles>

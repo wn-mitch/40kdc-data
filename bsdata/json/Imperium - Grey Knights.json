@@ -34364,7 +34364,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "Each time an enemy unit Falls Back, you can use this ability, while the triggering unit is within Engagement Range of this unit:\n  - Roll one D6:\n    - On 1: Nothing happens.\n    - On 2-5: The triggering unit suffers D3 mortal wounds (Psychic Attack).\n    - On 6: The triggering unit suffers D3+3 mortal wounds (Psychic Attack).",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

@@ -15949,19 +15949,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "fellhammer-siege-host",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "targets-selected",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "kind": "charge"
+        },
+        "object": "this-unit"
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "event-subject",
+        "modifier": {
+          "roll": "charge",
+          "operation": "subtract",
+          "value": 2,
+          "not_cumulative": "negative-modifiers"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "537a08c6b1ed734720a1cce18b8191ef237e401f1b025d4b285167fa20fc1e7d"
   },
   {
     "ability_id": "skinshift-pactbound-zealots-chaos-space-marines",

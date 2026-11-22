@@ -7222,19 +7222,78 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "death-guard",
     "detachment_id": "mortarions-hammer",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "visible_to": "this-unit"
+        },
+        "bind_as": "objective-marker",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "for-each-unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "designated": "afflicted"
+          }
+        },
+        "effect": {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "subject": "recipient",
+              "filter": {
+                "within": {
+                  "of": {
+                    "objective": {
+                      "selection_var": "objective-marker"
+                    }
+                  },
+                  "range": "objective-control"
+                }
+              }
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "test",
+                "target": "recipient",
+                "modifier": {
+                  "test": "battle-shock"
+                }
+              },
+              {
+                "type": "test-exemption",
+                "target": "recipient",
+                "modifier": {
+                  "test": "battle-shock",
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "15548802aad8d944f1e2d8df0485a2522e9f2b0e749db463753b5bc103971502"
   },
   {
     "ability_id": "face-of-death-death-lords-chosen-death-guard",

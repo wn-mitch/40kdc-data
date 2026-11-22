@@ -12798,19 +12798,48 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "aspect-host",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "Range",
+            "operation": "set",
+            "value": 18,
+            "weapons": {
+              "type": "ranged",
+              "name": "wailing doom"
+            }
+          }
+        },
+        {
+          "type": "stat-modifier",
+          "target": "this-model",
+          "modifier": {
+            "stat": "D",
+            "operation": "set",
+            "value": 8,
+            "weapons": {
+              "type": "ranged",
+              "name": "wailing doom"
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "831a43da5bcb07958b0b70e5f757e57499d2c81721d896ae888afabaa7e04ac8"
   },
   {
     "ability_id": "drakolithe-aeldari",
@@ -12818,9 +12847,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "dragon-knights",
       "leystalker"
@@ -12829,11 +12857,85 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "subject": "event-subject",
+              "filter": {
+                "within": {
+                  "of": "this-unit",
+                  "range": {
+                    "inches": 8
+                  }
+                }
+              }
+            }
+          },
+          {
+            "operator": "or",
+            "operands": [
+              {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "filter": {
+                        "state": "engaged"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-subject",
+                  "filter": {
+                    "engaged_with": "this-unit"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 3,
+        "comparison": "gte",
+        "on_success": {
+          "type": "mortal-wounds",
+          "target": "event-subject",
+          "modifier": {
+            "count": 1
+          }
+        },
+        "on_fail": null
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count_from": "equipped-wargear",
+      "per": "unit"
+    },
+    "source_digest": "d7a6beb95abc6f3b2886012988b69d54123d764ee5b4b1c04458264478a3d89a"
   },
   {
     "ability_id": "echoes-of-ulthanesh-windrider-host-aeldari",
@@ -13972,19 +14074,102 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "eldritch-raiders",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "none_of": [
+            "TITANIC"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "visible": {
+                    "to": "this-unit"
+                  }
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "within": {
+                    "of": "this-unit",
+                    "range": {
+                      "inches": 36
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "effect": {
+        "type": "ability-part",
+        "trigger": {
+          "event": "targets-selected",
+          "subject": "selected-unit",
+          "filter": {
+            "kind": "charge"
+          }
+        },
+        "effect": {
+          "type": "roll-modifier",
+          "target": "event-subject",
+          "modifier": {
+            "roll": "charge",
+            "operation": "subtract",
+            "value": 2,
+            "not_cumulative": "negative-modifiers"
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "61637a132dab3a464671d650a0cc854f792db001f8c1095789594aa9238c17d5"
   },
   {
     "ability_id": "infamy-aura-corsair-coterie-aeldari",
@@ -14900,19 +15085,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "ghosts-of-the-webway",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "strength",
+        "parameters": {
+          "subject": "defender",
+          "below": "half"
+        }
+      },
+      "effect": {
+        "type": "roll-result",
+        "target": "this-model",
+        "modifier": {
+          "roll": "hit",
+          "critical_on": "success"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "91934435d0a950ba5aa8031749a3281e8109508df049336b9d5ee72473dd0d50"
   },
   {
     "ability_id": "no-prey-too-big-eldritch-raiders-aeldari",
@@ -15970,19 +16171,29 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "seer-council",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 4,
+        "against": [
+          "mortal",
+          "psychic",
+          "devastating-wounds"
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "e3c0824f7a4bb94fbf5944651e6d08cf3da37ac03c76bada3a6ebfbb7d627275"
   },
   {
     "ability_id": "ruthless-killers-eldritch-raiders-aeldari",
@@ -16742,9 +16953,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "spiritseer-kygharil"
     ],
@@ -16752,11 +16962,99 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "WRAITH CONSTRUCT"
+          ],
+          "none_of": [
+            "TITANIC"
+          ],
+          "within": {
+            "range": {
+              "inches": 6
+            },
+            "of": "this-model"
+          }
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "bind_as": "wraith"
+      },
+      "effect": {
+        "type": "designate-target",
+        "designation": "spirit-mark-psychic-target",
+        "select": {
+          "kind": "unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            },
+            "eligibility": {
+              "type": "matches",
+              "parameters": {
+                "subject": "selected-unit",
+                "filter": {
+                  "visible": {
+                    "to": "this-model"
+                  }
+                }
+              }
+            },
+            "bind_as": "foe"
+          }
+        },
+        "applies": {
+          "to": "bound-unit-attacks-reference",
+          "beneficiary": {
+            "selection_var": "wraith"
+          },
+          "reference": {
+            "selection_var": "foe"
+          },
+          "effect": {
+            "type": "weapon-ability-grant",
+            "target": {
+              "selection_var": "wraith"
+            },
+            "modifier": {
+              "keywords": [
+                {
+                  "keyword_id": "sustained-hits",
+                  "parameters": {
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "duration": "until-next-movement-phase"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-movement-phase"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "move-started",
+        "optional": true
+      },
+      {
+        "event": "move-ended",
+        "optional": true
+      }
+    ],
+    "source_digest": "df87230ddd46d13a81279343333736a8cbf94bfdaba8469cf8a6ed944310eb54"
   },
   {
     "ability_id": "spirit-stone-of-raelyth-armoured-warhost-aeldari",

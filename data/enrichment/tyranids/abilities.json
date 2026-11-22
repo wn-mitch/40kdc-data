@@ -9629,19 +9629,37 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "unending-swarm",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "counts-as",
+      "target": "this-unit",
+      "modifier": {
+        "model_count": {
+          "below": 5
+        },
+        "for_weapon_ability": "blast"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "0b2fe8a05fd7b0b943cfb56530782964e4eb3034195f2c897ee3ec861c7ead0f"
   },
   {
     "ability_id": "psychoclastic-overload-the-vardenghast-swarm-tyranids",

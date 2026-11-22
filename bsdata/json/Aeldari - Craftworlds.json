@@ -79451,7 +79451,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Nothing happens.",
+                "$text": "Each time an enemy unit ends a move, you can use this ability, once per battle for each copy of this wargear its unit is equipped with, while the triggering unit is within 8\" of this unit and this unit is unengaged or while the triggering unit is within Engagement Range of this unit:\n  - Roll one D6: on a 3+, the triggering unit suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -80853,7 +80853,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "While the target unit is Below Half-strength, each successful Hit roll made by this model is a Critical Hit.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -84527,7 +84527,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "This unit has Feel No Pain 4+ against mortal wounds, Psychic Attacks and Critical Wounds caused by attacks with [DEVASTATING WOUNDS].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

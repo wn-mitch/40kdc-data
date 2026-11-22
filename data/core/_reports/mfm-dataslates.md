@@ -16,8 +16,8 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 181 | 276 |
-| stratagems | 0 | 0 | 1133 | 180 |
-| abilities | 0 | 0 | 3973 | 586 |
+| stratagems | 0 | 0 | 1141 | 172 |
+| abilities | 0 | 0 | 3987 | 572 |
 | phase-mappings | 0 | 0 | 1229 | 352 |
 | resource-pools | 0 | 0 | 0 | 7 |
 
@@ -29,23 +29,23 @@ dump confirmation.
 | adepta-sororitas | 0 | 0 | 123 | 25 |
 | adeptus-astartes | 0 | 0 | 236 | 14 |
 | adeptus-custodes | 0 | 0 | 152 | 6 |
-| adeptus-mechanicus | 0 | 0 | 148 | 19 |
+| adeptus-mechanicus | 0 | 0 | 149 | 18 |
 | adeptus-titanicus | 0 | 0 | 8 | 2 |
-| aeldari | 0 | 0 | 252 | 48 |
-| agents-of-the-imperium | 0 | 0 | 105 | 35 |
+| aeldari | 0 | 0 | 258 | 42 |
+| agents-of-the-imperium | 0 | 0 | 107 | 33 |
 | astra-militarum | 0 | 0 | 218 | 33 |
 | black-templars | 0 | 0 | 61 | 2 |
 | blood-angels | 0 | 0 | 53 | 8 |
 | chaos-daemons | 0 | 0 | 173 | 22 |
 | chaos-knights | 0 | 0 | 88 | 22 |
-| chaos-space-marines | 0 | 0 | 240 | 41 |
+| chaos-space-marines | 0 | 0 | 241 | 40 |
 | dark-angels | 0 | 0 | 69 | 8 |
-| death-guard | 0 | 0 | 139 | 21 |
+| death-guard | 0 | 0 | 140 | 20 |
 | deathwatch | 0 | 0 | 34 | 2 |
 | drukhari | 0 | 0 | 139 | 25 |
 | emperors-children | 0 | 0 | 128 | 20 |
 | genestealer-cults | 0 | 0 | 122 | 26 |
-| grey-knights | 0 | 0 | 125 | 9 |
+| grey-knights | 0 | 0 | 127 | 7 |
 | imperial-fists | 0 | 0 | 9 | 2 |
 | imperial-knights | 0 | 0 | 97 | 21 |
 | iron-hands | 0 | 0 | 11 | 0 |
@@ -58,7 +58,7 @@ dump confirmation.
 | tau-empire | 0 | 0 | 142 | 24 |
 | thousand-sons | 0 | 0 | 129 | 29 |
 | titanicus-traitoris | 0 | 0 | 8 | 2 |
-| tyranids | 0 | 0 | 166 | 20 |
+| tyranids | 0 | 0 | 167 | 19 |
 | ultramarines | 0 | 0 | 11 | 0 |
 | white-scars | 0 | 0 | 11 | 0 |
 | world-eaters | 0 | 0 | 123 | 24 |
@@ -85,19 +85,19 @@ dump confirmation.
 | adeptus-custodes | unpublished | 3 |
 | adeptus-custodes | verified | 152 |
 | adeptus-mechanicus | digest-differs | 7 |
-| adeptus-mechanicus | stub | 10 |
+| adeptus-mechanicus | stub | 9 |
 | adeptus-mechanicus | unpublished | 2 |
-| adeptus-mechanicus | verified | 148 |
+| adeptus-mechanicus | verified | 149 |
 | adeptus-titanicus | stub | 2 |
 | adeptus-titanicus | verified | 8 |
 | aeldari | digest-differs | 9 |
-| aeldari | stub | 21 |
+| aeldari | stub | 15 |
 | aeldari | unpublished | 18 |
-| aeldari | verified | 252 |
+| aeldari | verified | 258 |
 | agents-of-the-imperium | digest-differs | 10 |
-| agents-of-the-imperium | stub | 14 |
+| agents-of-the-imperium | stub | 12 |
 | agents-of-the-imperium | unpublished | 11 |
-| agents-of-the-imperium | verified | 105 |
+| agents-of-the-imperium | verified | 107 |
 | astra-militarum | digest-differs | 11 |
 | astra-militarum | stub | 3 |
 | astra-militarum | unpublished | 19 |
@@ -117,16 +117,16 @@ dump confirmation.
 | chaos-knights | unpublished | 18 |
 | chaos-knights | verified | 88 |
 | chaos-space-marines | digest-differs | 11 |
-| chaos-space-marines | stub | 15 |
+| chaos-space-marines | stub | 14 |
 | chaos-space-marines | unpublished | 15 |
-| chaos-space-marines | verified | 240 |
+| chaos-space-marines | verified | 241 |
 | dark-angels | digest-differs | 7 |
 | dark-angels | stub | 1 |
 | dark-angels | verified | 69 |
 | death-guard | digest-differs | 4 |
-| death-guard | stub | 9 |
+| death-guard | stub | 8 |
 | death-guard | unpublished | 8 |
-| death-guard | verified | 139 |
+| death-guard | verified | 140 |
 | deathwatch | digest-differs | 1 |
 | deathwatch | no-source | 1 |
 | deathwatch | verified | 34 |
@@ -142,9 +142,9 @@ dump confirmation.
 | genestealer-cults | unpublished | 10 |
 | genestealer-cults | verified | 122 |
 | grey-knights | digest-differs | 1 |
-| grey-knights | stub | 6 |
+| grey-knights | stub | 4 |
 | grey-knights | unpublished | 2 |
-| grey-knights | verified | 125 |
+| grey-knights | verified | 127 |
 | imperial-fists | digest-differs | 2 |
 | imperial-fists | verified | 9 |
 | imperial-knights | digest-differs | 6 |
@@ -180,9 +180,9 @@ dump confirmation.
 | titanicus-traitoris | stub | 2 |
 | titanicus-traitoris | verified | 8 |
 | tyranids | digest-differs | 4 |
-| tyranids | stub | 7 |
+| tyranids | stub | 6 |
 | tyranids | unpublished | 9 |
-| tyranids | verified | 166 |
+| tyranids | verified | 167 |
 | ultramarines | verified | 11 |
 | white-scars | verified | 11 |
 | world-eaters | digest-differs | 5 |

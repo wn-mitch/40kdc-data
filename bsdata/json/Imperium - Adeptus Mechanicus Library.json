@@ -34159,7 +34159,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "When damage is allocated to this model, change the Damage characteristic of that attack to 1.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
