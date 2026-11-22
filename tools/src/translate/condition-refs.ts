@@ -145,10 +145,16 @@ export function isEventSubject(ref: unknown): boolean {
   return ref === "event-subject" || ref === EVENT_SUBJECT_MODEL;
 }
 
-/** Whether every trigger names a model as its `role` (its subject or object). */
+/** The unit ref naming one model of this unit ("each time a model in your unit is destroyed"): its event's unit is that model. */
+const ONE_MODEL_REF = "model-in-this-unit";
+
+/** Whether every trigger names a model as its `role` (its subject or object): a model-level filter, or one model of this unit. */
 function allModels(triggers: readonly { event?: unknown }[], role: "subject" | "object"): boolean {
   const live = triggers.filter((t) => t.event != null);
-  return live.length > 0 && live.every((t) => ((t as Record<string, unknown>)[role] as { level?: unknown } | undefined)?.level === "model");
+  return live.length > 0 && live.every((t) => {
+    const named = (t as Record<string, unknown>)[role];
+    return named === ONE_MODEL_REF || (named as { level?: unknown } | undefined)?.level === "model";
+  });
 }
 
 /**

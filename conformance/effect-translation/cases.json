@@ -11703,7 +11703,7 @@
       "optional": true
     },
     "expected": {
-      "text": "At the start of the battle round, you can use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:\n  - Roll 8D6; allocate dice to activate up to 2 of the following:\n    - Unbridled Bloodlust (requires pair of 1+): add 1 to this unit's Charge rolls.\n    - Rage-Fuelled Invigoration (requires pair of 2+): add 3\" to this unit's Pile-in and Consolidation moves.\n    - Total Carnage (requires pair of 3+): when a model in this unit is destroyed, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.\n    - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n    - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].\n    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, this unit's weapons gain [DEVASTATING WOUNDS]."
+      "text": "At the start of the battle round, you can use this ability, once per battle round per army, if your Army Faction is WORLD EATERS, until the end of the battle round:\n  - Roll 8D6; allocate dice to activate up to 2 of the following:\n    - Unbridled Bloodlust (requires pair of 1+): add 1 to this unit's Charge rolls.\n    - Rage-Fuelled Invigoration (requires pair of 2+): add 3\" to this unit's Pile-in and Consolidation moves.\n    - Total Carnage (requires pair of 3+): when a model in this unit is destroyed, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.\n    - Martial Excellence (requires pair of 4+ or triple of 1+): melee weapons equipped by models in this unit gain [SUSTAINED HITS 1].\n    - Warp Blades (requires pair of 5+ or triple of 2+): melee weapons equipped by models in this unit gain [LETHAL HITS].\n    - Decapitating Strikes (requires pair of 6+ or triple of 3+): while making melee attacks against INFANTRY targets, this unit's weapons gain [DEVASTATING WOUNDS]."
     }
   },
   {
@@ -53346,6 +53346,101 @@
     },
     "expected": {
       "text": "When damage is allocated to this model, for this activation, change the Damage characteristic of that attack to 1."
+    }
+  },
+  {
+    "caseId": "batch-a/destroyed-model-of-this-unit-history",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "event-object",
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "event-object",
+                    "event": "selected",
+                    "filter": {
+                      "to": "shoot"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "cp-gain",
+          "target": "this-model",
+          "modifier": {
+            "amount": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "expected": {
+      "text": "Until the end of the phase:\n  - When a model in this unit is destroyed, unless that model has fought this phase or that model has been selected to shoot this phase, you gain 1 CP."
+    }
+  },
+  {
+    "caseId": "batch-a/attacks-resolved-of-bound-moment-subject",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "binds_event_variable": "moment-subject"
+    },
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": {
+          "event_var": "moment-subject"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "expected": {
+      "text": "When an enemy unit targets this unit, until the end of the phase:\n  - After that unit shoots, this unit can make a Normal move of up to 6\"."
     }
   },
   {

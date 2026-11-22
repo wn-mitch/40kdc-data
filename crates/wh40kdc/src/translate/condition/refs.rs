@@ -208,15 +208,15 @@ fn live_triggers<'a>(triggers: &[&'a Value]) -> Vec<&'a Value> {
         .collect()
 }
 
-/// Whether every trigger names a model as its `role` (its subject or object).
+/// Whether every trigger names a model as its `role` (its subject or object): a model-level
+/// filter, or one model of this unit (`model-in-this-unit`).
 fn all_models(triggers: &[&Value], role: &str) -> bool {
     let live = live_triggers(triggers);
     !live.is_empty()
         && live.iter().all(|t| {
-            t.get(role)
-                .and_then(|o| o.get("level"))
-                .and_then(Value::as_str)
-                == Some("model")
+            let named = t.get(role);
+            named.and_then(Value::as_str) == Some("model-in-this-unit")
+                || named.and_then(|o| o.get("level")).and_then(Value::as_str) == Some("model")
         })
 }
 

@@ -26829,7 +26829,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When a model in this unit is destroyed, while making melee attacks, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
+                    "$text": "When a model in this unit is destroyed, while making melee attacks, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

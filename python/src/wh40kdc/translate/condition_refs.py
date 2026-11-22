@@ -269,10 +269,13 @@ def _live_triggers(trigger: Any) -> list[dict[str, Any]]:
 
 
 def _all_models(triggers: list[Any], role: str) -> bool:
-    """Whether every trigger names a model as its `role` (its subject or object)."""
+    """Whether every trigger names a model as its `role` (its subject or object): a
+    model-level filter, or one model of this unit (`model-in-this-unit`)."""
     live = _live_triggers(triggers)
     return bool(live) and all(
-        isinstance(t.get(role), dict) and t[role].get("level") == "model" for t in live
+        t.get(role) == "model-in-this-unit"
+        or (isinstance(t.get(role), dict) and t[role].get("level") == "model")
+        for t in live
     )
 
 

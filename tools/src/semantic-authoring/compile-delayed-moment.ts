@@ -29,6 +29,10 @@ export function foldDelayedMoments(list: readonly CompileLeaf[], sourceText: str
   if (sourceText === undefined) return [...list];
   const firstEffect = list.findIndex((leaf) => leaf.role === "EFFECT");
   if (firstEffect === -1) return [...list];
+  return bindAttackingUnit(foldDelayed(list, sourceText, firstEffect), sourceText, firstEffect);
+}
+
+function foldDelayed(list: readonly CompileLeaf[], sourceText: string, firstEffect: number): CompileLeaf[] {
   const text = (from: number, to: number) => exactSpan(sourceText, from, to);
   const delayed = list.flatMap((leaf, index) => {
     const effect = list[index - 1];
@@ -58,4 +62,33 @@ export function foldDelayedMoments(list: readonly CompileLeaf[], sourceText: str
 export function wrapDelayed(leaf: CompileLeaf, node: Node): Node {
   const held = leaf.parameters.delayed_trigger;
   return held === undefined ? node : { type: "ability-part", trigger: held, duration: "phase", effect: node };
+}
+
+/** "After the attacking unit has resolved its attacks": an effect moment that names the unit the leading moment's attacks came from. */
+const ATTACKING_UNIT = /^after\b.*\bthe attacking unit\b/iu;
+
+/**
+ * "Just after an enemy unit has selected its targets … after the attacking unit has resolved its
+ * attacks, …": an enemy attacks-resolved moment in the effect that says "the attacking unit" is the
+ * enemy unit the record's leading moment names, not any enemy unit. The leading moment binds that
+ * unit (`binds_event_variable`, the binding a delayed moment uses) and the later moment's subject is
+ * that binding. Only with exactly one leading enemy-acting moment; any other moment is left as it is.
+ */
+function bindAttackingUnit(list: readonly CompileLeaf[], sourceText: string, firstEffect: number): CompileLeaf[] {
+  const named = list.flatMap((leaf, index) => index > firstEffect && leaf.fragment === "EFFECT" && leaf.family_id === "event"
+    && leaf.parameters.kind === "attacks-resolved" && leaf.parameters.owner === "enemy" && leaf.parameters.subject === undefined
+    && leaf.parameters.subject_filter === undefined && leaf.end_byte !== undefined
+    && ATTACKING_UNIT.test(exactSpan(sourceText, leaf.start_byte, leaf.end_byte)) ? [index] : []);
+  if (named.length === 0) return [...list];
+  const leading = list.slice(0, firstEffect).flatMap((leaf, index) => enemyActing(leaf) ? [index] : []);
+  if (leading.length !== 1) return [...list];
+  const binds = list[leading[0]!]!.parameters.binds_event_variable;
+  if (binds !== undefined && binds !== DELAYED_SUBJECT) return [...list];
+  const out = [...list];
+  out[leading[0]!] = { ...out[leading[0]!]!, parameters: { ...out[leading[0]!]!.parameters, binds_event_variable: DELAYED_SUBJECT } };
+  for (const index of named) {
+    const { owner: _owner, ...parameters } = out[index]!.parameters;
+    out[index] = { ...out[index]!, parameters: { ...parameters, subject_filter: { event_var: DELAYED_SUBJECT } } };
+  }
+  return out;
 }

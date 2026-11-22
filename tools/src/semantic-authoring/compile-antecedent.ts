@@ -615,6 +615,12 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   // moment's object, not the Stratagem's target. A bare filter before the anaphor still wins (checked above).
   const allocation = earlier.filter((other) => other.family_id === "event" && other.parameters.kind === "damage-allocated" && other.fragment === leaves[index]!.fragment).at(-1);
   if (allocation && !inWhen) return "event-object";
+  // "Each time a model in your unit is destroyed, if that model has not shot …" in a Stratagem: "that model" is the
+  // destroyed model, the moment's object, not the Stratagem's target. Only an anaphor printed as "that model" moves.
+  const destroyedModel = earlier.some((other) => other.family_id === "event" && other.parameters.kind === "model-destroyed" && other.parameters.by === undefined
+    && other.fragment === leaves[index]!.fragment);
+  if (destroyedModel && !inWhen && sourceText !== undefined && leaves[index]!.end_byte !== undefined
+    && /^that model\b/iu.test(exactSpan(sourceText, leaves[index]!.start_byte, leaves[index]!.end_byte))) return "event-object";
   // With several targets, the target in focus (compile-target-refs.ts bindTargetRefs) instead.
   if (!inWhen && leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return focus?.(index) ?? "this-unit";
   // "Each time an attack is allocated to a model, … that model": the unit the moment happens to,

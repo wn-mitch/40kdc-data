@@ -6151,5 +6151,94 @@
     "scope": {
       "duration": "resolution"
     }
+  },
+  {
+    "caseId": "batch-a/destroyed-model-of-this-unit-history",
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "event-object",
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "event-object",
+                    "event": "selected",
+                    "filter": {
+                      "to": "shoot"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "cp-gain",
+          "target": "this-model",
+          "modifier": {
+            "amount": 1
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    }
+  },
+  {
+    "caseId": "batch-a/attacks-resolved-of-bound-moment-subject",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit",
+      "binds_event_variable": "moment-subject"
+    },
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": {
+          "event_var": "moment-subject"
+        }
+      },
+      "effect": {
+        "type": "move",
+        "target": "this-unit",
+        "modifier": {
+          "move_type": "normal",
+          "distance": 6
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    }
   }
 ]

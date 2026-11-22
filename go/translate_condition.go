@@ -228,13 +228,17 @@ func liveTriggers(triggers []map[string]any) []map[string]any {
 	return out
 }
 
-// allModels reports whether every trigger names a model as its role (its subject or object).
+// allModels reports whether every trigger names a model as its role (its subject or object): a
+// model-level filter, or one model of this unit (model-in-this-unit).
 func allModels(triggers []map[string]any, role string) bool {
 	live := liveTriggers(triggers)
 	if len(live) == 0 {
 		return false
 	}
 	for _, t := range live {
+		if t[role] == "model-in-this-unit" {
+			continue
+		}
 		if mapOr(t[role])["level"] != "model" {
 			return false
 		}
