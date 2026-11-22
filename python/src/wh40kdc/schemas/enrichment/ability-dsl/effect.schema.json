@@ -558,6 +558,26 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
+                "not_cumulative": {
+                  "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+                  "oneOf": [
+                    {
+                      "const": "negative-modifiers"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "ability"
+                      ],
+                      "properties": {
+                        "ability": {
+                          "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                        }
+                      }
+                    }
+                  ]
+                },
                 "stat": {
                   "$ref": "../../defs/common.schema.json#/$defs/stat"
                 },
@@ -693,6 +713,26 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
+                "not_cumulative": {
+                  "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+                  "oneOf": [
+                    {
+                      "const": "negative-modifiers"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "ability"
+                      ],
+                      "properties": {
+                        "ability": {
+                          "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                        }
+                      }
+                    }
+                  ]
+                },
                 "roll": {
                   "$ref": "../../defs/common.schema.json#/$defs/roll-selector"
                 },
@@ -2249,6 +2289,26 @@
                 "of": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
                 },
+                "model_count": {
+                  "description": "The unit counts as containing fewer than `below` models, for for_weapon_ability's purposes only (\"treated as containing fewer than five models for the purpose of the [BLAST] ability\").",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "below"
+                  ],
+                  "properties": {
+                    "below": {
+                      "type": "integer",
+                      "minimum": 2
+                    }
+                  }
+                },
+                "for_weapon_ability": {
+                  "description": "The weapon ability a model_count applies to.",
+                  "enum": [
+                    "blast"
+                  ]
+                },
                 "in_region": {
                   "$ref": "../../defs/common.schema.json#/$defs/region-ref"
                 }
@@ -2262,6 +2322,12 @@
                 {
                   "required": [
                     "in_region"
+                  ]
+                },
+                {
+                  "required": [
+                    "model_count",
+                    "for_weapon_ability"
                   ]
                 }
               ]
@@ -2755,7 +2821,8 @@
                     {
                       "enum": [
                         "half",
-                        "to-zero"
+                        "to-zero",
+                        "to-one"
                       ]
                     }
                   ]
@@ -2807,11 +2874,29 @@
                   ]
                 },
                 "against": {
-                  "enum": [
-                    "all",
-                    "mortal",
-                    "psychic",
-                    "psychic-and-mortal"
+                  "description": "What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).",
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "all",
+                        "mortal",
+                        "psychic",
+                        "psychic-and-mortal",
+                        "damage-1-unmodified"
+                      ]
+                    },
+                    {
+                      "type": "array",
+                      "minItems": 2,
+                      "uniqueItems": true,
+                      "items": {
+                        "enum": [
+                          "mortal",
+                          "psychic",
+                          "devastating-wounds"
+                        ]
+                      }
+                    }
                   ]
                 }
               },
@@ -3122,9 +3207,11 @@
               "additionalProperties": false,
               "properties": {
                 "act": {
+                  "description": "What the destroyed model can do: fight, shoot, or either (shoot-or-fight).",
                   "enum": [
                     "fight",
-                    "shoot"
+                    "shoot",
+                    "shoot-or-fight"
                   ]
                 },
                 "resolution": {
@@ -3634,6 +3721,17 @@
                 "ends_when": {
                   "$ref": "condition.schema.json",
                   "description": "Where the moving unit must be when the move ends, as a condition on it: \"your unit must end that move either wholly within your deployment zone or within range of an objective marker\". For a single distance to a place, use ends_within."
+                },
+                "as_if_keywords": {
+                  "description": "For this move only, its models move as if they had these keywords (\"move as if they have the FLY keyword\").",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": [
+                      "FLY"
+                    ]
+                  }
                 },
                 "keeps_eligible": {
                   "const": true

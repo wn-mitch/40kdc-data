@@ -69,7 +69,7 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // Every earlier leaf keeps its meaning.
   { family: "resource-spend", from: 4, to: 6, map: (parameters) => ({ ...parameters }) },
   { family: "resource", from: 1, to: 3, map: (parameters) => ({ ...parameters }) },
-  { family: "characteristic-modifier", from: 21, to: 22, map: (parameters) => ({ ...parameters }) },
+  { family: "characteristic-modifier", from: 21, to: 23, map: (parameters) => ({ ...parameters }) },
   { family: "characteristic-amount", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
   { family: "return-models", from: 7, to: 9, map: (parameters) => ({ ...parameters }) },
   { family: "dice-roll", from: 10, to: 11, map: (parameters) => ({ ...parameters }) },
@@ -82,8 +82,10 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "destroy-models", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
   { family: "rule-state", from: 4, to: 6, map: (parameters) => ({ ...parameters }) },
   { family: "sticky-objective", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
-  // apply-mark v10: the registry gains pyrogenesis-flux-spent.
-  { family: "apply-mark", from: 9, to: 10, map: (parameters) => ({ ...parameters }) },
+  // apply-mark v10: the registry gains pyrogenesis-flux-spent; v11 six Stratagem targets (seers-eye, spirit-mark-psychic,
+  // rites-of-exorcism, execution-order, exemplars-wisdom, virtue-of-courage).
+  { family: "apply-mark", from: 9, to: 11, map: (parameters) => ({ ...parameters }) },
+  { family: "apply-mark", from: 10, to: 11, map: (parameters) => ({ ...parameters }) },
   // choice-open v5 adds id (Feed the Swarm's Regenerate); ability-activate v6 adds immediate; ability-modifier
   // v8 names a record's option ({ability_id, option_id}) and adds the amount and received aspects. Every
   // earlier leaf keeps its meaning.
@@ -107,6 +109,25 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "set-up", from: 6, to: 7, map: (parameters) => ({ ...parameters }) },
   // resource-spend v6: {up_to} takes at_least ("spend 1-3 Pain tokens").
   { family: "resource-spend", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
+  // Long-tail batch A: critical-hit-threshold v2 value success; characteristic-set v11 Range.
+  // Every earlier leaf keeps its meaning.
+  { family: "critical-hit-threshold", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
+  { family: "characteristic-set", from: 10, to: 11, map: (parameters) => ({ ...parameters }) },
+  // feel-no-pain v6: against damage-1-unmodified, or a list of mortal, psychic and devastating-wounds.
+  { family: "feel-no-pain", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
+  // fight-on-death v3: act shoot-or-fight, after the attacking unit finishes.
+  { family: "fight-on-death", from: 2, to: 3, map: (parameters) => ({ ...parameters }) },
+  // roll-modifier v14 and characteristic-modifier v23: not_cumulative (negative-modifiers, or {ability}).
+  { family: "roll-modifier", from: 13, to: 14, map: (parameters) => ({ ...parameters }) },
+  { family: "characteristic-modifier", from: 22, to: 23, map: (parameters) => ({ ...parameters }) },
+  // make-move v9: as_if_keywords (FLY) for that move.
+  { family: "make-move", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
+  // select-objective-open v2: visible_to.
+  { family: "select-objective-open", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
+  // usage-limit v7: count_from equipped-wargear.
+  { family: "usage-limit", from: 6, to: 7, map: (parameters) => ({ ...parameters }) },
+  // counts-as v4: model_count_below for a weapon ability's purposes (Blast).
+  { family: "counts-as", from: 3, to: 4, map: (parameters) => ({ ...parameters }) },
 ];
 
 export type FamilyVersionReport = {

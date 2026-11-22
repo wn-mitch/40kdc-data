@@ -86,7 +86,15 @@ pub(crate) fn incoming_lead(m: &P, subj: &str) -> String {
 fn stat_change(m: &P, what: &str) -> String {
     let op = jstr(m.get("operation"));
     match op.as_str() {
-        "set" => return format!("set {what} to {}", dice_case(m.get("value"))),
+        // A Range is printed in inches ("a Range characteristic of 18\"").
+        "set" => {
+            let inches = if sv(m, "stat") == Some("Range") {
+                "\""
+            } else {
+                ""
+            };
+            return format!("set {what} to {}{inches}", dice_case(m.get("value")));
+        }
         "halve" => return format!("halve {what}"),
         "multiply" => return format!("multiply {what} by {}", dice_case(m.get("value"))),
         "improve" | "worsen" => return format!("{op} {what} by {}", dice_case(m.get("value"))),
@@ -190,6 +198,20 @@ fn attack_maker(target: Option<&Value>, m: &P, subj: &str) -> String {
         String::new()
     } else {
         format!(" if it is made{with_weapons}{by}")
+    }
+}
+
+/// " (this is not cumulative with …)": what a modifier does not stack with, after the change it qualifies.
+fn not_cumulative_trail(m: &P, of: &str) -> String {
+    match m.get("not_cumulative") {
+        Some(Value::String(s)) if s == "negative-modifiers" => {
+            format!(" (this is not cumulative with any other negative modifiers to that {of})")
+        }
+        Some(Value::Object(nc)) if nc.get("ability").is_some_and(|a| !a.is_null()) => format!(
+            " (this is not cumulative with the {} ability)",
+            ability_label(nc.get("ability"))
+        ),
+        _ => String::new(),
     }
 }
 
@@ -636,9 +658,17 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
     let subj = effect_subject(target, ctx);
     let subj = subj.as_str();
     match sv(e, "type").unwrap_or("") {
-        "stat-modifier" => stat_modifier(target, m, subj, ctx),
+        "stat-modifier" => format!(
+            "{}{}",
+            stat_modifier(target, m, subj, ctx),
+            not_cumulative_trail(m, "characteristic")
+        ),
         "ignore-modifiers" => ignore_modifiers(m, subj),
-        "roll-modifier" => roll_modifier(m, subj, ctx),
+        "roll-modifier" => format!(
+            "{}{}",
+            roll_modifier(m, subj, ctx),
+            not_cumulative_trail(m, "roll")
+        ),
         "re-roll" => re_roll(target, m, subj, ctx),
         "roll-result" => roll_result(m, subj),
         "end-attack-sequence" => "the attack sequence ends".to_string(),

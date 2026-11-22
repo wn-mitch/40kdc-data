@@ -1689,6 +1689,38 @@ export interface ObjectiveFilter {
   /**
    * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
    */
+  visible_to?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
   controlled_by_unit?:
     | (
         | "this-unit"
@@ -4139,6 +4171,14 @@ export interface StatModifierEffect {
   type: "stat-modifier";
   target: UnitRef;
   modifier: {
+    /**
+     * The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+     */
+    not_cumulative?:
+      | "negative-modifiers"
+      | {
+          ability: EntityId;
+        };
     stat: Stat;
     operation: "add" | "subtract" | "set" | "improve" | "worsen" | "multiply" | "halve";
     value?: Quantity;
@@ -4217,6 +4257,14 @@ export interface RollModifierEffect {
   type: "roll-modifier";
   target: UnitRef;
   modifier: {
+    /**
+     * The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+     */
+    not_cumulative?:
+      | "negative-modifiers"
+      | {
+          ability: EntityId;
+        };
     roll: RollSelector;
     operation: "add" | "subtract" | "halve";
     value?: Quantity;
@@ -5721,7 +5769,7 @@ export interface MoveTypeEffect {
     | MoveTypeEffect;
 }
 /**
- * One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).
+ * One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired); count_from takes the count from the unit's loadout.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "ability-usage-limit".
@@ -5739,6 +5787,10 @@ export interface AbilityUsageLimit {
     | "first-time-this-turn";
   count?: number;
   per?: "army" | "unit" | "model";
+  /**
+   * How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.
+   */
+  count_from?: "equipped-wargear";
 }
 /**
  * [ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, "the selected combat doctrine is active for this unit" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. immediate: the one option resolves once, now, instead of becoming active. override: the activation resolves with this amount instead of its own.
@@ -6108,7 +6160,7 @@ export interface DamageReductionEffect {
   type: "damage-reduction";
   target: UnitRef;
   modifier: {
-    reduction: number | ("half" | "to-zero");
+    reduction: number | ("half" | "to-zero" | "to-one");
     weapons?: WeaponScope;
   };
   scaling?: Scaling;
@@ -6121,7 +6173,16 @@ export interface FeelNoPainEffect {
   target: UnitRef;
   modifier: {
     threshold: number | UnitRating;
-    against?: "all" | "mortal" | "psychic" | "psychic-and-mortal";
+    /**
+     * What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).
+     */
+    against?:
+      | ("all" | "mortal" | "psychic" | "psychic-and-mortal" | "damage-1-unmodified")
+      | [
+          "mortal" | "psychic" | "devastating-wounds",
+          "mortal" | "psychic" | "devastating-wounds",
+          ...("mortal" | "psychic" | "devastating-wounds")[]
+        ];
   };
   scaling?: Scaling;
 }
@@ -6248,7 +6309,10 @@ export interface ActOnDeathEffect {
   type: "act-on-death";
   target: UnitRef;
   modifier: {
-    act: "fight" | "shoot";
+    /**
+     * What the destroyed model can do: fight, shoot, or either (shoot-or-fight).
+     */
+    act: "fight" | "shoot" | "shoot-or-fight";
     resolution?: string;
     removal?: string;
     gate?: DeathGate;
@@ -6419,6 +6483,12 @@ export interface MoveEffect {
       wholly?: true;
     };
     ends_when?: AbilityDSLCondition7;
+    /**
+     * For this move only, its models move as if they had these keywords ("move as if they have the FLY keyword").
+     *
+     * @minItems 1
+     */
+    as_if_keywords?: ["FLY", ..."FLY"[]];
     keeps_eligible?: true;
     ends_nearest?: EndsNearest1;
     /**
@@ -7029,6 +7099,38 @@ export interface ObjectiveFilter1 {
     range: RangeRef;
     of?: PlaceRef;
   };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  visible_to?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
   /**
    * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
    */

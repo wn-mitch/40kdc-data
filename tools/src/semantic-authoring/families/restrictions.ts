@@ -43,10 +43,15 @@ const USAGE_FREQUENCIES = [
 
 function normalizeUsageLimit(input: Params): Params {
   const scoped = "per" in input;
-  exactKeys(input, scoped ? ["frequency", "per"] : ["frequency"], "usage-limit");
+  const counted = "count_from" in input;
+  exactKeys(input, ["frequency", ...(scoped ? ["per"] : []), ...(counted ? ["count_from"] : [])], "usage-limit");
+  const frequency = enumValue(input.frequency, USAGE_FREQUENCIES, "usage-limit.frequency");
+  // "Place one token for each Drakolithe the unit is equipped with, removing one each time this ability is used".
+  if (counted && frequency !== "once-per-battle") throw new TypeError("usage-limit.count_from counts uses per battle; it needs frequency once-per-battle.");
   return {
-    frequency: enumValue(input.frequency, USAGE_FREQUENCIES, "usage-limit.frequency"),
+    frequency,
     ...(scoped ? { per: enumValue(input.per, [...USAGE_PER, "selected-unit"], "usage-limit.per") } : {}),
+    ...(counted ? { count_from: enumValue(input.count_from, ["equipped-wargear"], "usage-limit.count_from") } : {}),
   };
 }
 
@@ -299,16 +304,17 @@ export const RESTRICTIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "usage-limit",
-    version: 6,
+    version: 7,
     role: "RESTRICTION",
     label: "Usage frequency",
-    description: "A frequency qualifier: once per battle, battle round, turn, phase, opponent's turn or Command phase, twice per battle, or the first time this battle, this phase or each turn. It is independent of army, unit or model ownership: the optional per field records a reviewed binding; otherwise a separate usage-scope leaf supplies it. Frequency alone does not choose an allowance owner. per selected-unit counts the frequency for each unit the ability's one unit selection chooses, across every bearer; it lowers to that selection's selection_limit, not to the ability's usage.",
+    description: "A frequency qualifier: once per battle, battle round, turn, phase, opponent's turn or Command phase, twice per battle, or the first time this battle, this phase or each turn. It is independent of army, unit or model ownership: the optional per field records a reviewed binding; otherwise a separate usage-scope leaf supplies it. Frequency alone does not choose an allowance owner. per selected-unit counts the frequency for each unit the ability's one unit selection chooses, across every bearer; it lowers to that selection's selection_limit, not to the ability's usage. count_from equipped-wargear (with once-per-battle): once per battle for each copy of the wargear that carries this ability the unit is equipped with (\"place one token for each Drakolithe the unit is equipped with, removing one each time this ability is used\").",
     starter: { frequency: "" },
     parameterSchema: {
       type: "object", required: ["frequency"], additionalProperties: false,
       properties: {
         frequency: { enum: ["once-per-battle", "once-per-battle-round", "once-per-turn", "once-per-phase", "once-per-opponent-turn", "once-per-command-phase", "first-this-battle", "first-time-this-phase", "twice-per-battle", "first-time-this-turn"] },
         per: { enum: ["any", "army", "unit", "model", "selected-unit"] },
+        count_from: { enum: ["equipped-wargear"], "x-optional": true },
       },
     },
     normalize: normalizeUsageLimit,

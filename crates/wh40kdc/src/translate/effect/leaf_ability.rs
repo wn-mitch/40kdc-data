@@ -735,6 +735,15 @@ fn as_target_candidate(node: &Value) -> Value {
 }
 
 pub(super) fn counts_as(m: &P, subj: &str, ctx: &Ctx) -> String {
+    // "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
+    if let Some(count) = nn(m, "model_count") {
+        return format!(
+            "{subj} {} as containing fewer than {} models for the purpose of the [{}] ability",
+            v(subj, "counts"),
+            jstr(obj(Some(count)).get("below")),
+            dekebab(&jstr(m.get("for_weapon_ability"))).to_uppercase()
+        );
+    }
     if let Some(region) = nn(m, "in_region") {
         return format!(
             "{subj} {} as being within {}",

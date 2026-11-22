@@ -3033,13 +3033,13 @@ impl ::std::convert::From<::std::vec::Vec<AbilityUsageLimit>> for AbilityUsage {
         Self::Array(value)
     }
 }
-///One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).
+///One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired); count_from takes the count from the unit's loadout.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).",
+///  "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired); count_from takes the count from the unit's loadout.",
 ///  "type": "object",
 ///  "required": [
 ///    "frequency"
@@ -3048,6 +3048,12 @@ impl ::std::convert::From<::std::vec::Vec<AbilityUsageLimit>> for AbilityUsage {
 ///    "count": {
 ///      "type": "integer",
 ///      "minimum": 1.0
+///    },
+///    "count_from": {
+///      "description": "How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.",
+///      "enum": [
+///        "equipped-wargear"
+///      ]
 ///    },
 ///    "frequency": {
 ///      "type": "string",
@@ -3081,9 +3087,83 @@ impl ::std::convert::From<::std::vec::Vec<AbilityUsageLimit>> for AbilityUsage {
 pub struct AbilityUsageLimit {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<::std::num::NonZeroU64>,
+    ///How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count_from: ::std::option::Option<AbilityUsageLimitCountFrom>,
     pub frequency: AbilityUsageLimitFrequency,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub per: ::std::option::Option<AbilityUsageLimitPer>,
+}
+///How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.",
+///  "enum": [
+///    "equipped-wargear"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum AbilityUsageLimitCountFrom {
+    #[serde(rename = "equipped-wargear")]
+    EquippedWargear,
+}
+impl ::std::fmt::Display for AbilityUsageLimitCountFrom {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::EquippedWargear => f.write_str("equipped-wargear"),
+        }
+    }
+}
+impl ::std::str::FromStr for AbilityUsageLimitCountFrom {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "equipped-wargear" => Ok(Self::EquippedWargear),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityUsageLimitCountFrom {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AbilityUsageLimitCountFrom {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AbilityUsageLimitCountFrom {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`AbilityUsageLimitFrequency`
 ///
@@ -3289,9 +3369,11 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityUsageLimitPer {
 ///  ],
 ///  "properties": {
 ///    "act": {
+///      "description": "What the destroyed model can do: fight, shoot, or either (shoot-or-fight).",
 ///      "enum": [
 ///        "fight",
-///        "shoot"
+///        "shoot",
+///        "shoot-or-fight"
 ///      ]
 ///    },
 ///    "eligibility": {
@@ -3316,6 +3398,7 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityUsageLimitPer {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ActOnDeathEffectModifier {
+    ///What the destroyed model can do: fight, shoot, or either (shoot-or-fight).
     pub act: ActOnDeathEffectModifierAct,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub eligibility: ::std::option::Option<Condition>,
@@ -3326,15 +3409,17 @@ pub struct ActOnDeathEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub resolution: ::std::option::Option<ActOnDeathEffectModifierResolution>,
 }
-///`ActOnDeathEffectModifierAct`
+///What the destroyed model can do: fight, shoot, or either (shoot-or-fight).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "What the destroyed model can do: fight, shoot, or either (shoot-or-fight).",
 ///  "enum": [
 ///    "fight",
-///    "shoot"
+///    "shoot",
+///    "shoot-or-fight"
 ///  ]
 ///}
 /// ```
@@ -3356,12 +3441,15 @@ pub enum ActOnDeathEffectModifierAct {
     Fight,
     #[serde(rename = "shoot")]
     Shoot,
+    #[serde(rename = "shoot-or-fight")]
+    ShootOrFight,
 }
 impl ::std::fmt::Display for ActOnDeathEffectModifierAct {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Fight => f.write_str("fight"),
             Self::Shoot => f.write_str("shoot"),
+            Self::ShootOrFight => f.write_str("shoot-or-fight"),
         }
     }
 }
@@ -3373,6 +3461,7 @@ impl ::std::str::FromStr for ActOnDeathEffectModifierAct {
         match value {
             "fight" => Ok(Self::Fight),
             "shoot" => Ok(Self::Shoot),
+            "shoot-or-fight" => Ok(Self::ShootOrFight),
             _ => Err("invalid value".into()),
         }
     }
@@ -9810,8 +9899,28 @@ impl ::std::convert::From<::serde_json::Value> for CountOfCountOf {
 ///{
 ///  "type": "object",
 ///  "properties": {
+///    "for_weapon_ability": {
+///      "description": "The weapon ability a model_count applies to.",
+///      "enum": [
+///        "blast"
+///      ]
+///    },
 ///    "in_region": {
 ///      "$ref": "#/$defs/region-ref"
+///    },
+///    "model_count": {
+///      "description": "The unit counts as containing fewer than `below` models, for for_weapon_ability's purposes only (\"treated as containing fewer than five models for the purpose of the [BLAST] ability\").",
+///      "type": "object",
+///      "required": [
+///        "below"
+///      ],
+///      "properties": {
+///        "below": {
+///          "type": "integer",
+///          "minimum": 2.0
+///        }
+///      },
+///      "additionalProperties": false
 ///    },
 ///    "of": {
 ///      "$ref": "#/$defs/unit-ref"
@@ -9827,8 +9936,15 @@ impl ::std::convert::From<::serde_json::Value> for CountOfCountOf {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct CountsAsEffectModifier {
+    ///The weapon ability a model_count applies to.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub for_weapon_ability: ::std::option::Option<
+        CountsAsEffectModifierForWeaponAbility,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub in_region: ::std::option::Option<RegionRef>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub model_count: ::std::option::Option<CountsAsEffectModifierModelCount>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub of: ::std::option::Option<UnitRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -9837,11 +9953,112 @@ pub struct CountsAsEffectModifier {
 impl ::std::default::Default for CountsAsEffectModifier {
     fn default() -> Self {
         Self {
+            for_weapon_ability: Default::default(),
             in_region: Default::default(),
+            model_count: Default::default(),
             of: Default::default(),
             within: Default::default(),
         }
     }
+}
+///The weapon ability a model_count applies to.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The weapon ability a model_count applies to.",
+///  "enum": [
+///    "blast"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum CountsAsEffectModifierForWeaponAbility {
+    #[serde(rename = "blast")]
+    Blast,
+}
+impl ::std::fmt::Display for CountsAsEffectModifierForWeaponAbility {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Blast => f.write_str("blast"),
+        }
+    }
+}
+impl ::std::str::FromStr for CountsAsEffectModifierForWeaponAbility {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "blast" => Ok(Self::Blast),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for CountsAsEffectModifierForWeaponAbility {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for CountsAsEffectModifierForWeaponAbility {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CountsAsEffectModifierForWeaponAbility {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///The unit counts as containing fewer than `below` models, for for_weapon_ability's purposes only ("treated as containing fewer than five models for the purpose of the [BLAST] ability").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The unit counts as containing fewer than `below` models, for for_weapon_ability's purposes only (\"treated as containing fewer than five models for the purpose of the [BLAST] ability\").",
+///  "type": "object",
+///  "required": [
+///    "below"
+///  ],
+///  "properties": {
+///    "below": {
+///      "type": "integer",
+///      "minimum": 2.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct CountsAsEffectModifierModelCount {
+    pub below: i64,
 }
 ///`CpGainEffectModifier`
 ///
@@ -9887,7 +10104,8 @@ pub struct CpGainEffectModifier {
 ///        {
 ///          "enum": [
 ///            "half",
-///            "to-zero"
+///            "to-zero",
+///            "to-one"
 ///          ]
 ///        }
 ///      ]
@@ -9921,7 +10139,8 @@ pub struct DamageReductionEffectModifier {
 ///    {
 ///      "enum": [
 ///        "half",
-///        "to-zero"
+///        "to-zero",
+///        "to-one"
 ///      ]
 ///    }
 ///  ]
@@ -10002,7 +10221,8 @@ for DamageReductionEffectModifierReduction {
 ///{
 ///  "enum": [
 ///    "half",
-///    "to-zero"
+///    "to-zero",
+///    "to-one"
 ///  ]
 ///}
 /// ```
@@ -10024,12 +10244,15 @@ pub enum DamageReductionEffectModifierReductionVariant1 {
     Half,
     #[serde(rename = "to-zero")]
     ToZero,
+    #[serde(rename = "to-one")]
+    ToOne,
 }
 impl ::std::fmt::Display for DamageReductionEffectModifierReductionVariant1 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Half => f.write_str("half"),
             Self::ToZero => f.write_str("to-zero"),
+            Self::ToOne => f.write_str("to-one"),
         }
     }
 }
@@ -10041,6 +10264,7 @@ impl ::std::str::FromStr for DamageReductionEffectModifierReductionVariant1 {
         match value {
             "half" => Ok(Self::Half),
             "to-zero" => Ok(Self::ToZero),
+            "to-one" => Ok(Self::ToOne),
             _ => Err("invalid value".into()),
         }
     }
@@ -19752,11 +19976,29 @@ impl<'de> ::serde::Deserialize<'de> for FactionName {
 ///  ],
 ///  "properties": {
 ///    "against": {
-///      "enum": [
-///        "all",
-///        "mortal",
-///        "psychic",
-///        "psychic-and-mortal"
+///      "description": "What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).",
+///      "oneOf": [
+///        {
+///          "enum": [
+///            "all",
+///            "mortal",
+///            "psychic",
+///            "psychic-and-mortal",
+///            "damage-1-unmodified"
+///          ]
+///        },
+///        {
+///          "type": "array",
+///          "items": {
+///            "enum": [
+///              "mortal",
+///              "psychic",
+///              "devastating-wounds"
+///            ]
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
+///        }
 ///      ]
 ///    },
 ///    "threshold": {
@@ -19779,11 +20021,63 @@ impl<'de> ::serde::Deserialize<'de> for FactionName {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct FeelNoPainEffectModifier {
+    ///What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub against: ::std::option::Option<FeelNoPainEffectModifierAgainst>,
     pub threshold: FeelNoPainEffectModifierThreshold,
 }
-///`FeelNoPainEffectModifierAgainst`
+///What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).",
+///  "oneOf": [
+///    {
+///      "enum": [
+///        "all",
+///        "mortal",
+///        "psychic",
+///        "psychic-and-mortal",
+///        "damage-1-unmodified"
+///      ]
+///    },
+///    {
+///      "type": "array",
+///      "items": {
+///        "enum": [
+///          "mortal",
+///          "psychic",
+///          "devastating-wounds"
+///        ]
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum FeelNoPainEffectModifierAgainst {
+    Variant0(FeelNoPainEffectModifierAgainstVariant0),
+    Variant1(Vec<FeelNoPainEffectModifierAgainstVariant1Item>),
+}
+impl ::std::convert::From<FeelNoPainEffectModifierAgainstVariant0>
+for FeelNoPainEffectModifierAgainst {
+    fn from(value: FeelNoPainEffectModifierAgainstVariant0) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<Vec<FeelNoPainEffectModifierAgainstVariant1Item>>
+for FeelNoPainEffectModifierAgainst {
+    fn from(value: Vec<FeelNoPainEffectModifierAgainstVariant1Item>) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`FeelNoPainEffectModifierAgainstVariant0`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -19793,7 +20087,8 @@ pub struct FeelNoPainEffectModifier {
 ///    "all",
 ///    "mortal",
 ///    "psychic",
-///    "psychic-and-mortal"
+///    "psychic-and-mortal",
+///    "damage-1-unmodified"
 ///  ]
 ///}
 /// ```
@@ -19810,7 +20105,7 @@ pub struct FeelNoPainEffectModifier {
     PartialEq,
     PartialOrd
 )]
-pub enum FeelNoPainEffectModifierAgainst {
+pub enum FeelNoPainEffectModifierAgainstVariant0 {
     #[serde(rename = "all")]
     All,
     #[serde(rename = "mortal")]
@@ -19819,18 +20114,21 @@ pub enum FeelNoPainEffectModifierAgainst {
     Psychic,
     #[serde(rename = "psychic-and-mortal")]
     PsychicAndMortal,
+    #[serde(rename = "damage-1-unmodified")]
+    Damage1Unmodified,
 }
-impl ::std::fmt::Display for FeelNoPainEffectModifierAgainst {
+impl ::std::fmt::Display for FeelNoPainEffectModifierAgainstVariant0 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::All => f.write_str("all"),
             Self::Mortal => f.write_str("mortal"),
             Self::Psychic => f.write_str("psychic"),
             Self::PsychicAndMortal => f.write_str("psychic-and-mortal"),
+            Self::Damage1Unmodified => f.write_str("damage-1-unmodified"),
         }
     }
 }
-impl ::std::str::FromStr for FeelNoPainEffectModifierAgainst {
+impl ::std::str::FromStr for FeelNoPainEffectModifierAgainstVariant0 {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -19840,11 +20138,12 @@ impl ::std::str::FromStr for FeelNoPainEffectModifierAgainst {
             "mortal" => Ok(Self::Mortal),
             "psychic" => Ok(Self::Psychic),
             "psychic-and-mortal" => Ok(Self::PsychicAndMortal),
+            "damage-1-unmodified" => Ok(Self::Damage1Unmodified),
             _ => Err("invalid value".into()),
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for FeelNoPainEffectModifierAgainst {
+impl ::std::convert::TryFrom<&str> for FeelNoPainEffectModifierAgainstVariant0 {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -19853,7 +20152,7 @@ impl ::std::convert::TryFrom<&str> for FeelNoPainEffectModifierAgainst {
     }
 }
 impl ::std::convert::TryFrom<&::std::string::String>
-for FeelNoPainEffectModifierAgainst {
+for FeelNoPainEffectModifierAgainstVariant0 {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -19861,7 +20160,90 @@ for FeelNoPainEffectModifierAgainst {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<::std::string::String> for FeelNoPainEffectModifierAgainst {
+impl ::std::convert::TryFrom<::std::string::String>
+for FeelNoPainEffectModifierAgainstVariant0 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`FeelNoPainEffectModifierAgainstVariant1Item`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "mortal",
+///    "psychic",
+///    "devastating-wounds"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum FeelNoPainEffectModifierAgainstVariant1Item {
+    #[serde(rename = "mortal")]
+    Mortal,
+    #[serde(rename = "psychic")]
+    Psychic,
+    #[serde(rename = "devastating-wounds")]
+    DevastatingWounds,
+}
+impl ::std::fmt::Display for FeelNoPainEffectModifierAgainstVariant1Item {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Mortal => f.write_str("mortal"),
+            Self::Psychic => f.write_str("psychic"),
+            Self::DevastatingWounds => f.write_str("devastating-wounds"),
+        }
+    }
+}
+impl ::std::str::FromStr for FeelNoPainEffectModifierAgainstVariant1Item {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "mortal" => Ok(Self::Mortal),
+            "psychic" => Ok(Self::Psychic),
+            "devastating-wounds" => Ok(Self::DevastatingWounds),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for FeelNoPainEffectModifierAgainstVariant1Item {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for FeelNoPainEffectModifierAgainstVariant1Item {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for FeelNoPainEffectModifierAgainstVariant1Item {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -25694,6 +26076,17 @@ for MortalWoundsEffectModifierRollPerAttackAttackType {
 ///        "movement-phase"
 ///      ]
 ///    },
+///    "as_if_keywords": {
+///      "description": "For this move only, its models move as if they had these keywords (\"move as if they have the FLY keyword\").",
+///      "type": "array",
+///      "items": {
+///        "enum": [
+///          "FLY"
+///        ]
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
 ///    "counts_as_move": {
 ///      "description": "The move counts as this kind of move for rules that check what the unit did this turn.",
 ///      "$ref": "#/$defs/movement-kind"
@@ -25823,6 +26216,9 @@ pub struct MoveEffectModifier {
     ///The move is made as if it were your Movement phase, outside it.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub as_if: ::std::option::Option<MoveEffectModifierAsIf>,
+    ///For this move only, its models move as if they had these keywords ("move as if they have the FLY keyword").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub as_if_keywords: ::std::option::Option<Vec<MoveEffectModifierAsIfKeywordsItem>>,
     ///The move counts as this kind of move for rules that check what the unit did this turn.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub counts_as_move: ::std::option::Option<MovementKind>,
@@ -25917,6 +26313,78 @@ impl ::std::convert::TryFrom<&::std::string::String> for MoveEffectModifierAsIf 
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for MoveEffectModifierAsIf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`MoveEffectModifierAsIfKeywordsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "FLY"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MoveEffectModifierAsIfKeywordsItem {
+    #[serde(rename = "FLY")]
+    Fly,
+}
+impl ::std::fmt::Display for MoveEffectModifierAsIfKeywordsItem {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Fly => f.write_str("FLY"),
+        }
+    }
+}
+impl ::std::str::FromStr for MoveEffectModifierAsIfKeywordsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "FLY" => Ok(Self::Fly),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MoveEffectModifierAsIfKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MoveEffectModifierAsIfKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MoveEffectModifierAsIfKeywordsItem {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -30260,6 +30728,10 @@ pub struct OathStateConditionParameters {
 ///        "enemy-deployment-zone"
 ///      ]
 ///    },
+///    "visible_to": {
+///      "description": "Only objective markers visible to this unit (one or more of its models) or model (\"visible to one or more models in your unit\").",
+///      "$ref": "#/$defs/unit-ref"
+///    },
 ///    "within": {
 ///      "description": "Only objective markers within this range of `of` (default the model with the ability).",
 ///      "type": "object",
@@ -30316,6 +30788,9 @@ pub struct ObjectiveFilter {
     pub selection_var: ::std::option::Option<ObjectiveFilterSelectionVar>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub territory: ::std::option::Option<ObjectiveFilterTerritory>,
+    ///Only objective markers visible to this unit (one or more of its models) or model ("visible to one or more models in your unit").
+    #[serde(default)]
+    pub visible_to: ::std::boxed::Box<::std::option::Option<UnitRef>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub within: ::std::option::Option<ObjectiveFilterWithin>,
 }
@@ -30334,6 +30809,7 @@ impl ::std::default::Default for ObjectiveFilter {
             role: Default::default(),
             selection_var: Default::default(),
             territory: Default::default(),
+            visible_to: Default::default(),
             within: Default::default(),
         }
     }
@@ -42156,6 +42632,26 @@ impl ::std::convert::TryFrom<::std::string::String> for RollKindVariant0 {
 ///    "incoming": {
 ///      "const": true
 ///    },
+///    "not_cumulative": {
+///      "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+///      "oneOf": [
+///        {
+///          "const": "negative-modifiers"
+///        },
+///        {
+///          "type": "object",
+///          "required": [
+///            "ability"
+///          ],
+///          "properties": {
+///            "ability": {
+///              "$ref": "#/$defs/entity-id"
+///            }
+///          },
+///          "additionalProperties": false
+///        }
+///      ]
+///    },
 ///    "operation": {
 ///      "enum": [
 ///        "add",
@@ -42187,6 +42683,9 @@ pub struct RollModifierEffectModifier {
     pub cap: ::std::option::Option<u64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub incoming: ::std::option::Option<::serde_json::Value>,
+    ///The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_cumulative: ::std::option::Option<RollModifierEffectModifierNotCumulative>,
     pub operation: RollModifierEffectModifierOperation,
     pub roll: RollSelector,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -42195,6 +42694,45 @@ pub struct RollModifierEffectModifier {
     pub value_from: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapons: ::std::option::Option<WeaponScope>,
+}
+///The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+///  "oneOf": [
+///    {
+///      "const": "negative-modifiers"
+///    },
+///    {
+///      "type": "object",
+///      "required": [
+///        "ability"
+///      ],
+///      "properties": {
+///        "ability": {
+///          "$ref": "#/$defs/entity-id"
+///        }
+///      },
+///      "additionalProperties": false
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+pub enum RollModifierEffectModifierNotCumulative {
+    #[serde(rename = "negative-modifiers")]
+    NegativeModifiers,
+    #[serde(rename = "ability")]
+    Ability(EntityId),
+}
+impl ::std::convert::From<EntityId> for RollModifierEffectModifierNotCumulative {
+    fn from(value: EntityId) -> Self {
+        Self::Ability(value)
+    }
 }
 ///`RollModifierEffectModifierOperation`
 ///
@@ -52952,6 +53490,26 @@ impl ::std::convert::TryFrom<::std::string::String> for Stat {
 ///    "minimum": {
 ///      "type": "number"
 ///    },
+///    "not_cumulative": {
+///      "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+///      "oneOf": [
+///        {
+///          "const": "negative-modifiers"
+///        },
+///        {
+///          "type": "object",
+///          "required": [
+///            "ability"
+///          ],
+///          "properties": {
+///            "ability": {
+///              "$ref": "#/$defs/entity-id"
+///            }
+///          },
+///          "additionalProperties": false
+///        }
+///      ]
+///    },
 ///    "operation": {
 ///      "enum": [
 ///        "add",
@@ -52986,12 +53544,54 @@ pub struct StatModifierEffectModifier {
     pub maximum: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub minimum: ::std::option::Option<f64>,
+    ///The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_cumulative: ::std::option::Option<StatModifierEffectModifierNotCumulative>,
     pub operation: StatModifierEffectModifierOperation,
     pub stat: Stat,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub value: ::std::option::Option<Quantity>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapons: ::std::option::Option<WeaponScope>,
+}
+///The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+///  "oneOf": [
+///    {
+///      "const": "negative-modifiers"
+///    },
+///    {
+///      "type": "object",
+///      "required": [
+///        "ability"
+///      ],
+///      "properties": {
+///        "ability": {
+///          "$ref": "#/$defs/entity-id"
+///        }
+///      },
+///      "additionalProperties": false
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+pub enum StatModifierEffectModifierNotCumulative {
+    #[serde(rename = "negative-modifiers")]
+    NegativeModifiers,
+    #[serde(rename = "ability")]
+    Ability(EntityId),
+}
+impl ::std::convert::From<EntityId> for StatModifierEffectModifierNotCumulative {
+    fn from(value: EntityId) -> Self {
+        Self::Ability(value)
+    }
 }
 ///`StatModifierEffectModifierOperation`
 ///

@@ -39,7 +39,10 @@ pub(crate) fn usage_clause(u: &Value) -> String {
         Some("first-time-this-phase") => "the first time this phase".to_string(),
         Some("first-time-this-turn") => "the first time each turn".to_string(),
         Some("n-per-battle") => {
-            if n == 1.0 {
+            if sv(u, "count_from") == Some("equipped-wargear") {
+                "once per battle for each copy of this wargear its unit is equipped with"
+                    .to_string()
+            } else if n == 1.0 {
                 "once per battle".to_string()
             } else if n == 2.0 {
                 "twice per battle".to_string()
@@ -49,9 +52,10 @@ pub(crate) fn usage_clause(u: &Value) -> String {
         }
         _ => dekebab(&jstr(u.get("frequency"))),
     };
+    // A count from the unit's loadout is already its unit's: no "per unit" after it.
     match nn(u, "per") {
-        Some(per) => format!("{base} per {}", jv(per)),
-        None => base,
+        Some(per) if nn(u, "count_from").is_none() => format!("{base} per {}", jv(per)),
+        _ => base,
     }
 }
 

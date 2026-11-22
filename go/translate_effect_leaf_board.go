@@ -104,6 +104,28 @@ var plainCountRe = regexp.MustCompile(`^\d+$`)
 
 var fnpAgainst = map[string]string{
 	"mortal": " against mortal wounds", "psychic": " against Psychic Attacks", "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
+	"damage-1-unmodified": " against attacks with an unmodified Damage characteristic of 1",
+}
+
+// fnpAgainstItem names one kind in a Feel No Pain's list of what it covers.
+var fnpAgainstItem = map[string]string{
+	"mortal": "mortal wounds", "psychic": "Psychic Attacks", "devastating-wounds": "Critical Wounds caused by attacks with [DEVASTATING WOUNDS]",
+}
+
+// fnpAgainstPhrase is what a Feel No Pain covers (" against mortal wounds, …"), or "" for all.
+func fnpAgainstPhrase(against any) string {
+	if items, ok := against.([]any); ok {
+		kinds := make([]string, 0, len(items))
+		for _, item := range items {
+			if kind, ok := fnpAgainstItem[ejstr(item)]; ok {
+				kinds = append(kinds, kind)
+			} else {
+				kinds = append(kinds, dekebab(ejstr(item)))
+			}
+		}
+		return " against " + andList(kinds)
+	}
+	return fnpAgainst[ejstr(against)]
 }
 
 func destroyModelsLeaf(e, m map[string]any, subj string) string {
@@ -168,8 +190,11 @@ func regionExtendLeaf(m map[string]any) string {
 
 func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	act := "fight"
-	if m["act"] == "shoot" {
+	switch m["act"] {
+	case "shoot":
 		act = "shoot"
+	case "shoot-or-fight":
+		act = "shoot or fight"
 	}
 	model := "a model in " + subj
 	if isEventObject(e["target"]) {
@@ -203,8 +228,11 @@ func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		removal := ". Remove it after this unit has fought or at the end of the phase, whichever comes first"
 		if m["removal"] == "after-destroyed-model-fights" {
 			past := "fought"
-			if act == "shoot" {
+			switch act {
+			case "shoot":
 				past = "shot"
+			case "shoot or fight":
+				past = "shot or fought"
 			}
 			removal = ". Remove it after it has " + past
 		}
@@ -310,6 +338,17 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	if _, ok := asList(m["passthrough"]); ok {
 		s += ", moving over " + passthroughList(m["passthrough"]) + " as though they were not there"
+	}
+	if keywords, ok := asList(m["as_if_keywords"]); ok {
+		names := make([]string, 0, len(keywords))
+		for _, k := range keywords {
+			names = append(names, ejstr(k))
+		}
+		plural := ""
+		if len(keywords) > 1 {
+			plural = "s"
+		}
+		s += " (when doing so, its models move as if they had the " + andList(names) + " keyword" + plural + ")"
 	}
 	if ends, ok := asMap(m["ends_within"]); ok && ends != nil {
 		wholly := ""
@@ -741,6 +780,8 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 			how = "halve the Damage of that attack"
 		case "to-zero":
 			how = "change the Damage of that attack to 0"
+		case "to-one":
+			how = "change the Damage characteristic of that attack to 1"
 		}
 		if ctx.allocatedTrigger && m["weapons"] == nil {
 			return how
@@ -752,9 +793,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return "each time " + attack + " is allocated to " + subj + ", " + how
 	case "feel-no-pain":
 		if describerRatingRef(m["threshold"]) {
-			return subj + " " + ev(subj, "has") + " Feel No Pain X+" + fnpAgainst[ejstr(m["against"])] + ", X being its rating"
+			return subj + " " + ev(subj, "has") + " Feel No Pain X+" + fnpAgainstPhrase(m["against"]) + ", X being its rating"
 		}
-		return subj + " " + ev(subj, "has") + " Feel No Pain " + ejstr(m["threshold"]) + "+" + fnpAgainst[ejstr(m["against"])]
+		return subj + " " + ev(subj, "has") + " Feel No Pain " + ejstr(m["threshold"]) + "+" + fnpAgainstPhrase(m["against"])
 	case "invulnerable-save":
 		vs := ""
 		if m["weapons"] != nil {

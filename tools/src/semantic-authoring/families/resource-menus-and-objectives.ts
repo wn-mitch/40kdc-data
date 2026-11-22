@@ -101,7 +101,7 @@ function persistentDesignationOpen(input: Params): Params {
 
 function selectObjectiveOpen(input: Params): Params {
   const family = "select-objective-open";
-  exactKeys(input, ["bind_as", ...present(input, ["count", "each", "range_inches", "origin", "controlled_by"])], family);
+  exactKeys(input, ["bind_as", ...present(input, ["count", "each", "range_inches", "origin", "controlled_by", "visible_to"])], family);
   const result: Params = { bind_as: nonBlank(input.bind_as, `${family}.bind_as`) };
   // each and count answer the same "how many": each wins when both are present, and count goes unchecked.
   if ("each" in input) {
@@ -113,6 +113,8 @@ function selectObjectiveOpen(input: Params): Params {
   if ("range_inches" in input) result.range_inches = boundedInteger(input.range_inches, 1, 48, `${family}.range_inches`);
   if ("origin" in input) result.origin = enumValue(input.origin, OBJECTIVE_ORIGINS, `${family}.origin`);
   if ("controlled_by" in input) result.controlled_by = enumValue(input.controlled_by, OBJECTIVE_CONTROLLERS, `${family}.controlled_by`);
+  // "Select one objective marker visible to one or more models in your unit".
+  if ("visible_to" in input) result.visible_to = enumValue(input.visible_to, OBJECTIVE_ORIGINS, `${family}.visible_to`);
   return result;
 }
 
@@ -234,12 +236,12 @@ export const RESOURCE_MENUS_AND_OBJECTIVES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "select-objective-open",
-    version: 1,
+    version: 2,
     role: "EFFECT",
     label: "Select an objective marker",
-    description: "Opens a select-objective: the effect leaves after it apply to the selected objective marker (an aura's centre, a designation's subject).",
+    description: "Opens a select-objective: the effect leaves after it apply to the selected objective marker (an aura's centre, a designation's subject). visible_to: only a marker visible to this model, or to one or more models in this unit (\"visible to one or more models in your unit\").",
     starter: {bind_as: ""},
-    parameterSchema: {type: "object", required: ["bind_as"], properties: {bind_as: {type: "string", minLength: 1}, count: {type: "integer", minimum: 1}, each: {type: "boolean"}, range_inches: {type: "integer", minimum: 1}, origin: {enum: ["this-model", "this-unit"]}, controlled_by: {enum: ["your-army", "opponent"]}}, additionalProperties: false},
+    parameterSchema: {type: "object", required: ["bind_as"], properties: {bind_as: {type: "string", minLength: 1}, count: {type: "integer", minimum: 1}, each: {type: "boolean"}, range_inches: {type: "integer", minimum: 1}, origin: {enum: ["this-model", "this-unit"]}, controlled_by: {enum: ["your-army", "opponent"]}, visible_to: {enum: ["this-model", "this-unit"], "x-optional": true}}, additionalProperties: false},
     normalize: selectObjectiveOpen,
   },
   {

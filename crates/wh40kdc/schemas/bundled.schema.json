@@ -1135,6 +1135,10 @@
           },
           "description": "Only objective markers within this range of `of` (default the model with the ability)."
         },
+        "visible_to": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Only objective markers visible to this unit (one or more of its models) or model (\"visible to one or more models in your unit\")."
+        },
         "controlled_by_unit": {
           "$ref": "#/$defs/unit-ref",
           "description": "Only the objective marker this unit was controlling (its models' Level of Control) at the moment the rule was triggered (\"an objective your unit was controlling when it was destroyed\")."
@@ -5904,7 +5908,7 @@
       ]
     },
     "ability-usage-limit": {
-      "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).",
+      "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired); count_from takes the count from the unit's loadout.",
       "type": "object",
       "properties": {
         "frequency": {
@@ -5932,12 +5936,24 @@
             "unit",
             "model"
           ]
+        },
+        "count_from": {
+          "description": "How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.",
+          "enum": [
+            "equipped-wargear"
+          ]
         }
       },
       "required": [
         "frequency"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "not": {
+        "required": [
+          "count",
+          "count_from"
+        ]
+      }
     },
     "ability": {
       "title": "Ability DSL Entry",
@@ -8497,6 +8513,26 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
+                "not_cumulative": {
+                  "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+                  "oneOf": [
+                    {
+                      "const": "negative-modifiers"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "ability"
+                      ],
+                      "properties": {
+                        "ability": {
+                          "$ref": "#/$defs/entity-id"
+                        }
+                      }
+                    }
+                  ]
+                },
                 "stat": {
                   "$ref": "#/$defs/stat"
                 },
@@ -8632,6 +8668,26 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
+                "not_cumulative": {
+                  "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+                  "oneOf": [
+                    {
+                      "const": "negative-modifiers"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "ability"
+                      ],
+                      "properties": {
+                        "ability": {
+                          "$ref": "#/$defs/entity-id"
+                        }
+                      }
+                    }
+                  ]
+                },
                 "roll": {
                   "$ref": "#/$defs/roll-selector"
                 },
@@ -9702,6 +9758,26 @@
                 "of": {
                   "$ref": "#/$defs/unit-ref"
                 },
+                "model_count": {
+                  "description": "The unit counts as containing fewer than `below` models, for for_weapon_ability's purposes only (\"treated as containing fewer than five models for the purpose of the [BLAST] ability\").",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "below"
+                  ],
+                  "properties": {
+                    "below": {
+                      "type": "integer",
+                      "minimum": 2
+                    }
+                  }
+                },
+                "for_weapon_ability": {
+                  "description": "The weapon ability a model_count applies to.",
+                  "enum": [
+                    "blast"
+                  ]
+                },
                 "in_region": {
                   "$ref": "#/$defs/region-ref"
                 }
@@ -9715,6 +9791,12 @@
                 {
                   "required": [
                     "in_region"
+                  ]
+                },
+                {
+                  "required": [
+                    "model_count",
+                    "for_weapon_ability"
                   ]
                 }
               ]
@@ -10022,7 +10104,8 @@
                     {
                       "enum": [
                         "half",
-                        "to-zero"
+                        "to-zero",
+                        "to-one"
                       ]
                     }
                   ]
@@ -10074,11 +10157,29 @@
                   ]
                 },
                 "against": {
-                  "enum": [
-                    "all",
-                    "mortal",
-                    "psychic",
-                    "psychic-and-mortal"
+                  "description": "What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).",
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "all",
+                        "mortal",
+                        "psychic",
+                        "psychic-and-mortal",
+                        "damage-1-unmodified"
+                      ]
+                    },
+                    {
+                      "type": "array",
+                      "minItems": 2,
+                      "uniqueItems": true,
+                      "items": {
+                        "enum": [
+                          "mortal",
+                          "psychic",
+                          "devastating-wounds"
+                        ]
+                      }
+                    }
                   ]
                 }
               },
@@ -10375,9 +10476,11 @@
               "additionalProperties": false,
               "properties": {
                 "act": {
+                  "description": "What the destroyed model can do: fight, shoot, or either (shoot-or-fight).",
                   "enum": [
                     "fight",
-                    "shoot"
+                    "shoot",
+                    "shoot-or-fight"
                   ]
                 },
                 "resolution": {
@@ -10848,6 +10951,17 @@
                 "ends_when": {
                   "$ref": "#/$defs/condition",
                   "description": "Where the moving unit must be when the move ends, as a condition on it: \"your unit must end that move either wholly within your deployment zone or within range of an objective marker\". For a single distance to a place, use ends_within."
+                },
+                "as_if_keywords": {
+                  "description": "For this move only, its models move as if they had these keywords (\"move as if they have the FLY keyword\").",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": [
+                      "FLY"
+                    ]
+                  }
                 },
                 "keeps_eligible": {
                   "const": true

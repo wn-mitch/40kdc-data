@@ -119,6 +119,8 @@ def usage_clause(u: Any) -> str:
     freq = u.get("frequency")
     if isinstance(freq, str) and freq in _USAGE:
         base = _USAGE[freq]
+    elif freq == "n-per-battle" and u.get("count_from") == "equipped-wargear":
+        base = "once per battle for each copy of this wargear its unit is equipped with"
     elif freq == "n-per-battle":
         base = (
             "once per battle"
@@ -129,7 +131,10 @@ def usage_clause(u: Any) -> str:
         )
     else:
         base = dekebab(jstr(freq))
-    return f"{base} per {jstr(u['per'])}" if u.get("per") is not None else base
+    # A count from the unit's loadout is already its unit's: no "per unit" after it.
+    if u.get("per") is not None and u.get("count_from") is None:
+        return f"{base} per {jstr(u['per'])}"
+    return base
 
 
 def _scaling_clause(s: dict[str, Any]) -> str:

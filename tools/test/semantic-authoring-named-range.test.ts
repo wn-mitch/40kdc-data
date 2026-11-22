@@ -442,9 +442,9 @@ describe("Semantic authoring named-range reference: describer and family version
     expect(describeEffect(effect)).not.toContain("Contagion Range");
   });
 
-  it("registers the named-range versions: unit-position at 15 or later and counts-as at version 3", () => {
+  it("registers the named-range versions: unit-position at 15 or later and counts-as at 3 or later", () => {
     expect(currentFamilyVersion("unit-position")).toBeGreaterThanOrEqual(15);
-    expect(currentFamilyVersion("counts-as")).toBe(3);
+    expect(currentFamilyVersion("counts-as")).toBeGreaterThanOrEqual(3);
   });
 });
 

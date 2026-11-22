@@ -36,10 +36,26 @@ function thresholdBuff(family: string, subjects: readonly string[], extra: reado
       subject: enumValue(input.subject, subjects, `${family}.subject`),
       threshold: boundedInteger(input.threshold, 2, 6, `${family}.threshold`),
     };
-    if (extra.includes("against")) result.against = enumValue(input.against, ["all", "mortal", "psychic", "psychic-and-mortal"], `${family}.against`);
+    if (extra.includes("against")) result.against = fnpAgainst(input.against, `${family}.against`);
     if (hasKeywords) result.model_keywords = modelKeywordList(input.model_keywords, `${family}.model_keywords`, apostrophe ? { family, context: strings(input) } : undefined);
     return result;
   };
+}
+
+/** What a Feel No Pain covers, one at a time, in the order the rules list them. */
+const FNP_AGAINST_ITEMS = ["mortal", "psychic", "devastating-wounds"] as const;
+
+/**
+ * A Feel No Pain's `against`: one closed value, or a list of two or more covered kinds ("against
+ * mortal wounds, Psychic Attacks and Critical Wounds caused by attacks with [DEVASTATING WOUNDS]"),
+ * in canonical order. Mortal wounds with Psychic Attacks alone keep their own value.
+ */
+function fnpAgainst(value: unknown, label: string): string | string[] {
+  if (!Array.isArray(value)) return enumValue(value, ["all", "mortal", "psychic", "psychic-and-mortal", "damage-1-unmodified"], label);
+  const items = enumSet(value, FNP_AGAINST_ITEMS, label);
+  if (items.length < 2) throw new TypeError(`${label} as a list names two or more kinds; one kind is its own value.`);
+  if (items.length === 2 && items.includes("mortal") && items.includes("psychic")) throw new TypeError(`${label}: mortal wounds and Psychic Attacks are psychic-and-mortal.`);
+  return FNP_AGAINST_ITEMS.filter((item) => items.includes(item));
 }
 
 /** A keyword-grant list item: an optional leading apostrophe, then accented capitals checked without their accents. */
@@ -231,10 +247,10 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "feel-no-pain",
-    version: 5,
+    version: 6,
     role: "EFFECT",
     label: "Feel No Pain",
-    description: "Models ignore wounds on a roll of the threshold or more, optionally only against mortal wounds or psychic attacks. \"The bearer\" is this model. subject can also be antecedent: the unit an earlier leaf of the record introduced (\"that enemy unit\", \"it\"), bound when the record compiles. model_keywords: the Feel No Pain applies to only the subject's models with every listed keyword (\"**CHARACTER** models in this unit\"); a keyword can start with an apostrophe as the rules print it ('ARDMOB).",
+    description: "Models ignore wounds on a roll of the threshold or more, optionally only against mortal wounds or psychic attacks. against damage-1-unmodified: only against attacks with an unmodified Damage characteristic of 1; a list of two or more of mortal, psychic and devastating-wounds (Critical Wounds caused by attacks with [DEVASTATING WOUNDS]) covers each. \"The bearer\" is this model. subject can also be antecedent: the unit an earlier leaf of the record introduced (\"that enemy unit\", \"it\"), bound when the record compiles. model_keywords: the Feel No Pain applies to only the subject's models with every listed keyword (\"**CHARACTER** models in this unit\"); a keyword can start with an apostrophe as the rules print it ('ARDMOB).",
     starter: { subject: "this-unit", threshold: null, against: "all" },
     parameterSchema: {
       type: "object",
@@ -242,7 +258,10 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
       properties: {
         subject: { enum: ["this-unit", "this-model", ANTECEDENT] },
         threshold: THRESHOLD_SCHEMA,
-        against: { enum: ["all", "mortal", "psychic", "psychic-and-mortal"] },
+        against: { anyOf: [
+          { enum: ["all", "mortal", "psychic", "psychic-and-mortal", "damage-1-unmodified"] },
+          { type: "array", items: { enum: [...FNP_AGAINST_ITEMS] }, minItems: 2, uniqueItems: true },
+        ] },
         model_keywords: MODEL_KEYWORDS_SCHEMA,
       },
       additionalProperties: false,

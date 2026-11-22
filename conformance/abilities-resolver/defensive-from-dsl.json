@@ -2256,6 +2256,37 @@
       }
     },
     {
+      "caseId": "canonical/damage-zeroing/to-one",
+      "abilityId": "fabricated-plating",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-plating",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "damage-reduction",
+        "target": "this-unit",
+        "modifier": {
+          "reduction": "to-one"
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "damage-reduction: setting Damage to 1 is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
       "caseId": "canonical/ignore-modifiers/all-except-save-target-walk",
       "abilityId": "fabricated-resolve",
       "source": {
@@ -2981,6 +3012,110 @@
             ]
           }
         ]
+      }
+    },
+    {
+      "caseId": "canonical/feel-no-pain-scope/list-with-mortal",
+      "abilityId": "fabricated-warding",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-warding",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5,
+          "against": [
+            "mortal",
+            "devastating-wounds"
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [
+          {
+            "type": "feel-no-pain",
+            "threshold": 5,
+            "scope": "mortal"
+          }
+        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/feel-no-pain-scope/list-without-mortal",
+      "abilityId": "fabricated-warding",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-warding",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5,
+          "against": [
+            "psychic",
+            "devastating-wounds"
+          ]
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "feel-no-pain: against a list without mortal wounds (psychic attacks and Devastating Wounds criticals are not tracked by the buff layer)"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
+    },
+    {
+      "caseId": "canonical/feel-no-pain-scope/damage-1-unmodified",
+      "abilityId": "fabricated-warding",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-warding",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "feel-no-pain",
+        "target": "this-unit",
+        "modifier": {
+          "threshold": 5,
+          "against": "damage-1-unmodified"
+        }
+      },
+      "context": {
+        "phase": "shooting"
+      },
+      "perspective": "target",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "feel-no-pain: against \"damage-1-unmodified\" (the buff layer does not split Feel No Pain by an attack's Damage)"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
       }
     }
   ]

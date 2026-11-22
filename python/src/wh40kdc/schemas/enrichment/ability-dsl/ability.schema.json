@@ -417,7 +417,7 @@
       ]
     },
     "ability-usage-limit": {
-      "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).",
+      "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired); count_from takes the count from the unit's loadout.",
       "type": "object",
       "properties": {
         "frequency": {
@@ -445,12 +445,24 @@
             "unit",
             "model"
           ]
+        },
+        "count_from": {
+          "description": "How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.",
+          "enum": [
+            "equipped-wargear"
+          ]
         }
       },
       "required": [
         "frequency"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "not": {
+        "required": [
+          "count",
+          "count_from"
+        ]
+      }
     }
   }
 }

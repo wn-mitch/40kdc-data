@@ -1927,6 +1927,14 @@
       {
         "path": "/effect/modifier/area",
         "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/model_count",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/for_weapon_ability",
+        "code": "REQUIRED_MISSING"
       }
     ]
   },
@@ -2714,6 +2722,14 @@
       },
       {
         "path": "/effect/move_type",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/model_count",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/for_weapon_ability",
         "code": "REQUIRED_MISSING"
       }
     ]

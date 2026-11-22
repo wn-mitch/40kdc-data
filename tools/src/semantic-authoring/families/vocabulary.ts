@@ -141,7 +141,9 @@ const WINDOW_PHASES = ["command", "movement", "shooting", "charge", "fight"] as 
 
 /** A frequency in the DSL's spelling, with ownership only when the leaf explicitly records it. */
 export function usageFor(parameters: Record<string, unknown>): Record<string, unknown> {
-  const frequency = parameters.frequency === "once-per-battle" ? { frequency: "n-per-battle", count: 1 }
+  // Once per battle for each copy of the wargear that carries the ability: the count is the unit's loadout.
+  const frequency = parameters.count_from !== undefined ? { frequency: "n-per-battle", count_from: parameters.count_from }
+    : parameters.frequency === "once-per-battle" ? { frequency: "n-per-battle", count: 1 }
     : parameters.frequency === "twice-per-battle" ? { frequency: "n-per-battle", count: 2 } : { frequency: parameters.frequency };
   return { ...frequency, ...(parameters.per !== undefined && parameters.per !== "any" ? { per: parameters.per } : {}) };
 }

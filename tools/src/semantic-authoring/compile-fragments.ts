@@ -318,6 +318,10 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
       const act = closed(leaf, "act");
       // Shooting is a plain grant with no timing of its own: no resolution, removal, roll, or eligibility.
       if (act === "shoot") return { type: "act-on-death", target: target(leaf.parameters.subject), modifier: { act: "shoot" } };
+      // "It can shoot or fight after the attacking unit has finished making its attacks": the after-attack resolution, either act.
+      if (act === "shoot-or-fight") {
+        return { type: "act-on-death", target: "event-object", modifier: { act: "shoot-or-fight", resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights" } };
+      }
       // The schema pairs each resolution with its removal; a roll or eligibility is folded in by compile-dice.
       return closed(leaf, "timing") === "when-its-unit-fights"
         ? { type: "act-on-death", target: "event-object", modifier: { act: "fight", resolution: "when-unit-fights", removal: "after-unit-fights-or-phase-end" } }
@@ -381,6 +385,10 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
     case "counts-as": {
       // A region grant names the army rule's region instead of a range;
       // a named-range grant names the range and whose units it is measured to.
+      // "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
+      if (leaf.parameters.model_count_below !== undefined) {
+        return { type: "counts-as", target: target(leaf.parameters.subject), modifier: { model_count: { below: closed(leaf, "model_count_below") }, for_weapon_ability: String(closed(leaf, "for_weapon_ability")).toLowerCase() } };
+      }
       const modifier: Node = leaf.parameters.range_ref !== undefined
         ? { within: { aura_of: namedRange(leaf.parameters.range_ref).aura_of }, of: { owner: closed(leaf, "of_side") } }
         : leaf.parameters.region !== undefined

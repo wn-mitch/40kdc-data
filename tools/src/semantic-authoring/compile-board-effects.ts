@@ -24,6 +24,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.as_if !== undefined) modifier.as_if = closed(leaf, "as_if");
       // The disembark mode ("an assault disembark move").
       if (leaf.parameters.mode !== undefined) modifier.mode = closed(leaf, "mode");
+      // "Move as if they have the FLY keyword", for this move only.
+      if (leaf.parameters.as_if_keywords !== undefined) modifier.as_if_keywords = [...(leaf.parameters.as_if_keywords as string[])];
       // An embark's distance to its Transport in place of 3" (bindEmbarkAnchors, compile-transport-embark.ts).
       if (leaf.parameters.reach !== undefined) modifier.reach = closed(leaf, "reach");
       // "Must make … move": the target is obliged to make it.

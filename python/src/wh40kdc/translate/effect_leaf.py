@@ -134,7 +134,9 @@ def _stat_change(m: dict[str, Any], what: str) -> str:
     """A stat change as a verb phrase over ``what``."""
     op = jstr(m.get("operation"))
     if op == "set":
-        return f"set {what} to {dice_case(m.get('value'))}"
+        # A Range is printed in inches ("a Range characteristic of 18\"").
+        inches = '"' if m.get("stat") == "Range" else ""
+        return f"set {what} to {dice_case(m.get('value'))}{inches}"
     if op == "halve":
         return f"halve {what}"
     if op == "multiply":
@@ -203,6 +205,16 @@ def _attack_maker(target: Any, m: dict[str, Any], subj: str) -> str:
     else:
         by = f" by {subj}"
     return f" if it is made{with_weapons}{by}" if with_weapons or by else ""
+
+
+def _not_cumulative_trail(m: dict[str, Any], of: str) -> str:
+    """ " (this is not cumulative with ...)": what a modifier does not stack with."""
+    nc = m.get("not_cumulative")
+    if nc == "negative-modifiers":
+        return f" (this is not cumulative with any other negative modifiers to that {of})"
+    if isinstance(nc, dict) and nc.get("ability") is not None:
+        return f" (this is not cumulative with the {ability_label(nc['ability'])} ability)"
+    return ""
 
 
 def _stat_modifier(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
@@ -688,6 +700,14 @@ def _weapon_ability_range(m: dict[str, Any], subj: str) -> str:
 
 
 def _counts_as(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
+    # "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
+    if m.get("model_count") is not None:
+        below = jstr(_obj(m["model_count"]).get("below"))
+        rule = dekebab(jstr(m.get("for_weapon_ability"))).upper()
+        return (
+            f"{subj} {v(subj, 'counts')} as containing fewer than {below} models "
+            f"for the purpose of the [{rule}] ability"
+        )
     if m.get("in_region") is not None:
         region = m["in_region"] if isinstance(m["in_region"], dict) else {}
         return f"{subj} {v(subj, 'counts')} as being within {region_phrase(region)}"
@@ -852,11 +872,11 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
     subj = effect_subject(e.get("target"), ctx)
     t = e.get("type")
     if t == "stat-modifier":
-        return _stat_modifier(e, m, subj, ctx)
+        return _stat_modifier(e, m, subj, ctx) + _not_cumulative_trail(m, "characteristic")
     if t == "ignore-modifiers":
         return _ignore_modifiers(m, subj)
     if t == "roll-modifier":
-        return _roll_modifier(m, subj, ctx)
+        return _roll_modifier(m, subj, ctx) + _not_cumulative_trail(m, "roll")
     if t == "re-roll":
         return _re_roll(e, m, subj, ctx)
     if t == "roll-result":

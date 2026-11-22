@@ -49,7 +49,8 @@ function incomingLead(m: Record<string, unknown>, subj: string): string {
 /** A stat change as a verb phrase over `what` ("add 1 to the unit's Toughness characteristic"). */
 function statChange(m: Record<string, unknown>, what: string): string {
   const op = jstr(m.operation);
-  if (op === "set") return `set ${what} to ${diceCase(m.value)}`;
+  // A Range is printed in inches ("a Range characteristic of 18\"").
+  if (op === "set") return `set ${what} to ${diceCase(m.value)}${m.stat === "Range" ? "\"" : ""}`;
   if (op === "halve") return `halve ${what}`;
   if (op === "multiply") return `multiply ${what} by ${diceCase(m.value)}`;
   if (op === "improve" || op === "worsen") return `${op} ${what} by ${diceCase(m.value)}`;
@@ -96,6 +97,14 @@ function attackMaker(target: unknown, m: Record<string, unknown>, subj: string):
   return withWeapons || by ? ` if it is made${withWeapons}${by}` : "";
 }
 
+/** " (this is not cumulative with …)": what a modifier does not stack with, after the change it qualifies. */
+function notCumulativeTrail(m: Record<string, unknown>, of: string): string {
+  const nc = m.not_cumulative;
+  if (nc === "negative-modifiers") return ` (this is not cumulative with any other negative modifiers to that ${of})`;
+  if (nc != null && typeof nc === "object" && (nc as P).ability != null) return ` (this is not cumulative with the ${abilityLabel((nc as P).ability)} ability)`;
+  return "";
+}
+
 function statModifier(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   const statKey = jstr(m.stat);
   // AP is printed negative; the DSL stores its magnitude.
@@ -107,11 +116,12 @@ function statModifier(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ct
     m = { ...m, value: `${diceCase(m.value)}"` };
   }
   const stat = statKey === "detection-range" ? "detection range" : `${statName(m.stat)} characteristic`;
-  if (m.incoming === true) return `${incomingLead(m, subj)}${statChange(m, `the ${stat} of that attack`)}${bounds(m)}`;
-  if (ctx.attackOnTarget && ATTACK_STATS.has(statKey)) return `${statChange(m, `the ${stat} of that attack`)}${bounds(m)}${attackMaker(e.target, m, subj)}`;
-  if (hasWeapon(m)) return `${statChange(m, `the ${stat} of ${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)}`)}${bounds(m)}`;
-  if (e.target === "attacker" && ATTACK_STATS.has(statKey)) return `${statChange(m, `the ${stat} of the attacking unit's attacks`)}${bounds(m)}`;
-  return `${statChange(m, ofOrPossessive(subj, stat))}${bounds(m)}`;
+  const nc = notCumulativeTrail(m, "characteristic");
+  if (m.incoming === true) return `${incomingLead(m, subj)}${statChange(m, `the ${stat} of that attack`)}${bounds(m)}${nc}`;
+  if (ctx.attackOnTarget && ATTACK_STATS.has(statKey)) return `${statChange(m, `the ${stat} of that attack`)}${bounds(m)}${attackMaker(e.target, m, subj)}${nc}`;
+  if (hasWeapon(m)) return `${statChange(m, `the ${stat} of ${weaponNoun(m)} equipped by ${weaponHolder(e.target, ctx)}`)}${bounds(m)}${nc}`;
+  if (e.target === "attacker" && ATTACK_STATS.has(statKey)) return `${statChange(m, `the ${stat} of the attacking unit's attacks`)}${bounds(m)}${nc}`;
+  return `${statChange(m, ofOrPossessive(subj, stat))}${bounds(m)}${nc}`;
 }
 
 function ignoreModifiers(m: Record<string, unknown>, subj: string): string {
@@ -137,6 +147,10 @@ function suppressedWeaponScope(m: Record<string, unknown>, ctx: Ctx): string {
 }
 
 function rollModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
+  return `${rollModifierChange(m, subj, ctx)}${notCumulativeTrail(m, "roll")}`;
+}
+
+function rollModifierChange(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   // A bound roll's result as the value ("add 1 for each of those mortal wounds", one roll for both).
   const bound = typeof m.value === "object" && m.value !== null && typeof (m.value as P).roll_var === "string" && (m.value as P).successes_on == null;
   const boundValue = m.value_from === "previous-roll" || bound ? "the result of that roll" : null;
@@ -529,6 +543,8 @@ function asTargetCandidate(node: unknown): unknown {
 }
 
 function countsAs(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
+  // "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
+  if (m.model_count != null) return `${subj} ${v(subj, "counts")} as containing fewer than ${jstr((m.model_count as P).below)} models for the purpose of the [${dekebab(jstr(m.for_weapon_ability)).toUpperCase()}] ability`;
   if (m.in_region != null) return `${subj} ${v(subj, "counts")} as being within ${regionPhrase(m.in_region as P)}`;
   return `${subj} ${v(subj, "counts")} as being within ${rangePhrase(m.within)} of ${m.of != null ? effectSubject(m.of, ctx) : "this model"}`;
 }

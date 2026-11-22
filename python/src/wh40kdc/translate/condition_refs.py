@@ -604,6 +604,11 @@ def _objective_phrase(f: Any, plural: bool = False, noun: str = "objective") -> 
         s += f" tagged {dekebab(_str(f['designated']))}"
     if f.get("within") is not None and not unit_controls:
         s += f" within {range_phrase(within.get('range'))} of {place_ref_phrase(within.get('of'))}"
+    # "visible to one or more models in your unit".
+    if f.get("visible_to") is not None:
+        to = f["visible_to"]
+        who = "one or more models in the unit" if to == "this-unit" else unit_ref_phrase(to)
+        s += f" visible to {who}"
     # "that your unit was controlling when it was destroyed": the unit's control when the rule was
     # triggered.
     if f.get("controlled_by_unit") is not None:

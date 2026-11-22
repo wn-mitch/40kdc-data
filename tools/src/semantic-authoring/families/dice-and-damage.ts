@@ -101,7 +101,7 @@ function normalizeMortalWounds(input: Input): Input {
 }
 
 const FIGHT_ON_DEATH_TIMING = ["when-its-unit-fights", "after-the-attacking-unit-finishes"] as const;
-const FIGHT_ON_DEATH_ACTS = ["fight", "shoot"] as const;
+const FIGHT_ON_DEATH_ACTS = ["fight", "shoot", "shoot-or-fight"] as const;
 export const DICE_AND_DAMAGE_FAMILIES: readonly FlatFamily[] = [
   {
     id: "mortal-wound-source",
@@ -119,17 +119,17 @@ export const DICE_AND_DAMAGE_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "fight-on-death",
-    version: 2,
+    version: 3,
     role: "EFFECT",
     label: "Fights or shoots after being destroyed",
-    description: "\"Do not remove it from play; that destroyed model can fight or shoot …\": fighting names its timing (when its unit fights, or after the attacking unit finishes); shooting is a plain grant to a named subject, with no timing of its own. A roll and a \"has not fought\" condition before it limit which destroyed models fight.",
+    description: "\"Do not remove it from play; that destroyed model can fight or shoot …\": fighting names its timing (when its unit fights, or after the attacking unit finishes); shooting is a plain grant to a named subject, with no timing of its own; shoot-or-fight (\"it can shoot or fight after the attacking unit has finished making its attacks\") takes the after-the-attacking-unit-finishes timing. A roll and a \"has not fought\" condition before it limit which destroyed models fight.",
     starter: { act: "fight", timing: "" },
     parameterSchema: {
       type: "object",
       required: ["act"],
       properties: {
         act: { enum: FIGHT_ON_DEATH_ACTS },
-        timing: { enum: FIGHT_ON_DEATH_TIMING, "x-only-when": { act: ["fight"] } },
+        timing: { enum: FIGHT_ON_DEATH_TIMING, "x-only-when": { act: ["fight", "shoot-or-fight"] } },
         subject: { enum: FIXED_SUBJECTS, "x-only-when": { act: ["shoot"] } },
       },
       additionalProperties: false,
@@ -139,6 +139,10 @@ export const DICE_AND_DAMAGE_FAMILIES: readonly FlatFamily[] = [
       if (act === "fight") {
         exactKeys(input, ["act", "timing"], "fight-on-death");
         return { act, timing: enumValue(input.timing, FIGHT_ON_DEATH_TIMING, "fight-on-death.timing") };
+      }
+      if (act === "shoot-or-fight") {
+        exactKeys(input, ["act", "timing"], "fight-on-death");
+        return { act, timing: enumValue(input.timing, ["after-the-attacking-unit-finishes"], "fight-on-death.timing (shoot-or-fight)") };
       }
       exactKeys(input, ["act", "subject"], "fight-on-death");
       return { act, subject: enumValue(input.subject, FIXED_SUBJECTS, "fight-on-death.subject") };

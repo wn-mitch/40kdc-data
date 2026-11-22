@@ -1252,19 +1252,34 @@ function translateFeelNoPain(
     });
     return;
   }
-  // `modifier.against` ∈ {"all", "mortal", "psychic", "psychic-and-mortal"}
-  // (default "all"). Anything else routes to unsupported so a malformed value
-  // can't silently masquerade as an all-FNP. `psychic-and-mortal` folds into
-  // the mortal stream (its mortal-wound coverage is exact; the psychic-attack
-  // half is invisible to the buff layer); bare `psychic` has no stream to
-  // attach to, so it stays unsupported rather than overstating defence.
+  // `modifier.against` ∈ {"all", "mortal", "psychic", "psychic-and-mortal",
+  // "damage-1-unmodified"} or a list of "mortal", "psychic" and
+  // "devastating-wounds" (default "all"). Anything else routes to unsupported
+  // so a malformed value can't silently masquerade as an all-FNP.
+  // `psychic-and-mortal`, and a list naming mortal wounds, fold into the
+  // mortal stream (its mortal-wound coverage is exact; psychic attacks and
+  // Devastating Wounds criticals are invisible to the buff layer); bare
+  // `psychic`, a list without mortal wounds, and Damage-1 attacks have no
+  // stream to attach to, so they stay unsupported rather than overstating defence.
   const rawAgainst = modifier.against;
   let scope: "all" | "mortal" = "all";
   if (rawAgainst !== undefined) {
     if (rawAgainst === "all" || rawAgainst === "mortal") {
       scope = rawAgainst;
-    } else if (rawAgainst === "psychic-and-mortal") {
+    } else if (rawAgainst === "psychic-and-mortal" || (Array.isArray(rawAgainst) && rawAgainst.includes("mortal"))) {
       scope = "mortal";
+    } else if (Array.isArray(rawAgainst)) {
+      out.unsupported.push({
+        reason: "feel-no-pain: against a list without mortal wounds (psychic attacks and Devastating Wounds criticals are not tracked by the buff layer)",
+        effectFragment: node,
+      });
+      return;
+    } else if (rawAgainst === "damage-1-unmodified") {
+      out.unsupported.push({
+        reason: 'feel-no-pain: against "damage-1-unmodified" (the buff layer does not split Feel No Pain by an attack\'s Damage)',
+        effectFragment: node,
+      });
+      return;
     } else if (rawAgainst === "psychic") {
       out.unsupported.push({
         reason: 'feel-no-pain: against "psychic" (psychic attacks are not tracked by the buff layer)',
@@ -1551,9 +1566,9 @@ function zeroingUses(usage: unknown): { uses: number; per: "unit" | "model" } {
 
 /**
  * Defender-side damage-reduction (`{type: "damage-reduction", modifier:
- * {reduction: N | "half" | "to-zero"}}`). A number subtracts from each Damage
+ * {reduction: N | "half" | "to-zero" | "to-one"}}`). A number subtracts from each Damage
  * roll; `"to-zero"` is a damage-zeroing defence, counted from the usage limit,
- * for the allocation stage; halving Damage is unsupported. Attacker-perspective
+ * for the allocation stage; halving Damage, or setting it to 1, is unsupported. Attacker-perspective
  * walks drop silently (this is a defender stat).
  */
 function translateDamageReduction(
@@ -1584,6 +1599,13 @@ function translateDamageReduction(
   if (reduction === "half") {
     out.unsupported.push({
       reason: "damage-reduction: halving Damage is not modelled by the buff layer",
+      effectFragment: node,
+    });
+    return;
+  }
+  if (reduction === "to-one") {
+    out.unsupported.push({
+      reason: "damage-reduction: setting Damage to 1 is not modelled by the buff layer",
       effectFragment: node,
     });
     return;

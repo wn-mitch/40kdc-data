@@ -143,6 +143,8 @@ const OUTSIDE_CRUNCHER_SCOPE: ReadonlyArray<{ reason: RegExp; why: string }> = [
   { reason: /^effect type "reserves-schedule" is not modelled by the buff layer$/u, why: "an arrival schedule changes deployment, not an attack" },
   { reason: /^ignore-modifiers: only hit and wound rolls and WS\/BS are modelled$/u, why: "ignoring modifiers to other rolls or characteristics is not modelled" },
   { reason: /^stat-modifier: operation "set" not supported$/u, why: "setting a characteristic has no single delta" },
+  { reason: /^damage-reduction: setting Damage to 1 is not modelled by the buff layer$/u, why: "capping an allocated attack's Damage at 1 is not modelled" },
+  { reason: /^feel-no-pain: against "damage-1-unmodified" \(the buff layer does not split Feel No Pain by an attack's Damage\)$/u, why: "a Feel No Pain against Damage 1 attacks depends on each attack's Damage" },
   { reason: /^roll-result on "(hit|wound|save)": only a critical threshold on hit or wound rolls is modelled$/u, why: "fixed roll outcomes beyond a critical threshold are not modelled" },
   { reason: /^target "event-subject" is not resolved by the buff engine$/u, why: "the triggering unit is bound only at runtime" },
   { reason: /^target "event-object" is not resolved by the buff engine$/u, why: "the unit the triggering action aimed at is bound only at runtime" },

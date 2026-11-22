@@ -1503,10 +1503,36 @@ def _translate_feel_no_pain(
     raw_scope = modifier.get("against")
     scope = "all"
     if raw_scope is not None:
-        if raw_scope in ("all", "mortal"):
+        if isinstance(raw_scope, list):
+            # A list naming mortal wounds folds into the mortal stream; psychic attacks and
+            # Devastating Wounds criticals are invisible to the buff layer.
+            if "mortal" not in raw_scope:
+                out["unsupported"].append(
+                    {
+                        "reason": (
+                            "feel-no-pain: against a list without mortal wounds (psychic attacks "
+                            "and Devastating Wounds criticals are not tracked by the buff layer)"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
+                return
+            scope = "mortal"
+        elif raw_scope in ("all", "mortal"):
             scope = raw_scope
         elif raw_scope == "psychic-and-mortal":
             scope = "mortal"
+        elif raw_scope == "damage-1-unmodified":
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        'feel-no-pain: against "damage-1-unmodified" (the buff layer does not '
+                        "split Feel No Pain by an attack's Damage)"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+            return
         elif raw_scope == "psychic":
             out["unsupported"].append(
                 {
@@ -1799,6 +1825,14 @@ def _translate_damage_reduction(
         out["unsupported"].append(
             {
                 "reason": "damage-reduction: halving Damage is not modelled by the buff layer",
+                "effectFragment": node,
+            }
+        )
+        return
+    if reduction == "to-one":
+        out["unsupported"].append(
+            {
+                "reason": "damage-reduction: setting Damage to 1 is not modelled by the buff layer",
                 "effectFragment": node,
             }
         )

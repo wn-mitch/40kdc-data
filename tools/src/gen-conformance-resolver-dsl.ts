@@ -38,6 +38,7 @@ import {
   TRIGGER_SUBJECT_CASE_PREFIX,
 } from "./gen-conformance-cruncher-cases.js";
 import { canonicalDamageZeroingCases, DAMAGE_ZEROING_CASE_PREFIX } from "./gen-conformance-zeroing-cases.js";
+import { canonicalFnpScopeCases, FNP_SCOPE_CASE_PREFIX } from "./gen-conformance-fnp-scope-cases.js";
 import { canonicalIgnoreModifiersCases, IGNORE_MODIFIERS_CASE_PREFIX } from "./gen-conformance-ignore-cases.js";
 import { canonicalLastingSetupCases, LASTING_SETUP_CASE_PREFIX } from "./gen-conformance-lasting-cases.js";
 import { canonicalMomentScopeCases, MOMENT_SCOPE_CASE_PREFIX } from "./gen-conformance-moment-scope-cases.js";
@@ -75,7 +76,7 @@ export const CANONICAL_DSL_CASE_PREFIXES: readonly string[] = [
   DAMAGE_ZEROING_CASE_PREFIX, IGNORE_MODIFIERS_CASE_PREFIX, LASTING_SETUP_CASE_PREFIX, TRIGGER_SUBJECT_CASE_PREFIX, STRATAGEM_MODEL_CASE_PREFIX,
   STRATAGEM_TARGET_CASE_PREFIX, NAMED_REGION_BENEFICIARY_CASE_PREFIX, DESIGNATION_CASE_PREFIX, MOVE_TYPE_CASE_PREFIX,
   REMOVED_KEYWORD_CASE_PREFIX, OWN_DEFINITION_CASE_PREFIX, MOMENT_SCOPE_CASE_PREFIX,
-  SELECTION_BACKREF_CASE_PREFIX, VISIBLE_TARGET_CASE_PREFIX, SPENT_AMOUNT_CASE_PREFIX,
+  SELECTION_BACKREF_CASE_PREFIX, VISIBLE_TARGET_CASE_PREFIX, SPENT_AMOUNT_CASE_PREFIX, FNP_SCOPE_CASE_PREFIX,
 ];
 
 /** Whether a corpus row is one the canonical generator writes (and the seeded refresh leaves alone). */
@@ -93,6 +94,7 @@ export function canonicalDslCases(): Array<Record<string, unknown> & { perspecti
     ...canonicalNamedRegionBeneficiaryCases(), ...canonicalDesignationCases(), ...canonicalMoveTypeCases(),
     ...canonicalRemovedKeywordCases(), ...canonicalOwnDefinitionCases(), ...canonicalMomentScopeCases(),
     ...canonicalSelectionBackrefCases(), ...canonicalVisibleTargetCases(), ...canonicalSpentAmountCases(),
+    ...canonicalFnpScopeCases(),
   ];
 }
 

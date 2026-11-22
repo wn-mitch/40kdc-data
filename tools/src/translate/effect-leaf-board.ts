@@ -56,7 +56,18 @@ function mortalWounds(m: Record<string, unknown>, subj: string): string {
 
 const FNP_AGAINST: Record<string, string> = {
   mortal: " against mortal wounds", psychic: " against Psychic Attacks", "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
+  "damage-1-unmodified": " against attacks with an unmodified Damage characteristic of 1",
 };
+/** One kind in a Feel No Pain's list of what it covers. */
+const FNP_AGAINST_ITEM: Record<string, string> = {
+  mortal: "mortal wounds", psychic: "Psychic Attacks", "devastating-wounds": "Critical Wounds caused by attacks with [DEVASTATING WOUNDS]",
+};
+
+/** " against mortal wounds", " against mortal wounds, Psychic Attacks and …": what a Feel No Pain covers, or nothing for all. */
+function fnpAgainst(against: unknown): string {
+  if (Array.isArray(against)) return ` against ${andList(against.map((item) => FNP_AGAINST_ITEM[jstr(item)] ?? dekebab(jstr(item))))}`;
+  return FNP_AGAINST[jstr(against)] ?? "";
+}
 
 /** "its full wounds", "half of its starting number of wounds", "3 wounds", "D3 wounds": what a set-up or returned model has left. */
 function woundsLeft(value: unknown): string {
@@ -115,7 +126,7 @@ function destroyModels(e: Leaf, m: Record<string, unknown>, subj: string): strin
 }
 
 function actOnDeath(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
-  const act = m.act === "shoot" ? "shoot" : "fight";
+  const act = m.act === "shoot" ? "shoot" : m.act === "shoot-or-fight" ? "shoot or fight" : "fight";
   const model = isEventObject(e.target) ? "a model in this unit" : subj === "this model" ? "this model" : typeof e.target === "object" && e.target != null && (e.target as P).level === "model" ? `a ${subj.replace(/^all /, "").replace(/\bmodels\b/, "model")}` : `a model in ${subj}`;
   const gate = m.gate as { dice?: unknown; threshold?: unknown; comparison?: unknown; modifiers?: { condition?: Condition; value?: unknown }[] } | undefined;
   const eligibility = m.eligibility != null ? conditionLeadIn(m.eligibility as Condition) : "";
@@ -125,7 +136,7 @@ function actOnDeath(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx)
   if (gate != null) {
     const before = eligibility ? ` ${eligibility}` : "";
     const adds = (gate.modifiers ?? []).map((g) => `, adding ${diceCase(g.value)} ${conditionLeadIn(g.condition ?? {})}`).join("");
-    const removal = m.removal === "after-destroyed-model-fights" ? `. Remove it after it has ${act === "shoot" ? "shot" : "fought"}` : ". Remove it after this unit has fought or at the end of the phase, whichever comes first";
+    const removal = m.removal === "after-destroyed-model-fights" ? `. Remove it after it has ${act === "shoot" ? "shot" : act === "shoot or fight" ? "shot or fought" : "fought"}` : ". Remove it after this unit has fought or at the end of the phase, whichever comes first";
     // Under a destroyed trigger the ability's lead-in already names the death: one lead-in only.
     const lead = ctx.destroyedTrigger ? (before ? `${before.trim()}, ` : "") : `each time ${model} is destroyed${before ? `,${before}` : ""}, `;
     return `${lead}roll one ${diceCase(gate.dice)}${adds}. On ${formatComparison(jstr(gate.comparison), gate.threshold)}, leave that model on the battlefield; ${resolution}${removal}`;
@@ -216,6 +227,7 @@ function move(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   if (m.reach != null) s += ` within a Transport it is able to embark within, if every model is within ${rangePhrase(m.reach)} of that Transport instead of 3"`;
   if (m.as_if === "movement-phase") s += " as if it were your Movement phase";
   if (Array.isArray(m.passthrough)) s += `, moving over ${passthrough(m.passthrough)} as though they were not there`;
+  if (Array.isArray(m.as_if_keywords)) s += ` (when doing so, its models move as if they had the ${andList((m.as_if_keywords as unknown[]).map(jstr))} keyword${m.as_if_keywords.length > 1 ? "s" : ""})`;
   const ends = m.ends_within as P | undefined;
   if (ends != null) s += `, ending that move ${ends.wholly === true ? "wholly " : ""}within ${rangePhrase(ends.range)} of ${endsOf(ends.of, ctx)}`;
   if (m.ends_when != null) s += `; it must end that move where ${describeCondition(m.ends_when as Condition)}${m.ends_when_replaces === true ? " (instead of the usual threshold)" : ""}`;
@@ -548,14 +560,15 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "mortal-wounds": return mortalWounds(m, subj);
     case "damage-reduction": {
       const r = jstr(m.reduction);
-      const how = r === "half" ? "halve the Damage of that attack" : r === "to-zero" ? "change the Damage of that attack to 0" : `subtract ${r} from the Damage characteristic of that attack`;
+      const how = r === "half" ? "halve the Damage of that attack" : r === "to-zero" ? "change the Damage of that attack to 0"
+        : r === "to-one" ? "change the Damage characteristic of that attack to 1" : `subtract ${r} from the Damage characteristic of that attack`;
       if (ctx.allocatedTrigger && m.weapons == null) return how;
       const attack = m.weapons != null ? `an attack with ${weaponNoun(m)}` : "an attack";
       return `each time ${attack} is allocated to ${subj}, ${how}`;
     }
     case "feel-no-pain": {
       const rated = isRatingRef(m.threshold);
-      return `${subj} ${v(subj, "has")} Feel No Pain ${rated ? "X" : jstr(m.threshold)}+${FNP_AGAINST[jstr(m.against)] ?? ""}${rated ? ", X being its rating" : ""}`;
+      return `${subj} ${v(subj, "has")} Feel No Pain ${rated ? "X" : jstr(m.threshold)}+${fnpAgainst(m.against)}${rated ? ", X being its rating" : ""}`;
     }
     case "invulnerable-save": {
       const scope = m.weapons as P | undefined;

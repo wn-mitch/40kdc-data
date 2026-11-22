@@ -108,12 +108,15 @@ export function rollEffect(leaf: CompileLeaf, context: EffectContext, target: Ta
           // "Halve Advance and Charge rolls" takes no value.
           roll, operation: closed(leaf, "operation"), ...(leaf.parameters.operation === "halve" ? {} : { value: typeof leaf.parameters.value_var === "string" ? { roll_var: leaf.parameters.value_var } : closed(leaf, "value") }),
           ...(leaf.parameters.cap !== undefined ? { cap: closed(leaf, "cap") } : {}), ...weaponScope(leaf),
+          // "(this is not cumulative with any other negative modifiers to that Charge roll)".
+          ...(leaf.parameters.not_cumulative !== undefined ? { not_cumulative: structuredClone(leaf.parameters.not_cumulative) } : {}),
         },
       };
     }
     case "critical-hit-threshold": {
       const value = closed(leaf, "value");
-      if (typeof value !== "number") throw new CompileError("critical-hit-threshold needs a numeric threshold before it can compile.");
+      // "Each successful Hit roll scores a Critical Hit": the DSL's critical_on success.
+      if (typeof value !== "number" && value !== "success") throw new CompileError("critical-hit-threshold needs a numeric threshold before it can compile.");
       const roll = leaf.parameters.roll === undefined ? "hit" : closed(leaf, "roll");
       // Folded from "if such a weapon already has that ability" (compile-weapon-already-has.ts): only the weapons that print the keyword.
       return {

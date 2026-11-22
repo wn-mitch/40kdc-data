@@ -5891,5 +5891,265 @@
     "scope": {
       "duration": "phase"
     }
+  },
+  {
+    "caseId": "batch-a/fnp-against-list",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5,
+        "against": [
+          "mortal",
+          "devastating-wounds"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "batch-a/fnp-against-list-psychic",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 4,
+        "against": [
+          "psychic",
+          "devastating-wounds"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "batch-a/fnp-damage-1-unmodified",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-model",
+      "modifier": {
+        "threshold": 4,
+        "against": "damage-1-unmodified"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "batch-a/act-on-death-shoot-or-fight",
+    "trigger": {
+      "event": "destroyed",
+      "object": "this-model"
+    },
+    "effect": {
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "shoot-or-fight",
+        "resolution": "after-attacking-unit-finishes",
+        "removal": "after-destroyed-model-fights"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "batch-a/stat-modifier-not-cumulative-negative",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "event-subject",
+      "modifier": {
+        "stat": "M",
+        "operation": "subtract",
+        "value": 2,
+        "not_cumulative": "negative-modifiers"
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    }
+  },
+  {
+    "caseId": "batch-a/roll-modifier-not-cumulative-negative",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "event-subject",
+      "modifier": {
+        "roll": "hit",
+        "operation": "subtract",
+        "value": 1,
+        "not_cumulative": "negative-modifiers"
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    }
+  },
+  {
+    "caseId": "batch-a/roll-modifier-not-cumulative-ability",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "event-subject",
+      "modifier": {
+        "roll": "charge",
+        "operation": "subtract",
+        "value": 2,
+        "not_cumulative": {
+          "ability": "fabricated-veil"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    }
+  },
+  {
+    "caseId": "batch-a/stat-set-range",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "Range",
+        "operation": "set",
+        "value": 18,
+        "weapons": {
+          "keyword": {
+            "keyword_id": "torrent"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    }
+  },
+  {
+    "caseId": "batch-a/move-as-if-fly",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "as_if_keywords": [
+          "FLY"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "batch-a/select-objective-visible-to-unit",
+    "effect": {
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "visible_to": "this-unit"
+        },
+        "bind_as": "marked-objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "batch-a/select-objective-visible-to-model",
+    "effect": {
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "visible_to": "this-model"
+        },
+        "bind_as": "marked-objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "batch-a/usage-count-from-equipped-wargear",
+    "effect": {
+      "type": "ability-part",
+      "usage": {
+        "frequency": "n-per-battle",
+        "count_from": "equipped-wargear",
+        "per": "unit"
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
+  },
+  {
+    "caseId": "batch-a/counts-as-model-count-blast",
+    "effect": {
+      "type": "counts-as",
+      "target": "this-unit",
+      "modifier": {
+        "model_count": {
+          "below": 5
+        },
+        "for_weapon_ability": "blast"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    }
+  },
+  {
+    "caseId": "batch-a/damage-reduction-to-one",
+    "trigger": {
+      "event": "damage-allocated",
+      "object": "this-model"
+    },
+    "effect": {
+      "type": "damage-reduction",
+      "target": "this-model",
+      "modifier": {
+        "reduction": "to-one"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    }
   }
 ]

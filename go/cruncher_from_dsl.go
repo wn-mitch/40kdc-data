@@ -2037,10 +2037,27 @@ func translateFeelNoPain(node, source map[string]any, opts dslOpts, out *effectT
 	rawAgainst, present := modifier["against"]
 	scope := "all"
 	if present {
-		if rawAgainst == "all" || rawAgainst == "mortal" {
+		if list, isList := rawAgainst.([]any); isList {
+			// A list naming mortal wounds folds into the mortal stream; psychic attacks and
+			// Devastating Wounds criticals are invisible to the buff layer.
+			hasMortal := false
+			for _, item := range list {
+				if item == "mortal" {
+					hasMortal = true
+				}
+			}
+			if !hasMortal {
+				out.unsupported = append(out.unsupported, unsup("feel-no-pain: against a list without mortal wounds (psychic attacks and Devastating Wounds criticals are not tracked by the buff layer)", node))
+				return
+			}
+			scope = "mortal"
+		} else if rawAgainst == "all" || rawAgainst == "mortal" {
 			scope = rawAgainst.(string)
 		} else if rawAgainst == "psychic-and-mortal" {
 			scope = "mortal"
+		} else if rawAgainst == "damage-1-unmodified" {
+			out.unsupported = append(out.unsupported, unsup("feel-no-pain: against \"damage-1-unmodified\" (the buff layer does not split Feel No Pain by an attack's Damage)", node))
+			return
 		} else if rawAgainst == "psychic" {
 			out.unsupported = append(out.unsupported, unsup("feel-no-pain: against \"psychic\" (psychic attacks are not tracked by the buff layer)", node))
 			return
@@ -2167,6 +2184,10 @@ func translateDamageReduction(node, source map[string]any, opts dslOpts, out *ef
 	}
 	if reduction == "half" {
 		out.unsupported = append(out.unsupported, unsup("damage-reduction: halving Damage is not modelled by the buff layer", node))
+		return
+	}
+	if reduction == "to-one" {
+		out.unsupported = append(out.unsupported, unsup("damage-reduction: setting Damage to 1 is not modelled by the buff layer", node))
 		return
 	}
 	out.unsupported = append(out.unsupported, unsup("damage-reduction: unrecognised reduction \""+jsStr(reduction)+"\"", node))

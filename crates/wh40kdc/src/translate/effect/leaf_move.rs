@@ -243,6 +243,14 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
             passthrough(p)
         ));
     }
+    if let Some(k) = arr(m, "as_if_keywords") {
+        let keywords: Vec<String> = k.iter().map(|x| jstr(Some(x))).collect();
+        s.push_str(&format!(
+            " (when doing so, its models move as if they had the {} keyword{})",
+            and_list(&keywords),
+            if k.len() > 1 { "s" } else { "" }
+        ));
+    }
     if let Some(ends) = nn(m, "ends_within") {
         let ends = obj(Some(ends));
         let of = ends_of(ends.get("of"), ctx);

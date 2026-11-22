@@ -168,10 +168,12 @@ func usageClause(usage any) string {
 	case "first-time-this-turn":
 		base = "the first time each turn"
 	case "n-per-battle":
-		switch n {
-		case 1:
+		switch {
+		case u["count_from"] == "equipped-wargear":
+			base = "once per battle for each copy of this wargear its unit is equipped with"
+		case n == 1:
 			base = "once per battle"
-		case 2:
+		case n == 2:
 			base = "twice per battle"
 		default:
 			base = numStr(n) + " times per battle"
@@ -179,7 +181,8 @@ func usageClause(usage any) string {
 	default:
 		base = dekebab(ejstr(u["frequency"]))
 	}
-	if u["per"] != nil {
+	// A count from the unit's loadout is already its unit's: no "per unit" after it.
+	if u["per"] != nil && u["count_from"] == nil {
 		return base + " per " + ejstr(u["per"])
 	}
 	return base

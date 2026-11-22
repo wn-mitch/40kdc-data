@@ -342,6 +342,8 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
     const within = f.within as P;
     s += ` within ${rangePhrase(within.range)} of ${placeRefPhrase(within.of)}`;
   }
+  // "visible to one or more models in your unit".
+  if (f.visible_to != null) s += ` visible to ${f.visible_to === "this-unit" ? "one or more models in the unit" : unitRefPhrase(f.visible_to)}`;
   // "that your unit was controlling when it was destroyed": the unit's control when the rule was triggered.
   if (f.controlled_by_unit != null) s += ` that ${unitRefPhrase(f.controlled_by_unit)} was controlling ${f.controlled_at === "previous-phase-end" ? "at the end of the previous phase" : "when the rule was triggered"}`;
   if (f.clear_of != null) s += `, with no ${unitFilterPhrase(f.clear_of as P).replace(/^an? /, "").replace(/\bunit\b/, "units")} within range of it`;
@@ -421,10 +423,12 @@ export function usageClause(u: AbilityUsage | AbilityUsage[]): string {
     case "first-this-battle": base = "the first time this battle"; break;
     case "first-time-this-phase": base = "the first time this phase"; break;
     case "first-time-this-turn": base = "the first time each turn"; break;
-    case "n-per-battle": base = n === 1 ? "once per battle" : n === 2 ? "twice per battle" : `${str(n)} times per battle`; break;
+    case "n-per-battle": base = u.count_from === "equipped-wargear" ? "once per battle for each copy of this wargear its unit is equipped with"
+      : n === 1 ? "once per battle" : n === 2 ? "twice per battle" : `${str(n)} times per battle`; break;
     default: base = dekebab(str(u.frequency));
   }
-  return u.per != null ? `${base} per ${str(u.per)}` : base;
+  // A count from the unit's loadout is already its unit's: no "per unit" after it.
+  return u.per != null && u.count_from == null ? `${base} per ${str(u.per)}` : base;
 }
 
 

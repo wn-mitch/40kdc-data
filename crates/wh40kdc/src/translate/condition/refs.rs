@@ -688,6 +688,15 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
             place_ref_phrase(within.get("of"))
         ));
     }
+    // "visible to one or more models in your unit".
+    if let Some(to) = nn(f, "visible_to") {
+        let who = if to.as_str() == Some("this-unit") {
+            "one or more models in the unit".to_string()
+        } else {
+            unit_ref_phrase(Some(to), "the unit")
+        };
+        s.push_str(&format!(" visible to {who}"));
+    }
     // "that your unit was controlling when it was destroyed": the unit's control when the rule was
     // triggered, or at the end of the previous phase.
     if let Some(u) = nn(f, "controlled_by_unit") {

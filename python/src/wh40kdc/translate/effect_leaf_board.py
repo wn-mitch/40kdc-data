@@ -152,7 +152,22 @@ _FNP_AGAINST = {
     "mortal": " against mortal wounds",
     "psychic": " against Psychic Attacks",
     "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
+    "damage-1-unmodified": " against attacks with an unmodified Damage characteristic of 1",
 }
+# One kind in a Feel No Pain's list of what it covers.
+_FNP_AGAINST_ITEM = {
+    "mortal": "mortal wounds",
+    "psychic": "Psychic Attacks",
+    "devastating-wounds": "Critical Wounds caused by attacks with [DEVASTATING WOUNDS]",
+}
+
+
+def _fnp_against(against: Any) -> str:
+    """What a Feel No Pain covers (" against mortal wounds, ..."), or "" for all."""
+    if isinstance(against, list):
+        kinds = [_FNP_AGAINST_ITEM.get(jstr(item), dekebab(jstr(item))) for item in against]
+        return f" against {and_list(kinds)}"
+    return _FNP_AGAINST.get(jstr(against), "")
 
 
 def _wounds_left(value: Any) -> str:
@@ -265,7 +280,7 @@ def _region_extend(m: dict[str, Any]) -> str:
 
 
 def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
-    act = "shoot" if m.get("act") == "shoot" else "fight"
+    act = {"shoot": "shoot", "shoot-or-fight": "shoot or fight"}.get(jstr(m.get("act")), "fight")
     target = e.get("target")
     if is_event_object(target):
         model = "a model in this unit"
@@ -286,7 +301,8 @@ def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             for g in (gate.get("modifiers") or [])
         )
         if m.get("removal") == "after-destroyed-model-fights":
-            removal = f". Remove it after it has {'shot' if act == 'shoot' else 'fought'}"
+            done = {"shoot": "shot", "shoot or fight": "shot or fought"}.get(act, "fought")
+            removal = f". Remove it after it has {done}"
         else:
             removal = (
                 ". Remove it after this unit has fought or at the end of the phase, whichever "
@@ -506,6 +522,13 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         s += " as if it were your Movement phase"
     if isinstance(m.get("passthrough"), list):
         s += f", moving over {_passthrough(m['passthrough'])} as though they were not there"
+    if isinstance(m.get("as_if_keywords"), list):
+        keywords = m["as_if_keywords"]
+        plural = "s" if len(keywords) > 1 else ""
+        s += (
+            " (when doing so, its models move as if they had the "
+            f"{and_list([jstr(k) for k in keywords])} keyword{plural})"
+        )
     ends = m.get("ends_within")
     if ends is not None:
         ends = _obj(ends)
@@ -843,6 +866,8 @@ def _damage_reduction(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         how = "halve the Damage of that attack"
     elif r == "to-zero":
         how = "change the Damage of that attack to 0"
+    elif r == "to-one":
+        how = "change the Damage characteristic of that attack to 1"
     else:
         how = f"subtract {r} from the Damage characteristic of that attack"
     if ctx.get("allocated_trigger") and m.get("weapons") is None:
@@ -902,7 +927,7 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "feel-no-pain":
         rated = is_rating_ref(m.get("threshold"))
         threshold = "X" if rated else jstr(m.get("threshold"))
-        against = _FNP_AGAINST.get(jstr(m.get("against")), "")
+        against = _fnp_against(m.get("against"))
         tail = ", X being its rating" if rated else ""
         return f"{subj} {v(subj, 'has')} Feel No Pain {threshold}+{against}{tail}"
     if t == "invulnerable-save":

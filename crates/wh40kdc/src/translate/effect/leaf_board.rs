@@ -296,11 +296,37 @@ fn empty_condition() -> Value {
     Value::Object(Map::new())
 }
 
+/// " against mortal wounds", " against mortal wounds, Psychic Attacks and …": what a Feel No Pain covers, or nothing for all.
+fn fnp_against(against: Option<&Value>) -> String {
+    if let Some(Value::Array(items)) = against {
+        let kinds: Vec<String> = items
+            .iter()
+            .map(|item| match jstr(Some(item)).as_str() {
+                "mortal" => "mortal wounds".to_string(),
+                "psychic" => "Psychic Attacks".to_string(),
+                "devastating-wounds" => {
+                    "Critical Wounds caused by attacks with [DEVASTATING WOUNDS]".to_string()
+                }
+                other => crate::translate::dekebab(other),
+            })
+            .collect();
+        return format!(" against {}", and_list(&kinds));
+    }
+    match jstr(against).as_str() {
+        "mortal" => " against mortal wounds",
+        "psychic" => " against Psychic Attacks",
+        "psychic-and-mortal" => " against Psychic Attacks and mortal wounds",
+        "damage-1-unmodified" => " against attacks with an unmodified Damage characteristic of 1",
+        _ => "",
+    }
+    .to_string()
+}
+
 fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
-    let act = if sv(m, "act") == Some("shoot") {
-        "shoot"
-    } else {
-        "fight"
+    let act = match sv(m, "act") {
+        Some("shoot") => "shoot",
+        Some("shoot-or-fight") => "shoot or fight",
+        _ => "fight",
     };
     let model = if crate::translate::condition::is_event_object(target) {
         "a model in this unit".to_string()
@@ -352,7 +378,11 @@ fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String 
         let removal = if sv(m, "removal") == Some("after-destroyed-model-fights") {
             format!(
                 ". Remove it after it has {}",
-                if act == "shoot" { "shot" } else { "fought" }
+                match act {
+                    "shoot" => "shot",
+                    "shoot or fight" => "shot or fought",
+                    _ => "fought",
+                }
             )
         } else {
             ". Remove it after this unit has fought or at the end of the phase, whichever comes first"
@@ -493,6 +523,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             let how = match r.as_str() {
                 "half" => "halve the Damage of that attack".to_string(),
                 "to-zero" => "change the Damage of that attack to 0".to_string(),
+                "to-one" => "change the Damage characteristic of that attack to 1".to_string(),
                 _ => format!("subtract {r} from the Damage characteristic of that attack"),
             };
             if ctx.allocated_trigger && nn(m, "weapons").is_none() {
@@ -506,12 +537,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             format!("each time {attack} is allocated to {subj}, {how}")
         }
         Some("feel-no-pain") => {
-            let against = match jstr(m.get("against")).as_str() {
-                "mortal" => " against mortal wounds",
-                "psychic" => " against Psychic Attacks",
-                "psychic-and-mortal" => " against Psychic Attacks and mortal wounds",
-                _ => "",
-            };
+            let against = fnp_against(m.get("against"));
             let rated = is_rating_ref(m.get("threshold"));
             format!(
                 "{subj} {} Feel No Pain {}+{against}{}",

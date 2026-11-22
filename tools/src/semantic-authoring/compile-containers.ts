@@ -356,6 +356,8 @@ function buildSelectObjective(head: CompileLeaf, groups: CompileLeaf[][]): Node 
     // An origin without a distance is the origin's own reach: "an objective your unit is controlling".
     filter.within = { range: "objective-control", of: closed(head, "origin") };
   }
+  // "Visible to one or more models in your unit".
+  if (head.parameters.visible_to !== undefined) filter.visible_to = closed(head, "visible_to");
   // Folded from objective-criterion leaves (compile-objective-criteria.ts).
   if (head.parameters.controlled_by_unit !== undefined) filter.controlled_by_unit = head.parameters.controlled_by_unit;
   if (head.parameters.controlled_at !== undefined) filter.controlled_at = head.parameters.controlled_at;

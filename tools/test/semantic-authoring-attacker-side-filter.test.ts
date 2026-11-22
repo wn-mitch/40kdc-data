@@ -263,9 +263,9 @@ describe("Semantic authoring characteristic setter on the attack (characteristic
     expect(currentFamilyVersion("characteristic-set")).toBeGreaterThanOrEqual(7);
   });
 
-  it("lowers to a stat-modifier set on the attack's owner, as the attack's added-to twin does", () => {
+  it("lowers a Damage set to 1 on an allocated attack to a damage reduction on the attack's owner, as the attack's added-to twin targets", () => {
     const { mechanics } = compiled(TEXT, ITEMS);
-    expect(mechanics.effect).toEqual({ type: "stat-modifier", target: "this-unit", modifier: { stat: "D", operation: "set", value: 1 } });
+    expect(mechanics.effect).toEqual({ type: "damage-reduction", target: "this-unit", modifier: { reduction: "to-one" } });
     const add = compiled(TEXT.replace("change the Damage characteristic of that attack to 1", "change the Damage characteristic of that attack by 1"), [
       ITEMS[0]!, ["change the Damage characteristic of that attack by 1", "characteristic-modifier", { subject: "attack", characteristics: ["D"], operation: "add", value: 1, weapon_type: "all" }],
     ]);

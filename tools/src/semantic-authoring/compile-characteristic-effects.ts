@@ -48,8 +48,16 @@ export function characteristicEffect(leaf: CompileLeaf, context: EffectContext, 
       const characteristic = closed(leaf, "characteristic");
       const weaponType = leaf.parameters.weapon_type;
       if (subject === undefined) throw new CompileError("Characteristic setter needs a reviewed recipient.");
-      if ((WEAPON_CHARACTERISTICS as readonly string[]).includes(String(characteristic)) && weaponType === undefined) {
+      if ((characteristic === "Range" || (WEAPON_CHARACTERISTICS as readonly string[]).includes(String(characteristic))) && weaponType === undefined) {
         throw new CompileError("A weapon characteristic setter needs a reviewed weapon scope.");
+      }
+      // "Each time an attack is allocated to the bearer, change the Damage characteristic of that
+      // attack to 1": a defender-side reduction of the allocated attack, not the attacker's profile.
+      if (context.defended === true && subject === "attack" && characteristic === "D" && leaf.parameters.value === 1) {
+        return {
+          type: "damage-reduction", target: context.allocatedTo === "this-model" || context.allocatedTo === "selected-unit" ? context.allocatedTo : "this-unit",
+          modifier: { reduction: "to-one", ...weaponScope(leaf) },
+        };
       }
       // The attack being made belongs to whoever attacks, as for characteristic-modifier below.
       const owner = subject === "attack" ? attackOwner(context) : models(leaf, target(subject));
@@ -109,6 +117,8 @@ export function characteristicEffect(leaf: CompileLeaf, context: EffectContext, 
             ...weaponScope(scopedLeaf),
             // A floor on this characteristic alone (compile-characteristic-amount.ts bindCharacteristicFloors), else the change's own.
             ...(floorOf(leaf, stat) !== undefined ? { minimum: floorOf(leaf, stat) } : {}),
+            // "(this is not cumulative with the REAVERS' Matchless Swiftness ability)".
+            ...(leaf.parameters.not_cumulative !== undefined ? { not_cumulative: structuredClone(leaf.parameters.not_cumulative) } : {}),
           },
         };
       }));

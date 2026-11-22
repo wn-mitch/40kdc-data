@@ -206,6 +206,8 @@ export interface AbilityAppliesTo {
 export interface AbilityUsage {
   frequency?: string;
   count?: number;
+  /** equipped-wargear: once per battle for each copy of the wargear that carries the ability. */
+  count_from?: string;
   per?: string;
 }
 

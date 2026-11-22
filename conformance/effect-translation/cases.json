@@ -52977,6 +52977,308 @@
     }
   },
   {
+    "caseId": "batch-a/fnp-against-list",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5,
+        "against": [
+          "mortal",
+          "devastating-wounds"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "This unit has Feel No Pain 5+ against mortal wounds and Critical Wounds caused by attacks with [DEVASTATING WOUNDS]."
+    }
+  },
+  {
+    "caseId": "batch-a/fnp-against-list-psychic",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 4,
+        "against": [
+          "psychic",
+          "devastating-wounds"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "This unit has Feel No Pain 4+ against Psychic Attacks and Critical Wounds caused by attacks with [DEVASTATING WOUNDS]."
+    }
+  },
+  {
+    "caseId": "batch-a/fnp-damage-1-unmodified",
+    "effect": {
+      "type": "feel-no-pain",
+      "target": "this-model",
+      "modifier": {
+        "threshold": 4,
+        "against": "damage-1-unmodified"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "This model has Feel No Pain 4+ against attacks with an unmodified Damage characteristic of 1."
+    }
+  },
+  {
+    "caseId": "batch-a/act-on-death-shoot-or-fight",
+    "trigger": {
+      "event": "destroyed",
+      "object": "this-model"
+    },
+    "effect": {
+      "type": "act-on-death",
+      "target": "event-object",
+      "modifier": {
+        "act": "shoot-or-fight",
+        "resolution": "after-attacking-unit-finishes",
+        "removal": "after-destroyed-model-fights"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "Each time this model is destroyed, do not remove that model yet; after the attacking unit has finished making its attacks, it can shoot or fight; then remove it."
+    }
+  },
+  {
+    "caseId": "batch-a/stat-modifier-not-cumulative-negative",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "event-subject",
+      "modifier": {
+        "stat": "M",
+        "operation": "subtract",
+        "value": 2,
+        "not_cumulative": "negative-modifiers"
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "expected": {
+      "text": "Until the end of the turn, subtract 2\" from the triggering unit's Move characteristic (this is not cumulative with any other negative modifiers to that characteristic)."
+    }
+  },
+  {
+    "caseId": "batch-a/roll-modifier-not-cumulative-negative",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "event-subject",
+      "modifier": {
+        "roll": "hit",
+        "operation": "subtract",
+        "value": 1,
+        "not_cumulative": "negative-modifiers"
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "expected": {
+      "text": "Until the end of the phase, subtract 1 from the triggering unit's Hit rolls (this is not cumulative with any other negative modifiers to that roll)."
+    }
+  },
+  {
+    "caseId": "batch-a/roll-modifier-not-cumulative-ability",
+    "effect": {
+      "type": "roll-modifier",
+      "target": "event-subject",
+      "modifier": {
+        "roll": "charge",
+        "operation": "subtract",
+        "value": 2,
+        "not_cumulative": {
+          "ability": "fabricated-veil"
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "expected": {
+      "text": "Until the end of the phase, subtract 2 from the triggering unit's Charge rolls (this is not cumulative with the Fabricated Veil ability)."
+    }
+  },
+  {
+    "caseId": "batch-a/stat-set-range",
+    "effect": {
+      "type": "stat-modifier",
+      "target": "this-model",
+      "modifier": {
+        "stat": "Range",
+        "operation": "set",
+        "value": 18,
+        "weapons": {
+          "keyword": {
+            "keyword_id": "torrent"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "expected": {
+      "text": "Until the end of the phase, set the Range characteristic of weapons with [TORRENT] equipped by this model to 18\"\"."
+    }
+  },
+  {
+    "caseId": "batch-a/move-as-if-fly",
+    "effect": {
+      "type": "move",
+      "target": "this-unit",
+      "modifier": {
+        "move_type": "normal",
+        "distance": 6,
+        "as_if_keywords": [
+          "FLY"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation, this unit can make a Normal move of up to 6\" (when doing so, its models move as if they had the FLY keyword)."
+    }
+  },
+  {
+    "caseId": "batch-a/select-objective-visible-to-unit",
+    "effect": {
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "visible_to": "this-unit"
+        },
+        "bind_as": "marked-objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation:\n  - Select one objective marker visible to one or more models in the unit (referred to below as the marked objective): you gain 1 CP."
+    }
+  },
+  {
+    "caseId": "batch-a/select-objective-visible-to-model",
+    "effect": {
+      "type": "select-objective",
+      "selector": {
+        "filter": {
+          "visible_to": "this-model"
+        },
+        "bind_as": "marked-objective",
+        "count": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation:\n  - Select one objective marker visible to this model (referred to below as the marked objective): you gain 1 CP."
+    }
+  },
+  {
+    "caseId": "batch-a/usage-count-from-equipped-wargear",
+    "effect": {
+      "type": "ability-part",
+      "usage": {
+        "frequency": "n-per-battle",
+        "count_from": "equipped-wargear",
+        "per": "unit"
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "For this activation:\n  - Once per battle for each copy of this wargear its unit is equipped with, you gain 1 CP."
+    }
+  },
+  {
+    "caseId": "batch-a/counts-as-model-count-blast",
+    "effect": {
+      "type": "counts-as",
+      "target": "this-unit",
+      "modifier": {
+        "model_count": {
+          "below": 5
+        },
+        "for_weapon_ability": "blast"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "expected": {
+      "text": "This unit counts as containing fewer than 5 models for the purpose of the [BLAST] ability."
+    }
+  },
+  {
+    "caseId": "batch-a/damage-reduction-to-one",
+    "trigger": {
+      "event": "damage-allocated",
+      "object": "this-model"
+    },
+    "effect": {
+      "type": "damage-reduction",
+      "target": "this-model",
+      "modifier": {
+        "reduction": "to-one"
+      }
+    },
+    "scope": {
+      "duration": "resolution"
+    },
+    "expected": {
+      "text": "When damage is allocated to this model, for this activation, change the Damage characteristic of that attack to 1."
+    }
+  },
+  {
     "caseId": "model-refs/event-subject-model-matches",
     "effect": {
       "type": "conditional",

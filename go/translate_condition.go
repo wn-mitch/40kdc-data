@@ -656,6 +656,14 @@ func objectivePhrase(f map[string]any, plural bool, noun string) string {
 	if hasWithin && !unitControls {
 		s += " within " + rangePhrase(within["range"]) + " of " + placeRefPhrase(within["of"])
 	}
+	// "visible to one or more models in your unit".
+	if f["visible_to"] != nil {
+		who := "one or more models in the unit"
+		if f["visible_to"] != "this-unit" {
+			who = unitRefPhrase(f["visible_to"], "the unit")
+		}
+		s += " visible to " + who
+	}
 	// "that your unit was controlling when it was destroyed": the unit's control when the rule was triggered.
 	if f["controlled_by_unit"] != nil {
 		when := "when the rule was triggered"

@@ -45,7 +45,12 @@ func statChange(m map[string]any, what string) string {
 	op := ejstr(m["operation"])
 	switch op {
 	case "set":
-		return "set " + what + " to " + diceCase(m["value"])
+		// A Range is printed in inches ("a Range characteristic of 18\"").
+		inches := ""
+		if m["stat"] == "Range" {
+			inches = "\""
+		}
+		return "set " + what + " to " + diceCase(m["value"]) + inches
 	case "halve":
 		return "halve " + what
 	case "multiply":
@@ -825,7 +830,25 @@ func weaponAbilityRangeLeaf(m map[string]any, subj string) string {
 	return ofOrPossessive(subj, "attacks") + " benefit from " + bracketKeyword(m["keyword"]) + " when the target is within the weapon's range"
 }
 
+// notCumulativeTrail is " (this is not cumulative with …)": what a modifier does not stack with,
+// after the change it qualifies.
+func notCumulativeTrail(m map[string]any, of string) string {
+	nc := m["not_cumulative"]
+	if nc == "negative-modifiers" {
+		return " (this is not cumulative with any other negative modifiers to that " + of + ")"
+	}
+	if ncm, ok := nc.(map[string]any); ok && ncm["ability"] != nil {
+		return " (this is not cumulative with the " + abilityLabel(ncm["ability"]) + " ability)"
+	}
+	return ""
+}
+
 func countsAsLeaf(m map[string]any, subj string, ctx effCtx) string {
+	// "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
+	if m["model_count"] != nil {
+		return subj + " " + ev(subj, "counts") + " as containing fewer than " + ejstr(mapOr(m["model_count"])["below"]) +
+			" models for the purpose of the [" + strings.ToUpper(dekebab(ejstr(m["for_weapon_ability"]))) + "] ability"
+	}
 	if m["in_region"] != nil {
 		return subj + " " + ev(subj, "counts") + " as being within " + regionPhrase(mapOr(m["in_region"]))
 	}
@@ -933,11 +956,11 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 	subj := effectSubject(e["target"], ctx)
 	switch e["type"] {
 	case "stat-modifier":
-		return statModifierLeaf(e, m, subj, ctx)
+		return statModifierLeaf(e, m, subj, ctx) + notCumulativeTrail(m, "characteristic")
 	case "ignore-modifiers":
 		return ignoreModifiersLeaf(m, subj)
 	case "roll-modifier":
-		return rollModifierLeaf(m, subj, ctx)
+		return rollModifierLeaf(m, subj, ctx) + notCumulativeTrail(m, "roll")
 	case "re-roll":
 		return reRollLeaf(e, m, subj, ctx)
 	case "roll-result":

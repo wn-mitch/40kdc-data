@@ -247,6 +247,16 @@ function normalizeCountsAs(input: Params): Params {
     return { subject, range_ref: "synapse", of_side: "friendly" };
   }
   if ("of_side" in input) throw new TypeError("counts-as.of_side goes with range_ref.");
+  // "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
+  if ("model_count_below" in input) {
+    exactKeys(input, ["subject", "model_count_below", "for_weapon_ability"], "counts-as");
+    if (!grantable) throw new TypeError(`counts-as.subject ${JSON.stringify(subject)} cannot take a model count.`);
+    return {
+      subject,
+      model_count_below: boundedInteger(input.model_count_below, 2, 20, "counts-as.model_count_below"),
+      for_weapon_ability: enumValue(input.for_weapon_ability, ["Blast"], "counts-as.for_weapon_ability"),
+    };
+  }
   if ("region" in input) {
     if ("within" in input) throw new TypeError("counts-as takes within or region, not both.");
     if (!grantable) throw new TypeError(`counts-as.subject ${JSON.stringify(subject)} cannot take a region.`);
@@ -344,10 +354,10 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "counts-as",
-    version: 3,
+    version: 4,
     role: "EFFECT",
     label: "Counts as being within range",
-    description: "This unit or model, or the unit an earlier leaf introduced, counts as being within a range of this model for the purposes of another rule (a Titan-killer's range, an aura counting itself); or counts as inside a region an army rule defines (region: \"that unit is within your army's Hallowed Ground\"); or counts as within a named range of your host (range_ref synapse with of_side friendly: \"that unit is inside Synapse Range of your host\"). Exactly one of within, region or range_ref is given.",
+    description: "This unit or model, or the unit an earlier leaf introduced, counts as being within a range of this model for the purposes of another rule (a Titan-killer's range, an aura counting itself); or counts as inside a region an army rule defines (region: \"that unit is within your army's Hallowed Ground\"); or counts as within a named range of your host (range_ref synapse with of_side friendly: \"that unit is inside Synapse Range of your host\"). Or counts as containing fewer models than model_count_below for one weapon ability's purposes (for_weapon_ability Blast: \"treated as containing fewer than five models for the purpose of the [BLAST] ability\"). Exactly one of within, region, range_ref or model_count_below is given.",
     starter: { subject: "", within: 1 },
     parameterSchema: {
       type: "object",
@@ -363,6 +373,8 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
         },
         range_ref: { enum: ["synapse"], "x-optional": true },
         of_side: { enum: ["friendly"], "x-only-when": { range_ref: ["synapse"] }, "x-optional": true },
+        model_count_below: { type: "integer", minimum: 2, maximum: 20, "x-optional": true },
+        for_weapon_ability: { enum: ["Blast"], "x-optional": true },
       },
       additionalProperties: false,
     },

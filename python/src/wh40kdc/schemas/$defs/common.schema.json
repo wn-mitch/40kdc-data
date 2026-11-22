@@ -1222,6 +1222,10 @@
           },
           "description": "Only objective markers within this range of `of` (default the model with the ability)."
         },
+        "visible_to": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Only objective markers visible to this unit (one or more of its models) or model (\"visible to one or more models in your unit\")."
+        },
         "controlled_by_unit": {
           "$ref": "#/$defs/unit-ref",
           "description": "Only the objective marker this unit was controlling (its models' Level of Control) at the moment the rule was triggered (\"an objective your unit was controlling when it was destroyed\")."
