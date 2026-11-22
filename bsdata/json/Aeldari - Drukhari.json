@@ -2283,7 +2283,7 @@
       {
         "name": "Power From Pain",
         "id": "cddc-0fe0-af5e-48e9",
-        "description": "Nothing happens.",
+        "description": "Pain abilities only apply to a unit while it is Empowered. While an Attached unit is Empowered, the Pain abilities of all its Leader and Bodyguard units take effect, with no additional spend.\nIf your Army Faction is DRUKHARI:\n  - At the start of your Command phase, you gain 1 Pain token.\n  - Each time an enemy unit is destroyed, you gain 1 Pain token.\n  - When an enemy unit fails a Battle-shock test, you gain 1 Pain token.\n  - Each time you spend Pain tokens to Empower a friendly unit, you can use this ability, until the end of the phase, the triggering unit is Empowered.",
         "hidden": false
       },
       {

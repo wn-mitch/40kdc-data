@@ -10155,19 +10155,99 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "drukhari",
     "detachment_id": "covenite-coterie",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "resource-spend",
+          "target": "this-model",
+          "modifier": {
+            "pool": "pain-token-pool",
+            "amount": {
+              "up_to": 3,
+              "at_least": 1
+            },
+            "bind_as": "postmortality-pain"
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "resource",
+            "parameters": {
+              "pool": "pain-token-pool",
+              "count": {
+                "max": 0
+              }
+            }
+          },
+          "effect": {
+            "type": "permission",
+            "target": "this-model",
+            "modifier": {
+              "activity": "use-stratagem",
+              "allow": false,
+              "stratagem": "postmortality-covenite-coterie-drukhari"
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended"
+          },
+          "effect": {
+            "type": "set-up",
+            "target": "this-model",
+            "modifier": {
+              "to": "battlefield",
+              "placement": [
+                "closest-to-destruction",
+                "unengaged"
+              ],
+              "wounds_remaining": {
+                "spent": "postmortality-pain"
+              },
+              "detach": true,
+              "starting_strength": 1,
+              "mandatory": true
+            }
+          },
+          "duration": "phase"
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": "model-in-this-unit"
+    },
+    "usage": {
+      "frequency": "n-per-battle",
+      "count": 1,
+      "per": "model"
+    },
+    "source_digest": "e3a550ce207dd7443db1b390751ce8055f81e67742629dcff8b8ea6d60948f14"
   },
   {
     "ability_id": "pounce-on-the-prey-skysplinter-assault-drukhari",
@@ -10195,9 +10275,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "archon",
       "coven-of-agonies-cronos",
@@ -10231,11 +10310,138 @@
     "detachment_id": null,
     "ability_type": "faction",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "rule-state",
+          "target": {
+            "not_designated": "empowered",
+            "excluding": {
+              "member_of": {
+                "designated": "empowered"
+              }
+            }
+          },
+          "modifier": {
+            "direction": "suppressed",
+            "rule_kind": "ability",
+            "rule": {
+              "ability_keyword": "PAIN"
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "army-faction",
+            "parameters": {
+              "faction": "drukhari"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "phase-started",
+                  "condition": {
+                    "operator": "and",
+                    "operands": [
+                      {
+                        "type": "phase-is",
+                        "parameters": {
+                          "phase": "command"
+                        }
+                      },
+                      {
+                        "type": "player-turn-is",
+                        "parameters": {
+                          "turn": "your-turn"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "effect": {
+                  "type": "resource-gain",
+                  "target": "this-model",
+                  "modifier": {
+                    "pool": "pain-token-pool",
+                    "amount": 1
+                  }
+                }
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "destroyed",
+                  "object": {
+                    "owner": "enemy"
+                  }
+                },
+                "effect": {
+                  "type": "resource-gain",
+                  "target": "this-model",
+                  "modifier": {
+                    "pool": "pain-token-pool",
+                    "amount": 1
+                  }
+                }
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "after-roll",
+                  "filter": {
+                    "roll": "battle-shock",
+                    "result": "failure"
+                  },
+                  "subject": {
+                    "owner": "enemy"
+                  }
+                },
+                "effect": {
+                  "type": "resource-gain",
+                  "target": "this-model",
+                  "modifier": {
+                    "pool": "pain-token-pool",
+                    "amount": 1
+                  }
+                }
+              },
+              {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "resource-spent",
+                  "filter": {
+                    "pool": "pain-token-pool",
+                    "tag": "empowered"
+                  },
+                  "object": {
+                    "owner": "friendly"
+                  },
+                  "optional": true
+                },
+                "effect": {
+                  "type": "designate",
+                  "target": "event-subject",
+                  "modifier": {
+                    "tag": "empowered"
+                  }
+                },
+                "duration": "phase"
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "85a34fca269c9b5af99cad8e07e018e380a24a6980d761c6228a743d84ef2d8c"
   },
   {
     "ability_id": "powerful-creations-coven-of-agonies-drukhari",
@@ -11125,19 +11331,71 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "drukhari",
     "detachment_id": "kabalite-cartel",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "roll-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "hit",
+            "operation": "add",
+            "value": 1
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "destroyed",
+            "subject": "this-unit",
+            "object": {
+              "owner": "any",
+              "designated": "contract-unit"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "for-each-unit",
+                "selector": {
+                  "filter": {
+                    "owner": "enemy"
+                  }
+                },
+                "effect": {
+                  "type": "test",
+                  "target": "recipient",
+                  "modifier": {
+                    "test": "battle-shock"
+                  }
+                }
+              },
+              {
+                "type": "resource-gain-cap",
+                "target": "this-model",
+                "modifier": {
+                  "pool": "pain-token-pool",
+                  "max": 3,
+                  "source": "failed-battle-shock"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "source_digest": "5440b240a49592851f6dca21ea779fd3f9b3a89f6f5970dda8b43b8f3020cfce"
   },
   {
     "ability_id": "torturers-craft-coven-of-agonies-wracks-drukhari",

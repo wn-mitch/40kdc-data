@@ -9585,7 +9585,12 @@ Add 1 to this unit's Objective Control characteristic.</characteristic>
   </sharedSelectionEntryGroups>
   <sharedRules>
     <rule name="Power From Pain" id="cddc-0fe0-af5e-48e9" hidden="false">
-      <description>Nothing happens.</description>
+      <description>Pain abilities only apply to a unit while it is Empowered. While an Attached unit is Empowered, the Pain abilities of all its Leader and Bodyguard units take effect, with no additional spend.
+If your Army Faction is DRUKHARI:
+  - At the start of your Command phase, you gain 1 Pain token.
+  - Each time an enemy unit is destroyed, you gain 1 Pain token.
+  - When an enemy unit fails a Battle-shock test, you gain 1 Pain token.
+  - Each time you spend Pain tokens to Empower a friendly unit, you can use this ability, until the end of the phase, the triggering unit is Empowered.</description>
     </rule>
     <rule name="Corsairs and Travelling Players" id="96a9-9b00-974d-4f41" hidden="false">
       <description>Your army can include at most 500 units with the HARLEQUINS or ANHRATHE keyword.

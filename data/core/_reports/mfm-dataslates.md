@@ -16,8 +16,8 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 181 | 276 |
-| stratagems | 0 | 0 | 1131 | 182 |
-| abilities | 0 | 0 | 3970 | 589 |
+| stratagems | 0 | 0 | 1133 | 180 |
+| abilities | 0 | 0 | 3973 | 586 |
 | phase-mappings | 0 | 0 | 1229 | 352 |
 | resource-pools | 0 | 0 | 0 | 7 |
 
@@ -42,7 +42,7 @@ dump confirmation.
 | dark-angels | 0 | 0 | 69 | 8 |
 | death-guard | 0 | 0 | 139 | 21 |
 | deathwatch | 0 | 0 | 34 | 2 |
-| drukhari | 0 | 0 | 136 | 28 |
+| drukhari | 0 | 0 | 139 | 25 |
 | emperors-children | 0 | 0 | 128 | 20 |
 | genestealer-cults | 0 | 0 | 122 | 26 |
 | grey-knights | 0 | 0 | 125 | 9 |
@@ -131,9 +131,9 @@ dump confirmation.
 | deathwatch | no-source | 1 |
 | deathwatch | verified | 34 |
 | drukhari | digest-differs | 7 |
-| drukhari | stub | 15 |
+| drukhari | stub | 12 |
 | drukhari | unpublished | 6 |
-| drukhari | verified | 136 |
+| drukhari | verified | 139 |
 | emperors-children | digest-differs | 4 |
 | emperors-children | unpublished | 16 |
 | emperors-children | verified | 128 |
