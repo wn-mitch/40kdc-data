@@ -53359,7 +53359,7 @@
       "duration": "phase"
     },
     "expected": {
-      "text": "When an enemy unit targets this unit, until the end of the phase:\n  - After that unit shoots, this unit can make a Normal move of up to 6\"."
+      "text": "When an enemy unit targets this unit, until the end of the phase:\n  - After that unit has finished making its attacks, this unit can make a Normal move of up to 6\"."
     }
   },
   {
@@ -53537,7 +53537,7 @@
       "per": "army"
     },
     "expected": {
-      "text": "Each time an enemy unit destroys a friendly unit with the DIRE AVENGERS or GUARDIANS keyword, once per battle round per army, until the end of the phase:\n  - After that unit shoots:\n    - This unit is eligible to shoot as if it were your Shooting phase.\n    - This unit must target the triggering unit with attacks."
+      "text": "Each time an enemy unit destroys a friendly unit with the DIRE AVENGERS or GUARDIANS keyword, once per battle round per army, until the end of the phase:\n  - After that unit has finished making its attacks:\n    - This unit is eligible to shoot as if it were your Shooting phase.\n    - This unit must target the triggering unit with attacks."
     }
   },
   {
@@ -54092,6 +54092,56 @@
     "behavior": "reactive",
     "expected": {
       "text": "Each time this unit destroys an enemy unit or when this unit causes an enemy unit to become Below Half-strength, this unit resolves the Reanimation Protocols ability now."
+    }
+  },
+  {
+    "caseId": "batch-b-fixes/marker-relocate-away-from-enemies",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "timing": "before-marker-removal"
+      },
+      "optional": true
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "marker": "cult-ambush-marker"
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "marker",
+        "target": "this-unit",
+        "modifier": {
+          "label": "cult-ambush-marker",
+          "operation": "relocate",
+          "min_enemy_distance": {
+            "inches": 8
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "Each time an enemy unit ends a move, before those markers are removed, you can use this ability, while the triggering unit is within 8\" of a cult ambush marker, move the cult ambush marker anywhere on the battlefield more than 8\" horizontally away from all enemy units."
     }
   },
   {

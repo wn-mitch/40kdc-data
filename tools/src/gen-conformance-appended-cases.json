@@ -6936,5 +6936,52 @@
       "duration": "permanent"
     },
     "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-b-fixes/marker-relocate-away-from-enemies",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "timing": "before-marker-removal"
+      },
+      "optional": true
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "marker": "cult-ambush-marker"
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "marker",
+        "target": "this-unit",
+        "modifier": {
+          "label": "cult-ambush-marker",
+          "operation": "relocate",
+          "min_enemy_distance": {
+            "inches": 8
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
   }
 ]

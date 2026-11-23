@@ -79,7 +79,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.distance !== undefined) modifier.distance = { inches: closed(leaf, "distance") };
       // Only a marker not yet moved this turn.
       if (leaf.parameters.not_moved_this_turn === true) modifier.not_moved_this_turn = true;
-      // A placed marker's distance from enemy units.
+      // A placed or relocated marker's distance from enemy units.
       if (leaf.parameters.min_enemy_distance !== undefined) modifier.min_enemy_distance = { inches: closed(leaf, "min_enemy_distance") };
       // The place a placed marker is measured to.
       if (leaf.parameters.near_inches !== undefined) {

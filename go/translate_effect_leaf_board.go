@@ -728,7 +728,16 @@ func markerLeaf(m map[string]any, ctx effCtx) string {
 		if m["not_moved_this_turn"] == true {
 			unmoved = " that has not been moved this turn"
 		}
-		return "move the " + label + " marker" + unmoved + dist + consume
+		// "set up that marker anywhere on the battlefield that is more than 8\" horizontally away from all enemy units".
+		away := ""
+		if m["min_enemy_distance"] != nil {
+			lead := " anywhere on the battlefield"
+			if m["distance"] != nil {
+				lead = ","
+			}
+			away = lead + " more than " + rangePhrase(m["min_enemy_distance"]) + " horizontally away from all enemy units"
+		}
+		return "move the " + label + " marker" + unmoved + dist + away + consume
 	}
 	if m["operation"] == "remove" {
 		return "remove that " + label + " marker from the battlefield"

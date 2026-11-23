@@ -137,6 +137,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "designated-filter", from: 3, to: 4, map: (parameters) => ({ ...parameters }) },
   { family: "unit-keyword", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
   { family: "roll-result", from: 3, to: 4, map: (parameters) => ({ ...parameters }) },
+  // battlefield-marker v6: a relocate takes min_enemy_distance. Every earlier leaf keeps its meaning.
+  { family: "battlefield-marker", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
 ];
 
 export type FamilyVersionReport = {

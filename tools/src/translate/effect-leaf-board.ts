@@ -350,7 +350,12 @@ function marker(m: Record<string, unknown>, ctx: Ctx): string {
   const label = dekebab(jstr(m.label)).replace(/ marker$/i, "");
   const consume = m.consume === "on-use" ? "; using the marker consumes it" : "";
   const unmoved = m.not_moved_this_turn === true ? " that has not been moved this turn" : "";
-  if (m.operation === "relocate") return `move the ${label} marker${unmoved}${m.distance != null ? ` up to ${rangePhrase(m.distance)}` : ""}${consume}`;
+  if (m.operation === "relocate") {
+    // "set up that marker anywhere on the battlefield that is more than 8\" horizontally away from all enemy units".
+    const away = m.min_enemy_distance != null
+      ? `${m.distance != null ? "," : " anywhere on the battlefield"} more than ${rangePhrase(m.min_enemy_distance)} horizontally away from all enemy units` : "";
+    return `move the ${label} marker${unmoved}${m.distance != null ? ` up to ${rangePhrase(m.distance)}` : ""}${away}${consume}`;
+  }
   if (m.operation === "remove") return `remove that ${label} marker from the battlefield`;
   const where = m.placement != null ? ` ${dekebab(jstr(m.placement))}` : "";
   // "a 40mm circular Tunnel Marker": the diameter follows the noun, so the article stays the label's.

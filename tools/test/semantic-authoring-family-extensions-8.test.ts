@@ -364,8 +364,9 @@ describe("Reserves states", () => {
     expect(say).not.toContain("marker marker");
   });
 
-  it("limits a marker's enemy distance to a place and takes no distance on a remove", () => {
-    expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "relocate", distance: 6, min_enemy_distance: 3 })).toThrow(/limits a place/u);
+  it("limits a marker's enemy distance to a place or a relocate and takes no distance on a remove", () => {
+    expect(normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "relocate", distance: 6, min_enemy_distance: 3 })).toEqual({ subject: "this-unit", label: "beta-marker", operation: "relocate", distance: 6, min_enemy_distance: 3 });
+    expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "remove", min_enemy_distance: 3 })).toThrow(/limits a place or a relocate/u);
     expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "remove", distance: 3 })).toThrow(/remove takes no distance/u);
     expect(normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", min_enemy_distance: 9 })).toEqual({ subject: "this-unit", label: "beta-marker", min_enemy_distance: 9 });
     expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "beta-marker", operation: "relocate", near_inches: 1, near_of: "this-unit" })).toThrow(/limits a place/u);

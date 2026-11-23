@@ -165,3 +165,24 @@ describe("history and state moments", () => {
     expect(describeAbility(mechanics as never)).toContain("On a result greater than the current battle round number");
   });
 });
+
+describe("batch B fixes", () => {
+  it("relocates a marker anywhere on the battlefield away from enemy units, and refuses the limit on a remove", () => {
+    const text = "You can set up that Fixture marker anywhere on the battlefield that is more than 8\" horizontally away from all enemy units.";
+    const mechanics = compiled(text, [
+      ["You can", "optional-use", { who: "you" }],
+      ["set up that Fixture marker anywhere on the battlefield that is more than 8\" horizontally away from all enemy units", "battlefield-marker", { subject: "this-unit", label: "fixture-marker", operation: "relocate", min_enemy_distance: 8 }],
+    ]);
+    expect(JSON.stringify(mechanics.effect)).toContain('"operation":"relocate","min_enemy_distance":{"inches":8}');
+    expect(describeAbility(mechanics as never)).toContain("You can move the fixture marker anywhere on the battlefield more than 8\" horizontally away from all enemy units");
+    expect(() => normalize("battlefield-marker", { subject: "this-unit", label: "fixture-marker", operation: "remove", min_enemy_distance: 8 })).toThrow();
+  });
+
+  it("names a bound unit's attacks in either phase, and keeps a fight's own verb", () => {
+    const bound = (filter?: Record<string, unknown>) => describeAbility({ trigger: { event: "targets-selected", filter: { kind: "attack" }, subject: { owner: "enemy" }, object: "this-unit", binds_event_variable: "moment-subject" },
+      effect: { type: "ability-part", trigger: { event: "attacks-resolved", subject: { event_var: "moment-subject" }, ...(filter ? { filter } : {}) }, effect: { type: "cp-gain", target: "this-unit", modifier: { amount: 1 } } },
+      scope: { duration: "phase" } } as never);
+    expect(bound()).toContain("After that unit has finished making its attacks");
+    expect(bound({ kind: "fight" })).toContain("After that unit fights");
+  });
+});

@@ -447,6 +447,15 @@ def _event_phrase(t: AbilityTrigger) -> str:
             return f"{allocated} to {_object_phrase(obj)}"
         return allocated
     if event == "attacks-resolved":
+        # A bound unit's attacks of either kind: "after that unit has finished making its attacks".
+        if (
+            subject_obj
+            and obj is None
+            and f.get("kind") is None
+            and isinstance(t["subject"], dict)
+            and isinstance(t["subject"].get("event_var"), str)
+        ):
+            return f"after {who} has finished making its attacks"
         if subject_obj:
             if obj is not None:
                 return f"after {who} has shot and targeted {_object_phrase(obj)}"

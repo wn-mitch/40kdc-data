@@ -34,7 +34,21 @@ pub(super) fn marker(m: &P, ctx: &Ctx) -> String {
         } else {
             ""
         };
-        return format!("move the {label} marker{unmoved}{dist}{consume}");
+        // "set up that marker anywhere on the battlefield that is more than 8\" horizontally away from all enemy units".
+        let away = nn(m, "min_enemy_distance")
+            .map(|d| {
+                format!(
+                    "{} more than {} horizontally away from all enemy units",
+                    if nn(m, "distance").is_some() {
+                        ","
+                    } else {
+                        " anywhere on the battlefield"
+                    },
+                    range_phrase(Some(d))
+                )
+            })
+            .unwrap_or_default();
+        return format!("move the {label} marker{unmoved}{dist}{away}{consume}");
     }
     if sv(m, "operation") == Some("remove") {
         return format!("remove that {label} marker from the battlefield");

@@ -11458,7 +11458,7 @@
                 },
                 "min_enemy_distance": {
                   "$ref": "#/$defs/range-ref",
-                  "description": "Place: more than this distance horizontally away from all enemy units."
+                  "description": "Place or relocate: more than this distance horizontally away from all enemy units (a relocate with no distance goes anywhere on the battlefield that is)."
                 },
                 "near": {
                   "type": "array",

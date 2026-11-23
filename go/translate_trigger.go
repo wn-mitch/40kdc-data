@@ -507,6 +507,12 @@ func triggerEventPhrase(t map[string]any) string {
 		}
 		return allocated
 	case "attacks-resolved":
+		// A bound unit's attacks of either kind: "after that unit has finished making its attacks".
+		if sm, ok := asMap(t["subject"]); ok && sm != nil && object == nil && f["kind"] == nil {
+			if _, bound := sm["event_var"].(string); bound {
+				return "after " + who + " has finished making its attacks"
+			}
+		}
 		if isObject(t["subject"]) {
 			if object != nil {
 				return "after " + who + " has shot and targeted " + triggerObjectPhrase(object)

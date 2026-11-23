@@ -93,7 +93,7 @@ function battlefieldMarker(input: Params): Params {
     if (rest.distance !== undefined) throw new TypeError("battlefield-marker: a place with near_inches takes no distance.");
   }
   if (away !== undefined) {
-    if (operation !== "place") throw new TypeError("battlefield-marker.min_enemy_distance limits a place.");
+    if (operation === "remove") throw new TypeError("battlefield-marker.min_enemy_distance limits a place or a relocate.");
     if (!Number.isInteger(away) || (away as number) < 1) throw new TypeError("battlefield-marker.min_enemy_distance is a whole number of inches, at least 1.");
   }
   if (operation === "remove") {
@@ -138,10 +138,10 @@ function engagementExclusive(input: Params): Params {
 export const SET_UP_AND_MARKERS_FAMILIES: readonly FlatFamily[] = [
   {
     id: "battlefield-marker",
-    version: 5,
+    version: 6,
     role: "EFFECT",
     label: "Place or relocate a marker",
-    description: "Place a named marker, relocate it up to a distance, or remove it (the marker the record's condition names is removed from the battlefield); operation (place by default) and distance are optional. not_moved_this_turn: a relocate takes only a marker that has not been moved this turn. A placed marker can go more than min_enemy_distance inches horizontally away from all enemy units, and (wholly, with near_wholly) within near_inches of near_of (this-unit, this-model, or event-subject: the moment's unit, \"that unit\"); a place with near_inches takes no distance. size_mm: a placed marker is circular with that diameter in millimetres. A size the rule states in another sentence (\"Use a circular 32mm diameter marker for Cult Ambush markers\") still belongs on the place leaf.",
+    description: "Place a named marker, relocate it up to a distance, or remove it (the marker the record's condition names is removed from the battlefield); operation (place by default) and distance are optional. not_moved_this_turn: a relocate takes only a marker that has not been moved this turn. A placed or relocated marker can go more than min_enemy_distance inches horizontally away from all enemy units (\"set up that marker anywhere on the battlefield that is more than 8\\\" horizontally away from all enemy units\"), and (wholly, with near_wholly) within near_inches of near_of (this-unit, this-model, or event-subject: the moment's unit, \"that unit\"); a place with near_inches takes no distance. size_mm: a placed marker is circular with that diameter in millimetres. A size the rule states in another sentence (\"Use a circular 32mm diameter marker for Cult Ambush markers\") still belongs on the place leaf.",
     starter: {"subject":"this-unit","label":""},
     parameterSchema: {
       "type": "object",

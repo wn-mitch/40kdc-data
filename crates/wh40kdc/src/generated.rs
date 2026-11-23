@@ -24637,7 +24637,7 @@ for LoadoutConditionParametersUniform {
 ///      "minLength": 1
 ///    },
 ///    "min_enemy_distance": {
-///      "description": "Place: more than this distance horizontally away from all enemy units.",
+///      "description": "Place or relocate: more than this distance horizontally away from all enemy units (a relocate with no distance goes anywhere on the battlefield that is).",
 ///      "$ref": "#/$defs/range-ref"
 ///    },
 ///    "near": {
@@ -24682,7 +24682,7 @@ pub struct MarkerEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub distance: ::std::option::Option<RangeRef>,
     pub label: MarkerEffectModifierLabel,
-    ///Place: more than this distance horizontally away from all enemy units.
+    ///Place or relocate: more than this distance horizontally away from all enemy units (a relocate with no distance goes anywhere on the battlefield that is).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_enemy_distance: ::std::option::Option<RangeRef>,
     ///Place: (wholly) within range of each named place ("within 1\" of that unit"). distance on a place has no stated reference point; near names one.

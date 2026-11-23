@@ -792,7 +792,16 @@ def _marker(m: dict[str, Any], ctx: Ctx) -> str:
         unmoved = ""
         if m.get("not_moved_this_turn") is True:
             unmoved = " that has not been moved this turn"
-        return f"move the {label} marker{unmoved}{dist}{consume}"
+        # "set up that marker anywhere on the battlefield that is more than 8\" horizontally away
+        # from all enemy units".
+        away = ""
+        if m.get("min_enemy_distance") is not None:
+            lead = "," if m.get("distance") is not None else " anywhere on the battlefield"
+            away = (
+                f"{lead} more than {range_phrase(m['min_enemy_distance'])} horizontally away"
+                " from all enemy units"
+            )
+        return f"move the {label} marker{unmoved}{dist}{away}{consume}"
     if m.get("operation") == "remove":
         return f"remove that {label} marker from the battlefield"
     where = f" {dekebab(jstr(m['placement']))}" if m.get("placement") is not None else ""

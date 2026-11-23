@@ -583,6 +583,17 @@ pub(crate) fn event_phrase(t: &P) -> String {
             }
         }
         "attacks-resolved" => {
+            // A bound unit's attacks of either kind: "after that unit has finished making its attacks".
+            if is_object(subject)
+                && nn(t, "object").is_none()
+                && nn(f, "kind").is_none()
+                && subject
+                    .and_then(Value::as_object)
+                    .and_then(|s| s.get("event_var"))
+                    .is_some_and(Value::is_string)
+            {
+                return format!("after {who} has finished making its attacks");
+            }
             if is_object(subject) {
                 if nn(t, "object").is_some() {
                     return format!(
