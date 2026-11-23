@@ -7690,5 +7690,23 @@
       }
     ],
     "behavior": "reactive"
+  },
+  {
+    "caseId": "ignore-modifiers-any-or-all",
+    "effect": {
+      "type": "ignore-modifiers",
+      "target": "this-unit",
+      "modifier": {
+        "what": "characteristics",
+        "stats": [
+          "AP",
+          "D"
+        ],
+        "choice": "any-or-all"
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    }
   }
 ]

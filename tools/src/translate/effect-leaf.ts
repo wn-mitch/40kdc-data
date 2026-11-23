@@ -132,7 +132,10 @@ function ignoreModifiers(m: Record<string, unknown>, subj: string): string {
       : Array.isArray(m.stats) ? `${andList((m.stats as unknown[]).map(statName))} characteristics` : "characteristics";
   // "any roll (excluding modifiers to saving throws)": the rolls whose modifiers still apply.
   const except = m.what === "rolls" && Array.isArray(m.except_rolls) && m.except_rolls.length ? ` (except ${andList((m.except_rolls as unknown[]).map(rollName))} rolls)` : "";
-  if (m.incoming === true) return `${incomingLead(m, subj)}ignore any ${kind}modifiers to that attack's ${things}${except}`;
+  // "you can ignore any or all modifiers to …": the player picks which modifiers to ignore, keeping any it wants.
+  const which = m.choice === "any-or-all" ? "any or all" : "any";
+  if (m.incoming === true) return `${incomingLead(m, subj)}ignore ${which} ${kind}modifiers to that attack's ${things}${except}`;
+  if (m.choice === "any-or-all") return `you can ignore any or all ${kind}modifiers to ${ofOrPossessive(subj, things)}${except}${weaponRollScope(m)}`;
   return `${subj} ${v(subj, "ignores")} any ${kind}modifiers to ${pronoun(subj)} ${things}${except}${weaponRollScope(m)}`;
 }
 

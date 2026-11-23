@@ -288,8 +288,17 @@ def _ignore_modifiers(m: dict[str, Any], subj: str) -> str:
         if m.get("what") == "rolls" and isinstance(except_rolls, list) and except_rolls
         else ""
     )
+    # "you can ignore any or all modifiers to …": the player picks which modifiers to ignore.
+    any_or_all = m.get("choice") == "any-or-all"
+    which = "any or all" if any_or_all else "any"
     if m.get("incoming") is True:
-        return f"{_incoming_lead(m, subj)}ignore any {kind}modifiers to that attack's {things}{exc}"
+        lead = _incoming_lead(m, subj)
+        return f"{lead}ignore {which} {kind}modifiers to that attack's {things}{exc}"
+    if any_or_all:
+        return (
+            f"you can ignore any or all {kind}modifiers to {of_or_possessive(subj, things)}"
+            f"{exc}{weapon_roll_scope(m)}"
+        )
     return (
         f"{subj} {v(subj, 'ignores')} any {kind}modifiers to {pronoun(subj)} "
         f"{things}{exc}{weapon_roll_scope(m)}"

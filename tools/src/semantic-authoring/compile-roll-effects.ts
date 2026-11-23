@@ -70,6 +70,7 @@ export function rollEffect(leaf: CompileLeaf, context: EffectContext, target: Ta
       }
       const only = leaf.parameters.only === undefined ? undefined : closed(leaf, "only");
       if (only) modifier.only = only;
+      if (leaf.parameters.choice !== undefined) modifier.choice = closed(leaf, "choice");
       Object.assign(modifier, weaponScope(leaf));
       // "modifiers to … that attack": the attack's maker ignores them.
       return { type: "ignore-modifiers", target: leaf.parameters.subject === "attack" ? attackOwner(context) : target(leaf.parameters.subject), modifier };

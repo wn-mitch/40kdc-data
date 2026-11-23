@@ -8667,6 +8667,10 @@
                     "improving"
                   ]
                 },
+                "choice": {
+                  "description": "The player picks which of these modifiers to ignore and can keep any of them (\"can ignore any or all modifiers to …\"). Absent: every named modifier is ignored.",
+                  "const": "any-or-all"
+                },
                 "incoming": {
                   "const": true
                 },

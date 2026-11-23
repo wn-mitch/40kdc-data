@@ -4318,6 +4318,10 @@ export interface IgnoreModifiersEffect {
      */
     except_rolls?: [RollKind, ...RollKind[]];
     only?: "worsening" | "improving";
+    /**
+     * The player picks which of these modifiers to ignore and can keep any of them ("can ignore any or all modifiers to …"). Absent: every named modifier is ignored.
+     */
+    choice?: "any-or-all";
     incoming?: true;
     weapons?: WeaponScope;
   };

@@ -239,8 +239,17 @@ func ignoreModifiersLeaf(m map[string]any, subj string) string {
 		}
 		except = " (except " + andList(names) + " rolls)"
 	}
+	// "you can ignore any or all modifiers to …": the player picks which modifiers to ignore.
+	anyOrAll := m["choice"] == "any-or-all"
+	which := "any"
+	if anyOrAll {
+		which = "any or all"
+	}
 	if m["incoming"] == true {
-		return incomingLead(m, subj) + "ignore any " + kind + "modifiers to that attack's " + things + except
+		return incomingLead(m, subj) + "ignore " + which + " " + kind + "modifiers to that attack's " + things + except
+	}
+	if anyOrAll {
+		return "you can ignore any or all " + kind + "modifiers to " + ofOrPossessive(subj, things) + except + weaponRollScope(m)
 	}
 	return subj + " " + ev(subj, "ignores") + " any " + kind + "modifiers to " + pronoun(subj) + " " + things + except + weaponRollScope(m)
 }

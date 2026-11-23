@@ -54917,6 +54917,27 @@
     }
   },
   {
+    "caseId": "ignore-modifiers-any-or-all",
+    "effect": {
+      "type": "ignore-modifiers",
+      "target": "this-unit",
+      "modifier": {
+        "what": "characteristics",
+        "stats": [
+          "AP",
+          "D"
+        ],
+        "choice": "any-or-all"
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "expected": {
+      "text": "Until the end of the phase, you can ignore any or all modifiers to this unit's Armour Penetration and Damage characteristics."
+    }
+  },
+  {
     "caseId": "model-refs/event-subject-model-matches",
     "effect": {
       "type": "conditional",

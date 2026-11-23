@@ -336,10 +336,20 @@ fn ignore_modifiers(m: &P, subj: &str) -> String {
         }
         _ => String::new(),
     };
+    // "you can ignore any or all modifiers to …": the player picks which modifiers to ignore.
+    let any_or_all = sv(m, "choice") == Some("any-or-all");
+    let which = if any_or_all { "any or all" } else { "any" };
     if is_true(m, "incoming") {
         return format!(
-            "{}ignore any {kind}modifiers to that attack's {things}{except}",
+            "{}ignore {which} {kind}modifiers to that attack's {things}{except}",
             incoming_lead(m, subj)
+        );
+    }
+    if any_or_all {
+        return format!(
+            "you can ignore any or all {kind}modifiers to {}{except}{}",
+            of_or_possessive(subj, &things),
+            weapon_roll_scope(m)
         );
     }
     format!(

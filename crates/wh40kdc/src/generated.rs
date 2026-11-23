@@ -22852,6 +22852,10 @@ impl<'de> ::serde::Deserialize<'de> for HullShapeName {
 ///    "what"
 ///  ],
 ///  "properties": {
+///    "choice": {
+///      "description": "The player picks which of these modifiers to ignore and can keep any of them (\"can ignore any or all modifiers to …\"). Absent: every named modifier is ignored.",
+///      "const": "any-or-all"
+///    },
 ///    "except_rolls": {
 ///      "description": "Rolls left out of an \"any roll\" list (rolls [\"all\"]): their modifiers still apply (\"excluding modifiers to saving throws\").",
 ///      "type": "array",
@@ -22903,6 +22907,9 @@ impl<'de> ::serde::Deserialize<'de> for HullShapeName {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct IgnoreModifiersEffectModifier {
+    ///The player picks which of these modifiers to ignore and can keep any of them ("can ignore any or all modifiers to …"). Absent: every named modifier is ignored.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub choice: ::std::option::Option<::serde_json::Value>,
     ///Rolls left out of an "any roll" list (rolls ["all"]): their modifiers still apply ("excluding modifiers to saving throws").
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub except_rolls: ::std::option::Option<Vec<RollKind>>,

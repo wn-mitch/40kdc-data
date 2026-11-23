@@ -154,19 +154,22 @@ function normalizeReroll(input: Input): Input {
 // ignore-modifiers
 
 const IGNORE_ONLY = ["worsening", "improving"] as const;
+/** any-or-all: the player picks which of the modifiers to ignore ("can ignore any or all modifiers"). */
+const IGNORE_CHOICES = ["any-or-all"] as const;
 const EXCEPTABLE_ROLLS = ROLL_KINDS.filter((roll) => roll !== "all" && roll !== "any");
 
 function normalizeIgnoreModifiers(input: Input): Input {
   const { except_rolls: except, ...rest } = input;
   const subject = enumValue(rest.subject, ["this-unit", "this-model", ANTECEDENT, "attack"], "ignore-modifiers.subject");
   const kinds = enumSet(rest.what, ["characteristics", "rolls"], "ignore-modifiers.what");
-  const allowed = ["subject", "what", "only", "weapon_type", ...(kinds.includes("characteristics") ? ["stats"] : []), ...(kinds.includes("rolls") ? ["rolls"] : [])];
-  allowedKeys(rest, allowed, "ignore-modifiers parameters must be subject, what, only, weapon_type, except_rolls, and stats/rolls only for the kinds what names.");
+  const allowed = ["subject", "what", "only", "weapon_type", "choice", ...(kinds.includes("characteristics") ? ["stats"] : []), ...(kinds.includes("rolls") ? ["rolls"] : [])];
+  allowedKeys(rest, allowed, "ignore-modifiers parameters must be subject, what, only, weapon_type, choice, except_rolls, and stats/rolls only for the kinds what names.");
   const result: Input = { subject, what: kinds };
   if (rest.stats !== undefined) result.stats = enumSet(rest.stats, STATS, "ignore-modifiers.stats");
   if (kinds.includes("rolls")) result.rolls = enumSet(rest.rolls, ROLL_KINDS, "ignore-modifiers.rolls");
   if (rest.only !== undefined) result.only = enumValue(rest.only, IGNORE_ONLY, "ignore-modifiers.only");
   if (rest.weapon_type !== undefined) result.weapon_type = enumValue(rest.weapon_type, WEAPON_TYPES, "ignore-modifiers.weapon_type");
+  if (rest.choice !== undefined) result.choice = enumValue(rest.choice, IGNORE_CHOICES, "ignore-modifiers.choice");
   if (except === undefined) return result;
   const rolls = Array.isArray(result.rolls) ? result.rolls : [];
   if (!rolls.some((roll) => roll === "all" || roll === "any")) throw new TypeError("ignore-modifiers.except_rolls leaves rolls out of an \"any roll\" list: rolls must be all or any.");
@@ -299,10 +302,10 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "ignore-modifiers",
-    version: 5,
+    version: 6,
     role: "EFFECT",
     label: "Ignore modifiers",
-    description: "Ignores modifiers to named characteristics and/or rolls (all of them, or only worsening or improving ones). `what` lists the kinds one list names (\"BS, Hit rolls and Wound rolls\" is both); with no stats named, every characteristic is covered. except_rolls: the rolls an \"any roll\" list leaves out, whose modifiers still apply (\"any roll or test made for it (excluding modifiers to saving throws)\"); only with rolls all or any. The subject can be antecedent: the units a unit-filter right before it matches, or a selected unit (\"Friendly X units can ignore modifiers to …\"). Subject attack: the modifiers to \"that attack\", ignored by whoever makes it (the attacker).",
+    description: "Ignores modifiers to named characteristics and/or rolls (all of them, or only worsening or improving ones). `what` lists the kinds one list names (\"BS, Hit rolls and Wound rolls\" is both); with no stats named, every characteristic is covered. except_rolls: the rolls an \"any roll\" list leaves out, whose modifiers still apply (\"any roll or test made for it (excluding modifiers to saving throws)\"); only with rolls all or any. The subject can be antecedent: the units a unit-filter right before it matches, or a selected unit (\"Friendly X units can ignore modifiers to …\"). Subject attack: the modifiers to \"that attack\", ignored by whoever makes it (the attacker). choice any-or-all: the player picks which of those modifiers to ignore and can keep the rest (\"can ignore any or all modifiers to …\").",
     starter: { subject: "this-unit", what: [] },
     parameterSchema: {
       type: "object",
@@ -315,6 +318,7 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
         only: { enum: IGNORE_ONLY },
         weapon_type: { enum: WEAPON_TYPES },
         except_rolls: { type: "array", items: { enum: EXCEPTABLE_ROLLS }, minItems: 1, uniqueItems: true, "x-optional": true },
+        choice: { enum: IGNORE_CHOICES, "x-optional": true },
       },
       additionalProperties: false,
     },

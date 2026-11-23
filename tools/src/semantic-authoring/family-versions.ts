@@ -145,8 +145,9 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // Every earlier leaf keeps its meaning.
   { family: "stratagem-target", from: 6, to: 7, map: (parameters) => ({ ...parameters }) },
   { family: "counts-as", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
-  // ignore-modifiers v5: subject attack.
-  { family: "ignore-modifiers", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
+  // ignore-modifiers v5: subject attack; v6: choice any-or-all.
+  { family: "ignore-modifiers", from: 4, to: 6, map: (parameters) => ({ ...parameters }) },
+  { family: "ignore-modifiers", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
   // designated-filter v5: by {bound: name}.
   { family: "designated-filter", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
   // triggering-target v7: bind_as.

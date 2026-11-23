@@ -2120,6 +2120,7 @@ class Modifier1(TypedDict):
     rolls: NotRequired[list[RollSelector]]
     except_rolls: NotRequired[list[RollKind]]
     only: NotRequired[Literal["worsening", "improving"]]
+    choice: NotRequired[Literal["any-or-all"]]
     incoming: NotRequired[Literal[True]]
     weapons: NotRequired[WeaponScope]
 
