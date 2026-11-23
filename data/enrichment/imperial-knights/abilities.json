@@ -5434,19 +5434,78 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "imperial-knights",
     "detachment_id": "spearhead-at-arms",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "exemplars-wisdom-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": {
+            "stratagem_target": "bondsmen"
+          },
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        },
+        "attacker": {
+          "stratagem_target": "bondsmen"
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "IMPERIAL KNIGHTS",
+          "TITANIC"
+        ],
+        "level": "model"
+      }
+    },
+    "source_digest": "144831699005a2b02bbdd0fb71ba381db99214a8777738ba416a5137467d7f98"
   },
   {
     "ability_id": "fables-of-nightmare-spearhead-at-arms-imperial-knights",
@@ -7317,19 +7376,103 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "imperial-knights",
     "detachment_id": "spearhead-at-arms",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "virtue-of-courage-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": {
+                    "stratagem_target": "lead"
+                  },
+                  "filter": {
+                    "all_of": [
+                      "ARMIGER"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": {
+                  "stratagem_target": "lead"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": {
+                "stratagem_target": "bondsmen"
+              },
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          ]
+        },
+        "attacker": [
+          {
+            "stratagem_target": "lead"
+          },
+          {
+            "stratagem_target": "bondsmen"
+          }
+        ],
+        "attacker_filter": {
+          "all_of": [
+            "ARMIGER"
+          ],
+          "level": "model"
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "source_digest": "b629fa6e8fab0bf9817a0df109d86b5db83f974c83d70e1ea4025f463f6a0584"
   },
   {
     "ability_id": "vow-of-retribution-valourstrike-lance-imperial-knights",

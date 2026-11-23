@@ -16893,19 +16893,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "spirit-conclave",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "counts-as",
+      "target": {
+        "stratagem_target": "wraith"
+      },
+      "modifier": {
+        "within": {
+          "inches": 12
+        },
+        "of": {
+          "stratagem_target": "psyker"
+        },
+        "for_abilities": [
+          "psychic-guidance-aeldari",
+          "spirit-guides"
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "738e9ab7a9d3341ae6b16eeddf473495fe18eed9454411b98381b84f24045b69"
   },
   {
     "ability_id": "soulsight-armoured-warhost-aeldari",

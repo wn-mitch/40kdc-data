@@ -183,11 +183,61 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Imperial Knights",
+          "Titanic"
+        ],
+        "name": "lead",
+        "count": "one",
+        "selects": "model",
+        "bound_to": "triggering-unit"
+      },
+      {
+        "required_keywords": [
+          "Armiger"
+        ],
+        "name": "bondsmen",
+        "count": "one-or-more",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "bondsman-affected",
+                  "designated_by": {
+                    "stratagem_target": "lead"
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "lead"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "exemplars-wisdom-spearhead-at-arms-imperial-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1946,11 +1996,83 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "name": "lead",
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "operator": "or",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "ARMIGER"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "all_of": [
+                    "IMPERIAL KNIGHTS",
+                    "TITANIC"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "required_keywords": [
+          "Armiger"
+        ],
+        "name": "bondsmen",
+        "count": "one-or-more",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "subject": "this-unit",
+                "filter": {
+                  "designated": "bondsman-affected",
+                  "designated_by": {
+                    "stratagem_target": "lead"
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "lead"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "virtue-of-courage-spearhead-at-arms-imperial-knights",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {

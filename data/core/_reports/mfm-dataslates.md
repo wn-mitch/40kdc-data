@@ -16,8 +16,8 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 181 | 276 |
-| stratagems | 0 | 0 | 1155 | 158 |
-| abilities | 0 | 0 | 4004 | 555 |
+| stratagems | 0 | 0 | 1163 | 150 |
+| abilities | 0 | 0 | 4013 | 546 |
 | phase-mappings | 0 | 0 | 1229 | 352 |
 | resource-pools | 0 | 0 | 0 | 7 |
 
@@ -31,9 +31,9 @@ dump confirmation.
 | adeptus-custodes | 0 | 0 | 153 | 5 |
 | adeptus-mechanicus | 0 | 0 | 150 | 17 |
 | adeptus-titanicus | 0 | 0 | 8 | 2 |
-| aeldari | 0 | 0 | 261 | 39 |
+| aeldari | 0 | 0 | 262 | 38 |
 | agents-of-the-imperium | 0 | 0 | 108 | 32 |
-| astra-militarum | 0 | 0 | 218 | 33 |
+| astra-militarum | 0 | 0 | 219 | 32 |
 | black-templars | 0 | 0 | 61 | 2 |
 | blood-angels | 0 | 0 | 53 | 8 |
 | chaos-daemons | 0 | 0 | 175 | 20 |
@@ -42,12 +42,12 @@ dump confirmation.
 | dark-angels | 0 | 0 | 69 | 8 |
 | death-guard | 0 | 0 | 140 | 20 |
 | deathwatch | 0 | 0 | 34 | 2 |
-| drukhari | 0 | 0 | 139 | 25 |
+| drukhari | 0 | 0 | 141 | 23 |
 | emperors-children | 0 | 0 | 128 | 20 |
-| genestealer-cults | 0 | 0 | 123 | 25 |
-| grey-knights | 0 | 0 | 129 | 5 |
+| genestealer-cults | 0 | 0 | 124 | 24 |
+| grey-knights | 0 | 0 | 130 | 4 |
 | imperial-fists | 0 | 0 | 9 | 2 |
-| imperial-knights | 0 | 0 | 97 | 21 |
+| imperial-knights | 0 | 0 | 99 | 19 |
 | iron-hands | 0 | 0 | 11 | 0 |
 | leagues-of-votann | 0 | 0 | 141 | 14 |
 | necrons | 0 | 0 | 206 | 24 |
@@ -58,7 +58,7 @@ dump confirmation.
 | tau-empire | 0 | 0 | 142 | 24 |
 | thousand-sons | 0 | 0 | 129 | 29 |
 | titanicus-traitoris | 0 | 0 | 8 | 2 |
-| tyranids | 0 | 0 | 167 | 19 |
+| tyranids | 0 | 0 | 168 | 18 |
 | ultramarines | 0 | 0 | 11 | 0 |
 | white-scars | 0 | 0 | 11 | 0 |
 | world-eaters | 0 | 0 | 123 | 24 |
@@ -91,17 +91,17 @@ dump confirmation.
 | adeptus-titanicus | stub | 2 |
 | adeptus-titanicus | verified | 8 |
 | aeldari | digest-differs | 9 |
-| aeldari | stub | 12 |
+| aeldari | stub | 11 |
 | aeldari | unpublished | 18 |
-| aeldari | verified | 261 |
+| aeldari | verified | 262 |
 | agents-of-the-imperium | digest-differs | 10 |
 | agents-of-the-imperium | stub | 11 |
 | agents-of-the-imperium | unpublished | 11 |
 | agents-of-the-imperium | verified | 108 |
 | astra-militarum | digest-differs | 11 |
 | astra-militarum | stub | 3 |
-| astra-militarum | unpublished | 19 |
-| astra-militarum | verified | 218 |
+| astra-militarum | unpublished | 18 |
+| astra-militarum | verified | 219 |
 | black-templars | digest-differs | 1 |
 | black-templars | stub | 1 |
 | black-templars | verified | 61 |
@@ -131,26 +131,26 @@ dump confirmation.
 | deathwatch | no-source | 1 |
 | deathwatch | verified | 34 |
 | drukhari | digest-differs | 7 |
-| drukhari | stub | 12 |
+| drukhari | stub | 10 |
 | drukhari | unpublished | 6 |
-| drukhari | verified | 139 |
+| drukhari | verified | 141 |
 | emperors-children | digest-differs | 4 |
 | emperors-children | unpublished | 16 |
 | emperors-children | verified | 128 |
 | genestealer-cults | digest-differs | 3 |
-| genestealer-cults | stub | 12 |
+| genestealer-cults | stub | 11 |
 | genestealer-cults | unpublished | 10 |
-| genestealer-cults | verified | 123 |
+| genestealer-cults | verified | 124 |
 | grey-knights | digest-differs | 1 |
-| grey-knights | stub | 2 |
+| grey-knights | stub | 1 |
 | grey-knights | unpublished | 2 |
-| grey-knights | verified | 129 |
+| grey-knights | verified | 130 |
 | imperial-fists | digest-differs | 2 |
 | imperial-fists | verified | 9 |
 | imperial-knights | digest-differs | 6 |
-| imperial-knights | stub | 8 |
+| imperial-knights | stub | 6 |
 | imperial-knights | unpublished | 7 |
-| imperial-knights | verified | 97 |
+| imperial-knights | verified | 99 |
 | iron-hands | verified | 11 |
 | leagues-of-votann | digest-differs | 3 |
 | leagues-of-votann | stub | 4 |
@@ -180,9 +180,9 @@ dump confirmation.
 | titanicus-traitoris | stub | 2 |
 | titanicus-traitoris | verified | 8 |
 | tyranids | digest-differs | 4 |
-| tyranids | stub | 6 |
+| tyranids | stub | 5 |
 | tyranids | unpublished | 9 |
-| tyranids | verified | 167 |
+| tyranids | verified | 168 |
 | ultramarines | verified | 11 |
 | white-scars | verified | 11 |
 | world-eaters | digest-differs | 5 |

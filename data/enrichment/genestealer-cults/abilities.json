@@ -9095,19 +9095,117 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "genestealer-cults",
     "detachment_id": "xenocreed-congregation",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "vengeance-for-the-martyr-target",
+      "select": {
+        "kind": "unit",
+        "from": "event-subject"
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "event-object",
+                      "filter": {
+                        "any_of": [
+                          "ACOLYTE ICONWARD",
+                          "MAGUS",
+                          "PRIMUS"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "ACOLYTE HYBRIDS",
+                    "HYBRID METAMORPHS",
+                    "NEOPHYTE HYBRIDS"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-object",
+                  "filter": {
+                    "any_of": [
+                      "ACOLYTE ICONWARD",
+                      "MAGUS",
+                      "PRIMUS"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "ACOLYTE HYBRIDS",
+                    "HYBRID METAMORPHS",
+                    "NEOPHYTE HYBRIDS"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "result_scope": "any-result"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "duration": "battle"
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "battle"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "CHARACTER",
+          "GENESTEALER CULTS"
+        ],
+        "level": "model"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "781364ea93bc559f484822eebafbd24d55fdd3d677338c02d66675143718eca7"
   },
   {
     "ability_id": "xenos-resilience-genestealer-cults",

@@ -8386,19 +8386,74 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "drukhari",
     "detachment_id": "realspace-raiders",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": [
+        {
+          "event": "move-started",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          },
+          "subject": {
+            "stratagem_target": "first"
+          }
+        },
+        {
+          "event": "move-started",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          },
+          "subject": {
+            "stratagem_target": "second"
+          }
+        }
+      ],
+      "effect": {
+        "type": "move-modifier",
+        "target": "event-subject",
+        "modifier": {
+          "advance": "fixed-6",
+          "not_cumulative": {
+            "ability": "matchless-swiftness-drukhari"
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "c71802acb39f8950265198d06665bc035443edeb6a6bb6309a716cf3b8f03cc1"
   },
   {
     "ability_id": "enemies-without-number-kabalite-cartel-drukhari",
@@ -10255,19 +10310,51 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "drukhari",
     "detachment_id": "skysplinter-assault",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "subject": "event-object",
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "normal"
+            ]
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "turn"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DRUKHARI",
+          "INFANTRY"
+        ]
+      }
+    },
+    "source_digest": "da471e170e888d7350158d84db9023fe2e86d1b843215b79fefd55e91e54e024"
   },
   {
     "ability_id": "power-from-pain-drukhari",
