@@ -16,8 +16,8 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 181 | 276 |
-| stratagems | 0 | 0 | 1163 | 150 |
-| abilities | 0 | 0 | 4013 | 546 |
+| stratagems | 0 | 0 | 1165 | 148 |
+| abilities | 0 | 0 | 4015 | 544 |
 | phase-mappings | 0 | 0 | 1229 | 352 |
 | resource-pools | 0 | 0 | 0 | 7 |
 
@@ -31,7 +31,7 @@ dump confirmation.
 | adeptus-custodes | 0 | 0 | 153 | 5 |
 | adeptus-mechanicus | 0 | 0 | 150 | 17 |
 | adeptus-titanicus | 0 | 0 | 8 | 2 |
-| aeldari | 0 | 0 | 262 | 38 |
+| aeldari | 0 | 0 | 263 | 37 |
 | agents-of-the-imperium | 0 | 0 | 108 | 32 |
 | astra-militarum | 0 | 0 | 219 | 32 |
 | black-templars | 0 | 0 | 61 | 2 |
@@ -44,7 +44,7 @@ dump confirmation.
 | deathwatch | 0 | 0 | 34 | 2 |
 | drukhari | 0 | 0 | 141 | 23 |
 | emperors-children | 0 | 0 | 128 | 20 |
-| genestealer-cults | 0 | 0 | 124 | 24 |
+| genestealer-cults | 0 | 0 | 125 | 23 |
 | grey-knights | 0 | 0 | 130 | 4 |
 | imperial-fists | 0 | 0 | 9 | 2 |
 | imperial-knights | 0 | 0 | 99 | 19 |
@@ -91,9 +91,9 @@ dump confirmation.
 | adeptus-titanicus | stub | 2 |
 | adeptus-titanicus | verified | 8 |
 | aeldari | digest-differs | 9 |
-| aeldari | stub | 11 |
+| aeldari | stub | 10 |
 | aeldari | unpublished | 18 |
-| aeldari | verified | 262 |
+| aeldari | verified | 263 |
 | agents-of-the-imperium | digest-differs | 10 |
 | agents-of-the-imperium | stub | 11 |
 | agents-of-the-imperium | unpublished | 11 |
@@ -138,9 +138,9 @@ dump confirmation.
 | emperors-children | unpublished | 16 |
 | emperors-children | verified | 128 |
 | genestealer-cults | digest-differs | 3 |
-| genestealer-cults | stub | 11 |
+| genestealer-cults | stub | 10 |
 | genestealer-cults | unpublished | 10 |
-| genestealer-cults | verified | 124 |
+| genestealer-cults | verified | 125 |
 | grey-knights | digest-differs | 1 |
 | grey-knights | stub | 1 |
 | grey-knights | unpublished | 2 |

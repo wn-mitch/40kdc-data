@@ -5622,19 +5622,100 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "genestealer-cults",
     "detachment_id": "final-day",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "designate-target",
+          "designation": "avenge-the-star-children-target",
+          "select": {
+            "kind": "unit",
+            "from": "event-subject"
+          },
+          "applies": {
+            "to": "attackers-of-target",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "GENESTEALER CULTS"
+                    ],
+                    "level": "model"
+                  },
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "add",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "GENESTEALER CULTS"
+                    ],
+                    "level": "model"
+                  },
+                  "modifier": {
+                    "roll": "wound",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          },
+          "duration": "battle"
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "battle"
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "attacks-resolved",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "kind": "shoot"
+        }
+      },
+      {
+        "event": "attacks-resolved",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "kind": "fight"
+        }
+      }
+    ],
+    "source_digest": "0ef434d8165b545073e55c8f34e0daffa280e033c65cbbd3d3b82de38254e95b"
   },
   {
     "ability_id": "bio-horror-revelation-biosanctic-broodsurge-genestealer-cults",

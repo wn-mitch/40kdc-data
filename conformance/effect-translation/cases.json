@@ -8776,7 +8776,99 @@
     }
   },
   {
-    "caseId": "banishing-wave-psychic-brotherhood-strike-grey-knights#162",
+    "caseId": "avenge-the-star-children-final-day-genestealer-cults#162",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "designate-target",
+          "designation": "avenge-the-star-children-target",
+          "select": {
+            "kind": "unit",
+            "from": "event-subject"
+          },
+          "applies": {
+            "to": "attackers-of-target",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "GENESTEALER CULTS"
+                    ],
+                    "level": "model"
+                  },
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "add",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "GENESTEALER CULTS"
+                    ],
+                    "level": "model"
+                  },
+                  "modifier": {
+                    "roll": "wound",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          },
+          "duration": "battle"
+        }
+      ]
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "trigger": [
+      {
+        "event": "attacks-resolved",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "kind": "shoot"
+        }
+      },
+      {
+        "event": "attacks-resolved",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "kind": "fight"
+        }
+      }
+    ],
+    "expected": {
+      "text": "After an enemy unit shoots or after an enemy unit fights, for the rest of the battle:\n  - This unit is eligible to be targeted with Stratagems even if it has just been destroyed.\n  - Select the triggering unit (your Avenge the Star Children Target). For the rest of the battle, each time a friendly unit makes an attack against it:\n    - Add 1 to friendly GENESTEALER CULTS models' Hit rolls.\n    - Add 1 to friendly GENESTEALER CULTS models' Wound rolls."
+    }
+  },
+  {
+    "caseId": "banishing-wave-psychic-brotherhood-strike-grey-knights#163",
     "effect": {
       "type": "for-each-unit",
       "selector": {
@@ -8854,7 +8946,7 @@
     }
   },
   {
-    "caseId": "banner-of-macragge-adeptus-astartes#163",
+    "caseId": "banner-of-macragge-adeptus-astartes#164",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -8958,7 +9050,7 @@
     }
   },
   {
-    "caseId": "bastion-of-faith-champions-of-faith-adepta-sororitas#164",
+    "caseId": "bastion-of-faith-champions-of-faith-adepta-sororitas#165",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9077,7 +9169,7 @@
     }
   },
   {
-    "caseId": "battle-focus-aeldari#165",
+    "caseId": "battle-focus-aeldari#166",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9442,7 +9534,7 @@
     }
   },
   {
-    "caseId": "battle-focus-kygharils-protectors-aeldari#166",
+    "caseId": "battle-focus-kygharils-protectors-aeldari#167",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9807,7 +9899,7 @@
     }
   },
   {
-    "caseId": "battle-lust-berzerker-warband-world-eaters#167",
+    "caseId": "battle-lust-berzerker-warband-world-eaters#168",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -9855,7 +9947,7 @@
     }
   },
   {
-    "caseId": "battle-protocols-adeptus-mechanicus#168",
+    "caseId": "battle-protocols-adeptus-mechanicus#169",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -9974,7 +10066,7 @@
     }
   },
   {
-    "caseId": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights#169",
+    "caseId": "bearer-of-the-iron-chalice-valourstrike-lance-imperial-knights#170",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -10094,7 +10186,7 @@
     }
   },
   {
-    "caseId": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes#170",
+    "caseId": "bearers-of-his-light-emissaries-imperatus-adeptus-custodes#171",
     "effect": {
       "type": "ignore-modifiers",
       "target": "this-unit",
@@ -10129,7 +10221,7 @@
     }
   },
   {
-    "caseId": "beastscent-orks#171",
+    "caseId": "beastscent-orks#172",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10254,7 +10346,7 @@
     }
   },
   {
-    "caseId": "benedictions-of-the-omnissiah-adeptus-mechanicus#172",
+    "caseId": "benedictions-of-the-omnissiah-adeptus-mechanicus#173",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10411,7 +10503,7 @@
     }
   },
   {
-    "caseId": "berzerker-charge-world-eaters#173",
+    "caseId": "berzerker-charge-world-eaters#174",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10495,7 +10587,7 @@
     }
   },
   {
-    "caseId": "berzerker-frenzy-world-eaters#174",
+    "caseId": "berzerker-frenzy-world-eaters#175",
     "effect": {
       "type": "dice-gated",
       "dice": "D6",
@@ -10541,7 +10633,7 @@
     }
   },
   {
-    "caseId": "bestial-aspect-infernal-lance-chaos-knights#175",
+    "caseId": "bestial-aspect-infernal-lance-chaos-knights#176",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10617,7 +10709,7 @@
     }
   },
   {
-    "caseId": "bilious-blessing-lords-of-the-warp-chaos-daemons#176",
+    "caseId": "bilious-blessing-lords-of-the-warp-chaos-daemons#177",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -10697,7 +10789,7 @@
     }
   },
   {
-    "caseId": "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus#177",
+    "caseId": "binharic-offence-skitarii-hunter-cohort-adeptus-mechanicus#178",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -10765,7 +10857,7 @@
     }
   },
   {
-    "caseId": "bio-reserves-tyranids#178",
+    "caseId": "bio-reserves-tyranids#179",
     "effect": {
       "type": "choice",
       "options": [
@@ -10886,7 +10978,7 @@
     }
   },
   {
-    "caseId": "bio-stimulus-tyranids#179",
+    "caseId": "bio-stimulus-tyranids#180",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -10981,7 +11073,7 @@
     }
   },
   {
-    "caseId": "biomechanical-mutation-warpforged-cabal-thousand-sons#180",
+    "caseId": "biomechanical-mutation-warpforged-cabal-thousand-sons#181",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11054,7 +11146,7 @@
     }
   },
   {
-    "caseId": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines#181",
+    "caseId": "biomechanoid-regeneration-cult-of-the-arkifane-chaos-space-marines#182",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11120,7 +11212,7 @@
     }
   },
   {
-    "caseId": "blackstar-cluster-launcher-agents-of-the-imperium#182",
+    "caseId": "blackstar-cluster-launcher-agents-of-the-imperium#183",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11188,7 +11280,7 @@
     }
   },
   {
-    "caseId": "blade-of-saint-ellynor-army-of-faith-adepta-sororitas#183",
+    "caseId": "blade-of-saint-ellynor-army-of-faith-adepta-sororitas#184",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11290,7 +11382,7 @@
     }
   },
   {
-    "caseId": "blessed-believers-adepta-sororitas#184",
+    "caseId": "blessed-believers-adepta-sororitas#185",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11391,7 +11483,7 @@
     }
   },
   {
-    "caseId": "blessed-icon-of-disease-death-guard#185",
+    "caseId": "blessed-icon-of-disease-death-guard#186",
     "effect": {
       "type": "select-units",
       "selector": {
@@ -11460,7 +11552,7 @@
     }
   },
   {
-    "caseId": "blessed-transmutations-warpmeld-pact-thousand-sons#186",
+    "caseId": "blessed-transmutations-warpmeld-pact-thousand-sons#187",
     "effect": {
       "type": "return-models",
       "target": {
@@ -11489,7 +11581,7 @@
     }
   },
   {
-    "caseId": "blessing-of-burning-blood-khorne-daemonkin-world-eaters#187",
+    "caseId": "blessing-of-burning-blood-khorne-daemonkin-world-eaters#188",
     "effect": {
       "type": "sequence",
       "steps": [
@@ -11542,7 +11634,7 @@
     }
   },
   {
-    "caseId": "blessings-of-khorne-frenzied-reavers-world-eaters#188",
+    "caseId": "blessings-of-khorne-frenzied-reavers-world-eaters#189",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -11775,7 +11867,7 @@
     }
   },
   {
-    "caseId": "blessings-of-khorne-world-eaters#189",
+    "caseId": "blessings-of-khorne-world-eaters#190",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12014,7 +12106,7 @@
     }
   },
   {
-    "caseId": "blessings-of-the-omnissiah-adeptus-astartes#190",
+    "caseId": "blessings-of-the-omnissiah-adeptus-astartes#191",
     "effect": {
       "type": "conditional",
       "condition": {
@@ -12104,182 +12196,6 @@
     ],
     "expected": {
       "text": "When this unit starts a move, you can use this ability or when this unit ends a move, you can use this ability, during your Movement phase, until the start of your next Movement phase:\n  - Select one friendly ADEPTUS ASTARTES VEHICLE model that is within 3\" of this model:\n    - That model regains up to D3 lost wounds.\n    - That model ignores any modifiers to its Hit and Wound rolls."
-    }
-  },
-  {
-    "caseId": "blight-bombardment-death-guard#191",
-    "effect": {
-      "type": "designate-target",
-      "designation": "blight-bombardment-target",
-      "select": {
-        "kind": "unit",
-        "selector": {
-          "filter": {
-            "owner": "enemy"
-          },
-          "count": {
-            "min": 1,
-            "max": 1
-          },
-          "eligibility": {
-            "operator": "and",
-            "operands": [
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "within": {
-                      "of": "this-model",
-                      "range": {
-                        "inches": 30
-                      }
-                    }
-                  }
-                }
-              },
-              {
-                "type": "matches",
-                "parameters": {
-                  "subject": "selected-unit",
-                  "filter": {
-                    "visible": {
-                      "to": "this-model"
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        }
-      },
-      "applies": {
-        "to": "attackers-of-target",
-        "effect": {
-          "type": "sequence",
-          "steps": [
-            {
-              "type": "conditional",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "attack-is",
-                    "parameters": {
-                      "attack_type": "ranged"
-                    }
-                  },
-                  {
-                    "operator": "not",
-                    "operands": [
-                      {
-                        "operator": "and",
-                        "operands": [
-                          {
-                            "type": "attack-is",
-                            "parameters": {
-                              "attack_type": "ranged"
-                            }
-                          },
-                          {
-                            "type": "attack-is",
-                            "parameters": {
-                              "weapons": {
-                                "keyword": {
-                                  "keyword_id": "blast"
-                                }
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              "effect": {
-                "type": "re-roll",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "DEATH GUARD"
-                  ],
-                  "level": "model"
-                },
-                "modifier": {
-                  "roll": "hit",
-                  "subset": "ones"
-                }
-              }
-            },
-            {
-              "type": "conditional",
-              "condition": {
-                "operator": "and",
-                "operands": [
-                  {
-                    "type": "attack-is",
-                    "parameters": {
-                      "attack_type": "ranged"
-                    }
-                  },
-                  {
-                    "type": "attack-is",
-                    "parameters": {
-                      "weapons": {
-                        "keyword": {
-                          "keyword_id": "blast"
-                        }
-                      }
-                    }
-                  }
-                ]
-              },
-              "effect": {
-                "type": "re-roll",
-                "target": {
-                  "owner": "friendly",
-                  "all_of": [
-                    "DEATH GUARD"
-                  ],
-                  "level": "model"
-                },
-                "modifier": {
-                  "roll": "hit",
-                  "result_scope": "any-result"
-                }
-              }
-            }
-          ]
-        }
-      },
-      "duration": "phase"
-    },
-    "scope": {
-      "duration": "phase"
-    },
-    "trigger": {
-      "event": "phase-started",
-      "condition": {
-        "operator": "and",
-        "operands": [
-          {
-            "type": "phase-is",
-            "parameters": {
-              "phase": "shooting"
-            }
-          },
-          {
-            "type": "player-turn-is",
-            "parameters": {
-              "turn": "your-turn"
-            }
-          }
-        ]
-      }
-    },
-    "expected": {
-      "text": "At the start of your Shooting phase:\n  - Select one enemy unit that is within 30\" of this model and visible to this model (your Blight Bombardment Target). Until the end of the phase, each time a friendly unit makes an attack against it:\n    - While making ranged attacks, unless for ranged attacks and for attacks made with [BLAST] weapons, you can re-roll Hit rolls of 1 for attacks made by friendly DEATH GUARD models.\n    - While making ranged attacks, while making attacks made with [BLAST] weapons, you can re-roll Hit rolls for attacks made by friendly DEATH GUARD models."
     }
   },
   {

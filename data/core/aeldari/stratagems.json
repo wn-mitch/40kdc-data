@@ -2723,11 +2723,102 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": [
+      {
+        "required_keywords": [
+          "Aeldari",
+          "Psyker"
+        ],
+        "name": "psyker",
+        "count": "one",
+        "side": "your-army",
+        "selects": "model",
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "filter": {
+              "owner": "friendly"
+            }
+          }
+        }
+      },
+      {
+        "required_keywords": [
+          "Wraith Construct"
+        ],
+        "name": "wraith",
+        "count": "one",
+        "side": "your-army",
+        "selects": "unit",
+        "eligibility": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "matches",
+              "parameters": {
+                "filter": {
+                  "within": {
+                    "of": {
+                      "stratagem_target": "psyker"
+                    },
+                    "range": {
+                      "inches": 12
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "operator": "or",
+                  "operands": [
+                    {
+                      "type": "happened",
+                      "parameters": {
+                        "event": "selected",
+                        "filter": {
+                          "to": "fight"
+                        },
+                        "window": "phase"
+                      }
+                    },
+                    {
+                      "type": "happened",
+                      "parameters": {
+                        "event": "selected",
+                        "filter": {
+                          "to": "shoot"
+                        },
+                        "window": "phase"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "same-unit",
+                  "parameters": {
+                    "as": {
+                      "stratagem_target": "psyker"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
     "ability_id": "seers-eye-spirit-conclave-aeldari",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {

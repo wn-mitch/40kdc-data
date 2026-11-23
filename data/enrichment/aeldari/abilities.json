@@ -16321,19 +16321,67 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "aeldari",
     "detachment_id": "spirit-conclave",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "seers-eye-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "visible": {
+                  "to": {
+                    "stratagem_target": "psyker"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "ignore-modifiers",
+          "target": {
+            "stratagem_target": "wraith"
+          },
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "AP",
+              "D"
+            ],
+            "choice": "any-or-all"
+          }
+        },
+        "attacker": {
+          "stratagem_target": "wraith"
+        }
+      },
+      "duration": "phase"
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "80840f791fd111b05cc9cd51f61f814f86f875c324bad172d51cd308fe3b6f88"
   },
   {
     "ability_id": "seers-hand-kygharils-protectors-aeldari",
