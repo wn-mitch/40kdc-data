@@ -570,7 +570,8 @@ Commander in Enforcer Battlesuit (90 points)
 
   expect(roster.faction_id).toBe("tau-empire");
   expect(roster.detachments.map((detachment) => detachment.ref.id)).toEqual(["montka"]);
-  expect(roster.force_disposition).toBe("priority-assets");
+  // Mont'ka grants two force dispositions, so the import cannot pick one.
+  expect(roster.force_disposition).toBeNull();
   expect(roster.units[0]?.is_warlord).toBe(true);
 });
 

@@ -26,7 +26,7 @@
     }
   ],
   "battle_size": "strike-force",
-  "force_disposition": "priority-assets",
+  "force_disposition": null,
   "points": {
     "declared_limit": 2000,
     "detachment_cap": 3,

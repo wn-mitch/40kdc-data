@@ -170,7 +170,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "take-and-hold"
+      "take-and-hold",
+      "reconnaissance"
     ],
     "detachment_rule_ids": [
       "heroes-of-legend-imperial-knights",
@@ -275,7 +276,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "priority-assets"
+      "priority-assets",
+      "purge-the-foe"
     ],
     "external_refs": [
       {

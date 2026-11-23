@@ -2,7 +2,6 @@
 + LIST NAME: Star Bullets Test
 + FACTION KEYWORD: Adeptus Astartes
 + DETACHMENT: Gladius Task Force
-+ FORCE DISPOSITION: Priority Assets
 + TOTAL ARMY POINTS: 85pts
 + POINTS LIMIT: 85pts
 +

@@ -98,7 +98,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "take-and-hold"
+      "take-and-hold",
+      "reconnaissance"
     ],
     "external_refs": [
       {
@@ -135,7 +136,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "priority-assets"
+      "priority-assets",
+      "disruption"
     ],
     "external_refs": [
       {
@@ -212,7 +214,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "priority-assets"
+      "priority-assets",
+      "take-and-hold"
     ],
     "external_refs": [
       {

@@ -2,7 +2,6 @@
 + LIST NAME: Imported roster
 + FACTION KEYWORD: Aeldari
 + DETACHMENT: Aspect Host
-+ FORCE DISPOSITION: Priority Assets
 + TOTAL ARMY POINTS: 105pts
 + POINTS LIMIT: 105pts
 +

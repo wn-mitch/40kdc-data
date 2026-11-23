@@ -2,7 +2,6 @@
 + LIST NAME: Attached Groups Test
 + FACTION KEYWORD: Adeptus Astartes
 + DETACHMENT: Gladius Task Force
-+ FORCE DISPOSITION: Priority Assets
 + TOTAL ARMY POINTS: 395pts
 + POINTS LIMIT: 395pts
 +
