@@ -1514,7 +1514,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "designated condition",
-          "description": "[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.",
+          "description": "[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it. A unit subject is tested here only with `at` (its designation as it was then); otherwise it is a `matches` filter.",
           "required": [
             "type",
             "parameters"
@@ -1555,6 +1555,10 @@
                 "by": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
                   "description": "The unit that applied the designation (their Spotted unit; one marked by a MARKERLIGHT Observer)."
+                },
+                "at": {
+                  "$ref": "../../defs/common.schema.json#/$defs/snapshot",
+                  "description": "Read the designation as it was then (\"if that enemy unit was unravelling at the start of the phase\"), not at the moment of the check."
                 }
               },
               "required": [
@@ -1577,6 +1581,11 @@
                 {
                   "required": [
                     "count"
+                  ]
+                },
+                {
+                  "required": [
+                    "at"
                   ]
                 }
               ]

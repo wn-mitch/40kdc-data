@@ -788,6 +788,18 @@ func describePredicate(c map[string]any, negated bool) string {
 			}
 			by = " by " + by
 		}
+		// "If that enemy unit was unravelling at the start of the phase": the designation as it was then.
+		if p["at"] == "phase-start" || p["at"] == "turn-start" {
+			was := "was"
+			if negated {
+				was = "was not"
+			}
+			then := "turn"
+			if p["at"] == "phase-start" {
+				then = "phase"
+			}
+			return subjectOf(p, "this unit") + " " + was + " " + designationPhrase(cstr(p["tag"]), false) + by + " at the start of the " + then
+		}
 		return subjectOf(p, "this unit") + " is " + neg + designationPhrase(cstr(p["tag"]), false) + by
 	case "roll-total":
 		// "the Psychic test result is 10+": the total of a roll an enclosing step bound.

@@ -207,7 +207,7 @@ describe("roll-kind refusals for a trigger", () => {
   const text = "After making a roll, change the result to an unmodified 6.";
   const effect: [string, string, Record<string, unknown>] = ["change the result to an unmodified 6", "roll-auto-result", { roll: "hit", outcome: "counts-as-6" }];
 
-  for (const roll of ["any", "all", "attacks", "surge", "resource-die"]) {
+  for (const roll of ["any", "all", "surge", "resource-die"]) {
     it(`refuses an after-roll moment that names roll ${roll}`, () => {
       const error = refusal(placed(text, [["After making a roll", "event", { kind: "after-roll", roll }], effect]), text);
       expect(error).toMatch(/cannot name/u);
@@ -218,6 +218,11 @@ describe("roll-kind refusals for a trigger", () => {
       expect(error).toMatch(/cannot name/u);
     });
   }
+
+  it("compiles a moment before the roll that determines the number of attacks", () => {
+    const mechanics = compiled(placed(text, [["After making a roll", "event", { kind: "before-roll", roll: "attacks" }], effect]), text);
+    expect(mechanics.trigger).toMatchObject({ event: "before-roll", filter: { roll: "attacks" } });
+  });
 
   it("still compiles a single trigger roll kind", () => {
     const mechanics = compiled(placed(text, [["After making a roll", "event", { kind: "after-roll", roll: "hit" }], effect]), text);

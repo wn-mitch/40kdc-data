@@ -120,13 +120,19 @@ function normalizeDesignatedFilter(input: Params): Params {
   const family = "designated-filter";
   const negated = negation(input, family);
   const subject = subjectOf(input, SUBJECTS_OR_ANTECEDENT);
-  exactKeys(input, [...present(input, ["subject"]), "tag", ...present(input, ["by", "count_min", "count_max", "negated"])], family);
+  exactKeys(input, [...present(input, ["subject"]), "tag", ...present(input, ["by", "count_min", "count_max", "negated", "at"])], family);
   const tag = nonEmptyString(input.tag, "designated-filter.tag");
   if (!DESIGNATION_IDS.has(tag) && !UNIT_KEYWORD.test(tag)) throw new TypeError("designated-filter.tag must be a registered designation id.");
   const result: Params = { ...subject, tag };
   if (input.by !== undefined) result.by = enumValue(input.by, [...SUBJECT_REF, FOLLOWING_FILTER], "designated-filter.by");
   if (input.count_min !== undefined) result.count_min = boundedInteger(input.count_min, 0, 20, "designated-filter.count_min");
   if (input.count_max !== undefined) result.count_max = boundedInteger(input.count_max, 0, 20, "designated-filter.count_max");
+  // "If that enemy unit was unravelling at the start of the phase": the designation as it was then.
+  if (input.at !== undefined) {
+    if (input.subject === undefined) throw new TypeError("designated-filter.at reads one unit's designation as it was; give its subject.");
+    if (input.count_min !== undefined || input.count_max !== undefined) throw new TypeError("designated-filter.at reads one unit's designation, not a count.");
+    result.at = enumValue(input.at, ["phase-start"], "designated-filter.at");
+  }
   return { ...result, ...negated };
 }
 
@@ -394,10 +400,10 @@ export const ATTACK_AND_ROUND_PREDICATES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "designated-filter",
-    version: 3,
+    version: 4,
     role: "CONDITION",
     label: "Unit carries a designation",
-    description: "Requires a unit to carry a named designation (any registered tag, not only the five original marks), optionally applied by a named unit, or counts how many carry it. by following-filter: the designation was applied by a unit the unit-filter right after the leaf names (\"was marked by an Observer unit that has the Markerlight keyword\"). subject can be antecedent: the unit an earlier leaf of the record introduced (\"that enemy unit\", \"it\"), bound when the record compiles.",
+    description: "Requires a unit to carry a named designation (any registered tag, not only the five original marks), optionally applied by a named unit, or counts how many carry it. by following-filter: the designation was applied by a unit the unit-filter right after the leaf names (\"was marked by an Observer unit that has the Markerlight keyword\"). subject can be antecedent: the unit an earlier leaf of the record introduced (\"that enemy unit\", \"it\"), bound when the record compiles. at phase-start reads the subject's designation as it was at the start of the phase (\"if that enemy unit was unravelling at the start of the phase\").",
     starter: { tag: "" },
     parameterSchema: {
       type: "object", required: ["tag"], additionalProperties: false,
@@ -408,6 +414,7 @@ export const ATTACK_AND_ROUND_PREDICATES_FAMILIES: readonly FlatFamily[] = [
         by: { enum: ["this-unit", "this-model", "model-in-this-unit", "attacker", "defender", "event-subject", "event-object", "selected-unit", "recipient", "following-filter"] },
         count_min: { type: "integer", minimum: 0, maximum: 20 },
         count_max: { type: "integer", minimum: 0, maximum: 20 },
+        at: { enum: ["phase-start"], "x-optional": true },
       },
     },
     normalize: normalizeDesignatedFilter,

@@ -316,6 +316,16 @@ pub(crate) fn signed(operation: Option<&Value>, value: Option<&Value>) -> String
 
 /// Dice comparison → "a 4+", "a 3 or less", etc. (for dice-gated thresholds).
 pub(crate) fn format_comparison(comp: &str, threshold: Option<&Value>) -> String {
+    // A threshold read from the battle round: "a result greater than the current battle round number".
+    if threshold
+        .and_then(Value::as_object)
+        .and_then(|t| t.get("battle_round_plus"))
+        .and_then(Value::as_f64)
+        == Some(1.0)
+        && (comp == "gte" || comp.is_empty())
+    {
+        return "a result greater than the current battle round number".to_string();
+    }
     let th = jstr(threshold);
     match comp {
         "lte" => format!("a {th} or less"),

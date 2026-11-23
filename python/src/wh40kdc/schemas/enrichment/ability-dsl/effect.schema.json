@@ -6252,9 +6252,12 @@
                 "toughness",
                 "save"
               ]
+            },
+            {
+              "$ref": "../../defs/common.schema.json#/$defs/battle-round-threshold"
             }
           ],
-          "description": "Fixed threshold or model characteristic to compare against"
+          "description": "Fixed threshold, model characteristic, or a value read from the battle round to compare against"
         },
         "comparison": {
           "$ref": "../../defs/common.schema.json#/$defs/comparison",
@@ -8857,7 +8860,14 @@
           "$ref": "../../defs/common.schema.json#/$defs/comparison"
         },
         "threshold": {
-          "$ref": "../../defs/common.schema.json#/$defs/quantity"
+          "oneOf": [
+            {
+              "$ref": "../../defs/common.schema.json#/$defs/quantity"
+            },
+            {
+              "$ref": "../../defs/common.schema.json#/$defs/battle-round-threshold"
+            }
+          ]
         },
         "modifiers": {
           "type": "array",

@@ -30,8 +30,8 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // event v41 adds passed and a Dark Pact or contract bind_as on a used moment; unit-activity v26 passed on
   // made-dark-pact-this-phase; roll-total v2 roll_var dark-pact-test; ability-modifier v9 aspect mortal-wounds.
   // Every earlier leaf keeps its meaning.
-  { family: "event", from: 40, to: 42, map: (parameters) => ({ ...parameters }) },
-  { family: "unit-activity", from: 25, to: 26, map: (parameters) => ({ ...parameters }) },
+  { family: "event", from: 40, to: 43, map: (parameters) => ({ ...parameters }) },
+  { family: "unit-activity", from: 25, to: 27, map: (parameters) => ({ ...parameters }) },
   { family: "roll-total", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
   { family: "ability-modifier", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
   // issue-orders-open v3 adds as_if_phase, issuer_keywords and same_order; order-rule v3 the
@@ -97,7 +97,7 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // Miracle dice + Pain: wounds-remaining v2 takes a spent amount ({spent}); every earlier leaf keeps its meaning.
   { family: "wounds-remaining", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
   // event v42: a resource-spent moment takes object_owner ("Empower units from your army").
-  { family: "event", from: 41, to: 42, map: (parameters) => ({ ...parameters }) },
+  { family: "event", from: 41, to: 43, map: (parameters) => ({ ...parameters }) },
   // objective-criterion v3: occupied-by ("that has a friendly unit with this ability within range of it").
   { family: "objective-criterion", from: 2, to: 3, map: (parameters) => ({ ...parameters }) },
   // resource-die v2: value roll-result ("with a value equal to that result").
@@ -128,6 +128,15 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "usage-limit", from: 6, to: 7, map: (parameters) => ({ ...parameters }) },
   // counts-as v4: model_count_below for a weapon ability's purposes (Blast).
   { family: "counts-as", from: 3, to: 4, map: (parameters) => ({ ...parameters }) },
+  // Long-tail batch B: event v43 (an any-of destroyed-unit filter, the last model, a state change's cause and side,
+  // a CP gained from an ability, before-removal, before-deadly-demise and before-marker-removal timings);
+  // unit-activity v27 destroyed-by-event-subject-this-phase; designated-filter v4 at phase-start; unit-keyword v9
+  // subject event-object; roll-result v4 from {battle_round_plus: 1}. Every earlier leaf keeps its meaning.
+  { family: "event", from: 42, to: 43, map: (parameters) => ({ ...parameters }) },
+  { family: "unit-activity", from: 26, to: 27, map: (parameters) => ({ ...parameters }) },
+  { family: "designated-filter", from: 3, to: 4, map: (parameters) => ({ ...parameters }) },
+  { family: "unit-keyword", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
+  { family: "roll-result", from: 3, to: 4, map: (parameters) => ({ ...parameters }) },
 ];
 
 export type FamilyVersionReport = {

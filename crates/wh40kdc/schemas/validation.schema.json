@@ -1481,16 +1481,28 @@
         },
         "by": {
           "$ref": "#/$defs/unit-ref",
-          "description": "Who caused it (the unit or model whose attack destroyed the object)."
+          "description": "Who caused it (the unit or model whose attack destroyed the object; on state-changed, the unit whose attacks changed the subject's strength)."
         },
         "timing": {
           "enum": [
             "before-removal",
             "after-attacks",
             "after-set-up",
-            "after-emergency-disembark"
+            "after-emergency-disembark",
+            "before-deadly-demise",
+            "before-marker-removal"
           ],
-          "description": "destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up)."
+          "description": "destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal)."
+        },
+        "last": {
+          "const": true,
+          "description": "model-destroyed: the destroyed model is the last model in its unit that matches the object filter (\"the last Guardian Defender model in this unit\")."
+        },
+        "via": {
+          "enum": [
+            "ability"
+          ],
+          "description": "resource-gained: what the gain was the result of (\"gains a CP as the result of an ability\")."
         },
         "phase": {
           "$ref": "#/$defs/phase",
@@ -2058,6 +2070,20 @@
         "const": "any"
       },
       "description": "A definite player: friendly or enemy (an owner other than any)."
+    },
+    "battle-round-threshold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "battle_round_plus"
+      ],
+      "properties": {
+        "battle_round_plus": {
+          "const": 1,
+          "description": "The current battle round number plus this: 1 is a result greater than the current battle round number."
+        }
+      },
+      "description": "A roll threshold read from the battle round when the roll is made (\"if the result is greater than the current battle round number\")."
     },
     "game-version-ref": {
       "title": "Game Version Reference",
@@ -8108,7 +8134,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "designated condition",
-          "description": "[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.",
+          "description": "[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it. A unit subject is tested here only with `at` (its designation as it was then); otherwise it is a `matches` filter.",
           "required": [
             "type",
             "parameters"
@@ -8149,6 +8175,10 @@
                 "by": {
                   "$ref": "#/$defs/unit-ref",
                   "description": "The unit that applied the designation (their Spotted unit; one marked by a MARKERLIGHT Observer)."
+                },
+                "at": {
+                  "$ref": "#/$defs/snapshot",
+                  "description": "Read the designation as it was then (\"if that enemy unit was unravelling at the start of the phase\"), not at the moment of the check."
                 }
               },
               "required": [
@@ -8171,6 +8201,11 @@
                 {
                   "required": [
                     "count"
+                  ]
+                },
+                {
+                  "required": [
+                    "at"
                   ]
                 }
               ]
@@ -15020,9 +15055,12 @@
                 "toughness",
                 "save"
               ]
+            },
+            {
+              "$ref": "#/$defs/battle-round-threshold"
             }
           ],
-          "description": "Fixed threshold or model characteristic to compare against"
+          "description": "Fixed threshold, model characteristic, or a value read from the battle round to compare against"
         },
         "comparison": {
           "$ref": "#/$defs/comparison",
@@ -17625,7 +17663,14 @@
           "$ref": "#/$defs/comparison"
         },
         "threshold": {
-          "$ref": "#/$defs/quantity"
+          "oneOf": [
+            {
+              "$ref": "#/$defs/quantity"
+            },
+            {
+              "$ref": "#/$defs/battle-round-threshold"
+            }
+          ]
         },
         "modifiers": {
           "type": "array",

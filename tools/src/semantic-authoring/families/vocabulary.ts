@@ -119,7 +119,7 @@ export const ROLL_KINDS = [
  */
 export const TRIGGER_ROLL_KINDS = [
   "hit", "wound", "save", "damage", "charge", "advance", "battle-shock", "leadership", "hazard",
-  "psychic", "desperate-escape", "blessings-of-khorne", "deadly-demise", "channelling",
+  "psychic", "desperate-escape", "blessings-of-khorne", "deadly-demise", "channelling", "attacks",
 ] as const;
 
 /** A psychic ability's cost in its heading (compile-psychic-cost.ts). */

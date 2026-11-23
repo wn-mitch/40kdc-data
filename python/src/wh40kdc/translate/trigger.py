@@ -40,7 +40,7 @@ from wh40kdc.translate.condition_refs import (
     used_ability_phrase,
     with_article,
 )
-from wh40kdc.translate.effect_words import resource_noun
+from wh40kdc.translate.effect_words import resource_noun, weapon_noun
 
 AbilityTrigger = dict[str, Any]
 
@@ -181,6 +181,21 @@ def _actor_keywords(ref: Any) -> str:
     return ""
 
 
+def _last_model_phrase(ref: Any) -> str:
+    """The model a last-model destruction names: "GUARDIAN DEFENDER model in this unit"."""
+    o = ref if isinstance(ref, dict) else {}
+    if isinstance(o.get("all_of"), list):
+        keywords = " ".join(o["all_of"])
+    elif isinstance(o.get("any_of"), list):
+        keywords = _or_list(o["any_of"])
+    else:
+        keywords = ""
+    model = f"{keywords} model" if keywords else "model"
+    if o.get("member_of") == "this-unit":
+        return f"{model} in this unit"
+    return f"{model} in {_object_phrase(ref)}"
+
+
 def _object_phrase(ref: Any) -> str:
     """An object phrase: "this unit", "an enemy unit"."""
     if ref is None or ref == "this-unit":
@@ -211,6 +226,7 @@ _ROLL_NOUN: dict[str, str] = {
     "manoeuvre": "Agile Manoeuvre roll",
     "channelling": "Channel the Warp roll",
     "deadly-demise": "Deadly Demise roll",
+    "attacks": "roll to determine the number of attacks",
 }
 _TEST_ROLLS = {"battle-shock", "leadership", "desperate-escape"}
 
@@ -462,6 +478,9 @@ def _event_phrase(t: AbilityTrigger) -> str:
             return f"{_event_phrase(rest)}, {after}"
         if f.get("first") is True:
             return "the first time a model in this unit is destroyed"
+        # "When the last Guardian Defender model in this unit is destroyed".
+        if f.get("last") is True:
+            return f"when the last {_last_model_phrase(obj)} is destroyed"
         # A subject names who destroyed the model: "each time this unit destroys an enemy
         # CHARACTER model".
         if t.get("subject") is not None:
@@ -524,6 +543,15 @@ def _event_phrase(t: AbilityTrigger) -> str:
             return "each time you complete a Contract"
         return f"each time {who} {_USED.get(_str(kind), f'uses {dekebab(_str(kind))}')}"
     if event == "state-changed":
+        # "Caused an enemy unit that was not Below Half-strength to become Below Half-strength".
+        if f.get("by") is not None and f.get("strength") is not None:
+            by = "this unit" if f["by"] == "this-unit" else unit_ref_phrase(f["by"])
+            change = (
+                "become Below Half-strength"
+                if f["strength"] == "below-half"
+                else "fall below its Starting Strength"
+            )
+            return f"when {by} causes {who} to {change}"
         if f.get("strength") == "below-half":
             return f"when {who} becomes Below Half-strength"
         if f.get("strength") == "below-starting":
@@ -545,10 +573,11 @@ def _event_phrase(t: AbilityTrigger) -> str:
         pool = f.get("pool")
         if pool == "miracle-dice":
             return "when a Miracle die is generated"
-        if pool == "cp":
+        if pool in ("cp", "command-point"):
             subject = t.get("subject")
             enemy = isinstance(subject, dict) and subject.get("owner") == "enemy"
-            return f"each time {'your opponent gains' if enemy else 'you gain'} a CP"
+            via = " as the result of an ability" if f.get("via") == "ability" else ""
+            return f"each time {'your opponent gains' if enemy else 'you gain'} a CP{via}"
         return f"each time {dekebab(_str(pool))} is gained"
     if event == "resource-spent":
         pool = f.get("pool")
@@ -758,7 +787,15 @@ def describe_trigger(t: AbilityTrigger) -> str:
     s += _actor_keywords(subject)
     f = _obj(t.get("filter"))
     s += _destroy_attack_phrase(t, f)
-    if f.get("by") is not None:
+    # A moment's weapons ("a roll to determine the number of attacks made with a flamer"); a
+    # destruction names its own.
+    if (
+        f.get("weapons") is not None
+        and event not in ("destroyed", "model-destroyed")
+        and f.get("by") is None
+    ):
+        s += f" with {weapon_noun({'weapons': f['weapons']})}"
+    if f.get("by") is not None and not (event == "state-changed" and f.get("strength") is not None):
         source = "this model" if f["by"] == "this-model" else "this unit"
         atype = (
             f"{_str(f['attack_type'])} "
@@ -777,6 +814,12 @@ def describe_trigger(t: AbilityTrigger) -> str:
     # A destruction resolved once its attacker is done.
     if f.get("timing") == "after-attacks":
         s += ", after the attacking unit has resolved its attacks"
+    # "Just after … is destroyed, before making its Deadly Demise roll".
+    if f.get("timing") == "before-deadly-demise":
+        s += ", before its Deadly Demise roll is made"
+    # "Ends a move within 8 inches of your markers, before removing those markers".
+    if f.get("timing") == "before-marker-removal":
+        s += ", before those markers are removed"
     prox = t.get("proximity")
     if isinstance(prox, dict) and prox.get("range") is not None:
         of = (

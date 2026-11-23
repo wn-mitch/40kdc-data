@@ -322,16 +322,21 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "roll-result",
-    version: 3,
+    version: 4,
     role: "CONDITION",
     label: "On a roll of",
-    description: "A minimum result (\"on a 2+\") names only from; the dice leaf supplies the upper bound. An explicit band (\"on a 2-5\") or exact result (\"on a 6\") also names to. unmodified true: the band reads the die before any modifier (\"on an unmodified 6\"); after a moment that is a roll, with no dice of the ability's own between, it narrows that moment to those faces.",
+    description: "A minimum result (\"on a 2+\") names only from; the dice leaf supplies the upper bound. An explicit band (\"on a 2-5\") or exact result (\"on a 6\") also names to. from {battle_round_plus: 1}, alone: the result must be greater than the current battle round number (\"if the result is greater than the current battle round number\"). unmodified true: the band reads the die before any modifier (\"on an unmodified 6\"); after a moment that is a roll, with no dice of the ability's own between, it narrows that moment to those faces.",
     starter: { from: null },
     parameterSchema: {
       type: "object",
       required: ["from"],
       properties: {
-        from: { type: "integer", minimum: 1, maximum: 12 },
+        from: {
+          anyOf: [
+            { type: "integer", minimum: 1, maximum: 12 },
+            { type: "object", required: ["battle_round_plus"], properties: { battle_round_plus: { const: 1 } }, additionalProperties: false },
+          ],
+        },
         to: { type: "integer", minimum: 1, maximum: 12 },
         unmodified: { const: true, "x-optional": true },
       },
@@ -342,6 +347,13 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
       if ("unmodified" in input && unmodified !== true) throw new TypeError("roll-result.unmodified is true or absent.");
       const hasUpperBound = "to" in rest;
       exactKeys(rest, hasUpperBound ? ["from", "to"] : ["from"], "roll-result");
+      // "Greater than the current battle round number": the round plus one, read when the roll is made.
+      if (typeof rest.from === "object" && rest.from !== null) {
+        exactKeys(rest.from as Record<string, unknown>, ["battle_round_plus"], "roll-result.from");
+        if ((rest.from as Record<string, unknown>).battle_round_plus !== 1) throw new TypeError("roll-result.from battle_round_plus is 1: greater than the current battle round number.");
+        if (hasUpperBound || "unmodified" in input) throw new TypeError("roll-result.from battle_round_plus stands alone, with no to or unmodified.");
+        return { from: { battle_round_plus: 1 } };
+      }
       const from = boundedInteger(rest.from, 1, 12, "roll-result.from");
       return {
         from,

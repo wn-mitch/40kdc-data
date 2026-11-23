@@ -64,8 +64,20 @@ export function wrapDelayed(leaf: CompileLeaf, node: Node): Node {
   return held === undefined ? node : { type: "ability-part", trigger: held, duration: "phase", effect: node };
 }
 
-/** "After the attacking unit has resolved its attacks": an effect moment that names the unit the leading moment's attacks came from. */
-const ATTACKING_UNIT = /^after\b.*\bthe attacking unit\b/iu;
+/**
+ * "Just after an enemy unit destroys a … unit from your army": a destruction whose destroyer is an enemy unit, named
+ * outright (by enemy) or by the enemy unit-filter right before it (by antecedent).
+ */
+function enemyDestroys(list: readonly CompileLeaf[], index: number): boolean {
+  const leaf = list[index]!;
+  if (leaf.family_id !== "event" || (leaf.parameters.kind !== "unit-destroyed" && leaf.parameters.kind !== "model-destroyed")) return false;
+  if (leaf.parameters.by === "enemy") return true;
+  const before = list[index - 1];
+  return leaf.parameters.by === "antecedent" && before?.family_id === "unit-filter" && before.fragment === leaf.fragment && before.parameters.side === "enemy";
+}
+
+/** "After the attacking unit (or that enemy unit) has resolved its attacks": an effect moment that names the unit the leading moment's attacks came from. */
+const ATTACKING_UNIT = /^after\b.*\b(?:the attacking unit|that enemy unit)\b/iu;
 
 /**
  * "Just after an enemy unit has selected its targets … after the attacking unit has resolved its
@@ -75,12 +87,13 @@ const ATTACKING_UNIT = /^after\b.*\bthe attacking unit\b/iu;
  * that binding. Only with exactly one leading enemy-acting moment; any other moment is left as it is.
  */
 function bindAttackingUnit(list: readonly CompileLeaf[], sourceText: string, firstEffect: number): CompileLeaf[] {
-  const named = list.flatMap((leaf, index) => index > firstEffect && leaf.fragment === "EFFECT" && leaf.family_id === "event"
+  // The moment may open the effect ("After that enemy unit has finished making its attacks, your unit can shoot") or follow it.
+  const named = list.flatMap((leaf, index) => leaf.fragment === "EFFECT" && leaf.family_id === "event"
     && leaf.parameters.kind === "attacks-resolved" && leaf.parameters.owner === "enemy" && leaf.parameters.subject === undefined
     && leaf.parameters.subject_filter === undefined && leaf.end_byte !== undefined
     && ATTACKING_UNIT.test(exactSpan(sourceText, leaf.start_byte, leaf.end_byte)) ? [index] : []);
   if (named.length === 0) return [...list];
-  const leading = list.slice(0, firstEffect).flatMap((leaf, index) => enemyActing(leaf) ? [index] : []);
+  const leading = list.slice(0, firstEffect).flatMap((leaf, index) => enemyActing(leaf) || enemyDestroys(list, index) ? [index] : []);
   if (leading.length !== 1) return [...list];
   const binds = list[leading[0]!]!.parameters.binds_event_variable;
   if (binds !== undefined && binds !== DELAYED_SUBJECT) return [...list];

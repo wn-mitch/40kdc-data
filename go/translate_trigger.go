@@ -202,7 +202,7 @@ var rollNouns = map[string]string{
 	"advance": "Advance roll", "battle-shock": "Battle-shock test", "leadership": "Leadership test", "hazard": "Hazard roll",
 	"psychic": "Psychic test", "desperate-escape": "Desperate Escape test", "dark-pact": "Dark Pact Leadership test",
 	"blessings-of-khorne": "Blessings of Khorne roll", "manoeuvre": "Agile Manoeuvre roll", "channelling": "Channel the Warp roll",
-	"deadly-demise": "Deadly Demise roll",
+	"deadly-demise": "Deadly Demise roll", "attacks": "roll to determine the number of attacks",
 }
 
 var testRolls = map[string]bool{"battle-shock": true, "leadership": true, "desperate-escape": true}
@@ -570,6 +570,10 @@ func triggerEventPhrase(t map[string]any) string {
 		if f["first"] == true {
 			return "the first time a model in this unit is destroyed"
 		}
+		// "When the last Guardian Defender model in this unit is destroyed".
+		if f["last"] == true {
+			return "when the last " + lastModelPhrase(object) + " is destroyed"
+		}
 		// A subject names who destroyed the model: "each time this unit destroys an enemy CHARACTER model".
 		if t["subject"] != nil {
 			if object == "this-model" {
@@ -651,6 +655,18 @@ func triggerEventPhrase(t map[string]any) string {
 		}
 		return "each time " + who + " " + verb
 	case "state-changed":
+		// "Caused an enemy unit that was not Below Half-strength to become Below Half-strength".
+		if f["by"] != nil && f["strength"] != nil {
+			by := "this unit"
+			if f["by"] != "this-unit" {
+				by = unitRefPhrase(f["by"], "the unit")
+			}
+			change := "fall below its Starting Strength"
+			if f["strength"] == "below-half" {
+				change = "become Below Half-strength"
+			}
+			return "when " + by + " causes " + who + " to " + change
+		}
 		switch f["strength"] {
 		case "below-half":
 			return "when " + who + " becomes Below Half-strength"
@@ -676,11 +692,15 @@ func triggerEventPhrase(t map[string]any) string {
 		if f["pool"] == "miracle-dice" {
 			return "when a Miracle die is generated"
 		}
-		if f["pool"] == "cp" {
-			if sm, ok := asMap(t["subject"]); ok && sm != nil && sm["owner"] == "enemy" {
-				return "each time your opponent gains a CP"
+		if f["pool"] == "cp" || f["pool"] == "command-point" {
+			via := ""
+			if f["via"] == "ability" {
+				via = " as the result of an ability"
 			}
-			return "each time you gain a CP"
+			if sm, ok := asMap(t["subject"]); ok && sm != nil && sm["owner"] == "enemy" {
+				return "each time your opponent gains a CP" + via
+			}
+			return "each time you gain a CP" + via
 		}
 		return "each time " + dekebab(cstr(f["pool"])) + " is gained"
 	case "resource-spent":
@@ -972,7 +992,11 @@ func describeReactiveTrigger(t map[string]any) string {
 	s += actorKeywords(subject)
 	f := mapOr(t["filter"])
 	s += destroyAttackPhrase(event, f)
-	if f["by"] != nil {
+	// A moment's weapons ("a roll to determine the number of attacks made with a flamer"); a destruction names its own.
+	if weapons := mapOr(f["weapons"]); len(weapons) > 0 && event != "destroyed" && event != "model-destroyed" && f["by"] == nil {
+		s += " with " + weaponNoun(map[string]any{"weapons": weapons})
+	}
+	if f["by"] != nil && !(event == "state-changed" && f["strength"] != nil) {
 		source := "this unit"
 		if f["by"] == "this-model" {
 			source = "this model"
@@ -998,6 +1022,14 @@ func describeReactiveTrigger(t map[string]any) string {
 	// A destruction resolved once its attacker is done.
 	if f["timing"] == "after-attacks" {
 		s += ", after the attacking unit has resolved its attacks"
+	}
+	// "Just after … is destroyed, before making its Deadly Demise roll".
+	if f["timing"] == "before-deadly-demise" {
+		s += ", before its Deadly Demise roll is made"
+	}
+	// "Ends a move within 8 inches of your markers, before removing those markers".
+	if f["timing"] == "before-marker-removal" {
+		s += ", before those markers are removed"
 	}
 	if prox, ok := asMap(t["proximity"]); ok && prox != nil && prox["range"] != nil {
 		of := "this unit"
@@ -1039,4 +1071,23 @@ func selectedMode(f map[string]any) string {
 		}
 	}
 	return " using the " + mode + " rules"
+}
+
+// lastModelPhrase is the model a last-model destruction names: "GUARDIAN DEFENDER model in this unit".
+func lastModelPhrase(ref any) string {
+	o := mapOr(ref)
+	keywords := ""
+	if all, ok := o["all_of"].([]any); ok {
+		keywords = strings.Join(cstrList(all), " ")
+	} else if anyOf, ok := o["any_of"].([]any); ok {
+		keywords = orList(cstrList(anyOf))
+	}
+	model := "model"
+	if keywords != "" {
+		model = keywords + " model"
+	}
+	if o["member_of"] == "this-unit" {
+		return model + " in this unit"
+	}
+	return model + " in " + triggerObjectPhrase(ref)
 }

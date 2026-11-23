@@ -424,6 +424,10 @@ class UnitCharacteristic(TypedDict):
 DefiniteOwner: TypeAlias = Owner
 
 
+class BattleRoundThreshold(TypedDict):
+    battle_round_plus: Literal[1]
+
+
 class GameVersionRef(TypedDict):
     edition: Edition
     dataslate: DataslateVersion
@@ -1238,60 +1242,60 @@ class SimpleCondition28(TypedDict):
     parameters: Parameters34
 
 
-class Parameters44(TypedDict):
+class Parameters45(TypedDict):
     size: Literal["incursion", "strike-force", "onslaught"]
 
 
 class SimpleCondition36(TypedDict):
     type: Literal["battle-size"]
-    parameters: Parameters44
+    parameters: Parameters45
 
 
-class Parameters45(TypedDict):
+class Parameters46(TypedDict):
     modes: list[GameModeId]
 
 
 class SimpleCondition37(TypedDict):
     type: Literal["game-mode"]
-    parameters: Parameters45
+    parameters: Parameters46
 
 
-class Parameters46(TypedDict):
+class Parameters47(TypedDict):
     faction: EntityId
 
 
 class SimpleCondition38(TypedDict):
     type: Literal["army-faction"]
-    parameters: Parameters46
+    parameters: Parameters47
 
 
-class Parameters50(TypedDict):
+class Parameters51(TypedDict):
     during: Literal["deployment"]
 
 
 class SimpleCondition42(TypedDict):
     type: Literal["deployment-window"]
-    parameters: Parameters50
+    parameters: Parameters51
 
 
-class Parameters51(TypedDict):
+class Parameters52(TypedDict):
     owner: DefiniteOwner
     state: Literal["honoured"]
 
 
 class SimpleCondition43(TypedDict):
     type: Literal["army-state"]
-    parameters: Parameters51
+    parameters: Parameters52
 
 
-class Parameters52(TypedDict):
+class Parameters53(TypedDict):
     ability: EntityId
     state: Literal["fulfilled"]
 
 
 class SimpleCondition44(TypedDict):
     type: Literal["oath-state"]
-    parameters: Parameters52
+    parameters: Parameters53
 
 
 class EventBoundReference(TypedDict):
@@ -1562,7 +1566,7 @@ class Area1(TypedDict):
     ]
 
 
-class Subject3(TypedDict):
+class Subject4(TypedDict):
     terrain_area: dict[str, Any]
 
 
@@ -2050,7 +2054,7 @@ class SimpleCondition25(TypedDict):
     parameters: Parameters31
 
 
-class Parameters39(TypedDict):
+class Parameters40(TypedDict):
     pool: str
     count: NotRequired[CountBounds]
     below_max: NotRequired[Literal[True]]
@@ -2062,19 +2066,19 @@ class Parameters39(TypedDict):
 
 class SimpleCondition31(TypedDict):
     type: Literal["resource"]
-    parameters: Parameters39
+    parameters: Parameters40
 
 
-class Parameters41(TypedDict):
+class Parameters42(TypedDict):
     count: CountBounds
 
 
 class SimpleCondition33(TypedDict):
     type: Literal["engagement-fronts"]
-    parameters: Parameters41
+    parameters: Parameters42
 
 
-class Parameters42(TypedDict):
+class Parameters43(TypedDict):
     count: NotRequired[CountBounds]
     objective_role: NotRequired[Literal["central", "expansion"]]
     destroyer_on_objective: NotRequired[Literal[True]]
@@ -2084,10 +2088,10 @@ class Parameters42(TypedDict):
 
 class SimpleCondition34(TypedDict):
     type: Literal["destroyed-while-on-objective"]
-    parameters: NotRequired[Parameters42]
+    parameters: NotRequired[Parameters43]
 
 
-class Parameters43(TypedDict):
+class Parameters44(TypedDict):
     count: NotRequired[CountBounds]
     tag: NotRequired[str]
     at_start_of_turn: NotRequired[Literal[True]]
@@ -2095,7 +2099,7 @@ class Parameters43(TypedDict):
 
 class SimpleCondition35(TypedDict):
     type: Literal["destroyed-in-tagged-terrain"]
-    parameters: NotRequired[Parameters43]
+    parameters: NotRequired[Parameters44]
 
 
 class Modifier(TypedDict):
@@ -2420,8 +2424,17 @@ EventFilter = TypedDict(
         "weapons": NotRequired[WeaponScope],
         "by": NotRequired[UnitRef],
         "timing": NotRequired[
-            Literal["before-removal", "after-attacks", "after-set-up", "after-emergency-disembark"]
+            Literal[
+                "before-removal",
+                "after-attacks",
+                "after-set-up",
+                "after-emergency-disembark",
+                "before-deadly-demise",
+                "before-marker-removal",
+            ]
         ],
+        "last": NotRequired[Literal[True]],
+        "via": NotRequired[Literal["ability"]],
         "phase": NotRequired[Phase],
         "first": NotRequired[Literal[True]],
         "step": NotRequired[Literal["battle-shock", "reinforcements"]],
@@ -2982,6 +2995,7 @@ class Parameters37(TypedDict):
     tag: DesignationId
     count: NotRequired[CountBounds]
     by: NotRequired[UnitRef]
+    at: NotRequired[Snapshot]
 
 
 class Parameters38(TypedDict):
@@ -2989,11 +3003,20 @@ class Parameters38(TypedDict):
     tag: DesignationId
     count: CountBounds
     by: NotRequired[UnitRef]
+    at: NotRequired[Snapshot]
+
+
+class Parameters39(TypedDict):
+    subject: NotRequired[UnitRef | Subject]
+    tag: DesignationId
+    count: NotRequired[CountBounds]
+    by: NotRequired[UnitRef]
+    at: Snapshot
 
 
 class SimpleCondition30(TypedDict):
     type: Literal["designated"]
-    parameters: Parameters37 | Parameters38
+    parameters: Parameters37 | Parameters38 | Parameters39
 
 
 class Within2(TypedDict):
@@ -3001,7 +3024,7 @@ class Within2(TypedDict):
     range: RangeRef
 
 
-class Parameters40(TypedDict):
+class Parameters41(TypedDict):
     side: NotRequired[DefiniteOwner]
     count: NotRequired[CountBounds]
     friendly_unit_in_same_terrain_area: NotRequired[Literal[True]]
@@ -3011,10 +3034,10 @@ class Parameters40(TypedDict):
 
 class SimpleCondition32(TypedDict):
     type: Literal["operation-markers"]
-    parameters: NotRequired[Parameters40]
+    parameters: NotRequired[Parameters41]
 
 
-class Parameters47(TypedDict):
+class Parameters48(TypedDict):
     filter: UnitFilter
     min: NotRequired[int]
     every: NotRequired[Literal[True]]
@@ -3022,10 +3045,10 @@ class Parameters47(TypedDict):
 
 class SimpleCondition39(TypedDict):
     type: Literal["army-includes"]
-    parameters: Parameters47
+    parameters: Parameters48
 
 
-class Parameters48(TypedDict):
+class Parameters49(TypedDict):
     subject: NotRequired[UnitRef]
     by: UnitRef
     window: NotRequired[HistoryWindow]
@@ -3033,16 +3056,16 @@ class Parameters48(TypedDict):
 
 class SimpleCondition40(TypedDict):
     type: Literal["moved-over"]
-    parameters: Parameters48
+    parameters: Parameters49
 
 
-class Parameters49(TypedDict):
+class Parameters50(TypedDict):
     subject: NotRequired[UnitRef]
 
 
 class SimpleCondition41(TypedDict):
     type: Literal["guided"]
-    parameters: Parameters49
+    parameters: Parameters50
 
 
 SimpleCondition: TypeAlias = (
@@ -4076,7 +4099,7 @@ class SingleEffect42(TypedDict):
 
 
 class Modifier57(TypedDict):
-    subject: NotRequired[UnitRef | Subject | Subject3]
+    subject: NotRequired[UnitRef | Subject | Subject4]
     tag: DesignationId
     clear: NotRequired[Literal[True]]
     by: NotRequired[UnitRef]
@@ -4323,7 +4346,9 @@ DiceGatedEffect = TypedDict(
     {
         "type": Literal["dice-gated"],
         "dice": NotRequired[DiceExpression],
-        "threshold": NotRequired[int | Literal["leadership", "toughness", "save"]],
+        "threshold": NotRequired[
+            int | Literal["leadership", "toughness", "save"] | BattleRoundThreshold
+        ],
         "comparison": NotRequired[Comparison],
         "on_success": NotRequired[EffectNode | None],
         "on_fail": NotRequired[EffectNode | None],
@@ -4644,7 +4669,7 @@ class Modifier71(TypedDict):
 class DeathGate(TypedDict):
     dice: DiceExpression
     comparison: Comparison
-    threshold: Quantity
+    threshold: Quantity | BattleRoundThreshold
     modifiers: list[Modifier71]
 
 

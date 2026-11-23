@@ -351,6 +351,12 @@ func esigned(operation, value any) string {
 
 // formatComparison renders a dice comparison ("a 4+", "a 3 or less", ...).
 func formatComparison(comp string, threshold any) string {
+	// A threshold read from the battle round: "a result greater than the current battle round number".
+	if m, ok := asMap(threshold); ok && m != nil && (comp == "gte" || comp == "") {
+		if n, ok := m["battle_round_plus"].(float64); ok && n == 1 {
+			return "a result greater than the current battle round number"
+		}
+	}
 	th := ejstr(threshold)
 	switch comp {
 	case "lte":

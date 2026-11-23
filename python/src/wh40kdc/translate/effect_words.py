@@ -301,6 +301,14 @@ def signed(operation: Any, value: Any) -> str:
 
 def format_comparison(comp: str, threshold: Any) -> str:
     """Dice comparison → "a 4+", "a 3 or less", etc."""
+    # A threshold read from the battle round: "a result greater than the current battle round
+    # number".
+    if (
+        isinstance(threshold, dict)
+        and threshold.get("battle_round_plus") == 1
+        and comp in ("gte", "")
+    ):
+        return "a result greater than the current battle round number"
     th = jstr(threshold)
     if comp == "lte":
         return f"a {th} or less"

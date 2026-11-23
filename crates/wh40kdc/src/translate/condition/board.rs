@@ -426,6 +426,20 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 }
                 None => String::new(),
             };
+            // "If that enemy unit was unravelling at the start of the phase": the designation as it was then.
+            if is(p, "at", "phase-start") || is(p, "at", "turn-start") {
+                return format!(
+                    "{} {} {}{by} at the start of the {}",
+                    subject_of(p, "this unit"),
+                    if negated { "was not" } else { "was" },
+                    designation_phrase(&st(p.get("tag")), false),
+                    if is(p, "at", "phase-start") {
+                        "phase"
+                    } else {
+                        "turn"
+                    }
+                );
+            }
             format!(
                 "{} is {not_}{}{by}",
                 subject_of(p, "this unit"),

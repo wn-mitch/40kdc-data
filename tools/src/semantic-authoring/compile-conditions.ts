@@ -128,6 +128,8 @@ const HISTORY: Record<string, (subject: string | undefined, attackType?: string)
   "disembarked-from-this-transport-this-turn": (subject) => ({ ...(subject ? { subject } : {}), event: "disembarked", filter: { transport: "this-unit" }, window: "turn" }),
   // Models the subject lost, and enemy models it destroyed.
   "lost-models-this-phase": (subject) => ({ event: "model-destroyed", object: !subject || subject === "this-unit" ? "model-in-this-unit" : { level: "model", member_of: subject }, window: "phase" }),
+  // "That was destroyed by that enemy unit this phase": the subject destroyed by the moment's unit.
+  "destroyed-by-event-subject-this-phase": (subject) => ({ event: "destroyed", object: subject ?? "this-unit", filter: { by: "event-subject" }, window: "phase" }),
   "destroyed-enemy-model-this-phase": (subject) => ({ event: "model-destroyed", object: { owner: "enemy", level: "model" }, filter: { by: subject ?? "this-unit" }, window: "phase" }),
   "destroyed-enemy-model-this-turn": (subject) => ({ event: "model-destroyed", object: { owner: "enemy", level: "model" }, filter: { by: subject ?? "this-unit" }, window: "turn" }),
   "lost-models-to-triggering-attacks": (subject) => ({
@@ -181,7 +183,7 @@ function pred(type: string, parameters: Node, subject?: unknown): Node {
     filter = { within };
   } else if (type === "visible" && parameters.fully !== true && parameters.blocked_by === undefined) {
     filter = { visible: { to: parameters.to ?? "attacker" } };
-  } else if (type === "designated" && parameters.objective === undefined && parameters.count === undefined
+  } else if (type === "designated" && parameters.objective === undefined && parameters.count === undefined && parameters.at === undefined
     && parameters.count_min === undefined && parameters.count_max === undefined) {
     filter = { designated: parameters.tag, ...(parameters.by === undefined ? {} : { designated_by: parameters.by }) };
   }
@@ -723,6 +725,7 @@ export function condition(leaf: CompileLeaf): Node {
       // by: applied by a unit of the unit-filter after the leaf (compile-unit-filters.ts folds it in).
       if (leaf.parameters.by !== undefined) parameters.by = leaf.parameters.by === "following-filter" ? followingFilter(leaf) : closed(leaf, "by");
       if (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined) parameters.count = countBounds(leaf);
+      if (leaf.parameters.at !== undefined) parameters.at = closed(leaf, "at");
       return polarity(leaf, pred("designated", parameters, subjectOf(leaf)));
     }
     case "battle-round": {

@@ -6240,5 +6240,701 @@
     "scope": {
       "duration": "phase"
     }
+  },
+  {
+    "caseId": "batch-b/roll-attacks-with-weapon-first-part",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "attachment",
+        "parameters": {
+          "subject": "this-model",
+          "role": "leading",
+          "with": {
+            "owner": "friendly",
+            "all_of": [
+              "STORM GUARDIANS"
+            ]
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "before-roll",
+              "filter": {
+                "roll": "attacks",
+                "weapons": {
+                  "name": "flamer"
+                }
+              },
+              "optional": true
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "attacks",
+                "result_scope": "any-result"
+              }
+            }
+          },
+          {
+            "type": "ability-part",
+            "trigger": {
+              "event": "before-roll",
+              "filter": {
+                "roll": "damage"
+              },
+              "optional": true
+            },
+            "effect": {
+              "type": "conditional",
+              "condition": {
+                "type": "attack-is",
+                "parameters": {
+                  "weapons": {
+                    "name": "fusion gun"
+                  }
+                }
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": "this-unit",
+                "modifier": {
+                  "roll": "damage",
+                  "result_scope": "any-result"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-b/last-model-destroyed",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "member_of": "this-unit",
+        "all_of": [
+          "GUARDIAN DEFENDER"
+        ],
+        "level": "model"
+      },
+      "filter": {
+        "last": true
+      }
+    },
+    "effect": {
+      "type": "destroy-models",
+      "target": {
+        "level": "model",
+        "member_of": "this-unit",
+        "all_of": [
+          "HEAVY WEAPON PLATFORM"
+        ]
+      },
+      "modifier": {
+        "count": "all"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-b/destroyed-any-of-then-destroyer-attacks",
+    "trigger": {
+      "event": "destroyed",
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": {
+        "owner": "friendly",
+        "any_of": [
+          "DIRE AVENGERS",
+          "GUARDIANS"
+        ]
+      },
+      "binds_event_variable": "moment-subject"
+    },
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "attacks-resolved",
+        "subject": {
+          "event_var": "moment-subject"
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "permission",
+            "target": "this-unit",
+            "modifier": {
+              "activity": "shoot",
+              "allow": true,
+              "as_if": "shooting-phase"
+            }
+          },
+          {
+            "type": "targeting",
+            "target": "this-unit",
+            "modifier": {
+              "by": "this-unit",
+              "may": "must-target",
+              "kind": "attack",
+              "target": "event-subject"
+            }
+          }
+        ]
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "usage": {
+      "frequency": "once-per-battle-round",
+      "per": "army"
+    }
+  },
+  {
+    "caseId": "batch-b/model-destroyed-its-unit-engaged-after-attacks",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "despite": [
+              "engaged"
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "model-destroyed",
+            "object": {
+              "owner": "enemy",
+              "level": "model"
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 5,
+            "comparison": "gte",
+            "on_success": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-object",
+                  "filter": {
+                    "engaged_with": "this-unit"
+                  }
+                }
+              },
+              "effect": {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "attacks-resolved",
+                  "subject": "attacker"
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "this-unit",
+                  "modifier": {
+                    "count": 1
+                  }
+                }
+              }
+            },
+            "on_fail": null
+          },
+          "duration": "phase"
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-b/destroyed-before-deadly-demise",
+    "trigger": {
+      "event": "destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "SHADOW LEGION"
+        ]
+      },
+      "filter": {
+        "timing": "before-deadly-demise"
+      }
+    },
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "engaged_with": "this-unit"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "all_of": [
+                        "SLAANESH"
+                      ]
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "dice-table",
+                  "dice": "D6",
+                  "outcomes": [
+                    {
+                      "results": [
+                        1
+                      ],
+                      "effect": {
+                        "type": "no-effect"
+                      }
+                    },
+                    {
+                      "results": [
+                        2,
+                        3
+                      ],
+                      "effect": {
+                        "type": "mortal-wounds",
+                        "target": "recipient",
+                        "modifier": {
+                          "count": "D3"
+                        }
+                      }
+                    },
+                    {
+                      "results": [
+                        4,
+                        5,
+                        6
+                      ],
+                      "effect": {
+                        "type": "mortal-wounds",
+                        "target": "recipient",
+                        "modifier": {
+                          "count": 3
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "all_of": [
+                            "SLAANESH"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "dice-table",
+                  "dice": "D6",
+                  "outcomes": [
+                    {
+                      "results": [
+                        1,
+                        2,
+                        3
+                      ],
+                      "effect": {
+                        "type": "no-effect"
+                      }
+                    },
+                    {
+                      "results": [
+                        4,
+                        5
+                      ],
+                      "effect": {
+                        "type": "mortal-wounds",
+                        "target": "recipient",
+                        "modifier": {
+                          "count": "D3"
+                        }
+                      }
+                    },
+                    {
+                      "results": [
+                        6
+                      ],
+                      "effect": {
+                        "type": "mortal-wounds",
+                        "target": "recipient",
+                        "modifier": {
+                          "count": 3
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-b/model-destroyed-after-destroyer-attacks",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 6,
+        "comparison": "gte",
+        "on_success": {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "subject": "attacker"
+          },
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "event-subject",
+            "modifier": {
+              "count": 1
+            }
+          }
+        },
+        "on_fail": null
+      }
+    },
+    "scope": {
+      "duration": "attack-sequence"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-b/move-ended-before-marker-removal",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "timing": "before-marker-removal"
+      },
+      "optional": true
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "marker": "cult-ambush-marker"
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "marker",
+        "target": "this-unit",
+        "modifier": {
+          "label": "cult-ambush-marker",
+          "operation": "relocate"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-b/fight-on-death-battle-round-threshold",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "effect": {
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "act-on-death",
+        "target": "event-object",
+        "modifier": {
+          "act": "fight",
+          "resolution": "after-attacking-unit-finishes",
+          "removal": "after-destroyed-model-fights",
+          "gate": {
+            "dice": "D6",
+            "threshold": {
+              "battle_round_plus": 1
+            },
+            "comparison": "gte",
+            "modifiers": []
+          },
+          "eligibility": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "subject": "event-object",
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-b/opponent-cp-from-ability",
+    "trigger": {
+      "event": "resource-gained",
+      "filter": {
+        "pool": "command-point",
+        "via": "ability"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "effect": {
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 2,
+      "comparison": "gte",
+      "on_success": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      },
+      "on_fail": null
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-b/model-destroyed-before-deadly-demise",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "MONSTER",
+          "NECRONS"
+        ],
+        "level": "model",
+        "member_of": "this-unit"
+      },
+      "filter": {
+        "timing": "before-deadly-demise"
+      }
+    },
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "deadly-demise",
+            "succeeds_on": 3
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-b/designated-at-phase-start",
+    "trigger": {
+      "event": "destroyed",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "MONSTER",
+          "NECRONS"
+        ]
+      },
+      "object": {
+        "owner": "enemy"
+      }
+    },
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "designated",
+        "parameters": {
+          "subject": "event-object",
+          "tag": "unravelling",
+          "at": "phase-start"
+        }
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "reanimation-protocols-necrons"
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive",
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "army"
+    }
+  },
+  {
+    "caseId": "batch-b/destroyed-or-caused-below-half",
+    "trigger": [
+      {
+        "event": "destroyed",
+        "subject": "this-unit",
+        "object": {
+          "owner": "enemy"
+        }
+      },
+      {
+        "event": "state-changed",
+        "filter": {
+          "strength": "below-half",
+          "by": "this-unit"
+        },
+        "subject": {
+          "owner": "enemy"
+        }
+      }
+    ],
+    "effect": {
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "reanimation-protocols-necrons"
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "behavior": "reactive"
   }
 ]

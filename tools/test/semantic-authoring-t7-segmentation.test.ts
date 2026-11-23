@@ -121,13 +121,15 @@ describe("T7 destroyed model's unit keywords (SS-D)", () => {
     expect(compileLeaves(list, text).ok).toBe(false);
   });
 
-  it("event object_keywords: accepted on model-destroyed with an owner, and refused elsewhere (family)", () => {
+  it("event object_keywords: accepted on model-destroyed, and refused elsewhere (family)", () => {
     const version = currentFamilyVersion("event");
     const base = { kind: "model-destroyed", object_owner: "enemy" };
     expect(normalizeFingerprintParameters("event", { ...base, object_keywords: ["CHARACTER"] }, version)).toMatchObject({ object_keywords: ["CHARACTER"] });
     // A destruction with no keywords keeps its meaning.
     expect(normalizeFingerprintParameters("event", base, version)).toMatchObject({ kind: "model-destroyed", object_owner: "enemy" });
-    expect(() => normalizeFingerprintParameters("event", { kind: "model-destroyed", object_keywords: ["CHARACTER"] }, version)).toThrow(/object_owner/);
+    // With no owner, the keywords name a model of this unit ("the last Guardian Defender model in this unit").
+    expect(normalizeFingerprintParameters("event", { kind: "model-destroyed", object_keywords: ["CHARACTER"] }, version)).toEqual({ kind: "model-destroyed", object_keywords: ["CHARACTER"] });
+    expect(() => normalizeFingerprintParameters("event", { kind: "unit-destroyed", object_keywords: ["CHARACTER"] }, version)).toThrow();
     expect(() => normalizeFingerprintParameters("event", { kind: "unit-destroyed", object_owner: "enemy", object_keywords: ["CHARACTER"] }, version)).toThrow(/event\.object_keywords does not apply to kind unit-destroyed/);
   });
 

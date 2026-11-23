@@ -247,6 +247,10 @@ export function signed(operation: unknown, value: unknown): string {
 
 /** Dice comparison → "a 4+", "a 3 or less", etc. (for dice-gated thresholds). */
 export function formatComparison(comp: string, threshold: unknown): string {
+  // A threshold read from the battle round: "a result greater than the current battle round number".
+  if (typeof threshold === "object" && threshold !== null && (threshold as Record<string, unknown>).battle_round_plus === 1 && (comp === "gte" || comp === "")) {
+    return "a result greater than the current battle round number";
+  }
   const th = jstr(threshold);
   switch (comp) {
     case "lte": return `a ${th} or less`;

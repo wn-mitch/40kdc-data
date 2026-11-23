@@ -275,6 +275,10 @@ export function describePredicate(c: Condition, negated: boolean): string {
       }
       if (p.count != null) return `${neg}${countPhrase(p.count)} ${unitRefPhrase(s).replace(/^an? /, "").replace(/\b(unit|model)\b/, "$1s")} ${designationPhrase(str(p.tag))}${p.by != null ? ` by ${unitRefPhrase(p.by)}` : ""}`;
       const by = p.by != null ? ` by ${unitRefPhrase(p.by, "this unit").replace(/^the unit$/, "this unit")}` : "";
+      // "If that enemy unit was unravelling at the start of the phase": the designation as it was then.
+      if (p.at === "phase-start" || p.at === "turn-start") {
+        return `${subjectOf(p)} ${negated ? "was not" : "was"} ${designationPhrase(str(p.tag))}${by} at the start of the ${p.at === "phase-start" ? "phase" : "turn"}`;
+      }
       return `${subjectOf(p)} is ${negated ? "not " : ""}${designationPhrase(str(p.tag))}${by}`;
     }
     case "resource": {

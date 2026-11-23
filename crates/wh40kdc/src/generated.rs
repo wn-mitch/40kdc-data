@@ -7740,6 +7740,33 @@ impl ::std::default::Default for BattleRoundConditionParameters {
         }
     }
 }
+///A roll threshold read from the battle round when the roll is made ("if the result is greater than the current battle round number").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "A roll threshold read from the battle round when the roll is made (\"if the result is greater than the current battle round number\").",
+///  "type": "object",
+///  "required": [
+///    "battle_round_plus"
+///  ],
+///  "properties": {
+///    "battle_round_plus": {
+///      "description": "The current battle round number plus this: 1 is a result greater than the current battle round number.",
+///      "const": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct BattleRoundThreshold {
+    ///The current battle round number plus this: 1 is a result greater than the current battle round number.
+    pub battle_round_plus: ::serde_json::Value,
+}
 ///11e battle size, which sets the army's points limit and detachment-point budget: 'incursion' = 1000 pts / 2 detachment points; 'strike-force' = 2000 pts / 3 detachment points.
 ///
 /// <details><summary>JSON schema</summary>
@@ -10440,7 +10467,14 @@ impl<'de> ::serde::Deserialize<'de> for DataslateVersion {
 ///      }
 ///    },
 ///    "threshold": {
-///      "$ref": "#/$defs/quantity"
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/quantity"
+///        },
+///        {
+///          "$ref": "#/$defs/battle-round-threshold"
+///        }
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -10453,7 +10487,7 @@ pub struct DeathGate {
     pub comparison: Comparison,
     pub dice: DiceExpression,
     pub modifiers: ::std::vec::Vec<DeathGateModifiersItem>,
-    pub threshold: Quantity,
+    pub threshold: DeathGateThreshold,
 }
 ///`DeathGateModifiersItem`
 ///
@@ -10483,6 +10517,39 @@ pub struct DeathGate {
 pub struct DeathGateModifiersItem {
     pub condition: Condition,
     pub value: Quantity,
+}
+///`DeathGateThreshold`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/quantity"
+///    },
+///    {
+///      "$ref": "#/$defs/battle-round-threshold"
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum DeathGateThreshold {
+    Quantity(Quantity),
+    BattleRoundThreshold(BattleRoundThreshold),
+}
+impl ::std::convert::From<Quantity> for DeathGateThreshold {
+    fn from(value: Quantity) -> Self {
+        Self::Quantity(value)
+    }
+}
+impl ::std::convert::From<BattleRoundThreshold> for DeathGateThreshold {
+    fn from(value: BattleRoundThreshold) -> Self {
+        Self::BattleRoundThreshold(value)
+    }
 }
 ///`DefiniteOwner`
 ///
@@ -11909,12 +11976,21 @@ impl ::std::convert::TryFrom<::std::string::String> for DesignateTargetEffectTyp
 ///      "required": [
 ///        "count"
 ///      ]
+///    },
+///    {
+///      "required": [
+///        "at"
+///      ]
 ///    }
 ///  ],
 ///  "required": [
 ///    "tag"
 ///  ],
 ///  "properties": {
+///    "at": {
+///      "description": "Read the designation as it was then (\"if that enemy unit was unravelling at the start of the phase\"), not at the moment of the check.",
+///      "$ref": "#/$defs/snapshot"
+///    },
 ///    "by": {
 ///      "description": "The unit that applied the designation (their Spotted unit; one marked by a MARKERLIGHT Observer).",
 ///      "$ref": "#/$defs/unit-ref"
@@ -11966,6 +12042,16 @@ pub enum DesignatedConditionParameters {
         count: CountBounds,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         subject: ::std::option::Option<DesignatedConditionParametersVariant1Subject>,
+        tag: DesignationId,
+    },
+    Variant2 {
+        ///Read the designation as it was then ("if that enemy unit was unravelling at the start of the phase"), not at the moment of the check.
+        at: Snapshot,
+        ///The unit that applied the designation (their Spotted unit; one marked by a MARKERLIGHT Observer).
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        by: ::std::option::Option<UnitRef>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        subject: ::std::option::Option<DesignatedConditionParametersVariant2Subject>,
         tag: DesignationId,
     },
 }
@@ -13614,6 +13700,43 @@ impl ::std::convert::From<UnitRef> for DesignatedConditionParametersVariant1Subj
         Self::UnitRef(value)
     }
 }
+///`DesignatedConditionParametersVariant2Subject`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    {
+///      "type": "object",
+///      "required": [
+///        "objective"
+///      ],
+///      "properties": {
+///        "objective": {
+///          "$ref": "#/$defs/objective-filter"
+///        }
+///      },
+///      "additionalProperties": false
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum DesignatedConditionParametersVariant2Subject {
+    UnitRef(UnitRef),
+    Object { objective: ObjectiveFilter },
+}
+impl ::std::convert::From<UnitRef> for DesignatedConditionParametersVariant2Subject {
+    fn from(value: UnitRef) -> Self {
+        Self::UnitRef(value)
+    }
+}
 ///`DesignationApplies`
 ///
 /// <details><summary>JSON schema</summary>
@@ -14741,7 +14864,7 @@ impl<'de> ::serde::Deserialize<'de> for DiceExpression {
 ///      "additionalProperties": false
 ///    },
 ///    "threshold": {
-///      "description": "Fixed threshold or model characteristic to compare against",
+///      "description": "Fixed threshold, model characteristic, or a value read from the battle round to compare against",
 ///      "oneOf": [
 ///        {
 ///          "type": "integer"
@@ -14753,6 +14876,9 @@ impl<'de> ::serde::Deserialize<'de> for DiceExpression {
 ///            "toughness",
 ///            "save"
 ///          ]
+///        },
+///        {
+///          "$ref": "#/$defs/battle-round-threshold"
 ///        }
 ///      ]
 ///    },
@@ -14792,7 +14918,7 @@ pub struct DiceGatedEffect {
     pub rider: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub test: ::std::option::Option<DiceGatedEffectTest>,
-    ///Fixed threshold or model characteristic to compare against
+    ///Fixed threshold, model characteristic, or a value read from the battle round to compare against
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub threshold: ::std::option::Option<DiceGatedEffectThreshold>,
     #[serde(rename = "type")]
@@ -14962,13 +15088,13 @@ pub struct DiceGatedEffectTestModifiersItem {
     pub condition: Condition,
     pub value: i64,
 }
-///Fixed threshold or model characteristic to compare against
+///Fixed threshold, model characteristic, or a value read from the battle round to compare against
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "Fixed threshold or model characteristic to compare against",
+///  "description": "Fixed threshold, model characteristic, or a value read from the battle round to compare against",
 ///  "oneOf": [
 ///    {
 ///      "type": "integer"
@@ -14980,6 +15106,9 @@ pub struct DiceGatedEffectTestModifiersItem {
 ///        "toughness",
 ///        "save"
 ///      ]
+///    },
+///    {
+///      "$ref": "#/$defs/battle-round-threshold"
 ///    }
 ///  ]
 ///}
@@ -14990,52 +15119,7 @@ pub struct DiceGatedEffectTestModifiersItem {
 pub enum DiceGatedEffectThreshold {
     Integer(i64),
     String(DiceGatedEffectThresholdString),
-}
-impl ::std::str::FromStr for DiceGatedEffectThreshold {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if let Ok(v) = value.parse() {
-            Ok(Self::Integer(v))
-        } else if let Ok(v) = value.parse() {
-            Ok(Self::String(v))
-        } else {
-            Err("string conversion failed for all variants".into())
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DiceGatedEffectThreshold {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for DiceGatedEffectThreshold {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for DiceGatedEffectThreshold {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::fmt::Display for DiceGatedEffectThreshold {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match self {
-            Self::Integer(x) => x.fmt(f),
-            Self::String(x) => x.fmt(f),
-        }
-    }
+    BattleRoundThreshold(BattleRoundThreshold),
 }
 impl ::std::convert::From<i64> for DiceGatedEffectThreshold {
     fn from(value: i64) -> Self {
@@ -15045,6 +15129,11 @@ impl ::std::convert::From<i64> for DiceGatedEffectThreshold {
 impl ::std::convert::From<DiceGatedEffectThresholdString> for DiceGatedEffectThreshold {
     fn from(value: DiceGatedEffectThresholdString) -> Self {
         Self::String(value)
+    }
+}
+impl ::std::convert::From<BattleRoundThreshold> for DiceGatedEffectThreshold {
+    fn from(value: BattleRoundThreshold) -> Self {
+        Self::BattleRoundThreshold(value)
     }
 }
 ///`DiceGatedEffectThresholdString`
@@ -17292,7 +17381,7 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      ]
 ///    },
 ///    "by": {
-///      "description": "Who caused it (the unit or model whose attack destroyed the object).",
+///      "description": "Who caused it (the unit or model whose attack destroyed the object; on state-changed, the unit whose attacks changed the subject's strength).",
 ///      "$ref": "#/$defs/unit-ref"
 ///    },
 ///    "caused_by": {
@@ -17337,6 +17426,10 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///        "doctrine",
 ///        "contract"
 ///      ]
+///    },
+///    "last": {
+///      "description": "model-destroyed: the destroyed model is the last model in its unit that matches the object filter (\"the last Guardian Defender model in this unit\").",
+///      "const": true
 ///    },
 ///    "marker": {
 ///      "type": "string",
@@ -17433,12 +17526,14 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      ]
 ///    },
 ///    "timing": {
-///      "description": "destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).",
+///      "description": "destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal).",
 ///      "enum": [
 ///        "before-removal",
 ///        "after-attacks",
 ///        "after-set-up",
-///        "after-emergency-disembark"
+///        "after-emergency-disembark",
+///        "before-deadly-demise",
+///        "before-marker-removal"
 ///      ]
 ///    },
 ///    "to": {
@@ -17504,6 +17599,12 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      },
 ///      "additionalProperties": false
 ///    },
+///    "via": {
+///      "description": "resource-gained: what the gain was the result of (\"gains a CP as the result of an ability\").",
+///      "enum": [
+///        "ability"
+///      ]
+///    },
 ///    "weapons": {
 ///      "$ref": "#/$defs/weapon-scope"
 ///    }
@@ -17523,7 +17624,7 @@ pub struct EventFilter {
     pub all_attacks: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attack_type: ::std::option::Option<EventFilterAttackType>,
-    ///Who caused it (the unit or model whose attack destroyed the object).
+    ///Who caused it (the unit or model whose attack destroyed the object; on state-changed, the unit whose attacks changed the subject's strength).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub by: ::std::option::Option<UnitRef>,
     ///The exact bound event that caused this event. Actor equality alone never establishes this causal relation.
@@ -17543,6 +17644,9 @@ pub struct EventFilter {
     ///targets-selected / attacks-resolved / used: which kind of targeting, attack or rule.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub kind: ::std::option::Option<EventFilterKind>,
+    ///model-destroyed: the destroyed model is the last model in its unit that matches the object filter ("the last Guardian Defender model in this unit").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub last: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub marker: ::std::option::Option<EventFilterMarker>,
     ///A move type's named mode (a Fall Back's desperate escape, a combat disembark).
@@ -17575,7 +17679,7 @@ pub struct EventFilter {
     pub tag: ::std::option::Option<DesignationId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub through: ::std::option::Option<EventFilterThrough>,
-    ///destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).
+    ///destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub timing: ::std::option::Option<EventFilterTiming>,
     ///selected: what the unit was selected to do. attack means shoot or fight.
@@ -17588,6 +17692,9 @@ pub struct EventFilter {
     pub unmodified: ::std::option::Option<EventFilterUnmodified>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub usage: ::std::option::Option<EventFilterUsage>,
+    ///resource-gained: what the gain was the result of ("gains a CP as the result of an ability").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub via: ::std::option::Option<EventFilterVia>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapons: ::std::option::Option<WeaponScope>,
 }
@@ -17604,6 +17711,7 @@ impl ::std::default::Default for EventFilter {
             from: Default::default(),
             id: Default::default(),
             kind: Default::default(),
+            last: Default::default(),
             marker: Default::default(),
             mode: Default::default(),
             move_types: Default::default(),
@@ -17623,6 +17731,7 @@ impl ::std::default::Default for EventFilter {
             transport: Default::default(),
             unmodified: Default::default(),
             usage: Default::default(),
+            via: Default::default(),
             weapons: Default::default(),
         }
     }
@@ -18674,18 +18783,20 @@ impl ::std::convert::TryFrom<::std::string::String> for EventFilterThrough {
         value.parse()
     }
 }
-///destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).
+///destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).",
+///  "description": "destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal).",
 ///  "enum": [
 ///    "before-removal",
 ///    "after-attacks",
 ///    "after-set-up",
-///    "after-emergency-disembark"
+///    "after-emergency-disembark",
+///    "before-deadly-demise",
+///    "before-marker-removal"
 ///  ]
 ///}
 /// ```
@@ -18711,6 +18822,10 @@ pub enum EventFilterTiming {
     AfterSetUp,
     #[serde(rename = "after-emergency-disembark")]
     AfterEmergencyDisembark,
+    #[serde(rename = "before-deadly-demise")]
+    BeforeDeadlyDemise,
+    #[serde(rename = "before-marker-removal")]
+    BeforeMarkerRemoval,
 }
 impl ::std::fmt::Display for EventFilterTiming {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -18719,6 +18834,8 @@ impl ::std::fmt::Display for EventFilterTiming {
             Self::AfterAttacks => f.write_str("after-attacks"),
             Self::AfterSetUp => f.write_str("after-set-up"),
             Self::AfterEmergencyDisembark => f.write_str("after-emergency-disembark"),
+            Self::BeforeDeadlyDemise => f.write_str("before-deadly-demise"),
+            Self::BeforeMarkerRemoval => f.write_str("before-marker-removal"),
         }
     }
 }
@@ -18732,6 +18849,8 @@ impl ::std::str::FromStr for EventFilterTiming {
             "after-attacks" => Ok(Self::AfterAttacks),
             "after-set-up" => Ok(Self::AfterSetUp),
             "after-emergency-disembark" => Ok(Self::AfterEmergencyDisembark),
+            "before-deadly-demise" => Ok(Self::BeforeDeadlyDemise),
+            "before-marker-removal" => Ok(Self::BeforeMarkerRemoval),
             _ => Err("invalid value".into()),
         }
     }
@@ -19030,6 +19149,77 @@ pub struct EventFilterUnmodified {
 pub struct EventFilterUsage {
     pub count: ::serde_json::Value,
     pub frequency: ::serde_json::Value,
+}
+///resource-gained: what the gain was the result of ("gains a CP as the result of an ability").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "resource-gained: what the gain was the result of (\"gains a CP as the result of an ability\").",
+///  "enum": [
+///    "ability"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum EventFilterVia {
+    #[serde(rename = "ability")]
+    Ability,
+}
+impl ::std::fmt::Display for EventFilterVia {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Ability => f.write_str("ability"),
+        }
+    }
+}
+impl ::std::str::FromStr for EventFilterVia {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "ability" => Ok(Self::Ability),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for EventFilterVia {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for EventFilterVia {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for EventFilterVia {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`EventOrSelectionReference`
 ///
@@ -49285,7 +49475,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///    },
 ///    {
 ///      "title": "designated condition",
-///      "description": "[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.",
+///      "description": "[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it. A unit subject is tested here only with `at` (its designation as it was then); otherwise it is a `matches` filter.",
 ///      "type": "object",
 ///      "required": [
 ///        "parameters",
@@ -49707,7 +49897,7 @@ pub enum SimpleCondition {
     Visible { parameters: VisibleConditionParameters },
     /**designated condition
 
-[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.*/
+[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it. A unit subject is tested here only with `at` (its designation as it was then); otherwise it is a `matches` filter.*/
     #[serde(rename = "designated")]
     Designated { parameters: DesignatedConditionParameters },
     /**resource condition

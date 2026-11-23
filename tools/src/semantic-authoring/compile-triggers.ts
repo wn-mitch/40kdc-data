@@ -181,7 +181,15 @@ const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
   "step-started": (leaf) => withTurn({ event: "step-started", filter: { step: closed(leaf, "step") } }, leaf),
   used: usedTrigger,
   // A strength threshold in place of a state ("become Below Half-strength").
-  "state-changed": (leaf) => ({ event: "state-changed", filter: leaf.parameters.strength !== undefined ? { strength: closed(leaf, "strength") } : { state: closed(leaf, "state") } }),
+  "state-changed": (leaf) => ({
+    event: "state-changed",
+    filter: {
+      ...(leaf.parameters.strength !== undefined ? { strength: closed(leaf, "strength") } : { state: closed(leaf, "state") }),
+      // "Caused an enemy unit … to become Below Half-strength": the unit whose attacks did it.
+      ...(leaf.parameters.by !== undefined ? { by: closed(leaf, "by") } : {}),
+    },
+    ...(leaf.parameters.owner !== undefined ? { subject: { owner: closed(leaf, "owner") } } : {}),
+  }),
   "designation-changed": (leaf) => ({ event: "designation-changed", filter: { tag: closed(leaf, "tag") } }),
   "designation-resolved": (leaf) => ({ event: "designation-resolved", filter: { tag: closed(leaf, "tag") } }),
   "before-roll": (leaf) => ({ event: "before-roll", filter: { roll: triggerRoll(leaf) } }),
@@ -194,7 +202,12 @@ const V7_FILTERED_KINDS: Record<string, (leaf: CompileLeaf) => Node> = {
       : leaf.parameters.subject !== undefined && leaf.parameters.subject !== "this-unit" ? { subject: closed(leaf, "subject") } : {}),
   }),
   "marker-removed": (leaf) => ({ event: "marker-removed", filter: { marker: closed(leaf, "marker") } }),
-  "resource-gained": (leaf) => ({ event: "resource-gained", filter: { pool: closed(leaf, "pool") } }),
+  "resource-gained": (leaf) => ({
+    event: "resource-gained",
+    // "Each time your opponent gains a CP as the result of an ability": whose gain, and what caused it.
+    filter: { pool: closed(leaf, "pool"), ...(leaf.parameters.source !== undefined ? { via: closed(leaf, "source") } : {}) },
+    ...(leaf.parameters.owner !== undefined ? { subject: { owner: closed(leaf, "owner") } } : {}),
+  }),
   "resource-spent": spentTrigger,
 };
 
@@ -347,6 +360,8 @@ export function trigger(leaf: CompileLeaf): Node {
     const filter = (node.filter ?? {}) as Node;
     node.filter = { ...filter, timing: closed(leaf, "timing") };
   }
+  // "When the last Guardian Defender model in this unit is destroyed": the last model of the object's keywords.
+  if (leaf.parameters.last === true) node.filter = { ...((node.filter ?? {}) as Node), last: true };
   // "disembarks from a TRANSPORT that is within 6\" of this model" (compile-disembark-moment.ts): which Transports.
   if (leaf.parameters.transport_filter !== undefined) {
     const filter = (node.filter ?? {}) as Node;
@@ -434,9 +449,15 @@ function eventTrigger(leaf: CompileLeaf): Node {
   if (leaf.parameters.by !== undefined) node.subject = leaf.parameters.by === "enemy" ? { owner: "enemy" } : closed(leaf, "by");
   // A destroyed model's owner names a model, not a unit ("destroys an enemy model").
   // "When this unit destroys a CHARACTER model": the destroyed model's unit keywords (compile-unit-filters.ts folds them in).
+  // "The last Guardian Defender model in this unit": keywords with no owner name a model of this unit.
+  if (leaf.parameters.object_owner === undefined && leaf.parameters.object_keywords !== undefined) {
+    node.object = { member_of: "this-unit", all_of: closed(leaf, "object_keywords"), level: "model" };
+  }
   if (leaf.parameters.object_owner !== undefined) node.object = {
     owner: closed(leaf, "object_owner"),
     ...(leaf.parameters.object_keywords !== undefined ? { all_of: closed(leaf, "object_keywords") } : {}),
+    // "Destroys a DIRE AVENGERS or GUARDIANS unit": any one of the keywords.
+    ...(leaf.parameters.object_any_keywords !== undefined ? { any_of: closed(leaf, "object_any_keywords") } : {}),
     ...(node.event === "model-destroyed" ? { level: "model" } : {}),
   };
   // "An attack made with this model's quake cannon destroys": the attacks that destroy (compile-weapon-qualified.ts).

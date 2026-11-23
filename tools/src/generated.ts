@@ -874,9 +874,9 @@ export type DiceGatedEffect = {
   type: "dice-gated";
   dice?: DiceExpression;
   /**
-   * Fixed threshold or model characteristic to compare against
+   * Fixed threshold, model characteristic, or a value read from the battle round to compare against
    */
-  threshold?: number | ("leadership" | "toughness" | "save");
+  threshold?: number | ("leadership" | "toughness" | "save") | BattleRoundThreshold;
   comparison?: "gt" | "gte" | "lt" | "lte" | "eq";
   on_success?: EffectNode | null;
   on_fail?: EffectNode | null;
@@ -2769,9 +2769,23 @@ export interface EventFilter {
         stratagem_target: EntityId;
       };
   /**
-   * destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).
+   * destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal).
    */
-  timing?: "before-removal" | "after-attacks" | "after-set-up" | "after-emergency-disembark";
+  timing?:
+    | "before-removal"
+    | "after-attacks"
+    | "after-set-up"
+    | "after-emergency-disembark"
+    | "before-deadly-demise"
+    | "before-marker-removal";
+  /**
+   * model-destroyed: the destroyed model is the last model in its unit that matches the object filter ("the last Guardian Defender model in this unit").
+   */
+  last?: true;
+  /**
+   * resource-gained: what the gain was the result of ("gains a CP as the result of an ability").
+   */
+  via?: "ability";
   /**
    * The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
    */
@@ -2990,7 +3004,7 @@ export interface VisibleCondition {
   };
 }
 /**
- * [designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.
+ * [designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it. A unit subject is tested here only with `at` (its designation as it was then); otherwise it is a `matches` filter.
  */
 export interface DesignatedCondition {
   type: "designated";
@@ -3265,6 +3279,18 @@ export interface EndsNearest {
   instead_of?: "closest-enemy-unit";
   optional?: true;
   waives?: "closest-enemy-model";
+}
+/**
+ * A roll threshold read from the battle round when the roll is made ("if the result is greater than the current battle round number").
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "battle-round-threshold".
+ */
+export interface BattleRoundThreshold {
+  /**
+   * The current battle round number plus this: 1 is a result greater than the current battle round number.
+   */
+  battle_round_plus: 1;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -6327,7 +6353,7 @@ export interface ActOnDeathEffect {
 export interface DeathGate {
   dice: DiceExpression;
   comparison: Comparison;
-  threshold: Quantity;
+  threshold: Quantity | BattleRoundThreshold;
   modifiers: {
     condition: AbilityDSLCondition1;
     value: Quantity;

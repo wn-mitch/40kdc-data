@@ -216,6 +216,8 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
     if (markers.length > 1) throw new CompileError("One effect is gated by two result bands.");
     item.gate = item.gate.filter((node) => !isRollMarker(node));
     const band = markers[0]!;
+    // "If the result is greater than the current battle round number": a threshold read when rolled.
+    if (isRoundThreshold(band.from)) return { from: 1, to: faces, round: band.from as Node };
     const from = Number(band.from);
     const to = Number(band.to ?? faces);
     if (from > faces) throw new CompileError(`A result band starts at ${from}, beyond a ${dice}.`);
@@ -223,14 +225,14 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
     return { from, to };
   };
 
-  const table: Array<{ band: { from: number; to: number }; items: Planned[] }> = [];
+  const table: Array<{ band: { from: number; to: number; round?: Node }; items: Planned[] }> = [];
   for (const item of banded) {
     const band = bandOf(item);
     // Beside other banded effects ("On a 1, …. On a 2+, do not remove that model"), the roll is one table and fighting on death is its row.
     if (item.leaf.family_id === "fight-on-death" && (item.node.modifier as Node).act === "fight" && banded.length === 1) {
       if (band.to !== faces) throw new CompileError("Fighting on death needs a band that reaches the top face (\"on a 2+\").");
       const modifier = item.node.modifier as Node;
-      modifier.gate = { dice, threshold: band.from, comparison: "gte", modifiers: [] };
+      modifier.gate = { dice, threshold: band.round ?? band.from, comparison: "gte", modifiers: [] };
       // As the ability's only effect, the conditions ahead of it ("if that model has not fought")
       // say which destroyed models roll, so they are its eligibility rather than a wrapper.
       if (planned.length === 1) {
@@ -242,12 +244,20 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
       item.gate = [];
       continue;
     }
-    const row = table.find((entry) => entry.band.from === band.from && entry.band.to === band.to);
+    const row = table.find((entry) => entry.band.from === band.from && entry.band.to === band.to && entry.band.round === undefined && band.round === undefined);
     if (row) row.items.push(item); else table.push({ band, items: [item] });
   }
+  if (table.length > 1 && table.some((row) => row.band.round !== undefined)) throw new CompileError("A threshold read from the battle round is a roll's only band; it has no DSL shape beside other bands.");
 
   const rollNode = (): Node | null => {
     if (table.length === 0) return null;
+    const round = table[0]!.band.round;
+    if (round !== undefined) {
+      const gate: Node = rollVar
+        ? { type: "dice-gated", from: { roll_var: rollVar }, threshold: round, comparison: "gte", on_success: body(table[0]!.items), on_fail: null }
+        : { type: "dice-gated", dice, threshold: round, comparison: "gte", on_success: body(table[0]!.items), on_fail: null };
+      return wrap(gate);
+    }
     table.sort((left, right) => left.band.from - right.band.from);
     if (table.length === 1 && table[0]!.band.to === faces) {
       const gate: Node = rollVar
@@ -320,8 +330,14 @@ export function markerOf(item: Planned): Node {
 /** An effect cloned for one side of the roll, with its band marker taken out of its gate. */
 export const stripMarkers = (item: Planned): Planned => ({ ...item, node: structuredClone(item.node), gate: item.gate.filter((node) => !isRollMarker(node)) });
 
+/** A roll-result threshold read from the battle round ({battle_round_plus}), not a fixed face. */
+export const isRoundThreshold = (from: unknown): boolean => typeof from === "object" && from !== null && "battle_round_plus" in from;
+
 /** A band as the marker writes it, with `to` defaulting to `top`. */
-export const bandOfMarker = (marker: Node, top: number): Band => ({ from: Number(marker.from), to: Number(marker.to ?? top) });
+export const bandOfMarker = (marker: Node, top: number): Band => {
+  if (isRoundThreshold(marker.from)) throw new CompileError("A threshold read from the battle round has a DSL shape only as a roll's one band (a dice-gated effect or a fight-on-death gate).");
+  return { from: Number(marker.from), to: Number(marker.to ?? top) };
+};
 
 /** Rows of effects that share one band, in first-seen order. */
 function groupRows(entries: Array<{ band: Band; item: Planned }>): Row[] {

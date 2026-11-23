@@ -652,6 +652,13 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         if p.get("by") is not None:
             by_phrase = unit_ref_phrase(p["by"], "this unit")
             by = f" by {'this unit' if by_phrase == 'the unit' else by_phrase}"
+        # "If that enemy unit was unravelling at the start of the phase": the designation as it
+        # was then.
+        if p.get("at") in ("phase-start", "turn-start"):
+            was = "was not" if negated else "was"
+            then = "phase" if p.get("at") == "phase-start" else "turn"
+            tag = _designation_phrase(_str(p.get("tag")))
+            return f"{_subject_of(p)} {was} {tag}{by} at the start of the {then}"
         return f"{_subject_of(p)} is {nt}{_designation_phrase(_str(p.get('tag')))}{by}"
     if ctype == "resource":
         if p.get("below_max") is True:
