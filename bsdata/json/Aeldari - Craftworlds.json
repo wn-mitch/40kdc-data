@@ -20605,7 +20605,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Nothing happens.",
+                "$text": "When the last GUARDIAN DEFENDER model in this unit is destroyed, destroy HEAVY WEAPON PLATFORM models in this unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -83060,7 +83060,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "While this model is leading a friendly STORM GUARDIANS unit:\n  - Before a roll to determine the number of attacks is made with flamer weapons, you can use this ability: you can re-roll the Attacks roll.\n  - Before a Damage roll is made for an attack made by a model in this unit, you can use this ability: while making attacks made with fusion gun, you can re-roll Damage rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

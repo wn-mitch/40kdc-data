@@ -10870,7 +10870,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
@@ -10880,11 +10880,11 @@
       "type": "ability-part",
       "trigger": {
         "event": "attacks-resolved",
-        "subject": {
-          "owner": "enemy"
-        },
         "filter": {
           "kind": "fight"
+        },
+        "subject": {
+          "event_var": "moment-subject"
         }
       },
       "effect": {
@@ -10916,7 +10916,8 @@
       "subject": {
         "owner": "enemy"
       },
-      "object": "this-unit"
+      "object": "this-unit",
+      "binds_event_variable": "moment-subject"
     },
     "source_digest": "ab55a941bd9ce4bd25764e0ecb8530511e61d6f56c90d24e810dc0b3b73c5fb9"
   },
@@ -15892,19 +15893,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "chaos-cult",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 6,
+        "comparison": "gte",
+        "on_success": {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "subject": "attacker"
+          },
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "event-subject",
+            "modifier": {
+              "count": 1
+            }
+          }
+        },
+        "on_fail": null
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "attack-sequence"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "9fda4cfc04f64c575a51448090ac9fc40cbebe0df552b369c80be55f63d92809"
   },
   {
     "ability_id": "shroud-of-obfuscation-deceptors-chaos-space-marines",

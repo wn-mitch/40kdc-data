@@ -11057,7 +11057,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "unit_ids": [],
     "faction_id": "adeptus-mechanicus",
@@ -11095,6 +11095,7 @@
               {
                 "type": "happened",
                 "parameters": {
+                  "subject": "event-object",
                   "event": "selected",
                   "filter": {
                     "to": "fight"

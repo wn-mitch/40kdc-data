@@ -16,8 +16,8 @@ dump confirmation.
 | leader-attachments | 0 | 0 | 283 | 8 |
 | enhancements | 0 | 0 | 890 | 0 |
 | detachments | 0 | 0 | 181 | 276 |
-| stratagems | 0 | 0 | 1144 | 169 |
-| abilities | 0 | 0 | 3990 | 569 |
+| stratagems | 0 | 0 | 1153 | 160 |
+| abilities | 0 | 0 | 4002 | 557 |
 | phase-mappings | 0 | 0 | 1229 | 352 |
 | resource-pools | 0 | 0 | 0 | 7 |
 
@@ -29,28 +29,28 @@ dump confirmation.
 | adepta-sororitas | 0 | 0 | 123 | 25 |
 | adeptus-astartes | 0 | 0 | 236 | 14 |
 | adeptus-custodes | 0 | 0 | 153 | 5 |
-| adeptus-mechanicus | 0 | 0 | 149 | 18 |
+| adeptus-mechanicus | 0 | 0 | 150 | 17 |
 | adeptus-titanicus | 0 | 0 | 8 | 2 |
-| aeldari | 0 | 0 | 258 | 42 |
+| aeldari | 0 | 0 | 260 | 40 |
 | agents-of-the-imperium | 0 | 0 | 108 | 32 |
 | astra-militarum | 0 | 0 | 218 | 33 |
 | black-templars | 0 | 0 | 61 | 2 |
 | blood-angels | 0 | 0 | 53 | 8 |
-| chaos-daemons | 0 | 0 | 173 | 22 |
+| chaos-daemons | 0 | 0 | 175 | 20 |
 | chaos-knights | 0 | 0 | 88 | 22 |
-| chaos-space-marines | 0 | 0 | 241 | 40 |
+| chaos-space-marines | 0 | 0 | 243 | 38 |
 | dark-angels | 0 | 0 | 69 | 8 |
 | death-guard | 0 | 0 | 140 | 20 |
 | deathwatch | 0 | 0 | 34 | 2 |
 | drukhari | 0 | 0 | 139 | 25 |
 | emperors-children | 0 | 0 | 128 | 20 |
 | genestealer-cults | 0 | 0 | 122 | 26 |
-| grey-knights | 0 | 0 | 128 | 6 |
+| grey-knights | 0 | 0 | 129 | 5 |
 | imperial-fists | 0 | 0 | 9 | 2 |
 | imperial-knights | 0 | 0 | 97 | 21 |
 | iron-hands | 0 | 0 | 11 | 0 |
 | leagues-of-votann | 0 | 0 | 141 | 14 |
-| necrons | 0 | 0 | 202 | 28 |
+| necrons | 0 | 0 | 206 | 24 |
 | orks | 0 | 0 | 196 | 13 |
 | raven-guard | 0 | 0 | 11 | 0 |
 | salamanders | 0 | 0 | 10 | 1 |
@@ -86,14 +86,14 @@ dump confirmation.
 | adeptus-custodes | verified | 153 |
 | adeptus-mechanicus | digest-differs | 7 |
 | adeptus-mechanicus | stub | 9 |
-| adeptus-mechanicus | unpublished | 2 |
-| adeptus-mechanicus | verified | 149 |
+| adeptus-mechanicus | unpublished | 1 |
+| adeptus-mechanicus | verified | 150 |
 | adeptus-titanicus | stub | 2 |
 | adeptus-titanicus | verified | 8 |
 | aeldari | digest-differs | 9 |
-| aeldari | stub | 15 |
+| aeldari | stub | 13 |
 | aeldari | unpublished | 18 |
-| aeldari | verified | 258 |
+| aeldari | verified | 260 |
 | agents-of-the-imperium | digest-differs | 10 |
 | agents-of-the-imperium | stub | 11 |
 | agents-of-the-imperium | unpublished | 11 |
@@ -110,16 +110,16 @@ dump confirmation.
 | blood-angels | unpublished | 1 |
 | blood-angels | verified | 53 |
 | chaos-daemons | digest-differs | 3 |
-| chaos-daemons | stub | 7 |
+| chaos-daemons | stub | 5 |
 | chaos-daemons | unpublished | 12 |
-| chaos-daemons | verified | 173 |
+| chaos-daemons | verified | 175 |
 | chaos-knights | digest-differs | 4 |
 | chaos-knights | unpublished | 18 |
 | chaos-knights | verified | 88 |
 | chaos-space-marines | digest-differs | 11 |
-| chaos-space-marines | stub | 14 |
-| chaos-space-marines | unpublished | 15 |
-| chaos-space-marines | verified | 241 |
+| chaos-space-marines | stub | 13 |
+| chaos-space-marines | unpublished | 14 |
+| chaos-space-marines | verified | 243 |
 | dark-angels | digest-differs | 7 |
 | dark-angels | stub | 1 |
 | dark-angels | verified | 69 |
@@ -142,9 +142,9 @@ dump confirmation.
 | genestealer-cults | unpublished | 10 |
 | genestealer-cults | verified | 122 |
 | grey-knights | digest-differs | 1 |
-| grey-knights | stub | 3 |
+| grey-knights | stub | 2 |
 | grey-knights | unpublished | 2 |
-| grey-knights | verified | 128 |
+| grey-knights | verified | 129 |
 | imperial-fists | digest-differs | 2 |
 | imperial-fists | verified | 9 |
 | imperial-knights | digest-differs | 6 |
@@ -157,9 +157,9 @@ dump confirmation.
 | leagues-of-votann | unpublished | 7 |
 | leagues-of-votann | verified | 141 |
 | necrons | digest-differs | 7 |
-| necrons | stub | 8 |
+| necrons | stub | 4 |
 | necrons | unpublished | 13 |
-| necrons | verified | 202 |
+| necrons | verified | 206 |
 | orks | digest-differs | 10 |
 | orks | unpublished | 3 |
 | orks | verified | 196 |

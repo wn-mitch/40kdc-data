@@ -10386,19 +10386,77 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "scintillating-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "shoot",
+            "allow": true,
+            "despite": [
+              "engaged"
+            ]
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "model-destroyed",
+            "object": {
+              "owner": "enemy",
+              "level": "model"
+            }
+          },
+          "effect": {
+            "type": "dice-gated",
+            "dice": "D6",
+            "threshold": 5,
+            "comparison": "gte",
+            "on_success": {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-object",
+                  "filter": {
+                    "engaged_with": "this-unit"
+                  }
+                }
+              },
+              "effect": {
+                "type": "ability-part",
+                "trigger": {
+                  "event": "attacks-resolved",
+                  "subject": "attacker"
+                },
+                "effect": {
+                  "type": "mortal-wounds",
+                  "target": "this-unit",
+                  "modifier": {
+                    "count": 1
+                  }
+                }
+              }
+            },
+            "on_fail": null
+          },
+          "duration": "phase"
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "source_digest": "a40b554dcb70719f3e5e5e75d333a68c42c458f5d2e71d2f7b30b6bb38db7056"
   },
   {
     "ability_id": "flickering-reality-scintillating-legion-chaos-daemons",
@@ -12281,19 +12339,172 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-daemons",
     "detachment_id": "shadow-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "for-each-unit",
+          "selector": {
+            "filter": {
+              "owner": "enemy",
+              "engaged_with": "this-unit"
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "conditional",
+                "condition": {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "all_of": [
+                        "SLAANESH"
+                      ]
+                    }
+                  }
+                },
+                "effect": {
+                  "type": "dice-table",
+                  "dice": "D6",
+                  "outcomes": [
+                    {
+                      "results": [
+                        1
+                      ],
+                      "effect": {
+                        "type": "no-effect"
+                      }
+                    },
+                    {
+                      "results": [
+                        2,
+                        3
+                      ],
+                      "effect": {
+                        "type": "mortal-wounds",
+                        "target": "recipient",
+                        "modifier": {
+                          "count": "D3"
+                        }
+                      }
+                    },
+                    {
+                      "results": [
+                        4,
+                        5,
+                        6
+                      ],
+                      "effect": {
+                        "type": "mortal-wounds",
+                        "target": "recipient",
+                        "modifier": {
+                          "count": 3
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "conditional",
+                "condition": {
+                  "operator": "not",
+                  "operands": [
+                    {
+                      "type": "matches",
+                      "parameters": {
+                        "filter": {
+                          "all_of": [
+                            "SLAANESH"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                "effect": {
+                  "type": "dice-table",
+                  "dice": "D6",
+                  "outcomes": [
+                    {
+                      "results": [
+                        1,
+                        2,
+                        3
+                      ],
+                      "effect": {
+                        "type": "no-effect"
+                      }
+                    },
+                    {
+                      "results": [
+                        4,
+                        5
+                      ],
+                      "effect": {
+                        "type": "mortal-wounds",
+                        "target": "recipient",
+                        "modifier": {
+                          "count": "D3"
+                        }
+                      }
+                    },
+                    {
+                      "results": [
+                        6
+                      ],
+                      "effect": {
+                        "type": "mortal-wounds",
+                        "target": "recipient",
+                        "modifier": {
+                          "count": 3
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "SHADOW LEGION"
+        ]
+      },
+      "filter": {
+        "timing": "before-deadly-demise"
+      }
+    },
+    "source_digest": "d523463813a104956be18b707ebfc1cba1a2ab1693f372257d86d93dc06b9c53"
   },
   {
     "ability_id": "split-chaos-daemons",

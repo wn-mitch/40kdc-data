@@ -5556,7 +5556,7 @@ If your army includes an EPIC HERO unit (excluding YNNARI units), your army cann
         </profile>
         <profile name="Crewed Platform" id="d2f9-9dfe-1691-ed3c" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
-            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+            <characteristic name="Description" typeId="9b8f-694b-e5e-b573">When the last GUARDIAN DEFENDER model in this unit is destroyed, destroy HEAVY WEAPON PLATFORM models in this unit.</characteristic>
           </characteristics>
         </profile>
       </profiles>
@@ -23535,7 +23535,9 @@ Add 1 to the Attacks characteristic of melee weapons equipped by this model.</ch
           <profiles>
             <profile name="Breath of Vaul" id="1010-ff27-47e1-16f8" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While this model is leading a friendly STORM GUARDIANS unit:
+  - Before a roll to determine the number of attacks is made with flamer weapons, you can use this ability: you can re-roll the Attacks roll.
+  - Before a Damage roll is made for an attack made by a model in this unit, you can use this ability: while making attacks made with fusion gun, you can re-roll Damage rolls.</characteristic>
               </characteristics>
             </profile>
           </profiles>
