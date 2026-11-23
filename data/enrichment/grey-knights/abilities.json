@@ -7677,19 +7677,85 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "hallowed-conclave",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "event-object",
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "event-object",
+                    "event": "selected",
+                    "filter": {
+                      "to": "shoot"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "dice-gated",
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "on_success": {
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "shoot-or-fight",
+              "resolution": "after-attacking-unit-finishes",
+              "removal": "after-destroyed-model-fights"
+            }
+          },
+          "on_fail": null
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "1c382273a11ef9fe73e2707905dfaa5862cd0b5537c9d568cdb8df3626ef2fb0"
   },
   {
     "ability_id": "vigilance-of-titan-argent-assault-grey-knights",
