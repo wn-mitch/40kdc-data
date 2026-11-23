@@ -212,7 +212,7 @@
         "id": "area-07",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 11.951737,
           "y": 6.506812
@@ -471,7 +471,7 @@
         "id": "area-15",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 48.048263,
           "y": 37.493188
@@ -670,7 +670,7 @@
         "id": "area-05",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 50.958145,
           "y": 25.724646
@@ -896,7 +896,7 @@
         "id": "area-12",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 9.041855,
           "y": 18.275354
@@ -1316,7 +1316,7 @@
         "id": "area-08",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 40.431217,
           "y": 24.137766
@@ -1571,7 +1571,7 @@
         "id": "area-16",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 19.568783,
           "y": 19.862234
@@ -1654,7 +1654,7 @@
         "id": "area-02",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 15.045263,
           "y": 6.256812
@@ -1916,7 +1916,7 @@
         "id": "area-10",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 44.954737,
           "y": 37.743188
@@ -2286,7 +2286,7 @@
         "id": "area-05",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 49.743188,
           "y": 30.045263
@@ -2512,7 +2512,7 @@
         "id": "area-12",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 10.256812,
           "y": 13.954737
@@ -2703,7 +2703,7 @@
         "id": "area-02",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 51.045263,
           "y": 24.256812
@@ -2922,7 +2922,7 @@
         "id": "area-09",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 8.954737,
           "y": 19.743188
@@ -3197,7 +3197,7 @@
         "id": "area-01",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 21.256812,
           "y": 34.951737
@@ -3664,7 +3664,7 @@
         "id": "area-15",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 38.743188,
           "y": 9.048263
@@ -3872,7 +3872,7 @@
         "id": "area-05",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 18.004058,
           "y": 31.898058
@@ -4127,7 +4127,7 @@
         "id": "area-13",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 41.995942,
           "y": 12.101942
@@ -4341,7 +4341,7 @@
         "id": "area-03",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 21.540568,
           "y": 32.864118
@@ -4566,7 +4566,7 @@
         "id": "area-10",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 38.459432,
           "y": 11.135882
@@ -4929,7 +4929,7 @@
         "id": "area-05",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 48.256812,
           "y": 27.948737
@@ -5299,7 +5299,7 @@
         "id": "area-16",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 11.743188,
           "y": 16.051263
@@ -5546,7 +5546,7 @@
         "id": "area-07",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 39.019475,
           "y": 17.357506
@@ -5827,7 +5827,7 @@
         "id": "area-15",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 20.980525,
           "y": 26.642494
@@ -6042,7 +6042,7 @@
         "id": "area-05",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 50.045263,
           "y": 21.256812
@@ -6294,7 +6294,7 @@
         "id": "area-13",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 9.954737,
           "y": 22.743188
@@ -6582,7 +6582,7 @@
         "id": "area-05",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 48.951737,
           "y": 36.743188
@@ -6855,7 +6855,7 @@
         "id": "area-13",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 11.048263,
           "y": 7.256812
@@ -7077,7 +7077,7 @@
         "id": "area-03",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 48.045263,
           "y": 22.256812
@@ -7247,7 +7247,7 @@
         "id": "area-09",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 11.954737,
           "y": 21.743188
@@ -7648,7 +7648,7 @@
         "id": "area-06",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 12.256812,
           "y": 8.954737
@@ -7895,7 +7895,7 @@
         "id": "area-14",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 47.743188,
           "y": 35.045263
@@ -8157,7 +8157,7 @@
         "id": "area-06",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 48.954737,
           "y": 23.256812
@@ -8409,7 +8409,7 @@
         "id": "area-14",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 11.045263,
           "y": 20.743188
@@ -8676,7 +8676,7 @@
         "id": "area-06",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 50.743188,
           "y": 30.045263
@@ -8921,7 +8921,7 @@
         "id": "area-14",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 9.256812,
           "y": 13.954737
@@ -9185,7 +9185,7 @@
         "id": "area-05",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 41.200661,
           "y": 15.985569
@@ -9473,7 +9473,7 @@
         "id": "area-13",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 18.799339,
           "y": 28.014431
@@ -9789,7 +9789,7 @@
         "id": "area-06",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 37.04578,
           "y": 12.600683
@@ -10049,7 +10049,7 @@
         "id": "area-14",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 22.95422,
           "y": 31.399317
@@ -10270,7 +10270,7 @@
         "id": "area-04",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 8.753812,
           "y": 17.951737
@@ -10401,7 +10401,7 @@
         "id": "area-08",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 51.246188,
           "y": 26.048263
@@ -10909,7 +10909,7 @@
         "id": "area-07",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 30.707489,
           "y": 9.208505
@@ -11183,7 +11183,7 @@
         "id": "area-15",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 29.292511,
           "y": 34.791495
@@ -11266,7 +11266,7 @@
         "id": "area-01",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 22.998193,
           "y": 34.797641
@@ -11457,7 +11457,7 @@
         "id": "area-07",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 37.001807,
           "y": 9.202359
@@ -11985,7 +11985,7 @@
         "id": "area-07",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 28.391306,
           "y": 9.75627
@@ -12266,7 +12266,7 @@
         "id": "area-15",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 31.608694,
           "y": 34.24373
@@ -12385,7 +12385,7 @@
         "id": "area-02",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 40.804297,
           "y": 12.244835
@@ -12653,7 +12653,7 @@
         "id": "area-10",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 19.195703,
           "y": 31.755165
@@ -12935,7 +12935,7 @@
         "id": "area-02",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 37.246188,
           "y": 7.048263
@@ -13189,7 +13189,7 @@
         "id": "area-10",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 22.753812,
           "y": 36.951737
@@ -13474,7 +13474,7 @@
         "id": "area-03",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 19.987886,
           "y": 34.800211
@@ -13651,7 +13651,7 @@
         "id": "area-09",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 40.012114,
           "y": 9.199789
@@ -14000,7 +14000,7 @@
         "id": "area-03",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 30.45085,
           "y": 8.688473
@@ -14233,7 +14233,7 @@
         "id": "area-10",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 29.54915,
           "y": 35.311527
@@ -14583,7 +14583,7 @@
         "id": "area-04",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-7b3fc6fe17",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 21.540568,
           "y": 32.864118
@@ -14815,7 +14815,7 @@
         "id": "area-11",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-7b3fc6fe17",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 38.459432,
           "y": 11.135882
@@ -15013,7 +15013,7 @@
         "id": "area-01",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 21.256812,
           "y": 34.951737
@@ -15215,7 +15215,7 @@
         "id": "area-08",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 38.743188,
           "y": 9.048263
@@ -15719,7 +15719,7 @@
         "id": "area-06",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 18.092946,
           "y": 31.916358
@@ -15938,7 +15938,7 @@
         "id": "area-13",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 41.907054,
           "y": 12.083642
@@ -16133,7 +16133,7 @@
         "id": "area-02",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 28.781697,
           "y": 9.04287
@@ -16304,7 +16304,7 @@
         "id": "area-07",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 31.218303,
           "y": 34.95713
@@ -16662,7 +16662,7 @@
         "id": "area-01",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 38.260317,
           "y": 9.047389
@@ -16841,7 +16841,7 @@
         "id": "area-06",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 21.739683,
           "y": 34.952611
@@ -17398,7 +17398,7 @@
         "id": "area-07",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 47.743188,
           "y": 35.045263
@@ -17568,7 +17568,7 @@
         "id": "area-13",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 12.256812,
           "y": 8.954737
@@ -17783,7 +17783,7 @@
         "id": "area-03",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 10.985569,
           "y": 20.200661
@@ -18050,7 +18050,7 @@
         "id": "area-11",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 49.014431,
           "y": 23.799339
@@ -18482,7 +18482,7 @@
         "id": "area-08",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 46.246188,
           "y": 27.048263
@@ -18640,7 +18640,7 @@
         "id": "area-13",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 13.753812,
           "y": 16.951737
@@ -18763,7 +18763,7 @@
         "id": "area-01",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 27.304971,
           "y": 9.718767
@@ -19045,7 +19045,7 @@
         "id": "area-09",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 32.695029,
           "y": 34.281233
@@ -19512,7 +19512,7 @@
         "id": "area-06",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 27.458035,
           "y": 7.468497
@@ -19786,7 +19786,7 @@
         "id": "area-14",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 32.541965,
           "y": 36.531503
@@ -20033,7 +20033,7 @@
         "id": "area-05",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 37.800403,
           "y": 35.93384
@@ -20287,7 +20287,7 @@
         "id": "area-13",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 22.199597,
           "y": 8.06616
@@ -20553,7 +20553,7 @@
         "id": "area-05",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 42.743188,
           "y": 22.048263
@@ -20814,7 +20814,7 @@
         "id": "area-13",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 17.256812,
           "y": 21.951737
@@ -21057,7 +21057,7 @@
         "id": "area-04",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 39.740188,
           "y": 9.042263
@@ -21234,7 +21234,7 @@
         "id": "area-10",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 20.259812,
           "y": 34.957737
@@ -21626,7 +21626,7 @@
         "id": "area-06",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 13.093005,
           "y": 26.70792
@@ -21901,7 +21901,7 @@
         "id": "area-14",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 46.906995,
           "y": 17.29208
@@ -22018,7 +22018,7 @@
         "id": "area-01",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 36.978101,
           "y": 9.713397
@@ -22236,7 +22236,7 @@
         "id": "area-08",
         "name": "LongLineTower flip",
         "piece_type": "area",
-        "template": "bm-composite-longlinetower-flip-06c4f02941",
+        "template": "bm-composite-longlinetower-flip-8131e82b8b",
         "position": {
           "x": 23.041855,
           "y": 34.275354
@@ -22717,7 +22717,7 @@
         "id": "area-07",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 15.256812,
           "y": 36.951737
@@ -22964,7 +22964,7 @@
         "id": "area-15",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 44.743188,
           "y": 7.048263
@@ -23101,7 +23101,7 @@
         "id": "area-03",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 44.948066,
           "y": 9.220931
@@ -23376,7 +23376,7 @@
         "id": "area-11",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 15.051934,
           "y": 34.779069
@@ -23715,7 +23715,7 @@
         "id": "area-05",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 46.013415,
           "y": 22.292996
@@ -24003,7 +24003,7 @@
         "id": "area-14",
         "name": "LongLine Tower",
         "piece_type": "area",
-        "template": "bm-composite-longline-tower-3be6fa3536",
+        "template": "bm-composite-longline-tower-f4f8a17dd3",
         "position": {
           "x": 13.986585,
           "y": 21.707004
