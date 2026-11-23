@@ -265,20 +265,31 @@ export function loadoutWargearScoring(input: {
   };
 }
 
-const namedIdsByDataset = new WeakMap<Dataset, ReadonlySet<string>>();
+const namedIdsByDataset = new WeakMap<Dataset, Map<string, ReadonlySet<string>>>();
 
-/** Every string some ability record's effect or condition names, so an id a rule reads is kept. */
-function abilityNamedIds(dataset: Dataset): ReadonlySet<string> {
-  const cached = namedIdsByDataset.get(dataset);
+/**
+ * Every string an ability record that can reach a `factionId` unit names, so an id a rule reads is
+ * kept. Weapon ids are faction-scoped, so only core abilities and those of the unit's faction, its
+ * parent, or its children (a chapter on a parent roster) count: another faction's `flamer` is a
+ * different weapon.
+ */
+function abilityNamedIds(dataset: Dataset, factionId: string | undefined): ReadonlySet<string> {
+  const byFaction = namedIdsByDataset.get(dataset) ?? new Map<string, ReadonlySet<string>>();
+  namedIdsByDataset.set(dataset, byFaction);
+  const key = factionId ?? "";
+  const cached = byFaction.get(key);
   if (cached) return cached;
+  const parentOf = (id: string | undefined) => (id ? dataset.factions.getAny(id)?.raw.parent_faction_id ?? undefined : undefined);
+  const reaches = (abilityFaction: string | undefined) => abilityFaction === undefined || abilityFaction === factionId
+    || (factionId !== undefined && (parentOf(abilityFaction) === factionId || parentOf(factionId) === abilityFaction));
   const named = new Set<string>();
   const visit = (node: unknown): void => {
     if (typeof node === "string") named.add(node);
     else if (Array.isArray(node)) for (const item of node) visit(item);
     else if (isObject(node)) for (const value of Object.values(node)) visit(value);
   };
-  for (const ability of dataset.abilities.all) visit(ability.raw);
-  namedIdsByDataset.set(dataset, named);
+  for (const ability of dataset.abilities.all) if (reaches(ability.raw.faction_id ?? undefined)) visit(ability.raw);
+  byFaction.set(key, named);
   return named;
 }
 
@@ -288,7 +299,7 @@ function abilityNamedIds(dataset: Dataset): ReadonlySet<string> {
  * item of one of the unit's printed wargear rules is left out; wargear and everything else stays.
  */
 export function phaseScoredItem(dataset: Dataset, unit: Unit, phase: "shooting" | "fight"): (id: string) => boolean {
-  const named = abilityNamedIds(dataset);
+  const named = abilityNamedIds(dataset, unit.faction_id ?? undefined);
   const printed = new Set(printedWargear(unit).values());
   return (id) => {
     const profiles = resolveUnitWeapon(dataset, unit, id)?.profiles ?? [];

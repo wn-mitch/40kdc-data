@@ -170,6 +170,13 @@ describe("stack-damage search against the exhaustive oracle", () => {
     expect([shooting("chaos-icon"), fight("chaos-icon")]).toEqual([true, true]);
   });
 
+  it("ignores another faction's ability naming a same-id weapon", () => {
+    // Aeldari's Breath of Vaul names its own `flamer`; the Legionaries' flamer is a different weapon.
+    expect(JSON.stringify(dataset.abilities.getInFaction("breath-of-vaul-guardian-battlehost-aeldari", "aeldari")!.raw)).toContain('"flamer"');
+    const unit = dataset.units.getInFaction("legionaries", "chaos-space-marines")!.raw;
+    expect([phaseScoredItem(dataset, unit, "shooting")("flamer"), phaseScoredItem(dataset, unit, "fight")("flamer")]).toEqual([true, false]);
+  });
+
   it("reaches Unshackled Wrath's combined option and the optimal loadout", () => {
     const { session, spec } = cell("adeptus-mechanicus", "geq-guardsmen", "skitarii-rangers", "eradication-cohort");
     const best = session.optimiseLevers(spec);
