@@ -755,8 +755,21 @@ pub(super) fn counts_as(m: &P, subj: &str, ctx: &Ctx) -> String {
         Some(of) => effect_subject(Some(of), ctx),
         None => "this model".to_string(),
     };
+    // "for the purposes of the Psychic Guidance and Spirit Guides abilities".
+    let purposes = match m.get("for_abilities").and_then(Value::as_array) {
+        Some(ids) => {
+            let mut labels: Vec<String> = Vec::new();
+            for label in ids.iter().map(|id| ability_label(Some(id))) {
+                if !labels.contains(&label) {
+                    labels.push(label);
+                }
+            }
+            format!(" for the purposes of the {} abilities", and_list(&labels))
+        }
+        None => String::new(),
+    };
     format!(
-        "{subj} {} as being within {} of {of}",
+        "{subj} {} as being within {} of {of}{purposes}",
         v(subj, "counts"),
         range_phrase(m.get("within"))
     )

@@ -55,6 +55,9 @@ export function rollHead(e: P): string {
   // As many dice as a model's characteristic: "roll a number of D6 equal to the T characteristic of the selected unit".
   const stat = e.count_stat as P | undefined;
   if (stat != null) return `roll a number of ${diceCase(e.dice)} equal to the ${jstr(stat.stat)} characteristic of ${unitRefPhrase(stat.of)}${extra}${kind}`;
+  // As many dice as a count from the battle's history: "equal to the number of mortal wounds the unit suffered this phase".
+  const history = e.count_history as P | undefined;
+  if (history != null) return `roll a number of ${diceCase(e.dice)} equal to the number of mortal wounds ${unitRefPhrase(history.subject)} suffered this ${jstr(history.window)}${extra}${kind}`;
   return `roll ${diceCase(e.dice)}${extra}${kind}`;
 }
 

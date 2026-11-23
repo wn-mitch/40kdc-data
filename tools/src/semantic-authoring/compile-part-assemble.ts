@@ -13,7 +13,7 @@ import { passOffer, wrapNamedChain } from "./compile-named-selections.js";
 import { refuseUnwrappedThatMany, wrapThatMany } from "./compile-that-many.js";
 import { isRollMarker, resolveRolls } from "./compile-dice.js";
 import { foldBandSelection } from "./compile-band-selection.js";
-import { boundAttackDesignation, designation, directEntry, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle } from "./compile-wrappers.js";
+import { boundAttackDesignation, designation, directEntry, MOMENT_UNIT, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle } from "./compile-wrappers.js";
 import { filterObjectMoment, wrapModelAura } from "./compile-model-level.js";
 import { auraPart, namesUnboundRecipient } from "./compile-aura-parts.js";
 import { isForbiddenSetUp } from "./compile-set-up-placement.js";
@@ -116,7 +116,7 @@ export function assemblePart(
   } = frame;
   let { optional, optionalSentence } = frame;
   const { planned, split, boundDuration, window } = plan;
-  const { firstEffectIndex, partStarts, afterDestruction, afterThisUse, named, namedPass, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct } = bindings;
+  const { firstEffectIndex, partStarts, afterDestruction, afterThisUse, named, namedPass, delayed, fold, selectionLimit, target, nearTarget, selected, fromMoment, optionSelections, pair, independent, designatedSpends, direct } = bindings;
   // A Stratagem's RESTRICTIONS apply to its use as a whole, so they belong to the first part, not to the moment printed before them.
   const partOf = (index: number) => list[index]!.fragment === "RESTRICTIONS" ? 0 : partStarts.filter((part) => part.index < index).length;
   // Each effect's own duration wraps its node before the parts are built. Under a window, an effect that
@@ -284,7 +284,7 @@ export function assemblePart(
   }
   const pairCandidateEligibility = pairCandidates.length ? attempt(() => allOf(pairCandidates.map((at) => condition(list[at]!)))) : null;
 
-  if (selections.length === 1 && selected.length > 0) {
+  if ((selections.length === 1 || fromMoment) && selected.length > 0) {
     // "Ranged attacks that target that unit": an attack-type gate says which attacks against the
     // designated unit are changed, so it narrows the designation's effect, not the selection. The
     // attacker gate ("that disembarked from this TRANSPORT") narrows it the same way.
@@ -293,7 +293,8 @@ export function assemblePart(
     // An effect on the designated unit itself (bindings' `direct`) is the designation's own entry.
     const directOwn = direct.length ? attempt(() => directEntry(direct, rolls)) : null;
     if (direct.length && directOwn === null) return { ok: false, signature, errors };
-    body = attempt(() => designation(options.name, selections[0]!, list, gated(attackGates, body!), durations[0], eligibility, selectionLimit, false, directOwn));
+    // "that targets that enemy unit" with no selection: the moment's unit is designated (fromMoment).
+    body = attempt(() => designation(options.name, fromMoment ? MOMENT_UNIT : selections[0]!, list, gated(attackGates, body!), durations[0], eligibility, selectionLimit, false, directOwn));
     // The lifted spends come before the designation, so the designation's read of them is set when it is tested.
     if (body && designatedSpends.length) body = { type: "sequence", steps: [...designatedSpends.map((item) => gated(item.gate, item.node)), body] };
   }
@@ -319,6 +320,10 @@ export function assemblePart(
       ...(selectUnit(selections[0]!, body!, { eligibility, selectionLimit }).selector as Node),
       ...(existing.bind_as === undefined ? {} : { bind_as: existing.bind_as }),
     };
+  }
+  else if (optionSelections && body) {
+    // Each option of the "Or:" choice makes its own selection, in printed order; the option's effects name that unit.
+    body = attempt(() => selectInOptions(body!, selections, eligibilityIndexes.length > 0 || selected.length > 0 || selectionLimit !== null || maxCount !== undefined));
   }
   else if (named && body) {
     // Selections bound apart and named one by one: each nests in the one before it, with its own conditions.
@@ -665,4 +670,24 @@ function bonusCondition(bonus: { leaf: CompileLeaf; following?: CompileLeaf }, s
   const folded = foldUnitFilters([bonus.leaf, bonus.following], sourceText);
   if (folded.length !== 1) throw new CompileError("A conditional change's distance does not take the unit-filter after it.");
   return folded[0]!;
+}
+
+/**
+ * "Select one X unit. That unit heals 2D6 wounds. Or: Select one destroyed X unit. …": the one choice
+ * in the body, with each option wrapped in the selection printed in it. Refuses a choice whose
+ * options do not match the selections one to one, and selections with conditions, limits or counts
+ * of their own, which an option's select does not carry yet.
+ */
+function selectInOptions(body: Node, selections: readonly CompileLeaf[], qualified: boolean): Node {
+  if (qualified) throw new CompileError("A selection inside an \"Or:\" option takes only its unit-filter; conditions, limits and counts on it are not carried.");
+  const wrap = (node: Node): Node => {
+    if (node.type === "choice") {
+      const options = node.options as Node[];
+      if (options.length !== selections.length) throw new CompileError("Each option of an \"Or:\" choice makes one selection; the options and selections do not match.");
+      return { ...node, options: options.map((option, at) => selectUnit(selections[at]!, option, {})) };
+    }
+    if (node.type === "ability-part" || node.type === "conditional") return { ...node, effect: wrap(node.effect as Node) };
+    throw new CompileError("The selections of an \"Or:\" choice need the choice to be the ability's effect.");
+  };
+  return wrap(body);
 }

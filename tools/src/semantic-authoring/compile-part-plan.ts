@@ -274,6 +274,11 @@ export function planEffects(frame: PartFrame, sourceText: string | undefined, op
     else if (folded !== undefined && kept === undefined) boundDuration.set(previous.index, folded);
     boundDuration.delete(next.index);
     (previous.node.modifier as Node).advance = `fixed-${Number((next.node.modifier as Node).value)}`;
+    const notCumulative = (next.node.modifier as Node).not_cumulative;
+    if (notCumulative !== undefined) {
+      if (typeof notCumulative !== "object" || notCumulative === null) errors.push("An Advance with no roll does not stack only with a named ability's Move bonus.");
+      else (previous.node.modifier as Node).not_cumulative = structuredClone(notCumulative);
+    }
     planned.splice(planned.indexOf(next), 1);
   }
   return { planned, fold, split, boundDuration, window };

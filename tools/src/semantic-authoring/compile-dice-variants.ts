@@ -190,11 +190,13 @@ export function sharedPool(planned: Planned[], banded: Planned[], roll: CompileL
   };
   const inside = banded.map(counted);
   const countStat = roll.parameters.count_stat as { stat: string; of: string } | undefined;
+  const countHistory = roll.parameters.count_history as Node | undefined;
   const count = roll.parameters.count as number | undefined;
   const rolled: Node = {
     type: "roll",
-    dice: countStat !== undefined ? die : `${count ?? 1}${die}`,
+    dice: countStat !== undefined || countHistory !== undefined ? die : `${count ?? 1}${die}`,
     ...(countStat !== undefined ? { count_stat: { stat: countStat.stat, of: COUNT_STAT_REFS[countStat.of] } } : {}),
+    ...(countHistory !== undefined ? { count_history: structuredClone(countHistory) } : {}),
     roll_var: rollVar,
     effect: inside.length === 1 ? inside[0]! : { type: "sequence", steps: inside },
   };

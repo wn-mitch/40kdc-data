@@ -277,16 +277,11 @@ var unresolvedTargets = map[string]bool{"event-subject": true, "event-object": t
 // designated unit, or an unsupported debuff on it.
 func designateEntry(n, applies map[string]any, source map[string]any, opts dslOpts, out *effectTranslation) {
 	if applies["to"] == "attackers-of-target" || applies["to"] == "bearer-attacks-target" {
-		for _, rawFilter := range []any{applies["attacker_filter"], applies["attacker_unit_filter"]} {
+		for _, rawFilter := range []any{applies["attacker"], applies["attacker_filter"], applies["attacker_unit_filter"]} {
 			if rawFilter == nil {
 				continue
 			}
-			filter, ok := asMap(rawFilter)
-			if !ok || filter == nil {
-				out.unsupported = append(out.unsupported, unsup("designate-target attacker filter is unresolved", n))
-				return
-			}
-			verdict := matchesUnitFilter(filter, opts.context, "attacker", "friendly")
+			verdict := attackerVerdict(rawFilter, opts.context)
 			if verdict == false {
 				return
 			}
@@ -3934,4 +3929,33 @@ func marksOnly(node any) bool {
 		return true
 	}
 	return false
+}
+
+// attackerVerdict reports whether the crunched attacker is the one a designation's attacker entry
+// names: a unit filter, a unit-ref, or a list of unit-refs any one of which may make the attack.
+// nil means unknown.
+func attackerVerdict(raw any, ctx map[string]any) any {
+	refs, isList := raw.([]any)
+	if !isList {
+		refs = []any{raw}
+	}
+	allFalse := true
+	for _, ref := range refs {
+		filter, ok := asMap(ref)
+		if !ok || filter == nil {
+			allFalse = false
+			continue
+		}
+		verdict := matchesUnitFilter(filter, ctx, "attacker", "friendly")
+		if verdict == true {
+			return true
+		}
+		if verdict != false {
+			allFalse = false
+		}
+	}
+	if allFalse {
+		return false
+	}
+	return nil
 }

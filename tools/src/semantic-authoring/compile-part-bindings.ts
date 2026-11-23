@@ -14,6 +14,7 @@ import { momentsAfterDestruction, momentsAfterThisUse } from "./compile-nested-m
 import { chainPerPass, namedSelectionChain } from "./compile-named-selections.js";
 import { bindNearFriendlyTarget } from "./compile-near-friendly-target.js";
 import { groupedTargetRestrictions } from "./compile-target-groups.js";
+import { namesSelection } from "./compile-targeting-history.js";
 import type { PartFrame } from "./compile-part-classify.js";
 import type { PlannedEffect, planEffects } from "./compile-part-plan.js";
 
@@ -140,7 +141,11 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   const independent = pair === null && errors.length === 0 ? attempt(() => independentSelectionPair(selections)) : null;
   // Selections bound apart, which the leaves name one by one (compile-named-selections.ts).
   const named = pair === null && independent === null && errors.length === 0 ? attempt(() => namedSelectionChain(list, selections)) : null;
-  if (selections.length > 1 && pair === null && independent === null && named === null && errors.length === 0) errors.push("More than one unit is selected; the compiler binds only one.");
+  // "Select one X unit. That unit heals …. Or: Select one destroyed X unit. …": each option of an "Or:" choice makes its own selection.
+  const choiceMarks = list.flatMap((leaf, at) => leaf.family_id === "instead" && leaf.parameters.choice === true ? [at] : []);
+  const optionSelections = selections.length > 1 && pair === null && independent === null && named === null
+    && selections.every((selection, at) => at === 0 || choiceMarks.some((mark) => mark > list.indexOf(selections[at - 1]!) && mark < list.indexOf(selection)));
+  if (selections.length > 1 && pair === null && independent === null && named === null && !optionSelections && errors.length === 0) errors.push("More than one unit is selected; the compiler binds only one.");
   if (independent) {
     const refusal = independentPairRefusal(list, { parts: partStarts.length > 0, forEach: forEachLeaf !== null, count: Boolean(battleSizeCount || countOf) });
     if (refusal) errors.push(refusal);
@@ -165,15 +170,26 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   // A selection without "attacks against that unit" is only who "that unit" names (it suffers
   // mortal wounds, say); with it, every effect must be limited to those attacks.
   // An optional spend before a designated selection is lifted out of its body (see designatedSpends below); one after it is not.
-  const unlimitedItem = (item: PlannedEffect) => !optionalSpends.has(item.leaf);
-  const designatedSpends = selections.length === 1 && selected.length > 0 ? planned.filter((item) => optionalSpends.has(item.leaf) && item.leaf.start_byte < selections[0]!.start_byte) : [];
+  // "that targets that enemy unit", the unit of the ability's moment: designated with no selection.
+  const gates = list.filter((leaf) => leaf.family_id === "target-is-selected" && !namesSelection(leaf));
+  const fromMoment = selections.length === 0 && selected.length > 0 && gates.length > 0 && gates.every((leaf) => leaf.parameters.unit === "event-subject");
+  if (gates.some((leaf) => leaf.parameters.unit !== undefined) && !fromMoment) errors.push("An attack targets the moment's unit, but the ability also selects a unit or names another target.");
+  const designates = selected.length > 0 && (selections.length === 1 || fromMoment);
+  // "You can use this Stratagem on that unit even though it was just destroyed": a permission in the TARGET is about
+  // the Stratagem's target, not the designated unit, so it is lifted before the designation like a spend.
+  const targetPermissions = designates ? planned.filter((item) => item.leaf.family_id === "eligibility-permission" && item.leaf.fragment === "TARGET") : [];
+  const unlimitedItem = (item: PlannedEffect) => !optionalSpends.has(item.leaf) && !targetPermissions.includes(item);
+  const designatedSpends = [
+    ...targetPermissions,
+    ...(selections.length === 1 && selected.length > 0 ? planned.filter((item) => optionalSpends.has(item.leaf) && item.leaf.start_byte < selections[0]!.start_byte) : []),
+  ];
   // "that enemy unit cannot have the Benefit of Cover, and each time … makes an attack that targets that unit, …": an
   // effect on the selected unit itself is the designation's own entry (applies to: target) beside the attacks' entry.
-  const unselected = selections.length === 1 && selected.length > 0 ? planned.filter((item) => unlimitedItem(item) && !item.selected) : [];
+  const unselected = designates ? planned.filter((item) => unlimitedItem(item) && !item.selected) : [];
   const direct = partStarts.length === 0 && unselected.every((item) => item.node.target === "selected-unit") ? unselected : [];
-  if (selections.length === 1 && selected.length > 0 && (selected.filter(unlimitedItem).length + direct.length !== planned.filter(unlimitedItem).length
+  if (designates && (selected.filter(unlimitedItem).length + direct.length !== planned.filter(unlimitedItem).length
     || planned.some((item) => optionalSpends.has(item.leaf) && !designatedSpends.includes(item)))) errors.push("A unit is selected, but not every effect is limited to attacks against it.");
-  if (selections.length === 0 && selected.length > 0) errors.push("An attack targets \"that unit\", but no select-unit leaf says which unit.");
+  if (selections.length === 0 && selected.length > 0 && !fromMoment) errors.push("An attack targets \"that unit\", but no select-unit leaf says which unit.");
   if (selections.length === 0 && options.outerSelection !== true && planned.some((item) => namesSelected(item.node))) errors.push("An effect names \"that unit\", but no select-unit leaf says which unit.");
   // "Select one enemy X unit" with the bearer's attacks not aimed at it: the filter would narrow the
   // selection while the attacks stay unrestricted. An attack by the selected unit itself is the
@@ -228,7 +244,7 @@ export function bindParts(frame: PartFrame, plan: ReturnType<typeof planEffects>
   // When the window is itself an attack moment ("just after an enemy unit has shot"), the reactive trigger already is "those attacks".
   const attackMoment = list.some((leaf) => leaf.family_id === "event" && ["enemy-has-shot", "attacks-resolved", "after-shooting"].includes(String(leaf.parameters.kind)));
   if (!attackMoment && list.some((leaf) => leaf.family_id === "stratagem-target") && list.some((leaf) => leaf.family_id === "hit-by-attacks" && leaf.fragment === "TARGET")) errors.push("A hit-by-attacks qualifier on a Stratagem target has no DSL shape yet; it would be dropped.");
-  return { firstEffectIndex, partStarts, afterDestruction, afterThisUse, named, namedPass, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct };
+  return { firstEffectIndex, partStarts, afterDestruction, afterThisUse, named, namedPass, delayed, fold, selectionLimit, target, nearTarget, selected, fromMoment, optionSelections, pair, independent, designatedSpends, direct };
 }
 
 /**

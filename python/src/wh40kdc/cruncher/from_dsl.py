@@ -382,12 +382,13 @@ def _designate_entry(
     """One ``applies`` entry of a designate-target: a lever for attacks on the unit, or a debuff."""
     if applies.get("to") in ("attackers-of-target", "bearer-attacks-target"):
         for filt in (
+            applies.get("attacker"),
             applies.get("attacker_filter"),
             applies.get("attacker_unit_filter"),
         ):
             if filt is None:
                 continue
-            verdict = _matches_unit_filter(filt, opts["context"], "attacker", "friendly")
+            verdict = _attacker_verdict(filt, opts["context"])
             if verdict is False:
                 return
             if verdict == "unknown":
@@ -4925,3 +4926,16 @@ def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
         or source_binding
         or (node_type == "named-region-state" and consumer.get("attack_condition") is not None)
     )
+
+
+def _attacker_verdict(filt: Any, ctx: Any) -> Any:
+    """Whether the crunched attacker is the one a designation's attacker entry names.
+
+    The entry is a unit filter, a unit-ref, or a list of unit-refs any one of which may attack.
+    """
+    if not isinstance(filt, list):
+        return _matches_unit_filter(filt, ctx, "attacker", "friendly")
+    verdicts = [_matches_unit_filter(ref, ctx, "attacker", "friendly") for ref in filt]
+    if any(verdict is True for verdict in verdicts):
+        return True
+    return False if all(verdict is False for verdict in verdicts) else "unknown"

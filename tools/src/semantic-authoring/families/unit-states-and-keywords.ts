@@ -182,8 +182,12 @@ const SELECTION_BY = ["event-subject", "this-unit", "selected-unit", ANTECEDENT]
 const SELECTION_TARGETS = ["this-unit", "this-model", "selected-unit", FOLLOWING_FILTER, ANTECEDENT] as const;
 
 function normalizeTargetIsSelected(input: Params): Params {
-  keysWithin(input, [], ["by", "target", "all_attacks", "negated"], "target-is-selected");
-  const { by, target, all_attacks: all, negated } = input;
+  keysWithin(input, [], ["by", "target", "all_attacks", "negated", "unit"], "target-is-selected");
+  const { by, target, all_attacks: all, negated, unit } = input;
+  if (unit !== undefined) {
+    if (Object.keys(input).length > 1) throw new TypeError("target-is-selected.unit stands alone.");
+    return { unit: enumValue(unit, ["event-subject"], "target-is-selected.unit") };
+  }
   if (by === undefined && target === undefined) {
     if (all !== undefined || negated !== undefined) throw new TypeError("target-is-selected.all_attacks and negated need by and target.");
     return {};
@@ -261,10 +265,10 @@ export const UNIT_STATES_AND_KEYWORDS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "target-is-selected",
-    version: 3,
+    version: 4,
     role: "CONDITION",
     label: "Target is the selected unit",
-    description: "The attack targets the unit selected earlier in the ability (\"that unit\" after \"select one enemy unit\"). With by and target, always together, target was selected as a target by by in the moment the ability names (\"if one or more units with this ability are selected as a target of that charge\" = by antecedent, target this-unit); target following-filter is any unit the unit-filter right after this leaf matches. all_attacks and negated go only with by and target. all_attacks: target was selected as the target of every one of by's attacks, not just some (\"as the target of all of its attacks\"). negated: the selection did not happen (\"does not select your unit as the target of all of its attacks\" = all_attacks and negated).",
+    description: "The attack targets the unit selected earlier in the ability (\"that unit\" after \"select one enemy unit\"). With by and target, always together, target was selected as a target by by in the moment the ability names (\"if one or more units with this ability are selected as a target of that charge\" = by antecedent, target this-unit); target following-filter is any unit the unit-filter right after this leaf matches. all_attacks and negated go only with by and target. all_attacks: target was selected as the target of every one of by's attacks, not just some (\"as the target of all of its attacks\"). negated: the selection did not happen (\"does not select your unit as the target of all of its attacks\" = all_attacks and negated). unit event-subject, alone: the attack targets the unit of the ability's moment, which the ability designates with no selection (\"just after an enemy unit has shot\" … \"makes an attack that targets that enemy unit\").",
     starter: {},
     parameterSchema: {
       type: "object",
@@ -273,6 +277,7 @@ export const UNIT_STATES_AND_KEYWORDS_FAMILIES: readonly FlatFamily[] = [
         target: { enum: [...SELECTION_TARGETS], "x-optional": true },
         all_attacks: { const: true, "x-optional": true },
         negated: { type: "boolean", "x-optional": true },
+        unit: { enum: ["event-subject"], "x-optional": true },
       },
       additionalProperties: false,
     },

@@ -313,9 +313,34 @@ def model_event_refs(value: Any, triggers: list[Any]) -> Any:
             return out
         return v
 
+    value = _transport_refs(value, triggers)
     obj_ = _all_models(triggers, "object")
     subj = _all_models(triggers, "subject")
     return rewrite(value, obj_, subj) if obj_ or subj else value
+
+
+EVENT_OBJECT_TRANSPORT = "event-object-transport"
+
+
+def _transport_refs(value: Any, triggers: list[Any]) -> Any:
+    """`value` with its `event-object` refs spelled `EVENT_OBJECT_TRANSPORT` when every trigger is
+    a disembarked moment. Inside an `ability-part` with a trigger of its own, the ref names that
+    part's event and is left alone."""
+    live = [t for t in triggers if isinstance(t, dict) and t.get("event") is not None]
+    if not live or not all(t.get("event") == "disembarked" for t in live):
+        return value
+
+    def rewrite(v: Any) -> Any:
+        if v == "event-object":
+            return EVENT_OBJECT_TRANSPORT
+        if isinstance(v, list):
+            return [rewrite(x) for x in v]
+        if isinstance(v, dict):
+            own = v.get("type") == "ability-part" and v.get("trigger") is not None
+            return {k: (x if own and k == "effect" else rewrite(x)) for k, x in v.items()}
+        return v
+
+    return rewrite(value)
 
 
 _ROLE_PHRASES: dict[str, str] = {
@@ -328,6 +353,7 @@ _ROLE_PHRASES: dict[str, str] = {
     "event-subject-model": "the triggering model",
     "event-object": "that unit",
     "event-object-model": "that model",
+    "event-object-transport": "the Transport",
     "stratagem-target": "the Stratagem's target",
     "selected-unit": "the selected unit",
     "recipient": "this unit",

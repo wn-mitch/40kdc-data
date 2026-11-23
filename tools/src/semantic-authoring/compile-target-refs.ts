@@ -23,7 +23,7 @@ const ONE = "stratagem-target:";
 const SEVERAL = "stratagem-targets:";
 
 /** The reference to one named target. */
-const targetRef = (name: string) => `${ONE}${name}`;
+export const targetRef = (name: string) => `${ONE}${name}`;
 
 /** Whether a lowered value is a reference to the Stratagem's targets (one or several). */
 export function isTargetRef(value: unknown): value is string {
@@ -44,7 +44,7 @@ function targetRefs(pick: "every" | "any", targets: readonly Match[]): string {
   return targets.length === 1 && !targets[0]!.gate ? targetRef(targets[0]!.name) : `${SEVERAL}${JSON.stringify({ pick, targets })}`;
 }
 
-const parseSeveral = (ref: string) => JSON.parse(ref.slice(SEVERAL.length)) as Several;
+export const parseSeveral = (ref: string) => JSON.parse(ref.slice(SEVERAL.length)) as Several;
 
 /**
  * Keys a target reference can fill: those whose lowering takes any DSL unit-ref (effects through
@@ -54,7 +54,7 @@ const parseSeveral = (ref: string) => JSON.parse(ref.slice(SEVERAL.length)) as S
 export const TARGET_REF_KEYS: Readonly<Record<string, readonly string[]>> = {
   "named-ability-grant": ["subject"], "named-ability-suppression": ["subject"], "named-ability-exchange": ["subject"],
   "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "weapon-ability-range": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
-  "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject", "into"], "core-ability-grant": ["subject"],
+  "regain-wounds": ["subject"], "revive-into-reserves": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject", "into"], "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
   "targeting-restriction": ["by", "target"], "weapon-property-scope": ["subject"], "ignore-modifiers": ["subject"],
   "roll-modifier": ["subject"], reroll: ["subject"], "make-move": ["subject"], "act-after-move": ["subject"], "no-advance-roll": ["subject"],
@@ -67,6 +67,7 @@ export const TARGET_REF_KEYS: Readonly<Record<string, readonly string[]>> = {
   // "while a friendly X unit is within 3\" of your unit": an aura measured from a target (compile-wrappers.ts wrapAura).
   "aura-range": ["of"],
   "orders-modifier": ["subject"],
+  "counts-as": ["subject"],
 };
 
 const accepts = (leaf: CompileLeaf, key: string) => TARGET_REF_KEYS[leaf.family_id]?.includes(key) === true;
@@ -82,12 +83,15 @@ const afterTargeting = (leaf: CompileLeaf) => leaf.fragment !== "TARGET" && leaf
  */
 function matchedNames(filter: CompileLeaf, heads: readonly TargetHead[]): Match[] {
   const p = filter.parameters as { side: string; keywords?: string[]; level?: string } & Record<string, unknown>;
-  const extra = Object.keys(p).filter((key) => !["side", "keywords", "level", "among", "targets"].includes(key));
+  const extra = Object.keys(p).filter((key) => !["side", "keywords", "any_keywords", "level", "among", "targets"].includes(key));
   if (extra.length) throw new CompileError(`An among-filter names a Stratagem target by side, level and keywords only; it also holds ${extra.join(", ")}.`);
   const level = p.level ?? "unit";
+  // "your WRAITHBLADES, WRAITHGUARD or WRAITHLORD unit": the target printed with the same keyword list.
+  const anyOf = ((p.any_keywords as string[] | undefined) ?? []).slice().sort().join("|");
   return heads.flatMap((head) => {
     const side = p.side === "any" || (head.side !== null && head.side === p.side);
     if (!side || head.level !== level) return [];
+    if (anyOf && (head.anyKeywords ?? []).slice().sort().join("|") !== anyOf) return [];
     const missing = (p.keywords ?? []).filter((keyword) => !head.keywords.includes(keyword));
     if (missing.length === 0) return head.names.map((name) => ({ name }));
     const fits = head.alternatives.filter((keywords) => missing.every((keyword) => keywords.includes(keyword)));
@@ -497,6 +501,16 @@ function resolveTargetRefs<T>(value: T, position: Position = "effect"): T {
 }
 
 /**
+ * In a selector's eligibility "this unit" is each candidate it can select (the DSL's unit-ref), not a
+ * Stratagem target, so the eligibility is left out of the ambiguity check.
+ */
+function withoutCandidateChecks(key: string, value: unknown): unknown {
+  if (key !== "selector" || typeof value !== "object" || value === null || Array.isArray(value)) return value;
+  const { eligibility: _eligibility, ...rest } = value as Node;
+  return rest;
+}
+
+/**
  * A compiled entry's effect, moment and core target with every target reference resolved. With
  * several targets, the moment's "this unit" is the one target the moment binds (bound_to: the
  * attacked or the triggering unit); an effect still naming this unit (a default the leaves did
@@ -512,6 +526,6 @@ export function resolveEntry(effect: Node, trigger: unknown, target: Node | Node
     moment = replaced(moment, "this-unit", { stratagem_target: bound[0]!.name }) as typeof moment;
   }
   const resolved = { effect: resolveTargetRefs(effect), trigger: moment };
-  if (several && JSON.stringify(resolved).includes('"this-unit"')) throw new CompileError("An effect names this unit, but the Stratagem has several targets; name the one it means.");
+  if (several && JSON.stringify(resolved, withoutCandidateChecks).includes('"this-unit"')) throw new CompileError("An effect names this unit, but the Stratagem has several targets; name the one it means.");
   return { ...resolved, core: target ? { target_restrictions: resolveTargetRefs(target, "value") } : null };
 }

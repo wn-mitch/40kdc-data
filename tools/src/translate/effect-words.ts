@@ -349,6 +349,7 @@ const ROLE_SUBJECTS: Record<string, string> = {
   "event-subject-model": "the triggering model",
   "event-object": "that unit",
   "event-object-model": "that model",
+  "event-object-transport": "the Transport",
   "stratagem-target": "that unit",
   "bearer-transport": "the Transport this unit is embarked within",
   "ability-unit": "this unit",

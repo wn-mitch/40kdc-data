@@ -2309,6 +2309,15 @@
                     "blast"
                   ]
                 },
+                "for_abilities": {
+                  "description": "The abilities the unit counts as within range for, and only those (\"for the purposes of the Psychic Guidance and Spirit Guides abilities\").",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                  }
+                },
                 "in_region": {
                   "$ref": "../../defs/common.schema.json#/$defs/region-ref"
                 }
@@ -3986,6 +3995,19 @@
                       "const": true
                     }
                   }
+                },
+                "not_cumulative": {
+                  "description": "An Advance with no roll (advance) that does not stack with the named ability's own Move bonus (\"this is not cumulative with the REAVERS' Matchless Swiftness ability\").",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "ability"
+                  ],
+                  "properties": {
+                    "ability": {
+                      "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                    }
+                  }
                 }
               },
               "minProperties": 1,
@@ -4029,6 +4051,18 @@
                       "applies_to_moves"
                     ]
                   }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "not_cumulative"
+                    ]
+                  },
+                  "then": {
+                    "required": [
+                      "advance"
+                    ]
+                  }
                 }
               ]
             },
@@ -4041,7 +4075,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "set-up effect",
-          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
+          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as. from destroyed: a destroyed unit is returned and set up (with to: strategic-reserves, placed into Strategic Reserves).",
           "required": [
             "type",
             "target",
@@ -4071,7 +4105,8 @@
                   "enum": [
                     "strategic-reserves",
                     "transport",
-                    "battlefield"
+                    "battlefield",
+                    "destroyed"
                   ]
                 },
                 "via": {
@@ -6989,11 +7024,16 @@
                   "$ref": "../../defs/common.schema.json#/$defs/objective-selector"
                 }
               ]
+            },
+            "from": {
+              "enum": [
+                "event-subject"
+              ],
+              "description": "The unit is the unit of the ability's moment (\"just after an enemy unit has shot … attacks that target that enemy unit\"), designated with no choice; the select then has no selector."
             }
           },
           "required": [
-            "kind",
-            "selector"
+            "kind"
           ],
           "allOf": [
             {
@@ -7031,6 +7071,33 @@
                   "selector": {
                     "$ref": "../../defs/common.schema.json#/$defs/objective-selector"
                   }
+                }
+              }
+            }
+          ],
+          "oneOf": [
+            {
+              "required": [
+                "selector"
+              ],
+              "not": {
+                "required": [
+                  "from"
+                ]
+              }
+            },
+            {
+              "required": [
+                "from"
+              ],
+              "not": {
+                "required": [
+                  "selector"
+                ]
+              },
+              "properties": {
+                "kind": {
+                  "const": "unit"
                 }
               }
             }
@@ -7159,11 +7226,18 @@
           "then": {
             "properties": {
               "select": {
-                "properties": {
-                  "selector": {
-                    "required": [
-                      "count"
-                    ]
+                "if": {
+                  "required": [
+                    "selector"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "selector": {
+                      "required": [
+                        "count"
+                      ]
+                    }
                   }
                 }
               }
@@ -8667,6 +8741,31 @@
             }
           }
         },
+        "count_history": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "of",
+            "subject",
+            "window"
+          ],
+          "description": "Roll as many of `dice` (one die, such as D6) as a count from the battle's history: of mortal-wounds-suffered, the mortal wounds `subject` suffered in `window` (\"a number of dice equal to the number of mortal wounds your unit suffered this phase\").",
+          "properties": {
+            "of": {
+              "enum": [
+                "mortal-wounds-suffered"
+              ]
+            },
+            "subject": {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            },
+            "window": {
+              "enum": [
+                "phase"
+              ]
+            }
+          }
+        },
         "extra_dice_pool": {
           "type": "string",
           "minLength": 1
@@ -8687,6 +8786,16 @@
         "dice",
         "roll_var",
         "effect"
+      ],
+      "allOf": [
+        {
+          "not": {
+            "required": [
+              "count_stat",
+              "count_history"
+            ]
+          }
+        }
       ]
     },
     "select-objective-effect": {
@@ -8914,6 +9023,22 @@
         "attacker_filter": {
           "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
         },
+        "attacker": {
+          "description": "The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, \"each time a model in your WRAITH CONSTRUCT unit makes an attack\"), or any one of several (\"each time one of your ARMIGER models makes an attack\", with attacker_filter naming the keywords each attacking model has).",
+          "oneOf": [
+            {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+              }
+            }
+          ]
+        },
         "attacker_unit_filter": {
           "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
         },
@@ -8940,6 +9065,11 @@
               {
                 "required": [
                   "attacker_unit_filter"
+                ]
+              },
+              {
+                "required": [
+                  "attacker"
                 ]
               }
             ]

@@ -264,7 +264,12 @@ function moveModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): strin
     const moves = kinds ? `${kinds} moves` : "Move characteristic";
     clauses.push(!Number.isNaN(n) && n < 0 ? `subtract ${Math.abs(n)}" from ${ofOrPossessive(subj, moves)}` : `add ${diceCase(m.distance_bonus)}" to ${ofOrPossessive(subj, moves)}`);
   }
-  if (m.advance === "fixed-6" || m.advance === "fixed-8") clauses.push(`${subj} ${v(subj, "does")} not make an Advance roll; add ${m.advance.slice("fixed-".length)}" to ${pronoun(subj)} Move characteristic instead`);
+  if (m.advance === "fixed-6" || m.advance === "fixed-8") {
+    // "(this is not cumulative with the Matchless Swiftness ability)": the named ability's own Move bonus.
+    const nc = m.not_cumulative as P | undefined;
+    const trail = nc?.ability != null ? ` (this is not cumulative with the ${abilityLabel(nc.ability)} ability)` : "";
+    clauses.push(`${subj} ${v(subj, "does")} not make an Advance roll; add ${m.advance.slice("fixed-".length)}" to ${pronoun(subj)} Move characteristic instead${trail}`);
+  }
   if (Array.isArray(m.passthrough)) clauses.push(`${subj} can move over ${passthrough(m.passthrough)} as though they were not there`);
   if (m.no_end_in_engagement === true) clauses.push(`${subj} cannot end a move within Engagement Range of any enemy unit`);
   if (m.ends_nearest != null) clauses.push(endsNearestPhrase(m.ends_nearest as P, ctx, subj, `${pronoun(subj)} move`));
@@ -305,7 +310,9 @@ function setUp(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
     const arrival = m.arrives === "next-movement-phase"
       ? `; ${it} ${arrives} in the Reinforcements step of your next Movement phase${m.allow_first_round === true ? ", even in the first battle round" : ""}`
       : m.allow_first_round === true ? `; ${it} can arrive in the first battle round` : "";
-    return `${m.allow === false ? noneOf(who) : who} ${can} be placed into Strategic Reserves${limits}${arrival}`;
+    // "That unit heals 10 wounds and is placed in strategic reserves": a destroyed unit returned.
+    const placed = m.from === "destroyed" ? "is returned to the battle and placed" : `${can} be placed`;
+    return `${m.allow === false ? noneOf(who) : who} ${placed} into Strategic Reserves${limits}${arrival}`;
   }
   const from = m.from === "strategic-reserves" ? " from Strategic Reserves" : m.from === "transport" ? " from its Transport" : "";
   const whoCan = m.allow === false ? noneOf(who) : who;

@@ -226,6 +226,7 @@ UnitState: TypeAlias = Literal[
     "hidden",
     "fights-first",
     "benefit-of-cover",
+    "destroyed",
 ]
 
 
@@ -3463,6 +3464,7 @@ class Modifier19(TypedDict):
     of: NotRequired[UnitRef]
     model_count: NotRequired[ModelCount1]
     for_weapon_ability: NotRequired[Literal["blast"]]
+    for_abilities: NotRequired[list[EntityId]]
     in_region: NotRequired[RegionRef]
 
 
@@ -3471,6 +3473,7 @@ class Modifier20(TypedDict):
     of: NotRequired[UnitRef]
     model_count: NotRequired[ModelCount1]
     for_weapon_ability: NotRequired[Literal["blast"]]
+    for_abilities: NotRequired[list[EntityId]]
     in_region: RegionRef
 
 
@@ -3479,6 +3482,7 @@ class Modifier21(TypedDict):
     of: NotRequired[UnitRef]
     model_count: ModelCount1
     for_weapon_ability: Literal["blast"]
+    for_abilities: NotRequired[list[EntityId]]
     in_region: NotRequired[RegionRef]
 
 
@@ -3883,6 +3887,7 @@ class Modifier39(TypedDict):
     ends_when: NotRequired[Condition]
     ends_when_replaces: NotRequired[Literal[True]]
     mode_choice: NotRequired[ModeChoice]
+    not_cumulative: NotRequired[NotCumulative]
 
 
 class SingleEffect29(TypedDict):
@@ -3902,7 +3907,7 @@ Modifier40 = TypedDict(
     {
         "allow": NotRequired[bool],
         "to": Literal["battlefield", "strategic-reserves"],
-        "from": NotRequired[Literal["strategic-reserves", "transport", "battlefield"]],
+        "from": NotRequired[Literal["strategic-reserves", "transport", "battlefield", "destroyed"]],
         "via": NotRequired[Literal["deep-strike", "cult-ambush"]],
         "marker_range": NotRequired[MarkerRange],
         "subject": NotRequired[UnitRef | Literal["models-on-this-model"]],
@@ -4425,15 +4430,30 @@ class AuraEffect(TypedDict):
     modifier: Modifier69
 
 
-class Select1(TypedDict):
-    kind: Literal["unit", "objective"]
-    selector: UnitSelector | ObjectiveSelector
+Select1 = TypedDict(
+    "Select1",
+    {
+        "kind": Literal["unit", "objective"],
+        "selector": UnitSelector | ObjectiveSelector,
+        "from": NotRequired[Literal["event-subject"]],
+    },
+)
+
+
+Select2 = TypedDict(
+    "Select2",
+    {
+        "kind": Literal["unit"],
+        "selector": NotRequired[UnitSelector | ObjectiveSelector],
+        "from": Literal["event-subject"],
+    },
+)
 
 
 class DesignateTargetEffect(TypedDict):
     type: Literal["designate-target"]
     designation: str
-    select: Select1
+    select: Select1 | Select2
     applies: DesignationApplies | list[Apply]
     duration: NotRequired[ScopeDuration]
 
@@ -4583,6 +4603,11 @@ class NamedRegionState(TypedDict):
     branch_precedence: NotRequired[Literal["qualified-replaces-default"]]
 
 
+class Select3(TypedDict):
+    kind: Literal["unit", "objective"]
+    selector: UnitSelector | ObjectiveSelector
+
+
 class Consumer(TypedDict):
     relation: Literal["attacks-selected-unit", "within-selected-marker"]
     beneficiary: UnitRef
@@ -4605,7 +4630,7 @@ class PersistentDesignationEffect(TypedDict):
     type: Literal["persistent-designation"]
     operation: NotRequired[Literal["establish", "replace"]]
     designation: str
-    select: Select1
+    select: Select3
     consumer: NotRequired[Consumer]
     duration: ScopeDuration
     lifecycle: NotRequired[Lifecycle]
@@ -4618,10 +4643,17 @@ class CountStat(TypedDict):
     of: UnitRef
 
 
+class CountHistory(TypedDict):
+    of: Literal["mortal-wounds-suffered"]
+    subject: UnitRef
+    window: Literal["phase"]
+
+
 class RollEffect(TypedDict):
     type: Literal["roll"]
     dice: DiceExpression
     count_stat: NotRequired[CountStat]
+    count_history: NotRequired[CountHistory]
     extra_dice_pool: NotRequired[str]
     kind: NotRequired[RollKind]
     roll_var: str
@@ -4679,6 +4711,7 @@ class DesignationApplies(TypedDict):
     ]
     effect: EffectNode
     attacker_filter: NotRequired[UnitFilter]
+    attacker: NotRequired[UnitRef | list[UnitRef]]
     attacker_unit_filter: NotRequired[UnitFilter]
     beneficiary: NotRequired[EventOrSelectionReference]
     reference: NotRequired[SelectionReference]

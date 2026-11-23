@@ -31,7 +31,7 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // made-dark-pact-this-phase; roll-total v2 roll_var dark-pact-test; ability-modifier v9 aspect mortal-wounds.
   // Every earlier leaf keeps its meaning.
   { family: "event", from: 40, to: 43, map: (parameters) => ({ ...parameters }) },
-  { family: "unit-activity", from: 25, to: 27, map: (parameters) => ({ ...parameters }) },
+  { family: "unit-activity", from: 25, to: 28, map: (parameters) => ({ ...parameters }) },
   { family: "roll-total", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
   { family: "ability-modifier", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
   // issue-orders-open v3 adds as_if_phase, issuer_keywords and same_order; order-rule v3 the
@@ -43,7 +43,7 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // attack v10 lets a targeted attack's unit point back (antecedent); stratagem-target v6 allows count_max 1.
   // Every earlier leaf keeps its meaning.
   { family: "attack", from: 9, to: 10, map: (parameters) => ({ ...parameters }) },
-  { family: "stratagem-target", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
+  { family: "stratagem-target", from: 5, to: 7, map: (parameters) => ({ ...parameters }) },
   // resource-gain v7 and army-construction v5 accept a combat-patrol value in a battle-size table;
   // every earlier leaf keeps its meaning.
   { family: "resource-gain", from: 6, to: 7, map: (parameters) => ({ ...parameters }) },
@@ -72,7 +72,7 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "characteristic-modifier", from: 21, to: 23, map: (parameters) => ({ ...parameters }) },
   { family: "characteristic-amount", from: 1, to: 2, map: (parameters) => ({ ...parameters }) },
   { family: "return-models", from: 7, to: 9, map: (parameters) => ({ ...parameters }) },
-  { family: "dice-roll", from: 10, to: 11, map: (parameters) => ({ ...parameters }) },
+  { family: "dice-roll", from: 10, to: 12, map: (parameters) => ({ ...parameters }) },
   { family: "bearer-eligibility", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
   // Chaos Daemons: resource v3 holder opponent; optional-cost-paid v3 a Flux token spend; destroy-models v5
   // chosen_by; rule-state v5 sub_rule and aspect; sticky-objective v5 a designation tag.
@@ -83,9 +83,11 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   { family: "rule-state", from: 4, to: 6, map: (parameters) => ({ ...parameters }) },
   { family: "sticky-objective", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
   // apply-mark v10: the registry gains pyrogenesis-flux-spent; v11 six Stratagem targets (seers-eye, spirit-mark-psychic,
-  // rites-of-exorcism, execution-order, exemplars-wisdom, virtue-of-courage).
-  { family: "apply-mark", from: 9, to: 11, map: (parameters) => ({ ...parameters }) },
-  { family: "apply-mark", from: 10, to: 11, map: (parameters) => ({ ...parameters }) },
+  // rites-of-exorcism, execution-order, exemplars-wisdom, virtue-of-courage); v12 avenge-the-star-children and
+  // vengeance-for-the-martyr.
+  { family: "apply-mark", from: 9, to: 12, map: (parameters) => ({ ...parameters }) },
+  { family: "apply-mark", from: 10, to: 12, map: (parameters) => ({ ...parameters }) },
+  { family: "apply-mark", from: 11, to: 12, map: (parameters) => ({ ...parameters }) },
   // choice-open v5 adds id (Feed the Swarm's Regenerate); ability-activate v6 adds immediate; ability-modifier
   // v8 names a record's option ({ability_id, option_id}) and adds the amount and received aspects. Every
   // earlier leaf keeps its meaning.
@@ -127,18 +129,38 @@ export const FAMILY_VERSION_MAPPINGS: readonly VersionMapping[] = [
   // usage-limit v7: count_from equipped-wargear.
   { family: "usage-limit", from: 6, to: 7, map: (parameters) => ({ ...parameters }) },
   // counts-as v4: model_count_below for a weapon ability's purposes (Blast).
-  { family: "counts-as", from: 3, to: 4, map: (parameters) => ({ ...parameters }) },
+  { family: "counts-as", from: 3, to: 5, map: (parameters) => ({ ...parameters }) },
   // Long-tail batch B: event v43 (an any-of destroyed-unit filter, the last model, a state change's cause and side,
   // a CP gained from an ability, before-removal, before-deadly-demise and before-marker-removal timings);
   // unit-activity v27 destroyed-by-event-subject-this-phase; designated-filter v4 at phase-start; unit-keyword v9
   // subject event-object; roll-result v4 from {battle_round_plus: 1}. Every earlier leaf keeps its meaning.
   { family: "event", from: 42, to: 43, map: (parameters) => ({ ...parameters }) },
-  { family: "unit-activity", from: 26, to: 27, map: (parameters) => ({ ...parameters }) },
-  { family: "designated-filter", from: 3, to: 4, map: (parameters) => ({ ...parameters }) },
+  { family: "unit-activity", from: 26, to: 28, map: (parameters) => ({ ...parameters }) },
+  { family: "designated-filter", from: 3, to: 5, map: (parameters) => ({ ...parameters }) },
   { family: "unit-keyword", from: 8, to: 9, map: (parameters) => ({ ...parameters }) },
   { family: "roll-result", from: 3, to: 4, map: (parameters) => ({ ...parameters }) },
   // battlefield-marker v6: a relocate takes min_enemy_distance. Every earlier leaf keeps its meaning.
   { family: "battlefield-marker", from: 5, to: 6, map: (parameters) => ({ ...parameters }) },
+  // Long-tail batch C: stratagem-target v7 bind_as; counts-as v5 of {bound} and for_abilities.
+  // Every earlier leaf keeps its meaning.
+  { family: "stratagem-target", from: 6, to: 7, map: (parameters) => ({ ...parameters }) },
+  { family: "counts-as", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
+  // ignore-modifiers v5: subject attack.
+  { family: "ignore-modifiers", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
+  // designated-filter v5: by {bound: name}.
+  { family: "designated-filter", from: 4, to: 5, map: (parameters) => ({ ...parameters }) },
+  // triggering-target v7: bind_as.
+  { family: "triggering-target", from: 6, to: 7, map: (parameters) => ({ ...parameters }) },
+  // target-is-selected v4: unit event-subject.
+  { family: "target-is-selected", from: 3, to: 4, map: (parameters) => ({ ...parameters }) },
+  // unit-activity v28: suffered and inflicted mortal wounds this phase; subject disembarked-from.
+  { family: "unit-activity", from: 27, to: 28, map: (parameters) => ({ ...parameters }) },
+  // dice-roll v12: count_history.
+  { family: "dice-roll", from: 11, to: 12, map: (parameters) => ({ ...parameters }) },
+  // unit-filter v21: state destroyed.
+  { family: "unit-filter", from: 20, to: 21, map: (parameters) => ({ ...parameters }) },
+  // regain-wounds v10: amount 2D6.
+  { family: "regain-wounds", from: 9, to: 10, map: (parameters) => ({ ...parameters }) },
 ];
 
 export type FamilyVersionReport = {

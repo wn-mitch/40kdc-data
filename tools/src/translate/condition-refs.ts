@@ -164,6 +164,7 @@ function allModels(triggers: readonly { event?: unknown }[], role: "subject" | "
  * part's event instead, so it is left for the part to rewrite when it renders.
  */
 export function modelEventRefs<T>(value: T, triggers: readonly { event?: unknown }[]): T {
+  value = transportRefs(value, triggers);
   const rewrite = (v: unknown, object: boolean, subject: boolean): unknown => {
     if (object && v === "event-object") return EVENT_OBJECT_MODEL;
     if (subject && v === "event-subject") return EVENT_SUBJECT_MODEL;
@@ -182,6 +183,30 @@ export function modelEventRefs<T>(value: T, triggers: readonly { event?: unknown
   return object || subject ? (rewrite(value, object, subject) as T) : value;
 }
 
+/** The describer's spelling of `event-object` under a disembarked moment: the Transport the unit disembarked from. */
+export const EVENT_OBJECT_TRANSPORT = "event-object-transport";
+
+/**
+ * `value` with its `event-object` refs spelled `EVENT_OBJECT_TRANSPORT` when every trigger is a
+ * disembarked moment ("disembarks from a TRANSPORT that made a Normal move this phase"). Inside an
+ * `ability-part` with a trigger of its own, the ref names that part's event and is left alone.
+ */
+function transportRefs<T>(value: T, triggers: readonly { event?: unknown }[]): T {
+  const live = triggers.filter((t) => t.event != null);
+  if (live.length === 0 || !live.every((t) => t.event === "disembarked")) return value;
+  const rewrite = (v: unknown): unknown => {
+    if (v === "event-object") return EVENT_OBJECT_TRANSPORT;
+    if (Array.isArray(v)) return v.map(rewrite);
+    if (v != null && typeof v === "object") {
+      const o = v as Record<string, unknown>;
+      const own = o.type === "ability-part" && o.trigger != null;
+      return Object.fromEntries(Object.entries(o).map(([k, x]) => [k, own && k === "effect" ? x : rewrite(x)]));
+    }
+    return v;
+  };
+  return rewrite(value) as T;
+}
+
 /** Whether any trigger of a spec (one trigger or a list) with an event names a `role`. */
 function namesRole(trigger: unknown, role: "subject" | "object"): boolean {
   const list = Array.isArray(trigger) ? trigger : trigger != null ? [trigger] : [];
@@ -198,6 +223,7 @@ const ROLE_PHRASES: Record<string, string> = {
   "event-subject-model": "the triggering model",
   "event-object": "that unit",
   "event-object-model": "that model",
+  "event-object-transport": "the Transport",
   "stratagem-target": "the Stratagem's target",
   "selected-unit": "the selected unit",
   recipient: "this unit",

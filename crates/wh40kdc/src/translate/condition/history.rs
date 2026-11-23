@@ -390,6 +390,18 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             } else {
                 String::new()
             };
+            // "which inflicted one or more mortal wounds on your unit this phase": who caused them.
+            if f.get("attack_type").and_then(Value::as_str) == Some("mortal")
+                && nn(f, "by").is_some()
+            {
+                return format!(
+                    "{neg}{} inflicted one or more mortal wounds on {obj_phrase} {}",
+                    unit_ref_phrase(f.get("by"), "the unit"),
+                    window_phrase(window)
+                )
+                .trim_end()
+                .to_string();
+            }
             if window.and_then(Value::as_str) == Some("event") {
                 format!(
                     "{neg}{obj_phrase} lost one or more wounds from the triggering {atk}attacks"

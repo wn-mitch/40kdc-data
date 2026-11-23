@@ -269,6 +269,7 @@ pub(crate) fn model_event_refs(v: &Value, triggers: &[&Value]) -> Value {
             _ => v.clone(),
         }
     }
+    let v = &transport_refs(v, triggers);
     let object = all_models(triggers, "object");
     let subject = all_models(triggers, "subject");
     if object || subject {
@@ -276,6 +277,51 @@ pub(crate) fn model_event_refs(v: &Value, triggers: &[&Value]) -> Value {
     } else {
         v.clone()
     }
+}
+
+/// The describer's spelling of `event-object` under a disembarked moment: the Transport the unit
+/// disembarked from.
+pub(crate) const EVENT_OBJECT_TRANSPORT: &str = "event-object-transport";
+
+/// `v` with its `event-object` refs spelled `EVENT_OBJECT_TRANSPORT` when every trigger is a
+/// disembarked moment ("disembarks from a TRANSPORT that made a Normal move this phase"). Inside an
+/// `ability-part` with a trigger of its own, the ref names that part's event and is left alone.
+fn transport_refs(v: &Value, triggers: &[&Value]) -> Value {
+    fn rewrite(v: &Value) -> Value {
+        match v {
+            Value::String(s) if s == "event-object" => Value::String(EVENT_OBJECT_TRANSPORT.into()),
+            Value::Array(a) => Value::Array(a.iter().map(rewrite).collect()),
+            Value::Object(o) => {
+                let own = o.get("type").and_then(Value::as_str) == Some("ability-part")
+                    && o.get("trigger").is_some_and(|t| !t.is_null());
+                Value::Object(
+                    o.iter()
+                        .map(|(k, x)| {
+                            let x = if own && k == "effect" {
+                                x.clone()
+                            } else {
+                                rewrite(x)
+                            };
+                            (k.clone(), x)
+                        })
+                        .collect(),
+                )
+            }
+            _ => v.clone(),
+        }
+    }
+    let live: Vec<&&Value> = triggers
+        .iter()
+        .filter(|t| t.get("event").is_some_and(|e| !e.is_null()))
+        .collect();
+    if live.is_empty()
+        || !live
+            .iter()
+            .all(|t| t.get("event").and_then(Value::as_str) == Some("disembarked"))
+    {
+        return v.clone();
+    }
+    rewrite(v)
 }
 
 pub(crate) fn role_phrase(role: &str) -> Option<&'static str> {
@@ -289,6 +335,7 @@ pub(crate) fn role_phrase(role: &str) -> Option<&'static str> {
         EVENT_SUBJECT_MODEL => "the triggering model",
         "event-object" => "that unit",
         EVENT_OBJECT_MODEL => "that model",
+        EVENT_OBJECT_TRANSPORT => "the Transport",
         "stratagem-target" => "the Stratagem's target",
         "selected-unit" => "the selected unit",
         "recipient" => "this unit",

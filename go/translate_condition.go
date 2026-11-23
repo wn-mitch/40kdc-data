@@ -291,12 +291,64 @@ func modelEventRefs(v any, triggers []map[string]any) any {
 		}
 		return v
 	}
+	v = transportRefs(v, triggers)
 	object := allModels(triggers, "object")
 	subject := allModels(triggers, "subject")
 	if !object && !subject {
 		return v
 	}
 	return rewrite(v, object, subject)
+}
+
+// eventObjectTransport is the describer's spelling of `event-object` under a disembarked moment:
+// the Transport the unit disembarked from.
+const eventObjectTransport = "event-object-transport"
+
+// transportRefs returns v with its `event-object` refs spelled eventObjectTransport when every
+// trigger is a disembarked moment. Inside an `ability-part` with a trigger of its own, the ref names
+// that part's event and is left alone.
+func transportRefs(v any, triggers []map[string]any) any {
+	live := 0
+	for _, t := range triggers {
+		if t["event"] == nil {
+			continue
+		}
+		live++
+		if t["event"] != "disembarked" {
+			return v
+		}
+	}
+	if live == 0 {
+		return v
+	}
+	var rewrite func(v any) any
+	rewrite = func(v any) any {
+		switch x := v.(type) {
+		case string:
+			if x == "event-object" {
+				return eventObjectTransport
+			}
+		case []any:
+			out := make([]any, len(x))
+			for i, item := range x {
+				out[i] = rewrite(item)
+			}
+			return out
+		case map[string]any:
+			own := x["type"] == "ability-part" && x["trigger"] != nil
+			out := make(map[string]any, len(x))
+			for k, item := range x {
+				if own && k == "effect" {
+					out[k] = item
+				} else {
+					out[k] = rewrite(item)
+				}
+			}
+			return out
+		}
+		return v
+	}
+	return rewrite(v)
 }
 
 var rolePhrases = map[string]string{
@@ -309,6 +361,7 @@ var rolePhrases = map[string]string{
 	eventSubjectModel:    "the triggering model",
 	"event-object":       "that unit",
 	eventObjectModel:     "that model",
+	eventObjectTransport: "the Transport",
 	"stratagem-target":   "the Stratagem's target",
 	"selected-unit":      "the selected unit",
 	"recipient":          "this unit",

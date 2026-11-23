@@ -310,7 +310,7 @@ export type TerrainAreaKeyword = "obscuring" | "hidden" | "plunging-fire";
  */
 export type Owner = "friendly" | "enemy" | "any";
 /**
- * Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.
+ * Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves. destroyed: the unit has been destroyed ("Select one friendly destroyed X unit"); only a rule that returns a destroyed unit selects it.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "unit-state".
@@ -324,7 +324,8 @@ export type UnitState =
   | "on-battlefield"
   | "hidden"
   | "fights-first"
-  | "benefit-of-cover";
+  | "benefit-of-cover"
+  | "destroyed";
 /**
  * Not units that have every listed keyword ("excluding MONSTER CHARACTER units" excludes only units that are both).
  */
@@ -972,6 +973,52 @@ export type AbilityTrigger = Trigger | [Trigger, ...Trigger[]];
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
 export type AbilityDSLCondition4 = SimpleCondition | CompoundCondition;
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "roll-effect".
+ */
+export type RollEffect = {
+  [k: string]: unknown;
+} & {
+  type: "roll";
+  dice: DiceExpression;
+  /**
+   * Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).
+   */
+  count_stat?: {
+    stat: ("M" | "T" | "W" | "OC" | "A") &
+      (
+        | "M"
+        | "T"
+        | "Sv"
+        | "W"
+        | "Ld"
+        | "OC"
+        | "A"
+        | "WS"
+        | "BS"
+        | "S"
+        | "AP"
+        | "D"
+        | "Range"
+        | "detection-range"
+        | "psyker-level"
+      );
+    of: UnitRef;
+  };
+  /**
+   * Roll as many of `dice` (one die, such as D6) as a count from the battle's history: of mortal-wounds-suffered, the mortal wounds `subject` suffered in `window` ("a number of dice equal to the number of mortal wounds your unit suffered this phase").
+   */
+  count_history?: {
+    of: "mortal-wounds-suffered";
+    subject: UnitRef;
+    window: "phase";
+  };
+  extra_dice_pool?: string;
+  kind?: RollKind;
+  roll_var: string;
+  effect: EffectNode;
+};
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
@@ -4886,10 +4933,14 @@ export interface AuraEffect {
 export interface DesignateTargetEffect {
   type: "designate-target";
   designation: string;
-  select: {
-    kind: "unit" | "objective";
-    selector: UnitSelector | ObjectiveSelector;
-  };
+  select:
+    | {
+        [k: string]: unknown;
+      }
+    | {
+        kind?: "unit";
+        [k: string]: unknown;
+      };
   /**
    * What the designation does: one entry, or one entry per `to` when it does more than one thing to the designated unit ("that enemy unit cannot have the Benefit of Cover, and each time a friendly unit makes an attack that targets that unit, …"). Each entry of a list names a different `to`; a list never holds bound-unit-attacks-reference.
    */
@@ -4929,6 +4980,10 @@ export interface DesignationApplies {
   to: "target" | "attackers-of-target" | "bearer-attacks-target" | "bound-unit-attacks-reference";
   effect: EffectNode;
   attacker_filter?: UnitFilter;
+  /**
+   * The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, "each time a model in your WRAITH CONSTRUCT unit makes an attack"), or any one of several ("each time one of your ARMIGER models makes an attack", with attacker_filter naming the keywords each attacking model has).
+   */
+  attacker?: UnitRef | [UnitRef, UnitRef, ...UnitRef[]];
   attacker_unit_filter?: UnitFilter;
   beneficiary?: EventOrSelectionReference;
   reference?: SelectionReference;
@@ -5501,42 +5556,6 @@ export interface PersistentDesignationEffect {
  */
 export interface NoEffectEffect {
   type: "no-effect";
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "roll-effect".
- */
-export interface RollEffect {
-  type: "roll";
-  dice: DiceExpression;
-  /**
-   * Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).
-   */
-  count_stat?: {
-    stat: ("M" | "T" | "W" | "OC" | "A") &
-      (
-        | "M"
-        | "T"
-        | "Sv"
-        | "W"
-        | "Ld"
-        | "OC"
-        | "A"
-        | "WS"
-        | "BS"
-        | "S"
-        | "AP"
-        | "D"
-        | "Range"
-        | "detection-range"
-        | "psyker-level"
-      );
-    of: UnitRef;
-  };
-  extra_dice_pool?: string;
-  kind?: RollKind;
-  roll_var: string;
-  effect: EffectNode;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -6659,6 +6678,12 @@ export interface MoveModifierEffect {
       modes: "any" | [MoveMode, ...MoveMode[]];
       ignore_before_moving?: true;
     };
+    /**
+     * An Advance with no roll (advance) that does not stack with the named ability's own Move bonus ("this is not cumulative with the REAVERS' Matchless Swiftness ability").
+     */
+    not_cumulative?: {
+      ability: EntityId;
+    };
   };
   scaling?: Scaling;
 }
@@ -6677,7 +6702,7 @@ export interface EndsNearest2 {
   waives?: "closest-enemy-model";
 }
 /**
- * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.
+ * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as. from destroyed: a destroyed unit is returned and set up (with to: strategic-reserves, placed into Strategic Reserves).
  */
 export interface SetUpEffect {
   type: "set-up";
@@ -6685,7 +6710,7 @@ export interface SetUpEffect {
   modifier: {
     allow?: boolean;
     to: "battlefield" | "strategic-reserves";
-    from?: "strategic-reserves" | "transport" | "battlefield";
+    from?: "strategic-reserves" | "transport" | "battlefield" | "destroyed";
     /**
      * deep-strike: set up using the Deep Strike rules. cult-ambush: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).
      */

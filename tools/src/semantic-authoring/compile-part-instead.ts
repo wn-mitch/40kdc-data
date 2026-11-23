@@ -184,6 +184,12 @@ export function resolveInstead(frame: PartFrame, planned: PlannedEffect[], bound
         boundDuration.delete(replacement.index);
         // "add 8\" to the Move characteristic … instead": the no-roll advances that far.
         (previous.node.modifier as Node).advance = `fixed-${Number((replacement.node.modifier as Node).value)}`;
+        // "(this is not cumulative with the REAVERS' Matchless Swiftness ability)": the folded Move bonus's limit is the no-roll Advance's.
+        const notCumulative = (replacement.node.modifier as Node).not_cumulative;
+        if (notCumulative !== undefined) {
+          if (typeof notCumulative !== "object" || notCumulative === null) errors.push("An Advance with no roll does not stack only with a named ability's Move bonus.");
+          else (previous.node.modifier as Node).not_cumulative = structuredClone(notCumulative);
+        }
         planned.splice(planned.indexOf(replacement), 1);
       }
       else errors.push(`"Instead" after ${previous.leaf.family_id} must add 6" or 8" to Move; ${replacement.leaf.family_id} has no DSL fragment there.`);

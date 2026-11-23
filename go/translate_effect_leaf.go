@@ -856,7 +856,20 @@ func countsAsLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["of"] != nil {
 		of = effectSubject(m["of"], ctx)
 	}
-	return subj + " " + ev(subj, "counts") + " as being within " + rangePhrase(m["within"]) + " of " + of
+	// "for the purposes of the Psychic Guidance and Spirit Guides abilities".
+	purposes := ""
+	if ids, ok := m["for_abilities"].([]any); ok {
+		labels := []string{}
+		seen := map[string]bool{}
+		for _, id := range ids {
+			if label := abilityLabel(id); !seen[label] {
+				seen[label] = true
+				labels = append(labels, label)
+			}
+		}
+		purposes = " for the purposes of the " + andList(labels) + " abilities"
+	}
+	return subj + " " + ev(subj, "counts") + " as being within " + rangePhrase(m["within"]) + " of " + of + purposes
 }
 
 var weaponsWordRe = regexp.MustCompile(`weapons\b`)

@@ -137,7 +137,7 @@ function readRoll(node: Node, dice: string, rollVar: string): Node | null {
  */
 function resultReaders(planned: Planned[], roll: CompileLeaf): Node[] | null {
   const parameters = roll.parameters;
-  if (["count", "count_stat", "per_model", "for_each", "roll_var", "conditional_bonus", "pool_condition", "kind", "extra_dice"].some((key) => parameters[key] !== undefined)) return null;
+  if (["count", "count_stat", "count_history", "per_model", "for_each", "roll_var", "conditional_bonus", "pool_condition", "kind", "extra_dice"].some((key) => parameters[key] !== undefined)) return null;
   // "Roll D3+3: … that number of mortal wounds": the readers write the roll with its bonus.
   const bonus = Number(parameters.bonus ?? 0);
   const dice = bonus > 0 ? `${String(parameters.dice)}+${bonus}` : String(parameters.dice);
@@ -191,7 +191,7 @@ export function resolveRolls(planned: Planned[], global: Node[], rolls: readonly
     throw new CompileError("Several dice rolled at once each read their own face; a bonus added to the result has no per-die DSL shape.");
   }
   // A count from a model's characteristic is one shared pool (compile-dice-variants.ts).
-  if (rolls[0]!.parameters.count_stat !== undefined) return sharedPool(planned, banded, rolls[0]!);
+  if (rolls[0]!.parameters.count_stat !== undefined || rolls[0]!.parameters.count_history !== undefined) return sharedPool(planned, banded, rolls[0]!);
   // Several dice whose bands pay different mortal-wound effects are one pool, not a roll per effect.
   if (count !== undefined && perModel === undefined && forEach === undefined && perAttack === undefined && splitBands(banded)) {
     if (extraDice !== undefined) throw new CompileError("Additional dice under a condition have no DSL shape on a pool whose bands pay different effects.");

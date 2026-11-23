@@ -350,6 +350,14 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
         : amount === "all" ? "full" : /^\d+$/u.test(amount) ? Number(amount) : amount;
       return { type: "heal", target: target(leaf.parameters.subject), modifier: { amount: quantity, ...(per ? { per } : {}) } };
     }
+    // "That unit heals 10 wounds and is placed in strategic reserves": a destroyed unit healed, then set up in Reserves.
+    case "revive-into-reserves": {
+      const who = target(leaf.parameters.subject);
+      return { type: "sequence", steps: [
+        { type: "heal", target: who, modifier: { amount: Number(leaf.parameters.heal) } },
+        { type: "set-up", target: who, modifier: { to: "strategic-reserves", from: "destroyed" } },
+      ] };
+    }
     case "eligibility-permission": {
       const despite = leaf.parameters.despite as string[] | undefined;
       const asIf = leaf.parameters.as_if;
@@ -394,6 +402,9 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
         : leaf.parameters.region !== undefined
         ? { in_region: { rule_region: structuredClone(leaf.parameters.region as Node) } }
         : { within: { inches: closed(leaf, "within") } };
+      // A Stratagem target group the range is measured to, and the abilities it counts for.
+      if (leaf.parameters.of !== undefined) modifier.of = { stratagem_target: (leaf.parameters.of as Node).bound };
+      if (leaf.parameters.for_abilities !== undefined) modifier.for_abilities = structuredClone(leaf.parameters.for_abilities as string[]);
       return { type: "counts-as", target: target(leaf.parameters.subject), modifier };
     }
     case "named-region-producer":

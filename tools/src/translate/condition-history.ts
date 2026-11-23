@@ -106,6 +106,8 @@ function happenedPhrase(p: P, negated: boolean): string {
     }
     case "damage-allocated": {
       const obj = unitRefPhrase(p.object, "this unit");
+      // "which inflicted one or more mortal wounds on your unit this phase": who caused the mortal wounds.
+      if (f.attack_type === "mortal" && f.by != null) return `${neg}${unitRefPhrase(f.by, "the unit")} inflicted one or more mortal wounds on ${obj} ${windowPhrase(p.window)}`.trimEnd();
       const atk = f.attack_type ? `${str(f.attack_type)} ` : "";
       return p.window === "event"
         ? `${neg}${obj} lost one or more wounds from the triggering ${atk}attacks`

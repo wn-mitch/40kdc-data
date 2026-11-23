@@ -116,7 +116,7 @@ export interface Effect {
   };
   // designate-target / persistent-designation
   designation?: string;
-  select?: { kind?: "unit" | "objective"; selector?: Selector };
+  select?: { kind?: "unit" | "objective"; selector?: Selector; from?: unknown };
   selection_policy?: string;
   allow_while_embarked?: boolean;
   consumer?: {
@@ -302,6 +302,8 @@ function designationLabel(designation: unknown): string {
 }
 
 function designationTargetSubject(select: NonNullable<Effect["select"]>): string {
+  // "that enemy unit", the moment's unit: designated with no choice.
+  if (select.from != null) return unitRefPhrase(select.from);
   const selector = select.selector ?? {};
   return select.kind === "objective" ? objectiveSelectorPhrase(selector) : `${selectUnitsSubject(selector)}${selectionBinding(selector)}`;
 }
@@ -312,6 +314,7 @@ interface DesignationApplies {
   effect?: Effect;
   attacker_filter?: Record<string, unknown>;
   attacker_unit_filter?: Record<string, unknown>;
+  attacker?: unknown;
   beneficiary?: { selection_var: string } | { event_var: string };
   reference?: { selection_var: string };
 }
@@ -334,6 +337,13 @@ function designationWhen(applies: DesignationApplies, block: boolean): string {
 
 function designationAttackerPhrase(applies: DesignationApplies | undefined, block = false): string {
   const model = applies?.attacker_filter;
+  // "each time an ARMIGER model in the lead target or the bondsmen target makes an attack": the
+  // attacks of the Stratagem targets the entry names, optionally only those of its models the filter admits.
+  if (applies?.attacker != null) {
+    const refs = Array.isArray(applies.attacker) ? applies.attacker : [applies.attacker];
+    const noun = model ? selectorSubject({ filter: { ...model, owner: "any", level: "model" } }, false) : "model";
+    return `each time ${/^[aeiou]/iu.test(noun) ? "an" : "a"} ${noun} in ${orList(refs.map((ref) => unitRefPhrase(ref)))} ${block ? "makes an attack against it" : "attacks it"}`;
+  }
   const unit = applies?.attacker_unit_filter;
   const attacker = unit
     ? `a ${model ? selectorSubject({ filter: { ...model, owner: "any", level: "model" } }, false) : "model"} in a ${selectorSubject({ filter: { owner: "friendly", ...unit } }, false)}`

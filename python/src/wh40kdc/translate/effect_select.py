@@ -11,7 +11,7 @@ import re
 from typing import Any
 
 from wh40kdc.translate.condition_leadin import describe_selection_eligibility
-from wh40kdc.translate.condition_refs import unit_ref_phrase
+from wh40kdc.translate.condition_refs import _or_list, unit_ref_phrase
 from wh40kdc.translate.effect_quantity import amount_of, quantity_phrase
 from wh40kdc.translate.effect_words import (
     Ctx,
@@ -285,6 +285,9 @@ def designation_label(designation: Any) -> str:
 
 
 def designation_target_subject(select: dict[str, Any]) -> str:
+    # "that enemy unit", the moment's unit: designated with no choice.
+    if select.get("from") is not None:
+        return unit_ref_phrase(select["from"])
     selector = _obj(select.get("selector"))
     if select.get("kind") == "objective":
         from wh40kdc.translate.effect_bind import objective_selector_phrase
@@ -297,6 +300,21 @@ def designation_attacker_phrase(applies: Any, block: bool = False) -> str:
     applies = _obj(applies)
     model = applies.get("attacker_filter")
     unit = applies.get("attacker_unit_filter")
+    action = "makes an attack against it" if block else "attacks it"
+    # "each time an ARMIGER model in the lead target or the bondsmen target makes an attack": the
+    # attacks of the Stratagem targets the entry names, optionally only those of its models the
+    # filter admits.
+    if applies.get("attacker") is not None:
+        named = applies["attacker"]
+        refs = named if isinstance(named, list) else [named]
+        noun = (
+            selector_subject({"filter": {**model, "owner": "any", "level": "model"}}, False)
+            if isinstance(model, dict)
+            else "model"
+        )
+        article = "an" if re.match(r"[aeiou]", noun, re.IGNORECASE) else "a"
+        units = _or_list([unit_ref_phrase(ref) for ref in refs])
+        return f"each time {article} {noun} in {units} {action}"
     if isinstance(unit, dict):
         model_subject = (
             selector_subject(
@@ -316,7 +334,6 @@ def designation_attacker_phrase(applies: Any, block: bool = False) -> str:
         attacker = f"a {selector_subject({'filter': model_filter}, False)}"
     else:
         attacker = "a friendly unit"
-    action = "makes an attack against it" if block else "attacks it"
     return f"each time {attacker} {action}"
 
 

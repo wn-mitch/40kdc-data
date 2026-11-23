@@ -37,6 +37,7 @@ export const ANTECEDENT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "keyword-grant": ["subject"],
   "feel-no-pain": ["subject"],
   "regain-wounds": ["subject"],
+  "revive-into-reserves": ["subject"],
   "return-models": ["subject"],
   "unit-has-ability": ["subject"],
   // "it has the Deep Strike ability", "that unit has a 4+ invulnerable save".

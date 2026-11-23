@@ -5,7 +5,7 @@
  */
 
 import { CompileError } from "./compile-error.js";
-import { abilityRollOf, closed, type CompileLeaf, effect, type EffectContext, type TargetOf } from "./compile-fragments.js";
+import { abilityRollOf, attackOwner, closed, type CompileLeaf, effect, type EffectContext, type TargetOf } from "./compile-fragments.js";
 import { weaponScope } from "./compile-weapon-effects.js";
 
 type Node = Record<string, unknown>;
@@ -71,7 +71,8 @@ export function rollEffect(leaf: CompileLeaf, context: EffectContext, target: Ta
       const only = leaf.parameters.only === undefined ? undefined : closed(leaf, "only");
       if (only) modifier.only = only;
       Object.assign(modifier, weaponScope(leaf));
-      return { type: "ignore-modifiers", target: target(leaf.parameters.subject), modifier };
+      // "modifiers to … that attack": the attack's maker ignores them.
+      return { type: "ignore-modifiers", target: leaf.parameters.subject === "attack" ? attackOwner(context) : target(leaf.parameters.subject), modifier };
     }
     case "roll-auto-result": {
       if (Array.isArray(leaf.parameters.rolls)) return pickOne(leaf, context);

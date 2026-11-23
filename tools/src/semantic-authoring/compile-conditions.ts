@@ -1,3 +1,4 @@
+import { DISEMBARKED_FROM } from "./families/vocabulary.js";
 import { oathCondition } from "./compile-oath.js";
 import { DICE_COUNT_MARKER, DICE_COUNT_ROLLED } from "./compile-dice-count-choice.js";
 import { abilityUseCondition } from "./compile-ability-use.js";
@@ -148,6 +149,9 @@ const HISTORY: Record<string, (subject: string | undefined, attackType?: string)
   "was-charged-this-turn": (subject) => ({ event: "move-ended", subject: { owner: "any" }, object: subject ?? "this-unit", filter: { move_types: ["charge"] }, window: "turn" }),
   // Past targeting: targeted by any unit's attacks this phase, and attacks the subject made at this unit.
   "targeted-by-attacks-this-phase": (subject) => ({ event: "targets-selected", subject: { owner: "any" }, object: subject ?? "this-unit", filter: { kind: "attack" }, window: "phase" }),
+  // "suffered one or more mortal wounds this phase", and "which inflicted one or more mortal wounds on your unit this phase".
+  "suffered-mortal-wounds-this-phase": (subject) => ({ event: "damage-allocated", object: subject ?? "this-unit", filter: { attack_type: "mortal" }, window: "phase" }),
+  "inflicted-mortal-wounds-on-stratagem-target-this-phase": (subject) => ({ event: "damage-allocated", object: "stratagem-target", filter: { attack_type: "mortal", by: subject ?? "this-unit" }, window: "phase" }),
   "made-attacks-targeting-this-phase": (subject) => {
     if (subject === undefined) throw new CompileError("unit-activity made-attacks-targeting-this-phase names the unit that attacked this unit; this unit cannot be it.");
     return { event: "targets-selected", subject, object: "this-unit", filter: { kind: "attack" }, window: "phase" };
@@ -466,7 +470,8 @@ export function condition(leaf: CompileLeaf): Node {
         const happened = lowerTriggeringDestructions(leaf).map((parameters) => ({ type: "happened", parameters }));
         return polarity(leaf, happened.length === 1 ? happened[0]! : anyOf(happened));
       }
-      const subject = widenedWho(closed(leaf, "subject"));
+      // "a TRANSPORT that made a Normal move this phase": the Transport of the disembarked moment, its event object.
+      const subject = leaf.parameters.subject === DISEMBARKED_FROM ? "event-object" : widenedWho(closed(leaf, "subject"));
       // Several activities: any of them, and negated none of them.
       const activities = closed(leaf, "activities") as string[];
       // "not chosen by the Foo Gadget this phase" names its Gadgets (compile-opponent-stratagem.ts).
@@ -723,7 +728,8 @@ export function condition(leaf: CompileLeaf): Node {
       if (parameters.tag === "warlord" && (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined)) throw new CompileError("A count of Warlords is not a Warlord test; the Warlord is one model.");
       if (parameters.tag === "warlord" && leaf.parameters.subject === undefined) throw new CompileError("A Warlord test has no subject: name the model or unit it tests.");
       // by: applied by a unit of the unit-filter after the leaf (compile-unit-filters.ts folds it in).
-      if (leaf.parameters.by !== undefined) parameters.by = leaf.parameters.by === "following-filter" ? followingFilter(leaf) : closed(leaf, "by");
+      if (leaf.parameters.by !== undefined) parameters.by = leaf.parameters.by === "following-filter" ? followingFilter(leaf)
+        : typeof leaf.parameters.by === "object" ? { stratagem_target: (leaf.parameters.by as Node).bound } : closed(leaf, "by");
       if (leaf.parameters.count_min !== undefined || leaf.parameters.count_max !== undefined) parameters.count = countBounds(leaf);
       if (leaf.parameters.at !== undefined) parameters.at = closed(leaf, "at");
       return polarity(leaf, pred("designated", parameters, subjectOf(leaf)));

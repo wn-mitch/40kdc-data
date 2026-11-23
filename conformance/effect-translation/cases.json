@@ -54145,6 +54145,743 @@
     }
   },
   {
+    "caseId": "batch-c/seers-eye-spirit",
+    "effect": {
+      "type": "designate-target",
+      "designation": "seers-eye-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "visible": {
+                  "to": {
+                    "stratagem_target": "psyker"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "ignore-modifiers",
+          "target": {
+            "stratagem_target": "wraith"
+          },
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "AP",
+              "D"
+            ]
+          }
+        },
+        "attacker": {
+          "stratagem_target": "wraith"
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": null,
+    "behavior": "activated",
+    "expected": {
+      "text": "Select one enemy unit that is visible to the psyker target (your Seers Eye Target). Until the end of the phase, each time a model in the wraith target makes an attack against it, the wraith target ignores any modifiers to its Armour Penetration and Damage characteristics."
+    }
+  },
+  {
+    "caseId": "batch-c/soul-bridge-spirit",
+    "effect": {
+      "type": "counts-as",
+      "target": {
+        "stratagem_target": "wraith"
+      },
+      "modifier": {
+        "within": {
+          "inches": 12
+        },
+        "of": {
+          "stratagem_target": "psyker"
+        },
+        "for_abilities": [
+          "psychic-guidance-aeldari",
+          "spirit-guides"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "trigger": null,
+    "behavior": "activated",
+    "expected": {
+      "text": "Until the start of your next Command phase, the wraith target counts as being within 12\" of the psyker target for the purposes of the Psychic Guidance and Spirit Guides abilities."
+    }
+  },
+  {
+    "caseId": "batch-c/eager-for-the",
+    "effect": {
+      "type": "ability-part",
+      "trigger": [
+        {
+          "event": "move-started",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          },
+          "subject": {
+            "stratagem_target": "first"
+          }
+        },
+        {
+          "event": "move-started",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          },
+          "subject": {
+            "stratagem_target": "second"
+          }
+        }
+      ],
+      "effect": {
+        "type": "move-modifier",
+        "target": "event-subject",
+        "modifier": {
+          "advance": "fixed-6",
+          "not_cumulative": {
+            "ability": "matchless-swiftness-drukhari"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "At the start of your Movement phase, until the end of the phase:\n  - Each time the first target starts an Advance move or each time the second target starts an Advance move, the triggering unit does not make an Advance roll; add 6\" to its Move characteristic instead (this is not cumulative with the Matchless Swiftness ability)."
+    }
+  },
+  {
+    "caseId": "batch-c/pounce-on-the",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "subject": "event-object",
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "normal"
+            ]
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DRUKHARI",
+          "INFANTRY"
+        ]
+      }
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "When a friendly DRUKHARI INFANTRY unit disembarks from a Transport, if the Transport made a Normal move this phase, until the end of the turn, that unit is eligible to declare a charge."
+    }
+  },
+  {
+    "caseId": "batch-c/avenge-the-star",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "designate-target",
+          "designation": "avenge-the-star-children-target",
+          "select": {
+            "kind": "unit",
+            "from": "event-subject"
+          },
+          "applies": {
+            "to": "attackers-of-target",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "GENESTEALER CULTS"
+                    ],
+                    "level": "model"
+                  },
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "add",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "GENESTEALER CULTS"
+                    ],
+                    "level": "model"
+                  },
+                  "modifier": {
+                    "roll": "wound",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          },
+          "duration": "battle"
+        }
+      ]
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "After an enemy unit shoots, for the rest of the battle:\n  - This unit is eligible to be targeted with Stratagems even if it has just been destroyed.\n  - Select the triggering unit (your Avenge the Star Children Target). For the rest of the battle, each time a friendly unit makes an attack against it:\n    - Add 1 to friendly GENESTEALER CULTS models' Hit rolls.\n    - Add 1 to friendly GENESTEALER CULTS models' Wound rolls."
+    }
+  },
+  {
+    "caseId": "batch-c/vengeance-for-the",
+    "effect": {
+      "type": "designate-target",
+      "designation": "vengeance-for-the-martyr-target",
+      "select": {
+        "kind": "unit",
+        "from": "event-subject"
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "event-object",
+                      "filter": {
+                        "any_of": [
+                          "ACOLYTE ICONWARD",
+                          "MAGUS",
+                          "PRIMUS"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "ACOLYTE HYBRIDS",
+                    "HYBRID METAMORPHS",
+                    "NEOPHYTE HYBRIDS"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-object",
+                  "filter": {
+                    "any_of": [
+                      "ACOLYTE ICONWARD",
+                      "MAGUS",
+                      "PRIMUS"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "ACOLYTE HYBRIDS",
+                    "HYBRID METAMORPHS",
+                    "NEOPHYTE HYBRIDS"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "result_scope": "any-result"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "duration": "battle"
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "CHARACTER",
+          "GENESTEALER CULTS"
+        ],
+        "level": "model"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "Each time an enemy unit destroys a friendly CHARACTER GENESTEALER CULTS model:\n  - Select the triggering unit (your Vengeance for the Martyr Target). For the rest of the battle, each time a friendly unit makes an attack against it:\n    - Unless that model has the ACOLYTE ICONWARD, MAGUS or PRIMUS keyword, you can re-roll Hit rolls of 1 for attacks made by friendly models with the ACOLYTE HYBRIDS, HYBRID METAMORPHS or NEOPHYTE HYBRIDS keyword.\n    - If that model has the ACOLYTE ICONWARD, MAGUS or PRIMUS keyword, you can re-roll Hit rolls for attacks made by friendly models with the ACOLYTE HYBRIDS, HYBRID METAMORPHS or NEOPHYTE HYBRIDS keyword."
+    }
+  },
+  {
+    "caseId": "batch-c/hexwrought-reprisal-banishers",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "damage-allocated",
+            "object": "stratagem-target",
+            "filter": {
+              "attack_type": "mortal",
+              "by": "selected-unit"
+            },
+            "window": "phase"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll",
+        "dice": "D6",
+        "count_history": {
+          "of": "mortal-wounds-suffered",
+          "subject": "this-unit",
+          "window": "phase"
+        },
+        "roll_var": "pool",
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": {
+              "roll_var": "pool",
+              "successes_on": 2
+            },
+            "max": 6,
+            "psychic": true
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "phase-ended"
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "At the end of each phase:\n  - Select one enemy unit that inflicted one or more mortal wounds on the Stratagem's target this phase:\n    - Roll a number of D6 equal to the number of mortal wounds this unit suffered this phase; then that unit suffers a number of mortal wounds equal to the number of those dice that rolled a 2+ (Psychic Attack), to a maximum of 6 mortal wounds."
+    }
+  },
+  {
+    "caseId": "batch-c/exemplars-wisdom-spearhead",
+    "effect": {
+      "type": "designate-target",
+      "designation": "exemplars-wisdom-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": {
+            "stratagem_target": "bondsmen"
+          },
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        },
+        "attacker": {
+          "stratagem_target": "bondsmen"
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "IMPERIAL KNIGHTS",
+          "TITANIC"
+        ],
+        "level": "model"
+      }
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "After a friendly IMPERIAL KNIGHTS TITANIC model shoots:\n  - Select one enemy unit that was hit by an attack made by the triggering model during that shooting sequence (your Exemplars Wisdom Target). Until the end of the phase, each time a model in the bondsmen target makes an attack against it, improve the Armour Penetration characteristic of that attack by 1 if it is made by the bondsmen target."
+    }
+  },
+  {
+    "caseId": "batch-c/virtue-of-courage",
+    "effect": {
+      "type": "designate-target",
+      "designation": "virtue-of-courage-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": {
+                    "stratagem_target": "lead"
+                  },
+                  "filter": {
+                    "all_of": [
+                      "ARMIGER"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": {
+                  "stratagem_target": "lead"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": {
+                "stratagem_target": "bondsmen"
+              },
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          ]
+        },
+        "attacker": [
+          {
+            "stratagem_target": "lead"
+          },
+          {
+            "stratagem_target": "bondsmen"
+          }
+        ],
+        "attacker_filter": {
+          "all_of": [
+            "ARMIGER"
+          ],
+          "level": "model"
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "behavior": "reactive",
+    "expected": {
+      "text": "At the start of the Fight phase:\n  - Select one enemy unit (your Virtue of Courage Target). Until the end of the phase, each time an ARMIGER model in the lead target or the bondsmen target makes an attack against it:\n    - If the lead target has the ARMIGER keyword, add 1 to the lead target's Hit rolls.\n    - Add 1 to the bondsmen target's Hit rolls."
+    }
+  },
+  {
+    "caseId": "batch-c/bio-reserves-tyranids",
+    "effect": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "TERMAGANTS",
+                "VARDENGHAST SWARM"
+              ],
+              "not_states": [
+                "engaged"
+              ]
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          "effect": {
+            "type": "heal",
+            "target": "selected-unit",
+            "modifier": {
+              "amount": "2D6"
+            }
+          }
+        },
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "TERMAGANTS",
+                "VARDENGHAST SWARM"
+              ],
+              "state": "destroyed"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "heal",
+                "target": "selected-unit",
+                "modifier": {
+                  "amount": 10
+                }
+              },
+              {
+                "type": "set-up",
+                "target": "selected-unit",
+                "modifier": {
+                  "to": "strategic-reserves",
+                  "from": "destroyed"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": [
+      {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        },
+        "optional": true
+      },
+      {
+        "event": "phase-ended",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        },
+        "optional": true
+      }
+    ],
+    "behavior": "reactive",
+    "expected": {
+      "text": "At the start of your Movement phase, you can use this ability or at the end of your Movement phase, you can use this ability:\n  Choose one of the following:\n    - Select one friendly TERMAGANTS VARDENGHAST SWARM unit that is unengaged; that unit regains up to 2D6 lost wounds.\n    - Select one friendly TERMAGANTS VARDENGHAST SWARM unit that is destroyed; that unit regains up to 10 lost wounds; that unit is returned to the battle and placed into Strategic Reserves."
+    }
+  },
+  {
     "caseId": "model-refs/event-subject-model-matches",
     "effect": {
       "type": "conditional",

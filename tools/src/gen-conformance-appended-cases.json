@@ -6983,5 +6983,712 @@
       "duration": "permanent"
     },
     "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-c/seers-eye-spirit",
+    "effect": {
+      "type": "designate-target",
+      "designation": "seers-eye-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "visible": {
+                  "to": {
+                    "stratagem_target": "psyker"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "ignore-modifiers",
+          "target": {
+            "stratagem_target": "wraith"
+          },
+          "modifier": {
+            "what": "characteristics",
+            "stats": [
+              "AP",
+              "D"
+            ]
+          }
+        },
+        "attacker": {
+          "stratagem_target": "wraith"
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": null,
+    "behavior": "activated"
+  },
+  {
+    "caseId": "batch-c/soul-bridge-spirit",
+    "effect": {
+      "type": "counts-as",
+      "target": {
+        "stratagem_target": "wraith"
+      },
+      "modifier": {
+        "within": {
+          "inches": 12
+        },
+        "of": {
+          "stratagem_target": "psyker"
+        },
+        "for_abilities": [
+          "psychic-guidance-aeldari",
+          "spirit-guides"
+        ]
+      }
+    },
+    "scope": {
+      "duration": "until-next-command-phase"
+    },
+    "trigger": null,
+    "behavior": "activated"
+  },
+  {
+    "caseId": "batch-c/eager-for-the",
+    "effect": {
+      "type": "ability-part",
+      "trigger": [
+        {
+          "event": "move-started",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          },
+          "subject": {
+            "stratagem_target": "first"
+          }
+        },
+        {
+          "event": "move-started",
+          "filter": {
+            "move_types": [
+              "advance"
+            ]
+          },
+          "subject": {
+            "stratagem_target": "second"
+          }
+        }
+      ],
+      "effect": {
+        "type": "move-modifier",
+        "target": "event-subject",
+        "modifier": {
+          "advance": "fixed-6",
+          "not_cumulative": {
+            "ability": "matchless-swiftness-drukhari"
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "movement"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "your-turn"
+            }
+          }
+        ]
+      }
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-c/pounce-on-the",
+    "effect": {
+      "type": "conditional",
+      "condition": {
+        "type": "happened",
+        "parameters": {
+          "subject": "event-object",
+          "event": "move-ended",
+          "filter": {
+            "move_types": [
+              "normal"
+            ]
+          },
+          "window": "phase"
+        }
+      },
+      "effect": {
+        "type": "permission",
+        "target": "this-unit",
+        "modifier": {
+          "activity": "declare-charge",
+          "allow": true
+        }
+      }
+    },
+    "scope": {
+      "duration": "turn"
+    },
+    "trigger": {
+      "event": "disembarked",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DRUKHARI",
+          "INFANTRY"
+        ]
+      }
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-c/avenge-the-star",
+    "effect": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-unit",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "designate-target",
+          "designation": "avenge-the-star-children-target",
+          "select": {
+            "kind": "unit",
+            "from": "event-subject"
+          },
+          "applies": {
+            "to": "attackers-of-target",
+            "effect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "GENESTEALER CULTS"
+                    ],
+                    "level": "model"
+                  },
+                  "modifier": {
+                    "roll": "hit",
+                    "operation": "add",
+                    "value": 1
+                  }
+                },
+                {
+                  "type": "roll-modifier",
+                  "target": {
+                    "owner": "friendly",
+                    "all_of": [
+                      "GENESTEALER CULTS"
+                    ],
+                    "level": "model"
+                  },
+                  "modifier": {
+                    "roll": "wound",
+                    "operation": "add",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          },
+          "duration": "battle"
+        }
+      ]
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "trigger": {
+      "event": "attacks-resolved",
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-c/vengeance-for-the",
+    "effect": {
+      "type": "designate-target",
+      "designation": "vengeance-for-the-martyr-target",
+      "select": {
+        "kind": "unit",
+        "from": "event-subject"
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "operator": "not",
+                "operands": [
+                  {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "event-object",
+                      "filter": {
+                        "any_of": [
+                          "ACOLYTE ICONWARD",
+                          "MAGUS",
+                          "PRIMUS"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "ACOLYTE HYBRIDS",
+                    "HYBRID METAMORPHS",
+                    "NEOPHYTE HYBRIDS"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "subset": "ones"
+                }
+              }
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": "event-object",
+                  "filter": {
+                    "any_of": [
+                      "ACOLYTE ICONWARD",
+                      "MAGUS",
+                      "PRIMUS"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "re-roll",
+                "target": {
+                  "owner": "friendly",
+                  "any_of": [
+                    "ACOLYTE HYBRIDS",
+                    "HYBRID METAMORPHS",
+                    "NEOPHYTE HYBRIDS"
+                  ],
+                  "level": "model"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "result_scope": "any-result"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "duration": "battle"
+    },
+    "scope": {
+      "duration": "battle"
+    },
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "CHARACTER",
+          "GENESTEALER CULTS"
+        ],
+        "level": "model"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-c/hexwrought-reprisal-banishers",
+    "effect": {
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "damage-allocated",
+            "object": "stratagem-target",
+            "filter": {
+              "attack_type": "mortal",
+              "by": "selected-unit"
+            },
+            "window": "phase"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll",
+        "dice": "D6",
+        "count_history": {
+          "of": "mortal-wounds-suffered",
+          "subject": "this-unit",
+          "window": "phase"
+        },
+        "roll_var": "pool",
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": {
+              "roll_var": "pool",
+              "successes_on": 2
+            },
+            "max": 6,
+            "psychic": true
+          }
+        }
+      }
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": {
+      "event": "phase-ended"
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-c/exemplars-wisdom-spearhead",
+    "effect": {
+      "type": "designate-target",
+      "designation": "exemplars-wisdom-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "happened",
+            "parameters": {
+              "event": "after-roll",
+              "subject": "event-subject",
+              "object": "this-unit",
+              "filter": {
+                "roll": "hit",
+                "result": "success"
+              },
+              "window": "event"
+            }
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "stat-modifier",
+          "target": {
+            "stratagem_target": "bondsmen"
+          },
+          "modifier": {
+            "stat": "AP",
+            "operation": "improve",
+            "value": 1
+          }
+        },
+        "attacker": {
+          "stratagem_target": "bondsmen"
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "attacks-resolved",
+      "filter": {
+        "kind": "shoot"
+      },
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "IMPERIAL KNIGHTS",
+          "TITANIC"
+        ],
+        "level": "model"
+      }
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-c/virtue-of-courage",
+    "effect": {
+      "type": "designate-target",
+      "designation": "virtue-of-courage-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy"
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "matches",
+                "parameters": {
+                  "subject": {
+                    "stratagem_target": "lead"
+                  },
+                  "filter": {
+                    "all_of": [
+                      "ARMIGER"
+                    ]
+                  }
+                }
+              },
+              "effect": {
+                "type": "roll-modifier",
+                "target": {
+                  "stratagem_target": "lead"
+                },
+                "modifier": {
+                  "roll": "hit",
+                  "operation": "add",
+                  "value": 1
+                }
+              }
+            },
+            {
+              "type": "roll-modifier",
+              "target": {
+                "stratagem_target": "bondsmen"
+              },
+              "modifier": {
+                "roll": "hit",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          ]
+        },
+        "attacker": [
+          {
+            "stratagem_target": "lead"
+          },
+          {
+            "stratagem_target": "bondsmen"
+          }
+        ],
+        "attacker_filter": {
+          "all_of": [
+            "ARMIGER"
+          ],
+          "level": "model"
+        }
+      },
+      "duration": "phase"
+    },
+    "scope": {
+      "duration": "phase"
+    },
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "behavior": "reactive"
+  },
+  {
+    "caseId": "batch-c/bio-reserves-tyranids",
+    "effect": {
+      "type": "choice",
+      "options": [
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "TERMAGANTS",
+                "VARDENGHAST SWARM"
+              ],
+              "not_states": [
+                "engaged"
+              ]
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          "effect": {
+            "type": "heal",
+            "target": "selected-unit",
+            "modifier": {
+              "amount": "2D6"
+            }
+          }
+        },
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "TERMAGANTS",
+                "VARDENGHAST SWARM"
+              ],
+              "state": "destroyed"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "heal",
+                "target": "selected-unit",
+                "modifier": {
+                  "amount": 10
+                }
+              },
+              {
+                "type": "set-up",
+                "target": "selected-unit",
+                "modifier": {
+                  "to": "strategic-reserves",
+                  "from": "destroyed"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scope": {
+      "duration": "permanent"
+    },
+    "trigger": [
+      {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        },
+        "optional": true
+      },
+      {
+        "event": "phase-ended",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        },
+        "optional": true
+      }
+    ],
+    "behavior": "reactive"
   }
 ]

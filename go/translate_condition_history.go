@@ -245,6 +245,10 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		return trimEnd(neg + withArticle(rollWord(f["roll"])+" roll") + " " + result + windowPhrase(p["window"]) + times)
 	case "damage-allocated":
 		obj := unitRefPhrase(p["object"], "this unit")
+		// "which inflicted one or more mortal wounds on your unit this phase": who caused them.
+		if f["attack_type"] == "mortal" && f["by"] != nil {
+			return strings.TrimRight(neg+unitRefPhrase(f["by"], "the unit")+" inflicted one or more mortal wounds on "+obj+" "+windowPhrase(p["window"]), " ")
+		}
 		atk := ""
 		if jsTruthy(f["attack_type"]) {
 			atk = cstr(f["attack_type"]) + " "

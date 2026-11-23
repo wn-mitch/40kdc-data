@@ -21,6 +21,7 @@ pub(super) fn role_subject(role: &str) -> Option<&'static str> {
         "event-subject-model" => "the triggering model",
         "event-object" => "that unit",
         "event-object-model" => "that model",
+        "event-object-transport" => "the Transport",
         "stratagem-target" => "that unit",
         "selected-unit" => "the selected unit",
         "recipient" => "the unit",

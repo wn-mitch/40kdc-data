@@ -1,5 +1,5 @@
 import { ANTECEDENT } from "../antecedent-families.js";
-import { booleanValue, boundedInteger, enumSet, enumValue, exactKeys } from "../family-validation.js";
+import { booleanValue, boundedInteger, boundGroup, enumSet, enumValue, exactKeys } from "../family-validation.js";
 import { ASCII_KEYWORD, KEBAB_ID, KEBAB_ID_PATTERN, MATCHED_UNITS, SELECTION_NAME_SCHEMA, selectionName, STRING_LIST_SCHEMA, withLeadingApostrophes, type Params } from "./unit-filters-and-targeting-shared.js";
 import type { FlatFamily } from "./types.js";
 
@@ -269,8 +269,19 @@ function normalizeCountsAs(input: Params): Params {
     }
     return { subject, region: { region_id: region.region_id, owner_faction: region.owner_faction } };
   }
-  exactKeys(input, ["subject", "within"], "counts-as");
-  return { subject: enumValue(subject, [...SUBJECTS, ANTECEDENT], "counts-as.subject"), within: boundedInteger(input.within, 1, MAX_INCHES, "counts-as.within") };
+  exactKeys(input, ["subject", "within", ...("of" in input ? ["of"] : []), ...("for_abilities" in input ? ["for_abilities"] : [])], "counts-as");
+  const result: Params = { subject: enumValue(subject, [...SUBJECTS, ANTECEDENT], "counts-as.subject"), within: boundedInteger(input.within, 1, MAX_INCHES, "counts-as.within") };
+  // "within 12\" of your PSYKER model": a Stratagem target group the range is measured to.
+  if ("of" in input) result.of = boundGroup(input.of, "counts-as.of");
+  // "for the purposes of the Psychic Guidance and Spirit Guides abilities": only those abilities see it.
+  if ("for_abilities" in input) {
+    const ids = input.for_abilities;
+    if (!Array.isArray(ids) || ids.length === 0 || ids.some((id) => typeof id !== "string" || !KEBAB_ID.test(id)) || new Set(ids).size !== ids.length) {
+      throw new TypeError("counts-as.for_abilities lists distinct kebab-case ability ids.");
+    }
+    result.for_abilities = [...ids];
+  }
+  return result;
 }
 
 const RULE_KINDS = ["core-rule", "keyword", "ability", "faction-rule"] as const;
@@ -354,10 +365,10 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "counts-as",
-    version: 4,
+    version: 5,
     role: "EFFECT",
     label: "Counts as being within range",
-    description: "This unit or model, or the unit an earlier leaf introduced, counts as being within a range of this model for the purposes of another rule (a Titan-killer's range, an aura counting itself); or counts as inside a region an army rule defines (region: \"that unit is within your army's Hallowed Ground\"); or counts as within a named range of your host (range_ref synapse with of_side friendly: \"that unit is inside Synapse Range of your host\"). Or counts as containing fewer models than model_count_below for one weapon ability's purposes (for_weapon_ability Blast: \"treated as containing fewer than five models for the purpose of the [BLAST] ability\"). Exactly one of within, region, range_ref or model_count_below is given.",
+    description: "This unit or model, or the unit an earlier leaf introduced, counts as being within a range of this model for the purposes of another rule (a Titan-killer's range, an aura counting itself); or counts as inside a region an army rule defines (region: \"that unit is within your army's Hallowed Ground\"); or counts as within a named range of your host (range_ref synapse with of_side friendly: \"that unit is inside Synapse Range of your host\"). Or counts as containing fewer models than model_count_below for one weapon ability's purposes (for_weapon_ability Blast: \"treated as containing fewer than five models for the purpose of the [BLAST] ability\"). Exactly one of within, region, range_ref or model_count_below is given. With within, of ({bound: name}) names the Stratagem target group the range is measured to (\"within 12\\\" of your PSYKER model\"), and for_abilities the ability record ids it counts for (\"for the purposes of the Psychic Guidance and Spirit Guides abilities\").",
     starter: { subject: "", within: 1 },
     parameterSchema: {
       type: "object",
@@ -365,6 +376,8 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
       properties: {
         subject: { enum: ["this-unit", "this-model", "antecedent"] },
         within: { type: "integer", minimum: 1, maximum: 48 },
+        of: { type: "object", required: ["bound"], additionalProperties: false, properties: { bound: { type: "string", pattern: "^[a-z][a-z0-9-]*[a-z0-9]$" } }, "x-optional": true },
+        for_abilities: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$" }, "x-optional": true },
         region: {
           type: "object",
           required: ["region_id", "owner_faction"],

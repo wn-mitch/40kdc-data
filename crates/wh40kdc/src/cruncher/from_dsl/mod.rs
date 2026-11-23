@@ -631,20 +631,46 @@ pub(crate) fn buff(opts: &WalkOpts, contribution: Value) -> Value {
     json!({ "source": opts.source, "contribution": contribution })
 }
 
+/// Whether the crunched attacker is the one a designation's attacker entry names: a unit filter, a
+/// unit-ref, or a list of unit-refs any one of which may make the attack.
+fn attacker_verdict(filter: &Value, context: &EngineContext) -> Option<bool> {
+    let Some(refs) = filter.as_array() else {
+        return conditions::matches_unit_filter(
+            filter,
+            context,
+            TranslationPerspective::Attacker,
+            "friendly",
+        );
+    };
+    let verdicts: Vec<Option<bool>> = refs
+        .iter()
+        .map(|unit_ref| {
+            conditions::matches_unit_filter(
+                unit_ref,
+                context,
+                TranslationPerspective::Attacker,
+                "friendly",
+            )
+        })
+        .collect();
+    if verdicts.contains(&Some(true)) {
+        Some(true)
+    } else if verdicts.iter().all(|verdict| *verdict == Some(false)) {
+        Some(false)
+    } else {
+        None
+    }
+}
+
 /// One `applies` entry of a designate-target: a lever for attacks against the designated unit, or
 /// an unsupported debuff on it.
 fn designate_entry(node: &Obj, applies: Option<&Obj>, opts: &WalkOpts, out: &mut Out) {
     if applies.is_some_and(|a| {
         is_str(a, "to", "attackers-of-target") || is_str(a, "to", "bearer-attacks-target")
     }) {
-        for key in ["attacker_filter", "attacker_unit_filter"] {
+        for key in ["attacker", "attacker_filter", "attacker_unit_filter"] {
             if let Some(filter) = applies.and_then(|applies| applies.get(key)) {
-                match conditions::matches_unit_filter(
-                    filter,
-                    opts.context,
-                    TranslationPerspective::Attacker,
-                    "friendly",
-                ) {
+                match attacker_verdict(filter, opts.context) {
                     Some(false) => return,
                     None => {
                         out.unsupported("designate-target attacker filter is unresolved", node);

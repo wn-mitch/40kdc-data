@@ -115,3 +115,13 @@ export function spentReference(value: unknown, label: string): { spent: string; 
   if (value.per !== undefined) result.per = boundedInteger(value.per, 2, 10, `${label}.per`);
   return result;
 }
+
+/** A Stratagem target group named by its bind_as: {bound: name}. */
+export function boundGroup(value: unknown, field: string): Record<string, unknown> {
+  const group = value as Record<string, unknown> | undefined;
+  if (typeof group !== "object" || group === null || Array.isArray(group) || Object.keys(group).join(",") !== "bound"
+    || typeof group.bound !== "string" || !/^[a-z][a-z0-9-]*[a-z0-9]$/u.test(group.bound)) {
+    throw new TypeError(`${field} is {bound: name}: a Stratagem target group's bind_as.`);
+  }
+  return { bound: group.bound };
+}

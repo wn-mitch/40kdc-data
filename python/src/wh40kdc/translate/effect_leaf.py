@@ -712,7 +712,13 @@ def _counts_as(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         region = m["in_region"] if isinstance(m["in_region"], dict) else {}
         return f"{subj} {v(subj, 'counts')} as being within {region_phrase(region)}"
     of = effect_subject(m["of"], ctx) if m.get("of") is not None else "this model"
-    return f"{subj} {v(subj, 'counts')} as being within {range_phrase(m.get('within'))} of {of}"
+    # "for the purposes of the Psychic Guidance and Spirit Guides abilities".
+    purposes = ""
+    if isinstance(m.get("for_abilities"), list):
+        labels = list(dict.fromkeys(ability_label(i) for i in m["for_abilities"]))
+        purposes = f" for the purposes of the {and_list(labels)} abilities"
+    within = range_phrase(m.get("within"))
+    return f"{subj} {v(subj, 'counts')} as being within {within} of {of}{purposes}"
 
 
 _CORE_RULES = {

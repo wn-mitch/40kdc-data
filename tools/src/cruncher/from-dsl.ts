@@ -41,7 +41,7 @@ import type {
 } from "./buffs.js";
 import type { Phase } from "../generated.js";
 import { bindEachRecipient, bindEventSubject, planSelection, selectionLeverId, selectionOrder } from "./from-dsl-selection.js";
-import { matchesUnitFilter } from "./unit-filter.js";
+import { matchesUnitFilter, type FilterVerdict } from "./unit-filter.js";
 import {
   attachmentFromMembers, boundsVerdict, evaluateControls, evaluateDesignated, evaluateInRegion, evaluateOwnMove, evaluatePhaseEvent, evaluateRuleActive,
   evaluateTestResult, keywordModelBounds,
@@ -647,9 +647,9 @@ function walk(
       for (const applies of entries) {
         if (applies.to === "attackers-of-target" || applies.to === "bearer-attacks-target") {
           let skip = false;
-          for (const filter of [applies.attacker_filter, applies.attacker_unit_filter]) {
+          for (const filter of [applies.attacker, applies.attacker_filter, applies.attacker_unit_filter]) {
             if (filter === undefined) continue;
-            const verdict = matchesUnitFilter(filter, opts.context, "attacker");
+            const verdict = attackerVerdict(filter, opts.context);
             if (verdict === false) { skip = true; break; }
             if (verdict === "unknown") {
               out.unsupported.push({ reason: "designate-target attacker filter is unresolved", effectFragment: currentNode });
@@ -3455,3 +3455,14 @@ function isProvidedByAnotherUnit(source: BuffSource): boolean {
   return source.kind === "ability" && source.abilityKind === "support";
 }
 
+
+/**
+ * Whether the crunched attacker is the one a designation's attacker entry names: a unit filter, a
+ * unit-ref, or a list of unit-refs any one of which may make the attack.
+ */
+function attackerVerdict(filter: unknown, context: EngineContext): FilterVerdict {
+  if (!Array.isArray(filter)) return matchesUnitFilter(filter, context, "attacker");
+  const verdicts = filter.map((ref) => matchesUnitFilter(ref, context, "attacker"));
+  if (verdicts.includes(true)) return true;
+  return verdicts.every((verdict) => verdict === false) ? false : "unknown";
+}

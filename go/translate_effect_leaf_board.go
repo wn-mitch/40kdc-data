@@ -476,7 +476,12 @@ func moveModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 	}
 	if advance, ok := m["advance"].(string); ok && (advance == "fixed-6" || advance == "fixed-8") {
-		clauses = append(clauses, subj+" "+ev(subj, "does")+" not make an Advance roll; add "+strings.TrimPrefix(advance, "fixed-")+"\" to "+pronoun(subj)+" Move characteristic instead")
+		// "(this is not cumulative with the Matchless Swiftness ability)": the named ability's own Move bonus.
+		trail := ""
+		if ability := mapOr(m["not_cumulative"])["ability"]; ability != nil {
+			trail = " (this is not cumulative with the " + abilityLabel(ability) + " ability)"
+		}
+		clauses = append(clauses, subj+" "+ev(subj, "does")+" not make an Advance roll; add "+strings.TrimPrefix(advance, "fixed-")+"\" to "+pronoun(subj)+" Move characteristic instead"+trail)
 	}
 	if _, ok := asList(m["passthrough"]); ok {
 		clauses = append(clauses, subj+" can move over "+passthroughList(m["passthrough"])+" as though they were not there")
@@ -588,7 +593,12 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 		} else if m["allow_first_round"] == true {
 			arrival = "; " + it + " can arrive in the first battle round"
 		}
-		return whoCan + " " + can + " be placed into Strategic Reserves" + limits + arrival
+		// "That unit heals 10 wounds and is placed in strategic reserves": a destroyed unit returned.
+		placed := can + " be placed"
+		if m["from"] == "destroyed" {
+			placed = "is returned to the battle and placed"
+		}
+		return whoCan + " " + placed + " into Strategic Reserves" + limits + arrival
 	}
 	from := ""
 	switch m["from"] {

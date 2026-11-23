@@ -1,6 +1,6 @@
 import { DESIGNATION_IDS } from "../../translate/designations.js";
 import { ANTECEDENT } from "../antecedent-families.js";
-import { boundedInteger, enumValue, exactKeys } from "../family-validation.js";
+import { boundedInteger, boundGroup, enumValue, exactKeys } from "../family-validation.js";
 import type { FlatFamily } from "./types.js";
 import {
   type Params, SUBJECT_REF, SUBJECTS_OR_ANTECEDENT, FOLLOWING_FILTER, WINDOW_PHASES, BATTLE_SIZES, UNIT_KEYWORD,
@@ -124,7 +124,8 @@ function normalizeDesignatedFilter(input: Params): Params {
   const tag = nonEmptyString(input.tag, "designated-filter.tag");
   if (!DESIGNATION_IDS.has(tag) && !UNIT_KEYWORD.test(tag)) throw new TypeError("designated-filter.tag must be a registered designation id.");
   const result: Params = { ...subject, tag };
-  if (input.by !== undefined) result.by = enumValue(input.by, [...SUBJECT_REF, FOLLOWING_FILTER], "designated-filter.by");
+  // "affected by that model's Bondsman ability": the Stratagem target group that applied it ({bound: name}).
+  if (input.by !== undefined) result.by = typeof input.by === "object" && input.by !== null ? boundGroup(input.by, "designated-filter.by") : enumValue(input.by, [...SUBJECT_REF, FOLLOWING_FILTER], "designated-filter.by");
   if (input.count_min !== undefined) result.count_min = boundedInteger(input.count_min, 0, 20, "designated-filter.count_min");
   if (input.count_max !== undefined) result.count_max = boundedInteger(input.count_max, 0, 20, "designated-filter.count_max");
   // "If that enemy unit was unravelling at the start of the phase": the designation as it was then.
@@ -400,10 +401,10 @@ export const ATTACK_AND_ROUND_PREDICATES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "designated-filter",
-    version: 4,
+    version: 5,
     role: "CONDITION",
     label: "Unit carries a designation",
-    description: "Requires a unit to carry a named designation (any registered tag, not only the five original marks), optionally applied by a named unit, or counts how many carry it. by following-filter: the designation was applied by a unit the unit-filter right after the leaf names (\"was marked by an Observer unit that has the Markerlight keyword\"). subject can be antecedent: the unit an earlier leaf of the record introduced (\"that enemy unit\", \"it\"), bound when the record compiles. at phase-start reads the subject's designation as it was at the start of the phase (\"if that enemy unit was unravelling at the start of the phase\").",
+    description: "Requires a unit to carry a named designation (any registered tag, not only the five original marks), optionally applied by a named unit, or counts how many carry it. by following-filter: the designation was applied by a unit the unit-filter right after the leaf names (\"was marked by an Observer unit that has the Markerlight keyword\"). subject can be antecedent: the unit an earlier leaf of the record introduced (\"that enemy unit\", \"it\"), bound when the record compiles. by {bound: name}: a Stratagem target group applied it (\"affected by that model's Bondsman ability\" is bondsman-affected by the lead target). at phase-start reads the subject's designation as it was at the start of the phase (\"if that enemy unit was unravelling at the start of the phase\").",
     starter: { tag: "" },
     parameterSchema: {
       type: "object", required: ["tag"], additionalProperties: false,
@@ -411,7 +412,7 @@ export const ATTACK_AND_ROUND_PREDICATES_FAMILIES: readonly FlatFamily[] = [
         subject: { enum: [...SUBJECT_REF, ANTECEDENT] },
         negated: { type: "boolean" },
         tag: { type: "string", minLength: 1 },
-        by: { enum: ["this-unit", "this-model", "model-in-this-unit", "attacker", "defender", "event-subject", "event-object", "selected-unit", "recipient", "following-filter"] },
+        by: { oneOf: [{ enum: ["this-unit", "this-model", "model-in-this-unit", "attacker", "defender", "event-subject", "event-object", "selected-unit", "recipient", "following-filter"] }, { type: "object", required: ["bound"], additionalProperties: false, properties: { bound: { type: "string", pattern: "^[a-z][a-z0-9-]*[a-z0-9]$" } } }] },
         count_min: { type: "integer", minimum: 0, maximum: 20 },
         count_max: { type: "integer", minimum: 0, maximum: 20 },
         at: { enum: ["phase-start"], "x-optional": true },

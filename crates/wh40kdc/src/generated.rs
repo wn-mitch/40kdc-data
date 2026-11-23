@@ -9926,6 +9926,15 @@ impl ::std::convert::From<::serde_json::Value> for CountOfCountOf {
 ///{
 ///  "type": "object",
 ///  "properties": {
+///    "for_abilities": {
+///      "description": "The abilities the unit counts as within range for, and only those (\"for the purposes of the Psychic Guidance and Spirit Guides abilities\").",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
 ///    "for_weapon_ability": {
 ///      "description": "The weapon ability a model_count applies to.",
 ///      "enum": [
@@ -9963,6 +9972,9 @@ impl ::std::convert::From<::serde_json::Value> for CountOfCountOf {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct CountsAsEffectModifier {
+    ///The abilities the unit counts as within range for, and only those ("for the purposes of the Psychic Guidance and Spirit Guides abilities").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub for_abilities: ::std::option::Option<Vec<EntityId>>,
     ///The weapon ability a model_count applies to.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub for_weapon_ability: ::std::option::Option<
@@ -9980,6 +9992,7 @@ pub struct CountsAsEffectModifier {
 impl ::std::default::Default for CountsAsEffectModifier {
     fn default() -> Self {
         Self {
+            for_abilities: Default::default(),
             for_weapon_ability: Default::default(),
             in_region: Default::default(),
             model_count: Default::default(),
@@ -11436,11 +11449,38 @@ impl ::std::convert::From<UnitRef> for DesignateEffectModifierSubject {
 ///    },
 ///    "select": {
 ///      "type": "object",
+///      "oneOf": [
+///        {
+///          "not": {
+///            "required": [
+///              "from"
+///            ]
+///          },
+///          "required": [
+///            "selector"
+///          ]
+///        },
+///        {
+///          "required": [
+///            "from"
+///          ],
+///          "properties": {
+///            "kind": {
+///              "const": "unit"
+///            }
+///          }
+///        }
+///      ],
 ///      "required": [
-///        "kind",
-///        "selector"
+///        "kind"
 ///      ],
 ///      "properties": {
+///        "from": {
+///          "description": "The unit is the unit of the ability's moment (\"just after an enemy unit has shot … attacks that target that enemy unit\"), designated with no choice; the select then has no selector.",
+///          "enum": [
+///            "event-subject"
+///          ]
+///        },
 ///        "kind": {
 ///          "enum": [
 ///            "unit",
@@ -11566,6 +11606,9 @@ for DesignateTargetEffectApplies {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DesignateTargetEffectAppliesArrayItem {
+    ///The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, "each time a model in your WRAITH CONSTRUCT unit makes an attack"), or any one of several ("each time one of your ARMIGER models makes an attack", with attacker_filter naming the keywords each attacking model has).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub attacker: ::std::option::Option<DesignateTargetEffectAppliesArrayItemAttacker>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attacker_filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -11576,6 +11619,46 @@ pub struct DesignateTargetEffectAppliesArrayItem {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub reference: ::std::option::Option<SelectionReference>,
     pub to: DesignateTargetEffectAppliesArrayItemTo,
+}
+///The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, "each time a model in your WRAITH CONSTRUCT unit makes an attack"), or any one of several ("each time one of your ARMIGER models makes an attack", with attacker_filter naming the keywords each attacking model has).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, \"each time a model in your WRAITH CONSTRUCT unit makes an attack\"), or any one of several (\"each time one of your ARMIGER models makes an attack\", with attacker_filter naming the keywords each attacking model has).",
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/unit-ref"
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum DesignateTargetEffectAppliesArrayItemAttacker {
+    UnitRef(UnitRef),
+    Array(Vec<UnitRef>),
+}
+impl ::std::convert::From<UnitRef> for DesignateTargetEffectAppliesArrayItemAttacker {
+    fn from(value: UnitRef) -> Self {
+        Self::UnitRef(value)
+    }
+}
+impl ::std::convert::From<Vec<UnitRef>>
+for DesignateTargetEffectAppliesArrayItemAttacker {
+    fn from(value: Vec<UnitRef>) -> Self {
+        Self::Array(value)
+    }
 }
 ///`DesignateTargetEffectAppliesArrayItemTo`
 ///
@@ -11740,11 +11823,38 @@ impl<'de> ::serde::Deserialize<'de> for DesignateTargetEffectDesignation {
 /// ```json
 ///{
 ///  "type": "object",
+///  "oneOf": [
+///    {
+///      "not": {
+///        "required": [
+///          "from"
+///        ]
+///      },
+///      "required": [
+///        "selector"
+///      ]
+///    },
+///    {
+///      "required": [
+///        "from"
+///      ],
+///      "properties": {
+///        "kind": {
+///          "const": "unit"
+///        }
+///      }
+///    }
+///  ],
 ///  "required": [
-///    "kind",
-///    "selector"
+///    "kind"
 ///  ],
 ///  "properties": {
+///    "from": {
+///      "description": "The unit is the unit of the ability's moment (\"just after an enemy unit has shot … attacks that target that enemy unit\"), designated with no choice; the select then has no selector.",
+///      "enum": [
+///        "event-subject"
+///      ]
+///    },
 ///    "kind": {
 ///      "enum": [
 ///        "unit",
@@ -11767,12 +11877,19 @@ impl<'de> ::serde::Deserialize<'de> for DesignateTargetEffectDesignation {
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct DesignateTargetEffectSelect {
-    pub kind: DesignateTargetEffectSelectKind,
-    pub selector: DesignateTargetEffectSelectSelector,
+#[serde(untagged, deny_unknown_fields)]
+pub enum DesignateTargetEffectSelect {
+    Variant0 {
+        kind: DesignateTargetEffectSelectVariant0Kind,
+        selector: DesignateTargetEffectSelectVariant0Selector,
+    },
+    Variant1 {
+        ///The unit is the unit of the ability's moment ("just after an enemy unit has shot … attacks that target that enemy unit"), designated with no choice; the select then has no selector.
+        from: DesignateTargetEffectSelectVariant1From,
+        kind: DesignateTargetEffectSelectVariant1Kind,
+    },
 }
-///`DesignateTargetEffectSelectKind`
+///`DesignateTargetEffectSelectVariant0Kind`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -11797,13 +11914,13 @@ pub struct DesignateTargetEffectSelect {
     PartialEq,
     PartialOrd
 )]
-pub enum DesignateTargetEffectSelectKind {
+pub enum DesignateTargetEffectSelectVariant0Kind {
     #[serde(rename = "unit")]
     Unit,
     #[serde(rename = "objective")]
     Objective,
 }
-impl ::std::fmt::Display for DesignateTargetEffectSelectKind {
+impl ::std::fmt::Display for DesignateTargetEffectSelectVariant0Kind {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Unit => f.write_str("unit"),
@@ -11811,7 +11928,7 @@ impl ::std::fmt::Display for DesignateTargetEffectSelectKind {
         }
     }
 }
-impl ::std::str::FromStr for DesignateTargetEffectSelectKind {
+impl ::std::str::FromStr for DesignateTargetEffectSelectVariant0Kind {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -11823,7 +11940,7 @@ impl ::std::str::FromStr for DesignateTargetEffectSelectKind {
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for DesignateTargetEffectSelectKind {
+impl ::std::convert::TryFrom<&str> for DesignateTargetEffectSelectVariant0Kind {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -11832,7 +11949,7 @@ impl ::std::convert::TryFrom<&str> for DesignateTargetEffectSelectKind {
     }
 }
 impl ::std::convert::TryFrom<&::std::string::String>
-for DesignateTargetEffectSelectKind {
+for DesignateTargetEffectSelectVariant0Kind {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -11840,7 +11957,8 @@ for DesignateTargetEffectSelectKind {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<::std::string::String> for DesignateTargetEffectSelectKind {
+impl ::std::convert::TryFrom<::std::string::String>
+for DesignateTargetEffectSelectVariant0Kind {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -11848,7 +11966,7 @@ impl ::std::convert::TryFrom<::std::string::String> for DesignateTargetEffectSel
         value.parse()
     }
 }
-///`DesignateTargetEffectSelectSelector`
+///`DesignateTargetEffectSelectVariant0Selector`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -11866,18 +11984,163 @@ impl ::std::convert::TryFrom<::std::string::String> for DesignateTargetEffectSel
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-pub struct DesignateTargetEffectSelectSelector {
+pub struct DesignateTargetEffectSelectVariant0Selector {
     #[serde(flatten, default, skip_serializing_if = "::std::option::Option::is_none")]
     pub subtype_0: ::std::option::Option<UnitSelector>,
     #[serde(flatten, default, skip_serializing_if = "::std::option::Option::is_none")]
     pub subtype_1: ::std::option::Option<ObjectiveSelector>,
 }
-impl ::std::default::Default for DesignateTargetEffectSelectSelector {
+impl ::std::default::Default for DesignateTargetEffectSelectVariant0Selector {
     fn default() -> Self {
         Self {
             subtype_0: Default::default(),
             subtype_1: Default::default(),
         }
+    }
+}
+///The unit is the unit of the ability's moment ("just after an enemy unit has shot … attacks that target that enemy unit"), designated with no choice; the select then has no selector.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The unit is the unit of the ability's moment (\"just after an enemy unit has shot … attacks that target that enemy unit\"), designated with no choice; the select then has no selector.",
+///  "enum": [
+///    "event-subject"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DesignateTargetEffectSelectVariant1From {
+    #[serde(rename = "event-subject")]
+    EventSubject,
+}
+impl ::std::fmt::Display for DesignateTargetEffectSelectVariant1From {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::EventSubject => f.write_str("event-subject"),
+        }
+    }
+}
+impl ::std::str::FromStr for DesignateTargetEffectSelectVariant1From {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "event-subject" => Ok(Self::EventSubject),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DesignateTargetEffectSelectVariant1From {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for DesignateTargetEffectSelectVariant1From {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DesignateTargetEffectSelectVariant1From {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DesignateTargetEffectSelectVariant1Kind`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "unit"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DesignateTargetEffectSelectVariant1Kind {
+    #[serde(rename = "unit")]
+    Unit,
+}
+impl ::std::fmt::Display for DesignateTargetEffectSelectVariant1Kind {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Unit => f.write_str("unit"),
+        }
+    }
+}
+impl ::std::str::FromStr for DesignateTargetEffectSelectVariant1Kind {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "unit" => Ok(Self::Unit),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DesignateTargetEffectSelectVariant1Kind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for DesignateTargetEffectSelectVariant1Kind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DesignateTargetEffectSelectVariant1Kind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`DesignateTargetEffectType`
@@ -12212,7 +12475,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///        },
 ///        {
 ///          "not": {
-///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///            "type": "string",
 ///            "enum": [
 ///              "this-unit",
@@ -12312,7 +12575,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12394,7 +12657,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12479,7 +12742,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12595,7 +12858,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///        },
 ///        {
 ///          "not": {
-///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///            "type": "string",
 ///            "enum": [
 ///              "this-unit",
@@ -12665,7 +12928,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12762,7 +13025,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12847,7 +13110,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12959,7 +13222,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///        },
 ///        {
 ///          "not": {
-///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///            "type": "string",
 ///            "enum": [
 ///              "this-unit",
@@ -13033,7 +13296,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -13134,7 +13397,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -13215,7 +13478,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -13326,7 +13589,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///        },
 ///        {
 ///          "not": {
-///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///            "type": "string",
 ///            "enum": [
 ///              "this-unit",
@@ -13401,7 +13664,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -13502,7 +13765,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -13584,7 +13847,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -13749,6 +14012,22 @@ impl ::std::convert::From<UnitRef> for DesignatedConditionParametersVariant2Subj
 ///    "to"
 ///  ],
 ///  "properties": {
+///    "attacker": {
+///      "description": "The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, \"each time a model in your WRAITH CONSTRUCT unit makes an attack\"), or any one of several (\"each time one of your ARMIGER models makes an attack\", with attacker_filter naming the keywords each attacking model has).",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        {
+///          "type": "array",
+///          "items": {
+///            "$ref": "#/$defs/unit-ref"
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
+///        }
+///      ]
+///    },
 ///    "attacker_filter": {
 ///      "$ref": "#/$defs/unit-filter"
 ///    },
@@ -13780,6 +14059,9 @@ impl ::std::convert::From<UnitRef> for DesignatedConditionParametersVariant2Subj
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DesignationApplies {
+    ///The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, "each time a model in your WRAITH CONSTRUCT unit makes an attack"), or any one of several ("each time one of your ARMIGER models makes an attack", with attacker_filter naming the keywords each attacking model has).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub attacker: ::std::option::Option<DesignationAppliesAttacker>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attacker_filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -13790,6 +14072,45 @@ pub struct DesignationApplies {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub reference: ::std::option::Option<SelectionReference>,
     pub to: DesignationAppliesTo,
+}
+///The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, "each time a model in your WRAITH CONSTRUCT unit makes an attack"), or any one of several ("each time one of your ARMIGER models makes an attack", with attacker_filter naming the keywords each attacking model has).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, \"each time a model in your WRAITH CONSTRUCT unit makes an attack\"), or any one of several (\"each time one of your ARMIGER models makes an attack\", with attacker_filter naming the keywords each attacking model has).",
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/unit-ref"
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum DesignationAppliesAttacker {
+    UnitRef(UnitRef),
+    Array(Vec<UnitRef>),
+}
+impl ::std::convert::From<UnitRef> for DesignationAppliesAttacker {
+    fn from(value: UnitRef) -> Self {
+        Self::UnitRef(value)
+    }
+}
+impl ::std::convert::From<Vec<UnitRef>> for DesignationAppliesAttacker {
+    fn from(value: Vec<UnitRef>) -> Self {
+        Self::Array(value)
+    }
 }
 ///`DesignationAppliesTo`
 ///
@@ -27414,6 +27735,19 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///    "no_end_in_engagement": {
 ///      "const": true
 ///    },
+///    "not_cumulative": {
+///      "description": "An Advance with no roll (advance) that does not stack with the named ability's own Move bonus (\"this is not cumulative with the REAVERS' Matchless Swiftness ability\").",
+///      "type": "object",
+///      "required": [
+///        "ability"
+///      ],
+///      "properties": {
+///        "ability": {
+///          "$ref": "#/$defs/entity-id"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "passthrough": {
 ///      "type": "array",
 ///      "items": {
@@ -27510,6 +27844,8 @@ pub struct MoveModifierEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub no_end_in_engagement: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_cumulative: ::std::option::Option<MoveModifierEffectModifierNotCumulative>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub passthrough: ::std::option::Option<
         Vec<MoveModifierEffectModifierPassthroughItem>,
     >,
@@ -27528,6 +27864,7 @@ impl ::std::default::Default for MoveModifierEffectModifier {
             maximum: Default::default(),
             mode_choice: Default::default(),
             no_end_in_engagement: Default::default(),
+            not_cumulative: Default::default(),
             passthrough: Default::default(),
         }
     }
@@ -27983,6 +28320,31 @@ impl ::std::convert::From<Vec<MoveMode>> for MoveModifierEffectModifierModeChoic
     fn from(value: Vec<MoveMode>) -> Self {
         Self::Variant1(value)
     }
+}
+///An Advance with no roll (advance) that does not stack with the named ability's own Move bonus ("this is not cumulative with the REAVERS' Matchless Swiftness ability").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "An Advance with no roll (advance) that does not stack with the named ability's own Move bonus (\"this is not cumulative with the REAVERS' Matchless Swiftness ability\").",
+///  "type": "object",
+///  "required": [
+///    "ability"
+///  ],
+///  "properties": {
+///    "ability": {
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct MoveModifierEffectModifierNotCumulative {
+    pub ability: EntityId,
 }
 ///`MoveModifierEffectModifierPassthroughItem`
 ///
@@ -42167,6 +42529,31 @@ impl ::std::convert::TryFrom<::std::string::String> for RitualMenuEffectType {
 ///    "type"
 ///  ],
 ///  "properties": {
+///    "count_history": {
+///      "description": "Roll as many of `dice` (one die, such as D6) as a count from the battle's history: of mortal-wounds-suffered, the mortal wounds `subject` suffered in `window` (\"a number of dice equal to the number of mortal wounds your unit suffered this phase\").",
+///      "type": "object",
+///      "required": [
+///        "of",
+///        "subject",
+///        "window"
+///      ],
+///      "properties": {
+///        "of": {
+///          "enum": [
+///            "mortal-wounds-suffered"
+///          ]
+///        },
+///        "subject": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "window": {
+///          "enum": [
+///            "phase"
+///          ]
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "count_stat": {
 ///      "description": "Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).",
 ///      "type": "object",
@@ -42229,6 +42616,8 @@ impl ::std::convert::TryFrom<::std::string::String> for RitualMenuEffectType {
 #[serde(deny_unknown_fields)]
 pub struct RollEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count_history: ::std::option::Option<RollEffectCountHistory>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count_stat: ::std::option::Option<RollEffectCountStat>,
     pub dice: DiceExpression,
     pub effect: EffectNode,
@@ -42239,6 +42628,185 @@ pub struct RollEffect {
     pub roll_var: RollEffectRollVar,
     #[serde(rename = "type")]
     pub type_: RollEffectType,
+}
+///Roll as many of `dice` (one die, such as D6) as a count from the battle's history: of mortal-wounds-suffered, the mortal wounds `subject` suffered in `window` ("a number of dice equal to the number of mortal wounds your unit suffered this phase").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Roll as many of `dice` (one die, such as D6) as a count from the battle's history: of mortal-wounds-suffered, the mortal wounds `subject` suffered in `window` (\"a number of dice equal to the number of mortal wounds your unit suffered this phase\").",
+///  "type": "object",
+///  "required": [
+///    "of",
+///    "subject",
+///    "window"
+///  ],
+///  "properties": {
+///    "of": {
+///      "enum": [
+///        "mortal-wounds-suffered"
+///      ]
+///    },
+///    "subject": {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    "window": {
+///      "enum": [
+///        "phase"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RollEffectCountHistory {
+    pub of: RollEffectCountHistoryOf,
+    pub subject: UnitRef,
+    pub window: RollEffectCountHistoryWindow,
+}
+///`RollEffectCountHistoryOf`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "mortal-wounds-suffered"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RollEffectCountHistoryOf {
+    #[serde(rename = "mortal-wounds-suffered")]
+    MortalWoundsSuffered,
+}
+impl ::std::fmt::Display for RollEffectCountHistoryOf {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::MortalWoundsSuffered => f.write_str("mortal-wounds-suffered"),
+        }
+    }
+}
+impl ::std::str::FromStr for RollEffectCountHistoryOf {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "mortal-wounds-suffered" => Ok(Self::MortalWoundsSuffered),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RollEffectCountHistoryOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RollEffectCountHistoryOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RollEffectCountHistoryOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`RollEffectCountHistoryWindow`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "phase"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RollEffectCountHistoryWindow {
+    #[serde(rename = "phase")]
+    Phase,
+}
+impl ::std::fmt::Display for RollEffectCountHistoryWindow {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Phase => f.write_str("phase"),
+        }
+    }
+}
+impl ::std::str::FromStr for RollEffectCountHistoryWindow {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "phase" => Ok(Self::Phase),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RollEffectCountHistoryWindow {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RollEffectCountHistoryWindow {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RollEffectCountHistoryWindow {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).
 ///
@@ -47975,7 +48543,8 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///      "enum": [
 ///        "strategic-reserves",
 ///        "transport",
-///        "battlefield"
+///        "battlefield",
+///        "destroyed"
 ///      ]
 ///    },
 ///    "ignore_limits": {
@@ -48202,7 +48771,8 @@ pub struct SetUpEffectModifier {
 ///  "enum": [
 ///    "strategic-reserves",
 ///    "transport",
-///    "battlefield"
+///    "battlefield",
+///    "destroyed"
 ///  ]
 ///}
 /// ```
@@ -48226,6 +48796,8 @@ pub enum SetUpEffectModifierFrom {
     Transport,
     #[serde(rename = "battlefield")]
     Battlefield,
+    #[serde(rename = "destroyed")]
+    Destroyed,
 }
 impl ::std::fmt::Display for SetUpEffectModifierFrom {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -48233,6 +48805,7 @@ impl ::std::fmt::Display for SetUpEffectModifierFrom {
             Self::StrategicReserves => f.write_str("strategic-reserves"),
             Self::Transport => f.write_str("transport"),
             Self::Battlefield => f.write_str("battlefield"),
+            Self::Destroyed => f.write_str("destroyed"),
         }
     }
 }
@@ -48245,6 +48818,7 @@ impl ::std::str::FromStr for SetUpEffectModifierFrom {
             "strategic-reserves" => Ok(Self::StrategicReserves),
             "transport" => Ok(Self::Transport),
             "battlefield" => Ok(Self::Battlefield),
+            "destroyed" => Ok(Self::Destroyed),
             _ => Err("invalid value".into()),
         }
     }
@@ -50714,7 +51288,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "set-up effect",
-///      "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
+///      "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as. from destroyed: a destroyed unit is returned and set up (with to: strategic-reserves, placed into Strategic Reserves).",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -51596,7 +52170,7 @@ pub enum SingleEffect {
     },
     /**set-up effect
 
-[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.*/
+[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as. from destroyed: a destroyed unit is returned and set up (with to: strategic-reserves, placed into Strategic Reserves).*/
     #[serde(rename = "set-up")]
     SetUp {
         modifier: SetUpEffectModifier,
@@ -63836,7 +64410,7 @@ pub struct UnitRating {
 ///  "description": "Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.",
 ///  "oneOf": [
 ///    {
-///      "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///      "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///      "type": "string",
 ///      "enum": [
 ///        "this-unit",
@@ -63929,13 +64503,13 @@ impl ::std::convert::From<UnitFilter> for UnitRef {
         Self::Variant1(value)
     }
 }
-///this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.
+///this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///  "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///  "type": "string",
 ///  "enum": [
 ///    "this-unit",
@@ -64414,13 +64988,13 @@ impl<'de> ::serde::Deserialize<'de> for UnitSelectorBindAs {
             })
     }
 }
-///Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.
+///Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves. destroyed: the unit has been destroyed ("Select one friendly destroyed X unit"); only a rule that returns a destroyed unit selects it.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.",
+///  "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves. destroyed: the unit has been destroyed (\"Select one friendly destroyed X unit\"); only a rule that returns a destroyed unit selects it.",
 ///  "type": "string",
 ///  "enum": [
 ///    "engaged",
@@ -64431,7 +65005,8 @@ impl<'de> ::serde::Deserialize<'de> for UnitSelectorBindAs {
 ///    "on-battlefield",
 ///    "hidden",
 ///    "fights-first",
-///    "benefit-of-cover"
+///    "benefit-of-cover",
+///    "destroyed"
 ///  ]
 ///}
 /// ```
@@ -64467,6 +65042,8 @@ pub enum UnitState {
     FightsFirst,
     #[serde(rename = "benefit-of-cover")]
     BenefitOfCover,
+    #[serde(rename = "destroyed")]
+    Destroyed,
 }
 impl ::std::fmt::Display for UnitState {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -64480,6 +65057,7 @@ impl ::std::fmt::Display for UnitState {
             Self::Hidden => f.write_str("hidden"),
             Self::FightsFirst => f.write_str("fights-first"),
             Self::BenefitOfCover => f.write_str("benefit-of-cover"),
+            Self::Destroyed => f.write_str("destroyed"),
         }
     }
 }
@@ -64498,6 +65076,7 @@ impl ::std::str::FromStr for UnitState {
             "hidden" => Ok(Self::Hidden),
             "fights-first" => Ok(Self::FightsFirst),
             "benefit-of-cover" => Ok(Self::BenefitOfCover),
+            "destroyed" => Ok(Self::Destroyed),
             _ => Err("invalid value".into()),
         }
     }

@@ -115,6 +115,9 @@ const RUNTIME_CONTEXT_UNKNOWN: Readonly<Record<string, true>> = {
   // crunched unit's keywords, which a context-free gate does not know. A malformed filter fails validEffect.
   "aura recipient keywords are unavailable or its filter is malformed": true,
   "named-region-state beneficiary filter cannot be evaluated against current attacker facts": true,
+  // "Each time an ARMIGER model makes an attack against it": whether the crunched attacker is that
+  // model, or that Stratagem target, is its keywords or the Stratagem's use, which a context-free gate does not know.
+  "designate-target attacker filter is unresolved": true,
 };
 let effectValidator: Ajv | undefined;
 function validEffect(fragment: unknown): boolean {

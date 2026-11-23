@@ -201,7 +201,7 @@ function normalizeActAfterMove(input: Params): Params {
   };
 }
 
-const WOUND_AMOUNTS = ["1", "2", "3", "D3", "D6", "D3+3", "D3+1", "D3+2", "all", "that-many", "2D3"];
+const WOUND_AMOUNTS = ["1", "2", "3", "D3", "D6", "D3+3", "D3+1", "D3+2", "all", "that-many", "2D3", "2D6"];
 
 function normalizeRegainWounds(input: Params): Params {
   const { selection, ...rest } = input;
@@ -394,7 +394,7 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "regain-wounds",
-    version: 9,
+    version: 10,
     role: "EFFECT",
     label: "Regain lost wounds",
     description: "A model, or each model in a unit, regains lost wounds (heals). Adding to the Wounds characteristic is a different leaf. The amount is a printed number or dice amount (D3+1, D3+2, 2D3 …), all (\"regains all of its lost wounds\"), or that-many (as many wounds as the mortal wounds printed before it in its sentence, from the same roll: \"suffers D3+1 mortal wounds and … regains up to that many lost wounds\"). "
@@ -413,5 +413,25 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
       additionalProperties: false,
     },
     normalize: normalizeRegainWounds,
+  },
+  {
+    id: "revive-into-reserves",
+    version: 1,
+    role: "EFFECT",
+    label: "Return a destroyed unit to Reserves",
+    description: "A destroyed unit comes back: it heals a number of wounds and is placed into Strategic Reserves (\"That unit heals 10 wounds and is placed in strategic reserves\", after \"Select one friendly destroyed X unit\"). subject is antecedent: the destroyed unit an earlier leaf selected. heal is the wounds it heals, a whole number.",
+    starter: { subject: "", heal: 0 },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "heal"],
+      properties: { subject: { enum: [ANTECEDENT] }, heal: { type: "integer", minimum: 1, maximum: 60 } },
+      additionalProperties: false,
+    },
+    normalize: (input) => {
+      exactKeys(input, ["subject", "heal"], "revive-into-reserves");
+      const heal = input.heal;
+      if (!Number.isSafeInteger(heal) || (heal as number) < 1 || (heal as number) > 60) throw new TypeError("revive-into-reserves.heal is a whole number of wounds from 1 to 60.");
+      return { subject: enumValue(input.subject, [ANTECEDENT], "revive-into-reserves.subject"), heal };
+    },
   },
 ];

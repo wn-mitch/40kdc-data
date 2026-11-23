@@ -88,7 +88,8 @@ function normalizeTriggeringTarget(input: Params): Params {
   const family = "triggering-target";
   // unit_names are datasheet names, not keywords: they take no accented-keyword spelling.
   const spelling = new PrintedKeywords(family, input, ["unit_names"]);
-  const { any_keywords: anyKeywords, unit_names: names, ...rest } = input;
+  const { any_keywords: anyKeywords, unit_names: names, bind_as: bindAs, ...rest } = input;
+  if (bindAs !== undefined && (typeof bindAs !== "string" || !/^[a-z][a-z0-9-]*[a-z0-9]$/u.test(bindAs))) throw new TypeError(`${family}.bind_as is a kebab-case group name.`);
   let unitNames: string[] | undefined;
   if (names !== undefined) {
     if (rest.level === "model" || (rest.selects !== undefined && rest.selects !== "unit")) throw new TypeError(`${family}.unit_names identifies units, not models.`);
@@ -112,6 +113,7 @@ function normalizeTriggeringTarget(input: Params): Params {
     result.any_keywords = keywordList(spelling.bare(anyKeywords), "triggering-target any_keywords", 2).map((keyword) => spelling.printed(keyword));
   }
   if (unitNames !== undefined) result.unit_names = unitNames;
+  if (bindAs !== undefined) result.bind_as = bindAs;
   return spelling.finish(result);
 }
 
@@ -158,11 +160,17 @@ function normalizeStratagemTarget(input: Params): Params {
   const spelling = new PrintedKeywords(family, input);
   const count = enumValue(input.count, TARGET_COUNTS, "stratagem-target.count");
   if (count !== "exactly" && "count_exact" in input) throw new TypeError("stratagem-target.count_exact needs count exactly.");
-  const ranged = count === "up-to" ? ["count_max"] : count === "exactly" ? ["count_exact"] : [];
+  const ranged = [...(count === "up-to" ? ["count_max"] : count === "exactly" ? ["count_exact"] : []), ...("bind_as" in input ? ["bind_as"] : [])];
+  // "One PSYKER model … and one WRAITH CONSTRUCT unit": a group's own name, which the effect's leaves refer to ({bound: name}).
+  if ("bind_as" in input) {
+    if (typeof input.bind_as !== "string" || !/^[a-z][a-z0-9-]*[a-z0-9]$/u.test(input.bind_as)) throw new TypeError("stratagem-target.bind_as is a kebab-case group name.");
+    if (count === "exactly") throw new TypeError("stratagem-target.bind_as names one group; exactly-N targets are N groups.");
+  }
   const counted: Params = {
     count,
     ...(count === "up-to" ? { count_max: boundedInteger(input.count_max, 1, 10, "stratagem-target.count_max") } : {}),
     ...(count === "exactly" ? { count_exact: boundedInteger(input.count_exact, 2, 10, "stratagem-target.count_exact") } : {}),
+    ...("bind_as" in input ? { bind_as: input.bind_as } : {}),
   };
   // Without side, the leaf is only the count; the unit-filter after it names whose units and which keywords.
   if (!("side" in input)) {
@@ -262,10 +270,10 @@ export const RESTRICTIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "triggering-target",
-    version: 6,
+    version: 7,
     role: "RESTRICTION",
     label: "Target is that unit",
-    description: "\"That X unit\": the target is the unit the WHEN moment names. Its keywords narrow the trigger too. any_keywords: the unit also has at least one of these (a shared prefix before a slash list, with match all). unit_names: exact named unit datasheets, resolved within the owning faction to stable unit IDs; these are unit-level identities, not keywords or model names, so selects is unit. A keyword in keywords or any_keywords can carry accented capitals as the rules print it (KÂHL), and any keyword can start with an apostrophe ('ARDMOB).",
+    description: "\"That X unit\": the target is the unit the WHEN moment names. Its keywords narrow the trigger too. any_keywords: the unit also has at least one of these (a shared prefix before a slash list, with match all). unit_names: exact named unit datasheets, resolved within the owning faction to stable unit IDs; these are unit-level identities, not keywords or model names, so selects is unit. A keyword in keywords or any_keywords can carry accented capitals as the rules print it (KÂHL), and any keyword can start with an apostrophe ('ARDMOB). bind_as names the group this leaf opens (\"lead\"), so the effect's leaves can name it ({bound: name}), as on stratagem-target.",
     starter: { selects: "", keywords: [], match: "" },
     parameterSchema: {
       type: "object", required: ["selects", "keywords", "match"], additionalProperties: false,
@@ -275,6 +283,7 @@ export const RESTRICTIONS_FAMILIES: readonly FlatFamily[] = [
         match: { enum: ["all", "any"] },
         any_keywords: { type: "array", items: { type: "string", pattern: PRINTED_KEYWORD_PATTERN }, minItems: 2, uniqueItems: true, "x-optional": true },
         unit_names: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", minLength: 1 }, "x-optional": true },
+        bind_as: { type: "string", pattern: "^[a-z][a-z0-9-]*[a-z0-9]$", "x-optional": true },
       },
     },
     normalize: normalizeTriggeringTarget,
@@ -321,11 +330,11 @@ export const RESTRICTIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "stratagem-target",
-    version: 6,
+    version: 7,
     role: "RESTRICTION",
     kinds: ["stratagem"],
     label: "Stratagem target",
-    description: "A stratagem's TARGET: how many (one, one or more, up to count_max of 1-10 (\"Up to one\": zero or one unit), or exactly count_exact of 2-10, each meeting the same restrictions: \"Two **X** units\"), whose, unit or model, and the keywords it must have (all of them, or any one) and must not have. side, selects, keywords, match and excluded_keywords are given together or all left out; left out, the leaf is only the count (\"One\", \"Up to two\") and the unit-filter right after it says whose units and which keywords. A keyword can carry accented capitals (KÂHL) or start with an apostrophe ('ARDMOB) as the rules print it. Qualifiers such as \"that has not been selected to shoot this phase\" are their own condition leaves in the TARGET.",
+    description: "A stratagem's TARGET: how many (one, one or more, up to count_max of 1-10 (\"Up to one\": zero or one unit), or exactly count_exact of 2-10, each meeting the same restrictions: \"Two **X** units\"), whose, unit or model, and the keywords it must have (all of them, or any one) and must not have. side, selects, keywords, match and excluded_keywords are given together or all left out; left out, the leaf is only the count (\"One\", \"Up to two\") and the unit-filter right after it says whose units and which keywords. A keyword can carry accented capitals (KÂHL) or start with an apostrophe ('ARDMOB) as the rules print it. Qualifiers such as \"that has not been selected to shoot this phase\" are their own condition leaves in the TARGET. bind_as names the group this leaf opens (\"psyker\", \"bondsmen\"), so the effect's leaves can name it ({bound: name}); unnamed groups are first, second, ….",
     starter: { count: "" },
     parameterSchema: {
       type: "object", required: ["count"], additionalProperties: false,
@@ -338,6 +347,7 @@ export const RESTRICTIONS_FAMILIES: readonly FlatFamily[] = [
         match: { enum: ["all", "any"] },
         excluded_keywords: { type: "array", items: { type: "string", pattern: PRINTED_KEYWORD_PATTERN }, minItems: 0, uniqueItems: true },
         count_exact: { type: "integer", minimum: 2, maximum: 10, "x-only-when": { count: ["exactly"] } },
+        bind_as: { type: "string", pattern: "^[a-z][a-z0-9-]*[a-z0-9]$", "x-optional": true },
       },
     },
     normalize: normalizeStratagemTarget,

@@ -34,6 +34,7 @@ from wh40kdc.translate.effect_quantity import amount_of, is_literal, moved_phras
 from wh40kdc.translate.effect_select import for_each_unit_subject
 from wh40kdc.translate.effect_words import (
     Ctx,
+    ability_label,
     and_list,
     dekebab,
     designation_for,
@@ -614,9 +615,16 @@ def _move_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             )
     if m.get("advance") in ("fixed-6", "fixed-8"):
         inches = m["advance"][len("fixed-"):]
+        # "(this is not cumulative with the Matchless Swiftness ability)": that ability's bonus.
+        nc = m.get("not_cumulative")
+        trail = (
+            f" (this is not cumulative with the {ability_label(nc['ability'])} ability)"
+            if isinstance(nc, dict) and nc.get("ability") is not None
+            else ""
+        )
         clauses.append(
             f'{subj} {v(subj, "does")} not make an Advance roll; add {inches}" to {pronoun(subj)} '
-            "Move characteristic instead"
+            f"Move characteristic instead{trail}"
         )
     if isinstance(m.get("passthrough"), list):
         clauses.append(
@@ -717,7 +725,10 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             )
         else:
             arrival = f"; {it} can arrive in the first battle round" if first_round else ""
-        placed = f"{none_of(who) if denied else who} {can} be placed into Strategic Reserves"
+        # "That unit heals 10 wounds and is placed in strategic reserves": a destroyed unit.
+        returned = m.get("from") == "destroyed"
+        verb = "is returned to the battle and placed" if returned else f"{can} be placed"
+        placed = f"{none_of(who) if denied else who} {verb} into Strategic Reserves"
         return f"{placed}{limits}{arrival}"
     frm = m.get("from")
     source = (

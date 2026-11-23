@@ -546,7 +546,9 @@ function countsAs(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   // "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
   if (m.model_count != null) return `${subj} ${v(subj, "counts")} as containing fewer than ${jstr((m.model_count as P).below)} models for the purpose of the [${dekebab(jstr(m.for_weapon_ability)).toUpperCase()}] ability`;
   if (m.in_region != null) return `${subj} ${v(subj, "counts")} as being within ${regionPhrase(m.in_region as P)}`;
-  return `${subj} ${v(subj, "counts")} as being within ${rangePhrase(m.within)} of ${m.of != null ? effectSubject(m.of, ctx) : "this model"}`;
+  // "for the purposes of the Psychic Guidance and Spirit Guides abilities".
+  const purposes = Array.isArray(m.for_abilities) ? ` for the purposes of the ${andList([...new Set((m.for_abilities as unknown[]).map(abilityLabel))])} abilities` : "";
+  return `${subj} ${v(subj, "counts")} as being within ${rangePhrase(m.within)} of ${m.of != null ? effectSubject(m.of, ctx) : "this model"}${purposes}`;
 }
 
 const CORE_RULES: Record<string, [string, string]> = {

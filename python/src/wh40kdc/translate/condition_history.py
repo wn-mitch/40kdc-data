@@ -221,6 +221,11 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         return f"{neg}{roll_phrase} {result}{_window_phrase(window)}{times}".rstrip()
     if event == "damage-allocated":
         obj = unit_ref_phrase(p.get("object"), "this unit")
+        # "which inflicted one or more mortal wounds on your unit this phase": who caused them.
+        if f.get("attack_type") == "mortal" and f.get("by") is not None:
+            by = unit_ref_phrase(f.get("by"), "the unit")
+            inflicted = f"{neg}{by} inflicted one or more mortal wounds on {obj}"
+            return f"{inflicted} {_window_phrase(window)}".rstrip()
         atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
         if window == "event":
             return f"{neg}{obj} lost one or more wounds from the triggering {atk}attacks"

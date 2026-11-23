@@ -158,7 +158,7 @@ const EXCEPTABLE_ROLLS = ROLL_KINDS.filter((roll) => roll !== "all" && roll !== 
 
 function normalizeIgnoreModifiers(input: Input): Input {
   const { except_rolls: except, ...rest } = input;
-  const subject = enumValue(rest.subject, ["this-unit", "this-model", ANTECEDENT], "ignore-modifiers.subject");
+  const subject = enumValue(rest.subject, ["this-unit", "this-model", ANTECEDENT, "attack"], "ignore-modifiers.subject");
   const kinds = enumSet(rest.what, ["characteristics", "rolls"], "ignore-modifiers.what");
   const allowed = ["subject", "what", "only", "weapon_type", ...(kinds.includes("characteristics") ? ["stats"] : []), ...(kinds.includes("rolls") ? ["rolls"] : [])];
   allowedKeys(rest, allowed, "ignore-modifiers parameters must be subject, what, only, weapon_type, except_rolls, and stats/rolls only for the kinds what names.");
@@ -299,16 +299,16 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "ignore-modifiers",
-    version: 4,
+    version: 5,
     role: "EFFECT",
     label: "Ignore modifiers",
-    description: "Ignores modifiers to named characteristics and/or rolls (all of them, or only worsening or improving ones). `what` lists the kinds one list names (\"BS, Hit rolls and Wound rolls\" is both); with no stats named, every characteristic is covered. except_rolls: the rolls an \"any roll\" list leaves out, whose modifiers still apply (\"any roll or test made for it (excluding modifiers to saving throws)\"); only with rolls all or any. The subject can be antecedent: the units a unit-filter right before it matches, or a selected unit (\"Friendly X units can ignore modifiers to …\").",
+    description: "Ignores modifiers to named characteristics and/or rolls (all of them, or only worsening or improving ones). `what` lists the kinds one list names (\"BS, Hit rolls and Wound rolls\" is both); with no stats named, every characteristic is covered. except_rolls: the rolls an \"any roll\" list leaves out, whose modifiers still apply (\"any roll or test made for it (excluding modifiers to saving throws)\"); only with rolls all or any. The subject can be antecedent: the units a unit-filter right before it matches, or a selected unit (\"Friendly X units can ignore modifiers to …\"). Subject attack: the modifiers to \"that attack\", ignored by whoever makes it (the attacker).",
     starter: { subject: "this-unit", what: [] },
     parameterSchema: {
       type: "object",
       required: ["subject", "what"],
       properties: {
-        subject: { enum: ["this-unit", "this-model", ANTECEDENT] },
+        subject: { enum: ["this-unit", "this-model", ANTECEDENT, "attack"] },
         what: { type: "array", items: { enum: ["characteristics", "rolls"] }, minItems: 1, uniqueItems: true },
         stats: { type: "array", items: { enum: STATS }, minItems: 1, uniqueItems: true },
         rolls: { type: "array", items: { enum: ROLL_KINDS }, minItems: 1, uniqueItems: true },
