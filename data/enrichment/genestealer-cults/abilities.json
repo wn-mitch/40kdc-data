@@ -6739,19 +6739,57 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "genestealer-cults",
     "detachment_id": "biosanctic-broodsurge",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": {
+                "marker": "cult-ambush-marker"
+              },
+              "range": {
+                "inches": 8
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "marker",
+        "target": "this-unit",
+        "modifier": {
+          "label": "cult-ambush-marker",
+          "operation": "relocate",
+          "min_enemy_distance": {
+            "inches": 8
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "subject": {
+        "owner": "enemy"
+      },
+      "filter": {
+        "timing": "before-marker-removal"
+      },
+      "optional": true
+    },
+    "source_digest": "913594774e3ccf23675e98e00494701c98b988de4030620910cd25485d440d2e"
   },
   {
     "ability_id": "fire-point-commander-brood-brothers-auxilia-genestealer-cults",
