@@ -7,7 +7,7 @@ use serde_json::Value;
 
 use super::leaf_ability::*;
 use super::leaf_board::describe_board_leaf;
-use super::leaf_shapes::describe_shape_leaf;
+use super::leaf_shapes::{ability_class_state, describe_shape_leaf};
 use super::words::*;
 use crate::translate::condition::{and_list, nn, obj, or_list, P};
 
@@ -27,6 +27,8 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
     "ability-modifier",
     "ability-activate",
     "oath-modifier",
+    "orders-modifier",
+    "order-share",
     "permission",
     "targeting",
     "counts-as",
@@ -52,9 +54,11 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
     "cp-gain",
     "cost-modifier",
     "resource-gain",
+    "resource-gain-cap",
     "resource-spend",
     "resource-die",
     "objective-sticky",
+    "region-extend",
     "designate",
     "army-rule",
     "test-exemption",
@@ -62,6 +66,7 @@ pub(crate) const LEAF_TYPES: &[&str] = &[
     "characteristic-resolution",
     "borrow-weapons",
     "select-weapon",
+    "reserves-schedule",
 ];
 
 /// "each time an attack targets the unit, " — the lead of an `incoming` change.
@@ -81,7 +86,15 @@ pub(crate) fn incoming_lead(m: &P, subj: &str) -> String {
 fn stat_change(m: &P, what: &str) -> String {
     let op = jstr(m.get("operation"));
     match op.as_str() {
-        "set" => return format!("set {what} to {}", dice_case(m.get("value"))),
+        // A Range is printed in inches ("a Range characteristic of 18\"").
+        "set" => {
+            let inches = if sv(m, "stat") == Some("Range") {
+                "\""
+            } else {
+                ""
+            };
+            return format!("set {what} to {}{inches}", dice_case(m.get("value")));
+        }
         "halve" => return format!("halve {what}"),
         "multiply" => return format!("multiply {what} by {}", dice_case(m.get("value"))),
         "improve" | "worsen" => return format!("{op} {what} by {}", dice_case(m.get("value"))),
@@ -185,6 +198,20 @@ fn attack_maker(target: Option<&Value>, m: &P, subj: &str) -> String {
         String::new()
     } else {
         format!(" if it is made{with_weapons}{by}")
+    }
+}
+
+/// " (this is not cumulative with …)": what a modifier does not stack with, after the change it qualifies.
+fn not_cumulative_trail(m: &P, of: &str) -> String {
+    match m.get("not_cumulative") {
+        Some(Value::String(s)) if s == "negative-modifiers" => {
+            format!(" (this is not cumulative with any other negative modifiers to that {of})")
+        }
+        Some(Value::Object(nc)) if nc.get("ability").is_some_and(|a| !a.is_null()) => format!(
+            " (this is not cumulative with the {} ability)",
+            ability_label(nc.get("ability"))
+        ),
+        _ => String::new(),
     }
 }
 
@@ -309,10 +336,20 @@ fn ignore_modifiers(m: &P, subj: &str) -> String {
         }
         _ => String::new(),
     };
+    // "you can ignore any or all modifiers to …": the player picks which modifiers to ignore.
+    let any_or_all = sv(m, "choice") == Some("any-or-all");
+    let which = if any_or_all { "any or all" } else { "any" };
     if is_true(m, "incoming") {
         return format!(
-            "{}ignore any {kind}modifiers to that attack's {things}{except}",
+            "{}ignore {which} {kind}modifiers to that attack's {things}{except}",
             incoming_lead(m, subj)
+        );
+    }
+    if any_or_all {
+        return format!(
+            "you can ignore any or all {kind}modifiers to {}{except}{}",
+            of_or_possessive(subj, &things),
+            weapon_roll_scope(m)
         );
     }
     format!(
@@ -631,9 +668,17 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
     let subj = effect_subject(target, ctx);
     let subj = subj.as_str();
     match sv(e, "type").unwrap_or("") {
-        "stat-modifier" => stat_modifier(target, m, subj, ctx),
+        "stat-modifier" => format!(
+            "{}{}",
+            stat_modifier(target, m, subj, ctx),
+            not_cumulative_trail(m, "characteristic")
+        ),
         "ignore-modifiers" => ignore_modifiers(m, subj),
-        "roll-modifier" => roll_modifier(m, subj, ctx),
+        "roll-modifier" => format!(
+            "{}{}",
+            roll_modifier(m, subj, ctx),
+            not_cumulative_trail(m, "roll")
+        ),
         "re-roll" => re_roll(target, m, subj, ctx),
         "roll-result" => roll_result(m, subj),
         "end-attack-sequence" => "the attack sequence ends".to_string(),
@@ -662,7 +707,9 @@ pub(crate) fn describe_leaf(e: &P, ctx: &Ctx) -> String {
         "targeting" => targeting(e, m, subj, ctx),
         "weapon-ability-range" => weapon_ability_range(m, subj),
         "counts-as" => counts_as(m, subj, ctx),
-        "rule-state" => rule_state(m, subj),
+        "rule-state" => ability_class_state(target, m, subj).unwrap_or_else(|| rule_state(m, subj)),
+        "orders-modifier" => super::orders::orders_modifier(m, subj, ctx),
+        "order-share" => super::orders::order_share(m, subj, ctx),
         _ => describe_shape_leaf(e, m, subj, ctx)
             .unwrap_or_else(|| describe_board_leaf(e, m, subj, ctx)),
     }
@@ -759,6 +806,11 @@ fn ability_activate(m: &P, subj: &str) -> String {
         None => format!(
             "{subj} {} the {label} ability now{instead}",
             v(subj, "resolves")
+        ),
+        // "Your unit immediately Regenerates": the option resolves once, now, rather than becoming active.
+        Some(opt) if m.get("immediate") == Some(&Value::Bool(true)) => format!(
+            "the {} option of {label} resolves now for {subj}{instead}",
+            title_case(&jv(opt))
         ),
         Some(opt) => format!(
             "the {} option of {label} is active for {subj}{exclusive}{consumed}",

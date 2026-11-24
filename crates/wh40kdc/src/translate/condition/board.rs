@@ -426,27 +426,27 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
                 }
                 None => String::new(),
             };
+            // "If that enemy unit was unravelling at the start of the phase": the designation as it was then.
+            if is(p, "at", "phase-start") || is(p, "at", "turn-start") {
+                return format!(
+                    "{} {} {}{by} at the start of the {}",
+                    subject_of(p, "this unit"),
+                    if negated { "was not" } else { "was" },
+                    designation_phrase(&st(p.get("tag")), false),
+                    if is(p, "at", "phase-start") {
+                        "phase"
+                    } else {
+                        "turn"
+                    }
+                );
+            }
             format!(
                 "{} is {not_}{}{by}",
                 subject_of(p, "this unit"),
                 designation_phrase(&st(p.get("tag")), false)
             )
         }
-        "resource" => {
-            if p.get("below_max") == Some(&Value::Bool(true)) {
-                let source = obj(p.get("source_ability")).get("ability_id");
-                return format!(
-                    "{neg}the {} ability had unused selection capacity at the end of your opponent's previous turn",
-                    dekebab(&st(source))
-                );
-            }
-            // A pool is the player's ("If you have 3 or more Pact points").
-            format!(
-                "you have {} {}",
-                count_phrase(p.get("count")),
-                dekebab(&st(p.get("pool")))
-            )
-        }
+        "resource" => super::resource::resource_predicate(p, negated),
         // "the Psychic test result is 10+": the total of a roll an enclosing step bound.
         "roll-total" => {
             let roll = st(p.get("roll_var"));
@@ -545,6 +545,17 @@ pub(crate) fn board_predicate(c: &Value, negated: bool) -> String {
         "battle-size" => format!(
             "the battle size is {not_}{}",
             title_case(&st(p.get("size")))
+        ),
+        "game-mode" => format!(
+            "the battle is {not_}a {} battle",
+            p.get("modes")
+                .and_then(Value::as_array)
+                .map(|modes| modes
+                    .iter()
+                    .map(|mode| title_case(&st(Some(mode))))
+                    .collect::<Vec<_>>()
+                    .join(" or "))
+                .unwrap_or_default()
         ),
         "army-faction" => format!(
             "your Army Faction is {not_}{}",

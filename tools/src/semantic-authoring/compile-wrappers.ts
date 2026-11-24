@@ -7,7 +7,7 @@ import type { FilterAlternative } from "./unit-filter-alternatives.js";
 import { dslUnitFilter } from "./compile-unit-filter-dsl.js";
 import { destroyedSelectionEligibility } from "./compile-destroyed-selection.js";
 import { AURA_RECIPIENT } from "./compile-antecedent.js";
-import { isTargetRef } from "./compile-target-refs.js";
+import { isOneTargetRef, isTargetRef, parseSeveral, targetRef } from "./compile-target-refs.js";
 
 /**
  * Wrapping leaves (`aura-range`, `leader-target`, `for-each-unit-select`, `rules-bundle-marker`)
@@ -313,17 +313,33 @@ export function designationIdFor(name: string | undefined): string {
  * `friendlyRecipient` is set only by boundAttackDesignation (below): the selection is then the enemy
  * unit of an independent pair, the frame is the friendly unit's grant, and the select carries its name.
  */
-export function designation(recordName: string | undefined, selection: CompileLeaf, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null, selectionLimit: Node | null = null, friendlyRecipient = false, direct: DirectEntry | null = null): Node {
-  if (selection.parameters.target_kind === "model") throw new CompileError("A designated target is a unit; designate-target selects units, not models.");
-  const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > selection.start_byte) ?? leaves.find((leaf) => leaf.family_id === "attack");
+/** The unit of the ability's moment ("that enemy unit" after "just after an enemy unit has shot"), designated with no choice. */
+export const MOMENT_UNIT = { from: "event-subject" } as const;
+
+export function designation(recordName: string | undefined, selection: CompileLeaf | typeof MOMENT_UNIT, leaves: readonly CompileLeaf[], body: Node, lasting: string | undefined, eligibility: Node | null = null, selectionLimit: Node | null = null, friendlyRecipient = false, direct: DirectEntry | null = null): Node {
+  const chosen = "family_id" in selection ? selection : null;
+  if (chosen?.parameters.target_kind === "model") throw new CompileError("A designated target is a unit; designate-target selects units, not models.");
+  if (!chosen && (eligibility !== null || selectionLimit !== null)) throw new CompileError("The moment's unit is designated with no choice, so no eligibility or selection limit applies to it.");
+  const after = chosen?.start_byte ?? -1;
+  const attack = leaves.find((leaf) => leaf.family_id === "attack" && leaf.start_byte > after) ?? leaves.find((leaf) => leaf.family_id === "attack");
   // "Friendly X units' attacks that target that unit have …": an attack-property scope's frame
   // (compile-weapon-scopes.ts) says whose attacks as well as an attack leaf does.
   const frame = attack ? undefined : friendlyRecipient ? leaves.find(friendlyRecipientFrame)
-    : leaves.find((leaf) => leaf.start_byte > selection.start_byte && leaf.parameters.weapon_type !== undefined
+    : leaves.find((leaf) => leaf.start_byte > after && leaf.parameters.weapon_type !== undefined
       && (leaf.family_id === "weapon-ability-grant" || leaf.family_id === "characteristic-modifier") && leaf.parameters.subject !== "attack");
   if (!attack && !frame) throw new CompileError("A selected unit needs an attack leaf saying whose attacks against it are affected.");
   const own = attack ? attack.parameters.unit === "this-model" : frame!.parameters.subject === "this-model";
   const attacks: Node = { to: own ? "bearer-attacks-target" : "attackers-of-target", effect: body };
+  // "each time a model in your WRAITH CONSTRUCT unit makes an attack": the attacks of one Stratagem target only.
+  // "each time one of your ARMIGER models makes an attack": the attacks of any of several targets, each an ARMIGER.
+  const attacker = attack?.parameters.attacker_filter;
+  if (!own && isOneTargetRef(attacker)) attacks.attacker = attacker;
+  else if (!own && isTargetRef(attacker)) {
+    const { targets } = parseSeveral(attacker);
+    attacks.attacker = targets.map(({ name }) => targetRef(name));
+    const gates = [...new Set(targets.flatMap(({ gate }) => gate ?? []))];
+    if (gates.length) attacks.attacker_filter = { all_of: gates, level: "model" };
+  }
   // A direct effect on the designated unit is its own entry, in the order the record prints the two.
   const attackStart = attack?.start_byte ?? frame!.start_byte;
   const applies = direct === null ? attacks
@@ -331,7 +347,7 @@ export function designation(recordName: string | undefined, selection: CompileLe
   return {
     type: "designate-target",
     designation: designationIdFor(recordName),
-    select: { kind: "unit", selector: selectUnit(selection, body, { eligibility, selectionLimit }).selector as Node },
+    select: chosen ? { kind: "unit", selector: selectUnit(chosen, body, { eligibility, selectionLimit }).selector as Node } : { kind: "unit", from: MOMENT_UNIT.from },
     applies,
     ...(lasting ? { duration: lasting } : {}),
   };

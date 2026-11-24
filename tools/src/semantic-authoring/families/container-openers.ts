@@ -26,7 +26,8 @@ function optionList(value: unknown, label: string): string[] {
 const STANCE_MODES = ["re-selectable", "consumable"] as const;
 const STANCE_SCOPES = ["army", "unit"] as const;
 const DICE_REQUIREMENT_TYPES = ["pair", "triple", "single", "run"] as const;
-const ORDER_RULES = ["issuer", "one-at-a-time", "ineligible-state", "ends-on-state", "benefit", "only-orders"] as const;
+const ORDER_RULES = ["issuer", "one-at-a-time", "ineligible-state", "ends-on-state", "benefit", "only-orders", "recipient-keywords"] as const;
+const ORDER_PHASES = ["command"] as const;
 const ORDER_STATES = ["battle-shocked"] as const;
 const MOVE_TYPE_KINDS = ["normal", "advance", "fall-back", "charge", "pile-in", "consolidation", "ingress", "surge", "scout", "disembark", "embark", "pulse-jet"] as const;
 const MOVE_TYPE_MODES = ["ordered-retreat", "desperate-escape", "ongoing", "engaging", "objective", "rapid", "tactical", "combat", "emergency", "assault", "shock"] as const;
@@ -55,7 +56,7 @@ function orderRule(input: Params): Params {
     }
     return { rule, orders: [...new Set((input.orders as string[]).map((name) => name.trim()))] };
   }
-  const needs = rule === "issuer" || rule === "benefit" ? ["rule", "keywords"] : rule === "one-at-a-time" ? ["rule"] : ["rule", "state"];
+  const needs = rule === "issuer" || rule === "benefit" || rule === "recipient-keywords" ? ["rule", "keywords"] : rule === "one-at-a-time" ? ["rule"] : ["rule", "state"];
   exactKeys(input, needs, "order-rule");
   if (needs.includes("keywords")) {
     if (!Array.isArray(input.keywords) || input.keywords.length === 0 || input.keywords.some((k) => typeof k !== "string" || k.trim() === "")) {
@@ -119,7 +120,7 @@ function stanceSelectionCapacity(input: Params): Params {
 
 function issueOrdersOpen(input: Params): Params {
   const family = "issue-orders-open";
-  exactKeys(input, present(input, ["count", "range", "eligible_keyword", "recipient", "counts_toward_limit"]), family);
+  exactKeys(input, present(input, ["count", "range", "eligible_keyword", "recipient", "counts_toward_limit", "as_if_phase", "issuer_keywords", "same_order"]), family);
   const result: Params = {};
   if ("count" in input) result.count = boundedInteger(input.count, 1, 99, `${family}.count`);
   if ("range" in input) result.range = boundedInteger(input.range, 1, 48, `${family}.range`);
@@ -129,14 +130,25 @@ function issueOrdersOpen(input: Params): Params {
     if (input.counts_toward_limit !== false) throw new TypeError(`${family}.counts_toward_limit is false, for an Order outside the officer's limit; leave it out otherwise.`);
     result.counts_toward_limit = false;
   }
+  if ("as_if_phase" in input) result.as_if_phase = enumValue(input.as_if_phase, ORDER_PHASES, `${family}.as_if_phase`);
+  if ("issuer_keywords" in input) result.issuer_keywords = distinctStrings(input.issuer_keywords, `${family}.issuer_keywords`);
+  if ("same_order" in input) {
+    result.same_order = constTrue(input.same_order, `${family}.same_order`);
+    if ("recipient" in input) throw new TypeError(`${family}.same_order goes to another unit than the one the Order was just issued to; it takes no recipient.`);
+  }
   return result;
 }
 
 function choiceOpen(input: Params): Params {
   const family = "choice-open";
-  exactKeys(input, present(input, ["choice_label", "min_choices", "max_choices", "or_random", "ignore_consumed", "chosen_by"]), family);
+  exactKeys(input, present(input, ["choice_label", "id", "min_choices", "max_choices", "or_random", "ignore_consumed", "chosen_by"]), family);
   const result: Params = {};
   if ("choice_label" in input) result.choice_label = String(input.choice_label);
+  if ("id" in input) {
+    if (typeof input.id !== "string" || !/^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(input.id)) throw new TypeError(`${family}.id must be a kebab-case option id.`);
+    if ("ignore_consumed" in input) throw new TypeError(`${family}.id names a menu other rules make happen again; an activation's pick takes none.`);
+    result.id = input.id;
+  }
   if ("min_choices" in input) result.min_choices = boundedInteger(input.min_choices, 0, 99, `${family}.min_choices`);
   if ("max_choices" in input) result.max_choices = boundedInteger(input.max_choices, 1, 99, `${family}.max_choices`);
   if ("or_random" in input) result.or_random = randomPick(input.or_random, family);
@@ -248,12 +260,12 @@ export const CONTAINER_OPENERS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "order-rule",
-    version: 2,
+    version: 3,
     role: "RESTRICTION",
     label: "How Orders work",
-    description: "A rule of the record's issue-orders, wherever it is printed: issuer (the models with this ability that issue Orders, by keyword; each datasheet sets how many and to whom), one-at-a-time (a unit is affected by one Order; a later one replaces it), ineligible-state (units in this state cannot be issued an Order), ends-on-state (an Order stops affecting a unit that enters this state), benefit (only models with these keywords gain an Order's benefit), or only-orders (the officer issues only these Orders of its menu, by their printed names).",
+    description: "A rule of the record's issue-orders, wherever it is printed: issuer (the models with this ability that issue Orders, by keyword; each datasheet sets how many and to whom), one-at-a-time (a unit is affected by one Order; a later one replaces it), ineligible-state (units in this state cannot be issued an Order), ends-on-state (an Order stops affecting a unit that enters this state), benefit (only models with these keywords gain an Order's benefit), only-orders (the officer issues only these Orders of its menu, by their printed names), or recipient-keywords (inside one Order's own sentences: that Order can only be issued to units with these keywords).",
     starter: {rule: ""},
-    parameterSchema: {type: "object", required: ["rule"], properties: {rule: {enum: ["issuer", "one-at-a-time", "ineligible-state", "ends-on-state", "benefit", "only-orders"]}, keywords: {type: "array", minItems: 1, uniqueItems: true, items: {type: "string", minLength: 1}}, state: {enum: ["battle-shocked"]}, orders: {type: "array", minItems: 1, uniqueItems: true, items: {type: "string", minLength: 1}}}, additionalProperties: false},
+    parameterSchema: {type: "object", required: ["rule"], properties: {rule: {enum: ["issuer", "one-at-a-time", "ineligible-state", "ends-on-state", "benefit", "only-orders", "recipient-keywords"]}, keywords: {type: "array", minItems: 1, uniqueItems: true, items: {type: "string", minLength: 1}}, state: {enum: ["battle-shocked"]}, orders: {type: "array", minItems: 1, uniqueItems: true, items: {type: "string", minLength: 1}}}, additionalProperties: false},
     normalize: orderRule,
   },
   {
@@ -298,22 +310,22 @@ export const CONTAINER_OPENERS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "issue-orders-open",
-    version: 2,
+    version: 3,
     role: "EFFECT",
     label: "Issue Orders",
-    description: "Opens an issue-orders: every later sentence must open with a named-option leaf giving that Order's name; its effect is what the Order does (Astra Militarum Voice of Command). recipient antecedent sends the Order to the unit the moment before it names, not to an eligible unit the officer picks; counts_toward_limit false keeps the Order out of the Orders the officer can issue this turn.",
+    description: "Opens an issue-orders: every later sentence must open with a named-option leaf giving that Order's name; its effect is what the Order does (Astra Militarum Voice of Command). recipient antecedent sends the Order to the unit the moment before it names, not to an eligible unit the officer picks; counts_toward_limit false keeps the Order out of the Orders the officer can issue this turn. as_if_phase command: the Orders are issued as if it were the Command phase (\"can issue 1 Order as if it were your Command phase\"). issuer_keywords: the model of the unit that issues them (\"your unit's OFFICER model\"). same_order: the Order the moment before it just issued goes to another eligible unit (\"it can issue the same Order to another SQUADRON unit\"); it lists no Orders of its own.",
     starter: {},
-    parameterSchema: {type: "object", properties: {count: {type: "integer", minimum: 1}, range: {type: "integer", minimum: 1, maximum: 48}, eligible_keyword: {type: "string", minLength: 1}, recipient: {enum: ["antecedent"], "x-optional": true}, counts_toward_limit: {enum: [false], "x-optional": true}}, additionalProperties: false},
+    parameterSchema: {type: "object", properties: {count: {type: "integer", minimum: 1}, range: {type: "integer", minimum: 1, maximum: 48}, eligible_keyword: {type: "string", minLength: 1}, recipient: {enum: ["antecedent"], "x-optional": true}, counts_toward_limit: {enum: [false], "x-optional": true}, as_if_phase: {enum: ["command"], "x-optional": true}, issuer_keywords: {type: "array", minItems: 1, uniqueItems: true, items: {type: "string", minLength: 1}, "x-optional": true}, same_order: {const: true, "x-optional": true}}, additionalProperties: false},
     normalize: issueOrdersOpen,
   },
   {
     id: "choice-open",
-    version: 4,
+    version: 5,
     role: "EFFECT",
     label: "Choose one of the following",
-    description: "Opens a choice: every later sentence's effect becomes one option (min/max default to one). Composes with an earlier select-unit/for-each-unit-select, an earlier roll, and ability parts the same way any other effect leaf does. or_random says the options may instead be picked at random: {dice, count} rolls count dice (D3 or D6) and applies the option numbered by each result, the options being numbered in order from 1 to the die's faces. ignore_consumed lets the pick take an option a once-per-battle selection already used (\"even if you have already selected that imperative this battle\"); only an optionless pick an ability-activate names takes it, and never with or_random. chosen_by opponent: the opponent picks the option, not the player using the ability; such a pick takes no or_random or ignore_consumed.",
+    description: "Opens a choice: every later sentence's effect becomes one option (min/max default to one). Composes with an earlier select-unit/for-each-unit-select, an earlier roll, and ability parts the same way any other effect leaf does. or_random says the options may instead be picked at random: {dice, count} rolls count dice (D3 or D6) and applies the option numbered by each result, the options being numbered in order from 1 to the die's faces. ignore_consumed lets the pick take an option a once-per-battle selection already used (\"even if you have already selected that imperative this battle\"); only an optionless pick an ability-activate names takes it, and never with or_random. chosen_by opponent: the opponent picks the option, not the player using the ability; such a pick takes no or_random or ignore_consumed. id: the whole choice is an option of this record that other rules make happen again by that id (Feed the Swarm's \"Regenerate\": an ability-activate option, or an ability-modifier naming {ability_id, option_id}).",
     starter: {},
-    parameterSchema: {type: "object", properties: {choice_label: {type: "string", minLength: 1}, min_choices: {type: "integer", minimum: 0}, max_choices: {type: "integer", minimum: 1}, or_random: {type: "object", required: ["dice", "count"], properties: {dice: {enum: ["D3", "D6"]}, count: {type: "integer", minimum: 1, maximum: 3}}, additionalProperties: false, "x-optional": true}, ignore_consumed: {const: true, "x-optional": true}, chosen_by: {enum: ["opponent"], "x-optional": true}}, additionalProperties: false},
+    parameterSchema: {type: "object", properties: {choice_label: {type: "string", minLength: 1}, id: {type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-optional": true}, min_choices: {type: "integer", minimum: 0}, max_choices: {type: "integer", minimum: 1}, or_random: {type: "object", required: ["dice", "count"], properties: {dice: {enum: ["D3", "D6"]}, count: {type: "integer", minimum: 1, maximum: 3}}, additionalProperties: false, "x-optional": true}, ignore_consumed: {const: true, "x-optional": true}, chosen_by: {enum: ["opponent"], "x-optional": true}}, additionalProperties: false},
     normalize: choiceOpen,
   },
   {

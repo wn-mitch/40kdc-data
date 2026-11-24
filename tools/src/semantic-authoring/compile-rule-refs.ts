@@ -305,12 +305,25 @@ export function resolveRuleReferences(leaves: readonly CompileLeaf[], context?: 
         return menu ? withParameter("__menu", menu) : leaf;
       }
       case "order-rule": {
+        // "This Order can only be issued to K units" in a record that defines one Order: the menu it joins.
+        if (parameters.rule === "recipient-keywords") {
+          const menu = resolveOrderMenu(faction);
+          return menu ? withParameter("__menu", menu) : leaf;
+        }
         // "can only issue the Duty and Honour! and Fix Bayonets! Orders": each printed name as an option id of the menu.
         if (parameters.rule !== "only-orders" || !Array.isArray(parameters.orders)) return leaf;
         const menu = resolveOrderMenu(faction);
         const options = (parameters.orders as string[]).map((name) => resolveOptionName(faction, slug(name)));
         if (menu === null || options.some((option) => option === null || option.ability_id !== menu)) return leaf;
         return withParameter("__options", options.map((option) => option!.option_id));
+      }
+      case "orders-modifier": {
+        // "when your model issues the Move! Move! Move! Order": each printed name as an option of the faction's Orders menu.
+        if (!Array.isArray(parameters.orders)) return leaf;
+        const menu = resolveOrderMenu(faction);
+        const options = (parameters.orders as string[]).map((name) => resolveOptionName(faction, slug(name)));
+        if (menu === null || options.some((option) => option === null || option.ability_id !== menu)) return leaf;
+        return withParameter("__options", options);
       }
       case "weapon-grant": {
         const name = parameters.weapon_id;

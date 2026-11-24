@@ -81017,7 +81017,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "Each time a friendly DAEMON HERETIC ASTARTES VEHICLE unit invokes its contract, while the triggering unit is within 3\" of this model, until the end of the phase:\n  - If that ability inflicts one or more mortal wounds on that unit, add 1 to the number of mortal wounds it suffers.\n  - You can re-roll Hit rolls for attacks made by that unit.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -84389,7 +84389,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "Each time the unit makes a Dark Pact and passes its Leadership test, if the Dark Pact test result is 8+, you gain 1 CP.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -84455,7 +84455,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "At the end of the Fight phase:\n  For each enemy unit within 3\" of this model:\n    - If this unit made a Dark Pact and passed its Leadership test this phase:\n      - Roll one D6+1: on a 4+, that unit suffers D3 mortal wounds.\n    - Unless this unit made a Dark Pact and passed its Leadership test this phase:\n      - Roll one D6: on a 4+, that unit suffers D3 mortal wounds.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

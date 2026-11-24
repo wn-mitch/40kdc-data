@@ -5698,19 +5698,79 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "agents-of-the-imperium",
     "detachment_id": "imperialis-fleet",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "targets-selected",
+            "filter": {
+              "kind": "attack"
+            },
+            "subject": {
+              "owner": "enemy"
+            },
+            "object": "this-unit",
+            "binds_event_variable": "moment-subject"
+          },
+          "effect": {
+            "type": "invulnerable-save",
+            "target": "this-unit",
+            "modifier": {
+              "invuln_sv": 4
+            }
+          }
+        },
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "subject": {
+              "event_var": "moment-subject"
+            }
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "matches",
+                  "parameters": {
+                    "filter": {
+                      "state": "engaged"
+                    }
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "move",
+              "target": "this-unit",
+              "modifier": {
+                "move_type": "normal",
+                "distance": 6,
+                "as_if_keywords": [
+                  "FLY"
+                ]
+              }
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "source_digest": "b6687000656a82e30c576fc053509607ff079c3ed955445954a323fbf13adc77"
   },
   {
     "ability_id": "dragonfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
@@ -5910,19 +5970,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "agents-of-the-imperium",
     "detachment_id": "ordo-hereticus-purgation-force",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "execution-order-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "all_of": [
+              "CHARACTER"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "type": "matches",
+            "parameters": {
+              "subject": "selected-unit",
+              "filter": {
+                "state": "on-battlefield"
+              }
+            }
+          }
+        }
+      },
+      "applies": {
+        "to": "attackers-of-target",
+        "effect": {
+          "type": "weapon-ability-grant",
+          "target": "this-unit",
+          "modifier": {
+            "keywords": [
+              {
+                "keyword_id": "precision"
+              }
+            ]
+          }
+        }
+      },
+      "duration": "until-next-command-phase"
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "until-next-command-phase"
+    },
+    "behavior": "activated",
+    "source_digest": "49a059a3149af9252de742118fd9cff1d83d33ff4af531640bf76acbb43b23a2"
   },
   {
     "ability_id": "fleetmaster-imperialis-fleet-agents-of-the-imperium",
@@ -6913,19 +7014,108 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "agents-of-the-imperium",
     "detachment_id": "ordo-malleus-daemon-hunters",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "designate-target",
+      "designation": "rites-of-exorcism-target",
+      "select": {
+        "kind": "unit",
+        "selector": {
+          "filter": {
+            "owner": "enemy",
+            "all_of": [
+              "DAEMON"
+            ]
+          },
+          "count": {
+            "min": 1,
+            "max": 1
+          },
+          "eligibility": {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "within": {
+                      "of": "this-unit",
+                      "range": {
+                        "inches": 12
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "matches",
+                "parameters": {
+                  "subject": "selected-unit",
+                  "filter": {
+                    "visible": {
+                      "to": "this-unit"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "applies": [
+        {
+          "to": "target",
+          "effect": {
+            "type": "test",
+            "target": "selected-unit",
+            "modifier": {
+              "test": "battle-shock"
+            }
+          }
+        },
+        {
+          "to": "attackers-of-target",
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "roll-result",
+              "parameters": {
+                "roll": "battle-shock",
+                "result": "failure"
+              }
+            },
+            "effect": {
+              "type": "weapon-ability-grant",
+              "target": {
+                "owner": "friendly",
+                "all_of": [
+                  "AGENTS OF THE IMPERIUM"
+                ]
+              },
+              "modifier": {
+                "keywords": [
+                  {
+                    "keyword_id": "devastating-wounds"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "duration": "phase"
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "activated",
+    "source_digest": "64eae00693355a6cc5b029dabc643e8bc6c565d260d5cb9720bf439b4f8842c1"
   },
   {
     "ability_id": "ritual-of-warding-ordo-malleus-daemon-hunters-agents-of-the-imperium",

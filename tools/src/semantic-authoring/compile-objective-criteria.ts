@@ -6,9 +6,10 @@ import { CompileError, type CompileLeaf } from "./compile-fragments.js";
  * before it can take. The criteria fold into that leaf (controlled_by_unit, clear_of), which
  * lowers them into its selector's filter (compile-containers.ts), and leave the list. A criterion
  * needs a select-objective-open before it with no effect between them; one criterion of each
- * kind per selection. A territory in-region right after the selection folds the same way.
+ * kind per selection. occupied-by (occupied_by) keeps markers with one or more such units in range;
+ * own_ability narrows those units to holders of this record's ability. A territory in-region right after the selection folds the same way.
  */
-export function foldObjectiveCriteria(list: readonly CompileLeaf[]): CompileLeaf[] {
+export function foldObjectiveCriteria(list: readonly CompileLeaf[], abilityId?: string): CompileLeaf[] {
   if (!list.some((leaf) => leaf.family_id === "objective-criterion" || leaf.family_id === "in-region")) return [...list];
   const out: CompileLeaf[] = [];
   let head = -1;
@@ -27,7 +28,9 @@ export function foldObjectiveCriteria(list: readonly CompileLeaf[]): CompileLeaf
     if (leaf.family_id !== "objective-criterion") { out.push(leaf); continue; }
     if (head < 0) throw new CompileError("An objective criterion qualifies the objective markers a select-objective-open right before it selects.");
     const selection = out[head]!;
-    const key = leaf.parameters.criterion === "controlled-by-unit" ? "controlled_by_unit" : "clear_of";
+    const key = leaf.parameters.criterion === "controlled-by-unit" ? "controlled_by_unit" : leaf.parameters.criterion === "occupied-by" ? "occupied_by" : "clear_of";
+    // "that has a friendly unit with this ability within range of it": the holders of this record's ability.
+    if (leaf.parameters.own_ability === true && abilityId === undefined) throw new CompileError("An occupied-by criterion with own_ability needs the record's ability id.");
     if (selection.parameters[key] !== undefined) throw new CompileError(`A selection of objective markers takes one ${leaf.parameters.criterion} criterion.`);
     // "that your unit was controlling at the end of the previous phase": control read then, not when the rule triggered.
     const at = key === "controlled_by_unit" && leaf.parameters.at !== undefined ? { controlled_at: leaf.parameters.at } : {};
@@ -35,6 +38,7 @@ export function foldObjectiveCriteria(list: readonly CompileLeaf[]): CompileLeaf
       owner: leaf.parameters.side,
       ...(Array.isArray(leaf.parameters.keywords) ? { all_of: leaf.parameters.keywords } : {}),
       ...(Array.isArray(leaf.parameters.excluded_keywords) ? { none_of: leaf.parameters.excluded_keywords } : {}),
+      ...(leaf.parameters.own_ability === true ? { has_ability: [abilityId] } : {}),
     };
     out[head] = { ...selection, parameters: { ...selection.parameters, [key]: value, ...at } };
   }

@@ -192,6 +192,17 @@ def _describe_happened_core(p: P, negated: bool) -> str:
             else:
                 hits = f"a {atk}attack"
             return f"{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}"
+        # A Dark Pact's Leadership test:
+        # "the unit made a Dark Pact and passed its Leadership test this phase".
+        if (
+            subj is not None
+            and f.get("roll") == "dark-pact"
+            and f.get("result") in ("success", "failure")
+            and p.get("count") is None
+        ):
+            outcome = "passed" if f.get("result") == "success" else "failed"
+            made = f"{neg}{who} made a Dark Pact and {outcome} its Leadership test"
+            return f"{made} {_window_phrase(window)}".rstrip()
         # Whose roll it was, when the subject names one:
         # "this unit made a battle-shock roll and failed it".
         times = f" ({amount} times)" if p.get("count") is not None else ""
@@ -210,6 +221,11 @@ def _describe_happened_core(p: P, negated: bool) -> str:
         return f"{neg}{roll_phrase} {result}{_window_phrase(window)}{times}".rstrip()
     if event == "damage-allocated":
         obj = unit_ref_phrase(p.get("object"), "this unit")
+        # "which inflicted one or more mortal wounds on your unit this phase": who caused them.
+        if f.get("attack_type") == "mortal" and f.get("by") is not None:
+            by = unit_ref_phrase(f.get("by"), "the unit")
+            inflicted = f"{neg}{by} inflicted one or more mortal wounds on {obj}"
+            return f"{inflicted} {_window_phrase(window)}".rstrip()
         atk = f"{_str(f['attack_type'])} " if _truthy(f.get("attack_type")) else ""
         if window == "event":
             return f"{neg}{obj} lost one or more wounds from the triggering {atk}attacks"

@@ -102,6 +102,8 @@ function unmapped(what: string): never {
 /** The DSL scaling source (with its range and keyword) the counted filter and its qualifiers name. */
 function scalingSource(list: readonly CompileLeaf[], group: Group): Record<string, unknown> {
   const filter = list[group.filter]!.parameters as { side?: string; keywords?: string[]; level?: string } & Record<string, unknown>;
+  const hits = group.qualifiers.map((at) => list[at]!).filter((leaf) => leaf.family_id === "hit-by-attacks");
+  if (hits.length) return hitUnitsSource(list, group, filter, hits);
   const narrower = Object.keys(filter).filter((key) => !["side", "keywords", "level"].includes(key));
   if (narrower.length) unmapped(`units narrowed by ${narrower.join(", ")}`);
   if ((filter.keywords?.length ?? 0) > 1) unmapped("models with several keywords");
@@ -134,6 +136,28 @@ function scalingSource(list: readonly CompileLeaf[], group: Group): Record<strin
   if (keyword !== undefined) {
     if (!KEYWORD_SOURCES.has(String(source.of))) unmapped(`${String(source.of)} with a keyword`);
     source.keyword = keyword;
+  }
+  return source;
+}
+
+/**
+ * "for each assailed enemy unit hit by one or more of those attacks": the enemy units the attacks of
+ * the ability's moment hit, optionally only those carrying a designation. Anything narrower (keywords,
+ * a range, a window, another attacker or a hit filter) is refused by name.
+ */
+function hitUnitsSource(list: readonly CompileLeaf[], group: Group, filter: Record<string, unknown>, hits: readonly CompileLeaf[]): Record<string, unknown> {
+  if (hits.length > 1) throw new CompileError("A counted filter takes one hit-by-attacks after it.");
+  const hit = hits[0]!.parameters;
+  if (hit.subject !== COUNTED || hit.window !== undefined || hit.by !== undefined || hit.hit_filter !== undefined) unmapped("units hit by attacks other than those of the ability's moment");
+  if (filter.side !== "enemy" || filter.level === "model") unmapped(`${String(filter.side)} ${filter.level === "model" ? "models" : "units"} hit by those attacks`);
+  const narrower = Object.keys(filter).filter((key) => !["side", "level", "designated"].includes(key));
+  if (narrower.length) unmapped(`units hit by those attacks narrowed by ${narrower.join(", ")}`);
+  const other = group.qualifiers.map((at) => list[at]!).find((leaf) => leaf.family_id !== "hit-by-attacks" && leaf.family_id !== "unit-owner");
+  if (other) unmapped(`units hit by those attacks narrowed by ${other.family_id}`);
+  const source: Record<string, unknown> = { of: "enemy-units-hit" };
+  if (filter.designated !== undefined) {
+    if (typeof filter.designated !== "string") unmapped("units hit by those attacks with a designation of another shape");
+    source.designated = filter.designated;
   }
   return source;
 }

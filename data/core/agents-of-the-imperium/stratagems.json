@@ -30,7 +30,7 @@
     "ability_id": "adaptive-tactics-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -328,11 +328,31 @@
     ],
     "player_turn": "opponent-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "required_keywords": [
+        "Agents of the Imperium",
+        "Character"
+      ],
+      "excluded_keywords": [
+        "Officio Assassinorum"
+      ],
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "bound_to": "attacked-unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "owner": "friendly"
+          }
+        }
+      }
+    },
     "ability_id": "displacer-field-imperialis-fleet-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -584,7 +604,7 @@
     "ability_id": "exact-punishment-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -609,11 +629,27 @@
     ],
     "player_turn": "your-turn",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "type": "matches",
+        "parameters": {
+          "filter": {
+            "any_of": [
+              "ADEPTUS ARBITES",
+              "INQUISITORIAL AGENTS",
+              "ORDO HERETICUS INFANTRY"
+            ]
+          }
+        }
+      }
+    },
     "ability_id": "execution-order-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -678,7 +714,7 @@
     "ability_id": "hellfire-rounds-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -975,7 +1011,7 @@
     "ability_id": "line-of-fire-ordo-hereticus-purgation-force-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1232,7 +1268,7 @@
     "ability_id": "rapid-tactical-relocation-ordo-xenos-alien-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {
@@ -1258,11 +1294,40 @@
     ],
     "player_turn": "either",
     "timing": "once-per-phase",
-    "target_restrictions": null,
+    "target_restrictions": {
+      "count": "one",
+      "side": "your-army",
+      "selects": "unit",
+      "eligibility": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "any_of": [
+                  "INQUISITOR",
+                  "INQUISITORIAL AGENTS",
+                  "ORDO MALLEUS"
+                ]
+              }
+            }
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "owner": "friendly"
+              }
+            }
+          }
+        ]
+      }
+    },
     "ability_id": "rites-of-exorcism-ordo-malleus-daemon-hunters-agents-of-the-imperium",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "external_refs": [
       {

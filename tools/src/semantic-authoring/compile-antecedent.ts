@@ -54,7 +54,9 @@ export function objectEvent(leaf: CompileLeaf | undefined): boolean {
   // A unit-filter after a plain "is destroyed" names who destroyed it ("by an attack made by a
   // friendly X unit"), not what was destroyed; only "this unit destroys an X unit" names the object.
   // "when an enemy unit targets a friendly X unit": the unit targeted.
+  // "after the bearer issues an Order to a SQUADRON unit": the unit the Order went to.
   return leaf.parameters.kind === "damage-allocated" || leaf.parameters.kind === "enemy-selected-targets" || leaf.parameters.kind === "targets-selected"
+    || (leaf.parameters.kind === "used" && leaf.parameters.activity === "order" && leaf.parameters.object === undefined)
     || ((leaf.parameters.kind === "unit-destroyed" || leaf.parameters.kind === "model-destroyed") && leaf.parameters.by !== undefined);
 }
 
@@ -613,6 +615,13 @@ function antecedentRole(leaves: readonly CompileLeaf[], index: number, focus?: (
   // moment's object, not the Stratagem's target. A bare filter before the anaphor still wins (checked above).
   const allocation = earlier.filter((other) => other.family_id === "event" && other.parameters.kind === "damage-allocated" && other.fragment === leaves[index]!.fragment).at(-1);
   if (allocation && !inWhen) return "event-object";
+  // "Each time a model in your unit is destroyed, if that model has not shot …" in a Stratagem: "that model" is the
+  // destroyed model, the moment's object, not the Stratagem's target; so is "its unit" ("each time an enemy model is
+  // destroyed while its unit is within Engagement Range of your unit"). Only an anaphor printed so moves.
+  const destroyedModel = earlier.some((other) => other.family_id === "event" && other.parameters.kind === "model-destroyed" && other.parameters.by === undefined
+    && other.fragment === leaves[index]!.fragment);
+  if (destroyedModel && !inWhen && sourceText !== undefined && leaves[index]!.end_byte !== undefined
+    && /^(?:if |while )?(?:that model|its unit)\b/iu.test(exactSpan(sourceText, leaves[index]!.start_byte, leaves[index]!.end_byte))) return "event-object";
   // With several targets, the target in focus (compile-target-refs.ts bindTargetRefs) instead.
   if (!inWhen && leaves.some((other) => STRATAGEM_TARGETS.has(other.family_id))) return focus?.(index) ?? "this-unit";
   // "Each time an attack is allocated to a model, … that model": the unit the moment happens to,
@@ -655,7 +664,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "chosen-option-grant": ["holder"],
   "menu-options-grant": ["holder"],
   "characteristic-modifier": ["subject"], "weapon-ability-grant": ["subject"], "weapon-ability-range": ["subject"], "keyword-grant": ["subject"], "feel-no-pain": ["subject"],
-  "regain-wounds": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject", "into"], "core-ability-grant": ["subject"],
+  "regain-wounds": ["subject"], "revive-into-reserves": ["subject"], "return-models": ["subject"], "eligibility-permission": ["subject", "into"], "core-ability-grant": ["subject"],
   "invulnerable-save": ["subject"], "ability-record-grant": ["subject"], "move-through": ["subject"],
   "targeting-restriction": ["by", "target"], "weapon-property-scope": ["subject"], "ignore-modifiers": ["subject"],
   "roll-modifier": ["subject"], reroll: ["subject"], "ability-activate": ["subject"],
@@ -663,6 +672,7 @@ const ANY_UNIT_KEYS: Readonly<Record<string, readonly string[]>> = {
   "damage-reduction": ["subject"],
   "counts-as": ["subject"],
   "ability-modifier": ["subject"],
+  "orders-modifier": ["subject"],
   // "**K** units from your army are eligible to shoot and declare a charge in a turn in which they Fell Back": every unit the filter matches.
   "act-after-move": ["subject"],
   // "-2\" from that pile-in move" of an enemy unit an earlier unit-filter names.

@@ -81,7 +81,12 @@ func mortalWoundsLeaf(m map[string]any, subj string) string {
 				band = "result of " + ejstr(roll["threshold"]) + " or less"
 			}
 		}
-		return "roll " + dice + each + most + ": for each " + band + ", " + who + " " + ev(who, "suffers") + " " + suffered + psychic + cap
+		// "rolling two additional D6 if X": more dice when the condition holds.
+		more := ""
+		if extra, ok := asMap(roll["extra_dice"]); ok && extra != nil {
+			more = ", rolling " + ejstr(extra["count"]) + " additional D6 if " + describeCondition(mapOr(extra["condition"]))
+		}
+		return "roll " + dice + each + most + more + ": for each " + band + ", " + who + " " + ev(who, "suffers") + " " + suffered + psychic + cap
 	}
 	per := ""
 	if m["per"] == "model" {
@@ -99,6 +104,28 @@ var plainCountRe = regexp.MustCompile(`^\d+$`)
 
 var fnpAgainst = map[string]string{
 	"mortal": " against mortal wounds", "psychic": " against Psychic Attacks", "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
+	"damage-1-unmodified": " against attacks with an unmodified Damage characteristic of 1",
+}
+
+// fnpAgainstItem names one kind in a Feel No Pain's list of what it covers.
+var fnpAgainstItem = map[string]string{
+	"mortal": "mortal wounds", "psychic": "Psychic Attacks", "devastating-wounds": "Critical Wounds caused by attacks with [DEVASTATING WOUNDS]",
+}
+
+// fnpAgainstPhrase is what a Feel No Pain covers (" against mortal wounds, …"), or "" for all.
+func fnpAgainstPhrase(against any) string {
+	if items, ok := against.([]any); ok {
+		kinds := make([]string, 0, len(items))
+		for _, item := range items {
+			if kind, ok := fnpAgainstItem[ejstr(item)]; ok {
+				kinds = append(kinds, kind)
+			} else {
+				kinds = append(kinds, dekebab(ejstr(item)))
+			}
+		}
+		return " against " + andList(kinds)
+	}
+	return fnpAgainst[ejstr(against)]
 }
 
 func destroyModelsLeaf(e, m map[string]any, subj string) string {
@@ -134,13 +161,40 @@ func destroyModelsLeaf(e, m map[string]any, subj string) string {
 	if m["ignore_death_triggers"] == true {
 		triggers = ", ignoring any rules triggered by their destruction"
 	}
-	return verb + " " + what + tail + triggers
+	// "(chosen by its controlling player)": the destroyed unit's owner picks which models.
+	chooser := ""
+	if m["chosen_by"] == "controlling-player" {
+		chooser = " (chosen by its controlling player)"
+	}
+	return verb + " " + what + tail + chooser + triggers
+}
+
+// regionExtendLeaf: "No Man's Land is within your army's Shadow of Chaos": an area joins a region an army rule defines.
+func regionExtendLeaf(m map[string]any) string {
+	region := mapOr(m["region"])
+	area := mapOr(m["area"])
+	within := "within your army's " + titleCase(strings.TrimPrefix(ejstr(region["region_id"]), "the-"))
+	if list, ok := area["territories"].([]any); ok {
+		names := make([]string, 0, len(list))
+		for _, t := range list {
+			names = append(names, regionPhrase(map[string]any{"territory": t}))
+		}
+		return andList(names) + " are " + within
+	}
+	if area["territory"] != nil {
+		return regionPhrase(map[string]any{"territory": area["territory"]}) + " is " + within
+	}
+	rng := mapOr(area["objective_range"])
+	return "the area of the battlefield within " + ejstr(rng["inches"]) + "\" of each " + objectivePhrase(mapOr(rng["objective"]), false, "objective") + " is " + within
 }
 
 func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 	act := "fight"
-	if m["act"] == "shoot" {
+	switch m["act"] {
+	case "shoot":
 		act = "shoot"
+	case "shoot-or-fight":
+		act = "shoot or fight"
 	}
 	model := "a model in " + subj
 	if isEventObject(e["target"]) {
@@ -174,8 +228,11 @@ func actOnDeathLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		removal := ". Remove it after this unit has fought or at the end of the phase, whichever comes first"
 		if m["removal"] == "after-destroyed-model-fights" {
 			past := "fought"
-			if act == "shoot" {
+			switch act {
+			case "shoot":
 				past = "shot"
+			case "shoot or fight":
+				past = "shot or fought"
 			}
 			removal = ". Remove it after it has " + past
 		}
@@ -281,6 +338,17 @@ func moveLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	if _, ok := asList(m["passthrough"]); ok {
 		s += ", moving over " + passthroughList(m["passthrough"]) + " as though they were not there"
+	}
+	if keywords, ok := asList(m["as_if_keywords"]); ok {
+		names := make([]string, 0, len(keywords))
+		for _, k := range keywords {
+			names = append(names, ejstr(k))
+		}
+		plural := ""
+		if len(keywords) > 1 {
+			plural = "s"
+		}
+		s += " (when doing so, its models move as if they had the " + andList(names) + " keyword" + plural + ")"
 	}
 	if ends, ok := asMap(m["ends_within"]); ok && ends != nil {
 		wholly := ""
@@ -408,7 +476,12 @@ func moveModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 		}
 	}
 	if advance, ok := m["advance"].(string); ok && (advance == "fixed-6" || advance == "fixed-8") {
-		clauses = append(clauses, subj+" "+ev(subj, "does")+" not make an Advance roll; add "+strings.TrimPrefix(advance, "fixed-")+"\" to "+pronoun(subj)+" Move characteristic instead")
+		// "(this is not cumulative with the Matchless Swiftness ability)": the named ability's own Move bonus.
+		trail := ""
+		if ability := mapOr(m["not_cumulative"])["ability"]; ability != nil {
+			trail = " (this is not cumulative with the " + abilityLabel(ability) + " ability)"
+		}
+		clauses = append(clauses, subj+" "+ev(subj, "does")+" not make an Advance roll; add "+strings.TrimPrefix(advance, "fixed-")+"\" to "+pronoun(subj)+" Move characteristic instead"+trail)
 	}
 	if _, ok := asList(m["passthrough"]); ok {
 		clauses = append(clauses, subj+" can move over "+passthroughList(m["passthrough"])+" as though they were not there")
@@ -520,7 +593,12 @@ func setUpLeaf(m map[string]any, subj string, ctx effCtx) string {
 		} else if m["allow_first_round"] == true {
 			arrival = "; " + it + " can arrive in the first battle round"
 		}
-		return whoCan + " " + can + " be placed into Strategic Reserves" + limits + arrival
+		// "That unit heals 10 wounds and is placed in strategic reserves": a destroyed unit returned.
+		placed := can + " be placed"
+		if m["from"] == "destroyed" {
+			placed = "is returned to the battle and placed"
+		}
+		return whoCan + " " + placed + " into Strategic Reserves" + limits + arrival
 	}
 	from := ""
 	switch m["from"] {
@@ -660,7 +738,16 @@ func markerLeaf(m map[string]any, ctx effCtx) string {
 		if m["not_moved_this_turn"] == true {
 			unmoved = " that has not been moved this turn"
 		}
-		return "move the " + label + " marker" + unmoved + dist + consume
+		// "set up that marker anywhere on the battlefield that is more than 8\" horizontally away from all enemy units".
+		away := ""
+		if m["min_enemy_distance"] != nil {
+			lead := " anywhere on the battlefield"
+			if m["distance"] != nil {
+				lead = ","
+			}
+			away = lead + " more than " + rangePhrase(m["min_enemy_distance"]) + " horizontally away from all enemy units"
+		}
+		return "move the " + label + " marker" + unmoved + dist + away + consume
 	}
 	if m["operation"] == "remove" {
 		return "remove that " + label + " marker from the battlefield"
@@ -712,6 +799,8 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 			how = "halve the Damage of that attack"
 		case "to-zero":
 			how = "change the Damage of that attack to 0"
+		case "to-one":
+			how = "change the Damage characteristic of that attack to 1"
 		}
 		if ctx.allocatedTrigger && m["weapons"] == nil {
 			return how
@@ -723,9 +812,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return "each time " + attack + " is allocated to " + subj + ", " + how
 	case "feel-no-pain":
 		if describerRatingRef(m["threshold"]) {
-			return subj + " " + ev(subj, "has") + " Feel No Pain X+" + fnpAgainst[ejstr(m["against"])] + ", X being its rating"
+			return subj + " " + ev(subj, "has") + " Feel No Pain X+" + fnpAgainstPhrase(m["against"]) + ", X being its rating"
 		}
-		return subj + " " + ev(subj, "has") + " Feel No Pain " + ejstr(m["threshold"]) + "+" + fnpAgainst[ejstr(m["against"])]
+		return subj + " " + ev(subj, "has") + " Feel No Pain " + ejstr(m["threshold"]) + "+" + fnpAgainstPhrase(m["against"])
 	case "invulnerable-save":
 		vs := ""
 		if m["weapons"] != nil {
@@ -799,6 +888,9 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 		return "you gain " + ejstr(m["amount"]) + " CP"
 	case "cost-modifier":
 		return costModifierLeaf(m, subj)
+	// "You cannot gain more than 3 Pain tokens as a result of failed Battle-shock tests caused by this Stratagem".
+	case "resource-gain-cap":
+		return "you cannot gain more than " + ejstr(m["max"]) + " " + resourceNoun(m["pool"], nil, m["max"]) + " from failed Battle-shock tests this ability causes"
 	case "resource-gain":
 		// "you must pledge a number": the pool becomes the number picked, not one more.
 		if m["set"] == true {
@@ -822,6 +914,11 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 				return "you gain a number of " + resourceNoun(m["pool"], m["label"], 2.0) + " equal to your " + dekebab(source)
 			}
 		}
+		// "you gain an amount of YP equal to the difference": what this turn's gains fall short of N by.
+		if a, ok := m["amount"].(map[string]any); ok && a["difference_to"] != nil {
+			noun := resourceNoun(m["pool"], m["label"], 2.0)
+			return "you gain a number of " + noun + " equal to the difference between " + ejstr(a["difference_to"]) + " and the " + noun + " you gained this turn"
+		}
 		if _, ok := m["amount"].(map[string]any); ok {
 			return "you gain " + amountOf(m["amount"], resourceNoun(m["pool"], m["label"], 1.0), resourceNoun(m["pool"], m["label"], 2.0))
 		}
@@ -838,6 +935,13 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 			return "spend the " + resourceNoun(m["pool"], m["label"], 2.0) + " the cost table gives for the datasheet and Starting Strength of " +
 				effectSubject(m["table_of"], ctx) + " (" + costTable(m["amount_table"]) + ")"
 		}
+		if a, ok := m["amount"].(map[string]any); ok && a["up_to"] != nil {
+			// "Spend 1-3 Pain tokens": at_least is the least the player can choose.
+			if a["at_least"] != nil {
+				return "spend " + ejstr(a["at_least"]) + "-" + ejstr(a["up_to"]) + " " + resourceNoun(m["pool"], m["label"], a["up_to"])
+			}
+			return "spend up to " + ejstr(a["up_to"]) + " " + resourceNoun(m["pool"], m["label"], a["up_to"])
+		}
 		amount := diceCase(m["amount"])
 		count := m["amount"]
 		switch m["amount"] {
@@ -845,6 +949,8 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 			amount, count = "all your", 2.0
 		case "one-or-more":
 			amount = "one or more"
+		case "any":
+			amount, count = "any number of", 2.0
 		}
 		showing := ""
 		if m["face"] != nil {
@@ -870,14 +976,34 @@ func describeBoardLeaf(e, m map[string]any, subj string, ctx effCtx) string {
 			return placeRefPhrase(map[string]any{"objective": m["objective"]}) + " remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase"
 		}
 		return "objective markers " + subj + " " + ev(subj, "controls") + " remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase"
+	case "region-extend":
+		return regionExtendLeaf(m)
 	case "designate":
 		return designateLeaf(m, subj, ctx)
 	case "army-rule":
 		return armyRuleLeaf(m, subj, ctx, e["target"])
+	case "reserves-schedule":
+		return reservesScheduleLeaf(m)
 	}
 	t := "unknown"
 	if e["type"] != nil {
 		t = ejstr(e["type"])
 	}
 	return "[" + t + "]"
+}
+
+// reservesScheduleLeaf is a Combat Patrol arrival schedule: the units that must start in
+// Strategic Reserves and the first battle round each can be set up in.
+func reservesScheduleLeaf(m map[string]any) string {
+	entries, _ := m["entries"].([]any)
+	rows := make([]string, 0, len(entries))
+	for _, raw := range entries {
+		entry := mapOr(raw)
+		rows = append(rows, titleCase(ejstr(entry["unit_id"]))+" (battle round "+ejstr(entry["battle_round"])+")")
+	}
+	setUp := ""
+	if m["set_up"] == "wholly-within-deployment-zone" {
+		setUp = "; when they are set up, they must be set up wholly within your deployment zone"
+	}
+	return "the following friendly units must start the battle in Strategic Reserves and cannot be set up on the battlefield before the battle round stated: " + andList(rows) + setUp
 }

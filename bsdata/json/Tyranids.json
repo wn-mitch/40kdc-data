@@ -35259,7 +35259,7 @@
                   {
                     "name": "Feed the Swarm",
                     "id": "3edc-2bf4-bbb6-cb7a",
-                    "description": "If this unit has the HARVESTER keyword:\n  - Select one friendly TYRANIDS unit within 6\" of this unit (each unit can be selected for this ability at most once per phase across your army):\n    Choose one of the following (Regenerate):\n      - That unit regains up to D3+1 lost wounds.\n      - Return 1 destroyed model to that unit, each with its full wounds remaining.",
+                    "description": "During your Command phase, if this unit has the HARVESTER keyword:\n  - Select one friendly TYRANIDS unit within 6\" of this model (each unit can be selected for this ability at most once per phase across your army):\n    Choose one of the following (Regenerate):\n      - One model in that unit regains up to D3+1 lost wounds.\n      - Unless the selected unit has the ENDLESS MULTITUDE keyword, return 1 destroyed INFANTRY model (excluding CHARACTER models) to that unit, each with its full wounds remaining; if the selected unit has the ENDLESS MULTITUDE keyword, return 3 destroyed models to that unit, each with its full wounds remaining.",
                     "hidden": false
                   }
                 ]
@@ -38898,7 +38898,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "This unit can be affected by Regenerate (Feed the Swarm) up to twice, in place of its usual limit.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -39198,7 +39198,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "While a friendly HARVESTER unit is within 12\" of this model, the range of this unit's Regenerate (Feed the Swarm) ability is 9\".",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

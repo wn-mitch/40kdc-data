@@ -193,7 +193,10 @@ export async function checkDslShapes(root: string, result: ValidationResult): Pr
       const issues: Issue[] = [];
       for (const key of ["effect", "trigger", "usage"]) issues.push(...tagIssues(a[key], `/${index}/${key}`));
       const weapons = new Set<string>();
-      checkBindings(a.effect, `/${index}/effect`, { rolls: new Set(), objectives: new Set() }, weapons, issues);
+      // A trigger can bind its own roll (a Dark Pact's Leadership test) for the effect's roll-total.
+      const triggers = Array.isArray(a.trigger) ? a.trigger : [a.trigger];
+      const triggerRolls = triggers.flatMap((t) => (isNode(t) && typeof t.binds_roll_variable === "string" ? [t.binds_roll_variable] : []));
+      checkBindings(a.effect, `/${index}/effect`, { rolls: new Set(triggerRolls), objectives: new Set() }, weapons, issues);
       const refs: Array<{ path: string; name: string }> = [];
       collectStratagemTargets(a.effect, `/${index}/effect`, refs);
       const declared = typeof a.ability_id === "string" ? targets.get(a.ability_id) : undefined;

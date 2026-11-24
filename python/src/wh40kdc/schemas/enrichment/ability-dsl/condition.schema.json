@@ -1514,7 +1514,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "designated condition",
-          "description": "[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.",
+          "description": "[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it. A unit subject is tested here only with `at` (its designation as it was then); otherwise it is a `matches` filter.",
           "required": [
             "type",
             "parameters"
@@ -1555,6 +1555,10 @@
                 "by": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
                   "description": "The unit that applied the designation (their Spotted unit; one marked by a MARKERLIGHT Observer)."
+                },
+                "at": {
+                  "$ref": "../../defs/common.schema.json#/$defs/snapshot",
+                  "description": "Read the designation as it was then (\"if that enemy unit was unravelling at the start of the phase\"), not at the moment of the check."
                 }
               },
               "required": [
@@ -1578,6 +1582,11 @@
                   "required": [
                     "count"
                   ]
+                },
+                {
+                  "required": [
+                    "at"
+                  ]
                 }
               ]
             }
@@ -1587,7 +1596,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "resource condition",
-          "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.",
+          "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held. holder opponent: count bounds what the opponent holds.",
           "required": [
             "type",
             "parameters"
@@ -1627,11 +1636,27 @@
                 },
                 "at": {
                   "$ref": "../../defs/common.schema.json#/$defs/snapshot"
+                },
+                "gained": {
+                  "const": "turn",
+                  "description": "count bounds how much of the pool you gained this turn (\"you gained fewer than 3YP this turn\"), not how much it holds."
+                },
+                "holder": {
+                  "const": "opponent",
+                  "description": "count bounds what your opponent holds of a pool both players hold (\"if your opponent has one or more Flux tokens\"). Absent, the pool is yours."
                 }
               },
               "required": [
                 "pool"
-              ]
+              ],
+              "dependentRequired": {
+                "gained": [
+                  "count"
+                ],
+                "holder": [
+                  "count"
+                ]
+              }
             }
           }
         },
@@ -1805,6 +1830,38 @@
               },
               "required": [
                 "size"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "game-mode condition",
+          "description": "[clock] The battle is being played in one of these game modes (\"When playing a Combat Patrol battle\").",
+          "required": [
+            "type",
+            "parameters"
+          ],
+          "properties": {
+            "type": {
+              "const": "game-mode"
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "modes": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "$ref": "../../defs/common.schema.json#/$defs/game-mode-id"
+                  }
+                }
+              },
+              "required": [
+                "modes"
               ]
             }
           }

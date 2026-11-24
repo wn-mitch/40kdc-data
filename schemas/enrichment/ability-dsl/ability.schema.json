@@ -240,6 +240,11 @@
           "minLength": 1,
           "description": "Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}."
         },
+        "binds_roll_variable": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered."
+        },
         "binds_selected_die_variable": {
           "type": "string",
           "minLength": 1,
@@ -351,6 +356,20 @@
         {
           "if": {
             "required": [
+              "binds_roll_variable"
+            ]
+          },
+          "then": {
+            "properties": {
+              "event": {
+                "const": "after-roll"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
               "binds_selected_die_variable"
             ]
           },
@@ -398,7 +417,7 @@
       ]
     },
     "ability-usage-limit": {
-      "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).",
+      "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired); count_from takes the count from the unit's loadout.",
       "type": "object",
       "properties": {
         "frequency": {
@@ -426,12 +445,24 @@
             "unit",
             "model"
           ]
+        },
+        "count_from": {
+          "description": "How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.",
+          "enum": [
+            "equipped-wargear"
+          ]
         }
       },
       "required": [
         "frequency"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "not": {
+        "required": [
+          "count",
+          "count_from"
+        ]
+      }
     }
   }
 }

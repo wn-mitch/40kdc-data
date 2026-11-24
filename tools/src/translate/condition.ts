@@ -21,7 +21,7 @@ export interface Condition {
 import { describeHappened, destroyedCount } from "./condition-history.js";
 import { namedEquipmentPhrase } from "./condition-equipment.js";
 import { andList, countPhrase, dekebab, designationPhrase, EVENT_OBJECT_MODEL, EVENT_SUBJECT_MODEL, idLabel, keywordList, keywordNoun, objectivePhrase, ord, orList, type P, placeRefPhrase, rangePhrase, rollWord, ruleRefPhrase, statePhrase, str, subjectOf, titleCase, unitFilterPhrase, unitRefPhrase, windowPhrase, withArticle, withinClause } from "./condition-refs.js";
-import { bracketKeyword, diceCase, diceTableResultLabel, weaponNoun } from "./effect-words.js";
+import { bracketKeyword, diceCase, diceTableResultLabel, resourceNoun, weaponNoun } from "./effect-words.js";
 
 export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPhrase } from "./condition-refs.js";
 
@@ -31,7 +31,7 @@ export { dekebab, moveKinds, rangePhrase, titleCase, unitFilterPhrase, unitRefPh
 /** Predicates whose phrase negates by turning its verb (see `negatePhrase`). */
 const VERB_NEGATED = new Set([
   "strength", "model-count", "wounds", "loadout", "equipped-weapon-count", "attachment", "controls", "resource", "attack-compare",
-  "happened-compare", "roll-total", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "army-faction", "battle-size",
+  "happened-compare", "roll-total", "operation-markers", "engagement-fronts", "destroyed-while-on-objective", "destroyed-in-tagged-terrain", "army-faction", "battle-size", "game-mode",
 ]);
 
 /** "X is Y" → "X is not Y", "X has Y" → "X does not have Y", "you control" → "you do not control"; else a leading "not". */
@@ -275,6 +275,10 @@ export function describePredicate(c: Condition, negated: boolean): string {
       }
       if (p.count != null) return `${neg}${countPhrase(p.count)} ${unitRefPhrase(s).replace(/^an? /, "").replace(/\b(unit|model)\b/, "$1s")} ${designationPhrase(str(p.tag))}${p.by != null ? ` by ${unitRefPhrase(p.by)}` : ""}`;
       const by = p.by != null ? ` by ${unitRefPhrase(p.by, "this unit").replace(/^the unit$/, "this unit")}` : "";
+      // "If that enemy unit was unravelling at the start of the phase": the designation as it was then.
+      if (p.at === "phase-start" || p.at === "turn-start") {
+        return `${subjectOf(p)} ${negated ? "was not" : "was"} ${designationPhrase(str(p.tag))}${by} at the start of the ${p.at === "phase-start" ? "phase" : "turn"}`;
+      }
       return `${subjectOf(p)} is ${negated ? "not " : ""}${designationPhrase(str(p.tag))}${by}`;
     }
     case "resource": {
@@ -283,6 +287,13 @@ export function describePredicate(c: Condition, negated: boolean): string {
         return `${neg}the ${dekebab(str(source))} ability had unused selection capacity at the end of your opponent's previous turn`;
       }
       const amount = countPhrase(p.count);
+      // "you gained fewer than 3YP this turn": this turn's gains, not what the pool holds.
+      if (p.gained === "turn") return `you ${negated ? "did not gain" : "gained"} ${amount} ${resourceNoun(p.pool, undefined, 2)} this turn`;
+      // "if your opponent has one or more Flux tokens": the opponent's holding of a pool both players hold.
+      if (p.holder === "opponent") return `your opponent ${negated ? "does not have" : "has"} ${amount} ${resourceNoun(p.pool, undefined, 2)}`;
+      // "while you have 0 Pain tokens": an empty pool of the player's.
+      const count = (p.count ?? {}) as P;
+      if (count.max === 0 && count.min == null) return `you ${negated ? "do not have" : "have"} 0 ${resourceNoun(p.pool, undefined, 2)}`;
       // A pool is the player's ("If you have 3 or more Pact points").
       return `you have ${amount} ${dekebab(str(p.pool))}`;
     }
@@ -327,6 +338,8 @@ export function describePredicate(c: Condition, negated: boolean): string {
     }
     case "battle-size":
       return `the battle size is ${negated ? "not " : ""}${titleCase(str(p.size))}`;
+    case "game-mode":
+      return `the battle is ${negated ? "not " : ""}a ${(Array.isArray(p.modes) ? p.modes : []).map((mode) => titleCase(str(mode))).join(" or ")} battle`;
     case "army-faction":
       return `your Army Faction is ${negated ? "not " : ""}${str(p.faction).replace(/-/g, " ").toUpperCase()}`;
     case "army-state":

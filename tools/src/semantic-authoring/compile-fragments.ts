@@ -94,6 +94,8 @@ const SUBJECT_TARGETS: Record<string, string> = {
 const OTHER_UNITS = new Set(["selected-unit", "event-subject", "event-object", "defender", "recipient", "bearer-transport"]);
 
 /** Families whose subject is a property of one model: its keywords, its rules, its characteristics. */
+import { FIRST_TARGET, ordersModifier, SECOND_TARGET } from "./compile-orders.js";
+
 const MODEL_PROPERTY_FAMILIES = new Set(["keyword-grant", "rule-state", "characteristic-modifier", "characteristic-set"]);
 
 /**
@@ -263,6 +265,10 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
         },
       };
     }
+    case "orders-modifier": return ordersModifier(leaf, target);
+    case "order-share":
+      // The Stratagem's two targets, named once the entry knows them (compile-target-refs.ts resolveEntry).
+      return { type: "order-share", target: FIRST_TARGET, modifier: { with: SECOND_TARGET, ...(leaf.parameters.mutual === true ? { mutual: true } : {}) } };
     case "ability-activate":
       return { type: "ability-activate", target: target(leaf.parameters.subject), modifier: activationModifier(leaf) };
     case "feel-no-pain": {
@@ -279,8 +285,15 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
         if (typeof leaf.parameters.selection_var !== "string") throw new CompileError("sticky-objective names the selected objective marker, but this record selects no objective marker.");
         return { type: "objective-sticky", target: "this-unit", modifier: { objective: { selection_var: leaf.parameters.selection_var } } };
       }
-      // A leaf with no subject secures for this unit.
-      return { type: "objective-sticky", target: leaf.parameters.subject !== undefined ? closed(leaf, "subject") : "this-unit" };
+      {
+        // A leaf with no subject secures for this unit.
+        const holder = leaf.parameters.subject !== undefined ? closed(leaf, "subject") : "this-unit";
+        const sticky: Node = { type: "objective-sticky", target: holder };
+        if (leaf.parameters.tag === undefined) return sticky;
+        // "said to be Corrupted": the markers the holder controls also carry the tag an objective filter reads later.
+        const designate: Node = { type: "designate", target: holder, modifier: { subject: { objective: { controlled_by_unit: holder } }, tag: closed(leaf, "tag") } };
+        return { type: "sequence", steps: [sticky, designate] };
+      }
     case "no-advance-roll":
       return { type: "move-modifier", target: target(leaf.parameters.subject), modifier: { advance: "fixed-6" } };
     // A transient planning node (compile.ts): the instead loop removes it, and a left-over one is refused.
@@ -305,6 +318,10 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
       const act = closed(leaf, "act");
       // Shooting is a plain grant with no timing of its own: no resolution, removal, roll, or eligibility.
       if (act === "shoot") return { type: "act-on-death", target: target(leaf.parameters.subject), modifier: { act: "shoot" } };
+      // "It can shoot or fight after the attacking unit has finished making its attacks": the after-attack resolution, either act.
+      if (act === "shoot-or-fight") {
+        return { type: "act-on-death", target: "event-object", modifier: { act: "shoot-or-fight", resolution: "after-attacking-unit-finishes", removal: "after-destroyed-model-fights" } };
+      }
       // The schema pairs each resolution with its removal; a roll or eligibility is folded in by compile-dice.
       return closed(leaf, "timing") === "when-its-unit-fights"
         ? { type: "act-on-death", target: "event-object", modifier: { act: "fight", resolution: "when-unit-fights", removal: "after-unit-fights-or-phase-end" } }
@@ -332,6 +349,14 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
       const quantity = typeof leaf.parameters.amount_var === "string" ? { roll_var: leaf.parameters.amount_var }
         : amount === "all" ? "full" : /^\d+$/u.test(amount) ? Number(amount) : amount;
       return { type: "heal", target: target(leaf.parameters.subject), modifier: { amount: quantity, ...(per ? { per } : {}) } };
+    }
+    // "That unit heals 10 wounds and is placed in strategic reserves": a destroyed unit healed, then set up in Reserves.
+    case "revive-into-reserves": {
+      const who = target(leaf.parameters.subject);
+      return { type: "sequence", steps: [
+        { type: "heal", target: who, modifier: { amount: Number(leaf.parameters.heal) } },
+        { type: "set-up", target: who, modifier: { to: "strategic-reserves", from: "destroyed" } },
+      ] };
     }
     case "eligibility-permission": {
       const despite = leaf.parameters.despite as string[] | undefined;
@@ -368,23 +393,36 @@ function leafEffect(leaf: CompileLeaf, context: EffectContext): Node {
     case "counts-as": {
       // A region grant names the army rule's region instead of a range;
       // a named-range grant names the range and whose units it is measured to.
+      // "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
+      if (leaf.parameters.model_count_below !== undefined) {
+        return { type: "counts-as", target: target(leaf.parameters.subject), modifier: { model_count: { below: closed(leaf, "model_count_below") }, for_weapon_ability: String(closed(leaf, "for_weapon_ability")).toLowerCase() } };
+      }
       const modifier: Node = leaf.parameters.range_ref !== undefined
         ? { within: { aura_of: namedRange(leaf.parameters.range_ref).aura_of }, of: { owner: closed(leaf, "of_side") } }
         : leaf.parameters.region !== undefined
         ? { in_region: { rule_region: structuredClone(leaf.parameters.region as Node) } }
         : { within: { inches: closed(leaf, "within") } };
+      // A Stratagem target group the range is measured to, and the abilities it counts for.
+      if (leaf.parameters.of !== undefined) modifier.of = { stratagem_target: (leaf.parameters.of as Node).bound };
+      if (leaf.parameters.for_abilities !== undefined) modifier.for_abilities = structuredClone(leaf.parameters.for_abilities as string[]);
       return { type: "counts-as", target: target(leaf.parameters.subject), modifier };
     }
     case "named-region-producer":
       return compileNamedRegionProducer(leaf);
     case "rule-state":
       return {
-        type: "rule-state", target: target(leaf.parameters.subject),
+        // "a unit while it is Empowered": units that carry neither the tag nor belong to a unit that does (an Attached unit's Leader and Bodyguard units).
+        type: "rule-state", target: leaf.parameters.subject === "unmarked"
+          ? { not_designated: closed(leaf, "tag"), excluding: { member_of: { designated: closed(leaf, "tag") } } }
+          : target(leaf.parameters.subject),
         modifier: {
-          direction: closed(leaf, "direction"), rule_kind: closed(leaf, "rule_kind"), rule: closed(leaf, "rule"),
+          direction: closed(leaf, "direction"), rule_kind: closed(leaf, "rule_kind"),
+          // "Pain abilities": every ability tagged with the keyword.
+          rule: leaf.parameters.ability_keyword !== undefined ? { ability_keyword: closed(leaf, "ability_keyword") } : closed(leaf, "rule"),
           // The attacks a shooting moment bound ("those attacks"), folded by compile-bound-attacks.ts.
           ...(leaf.parameters.attacks_var !== undefined ? { attacks: { event_var: closed(leaf, "attacks_var") } } : {}),
           ...(leaf.parameters.any_army_faction === true ? { any_army_faction: true } : {}),
+          ...(leaf.parameters.sub_rule !== undefined ? { sub_rule: closed(leaf, "sub_rule"), aspect: closed(leaf, "aspect") } : {}),
         },
       };
     default: {

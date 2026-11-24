@@ -323,6 +323,25 @@ fn happened_phrase(p: &P, negated: bool) -> String {
                 };
                 return format!("{neg}{target} was hit by {hits}{attacker}{weapon}{by}{when}");
             }
+            // A Dark Pact's Leadership test: "the unit made a Dark Pact and passed its Leadership
+            // test this phase".
+            if nn(p, "subject").is_some()
+                && is(f, "roll", "dark-pact")
+                && (is(f, "result", "success") || is(f, "result", "failure"))
+                && nn(p, "count").is_none()
+            {
+                let outcome = if is(f, "result", "success") {
+                    "passed"
+                } else {
+                    "failed"
+                };
+                return format!(
+                    "{neg}{who} made a Dark Pact and {outcome} its Leadership test {}",
+                    window_phrase(window)
+                )
+                .trim_end()
+                .to_string();
+            }
             // Whose roll it was, when the subject names one: "this unit made a battle-shock roll
             // and failed it".
             if nn(p, "subject").is_some() {
@@ -371,6 +390,18 @@ fn happened_phrase(p: &P, negated: bool) -> String {
             } else {
                 String::new()
             };
+            // "which inflicted one or more mortal wounds on your unit this phase": who caused them.
+            if f.get("attack_type").and_then(Value::as_str) == Some("mortal")
+                && nn(f, "by").is_some()
+            {
+                return format!(
+                    "{neg}{} inflicted one or more mortal wounds on {obj_phrase} {}",
+                    unit_ref_phrase(f.get("by"), "the unit"),
+                    window_phrase(window)
+                )
+                .trim_end()
+                .to_string();
+            }
             if window.and_then(Value::as_str) == Some("event") {
                 format!(
                     "{neg}{obj_phrase} lost one or more wounds from the triggering {atk}attacks"

@@ -4184,19 +4184,82 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "adeptus-custodes",
     "detachment_id": "tristraens-gilded-blades",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "usage": {
+            "frequency": "once-per-turn",
+            "per": "army"
+          },
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "TRISTRAEN'S GILDED BLADES"
+                ]
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "re-roll",
+              "target": "this-unit",
+              "modifier": {
+                "roll": "battle-shock",
+                "result_scope": "any-result"
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "game-mode",
+            "parameters": {
+              "modes": [
+                "combat-patrol"
+              ]
+            }
+          },
+          "effect": {
+            "type": "reserves-schedule",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "entries": [
+                {
+                  "unit_id": "gilded-blades-custodian-wardens",
+                  "battle_round": 2
+                },
+                {
+                  "unit_id": "gilded-blades-allarus-custodians",
+                  "battle_round": 3
+                }
+              ],
+              "set_up": "wholly-within-deployment-zone"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "980765c05687c63106348a47ccc0c4a32f1bb29b433b184023ef4f34d9f9e60b"
   },
   {
     "ability_id": "praesidium-shield-tristraens-gilded-blades-adeptus-custodes",
@@ -8060,6 +8123,7 @@
                   {
                     "type": "matches",
                     "parameters": {
+                      "subject": "event-object",
                       "filter": {
                         "all_of": [
                           "CHARACTER"
@@ -8108,6 +8172,7 @@
                       {
                         "type": "matches",
                         "parameters": {
+                          "subject": "event-object",
                           "filter": {
                             "all_of": [
                               "CHARACTER"

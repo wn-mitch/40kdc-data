@@ -7,7 +7,7 @@ import type { DatabaseSync as DatabaseType } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
 import { hashJson } from "../src/canonical-hash.js";
 import { humanActor } from "../src/semantic-authoring/authority.js";
-import { validateFingerprint } from "../src/semantic-authoring/contracts.js";
+import { currentFamilyVersion, validateFingerprint } from "../src/semantic-authoring/contracts.js";
 import { getAbilityCoverage } from "../src/semantic-authoring/coverage.js";
 import { initializeWorkbench, insertSpan, openWorkbench } from "../src/semantic-authoring/db.js";
 import { applyAnnotationBatch } from "../src/semantic-authoring/review.js";
@@ -131,7 +131,7 @@ describe("Semantic authoring unresolved placeholders", () => {
     try {
       // An imported leaf as the hit-train migration wrote it.
       const span = insertSpan(db, id, "RAW_TEXT", 0, Buffer.byteLength(TEXT), TEXT);
-      const placeholder = validateFingerprint(db, "critical-hit-threshold", { value: "source" }, 1, TEXT);
+      const placeholder = validateFingerprint(db, "critical-hit-threshold", { value: "source" }, currentFamilyVersion("critical-hit-threshold"), TEXT);
       db.prepare("INSERT INTO annotation_batches (id, operation, reviewer, created_at) VALUES ('legacy', 'review', 'will', 'x')").run();
       db.prepare("INSERT INTO annotations (span_id, fingerprint_id, status, origin, authority_kind, confirmed_by, batch_id, created_at) VALUES (?, ?, 'active', 'hit-train', 'human', 'will', 'legacy', 'x')").run(span, placeholder);
       expect(getAbilityCoverage(db, id).leaf_bytes.numerator).toBe(0);

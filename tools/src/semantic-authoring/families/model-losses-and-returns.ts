@@ -1,5 +1,5 @@
 import {
-  booleanValue, boundedInteger, enumValue, exactKeys,
+  booleanValue, boundedInteger, enumValue, exactKeys, isSpentReference, spentReference, spentReferenceSchema,
 } from "../family-validation.js";
 import {
   type Params, ANTECEDENT, EVENT_SUBJECT, withApostrophes, withAccents, modelKeyword,
@@ -28,6 +28,8 @@ const WOUNDS_REMAINING_WORDS = ["full", "half-starting", "D3", "D6"] as const;
 
 function woundsRemaining(input: Params): Params {
   exactKeys(input, ["value"], "wounds-remaining");
+  // "a number of wounds remaining equal to the number of Pain tokens you just spent".
+  if (isSpentReference(input.value)) return { value: spentReference(input.value, "wounds-remaining.value") };
   const value = typeof input.value === "string" && /^\d+$/u.test(input.value) ? Number(input.value) : input.value;
   if (typeof value === "number") return { value: boundedInteger(value, 1, 30, "wounds-remaining.value") };
   return { value: enumValue(value, WOUNDS_REMAINING_WORDS, "wounds-remaining.value") };
@@ -43,11 +45,11 @@ const returnedModelExclusion = (input: Params) => withApostrophes("returned-mode
   return { keywords: unitKeywords(checked.keywords, "returned-model-exclusion.keywords") };
 });
 
-const DESTROY_RECIPIENTS = ["this-unit", "this-model", "defender", "selected-unit", ANTECEDENT] as const;
+const DESTROY_RECIPIENTS = ["this-unit", "this-model", "defender", "selected-unit", ANTECEDENT, "event-subject"] as const;
 const DESTROY_COUNTS = ["1", "2", "3", "D3", "D6", "all"] as const;
 
 function destroyModelsChecked(input: Params): Params {
-  exactKeys(input, ["recipient", "count", ...(["model_keyword", "remove_from_play", "ignore_death_triggers"] as const).filter((key) => key in input)], "destroy-models");
+  exactKeys(input, ["recipient", "count", ...(["model_keyword", "remove_from_play", "ignore_death_triggers", "chosen_by"] as const).filter((key) => key in input)], "destroy-models");
   const result: Params = {
     recipient: enumValue(input.recipient, DESTROY_RECIPIENTS, "destroy-models.recipient"),
     count: enumValue(input.count, DESTROY_COUNTS, "destroy-models.count"),
@@ -55,6 +57,11 @@ function destroyModelsChecked(input: Params): Params {
   if ("model_keyword" in input) result.model_keyword = modelKeyword(input.model_keyword, "destroy-models.model_keyword");
   if ("remove_from_play" in input) result.remove_from_play = booleanValue(input.remove_from_play, "destroy-models.remove_from_play");
   if ("ignore_death_triggers" in input) result.ignore_death_triggers = booleanValue(input.ignore_death_triggers, "destroy-models.ignore_death_triggers");
+  // "one model in that unit is destroyed (chosen by its controlling player)": the unit's owner picks which models.
+  if ("chosen_by" in input) {
+    result.chosen_by = enumValue(input.chosen_by, ["controlling-player"], "destroy-models.chosen_by");
+    if (result.count === "all") throw new TypeError("destroy-models.chosen_by names who picks some of the models; all of them leaves nothing to choose.");
+  }
   return result;
 }
 
@@ -66,13 +73,15 @@ const RETURN_COUNTS = ["1", "2", "3", "D3", "D3+1", "D3+2", "D3+3", "D6", "all"]
 const RETURN_WOUNDS = ["full", "1", "3", "half-starting", "D3", "D6"] as const;
 
 function returnModelsChecked(input: Params): Params {
-  exactKeys(input, ["subject", "count", ...(["wounds_remaining", "model_keyword", "bodyguard_only"] as const).filter((key) => key in input)], "return-models");
+  exactKeys(input, ["subject", "count", ...(["wounds_remaining", "model_keyword", "exclude_model_keyword", "bodyguard_only"] as const).filter((key) => key in input)], "return-models");
   const result: Params = {
     subject: enumValue(input.subject, RETURN_SUBJECTS, "return-models.subject"),
-    count: enumValue(input.count, RETURN_COUNTS, "return-models.count"),
+    // "for every 2YP you just spent, return up to one additional destroyed model": the amount a resource-spend bound.
+    count: isSpentReference(input.count) ? spentReference(input.count, "return-models.count") : enumValue(input.count, RETURN_COUNTS, "return-models.count"),
   };
   if ("wounds_remaining" in input) result.wounds_remaining = enumValue(input.wounds_remaining, RETURN_WOUNDS, "return-models.wounds_remaining");
   if ("model_keyword" in input) result.model_keyword = modelKeyword(input.model_keyword, "return-models.model_keyword");
+  if ("exclude_model_keyword" in input) result.exclude_model_keyword = modelKeyword(input.exclude_model_keyword, "return-models.exclude_model_keyword");
   if ("bodyguard_only" in input) result.bodyguard_only = booleanValue(input.bodyguard_only, "return-models.bodyguard_only");
   return result;
 }
@@ -98,10 +107,10 @@ function battleShockState(input: Params): Params {
 export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
   {
     id: "wounds-remaining",
-    version: 1,
+    version: 2,
     role: "CONDITION",
     label: "Wounds remaining on a returned model",
-    description: "How many wounds a model set back up or returned has: its full wounds, half of its starting number of wounds, a whole number, or D3/D6 (\"with 3 wounds remaining\"). It qualifies the set-up or return-models effect before it and gates nothing.",
+    description: "How many wounds a model set back up or returned has: its full wounds, half of its starting number of wounds, a whole number, D3/D6 (\"with 3 wounds remaining\"), or a spent amount {spent: the bind_as of an earlier resource-spend} (\"a number of wounds remaining equal to the number of Pain tokens you just spent\"). It qualifies the set-up or return-models effect before it and gates nothing.",
     starter: {"value":""},
     parameterSchema: {
       "type": "object",
@@ -123,7 +132,8 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
               "type": "integer",
               "minimum": 1,
               "maximum": 30
-            }
+            },
+            spentReferenceSchema
           ]
         }
       },
@@ -156,10 +166,10 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "destroy-models",
-    version: 4,
+    version: 5,
     role: "EFFECT",
     label: "Destroy models",
-    description: "Destroy a number of models (all of them, a fixed or rolled count, optionally only of a named model keyword) in this unit, the attack's target, the unit selected earlier, or the unit an earlier leaf of the record introduced (antecedent, bound when the record compiles), optionally removing them from play or ignoring rules their destruction would trigger. A keyword can carry accented capitals or start with an apostrophe as the rules print it (KÂHL, 'ARDMOB).",
+    description: "Destroy a number of models (all of them, a fixed or rolled count, optionally only of a named model keyword) in this unit, the attack's target, the unit selected earlier, the unit whose moment triggered the ability (event-subject: \"each time an enemy unit fails a Battle-shock test, … one model in that unit is destroyed\"), or the unit an earlier leaf of the record introduced (antecedent, bound when the record compiles), optionally removing them from play or ignoring rules their destruction would trigger. chosen_by controlling-player: the destroyed unit's controlling player picks which models (\"(chosen by its controlling player)\"); it takes a count other than all. A keyword can carry accented capitals or start with an apostrophe as the rules print it (KÂHL, 'ARDMOB).",
     starter: {"recipient":"","count":""},
     parameterSchema: {
       "type": "object",
@@ -174,7 +184,8 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
             "this-model",
             "defender",
             "selected-unit",
-            "antecedent"
+            "antecedent",
+            "event-subject"
           ]
         },
         "count": {
@@ -196,6 +207,10 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
         },
         "ignore_death_triggers": {
           "type": "boolean"
+        },
+        "chosen_by": {
+          "const": "controlling-player",
+          "x-optional": true
         }
       },
       "additionalProperties": false
@@ -262,10 +277,10 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "return-models",
-    version: 7,
+    version: 9,
     role: "EFFECT",
     label: "Return destroyed models",
-    description: "Return a number of destroyed models (all of them, a fixed or rolled count up to D3+3, optionally only of a named model keyword, or only models with the profile name model_name as the datasheet prints it: \"1 destroyed Geminae Superia model\") to this unit, this model or the unit an earlier leaf introduced (antecedent), each with its full wounds, 1, 3, D3 or D6 wounds, or half of its starting number of wounds remaining. model_name needs a unit subject. A keyword can carry accented capitals or start with an apostrophe as the rules print it (KÂHL, 'ARDMOB).",
+    description: "Return a number of destroyed models (all of them, a fixed or rolled count up to D3+3, or a spent amount {spent: the bind_as of an earlier resource-spend, per?: one for every N} (\"for every 2YP you just spent, return one additional model\"), optionally only of a named model keyword (and not of exclude_model_keyword: \"(excluding CHARACTERS)\"), or only models with the profile name model_name as the datasheet prints it: \"1 destroyed Geminae Superia model\") to this unit, this model or the unit an earlier leaf introduced (antecedent), each with its full wounds, 1, 3, D3 or D6 wounds, or half of its starting number of wounds remaining. model_name needs a unit subject. A keyword can carry accented capitals or start with an apostrophe as the rules print it (KÂHL, 'ARDMOB).",
     starter: {"subject":"","count":""},
     parameterSchema: {
       "type": "object",
@@ -282,17 +297,19 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
           ]
         },
         "count": {
-          "enum": [
-            "1",
-            "2",
-            "3",
-            "D3",
-            "D3+1",
-            "D3+3",
-            "D6",
-            "all",
-            "D3+2"
-          ]
+          "anyOf": [{
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "D3",
+              "D3+1",
+              "D3+3",
+              "D6",
+              "all",
+              "D3+2"
+            ]
+          }, spentReferenceSchema]
         },
         "wounds_remaining": {
           "enum": [
@@ -307,6 +324,11 @@ export const MODEL_LOSSES_AND_RETURNS_FAMILIES: readonly FlatFamily[] = [
         "model_keyword": {
           "type": "string",
           "pattern": "^'?[A-ZÀ-ÖØ-Þ][A-ZÀ-ÖØ-Þ0-9' -]*[A-ZÀ-ÖØ-Þ0-9]$"
+        },
+        "exclude_model_keyword": {
+          "type": "string",
+          "pattern": "^'?[A-ZÀ-ÖØ-Þ][A-ZÀ-ÖØ-Þ0-9' -]*[A-ZÀ-ÖØ-Þ0-9]$",
+          "x-optional": true
         },
         "bodyguard_only": {
           "type": "boolean"

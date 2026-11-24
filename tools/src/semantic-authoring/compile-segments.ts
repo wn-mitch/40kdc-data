@@ -166,6 +166,20 @@ export function sentenceSegments(leaves: readonly CompileLeaf[], sourceText: str
   if (header.some((leaf) => (leaf.role === "EVENT" && !attackHeader(leaf)) || HEADER_ONCE.has(leaf.family_id))) {
     // "Restrictions: Your army can include …" after the moment's effects is about the list, not something the moment
     // does: the army-only sentences that end the record are parts of their own, and the rest splits as it would alone.
+    // "When playing a Combat Patrol battle, …" after the moment's effects is a rule of its own that the game mode
+    // gates, not something the moment does. Each sentence a game-mode condition opens starts a part that keeps the
+    // sentences after it (a reserves schedule's rows); what comes before splits as it would alone.
+    const opensMode = (sentence: readonly CompileLeaf[]) => sentence[0]?.family_id === "game-mode";
+    const modeFrom = sentences.findIndex((sentence, position) => position > firstEffectful && opensMode(sentence));
+    if (modeFrom !== -1) {
+      const before = sentences.slice(0, modeFrom).flat();
+      const rules: CompileLeaf[][] = [];
+      for (const sentence of sentences.slice(modeFrom)) {
+        if (opensMode(sentence)) rules.push([...sentence]);
+        else rules.at(-1)!.push(...sentence);
+      }
+      return [...(sentenceSegments(before, sourceText) ?? [before]), ...rules];
+    }
     const armyFrom = sentences.findIndex((_sentence, position) => position > firstEffectful && sentences.slice(position).every(armyOnly));
     if (armyFrom !== -1) {
       const before = sentences.slice(0, armyFrom).flat();

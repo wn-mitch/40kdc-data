@@ -50,6 +50,16 @@ const SUBJECTS = ["this-unit", "this-model", "selected-unit", "event-subject", A
 /** Who destroyed the unit or model; enemy is any enemy unit. */
 const DESTROYERS = ["this-unit", "this-model", "selected-unit", ANTECEDENT, "enemy"] as const;
 const OBJECT_OWNERS = ["friendly", "enemy"] as const;
+/**
+ * When a destruction moment resolves: before the destroyed model is removed, or before its Deadly
+ * Demise roll ("just after … is destroyed, before making its Deadly Demise roll"), which is made
+ * before it is removed.
+ */
+const DESTRUCTION_TIMINGS = ["before-removal", "before-deadly-demise"] as const;
+/** A move that ends near markers resolves before those markers are removed ("before removing those markers"). */
+const MOVE_TIMINGS = ["before-marker-removal"] as const;
+/** Who changed a unit's strength: the unit whose attacks did it. */
+const STATE_CAUSES = ["this-unit", "this-model", "selected-unit", ANTECEDENT] as const;
 const ATTACK_TYPES = ["ranged", "melee", "psychic", "mortal", "any"] as const;
 const FILTERED_UNITS = "filtered-units";
 const SPEND_FOR = ["used", "resource-spent"] as const;
@@ -101,8 +111,8 @@ const OBJECT_DESIGNATIONS = [
 
 /** Keys each kind takes besides kind and bind_as; `required` keys must be present. */
 const KIND_KEYS: Readonly<Record<string, { required?: readonly string[]; optional?: readonly string[] }>> = {
-  "unit-destroyed": { optional: ["by", "object_owner", "timing", "object_designated"] },
-  "model-destroyed": { optional: ["by", "object_owner", "timing", "attack_type", "object_keywords"] },
+  "unit-destroyed": { optional: ["by", "object_owner", "timing", "object_designated", "object_any_keywords"] },
+  "model-destroyed": { optional: ["by", "object_owner", "timing", "attack_type", "object_keywords", "object_any_keywords", "last"] },
   "unit-or-model-destroyed": { optional: ["by", "object_owner", "timing", "attack_type", "object_keywords"] },
   "phase-start": { required: ["phase", "turn"] },
   "phase-end": { required: ["phase", "turn"] },
@@ -112,14 +122,14 @@ const KIND_KEYS: Readonly<Record<string, { required?: readonly string[]; optiona
   "before-roll": { optional: ["roll", "rolls"] },
   "after-roll": { optional: ["roll", "rolls", "subject", "result", "channelled", "before_resolving_activity"] },
   "damage-allocated": { optional: ["object", "attack_type"] },
-  used: { required: ["activity"], optional: ["owner", "subject", "id", "ids", "object", "source", "usage", "ability_keyword", "targets_level"] },
-  "state-changed": { optional: ["state", "strength"] },
+  used: { required: ["activity"], optional: ["owner", "subject", "id", "ids", "object", "source", "usage", "ability_keyword", "targets_level", "passed"] },
+  "state-changed": { optional: ["state", "strength", "owner", "by"] },
   "designation-changed": { required: ["tag"] },
   "designation-resolved": { required: ["tag"] },
   "marker-removed": { required: ["marker"] },
-  "resource-gained": { required: ["pool"], optional: ["caused_by_destruction"] },
-  "resource-spent": { required: ["pool"], optional: ["activity", "tag", "object"] },
-  "move-ended": { optional: ["owner", "subject", "move_types", "also", "through"] },
+  "resource-gained": { required: ["pool"], optional: ["caused_by_destruction", "owner", "source"] },
+  "resource-spent": { required: ["pool"], optional: ["activity", "tag", "object", "object_owner"] },
+  "move-ended": { optional: ["owner", "subject", "move_types", "also", "through", "timing"] },
   "move-started": { optional: ["owner", "subject", "move_types", "also"] },
   selected: { optional: ["owner", "subject", "move_types", "to", "mode"] },
   "targets-selected": { optional: ["owner", "subject", "action_kind", "object", "id"] },
@@ -287,6 +297,7 @@ function normalizeEvent(input: Record<string, unknown>): Record<string, unknown>
   if (has("subject") && has("owner")) throw new TypeError("event names its unit by subject or by owner, not both.");
   if (has("id") && has("ids")) throw new TypeError("event.ids lists the rules instead of id; name one or the other.");
   if (kind === "resource-spent" && has("activity") && has("tag")) throw new TypeError("event resource-spent names what the spend is for by activity or by tag, not both.");
+  if (kind === "resource-spent" && has("object") && has("object_owner")) throw new TypeError("event resource-spent names the unit it serves by object or by object_owner, not both.");
 
   // The moment's own filter fields.
   if (has("phase")) result.phase = enumValue(input.phase, PHASES, "event.phase");
@@ -330,14 +341,28 @@ function normalizeEvent(input: Record<string, unknown>): Record<string, unknown>
 
   // What the moment was done to.
   if (has("object")) result.object = enumValue(input.object, OBJECTS[kind]!, "event.object");
-  if (has("by")) result.by = enumValue(input.by, DESTROYERS, "event.by");
+  if (has("by")) result.by = enumValue(input.by, kind === "state-changed" ? STATE_CAUSES : DESTROYERS, "event.by");
   if (has("object_owner")) result.object_owner = enumValue(input.object_owner, OBJECT_OWNERS, "event.object_owner");
   if (has("object_keywords")) {
-    if (!has("object_owner")) throw new TypeError("event.object_keywords needs object_owner: whose model was destroyed.");
+    // Without object_owner, the model is one of this unit's ("the last Guardian Defender model in this unit").
+    if (!has("object_owner") && kind !== "model-destroyed") throw new TypeError("event.object_keywords needs object_owner: whose model was destroyed.");
     result.object_keywords = keywords(input.object_keywords, "event.object_keywords", printed);
   }
+  if (has("object_any_keywords")) {
+    if (!has("object_owner")) throw new TypeError("event.object_any_keywords needs object_owner: whose unit or model was destroyed.");
+    if (has("object_keywords")) throw new TypeError("event names the destroyed object's keywords as all of object_keywords or any of object_any_keywords, not both.");
+    const any = keywords(input.object_any_keywords, "event.object_any_keywords", printed);
+    if (any.length < 2) throw new TypeError("event.object_any_keywords lists two or more keywords, any one of which the object has; one keyword is object_keywords.");
+    result.object_any_keywords = any;
+  }
+  // "When the last Guardian Defender model in this unit is destroyed": the last model of the named keywords.
+  if (has("last")) {
+    if (input.last !== true) throw new TypeError("event.last must be true.");
+    if (!has("object_keywords") && !has("object_any_keywords")) throw new TypeError("event.last names the last model with the object's keywords; give object_keywords.");
+    result.last = true;
+  }
   if (has("object_designated")) result.object_designated = enumValue(input.object_designated, OBJECT_DESIGNATIONS, "event.object_designated");
-  if (has("timing")) result.timing = enumValue(input.timing, ["before-removal"], "event.timing");
+  if (has("timing")) result.timing = enumValue(input.timing, kind === "move-ended" ? MOVE_TIMINGS : DESTRUCTION_TIMINGS, "event.timing");
   if (has("attack_type")) result.attack_type = enumValue(input.attack_type, ATTACK_TYPES, "event.attack_type");
   if (has("same_subject_targeted")) result.same_subject_targeted = enumValue(input.same_subject_targeted, ["stratagem-target"], "event.same_subject_targeted");
 
@@ -360,10 +385,25 @@ function normalizeEvent(input: Record<string, unknown>): Record<string, unknown>
     if (new Set(ids).size !== ids.length) throw new TypeError("event.ids names a rule twice.");
     result.ids = ids;
   }
-  if (kind === "used" && ["source", "usage", "bind_as", "ability_keyword", "targets_level"].some(has) && result.activity !== "ability") {
-    throw new TypeError("event source, usage, bind_as, ability_keyword and targets_level qualify a used ability, not another used activity.");
+  // A Dark Pact or contract is bound for a later change to that same use ("add 1 to the number of mortal wounds it suffers").
+  const bindsPact = has("bind_as") && (result.activity === "dark-pact" || result.activity === "contract");
+  if (kind === "used" && ["source", "usage", "ability_keyword", "targets_level"].some(has) && result.activity !== "ability") {
+    throw new TypeError("event source, usage, ability_keyword and targets_level qualify a used ability, not another used activity.");
   }
-  if (has("source")) result.source = enumSet(input.source, ["unit", "enhancement"], "event.source");
+  if (kind === "used" && has("bind_as") && result.activity !== "ability" && !bindsPact) {
+    throw new TypeError("event bind_as on a used moment names a used ability, Dark Pact or contract.");
+  }
+  // "Makes a Dark Pact and does not fail the resulting Leadership test": the test's outcome.
+  if (has("passed")) {
+    if (result.activity !== "dark-pact") throw new TypeError("event.passed is the outcome of a Dark Pact's Leadership test; its activity is dark-pact.");
+    if (has("bind_as")) throw new TypeError("event.passed binds the Dark Pact's test, not the use; it takes no bind_as.");
+    if (typeof input.passed !== "boolean") throw new TypeError("event.passed must be true or false.");
+    result.passed = input.passed;
+  }
+  if (has("source")) {
+    // A resource gained "as the result of an ability".
+    result.source = kind === "resource-gained" ? enumValue(input.source, ["ability"], "event.source") : enumSet(input.source, ["unit", "enhancement"], "event.source");
+  }
   if (has("usage")) result.usage = usage(input.usage);
   if (has("ability_keyword")) {
     if (typeof input.ability_keyword !== "string" || !input.ability_keyword.trim()) throw new TypeError("event.ability_keyword must be a nonempty reviewed keyword.");
@@ -393,19 +433,19 @@ function normalizeEvent(input: Record<string, unknown>): Record<string, unknown>
 
 const EVENT: FlatFamily = {
   id: "event",
-  version: 40,
+  version: 43,
   role: "EVENT",
   label: "At an event",
   description: [
     "Marks when the mechanic triggers; kind names the moment. Attacks are the separate attack leaf.",
     "Fixed moments: a charge; after shooting; this unit selected to shoot or to fight; a Stratagem moment (just after an enemy unit selects its targets, ends a move, has shot, or declares a charge); the start of the battle; army selection; the end of deployment; Battle Formations declared; an objective newly gained.",
-    "Destruction: a unit destroyed, a model in a unit destroyed, this model destroyed (before it is removed), or either a unit or a model destroyed (unit-or-model-destroyed). unit-destroyed, model-destroyed and unit-or-model-destroyed take by (who destroyed it: this unit, this model, the selected unit, an earlier leaf's unit, or enemy for any enemy unit), object_owner (whose unit or model it was) and timing before-removal; model-destroyed and unit-or-model-destroyed also take object_keywords (the destroyed model's unit keywords, with object_owner) and attack_type; unit-destroyed takes object_designated (the destroyed unit carried that designation).",
+    "Destruction: a unit destroyed, a model in a unit destroyed, this model destroyed (before it is removed), or either a unit or a model destroyed (unit-or-model-destroyed). unit-destroyed, model-destroyed and unit-or-model-destroyed take by (who destroyed it: this unit, this model, the selected unit, an earlier leaf's unit, or enemy for any enemy unit), object_owner (whose unit or model it was) and timing (before-removal, or before-deadly-demise: after the destruction, before its Deadly Demise roll and so before it is removed); model-destroyed and unit-or-model-destroyed also take object_keywords (the destroyed model's unit keywords, with object_owner; on model-destroyed without object_owner, a model of this unit) and attack_type; unit-destroyed and model-destroyed take object_any_keywords (two or more keywords, any one of which the destroyed unit or model has: \"destroys a DIRE AVENGERS or GUARDIANS unit\"); model-destroyed takes last (the last model with those keywords in its unit: \"the last Guardian Defender model in this unit\"); unit-destroyed takes object_designated (the destroyed unit carried that designation).",
     "Turn structure: the start or end of a phase (phase and turn, both required); the end of the battle round; the end of a turn (optional turn); the start of the Battle-shock or Reinforcements step (step, optional turn).",
-    "Moments a unit makes take owner (friendly or enemy, and on targets-selected also any) or subject (this unit by default, this model, the selected unit, the triggering unit, or antecedent: an earlier leaf's unit), never both: move-started and move-ended (move_types; also, the other end of the same move, so one leaf fires at the start or end of a move; through on move-ended, the move passed through the named terrain, written by the move-passthrough-used fold); selected (to move, shoot, fight, charge or attack, narrowed by move_types; mode, the disembark mode, when move_types is [disembark]); targets-selected (action_kind charge, shoot, attack, stratagem or ability; object, what was selected as the target: this unit, this model, the selected unit, or antecedent; id, the ability or Stratagem that selected, with action_kind ability or stratagem); attacks-resolved (action_kind charge, shoot, attack, stratagem, or fight for a fight only; optional phase and turn; attack_type; same_subject_targeted stratagem-target); set-up (from strategic-reserves: set up from Reserves or as Reinforcements).",
+    "Moments a unit makes take owner (friendly or enemy, and on targets-selected also any) or subject (this unit by default, this model, the selected unit, the triggering unit, or antecedent: an earlier leaf's unit), never both: move-started and move-ended (move_types; also, the other end of the same move, so one leaf fires at the start or end of a move; through on move-ended, the move passed through the named terrain, written by the move-passthrough-used fold); selected (to move, shoot, fight, charge or attack, narrowed by move_types; mode, the disembark mode, when move_types is [disembark]); targets-selected (action_kind charge, shoot, attack, stratagem or ability; object, what was selected as the target: this unit, this model, the selected unit, or antecedent; id, the ability or Stratagem that selected, with action_kind ability or stratagem); attacks-resolved (action_kind charge, shoot, attack, stratagem, or fight for a fight only; optional phase and turn; attack_type; same_subject_targeted stratagem-target); set-up (from strategic-reserves: set up from Reserves or as Reinforcements). move-ended also takes timing before-marker-removal (\"ends a move within 8\" of your markers, before removing those markers\").",
     "A disembarkation takes transport this-unit (the Transport left). damage-allocated takes object (this unit, this model or the selected unit: the attack is allocated to a model in it) and attack_type.",
     "Rolls: before-roll and after-roll name roll, or rolls (two or more roll kinds a DSL trigger can name, lowered to one trigger per kind). after-roll also takes subject (who made the roll), result (success or failure), and, after a Psychic test (roll psychic), channelled and before_resolving_activity ritual.",
-    "used names the activity used (ability, Stratagem, action, manoeuvre, order, ritual, Dark Pact, Act of Faith, doctrine or contract), with owner (whose army) or subject (who used it); id names which ability, manoeuvre, Stratagem or action, or ids lists two or more rules any one of which was used; object is the unit the rule is aimed at (this unit, this model, the selected unit, or filtered-units: the unit-filter right before names it). A used ability also takes source (unit or enhancement definitions), usage (once per battle), ability_keyword and targets_level unit.",
-    "state-changed names the core-rules state that changed, or strength: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting). designation-changed and designation-resolved name the designation (tag). marker-removed names the marker. resource-gained and resource-spent name the pool; a spend can name what it is for, by activity or by tag (not both), and object (this unit, the selected unit, or antecedent), the unit it serves.",
+    "used names the activity used (ability, Stratagem, action, manoeuvre, order, ritual, Dark Pact, Act of Faith, doctrine or contract), with owner (whose army) or subject (who used it); id names which ability, manoeuvre, Stratagem or action, or ids lists two or more rules any one of which was used; object is the unit the rule is aimed at (this unit, this model, the selected unit, or filtered-units: the unit-filter right before names it). A used ability also takes source (unit or enhancement definitions), usage (once per battle), ability_keyword and targets_level unit. passed, on a used Dark Pact, is the outcome of its Leadership test (true: \"does not fail the resulting Leadership test\"); a later roll-total dark-pact-test reads that test's result. A used Dark Pact or contract also takes bind_as, for a later change to that same use.",
+    "state-changed names the core-rules state that changed, or strength: the unit becomes Below Half-strength (below-half) or falls below its Starting Strength (below-starting), with owner (whose unit) and by (the unit that caused it: \"caused an enemy unit … to become Below Half-strength\"). designation-changed and designation-resolved name the designation (tag). marker-removed names the marker. resource-gained and resource-spent name the pool; a gain takes owner (whose: enemy is your opponent) and source ability (\"as the result of an ability\"); a spend can name what it is for, by activity or by tag (not both), and the unit it serves: object (this unit, the selected unit, or antecedent) or object_owner (any unit of that side: \"Empower units from your army … by spending Pain tokens\").",
     "bind_as names the exact event for a later leaf to refer to; an exact destruction relation needs it: caused_by_destruction on resource-gained, causes_destruction on attacks-resolved, each naming unit and/or model destruction by owner, keywords and distance. A keyword can start with an apostrophe as the rules print it ('ARDMOB).",
   ].join(" "),
   starter: { kind: "" },
@@ -423,14 +463,14 @@ const EVENT: FlatFamily = {
       roll: { enum: ROLLS, "x-only-when": { kind: ["before-roll", "after-roll"] } },
       marker: { type: "string", minLength: 1, "x-only-when": { kind: ["marker-removed"] } },
       pool: { type: "string", minLength: 1, "x-only-when": { kind: ["resource-gained", "resource-spent"] } },
-      owner: { enum: ["friendly", "enemy", "any"], "x-only-when": { kind: ["move-ended", "move-started", "selected", "targets-selected", "attacks-resolved", "set-up", "used"] } },
+      owner: { enum: ["friendly", "enemy", "any"], "x-only-when": { kind: ["move-ended", "move-started", "selected", "targets-selected", "attacks-resolved", "set-up", "used", "state-changed", "resource-gained"] } },
       move_types: { type: "array", items: { enum: MOVE_TYPES }, minItems: 1, uniqueItems: true, "x-only-when": { kind: ["move-ended", "move-started", "selected"] } },
       to: { enum: SELECTED_TO, "x-only-when": { kind: ["selected"] } },
       action_kind: { enum: ["charge", "shoot", "attack", "stratagem", "ability", "fight"], "x-only-when": { kind: ["targets-selected", "attacks-resolved"] } },
       subject: { enum: SUBJECTS, "x-only-when": { kind: ["move-ended", "move-started", "selected", "targets-selected", "attacks-resolved", "set-up", "after-roll", "used"] }, "x-optional": true },
       result: { enum: ["success", "failure"], "x-only-when": { kind: ["after-roll"] }, "x-optional": true },
-      by: { enum: DESTROYERS, "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed"] }, "x-optional": true },
-      object_owner: { enum: OBJECT_OWNERS, "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed"] }, "x-optional": true },
+      by: { enum: DESTROYERS, "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed", "state-changed"] }, "x-optional": true },
+      object_owner: { enum: OBJECT_OWNERS, "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed", "resource-spent"] }, "x-optional": true },
       also: { enum: ["move-started", "move-ended"], "x-only-when": { kind: ["move-started", "move-ended"] }, "x-optional": true },
       object: { enum: ["this-unit", "this-model", ANTECEDENT, FILTERED_UNITS, "selected-unit"], "x-only-when": { kind: ["targets-selected", "damage-allocated", "resource-spent", "used"] }, "x-optional": true },
       from: { enum: ["strategic-reserves"], "x-only-when": { kind: ["set-up"] }, "x-optional": true },
@@ -440,7 +480,10 @@ const EVENT: FlatFamily = {
       attack_type: { enum: ATTACK_TYPES, "x-only-when": { kind: ["damage-allocated", "model-destroyed", "unit-or-model-destroyed", "attacks-resolved"] }, "x-optional": true },
       through: { enum: ["tall-terrain"], "x-optional": true, "x-only-when": { kind: ["move-ended"] } },
       object_keywords: { type: "array", items: KEYWORD_ITEMS, minItems: 1, uniqueItems: true, "x-only-when": { kind: ["model-destroyed", "unit-or-model-destroyed"] }, "x-optional": true },
-      source: { type: "array", minItems: 1, uniqueItems: true, items: { enum: ["unit", "enhancement"] }, "x-only-when": { kind: ["used"] }, "x-optional": true },
+      source: {
+        anyOf: [{ type: "array", minItems: 1, uniqueItems: true, items: { enum: ["unit", "enhancement"] } }, { const: "ability" }],
+        "x-only-when": { kind: ["used", "resource-gained"] }, "x-optional": true,
+      },
       bind_as: { type: "string", pattern: BINDING.source, minLength: 1, "x-only-when": { kind: BINDABLE_KINDS }, "x-optional": true },
       usage: {
         type: "object",
@@ -452,7 +495,10 @@ const EVENT: FlatFamily = {
       },
       ability_keyword: { type: "string", minLength: 1, "x-only-when": { kind: ["used"] }, "x-optional": true },
       targets_level: { enum: ["unit"], "x-only-when": { kind: ["used"] }, "x-optional": true },
-      timing: { enum: ["before-removal"], "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed"] }, "x-optional": true },
+      passed: { type: "boolean", "x-only-when": { kind: ["used"] }, "x-optional": true },
+      timing: { enum: [...DESTRUCTION_TIMINGS, ...MOVE_TIMINGS], "x-only-when": { kind: ["unit-destroyed", "model-destroyed", "unit-or-model-destroyed", "move-ended"] }, "x-optional": true },
+      object_any_keywords: { type: "array", items: KEYWORD_ITEMS, minItems: 2, uniqueItems: true, "x-only-when": { kind: ["unit-destroyed", "model-destroyed"] }, "x-optional": true },
+      last: { const: true, "x-only-when": { kind: ["model-destroyed"] }, "x-optional": true },
       object_designated: { enum: OBJECT_DESIGNATIONS, "x-only-when": { kind: ["unit-destroyed"] }, "x-optional": true },
       same_subject_targeted: { enum: ["stratagem-target"], "x-only-when": { kind: ["attacks-resolved"] }, "x-optional": true },
       channelled: { const: true, "x-only-when": { kind: ["after-roll"] }, "x-optional": true },

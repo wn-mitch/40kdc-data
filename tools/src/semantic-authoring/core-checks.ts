@@ -321,6 +321,12 @@ export function coreCheckErrors(dataRoot: string, abilityId: string, checks: rea
       if (abilities.join() !== coreAbilities.join()) {
         errors.push(`Eligible bearers need ${abilities.length ? `the ${abilities.join(", ")} ability` : "no core ability"}, but core requires ${coreAbilities.join(", ") || "none"}.`);
       }
+      // The wargear the leaf requires the bearer to be equipped with must be exactly the wargear core requires.
+      const wargear = [...(Array.isArray(check.parameters.wargear) ? check.parameters.wargear as string[] : [])].sort();
+      const coreWargear = [...(Array.isArray(record.required_wargear_ids) ? record.required_wargear_ids as string[] : [])].sort();
+      if (wargear.join() !== coreWargear.join()) {
+        errors.push(`Eligible bearers need ${wargear.length ? `to be equipped with ${wargear.join(", ")}` : "no wargear"}, but core requires ${coreWargear.join(", ") || "none"}.`);
+      }
     }
   }
   return errors;

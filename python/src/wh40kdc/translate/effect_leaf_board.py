@@ -34,6 +34,7 @@ from wh40kdc.translate.effect_quantity import amount_of, is_literal, moved_phras
 from wh40kdc.translate.effect_select import for_each_unit_subject
 from wh40kdc.translate.effect_words import (
     Ctx,
+    ability_label,
     and_list,
     dekebab,
     designation_for,
@@ -51,6 +52,7 @@ from wh40kdc.translate.effect_words import (
     pronoun,
     range_phrase,
     region_phrase,
+    resource_noun,
     signed,
     test_name,
     title_case,
@@ -126,8 +128,16 @@ def _mortal_wounds(m: dict[str, Any], subj: str) -> str:
             band = "1"
         else:
             band = f"result of {jstr(roll.get('threshold'))} or less"
+        # "rolling two additional D6 if X": more dice when the condition holds.
+        extra = roll.get("extra_dice")
+        more = (
+            f", rolling {jstr(_obj(extra).get('count'))} additional D6 if "
+            f"{describe_condition(_obj(_obj(extra).get('condition')))}"
+            if extra is not None
+            else ""
+        )
         return (
-            f"roll {dice}{each}{most}: for each {band}, {who} "
+            f"roll {dice}{each}{most}{more}: for each {band}, {who} "
             f"{v(who, 'suffers')} "
             f"{suffered}{psychic}{cap}"
         )
@@ -143,7 +153,22 @@ _FNP_AGAINST = {
     "mortal": " against mortal wounds",
     "psychic": " against Psychic Attacks",
     "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
+    "damage-1-unmodified": " against attacks with an unmodified Damage characteristic of 1",
 }
+# One kind in a Feel No Pain's list of what it covers.
+_FNP_AGAINST_ITEM = {
+    "mortal": "mortal wounds",
+    "psychic": "Psychic Attacks",
+    "devastating-wounds": "Critical Wounds caused by attacks with [DEVASTATING WOUNDS]",
+}
+
+
+def _fnp_against(against: Any) -> str:
+    """What a Feel No Pain covers (" against mortal wounds, ..."), or "" for all."""
+    if isinstance(against, list):
+        kinds = [_FNP_AGAINST_ITEM.get(jstr(item), dekebab(jstr(item))) for item in against]
+        return f" against {and_list(kinds)}"
+    return _FNP_AGAINST.get(jstr(against), "")
 
 
 def _wounds_left(value: Any) -> str:
@@ -229,11 +254,34 @@ def _destroy_models(e: Leaf, m: dict[str, Any], subj: str) -> str:
         if m.get("ignore_death_triggers") is True
         else ""
     )
-    return f"{verb} {what}{tail}{triggers}"
+    # "(chosen by its controlling player)": the destroyed unit's owner picks which models.
+    chooser = (
+        " (chosen by its controlling player)" if m.get("chosen_by") == "controlling-player" else ""
+    )
+    return f"{verb} {what}{tail}{chooser}{triggers}"
+
+
+def _region_extend(m: dict[str, Any]) -> str:
+    """An area joins a region an army rule defines ("No Man's Land is within your army's ...")."""
+    region = m.get("region") or {}
+    area = m.get("area") or {}
+    region_id = jstr(region.get("region_id"))
+    if region_id.startswith("the-"):
+        region_id = region_id[len("the-") :]
+    within = f"within your army's {title_case(region_id)}"
+    if isinstance(area.get("territories"), list):
+        names = [region_phrase({"territory": t}) for t in area["territories"]]
+        return f"{and_list(names)} are {within}"
+    if area.get("territory") is not None:
+        return f"{region_phrase({'territory': area['territory']})} is {within}"
+    rng = area.get("objective_range") or {}
+    marker = _objective_phrase(rng.get("objective") or {}, False)
+    inches = jstr(rng.get("inches"))
+    return f'the area of the battlefield within {inches}" of each {marker} is {within}'
 
 
 def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
-    act = "shoot" if m.get("act") == "shoot" else "fight"
+    act = {"shoot": "shoot", "shoot-or-fight": "shoot or fight"}.get(jstr(m.get("act")), "fight")
     target = e.get("target")
     if is_event_object(target):
         model = "a model in this unit"
@@ -254,7 +302,8 @@ def _act_on_death(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             for g in (gate.get("modifiers") or [])
         )
         if m.get("removal") == "after-destroyed-model-fights":
-            removal = f". Remove it after it has {'shot' if act == 'shoot' else 'fought'}"
+            done = {"shoot": "shot", "shoot or fight": "shot or fought"}.get(act, "fought")
+            removal = f". Remove it after it has {done}"
         else:
             removal = (
                 ". Remove it after this unit has fought or at the end of the phase, whichever "
@@ -474,6 +523,13 @@ def _move(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         s += " as if it were your Movement phase"
     if isinstance(m.get("passthrough"), list):
         s += f", moving over {_passthrough(m['passthrough'])} as though they were not there"
+    if isinstance(m.get("as_if_keywords"), list):
+        keywords = m["as_if_keywords"]
+        plural = "s" if len(keywords) > 1 else ""
+        s += (
+            " (when doing so, its models move as if they had the "
+            f"{and_list([jstr(k) for k in keywords])} keyword{plural})"
+        )
     ends = m.get("ends_within")
     if ends is not None:
         ends = _obj(ends)
@@ -559,9 +615,16 @@ def _move_modifier(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             )
     if m.get("advance") in ("fixed-6", "fixed-8"):
         inches = m["advance"][len("fixed-"):]
+        # "(this is not cumulative with the Matchless Swiftness ability)": that ability's bonus.
+        nc = m.get("not_cumulative")
+        trail = (
+            f" (this is not cumulative with the {ability_label(nc['ability'])} ability)"
+            if isinstance(nc, dict) and nc.get("ability") is not None
+            else ""
+        )
         clauses.append(
             f'{subj} {v(subj, "does")} not make an Advance roll; add {inches}" to {pronoun(subj)} '
-            "Move characteristic instead"
+            f"Move characteristic instead{trail}"
         )
     if isinstance(m.get("passthrough"), list):
         clauses.append(
@@ -662,7 +725,10 @@ def _set_up(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
             )
         else:
             arrival = f"; {it} can arrive in the first battle round" if first_round else ""
-        placed = f"{none_of(who) if denied else who} {can} be placed into Strategic Reserves"
+        # "That unit heals 10 wounds and is placed in strategic reserves": a destroyed unit.
+        returned = m.get("from") == "destroyed"
+        verb = "is returned to the battle and placed" if returned else f"{can} be placed"
+        placed = f"{none_of(who) if denied else who} {verb} into Strategic Reserves"
         return f"{placed}{limits}{arrival}"
     frm = m.get("from")
     source = (
@@ -737,7 +803,16 @@ def _marker(m: dict[str, Any], ctx: Ctx) -> str:
         unmoved = ""
         if m.get("not_moved_this_turn") is True:
             unmoved = " that has not been moved this turn"
-        return f"move the {label} marker{unmoved}{dist}{consume}"
+        # "set up that marker anywhere on the battlefield that is more than 8\" horizontally away
+        # from all enemy units".
+        away = ""
+        if m.get("min_enemy_distance") is not None:
+            lead = "," if m.get("distance") is not None else " anywhere on the battlefield"
+            away = (
+                f"{lead} more than {range_phrase(m['min_enemy_distance'])} horizontally away"
+                " from all enemy units"
+            )
+        return f"move the {label} marker{unmoved}{dist}{away}{consume}"
     if m.get("operation") == "remove":
         return f"remove that {label} marker from the battlefield"
     where = f" {dekebab(jstr(m['placement']))}" if m.get("placement") is not None else ""
@@ -811,6 +886,8 @@ def _damage_reduction(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
         how = "halve the Damage of that attack"
     elif r == "to-zero":
         how = "change the Damage of that attack to 0"
+    elif r == "to-one":
+        how = "change the Damage characteristic of that attack to 1"
     else:
         how = f"subtract {r} from the Damage characteristic of that attack"
     if ctx.get("allocated_trigger") and m.get("weapons") is None:
@@ -870,7 +947,7 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
     if t == "feel-no-pain":
         rated = is_rating_ref(m.get("threshold"))
         threshold = "X" if rated else jstr(m.get("threshold"))
-        against = _FNP_AGAINST.get(jstr(m.get("against")), "")
+        against = _fnp_against(m.get("against"))
         tail = ", X being its rating" if rated else ""
         return f"{subj} {v(subj, 'has')} Feel No Pain {threshold}+{against}{tail}"
     if t == "invulnerable-save":
@@ -914,6 +991,14 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
         return cp_gain(m)
     if t == "cost-modifier":
         return cost_modifier(m, subj)
+    # "You cannot gain more than 3 Pain tokens as a result of failed Battle-shock tests caused by
+    # this Stratagem".
+    if t == "resource-gain-cap":
+        noun = resource_noun(m.get("pool"), None, m.get("max"))
+        return (
+            f"you cannot gain more than {jstr(m.get('max'))} {noun} from failed Battle-shock tests "
+            "this ability causes"
+        )
     if t == "resource-gain":
         return resource_gain(m, subj)
     if t == "resource-spend":
@@ -933,8 +1018,34 @@ def describe_board_leaf(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx, inline:
             "your opponent's "
             "Level of Control over them is greater than yours at the end of a phase"
         )
+    if t == "region-extend":
+        return _region_extend(m)
     if t == "designate":
         return _designate(m, subj, ctx)
     if t == "army-rule":
         return army_rule(m, subj, ctx, e.get("target"))
+    if t == "reserves-schedule":
+        return _reserves_schedule(m)
     return f"[{t if t is not None else 'unknown'}]"
+
+
+def _reserves_schedule(m: dict[str, Any]) -> str:
+    """A Combat Patrol arrival schedule: the units that must start in Strategic Reserves and
+    the first battle round each can be set up in."""
+    raw_entries = m.get("entries")
+    entries = raw_entries if isinstance(raw_entries, list) else []
+    rows = and_list(
+        [
+            f"{title_case(jstr(row.get('unit_id')))} (battle round {jstr(row.get('battle_round'))})"
+            for row in (e if isinstance(e, dict) else {} for e in entries)
+        ]
+    )
+    set_up = (
+        "; when they are set up, they must be set up wholly within your deployment zone"
+        if m.get("set_up") == "wholly-within-deployment-zone"
+        else ""
+    )
+    return (
+        "the following friendly units must start the battle in Strategic Reserves and cannot "
+        f"be set up on the battlefield before the battle round stated: {rows}{set_up}"
+    )

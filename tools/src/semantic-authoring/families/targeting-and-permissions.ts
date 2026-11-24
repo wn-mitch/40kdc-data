@@ -1,5 +1,5 @@
 import { ANTECEDENT } from "../antecedent-families.js";
-import { booleanValue, boundedInteger, enumSet, enumValue, exactKeys } from "../family-validation.js";
+import { booleanValue, boundedInteger, boundGroup, enumSet, enumValue, exactKeys } from "../family-validation.js";
 import { ASCII_KEYWORD, KEBAB_ID, KEBAB_ID_PATTERN, MATCHED_UNITS, SELECTION_NAME_SCHEMA, selectionName, STRING_LIST_SCHEMA, withLeadingApostrophes, type Params } from "./unit-filters-and-targeting-shared.js";
 import type { FlatFamily } from "./types.js";
 
@@ -64,7 +64,7 @@ const PERMISSION_ACTIVITIES = [
 ] as const;
 const PERMISSION_DESPITE = [
   "engaged", "battle-shocked", "shot-this-phase", "fought-this-phase", "disembarked-this-turn",
-  "stratagem-used-this-phase", "performing-action", "advanced", "fell-back", "destroyed", "transport-advanced",
+  "stratagem-used-this-phase", "performing-action", "advanced", "fell-back", "destroyed", "transport-advanced", "embarked",
 ] as const;
 const PERMISSION_AS_IF = ["shooting-phase", "snap-shooting", "fight-phase"] as const;
 const PERMISSION_INTO = ["antecedent", "following-filter", "selection", "this-unit"] as const;
@@ -247,6 +247,16 @@ function normalizeCountsAs(input: Params): Params {
     return { subject, range_ref: "synapse", of_side: "friendly" };
   }
   if ("of_side" in input) throw new TypeError("counts-as.of_side goes with range_ref.");
+  // "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
+  if ("model_count_below" in input) {
+    exactKeys(input, ["subject", "model_count_below", "for_weapon_ability"], "counts-as");
+    if (!grantable) throw new TypeError(`counts-as.subject ${JSON.stringify(subject)} cannot take a model count.`);
+    return {
+      subject,
+      model_count_below: boundedInteger(input.model_count_below, 2, 20, "counts-as.model_count_below"),
+      for_weapon_ability: enumValue(input.for_weapon_ability, ["Blast"], "counts-as.for_weapon_ability"),
+    };
+  }
   if ("region" in input) {
     if ("within" in input) throw new TypeError("counts-as takes within or region, not both.");
     if (!grantable) throw new TypeError(`counts-as.subject ${JSON.stringify(subject)} cannot take a region.`);
@@ -259,8 +269,19 @@ function normalizeCountsAs(input: Params): Params {
     }
     return { subject, region: { region_id: region.region_id, owner_faction: region.owner_faction } };
   }
-  exactKeys(input, ["subject", "within"], "counts-as");
-  return { subject: enumValue(subject, [...SUBJECTS, ANTECEDENT], "counts-as.subject"), within: boundedInteger(input.within, 1, MAX_INCHES, "counts-as.within") };
+  exactKeys(input, ["subject", "within", ...("of" in input ? ["of"] : []), ...("for_abilities" in input ? ["for_abilities"] : [])], "counts-as");
+  const result: Params = { subject: enumValue(subject, [...SUBJECTS, ANTECEDENT], "counts-as.subject"), within: boundedInteger(input.within, 1, MAX_INCHES, "counts-as.within") };
+  // "within 12\" of your PSYKER model": a Stratagem target group the range is measured to.
+  if ("of" in input) result.of = boundGroup(input.of, "counts-as.of");
+  // "for the purposes of the Psychic Guidance and Spirit Guides abilities": only those abilities see it.
+  if ("for_abilities" in input) {
+    const ids = input.for_abilities;
+    if (!Array.isArray(ids) || ids.length === 0 || ids.some((id) => typeof id !== "string" || !KEBAB_ID.test(id)) || new Set(ids).size !== ids.length) {
+      throw new TypeError("counts-as.for_abilities lists distinct kebab-case ability ids.");
+    }
+    result.for_abilities = [...ids];
+  }
+  return result;
 }
 
 const RULE_KINDS = ["core-rule", "keyword", "ability", "faction-rule"] as const;
@@ -268,26 +289,50 @@ const RULE_KINDS = ["core-rule", "keyword", "ability", "faction-rule"] as const;
 const RULE_STATE_OTHER_SUBJECTS = ["selected-unit", "event-subject", "target", ANTECEDENT];
 
 function ruleStateCore(input: Params): Params {
-  exactKeys(input, ["subject", "direction", "rule_kind", "rule"], "rule-state");
+  const named = "ability_keyword" in input ? "ability_keyword" : "rule";
+  exactKeys(input, ["subject", "direction", "rule_kind", named, ...("tag" in input ? ["tag"] : [])], "rule-state");
   const ruleKind = enumValue(input.rule_kind, RULE_KINDS, "rule-state.rule_kind");
+  const direction = enumValue(input.direction, ["granted", "suppressed"], "rule-state.direction");
+  const subject = enumValue(input.subject, [...SUBJECTS, ...RULE_STATE_OTHER_SUBJECTS, UNMARKED], "rule-state.subject");
+  // "the unit while it is Empowered": the units neither carrying the tag nor part of a unit that does.
+  const unmarked = subject === UNMARKED ? { tag: markTag(input.tag) } : {};
+  if (subject !== UNMARKED && "tag" in input) throw new TypeError("rule-state.tag goes only with subject unmarked.");
+  if (named === "ability_keyword") {
+    // "Pain abilities only apply to a unit while it is Empowered": every ability tagged with the keyword.
+    const keyword = typeof input.ability_keyword === "string" ? input.ability_keyword : "";
+    if (!ASCII_KEYWORD.test(keyword)) throw new TypeError("rule-state.ability_keyword must be an uppercase keyword.");
+    if (ruleKind !== "ability" || direction !== "suppressed") throw new TypeError("rule-state.ability_keyword names suppressed abilities (rule_kind ability).");
+    return { subject, direction, rule_kind: ruleKind, ability_keyword: keyword, ...unmarked };
+  }
   const rule = typeof input.rule === "string" ? input.rule : "";
   if (ruleKind === "keyword") {
     if (!ASCII_KEYWORD.test(rule)) throw new TypeError("rule-state.rule must be an uppercase keyword when rule_kind is keyword.");
   } else if (!KEBAB_ID.test(rule)) {
     throw new TypeError("rule-state.rule must be a kebab-case id when rule_kind is not keyword.");
   }
-  const subject = enumValue(input.subject, [...SUBJECTS, ...RULE_STATE_OTHER_SUBJECTS], "rule-state.subject");
-  return {
-    subject,
-    direction: enumValue(input.direction, ["granted", "suppressed"], "rule-state.direction"),
-    rule_kind: ruleKind,
-    rule,
-  };
+  return { subject, direction, rule_kind: ruleKind, rule, ...unmarked };
+}
+
+/** The subject of a rule that holds for units not carrying a tag, directly or through the unit they are part of. */
+const UNMARKED = "unmarked";
+
+function markTag(tag: unknown): string {
+  if (typeof tag !== "string" || !KEBAB_ID.test(tag)) throw new TypeError("rule-state.tag must be a kebab-case designation id.");
+  return tag;
+}
+
+/** "no mortal wounds are inflicted by your army's Daemonic Terror rule": one aspect of a named section of a faction rule is switched off. */
+function ruleStateSection(result: Params, section: unknown, aspect: unknown): Params {
+  if (section === undefined && aspect === undefined) return result;
+  if (section === undefined || aspect === undefined) throw new TypeError("rule-state.sub_rule and rule-state.aspect are given together.");
+  if (result.direction !== "suppressed" || result.rule_kind !== "faction-rule") throw new TypeError("rule-state.sub_rule names a section of a suppressed faction rule.");
+  if (typeof section !== "string" || !KEBAB_ID.test(section)) throw new TypeError("rule-state.sub_rule must be a kebab-case id.");
+  return { ...result, sub_rule: section, aspect: enumValue(aspect, ["mortal-wounds"], "rule-state.aspect") };
 }
 
 function normalizeRuleState(input: Params): Params {
-  const { any_army_faction: any, ...rest } = input;
-  const result = withLeadingApostrophes("rule-state", rest, ruleStateCore);
+  const { any_army_faction: any, sub_rule: section, aspect, ...rest } = input;
+  const result = ruleStateSection(withLeadingApostrophes("rule-state", rest, ruleStateCore), section, aspect);
   if (any === undefined) return result;
   if (any !== true) throw new TypeError("rule-state.any_army_faction is true or omitted.");
   if (result.direction !== "granted" || result.rule_kind !== "faction-rule") throw new TypeError("rule-state.any_army_faction goes with a granted faction rule.");
@@ -320,10 +365,10 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "counts-as",
-    version: 3,
+    version: 5,
     role: "EFFECT",
     label: "Counts as being within range",
-    description: "This unit or model, or the unit an earlier leaf introduced, counts as being within a range of this model for the purposes of another rule (a Titan-killer's range, an aura counting itself); or counts as inside a region an army rule defines (region: \"that unit is within your army's Hallowed Ground\"); or counts as within a named range of your host (range_ref synapse with of_side friendly: \"that unit is inside Synapse Range of your host\"). Exactly one of within, region or range_ref is given.",
+    description: "This unit or model, or the unit an earlier leaf introduced, counts as being within a range of this model for the purposes of another rule (a Titan-killer's range, an aura counting itself); or counts as inside a region an army rule defines (region: \"that unit is within your army's Hallowed Ground\"); or counts as within a named range of your host (range_ref synapse with of_side friendly: \"that unit is inside Synapse Range of your host\"). Or counts as containing fewer models than model_count_below for one weapon ability's purposes (for_weapon_ability Blast: \"treated as containing fewer than five models for the purpose of the [BLAST] ability\"). Exactly one of within, region, range_ref or model_count_below is given. With within, of ({bound: name}) names the Stratagem target group the range is measured to (\"within 12\\\" of your PSYKER model\"), and for_abilities the ability record ids it counts for (\"for the purposes of the Psychic Guidance and Spirit Guides abilities\").",
     starter: { subject: "", within: 1 },
     parameterSchema: {
       type: "object",
@@ -331,6 +376,8 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
       properties: {
         subject: { enum: ["this-unit", "this-model", "antecedent"] },
         within: { type: "integer", minimum: 1, maximum: 48 },
+        of: { type: "object", required: ["bound"], additionalProperties: false, properties: { bound: { type: "string", pattern: "^[a-z][a-z0-9-]*[a-z0-9]$" } }, "x-optional": true },
+        for_abilities: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$" }, "x-optional": true },
         region: {
           type: "object",
           required: ["region_id", "owner_faction"],
@@ -339,6 +386,8 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
         },
         range_ref: { enum: ["synapse"], "x-optional": true },
         of_side: { enum: ["friendly"], "x-only-when": { range_ref: ["synapse"] }, "x-optional": true },
+        model_count_below: { type: "integer", minimum: 2, maximum: 20, "x-optional": true },
+        for_weapon_ability: { enum: ["Blast"], "x-optional": true },
       },
       additionalProperties: false,
     },
@@ -346,20 +395,24 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "rule-state",
-    version: 4,
+    version: 6,
     role: "EFFECT",
     label: "Grant or suppress a named rule",
-    description: "A unit or model gains or loses a core rule, keyword, ability, or faction rule (a core-rule slug such as the -1 to Hit for shooting in Engagement Range, or a keyword or ability by its own id). The subject is this unit or model, a selected unit, the triggering unit, the attack's target, or an earlier leaf's unit (antecedent): \"that enemy unit cannot have the Benefit of Cover\". A keyword can start with an apostrophe as the rules print it ('ARDMOB). any_army_faction: a granted faction rule the subject can use whatever your Army Faction is (\"even though your Army Faction is not X\").",
+    description: "A unit or model gains or loses a core rule, keyword, ability, or faction rule (a core-rule slug such as the -1 to Hit for shooting in Engagement Range, or a keyword or ability by its own id). The subject is this unit or model, a selected unit, the triggering unit, the attack's target, or an earlier leaf's unit (antecedent): \"that enemy unit cannot have the Benefit of Cover\". A keyword can start with an apostrophe as the rules print it ('ARDMOB). any_army_faction: a granted faction rule the subject can use whatever your Army Faction is (\"even though your Army Faction is not X\"). sub_rule and aspect (together, with a suppressed faction rule): only that aspect of the named section of the rule is off for the subject (\"no mortal wounds are inflicted by your army's Daemonic Terror rule\" is sub_rule daemonic-terror, aspect mortal-wounds, on the unit it would inflict them on). ability_keyword, in place of rule, names every ability tagged with that keyword (suppressed abilities only: \"Pain abilities\" is PAIN). Subject unmarked with tag: every unit that carries neither the tag nor is part of a unit that carries it (\"Pain abilities only apply to a unit while it is Empowered. While an Attached unit is Empowered, the Pain abilities of all Leader and Bodyguard units in that unit take effect\" is one suppression of PAIN for subject unmarked, tag empowered).",
     starter: { subject: "", direction: "", rule_kind: "", rule: "" },
     parameterSchema: {
       type: "object",
-      required: ["subject", "direction", "rule_kind", "rule"],
+      required: ["subject", "direction", "rule_kind"],
       properties: {
-        subject: { enum: ["this-unit", "this-model", "selected-unit", "event-subject", "target", "antecedent"] },
+        subject: { enum: ["this-unit", "this-model", "selected-unit", "event-subject", "target", "antecedent", "unmarked"] },
         direction: { enum: ["granted", "suppressed"] },
         rule_kind: { enum: ["core-rule", "keyword", "ability", "faction-rule"] },
-        rule: { type: "string", minLength: 1 },
+        rule: { type: "string", minLength: 1, "x-optional": true },
+        ability_keyword: { type: "string", pattern: "^[A-Z][A-Z0-9 -]*[A-Z0-9]$", "x-optional": true },
+        tag: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-only-when": { subject: ["unmarked"] } },
         any_army_faction: { const: true, "x-optional": true },
+        sub_rule: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$", "x-optional": true },
+        aspect: { enum: ["mortal-wounds"], "x-optional": true },
       },
       additionalProperties: false,
     },
@@ -367,10 +420,10 @@ export const TARGETING_AND_PERMISSIONS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "eligibility-permission",
-    version: 10,
+    version: 11,
     role: "EFFECT",
     label: "Allow or forbid an activity",
-    description: "A unit or model is (or is not) eligible to shoot, charge, fight, embark, disembark, Fall Back, Advance, be targeted with Stratagems, issue Orders, attempt Rituals, use Enhancements, move, or act as an Observer, optionally even if something would normally block it (including being just destroyed, so a Stratagem can still target it, and, for a disembark, the Transport having Advanced: transport-advanced), or as if in a different phase. "
+    description: "A unit or model is (or is not) eligible to shoot, charge, fight, embark, disembark, Fall Back, Advance, be targeted with Stratagems, issue Orders, attempt Rituals, use Enhancements, move, or act as an Observer, optionally even if something would normally block it (including being just destroyed, so a Stratagem can still target it; being embarked within a Transport: embarked; and, for a disembark, the Transport having Advanced: transport-advanced), or as if in a different phase. "
       + "The subject is this unit or model, the unit an earlier leaf of the record introduced (antecedent: \"that enemy unit\", \"it\"), the triggering unit (event-subject: the unit a move-ended event names), or the units a unit-filter names right before the permission (filtered-units: \"units cannot embark within this unit\"). "
       + "engaged_with_move_end: the permission applies within Engagement Range of the enemy unit the same ability's move ends nearest, not any engaged unit (despite includes engaged). into: the Transport an embark permission places the subject within (antecedent, following-filter, selection, this-unit), only with activity embark. "
       + "reach (1 to 12 inches: models that far from an enemy are eligible to fight) and next (true: the unit must be the next one selected to fight), only with activity fight and allow true. "

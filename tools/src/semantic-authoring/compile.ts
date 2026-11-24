@@ -1,6 +1,7 @@
 import { foldStepWindow } from "./compile-step-window.js";
 import { hasUnboundSelectedUnit, unscopedRecipientEffect } from "./compile-recipient-scope.js";
 import { resolveUnitNames, type UnitNameContext } from "./compile-unit-names.js";
+import { foldReservesSchedules } from "./compile-reserves-schedule.js";
 import { resolveRuleReferences, ruleScopeContext } from "./compile-rule-refs.js";
 import { foldAuraEmitter, lowerConditionalAuras } from "./compile-aura-emitter.js";
 import { foldNamedRanges, requireNamedRangeAuras } from "./compile-named-range.js";
@@ -35,6 +36,7 @@ import { bindDesignationSubjects, foldHitFilters } from "./compile-conditions.js
 import { foldDestructionAfterAttacks, foldEffectAfterAttacks } from "./compile-destruction-after-attacks.js";
 import { foldDisembarkMoment } from "./compile-disembark-moment.js";
 import { foldObjectiveCriteria } from "./compile-objective-criteria.js";
+import { foldBulletTrailingMoments } from "./compile-bullet-moments.js";
 import { foldDestroyedSelections } from "./compile-destroyed-selection.js";
 import { compileForEachPasses } from "./compile-for-each-passes.js";
 import { compileSelectionThenLoop } from "./compile-selection-then-loop.js";
@@ -49,9 +51,10 @@ import { foldRollCaps, foldRollFaces } from "./compile-roll-faces.js";
 import { compileStratagemWindowMoments, compileWindowMoment } from "./compile-window-moment.js";
 import { foldDelayedMoments } from "./compile-delayed-moment.js";
 import { foldRitualTest } from "./compile-ritual-test.js";
+import { bindDarkPactTest } from "./compile-dark-pact.js";
 import { foldEmergencyDisembark } from "./compile-emergency-disembark.js";
 import { bulletBreaks, commaItems, ordered, orLineBreaks, placements, plainLineBreaks, shapeSignature } from "./compile-placement.js";
-import { foldAlternativePools } from "./compile-dice-variants.js";
+import { foldAlternativePools, foldExtraDice } from "./compile-dice-variants.js";
 import { planContainers } from "./compile-containers.js";
 import { optionalDesignationUses, timingMoments } from "./compile-redesignate.js";
 import { compileNamedRegionState } from "./compile-named-region.js";
@@ -59,6 +62,7 @@ import { foldAlternativeConditions } from "./compile-alternative-conditions.js";
 import { splitHeldGrants } from "./compile-held-grants.js";
 import { foldConditionExclusions } from "./compile-condition-exclusions.js";
 import { refuseMomentUnderBareUse } from "./compile-nested-moment.js";
+import { bindOwnStratagemDenials } from "./compile-own-stratagem.js";
 import { refuseSelectionAcrossMoment } from "./compile-selection-moment.js";
 import { foldUnitFilters } from "./compile-unit-filters.js";
 import { mergeStackedFilters } from "./compile-unit-filter-merge.js";
@@ -76,6 +80,7 @@ import { foldAttackProperties } from "./compile-attack-properties.js";
 import { foldReturnedModelExclusions } from "./compile-returned-model-exclusions.js";
 import { foldModelState } from "./compile-model-state.js";
 import { foldStickyControl } from "./compile-sticky-control.js";
+import { foldAreaSelections } from "./compile-region-extend.js";
 import { foldSetUpLimits, foldSetUpPlacement, isPlacedLimit } from "./compile-set-up-placement.js";
 import { foldCountScales, markCountedSubjects } from "./compile-count-scale.js";
 import { foldImpliedHealCondition } from "./compile-implied-heal.js";
@@ -100,6 +105,7 @@ import { refuseStratagemTargetActivity } from "./compile-triggering-destruction.
 import { planConditionOf, type ConditionOfPlan } from "./compile-connective-plan.js";
 import { lowerHistoryMoments } from "./compile-connective-history.js";
 import { checkOptionalCosts } from "./compile-optional-cost.js";
+import { checkSpentReferences } from "./compile-spent.js";
 import { foldSelectionHolders } from "./compile-selection-holders.js";
 import { foldEmbarkedPermission } from "./compile-embarked-permission.js";
 import { bindMatchedPools } from "./compile-matched-set.js";
@@ -168,6 +174,12 @@ export { shapeSignature } from "./compile-placement.js";
  * A container option that carries its own moment or conditions, compiled as a whole ability and
  * returned as one ability-part: its trigger, usage and duration go on the part, its effect inside.
  */
+/** Whether a select-unit leaf comes before an option group's leaves: the option's "that unit" is that selection. */
+function outerSelected(list: readonly CompileLeaf[], group: readonly CompileLeaf[]): boolean {
+  const first = group[0];
+  return first !== undefined && list.some((leaf) => leaf.family_id === "select-unit" && leaf.start_byte < first.start_byte);
+}
+
 function nestedPart(group: readonly CompileLeaf[], sourceText: string | undefined, options: CompileOptions, objective?: string, name?: string): Node {
   const own = name === undefined ? options : { ...options, name };
   const compiled = compileChecked(group, sourceText, objective === undefined ? own : { ...own, selectedObjective: objective }, true);
@@ -209,6 +221,11 @@ export type CompileOptions = {
   units?: UnitNameContext;
   /** Set by the compiler: the record printed "in any phase", the phase its lasting effects end with (compile-part-assemble.ts). */
   anyPhaseWindow?: boolean;
+  /**
+   * Set by the compiler: this is one option of a container inside a record that selects a unit before it ("Regenerate
+   * one friendly unit … do one of the following"), so the option's "that unit" is that outer selection.
+   */
+  outerSelection?: boolean;
 };
 
 /** Compile one ability's reviewed leaves. Failures name what is missing; nothing is guessed. */
@@ -304,10 +321,10 @@ function compileUnchecked(record: readonly CompileLeaf[], sourceText?: string, o
   // Printed rule and ability names resolve to their records first (compile-rule-refs.ts). Qualifiers printed apart from their host are bound first: a characteristic amount after its recipient and a floor after its change (compile-characteristic-amount.ts), an additive option after its duration (compile-additive-option.ts), an ignore-modifier list after its lead-in (compile-ignore-list.ts), a named range's defined values onto its aura (compile-named-range.ts), and a cost table's headings and rows onto its by-table spend (compile-cost-table.ts).
   let bound: CompileLeaf[];
   try {
-    bound = foldCostTables(foldNamedRanges(foldAuraEmitter(bindIgnoreLists(
-      bindAdditiveOptions(bindCharacteristicFloors(bindCharacteristicAmounts(resolveRuleReferences(resolveUnitNames(leaves, options.units), ruleScopeContext(options.units, options.abilityId)))), sourceText),
+    bound = foldReservesSchedules(foldCostTables(foldNamedRanges(foldAuraEmitter(bindIgnoreLists(
+      bindAdditiveOptions(bindCharacteristicFloors(bindCharacteristicAmounts(resolveRuleReferences(resolveUnitNames(bindOwnStratagemDenials(leaves, options.abilityId), options.units), ruleScopeContext(options.units, options.abilityId)))), sourceText),
       sourceText,
-    )), options.abilityId));
+    )), options.abilityId)), options.units);
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(leaves), sourceText), errors: [error.message] };
@@ -374,7 +391,7 @@ function compileRecordBody(given: readonly CompileLeaf[], sourceText?: string, o
   let qualified: CompileLeaf[];
   // "if this unit is controlling an objective, that objective is secured": the control test is the secured objective's own scope (compile-sticky-control.ts).
   // "has lost any wounds" before a heal of that model is what the heal already requires (compile-implied-heal.ts).
-  try { qualified = foldStickyControl(foldEngagementExclusive(foldStanceInitial(foldWithEmbarked(foldImpliedHealCondition(given))), sourceText), sourceText); } catch (error) {
+  try { qualified = foldAreaSelections(foldStickyControl(foldEngagementExclusive(foldStanceInitial(foldWithEmbarked(foldImpliedHealCondition(given))), sourceText), sourceText)); } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature: shapeSignature(ordered(given), sourceText), errors: [error.message] };
   }
@@ -468,14 +485,14 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
     // A Stratagem with several targets: references to them first (compile-target-refs.ts).
     const refs = bindTargetRefs(mergeStackedFilters(foldHolderAbilities(foldSetUpPlacement(foldManoeuvreOwnRoll(foldHistoryWindow(foldByAbility(foldAuraMoments(foldUsedObjects(foldStratagemTail(foldObjectRange(splitIgnoreModifiers(resolveAttackBackrefs(groupMembership(hoistWeaponRecipients(foldWarlordTests(foldEffectAfterAttacks(foldDestructionAfterAttacks(foldDisembarkMoment(foldStepWindow(ordered(weaponBound), sourceText), sourceText), sourceText), sourceText)), sourceText)))), sourceText), sourceText), sourceText), sourceText), sourceText), sourceText), options.menuActions ?? manoeuvreLookupFor(options.abilityId)), sourceText), sourceText, options.abilityId), sourceText), sourceText);
     // "wholly within 6\" of a friendly Transport unit that unit is able to embark within" (compile-transport-embark.ts).
-    const bound = bindEmbarkAnchors(foldCountScales(bindDesignationSubjects(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(foldForwardComposition(refs.leaves), sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText))), sourceText));
+    const bound = bindEmbarkAnchors(foldCountScales(bindDesignationSubjects(foldExtraDice(foldAlternativePools(bindPrecedingRolls(foldBoundAttacks(refuseBareTarget(bindAntecedents(markCountedSubjects(bindArmyAntecedents(foldArmyAttachments(foldForwardComposition(refs.leaves), sourceText))), refs.focus, sourceText), isPlacedLimit)), sourceText)))), sourceText));
     refuseTransportAsSubject(bound);
     refuseDestinationMismatch(bound, sourceText);
     const scoped = bindWeaponStatAntecedents(foldWeaponScopes(foldModelState(foldReturnedModelExclusions(foldFightNext(foldCountsAsMoved(foldPassthroughUsed(foldAsIfPhases(foldHitFilters(foldLeadingHitFilters(foldTargetingWeapons(foldDestroyFilters(foldMortalWoundSources(bindEquippedCounts(bound)), sourceText), sourceText), sourceText), sourceText), sourceText)), sourceText), sourceText), sourceText)), sourceText));
     const filtered = resolveArmyGroups(foldWeaponAlreadyHas(bindScopeAttacks(foldDesignationOnce(foldUnitFilters(foldArmyPer(foldWeaponKeywords(foldAttackProperties(bindMatchedPools(scoped), sourceText), sourceText), sourceText), sourceText)))));
     // "For each X model you select, roll one D6": a plain roll inside the model selection (compile-selected-model-roll.ts);
     // "select one objective that: …": the criteria fold into the selection (compile-objective-criteria.ts).
-    list = foldDestroyedSelections(foldObjectiveCriteria(foldAllocatedAttackRolls(foldSelectedModelRolls(withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(foldConditionExclusions(bindTargetedTarget(filtered), sourceText), sourceText)))])))));
+    list = foldBulletTrailingMoments(foldDestroyedSelections(foldObjectiveCriteria(foldAllocatedAttackRolls(foldSelectedModelRolls(withDesignationExpiry([...foldSetUpLimits(foldActivationPicks(foldAlternativeConditions(foldConditionExclusions(bindTargetedTarget(filtered), sourceText), sourceText)))]))), options.abilityId)), sourceText);
     // A moment a reviewed "if" makes a condition is a history condition from here on (compile-connective-history.ts).
     list = lowerHistoryMoments(list, conditionOf.flatMap((plan) => plan.kind === "history" ? [plan] : []));
     refuseUnboundWeaponScope(list);
@@ -531,7 +548,7 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   let containerNodes: Map<number, Node>;
   let consumedByContainer: Set<number>;
   try {
-    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group, objective, name) => nestedPart(group, sourceText, options, objective, name), bulletBreaks(list, sourceText), commaItems(list, sourceText), plainLineBreaks(list, sourceText), orLineBreaks(list, sourceText)));
+    ({ nodes: containerNodes, consumed: consumedByContainer } = planContainers(list, places.map((place) => place.sentence), (group, objective, name) => nestedPart(group, sourceText, outerSelected(list, group) ? { ...options, outerSelection: true } : options, objective, name), bulletBreaks(list, sourceText), commaItems(list, sourceText), plainLineBreaks(list, sourceText), orLineBreaks(list, sourceText)));
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;
     return { ok: false, signature, errors: [error.message] };
@@ -544,6 +561,10 @@ function compilePart(leaves: readonly CompileLeaf[], sourceText: string | undefi
   if (!assembled.ok) return assembled;
   // A selection after "those attacks" resolve is made once, outside their per-attack gate (compile-resolved-selection.ts).
   try {
+    // "the number of YP you just spent" reads a spend before it that bound its amount (compile-spent.ts).
+    checkSpentReferences(assembled.mechanics.effect);
+    // "If the result of that test was 8 or more" reads the Dark Pact test its moment binds (compile-dark-pact.ts).
+    bindDarkPactTest(assembled.mechanics);
     return { ...assembled, mechanics: { ...assembled.mechanics, effect: hoistResolvedSelections(assembled.mechanics.effect) as typeof assembled.mechanics.effect } };
   } catch (error) {
     if (!(error instanceof CompileError)) throw error;

@@ -304,13 +304,8 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
         if p.get("role") == "leading" and (
             p.get("subject") == "this-model" or p.get("subject") is None
         ):
-            w = _obj(p.get("with"))
-            kw = (
-                f"{' '.join(_str(k) for k in w['all_of'])} "
-                if isinstance(w.get("all_of"), list)
-                else ""
-            )
-            return f"while this model is leading a {kw}unit"
+            predicate = _describe_predicate(c, False)
+            return "while " + re.sub(r"^the model ", "this model ", predicate)
         return f"while {_describe_predicate(c, False)}"
     if ctype == "happened":
         f = _obj(p.get("filter"))
@@ -354,7 +349,13 @@ def condition_lead_in(c: Condition, defending: bool = False) -> str:
             return f"when {_describe_happened(p, False)}"
         return f"if {_describe_happened(p, False)}"
     if ctype == "resource":
-        word = "if" if p.get("below_max") is True else "while"
+        word = (
+            "if"
+            if p.get("below_max") is True
+            or p.get("gained") == "turn"
+            or p.get("holder") == "opponent"
+            else "while"
+        )
         return f"{word} {_describe_predicate(c, False)}"
     if ctype == "strength":
         phrase = re.sub(

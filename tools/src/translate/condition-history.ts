@@ -93,6 +93,10 @@ function happenedPhrase(p: P, negated: boolean): string {
         const hits = (count.min != null && count.min !== 1) || count.max != null ? `${amount} ${atk}attacks` : atk === "" ? "an attack" : `a ${atk}attack`;
         return `${neg}${target} was hit by ${hits}${attacker}${weapon}${by}${when}`;
       }
+      // A Dark Pact's Leadership test: "the unit made a Dark Pact and passed its Leadership test this phase".
+      if (p.subject != null && f.roll === "dark-pact" && (f.result === "success" || f.result === "failure") && p.count == null) {
+        return `${neg}${who} made a Dark Pact and ${f.result === "success" ? "passed" : "failed"} its Leadership test ${windowPhrase(p.window)}`.trimEnd();
+      }
       // Whose roll it was, when the subject names one: "this unit made a battle-shock roll and failed it".
       if (p.subject != null) {
         const outcome = f.result === "failure" ? " and failed it" : f.result === "success" ? " and passed it" : "";
@@ -102,6 +106,8 @@ function happenedPhrase(p: P, negated: boolean): string {
     }
     case "damage-allocated": {
       const obj = unitRefPhrase(p.object, "this unit");
+      // "which inflicted one or more mortal wounds on your unit this phase": who caused the mortal wounds.
+      if (f.attack_type === "mortal" && f.by != null) return `${neg}${unitRefPhrase(f.by, "the unit")} inflicted one or more mortal wounds on ${obj} ${windowPhrase(p.window)}`.trimEnd();
       const atk = f.attack_type ? `${str(f.attack_type)} ` : "";
       return p.window === "event"
         ? `${neg}${obj} lost one or more wounds from the triggering ${atk}attacks`

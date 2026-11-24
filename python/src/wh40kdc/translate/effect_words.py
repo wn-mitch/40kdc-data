@@ -301,6 +301,14 @@ def signed(operation: Any, value: Any) -> str:
 
 def format_comparison(comp: str, threshold: Any) -> str:
     """Dice comparison → "a 4+", "a 3 or less", etc."""
+    # A threshold read from the battle round: "a result greater than the current battle round
+    # number".
+    if (
+        isinstance(threshold, dict)
+        and threshold.get("battle_round_plus") == 1
+        and comp in ("gte", "")
+    ):
+        return "a result greater than the current battle round number"
     th = jstr(threshold)
     if comp == "lte":
         return f"a {th} or less"
@@ -447,6 +455,7 @@ _ROLE_SUBJECTS = {
     "event-subject-model": "the triggering model",
     "event-object": "that unit",
     "event-object-model": "that model",
+    "event-object-transport": "the Transport",
     "stratagem-target": "that unit",
     "bearer-transport": "the Transport this unit is embarked within",
     "ability-unit": "this unit",
@@ -591,7 +600,7 @@ def effect_subject(target: Any, ctx: Ctx | None = None) -> str:
     if target == "recipient":
         if ctx.get("each_model") or ctx.get("selected_model"):
             return "that model"
-        if ctx.get("aura_recipient") or ctx.get("selected_unit"):
+        if ctx.get("aura_recipient") or ctx.get("selected_unit") or ctx.get("each_unit"):
             return "that unit"
         return "this unit"
     if target == "event-subject" and ctx.get("unit_subject") == "that unit":

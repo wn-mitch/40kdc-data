@@ -34,6 +34,7 @@ SCALE_OF: dict[str, str] = {
     "models-equipped-with": "models in this unit equipped with",
     "enemy-units-in-range": "enemy units",
     "wounds-lost": "wounds lost",
+    "enemy-units-hit": "enemy units hit by those attacks",
     "battle-round": "battle round",
 }
 
@@ -46,6 +47,8 @@ def scale_source(q: dict[str, Any]) -> str:
         s += f" {title_case(jstr(q.get('wargear')))}"
     if q.get("keyword") is not None:
         s = re.sub(r"^models\b", f"{jstr(q['keyword'])} models", s, count=1)
+    if q.get("designated") is not None:
+        s = f"{dekebab(jstr(q['designated']))} {s}"
     if q.get("within") is not None:
         s += f" within {range_phrase(q['within'])}"
     if of == "markers":
@@ -55,8 +58,19 @@ def scale_source(q: dict[str, Any]) -> str:
     return s
 
 
-def _battle_sized(q: dict[str, Any]) -> bool:
-    return all(q.get(k) is not None for k in _BATTLE_SIZES)
+def _battle_sized(q: dict[str, Any]) -> tuple[str, str] | None:
+    """A battle-size table's values in print order and their size names, a Combat Patrol
+    row first when it has one; ``None`` when it is not a full table."""
+    if not all(q.get(k) is not None for k in _BATTLE_SIZES):
+        return None
+    keys: tuple[str, ...]
+    if q.get("combat-patrol") is not None:
+        keys = ("combat-patrol", *_BATTLE_SIZES)
+        names = "Combat Patrol/Incursion/Strike Force/Onslaught"
+    else:
+        keys = _BATTLE_SIZES
+        names = "Incursion/Strike Force/Onslaught"
+    return "/".join(jstr(q[k]) for k in keys), names
 
 
 def quantity_phrase(q: dict[str, Any]) -> str:
@@ -67,9 +81,10 @@ def quantity_phrase(q: dict[str, Any]) -> str:
     # A characteristic of the effect's target unit: "its Psyker Level characteristic".
     if q.get("characteristic") is not None:
         return f"its {stat_name(q['characteristic'])} characteristic"
-    if _battle_sized(q):
-        values = "/".join(jstr(q[k]) for k in _BATTLE_SIZES)
-        return f"{values} (Incursion/Strike Force/Onslaught)"
+    sized = _battle_sized(q)
+    if sized is not None:
+        values, names = sized
+        return f"{values} ({names})"
     if isinstance(q.get("roll_var"), str):
         if q.get("successes_on") is not None:
             # "for each 1": the dice at or under the face.
@@ -79,6 +94,11 @@ def quantity_phrase(q: dict[str, Any]) -> str:
                 return f"the number of those dice that rolled a {jstr(q['successes_on'])} or less"
             return f"the number of those dice that rolled a {jstr(q['successes_on'])}+"
         return "the result of that roll"
+    # "the number of YP you just spent": the amount a resource-spend of this ability bound.
+    if isinstance(q.get("spent"), str):
+        if q.get("per") is not None:
+            return f"1 for every {jstr(q['per'])} you spent"
+        return "the amount you spent"
     if q.get("count_of") == "battle-round":
         return "the battle round number"
     if q.get("count_of") == "embarked-models-oc":
@@ -99,9 +119,13 @@ def amount_of(q: Any, one: str, many: str) -> str:
         n = dice_case(q)
         return f"{n} {one if n == '1' else many}"
     p = q if isinstance(q, dict) else {}
-    if _battle_sized(p):
-        values = "/".join(jstr(p[k]) for k in _BATTLE_SIZES)
-        return f"{values} {many} (Incursion/Strike Force/Onslaught)"
+    sized = _battle_sized(p)
+    if sized is not None:
+        values, names = sized
+        return f"{values} {many} ({names})"
+    # "for every 2YP you just spent, return one additional model": one per that many spent.
+    if isinstance(p.get("spent"), str) and p.get("per") is not None:
+        return f"1 {one} for every {jstr(p['per'])} you spent"
     return f"a number of {many} equal to {quantity_phrase(p)}"
 
 

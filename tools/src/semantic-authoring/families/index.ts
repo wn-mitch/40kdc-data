@@ -13,7 +13,9 @@ import { MOVE_LIMITS_FAMILIES } from "./move-limits.js";
 import { MOVES_FAMILIES } from "./moves.js";
 import { NAMED_ABILITIES_FAMILIES } from "./named-abilities.js";
 import { NAMED_REGIONS_FAMILIES } from "./named-regions.js";
+import { ORDERS_FAMILIES } from "./orders.js";
 import { PSYCHIC_AND_OATHS_FAMILIES } from "./psychic-and-oaths.js";
+import { RESERVES_SCHEDULE_FAMILIES } from "./reserves-schedule.js";
 import { RESOURCE_MENUS_AND_OBJECTIVES_FAMILIES } from "./resource-menus-and-objectives.js";
 import { RESOURCES_AND_DESIGNATIONS_FAMILIES } from "./resources-and-designations.js";
 import { RESTRICTIONS_FAMILIES } from "./restrictions.js";
@@ -80,10 +82,12 @@ const FAMILY_ORDER: readonly string[] = [
   "choice-open", "stance-select-open", "history-compare", "named-option", "unit-filter",
   "core-ability-grant", "reroll", "unit-activity", "move-distance", "transport-capacity",
   "weapon-property-scope", "equipped-weapon-count", "bearer-eligibility", "split-unit", "set-up",
-  "targeting-restriction", "in-region", "resource-gain", "army-construction",
+  "targeting-restriction", "in-region", "resource-gain", "resource-gain-cap", "army-construction",
   "ability-record-grant", "characteristic-set", "usage-limit", "attack-filter",
   "characteristic-modifier", "event", "turn-start", "add-unit", "target-is-selected",
   "regain-wounds", "return-models", "for-each-unit-select", "apply-mark", "designated-filter",
+  "orders-modifier", "order-share",
+  "game-mode", "reserves-schedule", "region-extend", "area-select", "revive-into-reserves",
 ];
 
 const ALL: readonly FlatFamily[] = [
@@ -102,7 +106,9 @@ const ALL: readonly FlatFamily[] = [
   ...MOVES_FAMILIES,
   ...NAMED_ABILITIES_FAMILIES,
   ...NAMED_REGIONS_FAMILIES,
+  ...ORDERS_FAMILIES,
   ...PSYCHIC_AND_OATHS_FAMILIES,
+  ...RESERVES_SCHEDULE_FAMILIES,
   ...RESOURCE_MENUS_AND_OBJECTIVES_FAMILIES,
   ...RESOURCES_AND_DESIGNATIONS_FAMILIES,
   ...RESTRICTIONS_FAMILIES,

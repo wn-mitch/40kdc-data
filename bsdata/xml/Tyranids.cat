@@ -10049,11 +10049,11 @@ While a friendly MONSTER TYRANIDS unit is not Battle-shocked, unless that unit i
               </constraints>
               <rules>
                 <rule name="Feed the Swarm" id="3edc-2bf4-bbb6-cb7a" hidden="false">
-                  <description>If this unit has the HARVESTER keyword:
-  - Select one friendly TYRANIDS unit within 6" of this unit (each unit can be selected for this ability at most once per phase across your army):
+                  <description>During your Command phase, if this unit has the HARVESTER keyword:
+  - Select one friendly TYRANIDS unit within 6" of this model (each unit can be selected for this ability at most once per phase across your army):
     Choose one of the following (Regenerate):
-      - That unit regains up to D3+1 lost wounds.
-      - Return 1 destroyed model to that unit, each with its full wounds remaining.</description>
+      - One model in that unit regains up to D3+1 lost wounds.
+      - Unless the selected unit has the ENDLESS MULTITUDE keyword, return 1 destroyed INFANTRY model (excluding CHARACTER models) to that unit, each with its full wounds remaining; if the selected unit has the ENDLESS MULTITUDE keyword, return 3 destroyed models to that unit, each with its full wounds remaining.</description>
                 </rule>
               </rules>
               <categoryLinks>
@@ -11145,7 +11145,7 @@ At the start of each turn, for the rest of the battle, while the model has lost 
           <profiles>
             <profile name="Regenerating Monstrosity" id="0e35-c047-956c-e0e5" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit can be affected by Regenerate (Feed the Swarm) up to twice, in place of its usual limit.</characteristic>
               </characteristics>
             </profile>
           </profiles>
@@ -11226,7 +11226,7 @@ While this model is within 6" of a friendly HARVESTER unit, this unit gains the 
           <profiles>
             <profile name="Biophagic Flow (Aura)" id="aff7-766b-f974-6a38" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
               <characteristics>
-                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">Nothing happens.</characteristic>
+                <characteristic name="Description" typeId="9b8f-694b-e5e-b573">While a friendly HARVESTER unit is within 12" of this model, the range of this unit's Regenerate (Feed the Swarm) ability is 9".</characteristic>
               </characteristics>
             </profile>
           </profiles>

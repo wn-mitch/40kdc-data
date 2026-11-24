@@ -1,3 +1,4 @@
+import { DESIGNATION_IDS } from "../../translate/designations.js";
 import { boundedInteger, enumSet, enumValue, exactKeys } from "../family-validation.js";
 import type { FlatFamily } from "./types.js";
 import {
@@ -35,10 +36,26 @@ function thresholdBuff(family: string, subjects: readonly string[], extra: reado
       subject: enumValue(input.subject, subjects, `${family}.subject`),
       threshold: boundedInteger(input.threshold, 2, 6, `${family}.threshold`),
     };
-    if (extra.includes("against")) result.against = enumValue(input.against, ["all", "mortal", "psychic", "psychic-and-mortal"], `${family}.against`);
+    if (extra.includes("against")) result.against = fnpAgainst(input.against, `${family}.against`);
     if (hasKeywords) result.model_keywords = modelKeywordList(input.model_keywords, `${family}.model_keywords`, apostrophe ? { family, context: strings(input) } : undefined);
     return result;
   };
+}
+
+/** What a Feel No Pain covers, one at a time, in the order the rules list them. */
+const FNP_AGAINST_ITEMS = ["mortal", "psychic", "devastating-wounds"] as const;
+
+/**
+ * A Feel No Pain's `against`: one closed value, or a list of two or more covered kinds ("against
+ * mortal wounds, Psychic Attacks and Critical Wounds caused by attacks with [DEVASTATING WOUNDS]"),
+ * in canonical order. Mortal wounds with Psychic Attacks alone keep their own value.
+ */
+function fnpAgainst(value: unknown, label: string): string | string[] {
+  if (!Array.isArray(value)) return enumValue(value, ["all", "mortal", "psychic", "psychic-and-mortal", "damage-1-unmodified"], label);
+  const items = enumSet(value, FNP_AGAINST_ITEMS, label);
+  if (items.length < 2) throw new TypeError(`${label} as a list names two or more kinds; one kind is its own value.`);
+  if (items.length === 2 && items.includes("mortal") && items.includes("psychic")) throw new TypeError(`${label}: mortal wounds and Psychic Attacks are psychic-and-mortal.`);
+  return FNP_AGAINST_ITEMS.filter((item) => items.includes(item));
 }
 
 /** A keyword-grant list item: an optional leading apostrophe, then accented capitals checked without their accents. */
@@ -96,7 +113,7 @@ function chooseValue(value: unknown): { count: number; from?: string[] } {
   return { count: picked, from: listed };
 }
 
-const ACTIVATE_KEYS = ["subject", "ability", "option", "options", "all_options", "chosen", "choose", "additive", "ignore_consumed", "from_event"];
+const ACTIVATE_KEYS = ["subject", "ability", "option", "options", "all_options", "chosen", "choose", "additive", "ignore_consumed", "from_event", "immediate"];
 const OPTION_FORMS = ["option", "options", "all_options", "chosen", "choose"] as const;
 
 function normalizeAbilityActivate(input: Params): Params {
@@ -130,6 +147,12 @@ function normalizeAbilityActivate(input: Params): Params {
     if (others.length) throw new TypeError(`ability-activate.from_event names the triggering use's option; it takes no ${others.join(" or ")}.`);
     result.from_event = true;
   }
+  if ("immediate" in input) {
+    if (input.immediate !== true) throw new TypeError("ability-activate.immediate is true or omitted.");
+    const others = ["options", "all_options", "chosen", "choose", "additive", "ignore_consumed", "from_event"].filter((key) => result[key] !== undefined);
+    if (result.option === undefined || others.length) throw new TypeError("ability-activate.immediate resolves one named option once, now: it takes option and no other option form.");
+    result.immediate = true;
+  }
   return result;
 }
 
@@ -157,12 +180,16 @@ function normalizeCoreAbilityGrant(input: Params): Params {
 const STICKY_SUBJECTS = ["this-unit", "this-model", "selected-unit", "recipient", "selected-objective"];
 
 function normalizeStickyObjective(input: Params): Params {
-  if (!("subject" in input)) {
-    exactKeys(input, [], "sticky-objective");
-    return {};
+  exactKeys(input, ["subject", "tag"].filter((key) => key in input), "sticky-objective");
+  const result: Params = {};
+  if ("subject" in input) result.subject = enumValue(input.subject, STICKY_SUBJECTS, "sticky-objective.subject");
+  // "That objective marker is said to be Corrupted": the secured marker also carries a registered designation.
+  if ("tag" in input) {
+    if (typeof input.tag !== "string" || !DESIGNATION_IDS.has(input.tag)) throw new TypeError(`sticky-objective.tag ${JSON.stringify(input.tag)} is not a registered designation.`);
+    if (result.subject === "selected-objective") throw new TypeError("sticky-objective.tag names the markers a unit controls; the selected objective marker takes no tag.");
+    result.tag = input.tag;
   }
-  exactKeys(input, ["subject"], "sticky-objective");
-  return { subject: enumValue(input.subject, STICKY_SUBJECTS, "sticky-objective.subject") };
+  return result;
 }
 
 function normalizeActAfterMove(input: Params): Params {
@@ -174,7 +201,7 @@ function normalizeActAfterMove(input: Params): Params {
   };
 }
 
-const WOUND_AMOUNTS = ["1", "2", "3", "D3", "D6", "D3+3", "D3+1", "D3+2", "all", "that-many", "2D3"];
+const WOUND_AMOUNTS = ["1", "2", "3", "D3", "D6", "D3+3", "D3+1", "D3+2", "all", "that-many", "2D3", "2D6"];
 
 function normalizeRegainWounds(input: Params): Params {
   const { selection, ...rest } = input;
@@ -220,10 +247,10 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "feel-no-pain",
-    version: 5,
+    version: 6,
     role: "EFFECT",
     label: "Feel No Pain",
-    description: "Models ignore wounds on a roll of the threshold or more, optionally only against mortal wounds or psychic attacks. \"The bearer\" is this model. subject can also be antecedent: the unit an earlier leaf of the record introduced (\"that enemy unit\", \"it\"), bound when the record compiles. model_keywords: the Feel No Pain applies to only the subject's models with every listed keyword (\"**CHARACTER** models in this unit\"); a keyword can start with an apostrophe as the rules print it ('ARDMOB).",
+    description: "Models ignore wounds on a roll of the threshold or more, optionally only against mortal wounds or psychic attacks. against damage-1-unmodified: only against attacks with an unmodified Damage characteristic of 1; a list of two or more of mortal, psychic and devastating-wounds (Critical Wounds caused by attacks with [DEVASTATING WOUNDS]) covers each. \"The bearer\" is this model. subject can also be antecedent: the unit an earlier leaf of the record introduced (\"that enemy unit\", \"it\"), bound when the record compiles. model_keywords: the Feel No Pain applies to only the subject's models with every listed keyword (\"**CHARACTER** models in this unit\"); a keyword can start with an apostrophe as the rules print it ('ARDMOB).",
     starter: { subject: "this-unit", threshold: null, against: "all" },
     parameterSchema: {
       type: "object",
@@ -231,7 +258,10 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
       properties: {
         subject: { enum: ["this-unit", "this-model", ANTECEDENT] },
         threshold: THRESHOLD_SCHEMA,
-        against: { enum: ["all", "mortal", "psychic", "psychic-and-mortal"] },
+        against: { anyOf: [
+          { enum: ["all", "mortal", "psychic", "psychic-and-mortal", "damage-1-unmodified"] },
+          { type: "array", items: { enum: [...FNP_AGAINST_ITEMS] }, minItems: 2, uniqueItems: true },
+        ] },
         model_keywords: MODEL_KEYWORDS_SCHEMA,
       },
       additionalProperties: false,
@@ -259,7 +289,7 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "ability-activate",
-    version: 5,
+    version: 6,
     role: "EFFECT",
     label: "Activate an ability now",
     description: "Makes a named ability resolve at once, or activates some of its options, for this unit or model, an earlier leaf's unit (antecedent), a selected unit, the unit an aura reaches (recipient), or the units a unit-filter names before the activation (filtered-units: \"active for friendly K units in addition to\"). "
@@ -268,7 +298,8 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
       + "or choose {count, from?} (the player picks count options at once, from the listed ones or from all: \"the assault doctrine or tactical doctrine is active\"). With no option form the ability resolves at once. "
       + "additive: the activated options join the ones already active (\"in addition to any other combat doctrine\"); without it an activation replaces the unit's active option. "
       + "ignore_consumed goes with chosen: the option picked earlier may be one a once-per-battle selection already used (\"even if you have already selected that Vow this battle\"); a pick that says so itself is a choice-open's ignore_consumed. "
-      + "from_event: the option active is the one the triggering use of another ability selected (\"the selected combat doctrine is active for this unit\" after a Strategic Acumen use); it takes no other option form, and replaces the unit's active option.",
+      + "from_event: the option active is the one the triggering use of another ability selected (\"the selected combat doctrine is active for this unit\" after a Strategic Acumen use); it takes no other option form, and replaces the unit's active option."
+      + " immediate, with option: that option resolves once, now, for the subject instead of becoming active (\"Your unit immediately Regenerates (See Feed the Swarm)\", the Regenerate choice of Feed the Swarm).",
     starter: { subject: "this-unit", ability: "" },
     parameterSchema: {
       type: "object",
@@ -290,6 +321,7 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
         additive: { const: true, "x-optional": true },
         ignore_consumed: { const: true, "x-optional": true },
         from_event: { const: true, "x-optional": true },
+        immediate: { const: true, "x-optional": true },
       },
       additionalProperties: false,
     },
@@ -323,12 +355,12 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "sticky-objective",
-    version: 4,
+    version: 5,
     role: "EFFECT",
     label: "Sticky objective",
-    description: "\"That objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase.\" Being within range of it is a separate condition. subject names whose objectives (default this-unit): a selected unit, or each unit a for-each loop reaches (recipient); selected-objective is the one marker this record's select-objective chose (\"that objective is secured\").",
+    description: "\"That objective marker remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase.\" Being within range of it is a separate condition. subject names whose objectives (default this-unit): a selected unit, or each unit a for-each loop reaches (recipient); selected-objective is the one marker this record's select-objective chose (\"that objective is secured\"). tag: a registered designation the secured markers also carry (\"That objective marker is said to be Corrupted\"), read later by an objective filter; not with selected-objective.",
     starter: {},
-    parameterSchema: { type: "object", properties: { subject: { enum: STICKY_SUBJECTS } }, additionalProperties: false },
+    parameterSchema: { type: "object", properties: { subject: { enum: STICKY_SUBJECTS }, tag: { type: "string", pattern: "^[a-z][a-z0-9-]*$", "x-optional": true } }, additionalProperties: false },
     normalize: normalizeStickyObjective,
   },
   {
@@ -362,7 +394,7 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "regain-wounds",
-    version: 9,
+    version: 10,
     role: "EFFECT",
     label: "Regain lost wounds",
     description: "A model, or each model in a unit, regains lost wounds (heals). Adding to the Wounds characteristic is a different leaf. The amount is a printed number or dice amount (D3+1, D3+2, 2D3 …), all (\"regains all of its lost wounds\"), or that-many (as many wounds as the mortal wounds printed before it in its sentence, from the same roll: \"suffers D3+1 mortal wounds and … regains up to that many lost wounds\"). "
@@ -381,5 +413,25 @@ export const UNIT_BUFFS_FAMILIES: readonly FlatFamily[] = [
       additionalProperties: false,
     },
     normalize: normalizeRegainWounds,
+  },
+  {
+    id: "revive-into-reserves",
+    version: 1,
+    role: "EFFECT",
+    label: "Return a destroyed unit to Reserves",
+    description: "A destroyed unit comes back: it heals a number of wounds and is placed into Strategic Reserves (\"That unit heals 10 wounds and is placed in strategic reserves\", after \"Select one friendly destroyed X unit\"). subject is antecedent: the destroyed unit an earlier leaf selected. heal is the wounds it heals, a whole number.",
+    starter: { subject: "", heal: 0 },
+    parameterSchema: {
+      type: "object",
+      required: ["subject", "heal"],
+      properties: { subject: { enum: [ANTECEDENT] }, heal: { type: "integer", minimum: 1, maximum: 60 } },
+      additionalProperties: false,
+    },
+    normalize: (input) => {
+      exactKeys(input, ["subject", "heal"], "revive-into-reserves");
+      const heal = input.heal;
+      if (!Number.isSafeInteger(heal) || (heal as number) < 1 || (heal as number) > 60) throw new TypeError("revive-into-reserves.heal is a whole number of wounds from 1 to 60.");
+      return { subject: enumValue(input.subject, [ANTECEDENT], "revive-into-reserves.subject"), heal };
+    },
   },
 ];

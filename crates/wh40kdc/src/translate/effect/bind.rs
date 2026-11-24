@@ -30,6 +30,16 @@ pub(super) fn roll_head(e: &P) -> String {
             unit_ref_phrase(stat.get("of"), "this unit")
         );
     }
+    // As many dice as a count from the battle's history: "equal to the number of mortal wounds the unit suffered this phase".
+    if let Some(history) = nn(e, "count_history") {
+        let history = obj(Some(history));
+        return format!(
+            "roll a number of {} equal to the number of mortal wounds {} suffered this {}{extra}{kind}",
+            dice_case(e.get("dice")),
+            unit_ref_phrase(history.get("subject"), "the unit"),
+            sv(history, "window").unwrap_or("?")
+        );
+    }
     format!("roll {}{extra}{kind}", dice_case(e.get("dice")))
 }
 
@@ -50,8 +60,14 @@ pub(super) fn objective_selector_phrase(sel: &P) -> String {
     )
 }
 
+/// "for each objective marker …" when the selector has no count (every matching marker), else "select …".
 fn lead(sel: &P) -> String {
-    format!("select {}", objective_selector_phrase(sel))
+    let verb = if sel.get("count").is_none_or(serde_json::Value::is_null) {
+        "for"
+    } else {
+        "select"
+    };
+    format!("{verb} {}", objective_selector_phrase(sel))
 }
 
 /// select-objective on one line: "select one objective marker …: <effect>".

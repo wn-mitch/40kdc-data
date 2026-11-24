@@ -7,6 +7,7 @@ import {
   type Params, ENTITY_ID,
 } from "./movement-and-units-shared.js";
 import type { FlatFamily } from "./types.js";
+import { DESIGNATION_IDS } from "../../translate/designations.js";
 
 /** Named regions: the regions a rule produces and the state they grant. */
 
@@ -136,6 +137,47 @@ function namedRegionState(input: Params): Params {
     result.phase_extensions = phases.map((item, index) => recipeFragment(item, `${label}.phase_extensions[${index}]`, "phaseExtension"));
   }
   return result;
+}
+
+/** The battlefield areas a named region can be extended over or an ability selects between. */
+const EXTENSION_TERRITORIES = ["no-mans-land", "enemy-deployment-zone", "your-deployment-zone", "enemy-territory", "your-territory"] as const;
+const EXTENSION_AREAS = ["territory", "selected", "objective-range"] as const;
+
+/**
+ * "the selected areas of the battlefield are within your army's Shadow of Chaos": one area kind,
+ * each with only its own keys. selected reads the area-select leaves before it (compile-region-extend.ts).
+ */
+function regionExtend(input: Params): Params {
+  const label = "region-extend";
+  const area = enumValue(input.area, EXTENSION_AREAS, `${label}.area`);
+  const own = area === "territory" ? ["territory"] : area === "objective-range" ? ["inches", ...["objective_tag", "controlled_by"].filter((key) => key in input)] : [];
+  exactKeys(input, ["region_id", "owner_faction", "area", ...own], label);
+  const result: Params = {};
+  for (const key of ["region_id", "owner_faction"]) {
+    if (typeof input[key] !== "string" || !ENTITY_ID.test(input[key] as string)) throw new TypeError(`${label}.${key} must be a kebab-case entity id.`);
+    result[key] = input[key];
+  }
+  result.area = area;
+  if (area === "territory") result.territory = enumValue(input.territory, EXTENSION_TERRITORIES, `${label}.territory`);
+  if (area === "objective-range") {
+    result.inches = boundedInteger(input.inches, 1, 24, `${label}.inches`);
+    if ("objective_tag" in input) {
+      if (typeof input.objective_tag !== "string" || !DESIGNATION_IDS.has(input.objective_tag)) throw new TypeError(`${label}.objective_tag ${JSON.stringify(input.objective_tag)} is not a registered designation.`);
+      result.objective_tag = input.objective_tag;
+    }
+    if ("controlled_by" in input) result.controlled_by = enumValue(input.controlled_by, ["you"], `${label}.controlled_by`);
+  }
+  return result;
+}
+
+/** "Select No Man's Land or your opponent's deployment zone" (one) or "select both" (all). */
+function areaSelect(input: Params): Params {
+  const label = "area-select";
+  exactKeys(input, ["territories", "select"], label);
+  const territories = distinctStrings(input.territories, `${label}.territories`);
+  if (territories.length < 2) throw new TypeError(`${label}.territories lists at least two areas to select between.`);
+  for (const territory of territories) enumValue(territory, EXTENSION_TERRITORIES, `${label}.territories`);
+  return { territories, select: enumValue(input.select, ["one", "all"], `${label}.select`) };
 }
 
 export const NAMED_REGIONS_FAMILIES: readonly FlatFamily[] = [
@@ -343,5 +385,42 @@ export const NAMED_REGIONS_FAMILIES: readonly FlatFamily[] = [
       "additionalProperties": false
     },
     normalize: namedRegionState,
+  },
+  {
+    id: "region-extend",
+    version: 1,
+    role: "EFFECT",
+    label: "Extend a named region",
+    description: "An area of the battlefield is within a region an army rule defines (region_id and owner_faction name it, as in-region's rule-region), for the effect's duration: \"the selected areas of the battlefield are within your army's Shadow of Chaos\". area territory names one territory; objective-range is the area within inches of the objective markers that carry objective_tag (a registered designation) and, with controlled_by you, are under your control (\"while an objective marker is Corrupted and under your control, the area of the battlefield within 6\" of that objective marker\"); selected is the area the area-select leaves before it pick. Each area takes only its own keys.",
+    starter: { region_id: "", owner_faction: "", area: "territory", territory: "no-mans-land" },
+    parameterSchema: {
+      type: "object", required: ["region_id", "owner_faction", "area"], additionalProperties: false,
+      properties: {
+        region_id: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$" },
+        owner_faction: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*[a-z0-9]$" },
+        area: { enum: [...EXTENSION_AREAS] },
+        territory: { enum: [...EXTENSION_TERRITORIES], "x-only-when": { area: ["territory"] } },
+        inches: { type: "integer", minimum: 1, maximum: 24, "x-only-when": { area: ["objective-range"] } },
+        objective_tag: { type: "string", pattern: "^[a-z][a-z0-9-]*$", "x-only-when": { area: ["objective-range"] }, "x-optional": true },
+        controlled_by: { enum: ["you"], "x-only-when": { area: ["objective-range"] }, "x-optional": true },
+      },
+    },
+    normalize: regionExtend,
+  },
+  {
+    id: "area-select",
+    version: 1,
+    role: "EFFECT",
+    label: "Select battlefield areas",
+    description: "The player selects one of the listed areas (select one: \"Select No Man's Land or your opponent's deployment zone\") or all of them (select all: \"select both\") for a region-extend with area selected later in the ability. A select all right after a resource-spend is the alternative that spend pays for (\"or spend one Flux token and select both\"); both selects list the same areas.",
+    starter: { territories: [], select: "one" },
+    parameterSchema: {
+      type: "object", required: ["territories", "select"], additionalProperties: false,
+      properties: {
+        territories: { type: "array", minItems: 2, uniqueItems: true, items: { enum: [...EXTENSION_TERRITORIES] } },
+        select: { enum: ["one", "all"] },
+      },
+    },
+    normalize: areaSelect,
   },
 ];

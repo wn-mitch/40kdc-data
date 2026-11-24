@@ -29,7 +29,7 @@ function unknownOtherThan(value: unknown): never {
   throw new CompileError(`A unit-filter's other_than ${JSON.stringify(value)} has no DSL unit to exclude.`);
 }
 
-const POSITIVE_FILTER_STATES: readonly string[] = ["battle-shocked", "engaged", "hidden", "on-battlefield"];
+const POSITIVE_FILTER_STATES: readonly string[] = ["battle-shocked", "engaged", "hidden", "on-battlefield", "destroyed"];
 
 const positiveFilterStates = (states: readonly string[] | undefined): string[] => (states ?? []).filter((state) => POSITIVE_FILTER_STATES.includes(state));
 

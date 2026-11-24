@@ -41,7 +41,7 @@ import type {
 } from "./buffs.js";
 import type { Phase } from "../generated.js";
 import { bindEachRecipient, bindEventSubject, planSelection, selectionLeverId, selectionOrder } from "./from-dsl-selection.js";
-import { matchesUnitFilter } from "./unit-filter.js";
+import { matchesUnitFilter, type FilterVerdict } from "./unit-filter.js";
 import {
   attachmentFromMembers, boundsVerdict, evaluateControls, evaluateDesignated, evaluateInRegion, evaluateOwnMove, evaluatePhaseEvent, evaluateRuleActive,
   evaluateTestResult, keywordModelBounds,
@@ -307,7 +307,7 @@ function translateEffect(
   const abilityId = source.kind === "ability" ? source.abilityId : "effect";
   // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
   const step = onAttackRoll(activation?.trigger, effect, { context, perspective, abilityId, duration: activation?.duration, usage: activation?.usage, definitions: ownDefinitions(effect, abilityId) });
-  walk(step.effect, source, { ...step.opts, selections: selectionOrder(step.effect) }, out);
+  walk(step.effect, source, { ...step.opts, selections: selectionOrder(step.effect), spentMax: spentMaxima(step.effect) }, out);
   if (activation?.usage != null || activation?.cost != null || activation?.optional === true) {
     const { duration: _duration, trigger: _trigger, ...requirement } = activation;
     const requires = [requirement];
@@ -360,6 +360,8 @@ type WalkOpts = {
   attackRoll?: { roll: "hit" | "wound"; outcome: "success" | "critical" | undefined; unmodelled?: string[] };
   /** The effect's selections in document order ({@link selectionOrder}), which number their lever ids. */
   selections?: readonly string[];
+  /** The most each bound spend of the effect can spend ({@link spentMaxima}), by its bind_as name. */
+  spentMax?: ReadonlyMap<string, number>;
 };
 
 function walk(
@@ -410,6 +412,12 @@ function walk(
   // Keep the source representation intact rather than silently widening its buff.
   if (hasUnresolvedFidelityBinding(currentNode)) {
     out.unsupported.push({ reason: FIDELITY_BINDING_REASON, effectFragment: currentNode });
+    return;
+  }
+  // "add the number of YP you just spent": a lever at the most the spend can spend; the player vouches for spending it.
+  const spentMost = spentAtMost(currentNode, opts.spentMax);
+  if (spentMost) {
+    offerLever(spentMost.node, source, opts, out, { id: `${opts.abilityId}#spent-max`, label: "Spending the most", requires: [spentMost.spend] });
     return;
   }
   // A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed size here:
@@ -639,9 +647,9 @@ function walk(
       for (const applies of entries) {
         if (applies.to === "attackers-of-target" || applies.to === "bearer-attacks-target") {
           let skip = false;
-          for (const filter of [applies.attacker_filter, applies.attacker_unit_filter]) {
+          for (const filter of [applies.attacker, applies.attacker_filter, applies.attacker_unit_filter]) {
             if (filter === undefined) continue;
-            const verdict = matchesUnitFilter(filter, opts.context, "attacker");
+            const verdict = attackerVerdict(filter, opts.context);
             if (verdict === false) { skip = true; break; }
             if (verdict === "unknown") {
               out.unsupported.push({ reason: "designate-target attacker filter is unresolved", effectFragment: currentNode });
@@ -1244,19 +1252,34 @@ function translateFeelNoPain(
     });
     return;
   }
-  // `modifier.against` ∈ {"all", "mortal", "psychic", "psychic-and-mortal"}
-  // (default "all"). Anything else routes to unsupported so a malformed value
-  // can't silently masquerade as an all-FNP. `psychic-and-mortal` folds into
-  // the mortal stream (its mortal-wound coverage is exact; the psychic-attack
-  // half is invisible to the buff layer); bare `psychic` has no stream to
-  // attach to, so it stays unsupported rather than overstating defence.
+  // `modifier.against` ∈ {"all", "mortal", "psychic", "psychic-and-mortal",
+  // "damage-1-unmodified"} or a list of "mortal", "psychic" and
+  // "devastating-wounds" (default "all"). Anything else routes to unsupported
+  // so a malformed value can't silently masquerade as an all-FNP.
+  // `psychic-and-mortal`, and a list naming mortal wounds, fold into the
+  // mortal stream (its mortal-wound coverage is exact; psychic attacks and
+  // Devastating Wounds criticals are invisible to the buff layer); bare
+  // `psychic`, a list without mortal wounds, and Damage-1 attacks have no
+  // stream to attach to, so they stay unsupported rather than overstating defence.
   const rawAgainst = modifier.against;
   let scope: "all" | "mortal" = "all";
   if (rawAgainst !== undefined) {
     if (rawAgainst === "all" || rawAgainst === "mortal") {
       scope = rawAgainst;
-    } else if (rawAgainst === "psychic-and-mortal") {
+    } else if (rawAgainst === "psychic-and-mortal" || (Array.isArray(rawAgainst) && rawAgainst.includes("mortal"))) {
       scope = "mortal";
+    } else if (Array.isArray(rawAgainst)) {
+      out.unsupported.push({
+        reason: "feel-no-pain: against a list without mortal wounds (psychic attacks and Devastating Wounds criticals are not tracked by the buff layer)",
+        effectFragment: node,
+      });
+      return;
+    } else if (rawAgainst === "damage-1-unmodified") {
+      out.unsupported.push({
+        reason: 'feel-no-pain: against "damage-1-unmodified" (the buff layer does not split Feel No Pain by an attack\'s Damage)',
+        effectFragment: node,
+      });
+      return;
     } else if (rawAgainst === "psychic") {
       out.unsupported.push({
         reason: 'feel-no-pain: against "psychic" (psychic attacks are not tracked by the buff layer)',
@@ -1543,9 +1566,9 @@ function zeroingUses(usage: unknown): { uses: number; per: "unit" | "model" } {
 
 /**
  * Defender-side damage-reduction (`{type: "damage-reduction", modifier:
- * {reduction: N | "half" | "to-zero"}}`). A number subtracts from each Damage
+ * {reduction: N | "half" | "to-zero" | "to-one"}}`). A number subtracts from each Damage
  * roll; `"to-zero"` is a damage-zeroing defence, counted from the usage limit,
- * for the allocation stage; halving Damage is unsupported. Attacker-perspective
+ * for the allocation stage; halving Damage, or setting it to 1, is unsupported. Attacker-perspective
  * walks drop silently (this is a defender stat).
  */
 function translateDamageReduction(
@@ -1576,6 +1599,13 @@ function translateDamageReduction(
   if (reduction === "half") {
     out.unsupported.push({
       reason: "damage-reduction: halving Damage is not modelled by the buff layer",
+      effectFragment: node,
+    });
+    return;
+  }
+  if (reduction === "to-one") {
+    out.unsupported.push({
+      reason: "damage-reduction: setting Damage to 1 is not modelled by the buff layer",
       effectFragment: node,
     });
     return;
@@ -3337,10 +3367,49 @@ function unsizedValueReason(node: Record<string, unknown>): string | undefined {
   for (const field of SIZED_FIELDS) {
     const v = node.modifier[field];
     if (!isObject(v)) continue;
-    const what = typeof v.roll_var === "string" ? "a bound roll" : typeof v.count_of === "string" ? `the number of ${v.count_of}` : "the battle size";
+    // "spend up to 2YP": the player picks how much a spend spends; it sizes no buff.
+    if (node.type === "resource-spend" && field === "amount" && v.up_to !== undefined) continue;
+    const what = typeof v.roll_var === "string" ? "a bound roll" : typeof v.count_of === "string" ? `the number of ${v.count_of}`
+      : typeof v.spent === "string" ? "the amount spent" : "the battle size";
     return `${node.type}: its ${field} is set by ${what}; not resolved by the buff engine`;
   }
   return undefined;
+}
+
+/** The most each resource-spend of an effect that binds its amount (bind_as) can spend: its {up_to} amount. */
+function spentMaxima(effect: unknown): Map<string, number> {
+  const maxima = new Map<string, number>();
+  const visit = (node: unknown): void => {
+    if (Array.isArray(node)) {
+      node.forEach(visit);
+      return;
+    }
+    if (!isObject(node)) return;
+    const modifier = node.modifier;
+    if (node.type === "resource-spend" && isObject(modifier) && typeof modifier.bind_as === "string" && isObject(modifier.amount) && typeof modifier.amount.up_to === "number") {
+      maxima.set(modifier.bind_as, modifier.amount.up_to);
+    }
+    Object.keys(node).sort().forEach((key) => visit(node[key]));
+  };
+  visit(effect);
+  return maxima;
+}
+
+/**
+ * A leaf whose one bound size is a spent amount ({spent, per?}) with a known most, as the leaf at
+ * that most (one per `per`, rounded down), with the spend the lever requires. Undefined otherwise.
+ */
+function spentAtMost(node: Record<string, unknown>, maxima: ReadonlyMap<string, number> | undefined): { node: Record<string, unknown>; spend: Record<string, unknown> } | undefined {
+  const modifier = node.modifier;
+  if (maxima === undefined || !isObject(modifier) || typeof node.type !== "string" || node.scaling !== undefined) return undefined;
+  const bound = SIZED_FIELDS.filter((field) => isObject(modifier[field]));
+  if (bound.length !== 1) return undefined;
+  const field = bound[0]!;
+  const ref = modifier[field] as Record<string, unknown>;
+  if (typeof ref.spent !== "string" || !maxima.has(ref.spent)) return undefined;
+  const most = maxima.get(ref.spent)!;
+  const value = typeof ref.per === "number" ? Math.floor(most / ref.per) : most;
+  return { node: { ...node, modifier: { ...modifier, [field]: value } }, spend: { spent: ref.spent, amount: most } };
 }
 
 /**
@@ -3386,3 +3455,14 @@ function isProvidedByAnotherUnit(source: BuffSource): boolean {
   return source.kind === "ability" && source.abilityKind === "support";
 }
 
+
+/**
+ * Whether the crunched attacker is the one a designation's attacker entry names: a unit filter, a
+ * unit-ref, or a list of unit-refs any one of which may make the attack.
+ */
+function attackerVerdict(filter: unknown, context: EngineContext): FilterVerdict {
+  if (!Array.isArray(filter)) return matchesUnitFilter(filter, context, "attacker");
+  const verdicts = filter.map((ref) => matchesUnitFilter(ref, context, "attacker"));
+  if (verdicts.includes(true)) return true;
+  return verdicts.every((verdict) => verdict === false) ? false : "unknown";
+}

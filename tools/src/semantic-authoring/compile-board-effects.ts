@@ -7,6 +7,7 @@
 import { LIST_BUILDING_DESIGNATIONS } from "../translate/designations.js";
 import { armyRuleEffect } from "./compile-army.js";
 import { closed, CompileError, type CompileLeaf, unitOf } from "./compile-fragments.js";
+import { regionExtendEffect } from "./compile-region-extend.js";
 
 type Node = Record<string, unknown>;
 
@@ -23,6 +24,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.as_if !== undefined) modifier.as_if = closed(leaf, "as_if");
       // The disembark mode ("an assault disembark move").
       if (leaf.parameters.mode !== undefined) modifier.mode = closed(leaf, "mode");
+      // "Move as if they have the FLY keyword", for this move only.
+      if (leaf.parameters.as_if_keywords !== undefined) modifier.as_if_keywords = [...(leaf.parameters.as_if_keywords as string[])];
       // An embark's distance to its Transport in place of 3" (bindEmbarkAnchors, compile-transport-embark.ts).
       if (leaf.parameters.reach !== undefined) modifier.reach = closed(leaf, "reach");
       // "Must make … move": the target is obliged to make it.
@@ -76,7 +79,7 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       if (leaf.parameters.distance !== undefined) modifier.distance = { inches: closed(leaf, "distance") };
       // Only a marker not yet moved this turn.
       if (leaf.parameters.not_moved_this_turn === true) modifier.not_moved_this_turn = true;
-      // A placed marker's distance from enemy units.
+      // A placed or relocated marker's distance from enemy units.
       if (leaf.parameters.min_enemy_distance !== undefined) modifier.min_enemy_distance = { inches: closed(leaf, "min_enemy_distance") };
       // The place a placed marker is measured to.
       if (leaf.parameters.near_inches !== undefined) {
@@ -123,6 +126,9 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       const ownPool = typeof amount === "object" && amount !== null && "characteristic" in amount;
       return { type: "resource-gain", target: ownPool ? target(leaf.parameters.subject ?? "this-unit") : "this-model", modifier };
     }
+    // "You cannot gain more than 3 Pain tokens as a result of failed Battle-shock tests caused by this Stratagem".
+    case "resource-gain-cap":
+      return { type: "resource-gain-cap", target: "this-model", modifier: { pool: closed(leaf, "pool"), max: closed(leaf, "max"), source: closed(leaf, "source") } };
     case "resource-spend": {
       const modifier: Node = { pool: closed(leaf, "pool"), amount: closed(leaf, "amount") };
       // A by-table spend carries the rows compile-cost-table.ts folded onto it.
@@ -133,6 +139,8 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       }
       if (leaf.parameters.starting_strength !== undefined) throw new CompileError(`The resource-spend row at byte ${leaf.start_byte} is a cost-table row with no table.`);
       if (leaf.parameters.label !== undefined) modifier.label = closed(leaf, "label");
+      // "the number of YP you spent": a later {spent} amount reads what this spend bound (compile-spent.ts checks the pairing).
+      if (leaf.parameters.bind_as !== undefined) modifier.bind_as = closed(leaf, "bind_as");
       if (leaf.parameters.face !== undefined) modifier.face = closed(leaf, "face");
       if (leaf.parameters.requirement_type !== undefined) modifier.requirement = { type: closed(leaf, "requirement_type"), min_value: closed(leaf, "requirement_min") };
       return { type: "resource-spend", target: "this-model", modifier };
@@ -185,6 +193,13 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
     }
     case "army-construction":
       return armyRuleEffect(leaf);
+    case "reserves-schedule": {
+      // The rows folded by compile-reserves-schedule.ts.
+      if (leaf.parameters.entries === undefined) throw new CompileError(`The reserves schedule at byte ${leaf.start_byte} has no rows.`);
+      const modifier: Node = { entries: structuredClone(leaf.parameters.entries) };
+      if (leaf.parameters.set_up !== undefined) modifier.set_up = closed(leaf, "set_up");
+      return { type: "reserves-schedule", target: { owner: "friendly" }, modifier };
+    }
     case "return-models": {
       const modifier: Node = { count: countValue(closed(leaf, "count")) };
       if (leaf.parameters.wounds_remaining !== undefined) {
@@ -193,11 +208,18 @@ export function boardEffect(leaf: CompileLeaf, target: (subject: unknown) => Nod
       }
       return { type: "return-models", target: affectedModels(leaf, target(leaf.parameters.subject)), modifier };
     }
+    case "region-extend":
+      return regionExtendEffect(leaf, (spend) => {
+        const lowered = boardEffect(spend, target);
+        if (!lowered) throw new CompileError(`${spend.family_id} cannot pay for a selected area.`);
+        return lowered;
+      });
     case "destroy-models": {
       const recipient = String(closed(leaf, "recipient"));
       const modifier: Node = { count: countValue(closed(leaf, "count")) };
       if (leaf.parameters.remove_from_play === true) modifier.remove_from_play = true;
       if (leaf.parameters.ignore_death_triggers === true) modifier.ignore_death_triggers = true;
+      if (leaf.parameters.chosen_by !== undefined) modifier.chosen_by = closed(leaf, "chosen_by");
       const target_ = recipient === "this-unit" || recipient === "this-model" ? target(recipient) : recipient;
       return { type: "destroy-models", target: affectedModels(leaf, target_), modifier };
     }
@@ -272,13 +294,15 @@ function foldedPlacement(leaf: CompileLeaf, placement: unknown): Node {
   if (leaf.parameters.folded_away_from !== undefined) result.away_from = structuredClone(leaf.parameters.folded_away_from);
   if (leaf.parameters.folded_in_region !== undefined) result.in_region = structuredClone(leaf.parameters.folded_in_region);
   const keywords = placement === undefined ? [] : Array.isArray(placement) ? [...placement] : [placement];
-  if (leaf.parameters.folded_unengaged === true && !keywords.includes("unengaged")) keywords.push("unengaged");
+  if ((leaf.parameters.folded_unengaged === true || leaf.parameters.unengaged === true) && !keywords.includes("unengaged")) keywords.push("unengaged");
   if (keywords.length) result.placement = keywords.length === 1 ? keywords[0] : keywords;
   return result;
 }
 
 /** A count/amount family value ("1", "D3", "all") as the DSL prefers it: a number when it is one. */
 function countValue(value: unknown): unknown {
+  // A {spent} amount (compile-spent.ts) is already a DSL quantity.
+  if (value !== null && typeof value === "object") return value;
   const text = String(value);
   return /^\d+$/u.test(text) ? Number(text) : text;
 }

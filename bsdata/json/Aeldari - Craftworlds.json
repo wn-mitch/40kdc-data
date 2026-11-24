@@ -20605,7 +20605,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Nothing happens.",
+                "$text": "When the last GUARDIAN DEFENDER model in this unit is destroyed, destroy HEAVY WEAPON PLATFORM models in this unit.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -38391,7 +38391,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "During your Movement phase, until the end of the turn:\n  - When this unit is selected to make a Normal move, you can use this ability:\n    - This unit cannot declare a charge.\n    - Set this unit's Move characteristic to 24\".\n    - At the end of each phase, until the end of the phase, roll one D6 for each model in this unit: for each 1, this unit suffers 1 mortal wound.",
+                "$text": "During your Movement phase, until the end of the turn:\n  - When this unit is selected to make a Normal move, you can use this ability:\n    - This unit cannot declare a charge.\n    - Set this unit's Move characteristic to 24\".\n    - At the end of the phase, roll one D6 for each model in this unit: for each 1, this unit suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -79451,7 +79451,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Nothing happens.",
+                "$text": "Each time an enemy unit ends a move, you can use this ability, once per battle for each copy of this wargear its unit is equipped with, while the triggering unit is within 8\" of this unit and this unit is unengaged or while the triggering unit is within Engagement Range of this unit:\n  - Roll one D6: on a 3+, the triggering unit suffers 1 mortal wound.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]
@@ -80853,7 +80853,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "While the target unit is Below Half-strength, each successful Hit roll made by this model is a Critical Hit.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -83060,7 +83060,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "While this model is leading a friendly STORM GUARDIANS unit:\n  - Before a roll to determine the number of attacks is made with flamer weapons, you can use this ability: you can re-roll the Attacks roll.\n  - Before a Damage roll is made for an attack made by a model in this unit, you can use this ability: while making attacks made with fusion gun, you can re-roll Damage rolls.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -84527,7 +84527,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "This unit has Feel No Pain 4+ against mortal wounds, Psychic Attacks and Critical Wounds caused by attacks with [DEVASTATING WOUNDS].",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

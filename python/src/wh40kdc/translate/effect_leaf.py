@@ -17,9 +17,11 @@ from wh40kdc.translate.effect_leaf_access import permission, targeting
 from wh40kdc.translate.effect_leaf_board import describe_board_leaf
 from wh40kdc.translate.effect_leaf_shapes import (
     ability_activate,
+    ability_class_state,
     ability_limits,
     describe_shape_leaf,
 )
+from wh40kdc.translate.effect_orders import added_option_recipients, order_share, orders_modifier
 from wh40kdc.translate.effect_select import (
     select_units_subject,
     selection_binding,
@@ -76,6 +78,9 @@ LEAF_TYPES = frozenset(
         "weapon-grant",
         "ability-modifier",
         "oath-modifier",
+        "orders-modifier",
+        "order-share",
+        "reserves-schedule",
         "ability-activate",
         "permission",
         "targeting",
@@ -102,9 +107,11 @@ LEAF_TYPES = frozenset(
         "cp-gain",
         "cost-modifier",
         "resource-gain",
+        "resource-gain-cap",
         "resource-spend",
         "resource-die",
         "objective-sticky",
+        "region-extend",
         "designate",
         "army-rule",
         "test-exemption",
@@ -127,7 +134,9 @@ def _stat_change(m: dict[str, Any], what: str) -> str:
     """A stat change as a verb phrase over ``what``."""
     op = jstr(m.get("operation"))
     if op == "set":
-        return f"set {what} to {dice_case(m.get('value'))}"
+        # A Range is printed in inches ("a Range characteristic of 18\"").
+        inches = '"' if m.get("stat") == "Range" else ""
+        return f"set {what} to {dice_case(m.get('value'))}{inches}"
     if op == "halve":
         return f"halve {what}"
     if op == "multiply":
@@ -196,6 +205,16 @@ def _attack_maker(target: Any, m: dict[str, Any], subj: str) -> str:
     else:
         by = f" by {subj}"
     return f" if it is made{with_weapons}{by}" if with_weapons or by else ""
+
+
+def _not_cumulative_trail(m: dict[str, Any], of: str) -> str:
+    """ " (this is not cumulative with ...)": what a modifier does not stack with."""
+    nc = m.get("not_cumulative")
+    if nc == "negative-modifiers":
+        return f" (this is not cumulative with any other negative modifiers to that {of})"
+    if isinstance(nc, dict) and nc.get("ability") is not None:
+        return f" (this is not cumulative with the {ability_label(nc['ability'])} ability)"
+    return ""
 
 
 def _stat_modifier(e: Leaf, m: dict[str, Any], subj: str, ctx: Ctx) -> str:
@@ -269,8 +288,17 @@ def _ignore_modifiers(m: dict[str, Any], subj: str) -> str:
         if m.get("what") == "rolls" and isinstance(except_rolls, list) and except_rolls
         else ""
     )
+    # "you can ignore any or all modifiers to …": the player picks which modifiers to ignore.
+    any_or_all = m.get("choice") == "any-or-all"
+    which = "any or all" if any_or_all else "any"
     if m.get("incoming") is True:
-        return f"{_incoming_lead(m, subj)}ignore any {kind}modifiers to that attack's {things}{exc}"
+        lead = _incoming_lead(m, subj)
+        return f"{lead}ignore {which} {kind}modifiers to that attack's {things}{exc}"
+    if any_or_all:
+        return (
+            f"you can ignore any or all {kind}modifiers to {of_or_possessive(subj, things)}"
+            f"{exc}{weapon_roll_scope(m)}"
+        )
     return (
         f"{subj} {v(subj, 'ignores')} any {kind}modifiers to {pronoun(subj)} "
         f"{things}{exc}{weapon_roll_scope(m)}"
@@ -565,7 +593,17 @@ _ASPECTS = {
     "end-round": "last battle round",
     "threshold": "threshold",
     "options": "options",
+    "amount": "amount",
 }
+
+
+def _times_word(value: Any) -> str:
+    """"once", "twice", "3 times"."""
+    if is_num(value) and value == 1:
+        return "once"
+    if is_num(value) and value == 2:
+        return "twice"
+    return f"{jstr(value)} times"
 
 
 def _modified_ability(ref: Any, subj: str, ctx: Ctx) -> str:
@@ -582,7 +620,22 @@ def _modified_ability(ref: Any, subj: str, ctx: Ctx) -> str:
 
 
 def _ability_modifier(m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) -> str:
+    # "The bearer's unit can be regenerated up to twice per phase": times one unit can be affected.
+    if m.get("aspect") == "received":
+        label = ability_label(m.get("ability"))
+        times = _times_word(m.get("value"))
+        return f"{subj} can be affected by {label} up to {times}, in place of its usual limit"
     whose = _modified_ability(m.get("ability"), subj, ctx)
+    # "If it suffers one or more mortal wounds as a result of that Dark Pact, add 1 to the
+    # number of mortal wounds it suffers."
+    if m.get("aspect") == "mortal-wounds":
+        amount = jstr(m.get("value"))
+        subtract = m.get("operation") == "subtract"
+        change = f"subtract {amount} from" if subtract else f"add {amount} to"
+        return (
+            f"if {whose} inflicts one or more mortal wounds on {subj}, "
+            f"{change} the number of mortal wounds it suffers"
+        )
     aspect = _ASPECTS.get(jstr(m.get("aspect")), jstr(m.get("aspect")))
     raw = m.get("value")
     if (
@@ -611,7 +664,10 @@ def _ability_modifier(m: dict[str, Any], subj: str, ctx: Ctx, inline: Inline) ->
     option = None
     if opt is not None:
         o = opt if isinstance(opt, dict) else {}
-        option = f"the option {title_case(jstr(o.get('name')))} ({inline(o.get('effect'), ctx)})"
+        option = (
+            f"the option {title_case(jstr(o.get('name')))} "
+            f"({added_option_recipients(o, ctx)}{inline(o.get('effect'), ctx)})"
+        )
     op = m.get("operation")
     # An add with no value only widens the ability: it names the new recipients or option
     # instead of a count.
@@ -653,11 +709,25 @@ def _weapon_ability_range(m: dict[str, Any], subj: str) -> str:
 
 
 def _counts_as(m: dict[str, Any], subj: str, ctx: Ctx) -> str:
+    # "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
+    if m.get("model_count") is not None:
+        below = jstr(_obj(m["model_count"]).get("below"))
+        rule = dekebab(jstr(m.get("for_weapon_ability"))).upper()
+        return (
+            f"{subj} {v(subj, 'counts')} as containing fewer than {below} models "
+            f"for the purpose of the [{rule}] ability"
+        )
     if m.get("in_region") is not None:
         region = m["in_region"] if isinstance(m["in_region"], dict) else {}
         return f"{subj} {v(subj, 'counts')} as being within {region_phrase(region)}"
     of = effect_subject(m["of"], ctx) if m.get("of") is not None else "this model"
-    return f"{subj} {v(subj, 'counts')} as being within {range_phrase(m.get('within'))} of {of}"
+    # "for the purposes of the Psychic Guidance and Spirit Guides abilities".
+    purposes = ""
+    if isinstance(m.get("for_abilities"), list):
+        labels = list(dict.fromkeys(ability_label(i) for i in m["for_abilities"]))
+        purposes = f" for the purposes of the {and_list(labels)} abilities"
+    within = range_phrase(m.get("within"))
+    return f"{subj} {v(subj, 'counts')} as being within {within} of {of}{purposes}"
 
 
 _CORE_RULES = {
@@ -714,6 +784,11 @@ def _rule_state(m: dict[str, Any], subj: str) -> str:
         )
     granted = direction == "granted"
     rule = jstr(rule)
+    # "no mortal wounds are inflicted by your army's Daemonic Terror rule": one aspect of a
+    # section of the rule is off.
+    if m.get("sub_rule") is not None:
+        section = title_case(jstr(m["sub_rule"]))
+        return f"your army's {section} rule inflicts no mortal wounds on {subj}"
     if m.get("rule_kind") == "faction-rule":
         # any_army_faction: the granted faction rule works whatever the army's faction is.
         any_faction = ", whatever your Army Faction is" if m.get("any_army_faction") is True else ""
@@ -812,11 +887,11 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
     subj = effect_subject(e.get("target"), ctx)
     t = e.get("type")
     if t == "stat-modifier":
-        return _stat_modifier(e, m, subj, ctx)
+        return _stat_modifier(e, m, subj, ctx) + _not_cumulative_trail(m, "characteristic")
     if t == "ignore-modifiers":
         return _ignore_modifiers(m, subj)
     if t == "roll-modifier":
-        return _roll_modifier(m, subj, ctx)
+        return _roll_modifier(m, subj, ctx) + _not_cumulative_trail(m, "roll")
     if t == "re-roll":
         return _re_roll(e, m, subj, ctx)
     if t == "roll-result":
@@ -846,6 +921,11 @@ def describe_leaf(e: Leaf, ctx: Ctx, inline: Inline) -> str:
     if t == "counts-as":
         return _counts_as(m, subj, ctx)
     if t == "rule-state":
-        return _rule_state(m, subj)
+        ability_class = ability_class_state(e.get("target"), m, subj)
+        return ability_class if ability_class is not None else _rule_state(m, subj)
+    if t == "orders-modifier":
+        return orders_modifier(m, subj, ctx)
+    if t == "order-share":
+        return order_share(m, subj, ctx)
     shaped = describe_shape_leaf(e, m, subj, ctx)
     return shaped if shaped is not None else describe_board_leaf(e, m, subj, ctx, inline)

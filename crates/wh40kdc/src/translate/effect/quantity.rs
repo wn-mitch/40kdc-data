@@ -22,6 +22,7 @@ pub(crate) fn scale_of(of: &str) -> Option<&'static str> {
         "models-equipped-with" => "models in this unit equipped with",
         "enemy-units-in-range" => "enemy units",
         "wounds-lost" => "wounds lost",
+        "enemy-units-hit" => "enemy units hit by those attacks",
         "battle-round" => "battle round",
         _ => return None,
     })
@@ -43,6 +44,9 @@ pub(crate) fn scale_source(q: &P) -> String {
             }
         }
     }
+    if let Some(d) = nn(q, "designated") {
+        s = format!("{} {s}", dekebab(&jstr(Some(d))));
+    }
     if let Some(w) = nn(q, "within") {
         s.push_str(&format!(" within {}", range_phrase(Some(w))));
     }
@@ -62,14 +66,31 @@ pub(crate) fn scale_source(q: &P) -> String {
     s
 }
 
-fn battle_sized(q: &P) -> Option<String> {
-    BATTLE_SIZES.iter().all(|k| nn(q, k).is_some()).then(|| {
-        BATTLE_SIZES
-            .iter()
-            .map(|k| jstr(q.get(*k)))
-            .collect::<Vec<_>>()
-            .join("/")
-    })
+/// A battle-size table's values in print order and their size names, a Combat Patrol row first
+/// when it has one; `None` when it is not a full table.
+fn battle_sized(q: &P) -> Option<(String, &'static str)> {
+    if !BATTLE_SIZES.iter().all(|k| nn(q, k).is_some()) {
+        return None;
+    }
+    let patrol = nn(q, "combat-patrol").is_some();
+    let keys: Vec<&str> = if patrol {
+        std::iter::once("combat-patrol")
+            .chain(BATTLE_SIZES.iter().copied())
+            .collect()
+    } else {
+        BATTLE_SIZES.to_vec()
+    };
+    let values = keys
+        .iter()
+        .map(|k| jstr(q.get(*k)))
+        .collect::<Vec<_>>()
+        .join("/");
+    let names = if patrol {
+        "Combat Patrol/Incursion/Strike Force/Onslaught"
+    } else {
+        "Incursion/Strike Force/Onslaught"
+    };
+    Some((values, names))
 }
 
 /// A non-literal quantity as a noun phrase: one value per battle size, a bound roll's result,
@@ -82,8 +103,8 @@ pub(crate) fn quantity_phrase(q: &P) -> String {
     if let Some(c) = nn(q, "characteristic") {
         return format!("its {} characteristic", stat_name(Some(c)));
     }
-    if let Some(sizes) = battle_sized(q) {
-        return format!("{sizes} (Incursion/Strike Force/Onslaught)");
+    if let Some((sizes, names)) = battle_sized(q) {
+        return format!("{sizes} ({names})");
     }
     if q.get("roll_var").is_some_and(Value::is_string) {
         return match nn(q, "successes_on") {
@@ -97,6 +118,13 @@ pub(crate) fn quantity_phrase(q: &P) -> String {
             }
             Some(n) => format!("the number of those dice that rolled a {}+", jv(n)),
             None => "the result of that roll".to_string(),
+        };
+    }
+    // "the number of YP you just spent": the amount a resource-spend of this ability bound.
+    if q.get("spent").is_some_and(Value::is_string) {
+        return match nn(q, "per") {
+            Some(per) => format!("1 for every {} you spent", jv(per)),
+            None => "the amount you spent".to_string(),
         };
     }
     match q.get("count_of").and_then(Value::as_str) {
@@ -119,8 +147,14 @@ pub(crate) fn amount_of(q: Option<&Value>, one: &str, many: &str) -> String {
         return format!("{n} {}", if n == "1" { one } else { many });
     }
     let p = obj(q);
-    if let Some(sizes) = battle_sized(p) {
-        return format!("{sizes} {many} (Incursion/Strike Force/Onslaught)");
+    if let Some((sizes, names)) = battle_sized(p) {
+        return format!("{sizes} {many} ({names})");
+    }
+    // "for every 2YP you just spent, return one additional model": one per that many spent.
+    if p.get("spent").is_some_and(Value::is_string) {
+        if let Some(per) = nn(p, "per") {
+            return format!("1 {one} for every {} you spent", jv(per));
+        }
     }
     format!("a number of {many} equal to {}", quantity_phrase(p))
 }

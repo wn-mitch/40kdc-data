@@ -49,6 +49,15 @@ def roll_head(e: dict[str, Any]) -> str:
             f"roll a number of {dice_case(e.get('dice'))} equal to the {jstr(stat.get('stat'))} "
             f"characteristic of {unit_ref_phrase(stat.get('of'))}{extra}{kind}"
         )
+    # As many dice as a count from the battle's history ("the number of mortal wounds the unit
+    # suffered this phase").
+    history = e.get("count_history")
+    if isinstance(history, dict):
+        return (
+            f"roll a number of {dice_case(e.get('dice'))} equal to the number of mortal wounds "
+            f"{unit_ref_phrase(history.get('subject'))} suffered this {jstr(history.get('window'))}"
+            f"{extra}{kind}"
+        )
     return f"roll {dice_case(e.get('dice'))}{extra}{kind}"
 
 

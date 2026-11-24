@@ -32,4 +32,6 @@ def test_effect_translation(case: dict[str, Any]) -> None:
         ability["applies_to"] = case["applies_to"]
     if case.get("optional") is not None:
         ability["optional"] = case["optional"]
+    if case.get("ability_id") is not None:
+        ability["ability_id"] = case["ability_id"]
     assert describe_ability(ability) == case["expected"]["text"]

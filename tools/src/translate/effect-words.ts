@@ -23,6 +23,10 @@ export interface Ctx {
   auraRecipient?: boolean;
   /** Inside a `for-each-unit` over models: each pass's model (the recipient) reads "that model". */
   eachModel?: boolean;
+  /** Inside a `for-each-unit` over units: each pass's unit (the recipient) reads "that unit". */
+  eachUnit?: boolean;
+  /** The id of the record being described: a permission naming it is "this Stratagem". */
+  self?: string;
   /** The ability's trigger already says a unit or model is destroyed; leaves must not repeat it. */
   destroyedTrigger?: boolean;
   /** The ability's trigger already says damage/an attack is allocated; damage-reduction must not repeat it. */
@@ -58,6 +62,14 @@ export function diceCase(v: unknown): string {
 
 const BATTLE_SIZES = ["incursion", "strike-force", "onslaught"] as const;
 
+/** A battle-size table's sizes in print order, a Combat Patrol row first when it has one; null when it is not a full table. */
+function tableSizes(q: P): { keys: string[]; names: string } | null {
+  if (!BATTLE_SIZES.every((k) => q[k] != null)) return null;
+  return q["combat-patrol"] != null
+    ? { keys: ["combat-patrol", ...BATTLE_SIZES], names: "Combat Patrol/Incursion/Strike Force/Onslaught" }
+    : { keys: [...BATTLE_SIZES], names: "Incursion/Strike Force/Onslaught" };
+}
+
 /** What a count-of / scaling source counts, as a noun phrase. */
 export const SCALE_OF: Record<string, string> = {
   "enemy-models-in-range": "enemy models",
@@ -69,6 +81,7 @@ export const SCALE_OF: Record<string, string> = {
   "models-equipped-with": "models in this unit equipped with",
   "enemy-units-in-range": "enemy units",
   "wounds-lost": "wounds lost",
+  "enemy-units-hit": "enemy units hit by those attacks",
   "battle-round": "battle round",
 };
 
@@ -78,6 +91,7 @@ export function scaleSource(q: P): string {
   let s = SCALE_OF[of] ?? dekebab(of);
   if (of === "models-equipped-with") s += ` ${titleCase(jstr(q.wargear))}`;
   if (q.keyword != null) s = s.replace(/^models\b/, `${jstr(q.keyword)} models`);
+  if (q.designated != null) s = `${dekebab(jstr(q.designated))} ${s}`;
   if (q.within != null) s += ` within ${rangePhrase(q.within)}`;
   // A label that already ends in "marker" ("cult-ambush-marker") must not read "marker markers".
   if (of === "markers") s = `your ${dekebab(jstr(q.marker)).replace(/ marker$/i, "")} markers on the battlefield`;
@@ -92,13 +106,16 @@ export function quantityPhrase(q: P): string {
   if (isRatingRef(q)) return "its rating";
   // A characteristic of the effect's target unit: "its Psyker Level characteristic".
   if (q.characteristic != null) return `its ${statName(q.characteristic)} characteristic`;
-  if (BATTLE_SIZES.every((k) => q[k] != null)) return `${BATTLE_SIZES.map((k) => jstr(q[k])).join("/")} (Incursion/Strike Force/Onslaught)`;
+  const sized = tableSizes(q);
+  if (sized) return `${sized.keys.map((k) => jstr(q[k])).join("/")} (${sized.names})`;
   if (typeof q.roll_var === "string") {
     if (q.successes_on == null) return "the result of that roll";
     // "for each 1": the dice at or under the face.
     if (q.comparison === "lte") return Number(q.successes_on) === 1 ? "the number of those dice that rolled a 1" : `the number of those dice that rolled a ${jstr(q.successes_on)} or less`;
     return `the number of those dice that rolled a ${jstr(q.successes_on)}+`;
   }
+  // "the number of YP you just spent": the amount a resource-spend of this ability bound.
+  if (typeof q.spent === "string") return q.per != null ? `1 for every ${jstr(q.per)} you spent` : "the amount you spent";
   if (q.count_of === "battle-round") return "the battle round number";
   if (q.count_of === "embarked-models-oc") return `the total ${scaleSource(q)}`;
   if (q.count_of != null) return `the number of ${scaleSource(q)}`;
@@ -117,7 +134,10 @@ export function amountOf(q: unknown, one: string, many: string): string {
     return `${n} ${n === "1" ? one : many}`;
   }
   const p = q as P;
-  if (BATTLE_SIZES.every((k) => p[k] != null)) return `${BATTLE_SIZES.map((k) => jstr(p[k])).join("/")} ${many} (Incursion/Strike Force/Onslaught)`;
+  const sized = tableSizes(p);
+  if (sized) return `${sized.keys.map((k) => jstr(p[k])).join("/")} ${many} (${sized.names})`;
+  // "for every 2YP you just spent, return one additional model": one per that many spent.
+  if (typeof p.spent === "string" && p.per != null) return `1 ${one} for every ${jstr(p.per)} you spent`;
   return `a number of ${many} equal to ${quantityPhrase(p)}`;
 }
 
@@ -227,6 +247,10 @@ export function signed(operation: unknown, value: unknown): string {
 
 /** Dice comparison → "a 4+", "a 3 or less", etc. (for dice-gated thresholds). */
 export function formatComparison(comp: string, threshold: unknown): string {
+  // A threshold read from the battle round: "a result greater than the current battle round number".
+  if (typeof threshold === "object" && threshold !== null && (threshold as Record<string, unknown>).battle_round_plus === 1 && (comp === "gte" || comp === "")) {
+    return "a result greater than the current battle round number";
+  }
   const th = jstr(threshold);
   switch (comp) {
     case "lte": return `a ${th} or less`;
@@ -325,6 +349,7 @@ const ROLE_SUBJECTS: Record<string, string> = {
   "event-subject-model": "the triggering model",
   "event-object": "that unit",
   "event-object-model": "that model",
+  "event-object-transport": "the Transport",
   "stratagem-target": "that unit",
   "bearer-transport": "the Transport this unit is embarked within",
   "ability-unit": "this unit",
@@ -407,7 +432,7 @@ export function effectSubject(target: unknown, ctx: Ctx = {}): string {
     if (ctx.selectedUnit) return ctx.selectedPlural ? "those units" : "that unit";
     return "the selected unit";
   }
-  if (target === "recipient") return ctx.eachModel || ctx.selectedModel ? "that model" : ctx.auraRecipient || ctx.selectedUnit ? "that unit" : "this unit";
+  if (target === "recipient") return ctx.eachModel || ctx.selectedModel ? "that model" : ctx.auraRecipient || ctx.selectedUnit || ctx.eachUnit ? "that unit" : "this unit";
   if (target === "event-subject" && ctx.unitSubject === "that unit") return "that unit";
   if (target === "attacker") return ctx.unitSubject && ctx.unitSubject !== "that unit" ? ctx.unitSubject : "the attacking unit";
   if (typeof target === "string") return ROLE_SUBJECTS[target] ?? dekebab(target);

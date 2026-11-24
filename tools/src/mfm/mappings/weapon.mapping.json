@@ -651,6 +651,12 @@
       "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
       "reason": "Context-dependent keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
     },
+    "/profiles/*/keywords/*/parameters/value/combat-patrol": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Battle-size keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
     "/profiles/*/keywords/*/parameters/value/incursion": {
       "provenance": "repo-authored",
       "coverage": "unimplemented",
@@ -698,6 +704,18 @@
       "coverage": "unimplemented",
       "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
       "reason": "Bound-roll keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/per": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Spent-amount keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
+    },
+    "/profiles/*/keywords/*/parameters/value/spent": {
+      "provenance": "repo-authored",
+      "coverage": "unimplemented",
+      "sources": [], "joins": [], "transforms": [], "filters": [], "precedence": [], "consumers": [],
+      "reason": "Spent-amount keyword ratings are reviewed enrichment; the MFM weapon projection emits only flat or dice ratings."
     },
     "/profiles/*/keywords/*/parameters/value/successes_on": {
       "provenance": "repo-authored",

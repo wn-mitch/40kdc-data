@@ -5352,19 +5352,66 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "banishers",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "enemy"
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "happened",
+          "parameters": {
+            "event": "damage-allocated",
+            "object": "stratagem-target",
+            "filter": {
+              "attack_type": "mortal",
+              "by": "selected-unit"
+            },
+            "window": "phase"
+          }
+        }
+      },
+      "effect": {
+        "type": "roll",
+        "dice": "D6",
+        "count_history": {
+          "of": "mortal-wounds-suffered",
+          "subject": "this-unit",
+          "window": "phase"
+        },
+        "roll_var": "pool",
+        "effect": {
+          "type": "mortal-wounds",
+          "target": "selected-unit",
+          "modifier": {
+            "count": {
+              "roll_var": "pool",
+              "successes_on": 2
+            },
+            "max": 6,
+            "psychic": true
+          }
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended"
+    },
+    "source_digest": "21c41ea3254edaf904163c88f6f582a4d15186cde2613f48ec437eafecf8d16c"
   },
   {
     "ability_id": "inescapable-judgement-psychic-hallowed-conclave-grey-knights",
@@ -5372,19 +5419,84 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "hallowed-conclave",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "engaged_with": "this-unit"
+          }
+        }
+      },
+      "effect": {
+        "type": "dice-table",
+        "dice": "D6",
+        "outcomes": [
+          {
+            "results": [
+              1
+            ],
+            "effect": {
+              "type": "no-effect"
+            }
+          },
+          {
+            "results": [
+              2,
+              3,
+              4,
+              5
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "event-subject",
+              "modifier": {
+                "count": "D3",
+                "psychic": true
+              }
+            }
+          },
+          {
+            "results": [
+              6
+            ],
+            "effect": {
+              "type": "mortal-wounds",
+              "target": "event-subject",
+              "modifier": {
+                "count": "D3+3",
+                "psychic": true
+              }
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "move-ended",
+      "filter": {
+        "move_types": [
+          "fall-back"
+        ]
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "optional": true
+    },
+    "source_digest": "672453dc15b5665b4ce75bdad2e291cb83f0cd93395980825716e4a45b73a74f"
   },
   {
     "ability_id": "mandulian-reliquary-warpbane-task-force-grey-knights",
@@ -5480,19 +5592,67 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "augurium-task-force",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "act-on-death",
+        "target": "event-object",
+        "modifier": {
+          "act": "fight",
+          "resolution": "after-attacking-unit-finishes",
+          "removal": "after-destroyed-model-fights",
+          "gate": {
+            "dice": "D6",
+            "threshold": {
+              "battle_round_plus": 1
+            },
+            "comparison": "gte",
+            "modifiers": []
+          },
+          "eligibility": {
+            "operator": "not",
+            "operands": [
+              {
+                "type": "happened",
+                "parameters": {
+                  "subject": "event-object",
+                  "event": "selected",
+                  "filter": {
+                    "to": "fight"
+                  },
+                  "window": "phase"
+                }
+              }
+            ]
+          }
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "307557ae2ddf601ae2f53a5292c96d6c943f813d8de09dc5e991782e6c1f2009"
   },
   {
     "ability_id": "nemesis-rounds-hallowed-conclave-grey-knights",
@@ -7336,19 +7496,114 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "crowes-sanctifiers",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "move-ended",
+            "filter": {
+              "move_types": [
+                "charge"
+              ]
+            },
+            "subject": {
+              "owner": "friendly",
+              "all_of": [
+                "CROWE'S SANCTIFIERS"
+              ]
+            },
+            "optional": true
+          },
+          "effect": {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "subject": "event-subject",
+                "event": "move-ended",
+                "filter": {
+                  "move_types": [
+                    "ingress"
+                  ]
+                },
+                "window": "turn"
+              }
+            },
+            "effect": {
+              "type": "select-units",
+              "selector": {
+                "filter": {
+                  "owner": "enemy"
+                },
+                "count": {
+                  "min": 1,
+                  "max": 1
+                },
+                "eligibility": {
+                  "type": "matches",
+                  "parameters": {
+                    "subject": "selected-unit",
+                    "filter": {
+                      "engaged_with": "event-subject"
+                    }
+                  }
+                }
+              },
+              "effect": {
+                "type": "test",
+                "target": "selected-unit",
+                "modifier": {
+                  "test": "battle-shock"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "game-mode",
+            "parameters": {
+              "modes": [
+                "combat-patrol"
+              ]
+            }
+          },
+          "effect": {
+            "type": "reserves-schedule",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "entries": [
+                {
+                  "unit_id": "crowes-sanctifiers-brotherhood-terminator-squad",
+                  "battle_round": 2
+                },
+                {
+                  "unit_id": "crowes-sanctifiers-venerable-dreadnought",
+                  "battle_round": 3
+                }
+              ],
+              "set_up": "wholly-within-deployment-zone"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "b4c4271a15897d6b99769fe88f9c9f19dd5b01230d8a3cf778ec9261899b4b37"
   },
   {
     "ability_id": "tome-of-forbidden-ways-brotherhood-strike-grey-knights",
@@ -7517,19 +7772,85 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "hallowed-conclave",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "conditional",
+        "condition": {
+          "operator": "not",
+          "operands": [
+            {
+              "operator": "or",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "event-object",
+                    "event": "selected",
+                    "filter": {
+                      "to": "fight"
+                    },
+                    "window": "phase"
+                  }
+                },
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "event-object",
+                    "event": "selected",
+                    "filter": {
+                      "to": "shoot"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "effect": {
+          "type": "dice-gated",
+          "dice": "D6",
+          "threshold": 4,
+          "comparison": "gte",
+          "on_success": {
+            "type": "act-on-death",
+            "target": "event-object",
+            "modifier": {
+              "act": "shoot-or-fight",
+              "resolution": "after-attacking-unit-finishes",
+              "removal": "after-destroyed-model-fights"
+            }
+          },
+          "on_fail": null
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "1c382273a11ef9fe73e2707905dfaa5862cd0b5537c9d568cdb8df3626ef2fb0"
   },
   {
     "ability_id": "vigilance-of-titan-argent-assault-grey-knights",
@@ -7606,19 +7927,35 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "grey-knights",
     "detachment_id": "banishers",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "feel-no-pain",
+      "target": "this-unit",
+      "modifier": {
+        "threshold": 5,
+        "against": "damage-1-unmodified"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "ed14390f85a377aba64937cee1ae2c614ef60e477477df795957fa71859015ce"
   },
   {
     "ability_id": "warrior-strategist-grand-master-in-nemesis-dreadknight-grey-knights",

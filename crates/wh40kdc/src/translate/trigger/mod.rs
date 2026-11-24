@@ -316,7 +316,9 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
             crate::translate::effect::weapon_noun(f)
         ));
     }
-    if let Some(by) = nn(f, "by") {
+    if let Some(by) =
+        nn(f, "by").filter(|_| !(event == Some("state-changed") && nn(f, "strength").is_some()))
+    {
         let source = if by.as_str() == Some("this-unit") {
             "this unit".to_string()
         } else {
@@ -345,6 +347,14 @@ pub fn describe_trigger_value(trigger: &Value) -> String {
     // A destruction resolved once its attacker is done.
     if is(f, "timing", "after-attacks") {
         s.push_str(", after the attacking unit has resolved its attacks");
+    }
+    // "Just after … is destroyed, before making its Deadly Demise roll".
+    if is(f, "timing", "before-deadly-demise") {
+        s.push_str(", before its Deadly Demise roll is made");
+    }
+    // "Ends a move within 8 inches of your markers, before removing those markers".
+    if is(f, "timing", "before-marker-removal") {
+        s.push_str(", before those markers are removed");
     }
     let proximity = obj(t.get("proximity"));
     if let Some(range) = nn(proximity, "range") {

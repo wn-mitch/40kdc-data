@@ -168,10 +168,12 @@ func usageClause(usage any) string {
 	case "first-time-this-turn":
 		base = "the first time each turn"
 	case "n-per-battle":
-		switch n {
-		case 1:
+		switch {
+		case u["count_from"] == "equipped-wargear":
+			base = "once per battle for each copy of this wargear its unit is equipped with"
+		case n == 1:
 			base = "once per battle"
-		case 2:
+		case n == 2:
 			base = "twice per battle"
 		default:
 			base = numStr(n) + " times per battle"
@@ -179,7 +181,8 @@ func usageClause(usage any) string {
 	default:
 		base = dekebab(ejstr(u["frequency"]))
 	}
-	if u["per"] != nil {
+	// A count from the unit's loadout is already its unit's: no "per unit" after it.
+	if u["per"] != nil && u["count_from"] == nil {
 		return base + " per " + ejstr(u["per"])
 	}
 	return base
@@ -188,10 +191,16 @@ func usageClause(usage any) string {
 // partHead renders what leads an ability part: its moment, usage limit, name,
 // the choice to use it and its cost.
 func partHead(e map[string]any) string {
+	// A part armed for the phase that fires when the phase ends fires once, at the end of this phase.
+	thisPhaseEnd := e["duration"] == "phase" && isBarePhaseEnd(e["trigger"])
 	var moments []string
-	for _, t := range normalizeTriggers(e["trigger"]) {
-		if s := describeReactiveTrigger(withAuraRecipient(t, mapOr(e["effect"]))); s != "" {
-			moments = append(moments, s)
+	if thisPhaseEnd {
+		moments = []string{"at the end of the phase"}
+	} else {
+		for _, t := range normalizeTriggers(e["trigger"]) {
+			if s := describeReactiveTrigger(withAuraRecipient(t, mapOr(e["effect"]))); s != "" {
+				moments = append(moments, s)
+			}
 		}
 	}
 	level := ""
@@ -224,12 +233,13 @@ func partHead(e map[string]any) string {
 	if isObject(e["usage"]) {
 		usage = usageClause(e["usage"])
 	}
+
 	// A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
 	// Skip when the inner designate-target / persistent-designation already prints the same duration.
 	innerEff := mapOr(e["effect"])
 	ownDesigDur := (innerEff["type"] == "designate-target" || innerEff["type"] == "persistent-designation") && innerEff["duration"] == e["duration"]
 	trail := ""
-	if !ownDesigDur {
+	if !ownDesigDur && !thisPhaseEnd {
 		_, trail = durationClauses(e["duration"])
 		if strings.HasSuffix(trail, "control it") {
 			trail = strings.TrimSuffix(trail, "it") + "that objective marker"
@@ -249,6 +259,12 @@ func partTriggerCtx(e map[string]any, ctx effCtx) effCtx {
 		}
 	}
 	return ctx
+}
+
+// isBarePhaseEnd is a trigger that is only the end of a phase: no phase, turn or other gate named.
+func isBarePhaseEnd(trigger any) bool {
+	t, ok := trigger.(map[string]any)
+	return ok && t["event"] == "phase-ended" && len(t) == 1
 }
 
 // partWithModelRefs is a part with its own trigger, its effect's event refs read as that trigger's
@@ -406,7 +422,8 @@ func describeAbility(a map[string]any) string {
 	rendered := ""
 	if e, ok := asMap(a["effect"]); ok && e != nil {
 		scope, _ := asMap(a["scope"])
-		rendered = renderTopLevel(e, scope, a["usage"], a["trigger"], optional)
+		self, _ := a["ability_id"].(string)
+		rendered = renderTopLevel(e, scope, a["usage"], a["trigger"], optional, self)
 	}
 	core := rendered
 	if optional {
@@ -426,8 +443,8 @@ func conditionWithinRange(c map[string]any) (float64, bool) {
 	return f, ok
 }
 
-func renderTopLevel(e, scope map[string]any, usage, trigger any, optional bool) string {
-	ctx := effCtx{}
+func renderTopLevel(e, scope map[string]any, usage, trigger any, optional bool, self string) string {
+	ctx := effCtx{self: self}
 	var scopeDuration any
 	if scope != nil {
 		scopeDuration = scope["duration"]

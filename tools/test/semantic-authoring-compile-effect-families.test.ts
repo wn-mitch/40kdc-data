@@ -170,17 +170,17 @@ describe("Semantic authoring batch-3 families: targeting, eligibility and unit-s
     }
   });
 
-  it("compiles ignore-modifiers@4 rolls left out of an \"any roll\" list, on the rolls kind only", () => {
+  it("compiles ignore-modifiers@6 rolls left out of an \"any roll\" list, on the rolls kind only", () => {
     const params = { subject: "this-unit", what: ["characteristics", "rolls"], rolls: ["all"], except_rolls: ["save"] };
-    expect(compiled([leaf("EFFECT", "ignore-modifiers", params, 4)]).mechanics.effect).toEqual({
+    expect(compiled([leaf("EFFECT", "ignore-modifiers", params, 6)]).mechanics.effect).toEqual({
       type: "sequence",
       steps: [
         { type: "ignore-modifiers", target: "this-unit", modifier: { what: "characteristics" } },
         { type: "ignore-modifiers", target: "this-unit", modifier: { what: "rolls", rolls: ["all"], except_rolls: ["save"] } },
       ],
     });
-    expect(rendered(base(), [leaf("EFFECT", "ignore-modifiers", params, 4)])).toMatch(/except saving throw rolls/u);
-    const normalize = (input: Record<string, unknown>) => normalizeFingerprintParameters("ignore-modifiers", input, 4);
+    expect(rendered(base(), [leaf("EFFECT", "ignore-modifiers", params, 6)])).toMatch(/except saving throw rolls/u);
+    const normalize = (input: Record<string, unknown>) => normalizeFingerprintParameters("ignore-modifiers", input, 6);
     // Leaving a roll out only means something against "any roll".
     expect(() => normalize({ subject: "this-unit", what: ["rolls"], rolls: ["hit"], except_rolls: ["save"] })).toThrow(/rolls must be all or any/u);
     expect(() => normalize({ subject: "this-unit", what: ["rolls"], rolls: ["all"], except_rolls: ["all"] })).toThrow();
@@ -188,10 +188,10 @@ describe("Semantic authoring batch-3 families: targeting, eligibility and unit-s
 
   it("compiles a faction rule granted whatever the Army Faction (rule-state) and the Dark Pact test's auto-pass (roll-auto-result)", () => {
     const grant = { subject: "this-unit", direction: "granted", rule_kind: "faction-rule", rule: "dark-pacts", any_army_faction: true }; // mfm:mirror keep — a fabricated rule id
-    expect(compiled([leaf("EFFECT", "rule-state", grant, 4)]).mechanics.effect).toEqual({
+    expect(compiled([leaf("EFFECT", "rule-state", grant, 6)]).mechanics.effect).toEqual({
       type: "rule-state", target: "this-unit", modifier: { direction: "granted", rule_kind: "faction-rule", rule: "dark-pacts", any_army_faction: true }, // mfm:mirror keep — a fabricated rule id
     });
-    expect(() => normalizeFingerprintParameters("rule-state", { ...grant, direction: "suppressed" }, 4)).toThrow(/granted faction rule/u);
+    expect(() => normalizeFingerprintParameters("rule-state", { ...grant, direction: "suppressed" }, 6)).toThrow(/granted faction rule/u);
     expect(compiled([leaf("EFFECT", "roll-auto-result", { roll: "dark-pact", outcome: "auto-pass" })]).mechanics.effect)
       .toMatchObject({ type: "roll-result", modifier: { roll: "dark-pact", result: "pass" } });
     expect(() => normalizeFingerprintParameters("roll-auto-result", { roll: "dark-pact", outcome: "counts-as-6" })).toThrow(/automatic pass/u);

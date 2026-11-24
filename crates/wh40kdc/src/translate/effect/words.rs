@@ -30,6 +30,10 @@ pub(crate) struct Ctx {
     pub aura_recipient: bool,
     /// Inside a `for-each-unit` over models: each pass's model (the recipient) reads "that model".
     pub each_model: bool,
+    /// Inside a `for-each-unit` over units: each pass's unit (the recipient) reads "that unit".
+    pub each_unit: bool,
+    /// The id of the record being described: a permission naming it is "this Stratagem".
+    pub self_id: Option<String>,
     /// The ability's trigger already says a unit or model is destroyed; leaves must not repeat it.
     pub destroyed_trigger: bool,
     /// The ability's trigger already says damage/an attack is allocated; damage-reduction must not repeat it.
@@ -312,6 +316,16 @@ pub(crate) fn signed(operation: Option<&Value>, value: Option<&Value>) -> String
 
 /// Dice comparison → "a 4+", "a 3 or less", etc. (for dice-gated thresholds).
 pub(crate) fn format_comparison(comp: &str, threshold: Option<&Value>) -> String {
+    // A threshold read from the battle round: "a result greater than the current battle round number".
+    if threshold
+        .and_then(Value::as_object)
+        .and_then(|t| t.get("battle_round_plus"))
+        .and_then(Value::as_f64)
+        == Some(1.0)
+        && (comp == "gte" || comp.is_empty())
+    {
+        return "a result greater than the current battle round number".to_string();
+    }
     let th = jstr(threshold);
     match comp {
         "lte" => format!("a {th} or less"),

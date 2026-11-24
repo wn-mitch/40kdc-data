@@ -335,6 +335,30 @@ describe("integrity: phase-4 bindings", () => {
     expect(await run({ type: "sequence", steps: [menu({ type: "no-effect" }), gate] })).toEqual(['roll-total "psychic-test" is not inside a roll step or ritual menu that binds it']);
   });
 
+  it("reads a Dark Pact test total only under the trigger that binds that test", async () => {
+    const gate = { type: "conditional", condition: { type: "roll-total", parameters: { roll_var: "dark-pact-test", min: 8 } }, effect: { type: "no-effect" } };
+    const pact = { event: "after-roll", filter: { roll: "dark-pact", result: "success" } };
+    const runWith = async (trigger: unknown): Promise<string[]> => {
+      writeFileSync(join(root, "enrichment/probe/abilities.json"), JSON.stringify([ability(gate, { trigger })]));
+      writeFileSync(join(root, "core/probe/stratagems.json"), "[]");
+      const result: ValidationResult = { totalFiles: 0, totalItems: 0, passed: 0, failed: 0, errors: [] };
+      await checkDslShapes(root, result);
+      return result.errors.flatMap((e) => e.errors.map((x) => x.message));
+    };
+    const unbound = ['roll-total "dark-pact-test" is not inside a roll step or ritual menu that binds it'];
+    expect(await runWith(pact)).toEqual(unbound);
+    expect(await runWith({ ...pact, binds_roll_variable: "dark-pact-test" })).toEqual([]);
+    // A trigger list binds through any of its triggers; a binder under another name binds nothing here.
+    expect(await runWith([{ event: "turn-ended" }, { ...pact, binds_roll_variable: "dark-pact-test" }])).toEqual([]);
+    expect(await runWith({ ...pact, binds_roll_variable: "other-test" })).toEqual(unbound);
+  });
+
+  it("accepts a trigger roll binder only on an after-roll trigger", () => {
+    const gate = { type: "conditional", condition: { type: "roll-total", parameters: { roll_var: "dark-pact-test", min: 8 } }, effect: { type: "no-effect" } };
+    expect(abilityOk(ability(gate, { behavior: "reactive", trigger: { event: "after-roll", filter: { roll: "dark-pact", result: "success" }, binds_roll_variable: "dark-pact-test" } }))).toBe(true);
+    expect(abilityOk(ability(gate, { behavior: "reactive", trigger: { event: "used", filter: { kind: "dark-pact" }, binds_roll_variable: "dark-pact-test" } }))).toBe(false);
+  });
+
   it("requires bound objectives, bound weapons and one binding per split unit", async () => {
     expect(await run(leaf("designate", { subject: { objective: { selection_var: "o" } }, tag: "mutated" }))).toEqual([
       'objective {selection_var: "o"} is not inside a select-objective that binds it',

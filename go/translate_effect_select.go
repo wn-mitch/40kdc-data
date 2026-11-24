@@ -164,10 +164,13 @@ func selectUnitsPlural(sel map[string]any) bool {
 	return jsNumber(max) != 1
 }
 
-// eachContext is a for-each-unit body's context: a loop over models names each pass's model "that model".
+// eachContext is a for-each-unit body's context: a loop over models names each pass's model "that
+// model", a loop over units its unit "that unit".
 func eachContext(ctx effCtx, sel map[string]any) effCtx {
 	ctx = selectedContextPlural(ctx, sel, false)
-	ctx.eachModel = selectorNoun(sel) == "model"
+	model := selectorNoun(sel) == "model"
+	ctx.eachModel = model
+	ctx.eachUnit = !model
 	return ctx
 }
 
@@ -234,6 +237,10 @@ func designationLabel(designation any) string {
 }
 
 func designationTargetSubject(sel map[string]any) string {
+	// "that enemy unit", the moment's unit: designated with no choice.
+	if from := sel["from"]; from != nil {
+		return unitRefPhrase(from, "the unit")
+	}
 	selector := mapOr(sel["selector"])
 	if sel["kind"] == "objective" {
 		return objectiveSelectorPhrase(selector)
@@ -244,6 +251,38 @@ func designationTargetSubject(sel map[string]any) string {
 func designationAttackerPhrase(applies map[string]any, block bool) string {
 	model, hasModel := asMap(applies["attacker_filter"])
 	unit, hasUnit := asMap(applies["attacker_unit_filter"])
+	action := " attacks it"
+	if block {
+		action = " makes an attack against it"
+	}
+	// "each time an ARMIGER model in the lead target or the bondsmen target makes an attack": the
+	// attacks of the Stratagem targets the entry names, optionally only those of its models the
+	// filter admits.
+	if raw := applies["attacker"]; raw != nil {
+		refs, isList := raw.([]any)
+		if !isList {
+			refs = []any{raw}
+		}
+		noun := "model"
+		if hasModel && model != nil {
+			copy := map[string]any{}
+			for k, v := range model {
+				copy[k] = v
+			}
+			copy["owner"] = "any"
+			copy["level"] = "model"
+			noun = selectorSubject(map[string]any{"filter": copy}, false)
+		}
+		article := "a"
+		if noun != "" && strings.ContainsRune("aeiouAEIOU", rune(noun[0])) {
+			article = "an"
+		}
+		units := make([]string, 0, len(refs))
+		for _, ref := range refs {
+			units = append(units, unitRefPhrase(ref, "the unit"))
+		}
+		return "each time " + article + " " + noun + " in " + orList(units) + action
+	}
 	attacker := "a friendly unit"
 	if hasUnit && unit != nil {
 		modelSubject := "model"

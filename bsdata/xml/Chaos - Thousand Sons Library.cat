@@ -9711,10 +9711,10 @@ Friendly THOUSAND SONS units gain the Mortal Sorcery ability:
                   <description>Until the end of the phase:
   - When an enemy unit targets a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword, you can use this ability:
     - If the target unit is the same unit as that unit, subtract 1 from the attacking unit's Wound rolls.
-    - At the end of each phase, until the end of the phase, that unit suffers D3 mortal wounds.
+    - At the end of the phase, that unit suffers D3 mortal wounds.
   - When a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword is selected to shoot, you can use this ability or when a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword is selected to fight, you can use this ability:
     - Add 1 to the triggering unit's Wound rolls.
-    - At the end of each phase, until the end of the phase, the triggering unit suffers D3 mortal wounds.</description>
+    - At the end of the phase, the triggering unit suffers D3 mortal wounds.</description>
                 </rule>
               </rules>
               <categoryLinks>

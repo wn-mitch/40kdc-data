@@ -21,6 +21,7 @@ mod leadin;
 mod predicate;
 pub(crate) use predicate::step_window;
 mod refs;
+mod resource;
 
 use serde_json::Value;
 

@@ -243,6 +243,14 @@ pub(super) fn movement(m: &P, subj: &str, ctx: &Ctx) -> String {
             passthrough(p)
         ));
     }
+    if let Some(k) = arr(m, "as_if_keywords") {
+        let keywords: Vec<String> = k.iter().map(|x| jstr(Some(x))).collect();
+        s.push_str(&format!(
+            " (when doing so, its models move as if they had the {} keyword{})",
+            and_list(&keywords),
+            if k.len() > 1 { "s" } else { "" }
+        ));
+    }
     if let Some(ends) = nn(m, "ends_within") {
         let ends = obj(Some(ends));
         let of = ends_of(ends.get("of"), ctx);
@@ -324,8 +332,16 @@ pub(super) fn move_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
         .filter(|advance| matches!(*advance, "fixed-6" | "fixed-8"))
         .and_then(|advance| advance.strip_prefix("fixed-"))
     {
+        // "(this is not cumulative with the Matchless Swiftness ability)": the named ability's own Move bonus.
+        let trail = match nn(m, "not_cumulative").and_then(|nc| nn(obj(Some(nc)), "ability")) {
+            Some(ability) => format!(
+                " (this is not cumulative with the {} ability)",
+                ability_label(Some(ability))
+            ),
+            None => String::new(),
+        };
         clauses.push(format!(
-            "{subj} {} not make an Advance roll; add {inches}\" to {} Move characteristic instead",
+            "{subj} {} not make an Advance roll; add {inches}\" to {} Move characteristic instead{trail}",
             v(subj, "does"),
             pronoun(subj)
         ));
@@ -482,7 +498,13 @@ pub(super) fn set_up(m: &P, subj: &str, ctx: &Ctx) -> String {
         } else {
             String::new()
         };
-        return format!("{who} {can} be placed into Strategic Reserves{limits}{arrival}");
+        // "That unit heals 10 wounds and is placed in strategic reserves": a destroyed unit returned.
+        let placed = if sv(m, "from") == Some("destroyed") {
+            "is returned to the battle and placed".to_string()
+        } else {
+            format!("{can} be placed")
+        };
+        return format!("{who} {placed} into Strategic Reserves{limits}{arrival}");
     }
     let from = match sv(m, "from") {
         Some("strategic-reserves") => " from Strategic Reserves",

@@ -145,10 +145,16 @@ export function isEventSubject(ref: unknown): boolean {
   return ref === "event-subject" || ref === EVENT_SUBJECT_MODEL;
 }
 
-/** Whether every trigger names a model as its `role` (its subject or object). */
+/** The unit ref naming one model of this unit ("each time a model in your unit is destroyed"): its event's unit is that model. */
+const ONE_MODEL_REF = "model-in-this-unit";
+
+/** Whether every trigger names a model as its `role` (its subject or object): a model-level filter, or one model of this unit. */
 function allModels(triggers: readonly { event?: unknown }[], role: "subject" | "object"): boolean {
   const live = triggers.filter((t) => t.event != null);
-  return live.length > 0 && live.every((t) => ((t as Record<string, unknown>)[role] as { level?: unknown } | undefined)?.level === "model");
+  return live.length > 0 && live.every((t) => {
+    const named = (t as Record<string, unknown>)[role];
+    return named === ONE_MODEL_REF || (named as { level?: unknown } | undefined)?.level === "model";
+  });
 }
 
 /**
@@ -158,6 +164,7 @@ function allModels(triggers: readonly { event?: unknown }[], role: "subject" | "
  * part's event instead, so it is left for the part to rewrite when it renders.
  */
 export function modelEventRefs<T>(value: T, triggers: readonly { event?: unknown }[]): T {
+  value = transportRefs(value, triggers);
   const rewrite = (v: unknown, object: boolean, subject: boolean): unknown => {
     if (object && v === "event-object") return EVENT_OBJECT_MODEL;
     if (subject && v === "event-subject") return EVENT_SUBJECT_MODEL;
@@ -176,6 +183,30 @@ export function modelEventRefs<T>(value: T, triggers: readonly { event?: unknown
   return object || subject ? (rewrite(value, object, subject) as T) : value;
 }
 
+/** The describer's spelling of `event-object` under a disembarked moment: the Transport the unit disembarked from. */
+export const EVENT_OBJECT_TRANSPORT = "event-object-transport";
+
+/**
+ * `value` with its `event-object` refs spelled `EVENT_OBJECT_TRANSPORT` when every trigger is a
+ * disembarked moment ("disembarks from a TRANSPORT that made a Normal move this phase"). Inside an
+ * `ability-part` with a trigger of its own, the ref names that part's event and is left alone.
+ */
+function transportRefs<T>(value: T, triggers: readonly { event?: unknown }[]): T {
+  const live = triggers.filter((t) => t.event != null);
+  if (live.length === 0 || !live.every((t) => t.event === "disembarked")) return value;
+  const rewrite = (v: unknown): unknown => {
+    if (v === "event-object") return EVENT_OBJECT_TRANSPORT;
+    if (Array.isArray(v)) return v.map(rewrite);
+    if (v != null && typeof v === "object") {
+      const o = v as Record<string, unknown>;
+      const own = o.type === "ability-part" && o.trigger != null;
+      return Object.fromEntries(Object.entries(o).map(([k, x]) => [k, own && k === "effect" ? x : rewrite(x)]));
+    }
+    return v;
+  };
+  return rewrite(value) as T;
+}
+
 /** Whether any trigger of a spec (one trigger or a list) with an event names a `role`. */
 function namesRole(trigger: unknown, role: "subject" | "object"): boolean {
   const list = Array.isArray(trigger) ? trigger : trigger != null ? [trigger] : [];
@@ -192,6 +223,7 @@ const ROLE_PHRASES: Record<string, string> = {
   "event-subject-model": "the triggering model",
   "event-object": "that unit",
   "event-object-model": "that model",
+  "event-object-transport": "the Transport",
   "stratagem-target": "the Stratagem's target",
   "selected-unit": "the selected unit",
   recipient: "this unit",
@@ -342,9 +374,13 @@ export function objectivePhrase(f: P, plural = false, noun = "objective"): strin
     const within = f.within as P;
     s += ` within ${rangePhrase(within.range)} of ${placeRefPhrase(within.of)}`;
   }
+  // "visible to one or more models in your unit".
+  if (f.visible_to != null) s += ` visible to ${f.visible_to === "this-unit" ? "one or more models in the unit" : unitRefPhrase(f.visible_to)}`;
   // "that your unit was controlling when it was destroyed": the unit's control when the rule was triggered.
   if (f.controlled_by_unit != null) s += ` that ${unitRefPhrase(f.controlled_by_unit)} was controlling ${f.controlled_at === "previous-phase-end" ? "at the end of the previous phase" : "when the rule was triggered"}`;
   if (f.clear_of != null) s += `, with no ${unitFilterPhrase(f.clear_of as P).replace(/^an? /, "").replace(/\bunit\b/, "units")} within range of it`;
+  // "that has a friendly unit with this ability within range of it".
+  if (f.occupied_by != null) s += `, with one or more ${unitFilterPhrase(f.occupied_by as P).replace(/^an? /, "").replace(/\bunit\b/, "units")} within range of it`;
   return s;
 }
 
@@ -419,10 +455,12 @@ export function usageClause(u: AbilityUsage | AbilityUsage[]): string {
     case "first-this-battle": base = "the first time this battle"; break;
     case "first-time-this-phase": base = "the first time this phase"; break;
     case "first-time-this-turn": base = "the first time each turn"; break;
-    case "n-per-battle": base = n === 1 ? "once per battle" : n === 2 ? "twice per battle" : `${str(n)} times per battle`; break;
+    case "n-per-battle": base = u.count_from === "equipped-wargear" ? "once per battle for each copy of this wargear its unit is equipped with"
+      : n === 1 ? "once per battle" : n === 2 ? "twice per battle" : `${str(n)} times per battle`; break;
     default: base = dekebab(str(u.frequency));
   }
-  return u.per != null ? `${base} per ${str(u.per)}` : base;
+  // A count from the unit's loadout is already its unit's: no "per unit" after it.
+  return u.per != null && u.count_from == null ? `${base} per ${str(u.per)}` : base;
 }
 
 

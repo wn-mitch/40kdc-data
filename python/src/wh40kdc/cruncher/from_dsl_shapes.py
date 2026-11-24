@@ -7,6 +7,7 @@ Python mirror of the phase-4 helpers in ``tools/src/cruncher/from-dsl.ts``.
 
 from __future__ import annotations
 
+import math
 from collections.abc import Callable
 from typing import Any
 
@@ -71,14 +72,69 @@ def unsized_value_reason(node: dict[str, Any]) -> str | None:
         v = modifier.get(field)
         if not isinstance(v, dict):
             continue
+        # "spend up to 2YP": the player picks how much a spend spends; it sizes no buff.
+        if node_type == "resource-spend" and field == "amount" and "up_to" in v:
+            continue
         if isinstance(v.get("roll_var"), str):
             what = "a bound roll"
         elif isinstance(v.get("count_of"), str):
             what = f"the number of {v['count_of']}"
+        elif isinstance(v.get("spent"), str):
+            what = "the amount spent"
         else:
             what = "the battle size"
         return f"{node_type}: its {field} is set by {what}; not resolved by the buff engine"
     return None
+
+
+def spent_maxima(effect: Any) -> dict[str, Any]:
+    """The most each resource-spend of an effect that binds its amount (bind_as) can spend: its
+    ``{up_to}`` amount."""
+    maxima: dict[str, Any] = {}
+
+    def visit(node: Any) -> None:
+        if isinstance(node, list):
+            for item in node:
+                visit(item)
+            return
+        if not isinstance(node, dict):
+            return
+        modifier = node.get("modifier")
+        if node.get("type") == "resource-spend" and isinstance(modifier, dict):
+            amount = modifier.get("amount")
+            name = modifier.get("bind_as")
+            up_to = amount.get("up_to") if isinstance(amount, dict) else None
+            if isinstance(name, str) and _is_number(up_to):
+                maxima[name] = up_to
+        for key in sorted(node):
+            visit(node[key])
+
+    visit(effect)
+    return maxima
+
+
+def spent_at_most(
+    node: dict[str, Any], maxima: dict[str, Any] | None
+) -> tuple[dict[str, Any], dict[str, Any]] | None:
+    """A leaf whose one bound size is a spent amount (``{spent, per?}``) with a known most, as
+    the leaf at that most (one per ``per``, rounded down), with the spend the lever requires."""
+    modifier = node.get("modifier")
+    if maxima is None or not isinstance(modifier, dict) or not isinstance(node.get("type"), str):
+        return None
+    if "scaling" in node:
+        return None
+    bound = [field for field in _SIZED_FIELDS if isinstance(modifier.get(field), dict)]
+    if len(bound) != 1:
+        return None
+    field = bound[0]
+    ref = modifier[field]
+    name = ref.get("spent")
+    if not isinstance(name, str) or name not in maxima:
+        return None
+    most = maxima[name]
+    per = ref.get("per")
+    value = math.floor(most / per) if _is_number(per) else most
+    return {**node, "modifier": {**modifier, field: value}}, {"spent": name, "amount": most}
 
 
 def scaled_to_cap(node: dict[str, Any]) -> dict[str, Any] | None:

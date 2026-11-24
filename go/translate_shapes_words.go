@@ -236,11 +236,23 @@ func isBattleSizeValue(q map[string]any) bool {
 }
 
 func battleSizeValues(q map[string]any) string {
-	parts := make([]string, len(battleSizeKeys))
-	for i, k := range battleSizeKeys {
+	keys := battleSizeKeys
+	if q["combat-patrol"] != nil {
+		keys = append([]string{"combat-patrol"}, battleSizeKeys...)
+	}
+	parts := make([]string, len(keys))
+	for i, k := range keys {
 		parts[i] = ejstr(q[k])
 	}
 	return strings.Join(parts, "/")
+}
+
+// battleSizeNames names the sizes battleSizeValues prints, a Combat Patrol row first when q has one.
+func battleSizeNames(q map[string]any) string {
+	if q["combat-patrol"] != nil {
+		return "Combat Patrol/Incursion/Strike Force/Onslaught"
+	}
+	return "Incursion/Strike Force/Onslaught"
 }
 
 // scaleOf is what a count-of / scaling source counts, as a noun phrase.
@@ -254,6 +266,7 @@ var scaleOf = map[string]string{
 	"models-equipped-with":            "models in this unit equipped with",
 	"enemy-units-in-range":            "enemy units",
 	"wounds-lost":                     "wounds lost",
+	"enemy-units-hit":                 "enemy units hit by those attacks",
 	"battle-round":                    "battle round",
 }
 
@@ -277,6 +290,9 @@ func scaleSource(q map[string]any) string {
 	if q["keyword"] != nil {
 		s = replaceFirst(leadingModelsRe, s, ejstr(q["keyword"])+" models")
 	}
+	if q["designated"] != nil {
+		s = dekebab(ejstr(q["designated"])) + " " + s
+	}
 	if q["within"] != nil {
 		s += " within " + rangePhrase(q["within"])
 	}
@@ -298,7 +314,7 @@ func quantityPhrase(q map[string]any) string {
 		return "its " + statName(c) + " characteristic"
 	}
 	if isBattleSizeValue(q) {
-		return battleSizeValues(q) + " (Incursion/Strike Force/Onslaught)"
+		return battleSizeValues(q) + " (" + battleSizeNames(q) + ")"
 	}
 	if _, ok := q["roll_var"].(string); ok {
 		if q["successes_on"] != nil {
@@ -312,6 +328,13 @@ func quantityPhrase(q map[string]any) string {
 			return "the number of those dice that rolled a " + ejstr(q["successes_on"]) + "+"
 		}
 		return "the result of that roll"
+	}
+	// "the number of YP you just spent": the amount a resource-spend of this ability bound.
+	if _, ok := q["spent"].(string); ok {
+		if q["per"] != nil {
+			return "1 for every " + ejstr(q["per"]) + " you spent"
+		}
+		return "the amount you spent"
 	}
 	if q["count_of"] == "battle-round" {
 		return "the battle round number"
@@ -347,7 +370,11 @@ func amountOf(q any, one, many string) string {
 	}
 	p := mapOr(q)
 	if isBattleSizeValue(p) {
-		return battleSizeValues(p) + " " + many + " (Incursion/Strike Force/Onslaught)"
+		return battleSizeValues(p) + " " + many + " (" + battleSizeNames(p) + ")"
+	}
+	// "for every 2YP you just spent, return one additional model": one per that many spent.
+	if _, ok := p["spent"].(string); ok && p["per"] != nil {
+		return "1 " + one + " for every " + ejstr(p["per"]) + " you spent"
 	}
 	return "a number of " + many + " equal to " + quantityPhrase(p)
 }

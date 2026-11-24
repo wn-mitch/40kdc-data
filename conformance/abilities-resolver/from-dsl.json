@@ -23757,6 +23757,221 @@
         ],
         "activatable": []
       }
+    },
+    {
+      "caseId": "canonical/spent-amount/up-to-lever",
+      "abilityId": "fabricated-spent-amount",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-spent-amount",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "resource-spend",
+            "target": "this-model",
+            "modifier": {
+              "pool": "fabricated-pool",
+              "amount": {
+                "up_to": 3
+              },
+              "bind_as": "spent"
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "D",
+              "operation": "add",
+              "value": {
+                "spent": "spent"
+              },
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"resource-spend\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-spent-amount#spent-max",
+            "label": "Spending the most: +3 damage",
+            "group": null,
+            "requires": [
+              {
+                "spent": "spent",
+                "amount": 3
+              }
+            ],
+            "capRaise": null,
+            "gates": [
+              {
+                "phases": [
+                  "fight"
+                ]
+              }
+            ],
+            "buffs": [
+              {
+                "type": "damage-mod",
+                "value": 3
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/spent-amount/per-rounds-down",
+      "abilityId": "fabricated-spent-amount",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-spent-amount",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "resource-spend",
+            "target": "this-model",
+            "modifier": {
+              "pool": "fabricated-pool",
+              "amount": {
+                "up_to": 3
+              },
+              "bind_as": "spent"
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "D",
+              "operation": "add",
+              "value": {
+                "spent": "spent",
+                "per": 2
+              },
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"resource-spend\" is not modelled by the buff layer"
+        ],
+        "unsupportedScopes": [
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": [
+          {
+            "id": "fabricated-spent-amount#spent-max",
+            "label": "Spending the most: +1 damage",
+            "group": null,
+            "requires": [
+              {
+                "spent": "spent",
+                "amount": 3
+              }
+            ],
+            "capRaise": null,
+            "gates": [
+              {
+                "phases": [
+                  "fight"
+                ]
+              }
+            ],
+            "buffs": [
+              {
+                "type": "damage-mod",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "canonical/spent-amount/any-amount-unresolved",
+      "abilityId": "fabricated-spent-amount",
+      "source": {
+        "kind": "ability",
+        "abilityId": "fabricated-spent-amount",
+        "abilityKind": "unit"
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "resource-spend",
+            "target": "this-model",
+            "modifier": {
+              "pool": "fabricated-pool",
+              "amount": "any",
+              "bind_as": "spent"
+            }
+          },
+          {
+            "type": "stat-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "stat": "D",
+              "operation": "add",
+              "value": {
+                "spent": "spent"
+              },
+              "weapons": {
+                "type": "melee"
+              }
+            }
+          }
+        ]
+      },
+      "context": {
+        "phase": "fight"
+      },
+      "perspective": "attacker",
+      "expected": {
+        "applied": [],
+        "unsupportedReasons": [
+          "effect type \"resource-spend\" is not modelled by the buff layer",
+          "stat-modifier: its value is set by the amount spent; not resolved by the buff engine"
+        ],
+        "unsupportedScopes": [
+          "unresolved",
+          "unresolved"
+        ],
+        "needKeys": [],
+        "activatable": []
+      }
     }
   ]
 }

@@ -57,5 +57,8 @@ func (s *RunnerState) handleTranslateEffect(args any) map[string]any {
 	if a["optional"] == true {
 		ability["optional"] = true
 	}
+	if id, ok := a["ability_id"].(string); ok {
+		ability["ability_id"] = id
+	}
 	return okResp(map[string]any{"text": describeAbility(ability)})
 }

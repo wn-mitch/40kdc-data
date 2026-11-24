@@ -88,6 +88,35 @@ export function foldAlternativePools(input: readonly CompileLeaf[]): CompileLeaf
 }
 
 /**
+ * "Roll one D6 for each model in your unit, rolling two additional D6 if X": a dice-roll marked
+ * `plus_if` adds its dice to the roll before it (same fragment, same die) when the condition leaf
+ * right after it holds. Both leaves fold into that roll's `extra_dice` {count, leaf}; the condition
+ * is lowered where the roll resolves (compile-part-assemble.ts) and only a per-die roll takes it.
+ */
+export function foldExtraDice(input: readonly CompileLeaf[]): CompileLeaf[] {
+  if (!input.some((leaf) => leaf.family_id === "dice-roll" && leaf.parameters.plus_if === true)) return [...input];
+  const out: CompileLeaf[] = [];
+  for (let at = 0; at < input.length; at += 1) {
+    const leaf = input[at]!;
+    if (leaf.family_id !== "dice-roll" || leaf.parameters.plus_if !== true) { out.push(leaf); continue; }
+    const next = input[at + 1];
+    if (next === undefined || next.role !== "CONDITION" || next.fragment !== leaf.fragment || next.family_id === "roll-result") {
+      throw new CompileError(`dice-roll at byte ${leaf.start_byte} adds dice under a condition, but no condition leaf follows it saying when.`);
+    }
+    let base = out.length - 1;
+    while (base >= 0 && !(out[base]!.family_id === "dice-roll" && out[base]!.fragment === leaf.fragment)) base -= 1;
+    if (base < 0) throw new CompileError(`dice-roll at byte ${leaf.start_byte} adds dice, but no roll comes before it in its clause.`);
+    const roll = out[base]!;
+    if (roll.parameters.dice !== leaf.parameters.dice) throw new CompileError(`dice-roll at byte ${leaf.start_byte} adds ${String(leaf.parameters.dice)} to a roll of ${String(roll.parameters.dice)}; the added dice must be the same die.`);
+    if (roll.parameters.extra_dice !== undefined) throw new CompileError(`The roll at byte ${roll.start_byte} takes two sets of additional dice.`);
+    if (roll.parameters.alternative !== undefined || roll.parameters.pool_condition !== undefined) throw new CompileError(`The roll at byte ${roll.start_byte} is an alternative pool; additional dice go on a per-die roll.`);
+    out[base] = { ...roll, parameters: { ...roll.parameters, extra_dice: { count: Number(leaf.parameters.count ?? 1), leaf: next } } };
+    at += 1;
+  }
+  return out;
+}
+
+/**
  * A conditional change to a 2D6 roll read as one total ("roll 2D6 …, subtracting 1 if X: if the
  * result is 6 or less …"). The band reads the changed total, so each side becomes one dice-gated
  * 2D6 roll: a band that reaches the top total compares at or above, one that starts at the lowest
@@ -161,11 +190,13 @@ export function sharedPool(planned: Planned[], banded: Planned[], roll: CompileL
   };
   const inside = banded.map(counted);
   const countStat = roll.parameters.count_stat as { stat: string; of: string } | undefined;
+  const countHistory = roll.parameters.count_history as Node | undefined;
   const count = roll.parameters.count as number | undefined;
   const rolled: Node = {
     type: "roll",
-    dice: countStat !== undefined ? die : `${count ?? 1}${die}`,
+    dice: countStat !== undefined || countHistory !== undefined ? die : `${count ?? 1}${die}`,
     ...(countStat !== undefined ? { count_stat: { stat: countStat.stat, of: COUNT_STAT_REFS[countStat.of] } } : {}),
+    ...(countHistory !== undefined ? { count_history: structuredClone(countHistory) } : {}),
     roll_var: rollVar,
     effect: inside.length === 1 ? inside[0]! : { type: "sequence", steps: inside },
   };

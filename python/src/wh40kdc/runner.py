@@ -931,6 +931,8 @@ def _handle_translate_effect(args: Any) -> Response:
         ability["applies_to"] = args["applies_to"]
     if args.get("optional") is True:
         ability["optional"] = True
+    if isinstance(args.get("ability_id"), str):
+        ability["ability_id"] = args["ability_id"]
     return _ok({"text": describe_ability(ability)})
 
 

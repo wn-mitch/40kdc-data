@@ -30,7 +30,7 @@ use wh40kdc::scoring::{
 };
 use wh40kdc::share::{decode_share_token, encode_share_token, ShareList};
 use wh40kdc::{
-    describe_ability_parts_with_optional, describe_scoring_card, normalize_name, Dataset, Phase,
+    describe_ability_parts_for, describe_scoring_card, normalize_name, Dataset, Phase,
     SecondaryCard,
 };
 
@@ -1673,13 +1673,14 @@ fn handle_translate_effect(args: &Value) -> Value {
             let applies_to: Option<wh40kdc::KeywordPredicate> =
                 part("applies_to").and_then(|v| serde_json::from_value(v.clone()).ok());
             return ok_value(json!({
-                "text": wh40kdc::describe_ability_value_with_optional(
+                "text": wh40kdc::describe_ability_value_for(
                     effect_value,
                     part("scope"),
                     applies_to.as_ref(),
                     part("usage"),
                     part("trigger"),
                     args.get("optional") == Some(&Value::Bool(true)),
+                    args.get("ability_id").and_then(Value::as_str),
                 )
             }));
         }
@@ -1708,13 +1709,14 @@ fn handle_translate_effect(args: &Value) -> Value {
         .and_then(|v| serde_json::from_value(v.clone()).ok());
     let optional = args.get("optional") == Some(&Value::Bool(true));
     ok_value(json!({
-        "text": describe_ability_parts_with_optional(
+        "text": describe_ability_parts_for(
             &effect,
             scope.as_ref(),
             applies_to.as_ref(),
             usage.as_ref(),
             trigger.as_ref(),
             optional,
+            args.get("ability_id").and_then(Value::as_str),
         )
     }))
 }

@@ -208,15 +208,15 @@ fn live_triggers<'a>(triggers: &[&'a Value]) -> Vec<&'a Value> {
         .collect()
 }
 
-/// Whether every trigger names a model as its `role` (its subject or object).
+/// Whether every trigger names a model as its `role` (its subject or object): a model-level
+/// filter, or one model of this unit (`model-in-this-unit`).
 fn all_models(triggers: &[&Value], role: &str) -> bool {
     let live = live_triggers(triggers);
     !live.is_empty()
         && live.iter().all(|t| {
-            t.get(role)
-                .and_then(|o| o.get("level"))
-                .and_then(Value::as_str)
-                == Some("model")
+            let named = t.get(role);
+            named.and_then(Value::as_str) == Some("model-in-this-unit")
+                || named.and_then(|o| o.get("level")).and_then(Value::as_str) == Some("model")
         })
 }
 
@@ -269,6 +269,7 @@ pub(crate) fn model_event_refs(v: &Value, triggers: &[&Value]) -> Value {
             _ => v.clone(),
         }
     }
+    let v = &transport_refs(v, triggers);
     let object = all_models(triggers, "object");
     let subject = all_models(triggers, "subject");
     if object || subject {
@@ -276,6 +277,51 @@ pub(crate) fn model_event_refs(v: &Value, triggers: &[&Value]) -> Value {
     } else {
         v.clone()
     }
+}
+
+/// The describer's spelling of `event-object` under a disembarked moment: the Transport the unit
+/// disembarked from.
+pub(crate) const EVENT_OBJECT_TRANSPORT: &str = "event-object-transport";
+
+/// `v` with its `event-object` refs spelled `EVENT_OBJECT_TRANSPORT` when every trigger is a
+/// disembarked moment ("disembarks from a TRANSPORT that made a Normal move this phase"). Inside an
+/// `ability-part` with a trigger of its own, the ref names that part's event and is left alone.
+fn transport_refs(v: &Value, triggers: &[&Value]) -> Value {
+    fn rewrite(v: &Value) -> Value {
+        match v {
+            Value::String(s) if s == "event-object" => Value::String(EVENT_OBJECT_TRANSPORT.into()),
+            Value::Array(a) => Value::Array(a.iter().map(rewrite).collect()),
+            Value::Object(o) => {
+                let own = o.get("type").and_then(Value::as_str) == Some("ability-part")
+                    && o.get("trigger").is_some_and(|t| !t.is_null());
+                Value::Object(
+                    o.iter()
+                        .map(|(k, x)| {
+                            let x = if own && k == "effect" {
+                                x.clone()
+                            } else {
+                                rewrite(x)
+                            };
+                            (k.clone(), x)
+                        })
+                        .collect(),
+                )
+            }
+            _ => v.clone(),
+        }
+    }
+    let live: Vec<&&Value> = triggers
+        .iter()
+        .filter(|t| t.get("event").is_some_and(|e| !e.is_null()))
+        .collect();
+    if live.is_empty()
+        || !live
+            .iter()
+            .all(|t| t.get("event").and_then(Value::as_str) == Some("disembarked"))
+    {
+        return v.clone();
+    }
+    rewrite(v)
 }
 
 pub(crate) fn role_phrase(role: &str) -> Option<&'static str> {
@@ -289,6 +335,7 @@ pub(crate) fn role_phrase(role: &str) -> Option<&'static str> {
         EVENT_SUBJECT_MODEL => "the triggering model",
         "event-object" => "that unit",
         EVENT_OBJECT_MODEL => "that model",
+        EVENT_OBJECT_TRANSPORT => "the Transport",
         "stratagem-target" => "the Stratagem's target",
         "selected-unit" => "the selected unit",
         "recipient" => "this unit",
@@ -688,6 +735,15 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
             place_ref_phrase(within.get("of"))
         ));
     }
+    // "visible to one or more models in your unit".
+    if let Some(to) = nn(f, "visible_to") {
+        let who = if to.as_str() == Some("this-unit") {
+            "one or more models in the unit".to_string()
+        } else {
+            unit_ref_phrase(Some(to), "the unit")
+        };
+        s.push_str(&format!(" visible to {who}"));
+    }
     // "that your unit was controlling when it was destroyed": the unit's control when the rule was
     // triggered, or at the end of the previous phase.
     if let Some(u) = nn(f, "controlled_by_unit") {
@@ -710,6 +766,16 @@ pub(crate) fn objective_phrase(f: &P, plural: bool, noun: &str) -> String {
             .unwrap_or(&phrase);
         let phrase = first_unit_plural(phrase);
         s.push_str(&format!(", with no {phrase} within range of it"));
+    }
+    // "that has a friendly unit with this ability within range of it".
+    if let Some(c) = nn(f, "occupied_by") {
+        let phrase = unit_filter_phrase(obj(Some(c)));
+        let phrase = phrase
+            .strip_prefix("an ")
+            .or_else(|| phrase.strip_prefix("a "))
+            .unwrap_or(&phrase);
+        let phrase = first_unit_plural(phrase);
+        s.push_str(&format!(", with one or more {phrase} within range of it"));
     }
     s
 }

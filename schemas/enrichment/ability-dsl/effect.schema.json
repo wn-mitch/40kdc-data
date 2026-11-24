@@ -415,6 +415,10 @@
         },
         "within": {
           "$ref": "../../defs/common.schema.json#/$defs/range-ref"
+        },
+        "designated": {
+          "$ref": "../../defs/common.schema.json#/$defs/designation-id",
+          "description": "enemy-units-hit: only units carrying this designation are counted (\"each assailed enemy unit hit by those attacks\")."
         }
       },
       "required": [
@@ -441,6 +445,20 @@
               "required": [
                 "wargear"
               ]
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "designated"
+            ]
+          },
+          "then": {
+            "properties": {
+              "of": {
+                "const": "enemy-units-hit"
+              }
             }
           }
         }
@@ -540,6 +558,26 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
+                "not_cumulative": {
+                  "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+                  "oneOf": [
+                    {
+                      "const": "negative-modifiers"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "ability"
+                      ],
+                      "properties": {
+                        "ability": {
+                          "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                        }
+                      }
+                    }
+                  ]
+                },
                 "stat": {
                   "$ref": "../../defs/common.schema.json#/$defs/stat"
                 },
@@ -638,6 +676,10 @@
                     "improving"
                   ]
                 },
+                "choice": {
+                  "description": "The player picks which of these modifiers to ignore and can keep any of them (\"can ignore any or all modifiers to …\"). Absent: every named modifier is ignored.",
+                  "const": "any-or-all"
+                },
                 "incoming": {
                   "const": true
                 },
@@ -675,6 +717,26 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
+                "not_cumulative": {
+                  "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+                  "oneOf": [
+                    {
+                      "const": "negative-modifiers"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "ability"
+                      ],
+                      "properties": {
+                        "ability": {
+                          "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                        }
+                      }
+                    }
+                  ]
+                },
                 "roll": {
                   "$ref": "../../defs/common.schema.json#/$defs/roll-selector"
                 },
@@ -1273,7 +1335,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "ability-modifier effect",
-          "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options.",
+          "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, the number of mortal wounds a bound use inflicts when it inflicts any (mortal-wounds), or how many times one unit can be affected by it (received).",
           "required": [
             "type",
             "target",
@@ -1363,7 +1425,10 @@
                     "start-round",
                     "end-round",
                     "threshold",
-                    "options"
+                    "options",
+                    "amount",
+                    "received",
+                    "mortal-wounds"
                   ]
                 },
                 "operation": {
@@ -1408,6 +1473,10 @@
                     "name": {
                       "type": "string",
                       "minLength": 1
+                    },
+                    "eligible": {
+                      "$ref": "../../defs/common.schema.json#/$defs/keyword-predicate",
+                      "description": "The only friendly units the added Order can be issued to (\"This Order can only be issued to K units\")."
                     },
                     "effect": {
                       "$ref": "#/$defs/effect-node"
@@ -1550,7 +1619,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "ability-activate effect",
-          "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, \"the selected combat doctrine is active for this unit\" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
+          "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, \"the selected combat doctrine is active for this unit\" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. immediate: the one option resolves once, now, instead of becoming active. override: the activation resolves with this amount instead of its own.",
           "required": [
             "type",
             "target",
@@ -1576,6 +1645,10 @@
                 "option": {
                   "type": "string",
                   "minLength": 1
+                },
+                "immediate": {
+                  "const": true,
+                  "description": "The named option resolves once, now, for the target (\"Your unit immediately Regenerates\"), instead of becoming active. Requires option."
                 },
                 "options": {
                   "type": "array",
@@ -1755,6 +1828,32 @@
                       ]
                     }
                   }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "immediate"
+                    ]
+                  },
+                  "then": {
+                    "required": [
+                      "option"
+                    ],
+                    "not": {
+                      "anyOf": [
+                        {
+                          "required": [
+                            "exclusive"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "select"
+                          ]
+                        }
+                      ]
+                    }
+                  }
                 }
               ]
             },
@@ -1835,7 +1934,8 @@
                       "advanced",
                       "fell-back",
                       "destroyed",
-                      "transport-advanced"
+                      "transport-advanced",
+                      "embarked"
                     ]
                   },
                   "minItems": 1,
@@ -2193,6 +2293,35 @@
                 "of": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
                 },
+                "model_count": {
+                  "description": "The unit counts as containing fewer than `below` models, for for_weapon_ability's purposes only (\"treated as containing fewer than five models for the purpose of the [BLAST] ability\").",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "below"
+                  ],
+                  "properties": {
+                    "below": {
+                      "type": "integer",
+                      "minimum": 2
+                    }
+                  }
+                },
+                "for_weapon_ability": {
+                  "description": "The weapon ability a model_count applies to.",
+                  "enum": [
+                    "blast"
+                  ]
+                },
+                "for_abilities": {
+                  "description": "The abilities the unit counts as within range for, and only those (\"for the purposes of the Psychic Guidance and Spirit Guides abilities\").",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                  }
+                },
                 "in_region": {
                   "$ref": "../../defs/common.schema.json#/$defs/region-ref"
                 }
@@ -2206,6 +2335,12 @@
                 {
                   "required": [
                     "in_region"
+                  ]
+                },
+                {
+                  "required": [
+                    "model_count",
+                    "for_weapon_ability"
                   ]
                 }
               ]
@@ -2262,6 +2397,20 @@
                     },
                     {
                       "$ref": "../../defs/common.schema.json#/$defs/stance-option-ref"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "ability_keyword"
+                      ],
+                      "properties": {
+                        "ability_keyword": {
+                          "type": "string",
+                          "pattern": "^[A-Z][A-Z0-9 -]*[A-Z0-9]$"
+                        }
+                      },
+                      "description": "Every ability tagged with this keyword (\"Pain abilities\" is PAIN). Only with direction suppressed and rule_kind ability."
                     }
                   ]
                 },
@@ -2278,6 +2427,16 @@
                 "attacks": {
                   "$ref": "condition.schema.json#/$defs/event-bound-reference",
                   "description": "Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this."
+                },
+                "sub_rule": {
+                  "$ref": "../../defs/common.schema.json#/$defs/entity-id",
+                  "description": "A named section of the suppressed faction rule (\"your army's Daemonic Terror rule\"); only its aspect is off for the target."
+                },
+                "aspect": {
+                  "enum": [
+                    "mortal-wounds"
+                  ],
+                  "description": "What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it."
                 }
               },
               "required": [
@@ -2304,6 +2463,31 @@
                 }
               },
               "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "rule": {
+                        "type": "object",
+                        "required": [
+                          "ability_keyword"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "rule"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "direction": {
+                        "const": "suppressed"
+                      },
+                      "rule_kind": {
+                        "const": "ability"
+                      }
+                    }
+                  }
+                },
                 {
                   "if": {
                     "properties": {
@@ -2380,8 +2564,33 @@
                       }
                     }
                   }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "sub_rule"
+                    ]
+                  },
+                  "then": {
+                    "properties": {
+                      "direction": {
+                        "const": "suppressed"
+                      },
+                      "rule_kind": {
+                        "const": "faction-rule"
+                      }
+                    }
+                  }
                 }
-              ]
+              ],
+              "dependentRequired": {
+                "sub_rule": [
+                  "aspect"
+                ],
+                "aspect": [
+                  "sub_rule"
+                ]
+              }
             },
             "scaling": {
               "$ref": "#/$defs/scaling"
@@ -2481,6 +2690,24 @@
                       "type": "integer",
                       "minimum": 1,
                       "description": "No more than this many dice are rolled, however many candidates there are (\"to a maximum of six D6\")."
+                    },
+                    "extra_dice": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "count",
+                        "condition"
+                      ],
+                      "properties": {
+                        "count": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "condition": {
+                          "$ref": "condition.schema.json"
+                        }
+                      },
+                      "description": "Rolls this many additional dice, past any max_dice, when condition holds (\"rolling two additional D6 if you spent YP during this use\")."
                     }
                   },
                   "required": [
@@ -2607,7 +2834,8 @@
                     {
                       "enum": [
                         "half",
-                        "to-zero"
+                        "to-zero",
+                        "to-one"
                       ]
                     }
                   ]
@@ -2659,11 +2887,29 @@
                   ]
                 },
                 "against": {
-                  "enum": [
-                    "all",
-                    "mortal",
-                    "psychic",
-                    "psychic-and-mortal"
+                  "description": "What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).",
+                  "oneOf": [
+                    {
+                      "enum": [
+                        "all",
+                        "mortal",
+                        "psychic",
+                        "psychic-and-mortal",
+                        "damage-1-unmodified"
+                      ]
+                    },
+                    {
+                      "type": "array",
+                      "minItems": 2,
+                      "uniqueItems": true,
+                      "items": {
+                        "enum": [
+                          "mortal",
+                          "psychic",
+                          "devastating-wounds"
+                        ]
+                      }
+                    }
                   ]
                 }
               },
@@ -2937,6 +3183,10 @@
                 },
                 "ignore_death_triggers": {
                   "const": true
+                },
+                "chosen_by": {
+                  "const": "controlling-player",
+                  "description": "The destroyed unit's controlling player picks which models (\"one model in that unit is destroyed (chosen by its controlling player)\"). Absent, the player using the ability picks."
                 }
               },
               "required": [
@@ -2970,9 +3220,11 @@
               "additionalProperties": false,
               "properties": {
                 "act": {
+                  "description": "What the destroyed model can do: fight, shoot, or either (shoot-or-fight).",
                   "enum": [
                     "fight",
-                    "shoot"
+                    "shoot",
+                    "shoot-or-fight"
                   ]
                 },
                 "resolution": {
@@ -3483,6 +3735,17 @@
                   "$ref": "condition.schema.json",
                   "description": "Where the moving unit must be when the move ends, as a condition on it: \"your unit must end that move either wholly within your deployment zone or within range of an objective marker\". For a single distance to a place, use ends_within."
                 },
+                "as_if_keywords": {
+                  "description": "For this move only, its models move as if they had these keywords (\"move as if they have the FLY keyword\").",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": [
+                      "FLY"
+                    ]
+                  }
+                },
                 "keeps_eligible": {
                   "const": true
                 },
@@ -3736,6 +3999,19 @@
                       "const": true
                     }
                   }
+                },
+                "not_cumulative": {
+                  "description": "An Advance with no roll (advance) that does not stack with the named ability's own Move bonus (\"this is not cumulative with the REAVERS' Matchless Swiftness ability\").",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "ability"
+                  ],
+                  "properties": {
+                    "ability": {
+                      "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                    }
+                  }
                 }
               },
               "minProperties": 1,
@@ -3779,6 +4055,18 @@
                       "applies_to_moves"
                     ]
                   }
+                },
+                {
+                  "if": {
+                    "required": [
+                      "not_cumulative"
+                    ]
+                  },
+                  "then": {
+                    "required": [
+                      "advance"
+                    ]
+                  }
                 }
               ]
             },
@@ -3791,7 +4079,7 @@
           "type": "object",
           "additionalProperties": false,
           "title": "set-up effect",
-          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
+          "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as. from destroyed: a destroyed unit is returned and set up (with to: strategic-reserves, placed into Strategic Reserves).",
           "required": [
             "type",
             "target",
@@ -3821,7 +4109,8 @@
                   "enum": [
                     "strategic-reserves",
                     "transport",
-                    "battlefield"
+                    "battlefield",
+                    "destroyed"
                   ]
                 },
                 "via": {
@@ -4043,7 +4332,7 @@
                 },
                 "min_enemy_distance": {
                   "$ref": "../../defs/common.schema.json#/$defs/range-ref",
-                  "description": "Place: more than this distance horizontally away from all enemy units."
+                  "description": "Place or relocate: more than this distance horizontally away from all enemy units (a relocate with no distance goes anywhere on the battlefield that is)."
                 },
                 "near": {
                   "type": "array",
@@ -4550,6 +4839,20 @@
                           "minLength": 1
                         }
                       }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "difference_to"
+                      ],
+                      "properties": {
+                        "difference_to": {
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      },
+                      "description": "The amount by which the pool's gains this turn fall short of difference_to (\"you gained fewer than 3YP this turn … gain YP equal to the difference\"); 0 when they reach it."
                     }
                   ]
                 },
@@ -4569,6 +4872,49 @@
             },
             "scaling": {
               "$ref": "#/$defs/scaling"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "resource-gain-cap effect",
+          "description": "[resource] You cannot gain more than max of a pool from one source this ability causes (source failed-battle-shock: the failed Battle-shock tests it causes).",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "resource-gain-cap"
+            },
+            "target": {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "pool": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "max": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "source": {
+                  "enum": [
+                    "failed-battle-shock"
+                  ]
+                }
+              },
+              "required": [
+                "pool",
+                "max",
+                "source"
+              ]
             }
           }
         },
@@ -4606,10 +4952,31 @@
                       "enum": [
                         "all",
                         "one-or-more",
-                        "by-table"
+                        "by-table",
+                        "any"
                       ]
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "up_to"
+                      ],
+                      "properties": {
+                        "up_to": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "at_least": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "description": "The least the player can choose, if not 0 (\"spend 1-3 Pain tokens\")."
+                        }
+                      },
+                      "description": "Any amount from 0 (or at_least) to up_to, as the player chooses (\"spend up to 2YP\", \"spend 1-3 Pain tokens\")."
                     }
-                  ]
+                  ],
+                  "description": "A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table."
                 },
                 "label": {
                   "type": "string",
@@ -4658,6 +5025,10 @@
                 "table_of": {
                   "$ref": "../../defs/common.schema.json#/$defs/unit-ref",
                   "description": "With amount by-table: the unit whose datasheet and Starting Strength choose the row."
+                },
+                "bind_as": {
+                  "$ref": "../../defs/common.schema.json#/$defs/entity-id",
+                  "description": "Names the amount this spend spent, for a later spent-reference quantity ({spent: bind_as}) in the same ability."
                 }
               },
               "required": [
@@ -4749,7 +5120,8 @@
                     {
                       "enum": [
                         "rolled",
-                        "highest"
+                        "highest",
+                        "roll-result"
                       ]
                     }
                   ]
@@ -4805,6 +5177,115 @@
                 "objective": {
                   "$ref": "../../defs/common.schema.json#/$defs/objective-filter",
                   "description": "The one objective marker that stays under your control (\"that objective is secured\", the marker a select-objective bound as {selection_var}); without it, the objectives the target controls."
+                }
+              }
+            },
+            "scaling": {
+              "$ref": "#/$defs/scaling"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "region-extend effect",
+          "description": "[board] An area of the battlefield is within a region an army rule defines (\"the selected areas of the battlefield are within your army's Shadow of Chaos\") for the effect's duration: one territory, several territories, or the area within a range of the objective markers a filter names.",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "region-extend"
+            },
+            "target": {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "region",
+                "area"
+              ],
+              "properties": {
+                "region": {
+                  "$ref": "#/$defs/named-region-ref"
+                },
+                "area": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "territory"
+                      ],
+                      "properties": {
+                        "territory": {
+                          "enum": [
+                            "no-mans-land",
+                            "enemy-deployment-zone",
+                            "your-deployment-zone",
+                            "enemy-territory",
+                            "your-territory"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "territories"
+                      ],
+                      "properties": {
+                        "territories": {
+                          "type": "array",
+                          "minItems": 2,
+                          "uniqueItems": true,
+                          "items": {
+                            "enum": [
+                              "no-mans-land",
+                              "enemy-deployment-zone",
+                              "your-deployment-zone",
+                              "enemy-territory",
+                              "your-territory"
+                            ]
+                          }
+                        }
+                      },
+                      "description": "Every listed territory."
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "objective_range"
+                      ],
+                      "properties": {
+                        "objective_range": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "objective",
+                            "inches"
+                          ],
+                          "properties": {
+                            "objective": {
+                              "$ref": "../../defs/common.schema.json#/$defs/objective-filter"
+                            },
+                            "inches": {
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 24
+                            }
+                          }
+                        }
+                      },
+                      "description": "The area within inches of each objective marker the filter names (\"within 6\\\" of that objective marker\")."
+                    }
+                  ]
                 }
               }
             },
@@ -5424,6 +5905,193 @@
               ]
             }
           }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "orders-modifier effect",
+          "description": "[orders] Changes how the target issues Orders without issuing one itself: only `only_options` of a menu, to the `recipients` units (made eligible with `adds_recipients`), any number of them (`count` any), regardless of range (`range` unlimited), to recipients within `range_proxy.inches` of a marker as if the issuer were within that distance of them, or while the issuer is not on the battlefield (`off_battlefield`).",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "orders-modifier"
+            },
+            "target": {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "minProperties": 1,
+              "properties": {
+                "only_options": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "ability_id",
+                      "option_id"
+                    ],
+                    "properties": {
+                      "ability_id": {
+                        "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                      },
+                      "option_id": {
+                        "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                      }
+                    }
+                  },
+                  "description": "Only these Orders, each an option of an Orders menu."
+                },
+                "recipients": {
+                  "$ref": "../../defs/common.schema.json#/$defs/keyword-predicate",
+                  "description": "The friendly units the change reaches, by keyword."
+                },
+                "adds_recipients": {
+                  "const": true,
+                  "description": "The recipients become eligible to receive Orders from the target."
+                },
+                "count": {
+                  "const": "any",
+                  "description": "To any number of eligible units."
+                },
+                "range": {
+                  "const": "unlimited",
+                  "description": "Regardless of range."
+                },
+                "range_proxy": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "marker",
+                    "inches"
+                  ],
+                  "properties": {
+                    "marker": {
+                      "$ref": "../../defs/common.schema.json#/$defs/entity-id"
+                    },
+                    "inches": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 48
+                    }
+                  },
+                  "description": "To recipients within this distance of the marker, as if the issuer were within this distance of them."
+                },
+                "off_battlefield": {
+                  "const": true,
+                  "description": "Even while the target is not on the battlefield (embarked, in reserves)."
+                }
+              },
+              "dependentRequired": {
+                "adds_recipients": [
+                  "recipients"
+                ],
+                "range_proxy": [
+                  "recipients"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "order-share effect",
+          "description": "[orders] Orders affecting the target also affect `modifier.with`; `mutual`: and vice versa.",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "order-share"
+            },
+            "target": {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "with"
+              ],
+              "properties": {
+                "with": {
+                  "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+                },
+                "mutual": {
+                  "const": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "title": "reserves-schedule effect",
+          "description": "[army] Each listed datasheet's units must start the battle in Strategic Reserves and cannot be set up on the battlefield before that entry's battle round (a Combat Patrol detachment's arrival schedule). `set_up` is where they must be set up when they arrive.",
+          "required": [
+            "type",
+            "target",
+            "modifier"
+          ],
+          "properties": {
+            "type": {
+              "const": "reserves-schedule"
+            },
+            "target": {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            },
+            "modifier": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "entries": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "unit_id": {
+                        "$ref": "../../defs/common.schema.json#/$defs/entity-id",
+                        "description": "The datasheet (unit id) whose units the entry schedules."
+                      },
+                      "battle_round": {
+                        "type": "integer",
+                        "minimum": 2,
+                        "maximum": 5,
+                        "description": "The first battle round in which those units can be set up on the battlefield."
+                      }
+                    },
+                    "required": [
+                      "unit_id",
+                      "battle_round"
+                    ]
+                  }
+                },
+                "set_up": {
+                  "enum": [
+                    "wholly-within-deployment-zone"
+                  ],
+                  "description": "Where the units must be set up when they arrive."
+                }
+              },
+              "required": [
+                "entries"
+              ]
+            }
+          }
         }
       ]
     },
@@ -5439,6 +6107,10 @@
             "$ref": "#/$defs/effect-node"
           },
           "minItems": 2
+        },
+        "id": {
+          "$ref": "../../defs/common.schema.json#/$defs/entity-id",
+          "description": "A stable id for the whole choice: other rules make it happen again as an option of this record (ability-activate option, or an ability-modifier naming {ability_id, option_id}), such as Feed the Swarm's Regenerate."
         },
         "choice_label": {
           "type": "string"
@@ -5619,9 +6291,12 @@
                 "toughness",
                 "save"
               ]
+            },
+            {
+              "$ref": "../../defs/common.schema.json#/$defs/battle-round-threshold"
             }
           ],
-          "description": "Fixed threshold or model characteristic to compare against"
+          "description": "Fixed threshold, model characteristic, or a value read from the battle round to compare against"
         },
         "comparison": {
           "$ref": "../../defs/common.schema.json#/$defs/comparison",
@@ -6353,11 +7028,16 @@
                   "$ref": "../../defs/common.schema.json#/$defs/objective-selector"
                 }
               ]
+            },
+            "from": {
+              "enum": [
+                "event-subject"
+              ],
+              "description": "The unit is the unit of the ability's moment (\"just after an enemy unit has shot … attacks that target that enemy unit\"), designated with no choice; the select then has no selector."
             }
           },
           "required": [
-            "kind",
-            "selector"
+            "kind"
           ],
           "allOf": [
             {
@@ -6395,6 +7075,33 @@
                   "selector": {
                     "$ref": "../../defs/common.schema.json#/$defs/objective-selector"
                   }
+                }
+              }
+            }
+          ],
+          "oneOf": [
+            {
+              "required": [
+                "selector"
+              ],
+              "not": {
+                "required": [
+                  "from"
+                ]
+              }
+            },
+            {
+              "required": [
+                "from"
+              ],
+              "not": {
+                "required": [
+                  "selector"
+                ]
+              },
+              "properties": {
+                "kind": {
+                  "const": "unit"
                 }
               }
             }
@@ -6523,11 +7230,18 @@
           "then": {
             "properties": {
               "select": {
-                "properties": {
-                  "selector": {
-                    "required": [
-                      "count"
-                    ]
+                "if": {
+                  "required": [
+                    "selector"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "selector": {
+                      "required": [
+                        "count"
+                      ]
+                    }
                   }
                 }
               }
@@ -6837,7 +7551,7 @@
     "issue-orders-effect": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit. A per-officer record prints no menu: `menu_from` names the ability holding it, and `only_options` narrows it.",
+      "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit. A per-officer record prints no menu: `menu_from` names the ability holding it, and `only_options` narrows it. `as_if_phase` issues them as if it were that phase. `same_order` issues the Order the moment just issued again, to another eligible unit (`exclude` names the unit it already went to); it lists no menu. An option's `eligible` narrows which units that one Order can be issued to.",
       "properties": {
         "type": {
           "const": "issue-orders"
@@ -6914,6 +7628,10 @@
               },
               "effect": {
                 "$ref": "#/$defs/effect-node"
+              },
+              "eligible": {
+                "$ref": "../../defs/common.schema.json#/$defs/keyword-predicate",
+                "description": "Only units with these keywords can be issued this Order (\"This Order can only be issued to ARMOURED SKIRMISHER units\")."
               }
             },
             "required": [
@@ -6934,6 +7652,20 @@
             "$ref": "../../defs/common.schema.json#/$defs/entity-id"
           },
           "description": "Only these Orders of the `menu_from` menu, by option id, can be issued."
+        },
+        "as_if_phase": {
+          "enum": [
+            "command"
+          ],
+          "description": "The Orders are issued as if it were this phase (\"as if it were your Command phase\")."
+        },
+        "same_order": {
+          "const": true,
+          "description": "Issue again the Order the triggering use just issued, rather than a pick from a menu."
+        },
+        "exclude": {
+          "const": "event-object",
+          "description": "The unit the triggering use's Order already went to cannot receive it again (\"to another unit\")."
         }
       },
       "required": [
@@ -6943,25 +7675,69 @@
         {
           "if": {
             "required": [
-              "menu_from"
+              "same_order"
             ]
           },
           "then": {
             "not": {
-              "required": [
-                "options"
+              "anyOf": [
+                {
+                  "required": [
+                    "options"
+                  ]
+                },
+                {
+                  "required": [
+                    "menu_from"
+                  ]
+                },
+                {
+                  "required": [
+                    "only_options"
+                  ]
+                }
               ]
             }
           },
           "else": {
+            "allOf": [
+              {
+                "if": {
+                  "required": [
+                    "menu_from"
+                  ]
+                },
+                "then": {
+                  "not": {
+                    "required": [
+                      "options"
+                    ]
+                  }
+                },
+                "else": {
+                  "required": [
+                    "options"
+                  ],
+                  "not": {
+                    "required": [
+                      "only_options"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
             "required": [
-              "options"
-            ],
-            "not": {
-              "required": [
-                "only_options"
-              ]
-            }
+              "exclude"
+            ]
+          },
+          "then": {
+            "required": [
+              "same_order"
+            ]
           }
         }
       ]
@@ -7969,6 +8745,31 @@
             }
           }
         },
+        "count_history": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "of",
+            "subject",
+            "window"
+          ],
+          "description": "Roll as many of `dice` (one die, such as D6) as a count from the battle's history: of mortal-wounds-suffered, the mortal wounds `subject` suffered in `window` (\"a number of dice equal to the number of mortal wounds your unit suffered this phase\").",
+          "properties": {
+            "of": {
+              "enum": [
+                "mortal-wounds-suffered"
+              ]
+            },
+            "subject": {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            },
+            "window": {
+              "enum": [
+                "phase"
+              ]
+            }
+          }
+        },
         "extra_dice_pool": {
           "type": "string",
           "minLength": 1
@@ -7989,12 +8790,22 @@
         "dice",
         "roll_var",
         "effect"
+      ],
+      "allOf": [
+        {
+          "not": {
+            "required": [
+              "count_stat",
+              "count_history"
+            ]
+          }
+        }
       ]
     },
     "select-objective-effect": {
       "type": "object",
       "additionalProperties": false,
-      "$comment": "Select objective markers matching the selector and bind each as bind_as; the nested effect refers to it as {objective: {selection_var}} (designate subject, within of).",
+      "$comment": "Select objective markers matching the selector and bind each as bind_as; the nested effect refers to it as {objective: {selection_var}} (designate subject, within of). A selector without count is no choice: the nested effect resolves once for each matching marker (\"for each objective you control that ...\").",
       "properties": {
         "type": {
           "const": "select-objective"
@@ -8022,7 +8833,6 @@
             "properties": {
               "selector": {
                 "required": [
-                  "count",
                   "bind_as"
                 ]
               }
@@ -8163,7 +8973,14 @@
           "$ref": "../../defs/common.schema.json#/$defs/comparison"
         },
         "threshold": {
-          "$ref": "../../defs/common.schema.json#/$defs/quantity"
+          "oneOf": [
+            {
+              "$ref": "../../defs/common.schema.json#/$defs/quantity"
+            },
+            {
+              "$ref": "../../defs/common.schema.json#/$defs/battle-round-threshold"
+            }
+          ]
         },
         "modifiers": {
           "type": "array",
@@ -8210,6 +9027,22 @@
         "attacker_filter": {
           "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
         },
+        "attacker": {
+          "description": "The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, \"each time a model in your WRAITH CONSTRUCT unit makes an attack\"), or any one of several (\"each time one of your ARMIGER models makes an attack\", with attacker_filter naming the keywords each attacking model has).",
+          "oneOf": [
+            {
+              "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "../../defs/common.schema.json#/$defs/unit-ref"
+              }
+            }
+          ]
+        },
         "attacker_unit_filter": {
           "$ref": "../../defs/common.schema.json#/$defs/unit-filter"
         },
@@ -8236,6 +9069,11 @@
               {
                 "required": [
                   "attacker_unit_filter"
+                ]
+              },
+              {
+                "required": [
+                  "attacker"
                 ]
               }
             ]

@@ -32,11 +32,19 @@ export function foldDestructionAfterAttacks(leaves: readonly CompileLeaf[], sour
   return out;
 }
 
-/** "After the attacking unit has finished making its attacks" with nothing else named: a moment of the attacking unit, either side. */
+/**
+ * "After the attacking unit has finished making its attacks", or "after all of its attacks have been
+ * resolved" (its: an earlier leaf's unit), with nothing else named: a moment of the attacking unit, either side.
+ */
 function isAttacksDone(leaf: CompileLeaf): boolean {
   return leaf.family_id === "event" && leaf.parameters.kind === "attacks-resolved"
-    && Object.keys(leaf.parameters).every((key) => key === "kind" || key === "owner");
+    && (leaf.parameters.subject === undefined || leaf.parameters.subject === "antecedent")
+    && Object.keys(leaf.parameters).every((key) => key === "kind" || key === "owner" || key === "subject");
 }
+
+/** A moment whose attacker the later attacks-resolved moment names: an allocation, or a destruction by attacks. */
+const hasAttacker = (leaf: CompileLeaf): boolean => leaf.family_id === "event"
+  && (leaf.parameters.kind === "damage-allocated" || DESTROY_KINDS.has(String(leaf.parameters.kind)));
 
 /**
  * "Each time an enemy model loses a wound, … roll one D6: on a 4+, one model from your unit is
@@ -44,7 +52,9 @@ function isAttacksDone(leaf: CompileLeaf): boolean {
  * wound is lost, and the effect waits for that attack's unit to finish. An effect followed by an
  * attacks-resolved moment, with only a comma or spaces between them in one fragment, takes
  * `after_attacks`, which lowers to an ability-part on the attacker's attacks-resolved moment. The
- * attacking unit is the attacker of an earlier damage-allocated moment, so the record must have one.
+ * attacking unit is the attacker of an earlier damage-allocated moment, or the destroyer of an earlier
+ * destruction moment ("each time a model in your unit is destroyed, … the attacking unit suffers 1
+ * mortal wound after all of its attacks have been resolved"), so the record must have one.
  */
 export function foldEffectAfterAttacks(leaves: readonly CompileLeaf[], sourceText?: string): CompileLeaf[] {
   if (sourceText === undefined) return [...leaves];
@@ -53,7 +63,7 @@ export function foldEffectAfterAttacks(leaves: readonly CompileLeaf[], sourceTex
   for (const leaf of leaves) {
     const before = out.at(-1);
     const folds = before !== undefined && isAttacksDone(leaf) && before.role === "EFFECT" && before.parameters.after_attacks === undefined
-      && out.some((earlier) => earlier.family_id === "event" && earlier.parameters.kind === "damage-allocated")
+      && out.some(hasAttacker)
       && before.fragment === leaf.fragment && before.end_byte !== undefined
       && /^[\s,*]*$/u.test(bytes.subarray(before.end_byte, leaf.start_byte).toString("utf8"));
     if (!folds) { out.push(leaf); continue; }

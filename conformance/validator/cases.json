@@ -1709,6 +1709,14 @@
         "code": "REQUIRED_MISSING"
       },
       {
+        "path": "/effect/modifier/max",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/source",
+        "code": "REQUIRED_MISSING"
+      },
+      {
         "path": "/effect/modifier/producer",
         "code": "REQUIRED_MISSING"
       },
@@ -1903,6 +1911,30 @@
       {
         "path": "/effect/type",
         "code": "ENUM_VIOLATION"
+      },
+      {
+        "path": "/effect/modifier/with",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/entries",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/region",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/area",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/model_count",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/for_weapon_ability",
+        "code": "REQUIRED_MISSING"
       }
     ]
   },
@@ -2189,5 +2221,551 @@
         "code": "SCHEMA_VIOLATION"
       }
     ]
+  },
+  {
+    "name": "ability: immediate activation names one option",
+    "target": "ability",
+    "input": {
+      "ability_id": "example-renewal",
+      "name": "Example Renewal",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "the-example-rite",
+          "option": "renew",
+          "immediate": true
+        }
+      }
+    },
+    "expected_errors": []
+  },
+  {
+    "name": "ability: immediate activation without an option",
+    "target": "ability",
+    "input": {
+      "ability_id": "example-renewal",
+      "name": "Example Renewal",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "the-example-rite",
+          "immediate": true
+        }
+      }
+    },
+    "expected_errors": [
+      {
+        "path": "/effect/type",
+        "code": "ENUM_VIOLATION"
+      },
+      {
+        "path": "/effect/modifier/stat",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/operation",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier",
+        "code": "ADDITIONAL_PROPERTY"
+      },
+      {
+        "path": "/effect/modifier/what",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/roll",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/subset",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/result_scope",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/result",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/critical_on",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/succeeds_on",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/fails_on",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/at_most",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/keywords",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/removes",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/weapon_id",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/aspect",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/option",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/activity",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/allow",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/to",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/target",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/kind",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/may",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/within",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/in_region",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/direction",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/rule_kind",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/rule",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/count",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/reduction",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/threshold",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/invuln_sv",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/amount",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/act",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/model_counts",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/by",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/equal_units",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/copy_of",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/datasheet",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/model",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/join",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/also",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/move_type",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/label",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/occupancy_kind",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/subject_kind",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/models_per_group",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/spaces_per_group",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/rounding",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/spaces_per_model",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/equivalent_model_keyword",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/equivalent_model_count",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/capacity",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/test",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/state",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/set",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/of",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/pool",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/max",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/source",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/region",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/area",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/tag",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/detachment",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/exempt_from",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/window",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/tie",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/max_models",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/bind_as",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/keyword",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/range",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/with",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/entries",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/mode",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/options",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect",
+        "code": "ADDITIONAL_PROPERTY"
+      },
+      {
+        "path": "/effect/modifier/ability_id",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/additional_selections",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/allocation",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/steps",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/effect",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/dice",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/from",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/threshold",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/requirement",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/outcomes",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/condition",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/pool",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/max_activations",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/selector",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/target",
+        "code": "ENUM_VIOLATION"
+      },
+      {
+        "path": "/effect/designation",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/select",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/applies",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/reward",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/risk",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/menu_id",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/pool_id",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/actions",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/region_ref",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/producer",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/consumer",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/selection_policy",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/duration",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/roll_var",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/test",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/ritual_limit",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/rituals",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/name",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/move_type",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/model_count",
+        "code": "REQUIRED_MISSING"
+      },
+      {
+        "path": "/effect/modifier/for_weapon_ability",
+        "code": "REQUIRED_MISSING"
+      }
+    ]
+  },
+  {
+    "name": "ability: ability-modifier received aspect on an option",
+    "target": "ability",
+    "input": {
+      "ability_id": "example-renewal",
+      "name": "Example Renewal",
+      "authored_by": "40kdc-community",
+      "game_version": {
+        "edition": "10th",
+        "dataslate": "2025-q3"
+      },
+      "version": "2025-q3",
+      "unit_ids": [],
+      "ability_type": "unit",
+      "behavior": "passive",
+      "scope": {
+        "duration": "permanent"
+      },
+      "effect": {
+        "type": "ability-modifier",
+        "target": "this-unit",
+        "modifier": {
+          "ability": {
+            "ability_id": "the-example-rite",
+            "option_id": "renew"
+          },
+          "aspect": "received",
+          "operation": "set",
+          "value": 2
+        }
+      }
+    },
+    "expected_errors": []
   }
 ]

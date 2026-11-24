@@ -10,8 +10,42 @@ use super::placement::{placement_limits, placement_phrase};
 use super::select::for_each_unit_subject;
 use super::words::*;
 use crate::translate::condition::{
-    and_list, condition_lead_in_value, nn, obj, or_list, place_ref_phrase, range_phrase, P,
+    and_list, condition_lead_in_value, describe_condition_value, nn, obj, objective_phrase,
+    or_list, place_ref_phrase, range_phrase, P,
 };
+
+/// A Combat Patrol arrival schedule: "the following friendly units must start the battle in
+/// Strategic Reserves and cannot be set up on the battlefield before the battle round stated:
+/// Emperors Champion Vedrenn (battle round 2)".
+fn reserves_schedule(m: &P) -> String {
+    let rows: Vec<String> = m
+        .get("entries")
+        .and_then(Value::as_array)
+        .map(|entries| {
+            entries
+                .iter()
+                .map(|entry| {
+                    let entry = obj(Some(entry));
+                    format!(
+                        "{} (battle round {})",
+                        title_case(&jstr(entry.get("unit_id"))),
+                        jstr(entry.get("battle_round"))
+                    )
+                })
+                .collect()
+        })
+        .unwrap_or_default();
+    let set_up = if m.get("set_up").and_then(Value::as_str) == Some("wholly-within-deployment-zone")
+    {
+        "; when they are set up, they must be set up wholly within your deployment zone"
+    } else {
+        ""
+    };
+    format!(
+        "the following friendly units must start the battle in Strategic Reserves and cannot be set up on the battlefield before the battle round stated: {}{set_up}",
+        and_list(&rows)
+    )
+}
 
 fn wounds(n: &str, noun: &str) -> String {
     if n == "1" {
@@ -103,8 +137,19 @@ fn mortal_wounds(m: &P, subj: &str, ctx: &Ctx) -> String {
         } else {
             format!("result of {} or less", jstr(roll.get("threshold")))
         };
+        // "rolling two additional D6 if X": more dice when the condition holds.
+        let more = nn(roll, "extra_dice")
+            .map(|extra| {
+                let extra = obj(Some(extra));
+                format!(
+                    ", rolling {} additional D6 if {}",
+                    jstr(extra.get("count")),
+                    describe_condition_value(extra.get("condition").unwrap_or(&Value::Null))
+                )
+            })
+            .unwrap_or_default();
         return format!(
-            "roll {dice}{each}{most}: for each {band}, {who} {} {suffered}{psychic}{cap}",
+            "roll {dice}{each}{most}{more}: for each {band}, {who} {} {suffered}{psychic}{cap}",
             v(&who, "suffers")
         );
     }
@@ -177,6 +222,35 @@ fn singular_first_models(phrase: &str) -> String {
     phrase.to_string()
 }
 
+/// "No Man's Land is within your army's Shadow of Chaos": an area joins a region an army rule defines.
+fn region_extend(m: &P) -> String {
+    let region = obj(m.get("region"));
+    let area = obj(m.get("area"));
+    let id = jstr(region.get("region_id"));
+    let within = format!(
+        "within your army's {}",
+        title_case(id.strip_prefix("the-").unwrap_or(&id))
+    );
+    let territory = |t: &Value| {
+        let mut r = Map::new();
+        r.insert("territory".to_string(), t.clone());
+        region_phrase(&r)
+    };
+    if let Some(list) = area.get("territories").and_then(Value::as_array) {
+        let names: Vec<String> = list.iter().map(territory).collect();
+        return format!("{} are {within}", and_list(&names));
+    }
+    if let Some(t) = nn(area, "territory") {
+        return format!("{} is {within}", territory(t));
+    }
+    let range = obj(area.get("objective_range"));
+    format!(
+        "the area of the battlefield within {}\" of each {} is {within}",
+        jstr(range.get("inches")),
+        objective_phrase(obj(range.get("objective")), false, "objective")
+    )
+}
+
 fn destroy_models(target: Option<&Value>, m: &P, subj: &str) -> String {
     let model_target = target
         .and_then(Value::as_object)
@@ -209,18 +283,50 @@ fn destroy_models(target: Option<&Value>, m: &P, subj: &str) -> String {
     } else {
         ""
     };
-    format!("{verb} {what}{tail}{triggers}")
+    // "(chosen by its controlling player)": the destroyed unit's owner picks which models.
+    let chooser = if sv(m, "chosen_by") == Some("controlling-player") {
+        " (chosen by its controlling player)"
+    } else {
+        ""
+    };
+    format!("{verb} {what}{tail}{chooser}{triggers}")
 }
 
 fn empty_condition() -> Value {
     Value::Object(Map::new())
 }
 
+/// " against mortal wounds", " against mortal wounds, Psychic Attacks and …": what a Feel No Pain covers, or nothing for all.
+fn fnp_against(against: Option<&Value>) -> String {
+    if let Some(Value::Array(items)) = against {
+        let kinds: Vec<String> = items
+            .iter()
+            .map(|item| match jstr(Some(item)).as_str() {
+                "mortal" => "mortal wounds".to_string(),
+                "psychic" => "Psychic Attacks".to_string(),
+                "devastating-wounds" => {
+                    "Critical Wounds caused by attacks with [DEVASTATING WOUNDS]".to_string()
+                }
+                other => crate::translate::dekebab(other),
+            })
+            .collect();
+        return format!(" against {}", and_list(&kinds));
+    }
+    match jstr(against).as_str() {
+        "mortal" => " against mortal wounds",
+        "psychic" => " against Psychic Attacks",
+        "psychic-and-mortal" => " against Psychic Attacks and mortal wounds",
+        "damage-1-unmodified" => " against attacks with an unmodified Damage characteristic of 1",
+        _ => "",
+    }
+    .to_string()
+}
+
 fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String {
-    let act = if sv(m, "act") == Some("shoot") {
-        "shoot"
-    } else {
-        "fight"
+    let act = match sv(m, "act") {
+        Some("shoot") => "shoot",
+        Some("shoot-or-fight") => "shoot or fight",
+        _ => "fight",
     };
     let model = if crate::translate::condition::is_event_object(target) {
         "a model in this unit".to_string()
@@ -272,7 +378,11 @@ fn act_on_death(target: Option<&Value>, m: &P, subj: &str, ctx: &Ctx) -> String 
         let removal = if sv(m, "removal") == Some("after-destroyed-model-fights") {
             format!(
                 ". Remove it after it has {}",
-                if act == "shoot" { "shot" } else { "fought" }
+                match act {
+                    "shoot" => "shot",
+                    "shoot or fight" => "shot or fought",
+                    _ => "fought",
+                }
             )
         } else {
             ". Remove it after this unit has fought or at the end of the phase, whichever comes first"
@@ -413,6 +523,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             let how = match r.as_str() {
                 "half" => "halve the Damage of that attack".to_string(),
                 "to-zero" => "change the Damage of that attack to 0".to_string(),
+                "to-one" => "change the Damage characteristic of that attack to 1".to_string(),
                 _ => format!("subtract {r} from the Damage characteristic of that attack"),
             };
             if ctx.allocated_trigger && nn(m, "weapons").is_none() {
@@ -426,12 +537,7 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             format!("each time {attack} is allocated to {subj}, {how}")
         }
         Some("feel-no-pain") => {
-            let against = match jstr(m.get("against")).as_str() {
-                "mortal" => " against mortal wounds",
-                "psychic" => " against Psychic Attacks",
-                "psychic-and-mortal" => " against Psychic Attacks and mortal wounds",
-                _ => "",
-            };
+            let against = fnp_against(m.get("against"));
             let rated = is_rating_ref(m.get("threshold"));
             format!(
                 "{subj} {} Feel No Pain {}+{against}{}",
@@ -547,6 +653,12 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             }
         }
         Some("cost-modifier") => cost_modifier(m, subj),
+        // "You cannot gain more than 3 Pain tokens as a result of failed Battle-shock tests caused by this Stratagem".
+        Some("resource-gain-cap") => format!(
+            "you cannot gain more than {} {} from failed Battle-shock tests this ability causes",
+            jstr(m.get("max")),
+            resource_noun(m.get("pool"), None, m.get("max"))
+        ),
         Some("resource-gain") => {
             // "you must pledge a number": the pool becomes the number picked, not one more.
             if is_true(m, "set") {
@@ -583,6 +695,18 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
                     crate::translate::dekebab(source)
                 );
             }
+            // "you gain an amount of YP equal to the difference": what this turn's gains fall short of N by.
+            if let Some(to) = nn(m, "amount")
+                .filter(|a| a.is_object())
+                .and_then(|a| nn(obj(Some(a)), "difference_to"))
+            {
+                let two = Value::from(2);
+                let noun = resource_noun(m.get("pool"), m.get("label"), Some(&two));
+                return format!(
+                    "you gain a number of {noun} equal to the difference between {} and the {noun} you gained this turn",
+                    jstr(Some(to))
+                );
+            }
             if let Some(a) = nn(m, "amount").filter(|a| a.is_object() || a.is_array()) {
                 let one = Value::from(1);
                 let two = Value::from(2);
@@ -614,10 +738,30 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
                     cost_table(m.get("amount_table"))
                 );
             }
-            let all = sv(m, "amount") == Some("all");
+            if let Some(up_to) = nn(m, "amount")
+                .filter(|a| a.is_object())
+                .and_then(|a| nn(obj(Some(a)), "up_to"))
+            {
+                // "Spend 1-3 Pain tokens": at_least is the least the player can choose.
+                if let Some(at_least) = nn(obj(nn(m, "amount")), "at_least") {
+                    return format!(
+                        "spend {}-{} {}",
+                        jstr(Some(at_least)),
+                        jstr(Some(up_to)),
+                        resource_noun(m.get("pool"), m.get("label"), Some(up_to))
+                    );
+                }
+                return format!(
+                    "spend up to {} {}",
+                    jstr(Some(up_to)),
+                    resource_noun(m.get("pool"), m.get("label"), Some(up_to))
+                );
+            }
+            let all = matches!(sv(m, "amount"), Some("all") | Some("any"));
             let amount = match sv(m, "amount") {
                 Some("all") => "all your".to_string(),
                 Some("one-or-more") => "one or more".to_string(),
+                Some("any") => "any number of".to_string(),
                 _ => dice_case(m.get("amount")),
             };
             let two = Value::from(2);
@@ -653,8 +797,10 @@ pub(crate) fn describe_board_leaf(e: &P, m: &P, subj: &str, ctx: &Ctx) -> String
             "objective markers {subj} {} remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase",
             v(subj, "controls")
         ),
+        Some("region-extend") => region_extend(m),
         Some("designate") => designate(m, subj, ctx),
         Some("army-rule") => army_rule(m, subj, ctx, e.get("target")),
+        Some("reserves-schedule") => reserves_schedule(m),
         Some(t) => format!("[{t}]"),
         None => "[unknown]".to_string(),
     }

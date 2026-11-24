@@ -17,11 +17,11 @@ var leafTypes = map[string]bool{}
 func init() {
 	for _, t := range []string{
 		"stat-modifier", "ignore-modifiers", "roll-modifier", "re-roll", "roll-result", "end-attack-sequence", "ability-grant",
-		"keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "oath-modifier", "permission", "targeting",
+		"keyword-grant", "weapon-ability-grant", "weapon-ability-range", "weapon-grant", "ability-modifier", "ability-activate", "oath-modifier", "orders-modifier", "order-share", "reserves-schedule", "permission", "targeting",
 		"counts-as", "rule-state", "mortal-wounds", "damage-reduction", "feel-no-pain", "invulnerable-save", "heal", "return-models",
 		"destroy-models", "act-on-death", "split-unit", "add-unit", "destruction-rule", "move", "move-modifier", "set-up", "marker",
-		"transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-spend", "resource-die",
-		"objective-sticky", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons",
+		"transport-capacity", "test", "state-change", "cp-gain", "cost-modifier", "resource-gain", "resource-gain-cap", "resource-spend", "resource-die",
+		"objective-sticky", "region-extend", "designate", "army-rule", "test-exemption", "datasheet-swap", "characteristic-resolution", "borrow-weapons",
 		"select-weapon",
 	} {
 		leafTypes[t] = true
@@ -45,7 +45,12 @@ func statChange(m map[string]any, what string) string {
 	op := ejstr(m["operation"])
 	switch op {
 	case "set":
-		return "set " + what + " to " + diceCase(m["value"])
+		// A Range is printed in inches ("a Range characteristic of 18\"").
+		inches := ""
+		if m["stat"] == "Range" {
+			inches = "\""
+		}
+		return "set " + what + " to " + diceCase(m["value"]) + inches
 	case "halve":
 		return "halve " + what
 	case "multiply":
@@ -234,8 +239,17 @@ func ignoreModifiersLeaf(m map[string]any, subj string) string {
 		}
 		except = " (except " + andList(names) + " rolls)"
 	}
+	// "you can ignore any or all modifiers to …": the player picks which modifiers to ignore.
+	anyOrAll := m["choice"] == "any-or-all"
+	which := "any"
+	if anyOrAll {
+		which = "any or all"
+	}
 	if m["incoming"] == true {
-		return incomingLead(m, subj) + "ignore any " + kind + "modifiers to that attack's " + things + except
+		return incomingLead(m, subj) + "ignore " + which + " " + kind + "modifiers to that attack's " + things + except
+	}
+	if anyOrAll {
+		return "you can ignore any or all " + kind + "modifiers to " + ofOrPossessive(subj, things) + except + weaponRollScope(m)
 	}
 	return subj + " " + ev(subj, "ignores") + " any " + kind + "modifiers to " + pronoun(subj) + " " + things + except + weaponRollScope(m)
 }
@@ -635,7 +649,18 @@ func weaponAbilityGrantLeaf(e, m map[string]any, subj string, ctx effCtx) string
 var abilityAspects = map[string]string{
 	"uses": "number of uses", "range": "range", "targets": "number of targets", "recipients": "recipients", "selections": "number of selections",
 	"concurrent": "number that can apply at once", "duration": "duration", "start-round": "first battle round", "end-round": "last battle round",
-	"threshold": "threshold", "options": "options",
+	"threshold": "threshold", "options": "options", "amount": "amount",
+}
+
+// timesWord renders "once", "twice", "3 times".
+func timesWord(value any) string {
+	if n, ok := value.(float64); ok && n == 1 {
+		return "once"
+	}
+	if n, ok := value.(float64); ok && n == 2 {
+		return "twice"
+	}
+	return ejstr(value) + " times"
 }
 
 var leadingAllRe = regexp.MustCompile(`^all `)
@@ -669,7 +694,19 @@ func abilityModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 			return s
 		}
 	}
+	// "The bearer's unit can be regenerated up to twice per phase": how many times one unit can be affected by it.
+	if m["aspect"] == "received" {
+		return subj + " can be affected by " + abilityLabel(m["ability"]) + " up to " + timesWord(m["value"]) + ", in place of its usual limit"
+	}
 	whose := modifiedAbility(m["ability"], subj, ctx)
+	// "If it suffers one or more mortal wounds as a result of that Dark Pact, add 1 to the number of mortal wounds it suffers."
+	if m["aspect"] == "mortal-wounds" {
+		change := "add " + ejstr(m["value"]) + " to"
+		if m["operation"] == "subtract" {
+			change = "subtract " + ejstr(m["value"]) + " from"
+		}
+		return "if " + whose + " inflicts one or more mortal wounds on " + subj + ", " + change + " the number of mortal wounds it suffers"
+	}
 	aspect, ok := abilityAspects[ejstr(m["aspect"])]
 	if !ok {
 		aspect = ejstr(m["aspect"])
@@ -690,7 +727,7 @@ func abilityModifierLeaf(m map[string]any, subj string, ctx effCtx) string {
 	}
 	option := ""
 	if opt, ok := asMap(m["add_option"]); ok && opt != nil {
-		option = "the option " + titleCase(ejstr(opt["name"])) + " (" + describeEffectInline(mapOr(opt["effect"]), ctx) + ")"
+		option = "the option " + titleCase(ejstr(opt["name"])) + " (" + addedOptionRecipients(opt, ctx) + describeEffectInline(mapOr(opt["effect"]), ctx) + ")"
 	}
 	// An add with no value only widens the ability: it names the new recipients or option instead of a count.
 	if m["value"] == nil && m["operation"] != "set" && m["operation"] != "lift-limit" && (recipients != "" || option != "") {
@@ -802,7 +839,25 @@ func weaponAbilityRangeLeaf(m map[string]any, subj string) string {
 	return ofOrPossessive(subj, "attacks") + " benefit from " + bracketKeyword(m["keyword"]) + " when the target is within the weapon's range"
 }
 
+// notCumulativeTrail is " (this is not cumulative with …)": what a modifier does not stack with,
+// after the change it qualifies.
+func notCumulativeTrail(m map[string]any, of string) string {
+	nc := m["not_cumulative"]
+	if nc == "negative-modifiers" {
+		return " (this is not cumulative with any other negative modifiers to that " + of + ")"
+	}
+	if ncm, ok := nc.(map[string]any); ok && ncm["ability"] != nil {
+		return " (this is not cumulative with the " + abilityLabel(ncm["ability"]) + " ability)"
+	}
+	return ""
+}
+
 func countsAsLeaf(m map[string]any, subj string, ctx effCtx) string {
+	// "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
+	if m["model_count"] != nil {
+		return subj + " " + ev(subj, "counts") + " as containing fewer than " + ejstr(mapOr(m["model_count"])["below"]) +
+			" models for the purpose of the [" + strings.ToUpper(dekebab(ejstr(m["for_weapon_ability"]))) + "] ability"
+	}
 	if m["in_region"] != nil {
 		return subj + " " + ev(subj, "counts") + " as being within " + regionPhrase(mapOr(m["in_region"]))
 	}
@@ -810,7 +865,20 @@ func countsAsLeaf(m map[string]any, subj string, ctx effCtx) string {
 	if m["of"] != nil {
 		of = effectSubject(m["of"], ctx)
 	}
-	return subj + " " + ev(subj, "counts") + " as being within " + rangePhrase(m["within"]) + " of " + of
+	// "for the purposes of the Psychic Guidance and Spirit Guides abilities".
+	purposes := ""
+	if ids, ok := m["for_abilities"].([]any); ok {
+		labels := []string{}
+		seen := map[string]bool{}
+		for _, id := range ids {
+			if label := abilityLabel(id); !seen[label] {
+				seen[label] = true
+				labels = append(labels, label)
+			}
+		}
+		purposes = " for the purposes of the " + andList(labels) + " abilities"
+	}
+	return subj + " " + ev(subj, "counts") + " as being within " + rangePhrase(m["within"]) + " of " + of + purposes
 }
 
 var weaponsWordRe = regexp.MustCompile(`weapons\b`)
@@ -846,6 +914,10 @@ func ruleStateLeaf(m map[string]any, subj string) string {
 	}
 	if m["direction"] == "suppressed" && m["except_from"] == "this-ability" && m["rule_kind"] == "ability" {
 		return subj + " " + ev(subj, "loses") + " the " + abilityReferenceLabel(m["rule"]) + " ability and cannot gain it except from this ability"
+	}
+	// "no mortal wounds are inflicted by your army's Daemonic Terror rule": one aspect of a section of the rule is off.
+	if m["sub_rule"] != nil {
+		return "your army's " + titleCase(ejstr(m["sub_rule"])) + " rule inflicts no mortal wounds on " + subj
 	}
 	if m["rule_kind"] == "faction-rule" {
 		// any_army_faction: the granted faction rule works whatever the army's faction is.
@@ -906,11 +978,11 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 	subj := effectSubject(e["target"], ctx)
 	switch e["type"] {
 	case "stat-modifier":
-		return statModifierLeaf(e, m, subj, ctx)
+		return statModifierLeaf(e, m, subj, ctx) + notCumulativeTrail(m, "characteristic")
 	case "ignore-modifiers":
 		return ignoreModifiersLeaf(m, subj)
 	case "roll-modifier":
-		return rollModifierLeaf(m, subj, ctx)
+		return rollModifierLeaf(m, subj, ctx) + notCumulativeTrail(m, "roll")
 	case "re-roll":
 		return reRollLeaf(e, m, subj, ctx)
 	case "roll-result":
@@ -952,7 +1024,14 @@ func describeLeaf(e map[string]any, ctx effCtx) string {
 	case "counts-as":
 		return countsAsLeaf(m, subj, ctx)
 	case "rule-state":
+		if s, ok := abilityClassState(e["target"], m, subj); ok {
+			return s
+		}
 		return ruleStateLeaf(m, subj)
+	case "orders-modifier":
+		return ordersModifierLeaf(m, subj, ctx)
+	case "order-share":
+		return orderShareLeaf(m, subj, ctx)
 	}
 	if s, ok := describeShapeLeaf(e, m, subj, ctx); ok {
 		return s

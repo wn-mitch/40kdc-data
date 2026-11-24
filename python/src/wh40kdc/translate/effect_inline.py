@@ -21,6 +21,7 @@ from wh40kdc.translate.effect_aura import aura_reach, with_aura_recipient
 from wh40kdc.translate.effect_bind import roll_head, select_objective_inline
 from wh40kdc.translate.effect_leaf import LEAF_TYPES, describe_leaf
 from wh40kdc.translate.effect_move_type import move_type_inline
+from wh40kdc.translate.effect_orders import as_if_phase
 from wh40kdc.translate.effect_quantity import (
     quantity_phrase,
     requirement_phrase,
@@ -118,6 +119,8 @@ def usage_clause(u: Any) -> str:
     freq = u.get("frequency")
     if isinstance(freq, str) and freq in _USAGE:
         base = _USAGE[freq]
+    elif freq == "n-per-battle" and u.get("count_from") == "equipped-wargear":
+        base = "once per battle for each copy of this wargear its unit is equipped with"
     elif freq == "n-per-battle":
         base = (
             "once per battle"
@@ -128,7 +131,10 @@ def usage_clause(u: Any) -> str:
         )
     else:
         base = dekebab(jstr(freq))
-    return f"{base} per {jstr(u['per'])}" if u.get("per") is not None else base
+    # A count from the unit's loadout is already its unit's: no "per unit" after it.
+    if u.get("per") is not None and u.get("count_from") is None:
+        return f"{base} per {jstr(u['per'])}"
+    return base
 
 
 def _scaling_clause(s: dict[str, Any]) -> str:
@@ -149,6 +155,12 @@ def _scaling_wording(s: dict[str, Any]) -> str:
     if s.get("of") == "embarked-models-oc":
         points = "point" if num(s.get("per")) == 1 else f"{jstr(s.get('per'))} points"
         return f"for every {points} of {scale_source(s)}{cap}"
+    # "for each assailed enemy unit hit by those attacks": one counted unit at a time.
+    if s.get("of") == "enemy-units-hit" and num(s.get("per")) == 1:
+        designated = (
+            f"{dekebab(jstr(s['designated']))} " if s.get("designated") is not None else ""
+        )
+        return f"for each {designated}enemy unit hit by those attacks{cap}"
     c = f"for every {jstr(s.get('per'))} {scale_source(s)}"
     if s.get("within") is not None and not c.endswith(f"within {range_phrase(s['within'])}"):
         c += f" within {range_phrase(s['within'])}"
@@ -461,10 +473,12 @@ def _describe_effect_inline_base(e: Effect, ctx: Ctx) -> str:
         on_fail = inline(risk["on_fail"], ctx) if risk.get("on_fail") else "suffer a consequence"
         reward = inline(e.get("reward"), ctx)
         return f"take a {test_name(risk.get('test'))} test (on a failure, {on_fail}), then {reward}"
+    if t == "issue-orders" and e.get("same_order") is True:
+        return f"issue the same Order to another eligible unit{order_limit(e)}{as_if_phase(e)}"
     if t == "issue-orders" and e.get("menu_from") is not None:
         return (
             f"issue Orders from {ability_label(e['menu_from'])}{order_recipient(e)}"
-            f"{only_orders(e)}{order_limit(e)}"
+            f"{only_orders(e)}{order_limit(e)}{as_if_phase(e)}"
         )
     if t == "issue-orders":
         return (
@@ -592,13 +606,21 @@ def _own_choice_prompt(e: Effect) -> str:
 def part_head(e: Effect) -> str:
     """What leads a part: moment, usage limit, duration, name, optionality and cost."""
     effect = _obj(e.get("effect"))
-    moment = " or ".join(
-        s
-        for s in (
-            describe_trigger(with_aura_recipient(t, effect))
-            for t in normalize_triggers(e.get("trigger"))
+    # A part armed for the phase that fires when the phase ends (a trigger naming no phase, turn
+    # or other gate) fires once, at the end of this phase.
+    trig = e.get("trigger")
+    this_phase_end = e.get("duration") == "phase" and trig == {"event": "phase-ended"}
+    moment = (
+        "at the end of the phase"
+        if this_phase_end
+        else " or ".join(
+            s
+            for s in (
+                describe_trigger(with_aura_recipient(t, effect))
+                for t in normalize_triggers(trig)
+            )
+            if s
         )
-        if s
     )
     level = (
         f" (Psychic level {jstr(e['level'])})"
@@ -625,7 +647,11 @@ def part_head(e: Effect) -> str:
     )
     # A part's own control-lost duration leads it, with no objective marker before it for "it"
     # to name.
-    trail = "" if own_desig_dur else re.sub(r"control it$", "control that objective marker", trail)
+    trail = (
+        ""
+        if own_desig_dur or this_phase_end
+        else re.sub(r"control it$", "control that objective marker", trail)
+    )
     return ", ".join(p for p in (label, moment, usage, trail, named, cost) if p)
 
 

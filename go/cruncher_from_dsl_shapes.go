@@ -1,6 +1,9 @@
 package wh40kdc
 
-import "math"
+import (
+	"math"
+	"sort"
+)
 
 // Cruncher support for the phase-4 shapes: the `roll` allocation that stands in
 // for dice-pool-allocation, and the diagnostics for values the buff engine
@@ -95,15 +98,105 @@ func unsizedValueReason(node map[string]any) string {
 		if !ok {
 			continue
 		}
+		// "spend up to 2YP": the player picks how much a spend spends; it sizes no buff.
+		if _, upTo := v["up_to"]; upTo && t == "resource-spend" && field == "amount" {
+			continue
+		}
 		what := "the battle size"
 		if _, ok := v["roll_var"].(string); ok {
 			what = "a bound roll"
 		} else if c, ok := v["count_of"].(string); ok {
 			what = "the number of " + c
+		} else if _, ok := v["spent"].(string); ok {
+			what = "the amount spent"
 		}
 		return t + ": its " + field + " is set by " + what + "; not resolved by the buff engine"
 	}
 	return ""
+}
+
+// spentMaxima is the most each resource-spend of an effect that binds its
+// amount (bind_as) can spend: its {up_to} amount.
+func spentMaxima(effect any) map[string]float64 {
+	maxima := map[string]float64{}
+	var visit func(node any)
+	visit = func(node any) {
+		switch n := node.(type) {
+		case []any:
+			for _, item := range n {
+				visit(item)
+			}
+		case map[string]any:
+			if n["type"] == "resource-spend" {
+				if m, ok := n["modifier"].(map[string]any); ok {
+					name, named := m["bind_as"].(string)
+					amount, _ := m["amount"].(map[string]any)
+					if upTo, ok := amount["up_to"].(float64); ok && named {
+						maxima[name] = upTo
+					}
+				}
+			}
+			keys := make([]string, 0, len(n))
+			for k := range n {
+				keys = append(keys, k)
+			}
+			sort.Strings(keys)
+			for _, k := range keys {
+				visit(n[k])
+			}
+		}
+	}
+	visit(effect)
+	return maxima
+}
+
+// spentAtMost is a leaf whose one bound size is a spent amount ({spent, per?})
+// with a known most, as the leaf at that most (one per `per`, rounded down),
+// with the spend the lever requires. nil otherwise.
+func spentAtMost(node map[string]any, maxima map[string]float64) (map[string]any, map[string]any) {
+	modifier, ok := node["modifier"].(map[string]any)
+	if _, typed := node["type"].(string); !ok || !typed || maxima == nil {
+		return nil, nil
+	}
+	if _, scaled := node["scaling"]; scaled {
+		return nil, nil
+	}
+	field := ""
+	for _, f := range sizedFields {
+		if _, isObj := modifier[f].(map[string]any); isObj {
+			if field != "" {
+				return nil, nil
+			}
+			field = f
+		}
+	}
+	if field == "" {
+		return nil, nil
+	}
+	ref := modifier[field].(map[string]any)
+	name, ok := ref["spent"].(string)
+	if !ok {
+		return nil, nil
+	}
+	most, ok := maxima[name]
+	if !ok {
+		return nil, nil
+	}
+	value := most
+	if per, ok := ref["per"].(float64); ok {
+		value = math.Floor(most / per)
+	}
+	atMost := make(map[string]any, len(modifier))
+	for k, v := range modifier {
+		atMost[k] = v
+	}
+	atMost[field] = value
+	leaf := make(map[string]any, len(node))
+	for k, v := range node {
+		leaf[k] = v
+	}
+	leaf["modifier"] = atMost
+	return leaf, map[string]any{"spent": name, "amount": most}
 }
 
 // scaledToCap is a scaled leaf with a cap, as the leaf at that cap: the scaled

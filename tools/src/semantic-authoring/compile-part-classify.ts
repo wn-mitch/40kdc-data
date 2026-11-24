@@ -229,6 +229,18 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
     if (effects.every((at) => places[at]!.sentence === places[index]!.sentence)) return [];
     return triggerIndexes.flatMap((at, position) => at === moment ? [position] : []);
   };
+  // "each time you roll to determine the number of attacks made with a flamer …, you can re-roll the result, and each time you
+  // make a Damage roll …": a condition right after the first moment, when an effect and then another moment follow in its
+  // own source fragment, decides only that first moment's part; the later part's conditions stay its own.
+  const firstPartMoment = (index: number): number[] => {
+    const moment = [...triggerIndexes].reverse().find((at) => at < index);
+    if (moment === undefined || rawOf[moment] !== rawOf[index] || anyEffectBefore(moment)) return [];
+    if (list.slice(moment + 1, index).some((leaf) => leaf.role === "EFFECT" || leaf.role === "EVENT")) return [];
+    // The later moments are not yet listed in triggerIndexes, which fills in source order.
+    const next = list.findIndex((leaf, at) => at > index && leaf.role === "EVENT" && leaf.family_id === "event");
+    if (next === -1 || rawOf[next] !== rawOf[index] || !list.slice(index + 1, next).some((leaf) => leaf.role === "EFFECT")) return [];
+    return triggerIndexes.flatMap((at, position) => at === moment ? [position] : []);
+  };
   list.forEach((leaf, index) => {
     if (trailingTestCondition(list, index, sourceText) === "attach") {
       attachedAt.add(index + 1);
@@ -267,10 +279,23 @@ export function classifyLeaves(given: CompileLeaf[], places: Placement[], contai
         clauseGates.set(clause, [...(clauseGates.get(clause) ?? []), node]);
       // "…: Each time this unit is selected to fight, if it charged this turn, it can use this ability. If it does, ■ A ■ B":
       // a condition right after a moment that opens a later part decides that moment, so every effect of its part.
-      } else if (node !== "selected" && leading && partMomentsBefore(index).length) {
+      } else if (node !== "selected" && leading && (partMomentsBefore(index).length || firstPartMoment(index).length)) {
         for (const at of partMomentsBefore(index)) {
           const own = triggers[at]!.condition as Node | undefined;
           triggers[at] = { ...triggers[at]!, condition: own ? { operator: "and", operands: [own, node] } : node };
+        }
+        for (const at of firstPartMoment(index)) {
+          // A roll "made with a flamer" names the roll's weapon: the moment's own weapons filter.
+          const trigger = triggers[at]!;
+          const filter = (trigger.filter ?? {}) as Node;
+          const parameters = node.parameters as Node | undefined;
+          if ((trigger.event === "before-roll" || trigger.event === "after-roll") && node.type === "attack-is" && filter.weapons === undefined
+            && parameters !== undefined && Object.keys(parameters).length === 1 && parameters.weapons !== undefined) {
+            triggers[at] = { ...trigger, filter: { ...filter, weapons: parameters.weapons } };
+            continue;
+          }
+          const own = trigger.condition as Node | undefined;
+          triggers[at] = { ...trigger, condition: own ? { operator: "and", operands: [own, node] } : node };
         }
       // "Select up to three X units. Until the end of the round, each time a ranged attack targets one of those units, …":
       // a gate printed after the selection gates the effects of its sentence inside the selection, not the selection

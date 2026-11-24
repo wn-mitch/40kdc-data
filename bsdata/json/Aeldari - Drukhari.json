@@ -2283,7 +2283,7 @@
       {
         "name": "Power From Pain",
         "id": "cddc-0fe0-af5e-48e9",
-        "description": "Nothing happens.",
+        "description": "Pain abilities only apply to a unit while it is Empowered. While an Attached unit is Empowered, the Pain abilities of all its Leader and Bodyguard units take effect, with no additional spend.\nIf your Army Faction is DRUKHARI:\n  - At the start of your Command phase, you gain 1 Pain token.\n  - Each time an enemy unit is destroyed, you gain 1 Pain token.\n  - When an enemy unit fails a Battle-shock test, you gain 1 Pain token.\n  - Each time you spend Pain tokens to Empower a friendly unit, you can use this ability, until the end of the phase, the triggering unit is Empowered.",
         "hidden": false
       },
       {
@@ -5038,7 +5038,7 @@
             "characteristics": [
               {
                 "name": "Description",
-                "$text": "Each time pain token pool is spent:\n  - If one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6+1: on a 5+, you gain 1 Pain token.\n  - Unless one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6: on a 5+, you gain 1 Pain token.",
+                "$text": "Each time you spend Pain tokens to Empower a friendly unit within 9\" of this unit:\n  - If one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6+1: on a 5+, you gain 1 Pain token.\n  - Unless one or more models in this unit have no weapon named \"Spirit vortex\":\n    - Roll one D6: on a 5+, you gain 1 Pain token.",
                 "typeId": "9b8f-694b-e5e-b573"
               }
             ]

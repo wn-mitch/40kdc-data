@@ -281,6 +281,9 @@ export function bindBareFilterHits(leaves: readonly CompileLeaf[], sourceText?: 
     const filterAt = bareFilterAt(leaves, at);
     const filter = leaves[filterAt]!;
     if (filter.family_id !== "unit-filter") continue;
+    // "for each assailed enemy unit hit by one or more of those attacks": a counted filter, which the count takes (compile-count-scale.ts).
+    const counter = leaves[filterAt - 1];
+    if (counter?.family_id === "count-scale" && counter.fragment === filter.fragment && (counter.parameters.counts ?? "following-filter") === "following-filter") continue;
     if (replaced.has(filterAt)) throw new CompileError("A bare unit-filter takes one hit-by condition, and this one already has one.");
     const moment = leaves.filter((leaf) => leaf.start_byte < filter.start_byte && leaf.fragment === hit.fragment && leaf.family_id === "event")
       .reduce<CompileLeaf | undefined>((latest, leaf) => latest === undefined || leaf.start_byte > latest.start_byte ? leaf : latest, undefined);

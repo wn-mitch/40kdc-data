@@ -230,6 +230,7 @@ pub(crate) fn roll_noun(roll: &str) -> String {
         "manoeuvre" => "Agile Manoeuvre roll".to_string(),
         "channelling" => "Channel the Warp roll".to_string(),
         "deadly-demise" => "Deadly Demise roll".to_string(),
+        "attacks" => "roll to determine the number of attacks".to_string(),
         other => format!("{} roll", dekebab(other)),
     }
 }
@@ -582,6 +583,17 @@ pub(crate) fn event_phrase(t: &P) -> String {
             }
         }
         "attacks-resolved" => {
+            // A bound unit's attacks of either kind: "after that unit has finished making its attacks".
+            if is_object(subject)
+                && nn(t, "object").is_none()
+                && nn(f, "kind").is_none()
+                && subject
+                    .and_then(Value::as_object)
+                    .and_then(|s| s.get("event_var"))
+                    .is_some_and(Value::is_string)
+            {
+                return format!("after {who} has finished making its attacks");
+            }
             if is_object(subject) {
                 if nn(t, "object").is_some() {
                     return format!(
@@ -653,6 +665,10 @@ pub(crate) fn event_phrase(t: &P) -> String {
             }
             if f.get("first") == Some(&Value::Bool(true)) {
                 return "the first time a model in this unit is destroyed".to_string();
+            }
+            // "When the last Guardian Defender model in this unit is destroyed".
+            if f.get("last") == Some(&Value::Bool(true)) {
+                return format!("when the last {} is destroyed", last_model_phrase(object));
             }
             // A subject names who destroyed the model: "each time this unit destroys an enemy CHARACTER model".
             if nn(t, "subject").is_some() {
@@ -756,6 +772,13 @@ pub(crate) fn event_phrase(t: &P) -> String {
                     "when an Act of Faith is performed".to_string()
                 };
             }
+            // "after the bearer issues an Order to a SQUADRON unit": who issued it, and the unit it went to.
+            if is(f, "kind", "order") && matches!(nn(t, "object"), Some(Value::Object(_))) {
+                return format!(
+                    "each time {who} issues an Order to {}",
+                    object_phrase(nn(t, "object"))
+                );
+            }
             if is(f, "kind", "order") && nn(t, "object").is_some() {
                 return "each time an Order is issued to the unit".to_string();
             }
@@ -763,6 +786,20 @@ pub(crate) fn event_phrase(t: &P) -> String {
                 return "each time you complete a Contract".to_string();
             }
             format!("each time {who} {}", used_phrase(&st(f.get("kind"))))
+        }
+        // "Caused an enemy unit that was not Below Half-strength to become Below Half-strength".
+        "state-changed" if nn(f, "by").is_some() && nn(f, "strength").is_some() => {
+            let by = if is(f, "by", "this-unit") {
+                "this unit".to_string()
+            } else {
+                super::unit_ref_phrase(f.get("by"), "the unit")
+            };
+            let change = if is(f, "strength", "below-half") {
+                "become Below Half-strength"
+            } else {
+                "fall below its Starting Strength"
+            };
+            format!("when {by} causes {who} to {change}")
         }
         "state-changed" => match f.get("strength").and_then(Value::as_str) {
             Some("below-half") => format!("when {who} becomes Below Half-strength"),
@@ -792,16 +829,21 @@ pub(crate) fn event_phrase(t: &P) -> String {
             if is(f, "pool", "miracle-dice") {
                 return "when a Miracle die is generated".to_string();
             }
-            if is(f, "pool", "cp") {
+            if is(f, "pool", "cp") || is(f, "pool", "command-point") {
                 let enemy = subject
                     .and_then(Value::as_object)
                     .is_some_and(|s| is(s, "owner", "enemy"));
                 return format!(
-                    "each time {} a CP",
+                    "each time {} a CP{}",
                     if enemy {
                         "your opponent gains"
                     } else {
                         "you gain"
+                    },
+                    if is(f, "via", "ability") {
+                        " as the result of an ability"
+                    } else {
+                        ""
                     }
                 );
             }
@@ -813,6 +855,19 @@ pub(crate) fn event_phrase(t: &P) -> String {
             }
             if is(f, "pool", "yield-points") {
                 return "each time you spend Yield points".to_string();
+            }
+            // "When you spend 1 Pain token to Empower that friendly unit": the unit the spend Empowers.
+            if is(f, "tag", "empowered") {
+                let object = if t.get("object").is_some_and(|o| !o.is_null()) {
+                    object_phrase(t.get("object"))
+                } else {
+                    "a unit".to_string()
+                };
+                return format!(
+                    "each time you spend {} to Empower {}",
+                    crate::translate::effect::words::resource_noun(f.get("pool"), None, None),
+                    object
+                );
             }
             format!("each time {} is spent", dekebab(&st(f.get("pool"))))
         }
@@ -845,5 +900,29 @@ fn selected_mode(f: &P) -> String {
         format!(" using the {mode} Disembarkation rules")
     } else {
         format!(" using the {mode} rules")
+    }
+}
+
+/// The model a last-model destruction names: "GUARDIAN DEFENDER model in this unit".
+fn last_model_phrase(object: Option<&Value>) -> String {
+    let o = object.and_then(Value::as_object);
+    let keywords = match o {
+        Some(o) if o.get("all_of").is_some_and(Value::is_array) => {
+            strs(o.get("all_of")).unwrap_or_default().join(" ")
+        }
+        Some(o) if o.get("any_of").is_some_and(Value::is_array) => {
+            or_list(&strs(o.get("any_of")).unwrap_or_default())
+        }
+        _ => String::new(),
+    };
+    let model = if keywords.is_empty() {
+        "model".to_string()
+    } else {
+        format!("{keywords} model")
+    };
+    if o.is_some_and(|o| is(o, "member_of", "this-unit")) {
+        format!("{model} in this unit")
+    } else {
+        format!("{model} in {}", object_phrase(object))
     }
 }

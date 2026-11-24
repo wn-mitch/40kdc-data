@@ -19,6 +19,7 @@ import { conditionLeadIn, describeSelectionEligibility, isDefensiveEffect } from
 import { modelEventRefs, unitRefPhrase, usageClause } from "./condition-refs.js";
 import { describeTrigger, normalizeTriggers, type AbilityTrigger, type AbilityTriggerSpec } from "./trigger.js";
 import { definedGrantHead, definitionPart, describeLeaf, isDefinedGrant, LEAF_TYPES, type Leaf } from "./effect-leaf.js";
+import { asIfPhase, optionRecipients, sameOrderTarget } from "./effect-orders.js";
 import { expiryTrail } from "./expiry.js";
 import { moveTypeBlock, moveTypeInline } from "./effect-move-type.js";
 import { recipientGate } from "./effect-recipient-gate.js";
@@ -110,10 +111,12 @@ export interface Effect {
     max_value?: number;
     /** When the count is taken: live (default) at each use, on-apply once when the rule applies. */
     evaluated?: "live" | "on-apply";
+    /** enemy-units-hit: only units carrying this designation count. */
+    designated?: string;
   };
   // designate-target / persistent-designation
   designation?: string;
-  select?: { kind?: "unit" | "objective"; selector?: Selector };
+  select?: { kind?: "unit" | "objective"; selector?: Selector; from?: unknown };
   selection_policy?: string;
   allow_while_embarked?: boolean;
   consumer?: {
@@ -148,6 +151,9 @@ export interface Effect {
   one_at_a_time?: boolean;
   menu_from?: string;
   only_options?: string[];
+  as_if_phase?: string;
+  same_order?: boolean;
+  exclude?: string;
   /** issue-orders: the one unit the Order goes to, and whether it counts toward the officer's limit. */
   recipient?: unknown;
   counts_toward_limit?: boolean;
@@ -200,6 +206,8 @@ export interface AbilityAppliesTo {
 export interface AbilityUsage {
   frequency?: string;
   count?: number;
+  /** equipped-wargear: once per battle for each copy of the wargear that carries the ability. */
+  count_from?: string;
   per?: string;
 }
 
@@ -207,6 +215,8 @@ export type { AbilityTrigger, AbilityTriggerSpec } from "./trigger.js";
 
 /** Minimal ability view for `describeAbility`. */
 export interface AbilityLike {
+  /** The record's own id: a restriction naming it reads "this Stratagem". */
+  ability_id?: string;
   name?: string;
   effect?: Effect;
   scope?: AbilityScope;
@@ -257,9 +267,10 @@ function selectedContext(ctx: Ctx, sel: Record<string, unknown>, plural = select
   return { ...ctx, selectedUnit: !selectedModel, selectedModel, selectedPlural: plural, unitSubject: undefined };
 }
 
-/** A `for-each-unit` body: a loop over models names each pass's model "that model". */
+/** A `for-each-unit` body: a loop over models names each pass's model "that model", a loop over units its unit "that unit". */
 function eachContext(ctx: Ctx, sel: Record<string, unknown>): Ctx {
-  return { ...selectedContext(ctx, sel, false), eachModel: selectorNoun(sel) === "model" };
+  const model = selectorNoun(sel) === "model";
+  return { ...selectedContext(ctx, sel, false), eachModel: model, eachUnit: !model };
 }
 
 function selectUnitsInline(sel: Record<string, unknown>, effect: Effect, ctx: Ctx): string {
@@ -291,6 +302,8 @@ function designationLabel(designation: unknown): string {
 }
 
 function designationTargetSubject(select: NonNullable<Effect["select"]>): string {
+  // "that enemy unit", the moment's unit: designated with no choice.
+  if (select.from != null) return unitRefPhrase(select.from);
   const selector = select.selector ?? {};
   return select.kind === "objective" ? objectiveSelectorPhrase(selector) : `${selectUnitsSubject(selector)}${selectionBinding(selector)}`;
 }
@@ -301,6 +314,7 @@ interface DesignationApplies {
   effect?: Effect;
   attacker_filter?: Record<string, unknown>;
   attacker_unit_filter?: Record<string, unknown>;
+  attacker?: unknown;
   beneficiary?: { selection_var: string } | { event_var: string };
   reference?: { selection_var: string };
 }
@@ -323,6 +337,13 @@ function designationWhen(applies: DesignationApplies, block: boolean): string {
 
 function designationAttackerPhrase(applies: DesignationApplies | undefined, block = false): string {
   const model = applies?.attacker_filter;
+  // "each time an ARMIGER model in the lead target or the bondsmen target makes an attack": the
+  // attacks of the Stratagem targets the entry names, optionally only those of its models the filter admits.
+  if (applies?.attacker != null) {
+    const refs = Array.isArray(applies.attacker) ? applies.attacker : [applies.attacker];
+    const noun = model ? selectorSubject({ filter: { ...model, owner: "any", level: "model" } }, false) : "model";
+    return `each time ${/^[aeiou]/iu.test(noun) ? "an" : "a"} ${noun} in ${orList(refs.map((ref) => unitRefPhrase(ref)))} ${block ? "makes an attack against it" : "attacks it"}`;
+  }
   const unit = applies?.attacker_unit_filter;
   const attacker = unit
     ? `a ${model ? selectorSubject({ filter: { ...model, owner: "any", level: "model" } }, false) : "model"} in a ${selectorSubject({ filter: { owner: "friendly", ...unit } }, false)}`
@@ -481,6 +502,11 @@ function scalingWording(s: NonNullable<Effect["scaling"]>): string {
   if (s.of === "battle-round") return `multiplied by the battle round number${s.max_value != null ? ` (to a maximum of ${jstr(s.max_value)})` : ""}`;
   // A summed characteristic is counted in points: "for every point of Objective Control of the models embarked within this model".
   if (s.of === "embarked-models-oc") return `for every ${Number(s.per) === 1 ? "point" : `${jstr(s.per)} points`} of ${scaleSource(s as Record<string, unknown>)}${s.max_value != null ? ` (to a maximum of ${jstr(s.max_value)})` : ""}`;
+  // "for each assailed enemy unit hit by those attacks": one counted unit at a time.
+  if (s.of === "enemy-units-hit" && Number(s.per) === 1) {
+    const each = `for each ${s.designated != null ? `${dekebab(jstr(s.designated))} ` : ""}enemy unit hit by those attacks`;
+    return s.max_value != null ? `${each} (to a maximum of ${jstr(s.max_value)})` : each;
+  }
   let c = `for every ${jstr(s.per)} ${scaleSource(s as Record<string, unknown>)}`;
   if (s.round === "up") c += " (rounding up)";
   if (s.max_value != null) c += ` (to a maximum of ${jstr(s.max_value)})`;
@@ -766,7 +792,8 @@ function describeEffectInlineBase(e: Effect, ctx: Ctx = {}): string {
     case "risk-reward":
       return `take a ${testName(e.risk?.test)} test (on a failure, ${e.risk?.on_fail ? describeEffectInline(e.risk.on_fail, ctx) : "suffer a consequence"}), then ${describeEffectInline(e.reward ?? {}, ctx)}`;
     case "issue-orders":
-      if (e.menu_from != null) return `issue Orders from ${abilityLabel(e.menu_from)}${orderRecipient(e)}${onlyOrders(e)}${orderLimit(e)}`;
+      if (e.same_order === true) return `issue the same Order to another eligible unit${orderLimit(e)}${asIfPhase(e)}`;
+      if (e.menu_from != null) return `issue Orders from ${abilityLabel(e.menu_from)}${orderRecipient(e)}${onlyOrders(e)}${orderLimit(e)}${asIfPhase(e)}`;
       return `issue Orders${orderRecipient(e)}${orderLimit(e)}, each one of: ${(e.options ?? []).map((o) => jstr(o.name)).join(" / ")}`;
     case "resource-action-menu":
       return `actions may be performed when their conditions are met: ${(e.actions ?? []).map((a) => describeMenuAction(a, ctx)).join(" / ")}`;
@@ -958,7 +985,9 @@ function describeNamedRegionConditional(m: Record<string, unknown>, condition: C
  * the choice to use it and its cost ("at the end of your Movement phase, once per battle, you can").
  */
 function partHead(e: Effect): string {
-  const moment = normalizeTriggers(e.trigger).map((t) => describeTrigger(withAuraRecipient(t, e.effect, {}))).filter(Boolean).join(" or ");
+  // A part armed for the phase that fires when the phase ends fires once, at the end of this phase.
+  const thisPhaseEnd = e.duration === "phase" && isBarePhaseEnd(e.trigger);
+  const moment = thisPhaseEnd ? "at the end of the phase" : normalizeTriggers(e.trigger).map((t) => describeTrigger(withAuraRecipient(t, e.effect, {}))).filter(Boolean).join(" or ");
   const level = e.kind === "psychic" && e.level != null ? ` (Psychic level ${jstr(e.level)})` : "";
   // A named part that always applies is a labelled rule ("Kine Shield: …"), not one to use.
   const label = e.name && !moment && !e.optional ? `${jstr(e.name)}${level}` : "";
@@ -967,7 +996,7 @@ function partHead(e: Effect): string {
   // A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
   // Skip when the inner designate-target / persistent-designation already prints the same duration.
   const ownDesigDur = (e.effect?.type === "designate-target" || e.effect?.type === "persistent-designation") && e.effect.duration === e.duration;
-  const trail = ownDesigDur ? "" : durationClauses(e.duration).trail.replace(/control it$/u, "control that objective marker");
+  const trail = ownDesigDur || thisPhaseEnd ? "" : durationClauses(e.duration).trail.replace(/control it$/u, "control that objective marker");
   return [label, moment, e.usage ? usageClause(e.usage) : "", trail, named, cost].filter(Boolean).join(", ");
 }
 
@@ -978,6 +1007,13 @@ function partTriggerCtx(e: Effect, ctx: Ctx): Ctx {
   const allocated = ts.some((t) => t.event === "damage-allocated");
   if (!destroyed && !allocated) return ctx;
   return { ...ctx, ...(destroyed ? { destroyedTrigger: true } : {}), ...(allocated ? { allocatedTrigger: true } : {}) };
+}
+
+/** A trigger that is only the end of a phase: no phase, turn or other gate named. */
+function isBarePhaseEnd(trigger: unknown): boolean {
+  if (trigger == null || typeof trigger !== "object" || Array.isArray(trigger)) return false;
+  const t = trigger as Record<string, unknown>;
+  return t.event === "phase-ended" && Object.keys(t).length === 1;
 }
 
 /** A part with its own trigger: its effect's event refs read as that trigger's model, if it names one. */
@@ -1173,15 +1209,17 @@ export function describeEffect(e: Effect, depth: number = 0, ctx: Ctx = {}): str
       const units = filterSubject({ owner: "friendly", ...(e.eligible ?? {}) }, ctx).replace(/^all /, "");
       const states = Array.isArray(e.ineligible_states) ? ` that are not ${orList(e.ineligible_states.map(dekebabState))}` : "";
       const issue = e.issuer != null ? `${filterSubject({ ...e.issuer, level: "model" }, ctx).replace(/^all /, "")} can issue` : "Issue";
+      // "it can issue the same Order to another SQUADRON unit": the Order just issued, again.
+      if (e.same_order === true) return `${indent}${arrow}${issue} ${sameOrderTarget(e.count, units)}${rng}${states}${orderLimit(e)}${asIfPhase(e)}.`;
       if (e.menu_from != null) {
         // An officer's datasheet: how many of its army rule's Orders it issues, and to which units.
         const orders = e.count === 1 ? "Order" : "Orders";
         const who = e.issuer != null ? issue : "This model can issue";
-        return `${indent}${arrow}${who} up to ${n} ${orders} from ${abilityLabel(e.menu_from)} to ${orderTo(e, units)}${rng}${states}${onlyOrders(e)}${orderLimit(e)}.`;
+        return `${indent}${arrow}${who} up to ${n} ${orders} from ${abilityLabel(e.menu_from)} to ${orderTo(e, units)}${rng}${states}${onlyOrders(e)}${orderLimit(e)}${asIfPhase(e)}.`;
       }
-      const lines = [`${indent}${arrow}${issue} up to ${n} Orders to ${orderTo(e, units)}${rng}${states}${orderLimit(e)}, each one of:`];
+      const lines = [`${indent}${arrow}${issue} up to ${n} Orders to ${orderTo(e, units)}${rng}${states}${orderLimit(e)}${asIfPhase(e)}, each one of:`];
       for (const opt of e.options ?? []) {
-        lines.push(`${indent}  - ${jstr(opt.name)}: ${capitalize(describeEffectInline(opt.effect ?? {}, ctx))}.`);
+        lines.push(`${indent}  - ${jstr(opt.name)}${optionRecipients(opt as Record<string, unknown>, ctx)}: ${capitalize(describeEffectInline(opt.effect ?? {}, ctx))}.`);
       }
       for (const rule of orderRuleSentences(e, ctx)) lines.push(`${indent}${rule}`);
       return lines.join("\n");
@@ -1306,7 +1344,7 @@ function withOptionality(rendered: string): string {
  * carries no rules prose.
  */
 export function describeAbility(a: AbilityLike): string {
-  const rendered = a.effect ? renderTopLevel(a.effect, a.scope, a.usage, a.trigger, a.optional === true) : "";
+  const rendered = a.effect ? renderTopLevel(a.effect, a.scope, a.usage, a.trigger, a.optional === true, a.ability_id) : "";
   const core = a.optional === true ? withOptionality(rendered) : rendered;
   const applies = describeAppliesTo(a.applies_to);
   return [core, applies].filter(Boolean).join("\n");
@@ -1325,8 +1363,9 @@ function renderTopLevel(
   usage?: AbilityUsage | AbilityUsage[] | null,
   trigger?: AbilityTriggerSpec | null,
   optional = false,
+  self?: string,
 ): string {
-  const ctx: Ctx = {};
+  const ctx: Ctx = typeof self === "string" ? { self } : {};
   const { lead: durLead, trail } = durationClauses(scope?.duration);
   // An explicit usage limit supersedes the duration's coarse "once per battle" lead.
   const lead = usage && (Array.isArray(usage) || usage.frequency != null) ? usageClause(usage) : durLead;

@@ -20,7 +20,7 @@ const ORDINALS = ["first", "second", "third", "fourth", "fifth", "sixth", "seven
  * One target leaf and what it prints: the targets it names, whose units, their keywords, and the
  * alternatives its filter offers ("one **X** model or one **Y** model"), each with its own keywords.
  */
-export type TargetHead = { index: number; selector: CompileLeaf | null; names: string[]; side: string | null; level: string; keywords: string[]; alternatives: string[][]; mode: string | null; mode_cost: { label: string; amount: number } | null };
+export type TargetHead = { index: number; selector: CompileLeaf | null; names: string[]; side: string | null; level: string; keywords: string[]; alternatives: string[][]; mode: string | null; mode_cost: { label: string; amount: number } | null; anyKeywords?: string[] };
 
 const SIDES: Record<string, string> = { "your-army": "friendly", enemy: "enemy" };
 
@@ -46,9 +46,12 @@ export function targetHeads(list: readonly CompileLeaf[]): TargetHead[] {
     const keywords = [...new Set([...((p.keywords as string[] | undefined) ?? []), ...filters.flatMap((filter) => (filter.parameters.keywords as string[] | undefined) ?? [])])];
     const level = String(p.selects ?? filters.find((filter) => filter.parameters.level !== undefined)?.parameters.level ?? "unit");
     const alternatives = filters.flatMap((filter) => ((filter.parameters.alternatives as FilterAlternative[] | undefined) ?? []).map((item) => item.keywords ?? []));
-    const names = ORDINALS.slice(next, next + sizes[position]!);
+    // A group the leaf names (bind_as) keeps that name; the others are named by position.
+    const names = typeof selector.parameters.bind_as === "string" ? [selector.parameters.bind_as] : ORDINALS.slice(next, next + sizes[position]!);
     next += sizes[position]!;
-    return { index: at, selector, names, side: side === "any" ? null : side, level, keywords, alternatives, mode: selector.mode ?? null, mode_cost: selector.mode_cost ?? null };
+    // "One WRAITHBLADES, WRAITHGUARD or WRAITHLORD unit": the keywords any one of which the target has.
+    const anyKeywords = [...new Set(filters.flatMap((filter) => (filter.parameters.any_keywords as string[] | undefined) ?? []))];
+    return { index: at, selector, names, side: side === "any" ? null : side, level, keywords, alternatives, mode: selector.mode ?? null, mode_cost: selector.mode_cost ?? null, ...(anyKeywords.length ? { anyKeywords } : {}) };
   });
 }
 

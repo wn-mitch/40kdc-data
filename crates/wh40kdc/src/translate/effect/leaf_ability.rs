@@ -173,6 +173,7 @@ pub(super) fn aspect_name(aspect: &str) -> String {
         "end-round" => "last battle round",
         "threshold" => "threshold",
         "options" => "options",
+        "amount" => "amount",
         other => return other.to_string(),
     }
     .to_string()
@@ -207,7 +208,27 @@ pub(super) fn ability_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
             super::select::select_units_subject(selector), super::select::selection_binding(selector),
             if duration.is_empty() { String::new() } else { format!(" {duration}") });
     }
+    // "The bearer's unit can be regenerated up to twice per phase": how many times one unit can be affected by it.
+    if sv(m, "aspect") == Some("received") {
+        return format!(
+            "{subj} can be affected by {} up to {}, in place of its usual limit",
+            ability_label(m.get("ability")),
+            times_word(m.get("value"))
+        );
+    }
     let whose = modified_ability(m.get("ability"), subj, ctx);
+    // "If it suffers one or more mortal wounds as a result of that Dark Pact, add 1 to the number of mortal wounds it suffers."
+    if sv(m, "aspect") == Some("mortal-wounds") {
+        let value = jstr(m.get("value"));
+        let change = if sv(m, "operation") == Some("subtract") {
+            format!("subtract {value} from")
+        } else {
+            format!("add {value} to")
+        };
+        return format!(
+            "if {whose} inflicts one or more mortal wounds on {subj}, {change} the number of mortal wounds it suffers"
+        );
+    }
     let aspect_key = sv(m, "aspect");
     let aspect = aspect_name(&jstr(m.get("aspect")));
     let value = match m.get("value") {
@@ -222,8 +243,9 @@ pub(super) fn ability_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
     let option = nn(m, "add_option").map(|opt| {
         let opt = obj(Some(opt));
         format!(
-            "the option {} ({})",
+            "the option {} ({}{})",
             title_case(&jstr(opt.get("name"))),
+            super::orders::added_option_recipients(opt, ctx),
             super::inline(opt.get("effect").unwrap_or(&Value::Null), ctx)
         )
     });
@@ -261,6 +283,15 @@ pub(super) fn ability_modifier(m: &P, subj: &str, ctx: &Ctx) -> String {
         s.push_str(&format!("; add {o}"));
     }
     s + &cap + &ability_limits(m)
+}
+
+/// "once", "twice", "3 times".
+fn times_word(value: Option<&Value>) -> String {
+    match num(value) {
+        n if n == 1.0 => "once".to_string(),
+        n if n == 2.0 => "twice".to_string(),
+        _ => format!("{} times", jstr(value)),
+    }
 }
 
 /// The limits on a changed allowance: once per battle round, never in the same phase, outside
@@ -342,6 +373,7 @@ pub(super) fn despite_phrase(d: &str) -> Option<&'static str> {
         "advanced" => "Advanced this turn",
         "fell-back" => "Fell Back this turn",
         "destroyed" => "has just been destroyed",
+        "embarked" => "embarked within a Transport",
         _ => return None,
     })
 }
@@ -404,6 +436,16 @@ fn permission_consequences(m: &P, it: &str) -> String {
 }
 
 pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
+    // "You cannot use this Stratagem": a Stratagem's restriction on its own use.
+    if sv(m, "activity") == Some("use-stratagem")
+        && is_false(m, "allow")
+        && ctx
+            .self_id
+            .as_deref()
+            .is_some_and(|me| sv(m, "stratagem") == Some(me))
+    {
+        return "you cannot use this Stratagem".to_string();
+    }
     let it = if subj.starts_with("all ") || has_word_end(subj, " units") {
         "they"
     } else {
@@ -457,7 +499,7 @@ pub(super) fn permission(m: &P, subj: &str, ctx: &Ctx) -> String {
             return format!("{its} Transport Advanced this turn");
         }
         let phrase = despite_phrase(&d).map(str::to_string).unwrap_or(d.clone());
-        if ["engaged", "battle-shocked", "performing-action"].contains(&d.as_str()) {
+        if ["engaged", "battle-shocked", "performing-action", "embarked"].contains(&d.as_str()) {
             let is = if it == "they" { "they are" } else { "it is" };
             return format!("{is} {phrase}");
         }
@@ -693,6 +735,15 @@ fn as_target_candidate(node: &Value) -> Value {
 }
 
 pub(super) fn counts_as(m: &P, subj: &str, ctx: &Ctx) -> String {
+    // "Treated as containing fewer than five models for the purpose of the [BLAST] ability".
+    if let Some(count) = nn(m, "model_count") {
+        return format!(
+            "{subj} {} as containing fewer than {} models for the purpose of the [{}] ability",
+            v(subj, "counts"),
+            jstr(obj(Some(count)).get("below")),
+            dekebab(&jstr(m.get("for_weapon_ability"))).to_uppercase()
+        );
+    }
     if let Some(region) = nn(m, "in_region") {
         return format!(
             "{subj} {} as being within {}",
@@ -704,8 +755,21 @@ pub(super) fn counts_as(m: &P, subj: &str, ctx: &Ctx) -> String {
         Some(of) => effect_subject(Some(of), ctx),
         None => "this model".to_string(),
     };
+    // "for the purposes of the Psychic Guidance and Spirit Guides abilities".
+    let purposes = match m.get("for_abilities").and_then(Value::as_array) {
+        Some(ids) => {
+            let mut labels: Vec<String> = Vec::new();
+            for label in ids.iter().map(|id| ability_label(Some(id))) {
+                if !labels.contains(&label) {
+                    labels.push(label);
+                }
+            }
+            format!(" for the purposes of the {} abilities", and_list(&labels))
+        }
+        None => String::new(),
+    };
     format!(
-        "{subj} {} as being within {} of {of}",
+        "{subj} {} as being within {} of {of}{purposes}",
         v(subj, "counts"),
         range_phrase(m.get("within"))
     )
@@ -766,6 +830,13 @@ pub(super) fn rule_state(m: &P, subj: &str) -> String {
     let granted = sv(m, "direction") == Some("granted");
     let rule = jstr(m.get("rule"));
     let kind = sv(m, "rule_kind");
+    // "no mortal wounds are inflicted by your army's Daemonic Terror rule": one aspect of a section of the rule is off.
+    if nn(m, "sub_rule").is_some() {
+        return format!(
+            "your army's {} rule inflicts no mortal wounds on {subj}",
+            title_case(&jstr(m.get("sub_rule")))
+        );
+    }
     if kind == Some("faction-rule") {
         // any_army_faction: the granted faction rule works whatever the army's faction is.
         let any_faction = if m.get("any_army_faction") == Some(&Value::Bool(true)) {

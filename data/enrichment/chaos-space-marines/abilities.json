@@ -10880,11 +10880,11 @@
       "type": "ability-part",
       "trigger": {
         "event": "attacks-resolved",
-        "subject": {
-          "owner": "enemy"
-        },
         "filter": {
           "kind": "fight"
+        },
+        "subject": {
+          "event_var": "moment-subject"
         }
       },
       "effect": {
@@ -10916,7 +10916,8 @@
       "subject": {
         "owner": "enemy"
       },
-      "object": "this-unit"
+      "object": "this-unit",
+      "binds_event_variable": "moment-subject"
     },
     "source_digest": "ab55a941bd9ce4bd25764e0ecb8530511e61d6f56c90d24e810dc0b3b73c5fb9"
   },
@@ -12601,19 +12602,42 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "pactbound-zealots",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "roll-total",
+        "parameters": {
+          "roll_var": "dark-pact-test",
+          "min": 8
+        }
+      },
+      "effect": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "after-roll",
+      "filter": {
+        "roll": "dark-pact",
+        "result": "success"
+      },
+      "binds_roll_variable": "dark-pact-test"
+    },
+    "source_digest": "dd013da3ad90ed37037ad991716d325aae34be1663a0320c49695a20d80d54ee"
   },
   {
     "ability_id": "eyes-of-the-hunter-renegade-warband-chaos-space-marines",
@@ -14534,19 +14558,108 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "pactbound-zealots",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "for-each-unit",
+      "selector": {
+        "filter": {
+          "owner": "enemy",
+          "within": {
+            "range": {
+              "inches": 3
+            },
+            "of": "this-model"
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "conditional",
+            "condition": {
+              "type": "happened",
+              "parameters": {
+                "subject": "this-unit",
+                "event": "after-roll",
+                "filter": {
+                  "roll": "dark-pact",
+                  "result": "success"
+                },
+                "window": "phase"
+              }
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6+1",
+              "threshold": 4,
+              "comparison": "gte",
+              "on_success": {
+                "type": "mortal-wounds",
+                "target": "recipient",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              "on_fail": null
+            }
+          },
+          {
+            "type": "conditional",
+            "condition": {
+              "operator": "not",
+              "operands": [
+                {
+                  "type": "happened",
+                  "parameters": {
+                    "subject": "this-unit",
+                    "event": "after-roll",
+                    "filter": {
+                      "roll": "dark-pact",
+                      "result": "success"
+                    },
+                    "window": "phase"
+                  }
+                }
+              ]
+            },
+            "effect": {
+              "type": "dice-gated",
+              "dice": "D6",
+              "threshold": 4,
+              "comparison": "gte",
+              "on_success": {
+                "type": "mortal-wounds",
+                "target": "recipient",
+                "modifier": {
+                  "count": "D3"
+                }
+              },
+              "on_fail": null
+            }
+          }
+        ]
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-ended",
+      "condition": {
+        "type": "phase-is",
+        "parameters": {
+          "phase": "fight"
+        }
+      }
+    },
+    "source_digest": "f3495b14f110f0acbeea46ea1a0bea1b46ee944466669a7f4036cbfcdf95a350"
   },
   {
     "ability_id": "persistent-assailants-fellhammer-siege-host-chaos-space-marines",
@@ -15780,19 +15893,55 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "chaos-cult",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "model-destroyed",
+        "object": "model-in-this-unit"
+      },
+      "effect": {
+        "type": "dice-gated",
+        "dice": "D6",
+        "threshold": 6,
+        "comparison": "gte",
+        "on_success": {
+          "type": "ability-part",
+          "trigger": {
+            "event": "attacks-resolved",
+            "subject": "attacker"
+          },
+          "effect": {
+            "type": "mortal-wounds",
+            "target": "event-subject",
+            "modifier": {
+              "count": 1
+            }
+          }
+        },
+        "on_fail": null
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "attack-sequence"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "9fda4cfc04f64c575a51448090ac9fc40cbebe0df552b369c80be55f63d92809"
   },
   {
     "ability_id": "shroud-of-obfuscation-deceptors-chaos-space-marines",
@@ -15837,19 +15986,60 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "fellhammer-siege-host",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-part",
+      "trigger": {
+        "event": "targets-selected",
+        "subject": {
+          "owner": "enemy"
+        },
+        "filter": {
+          "kind": "charge"
+        },
+        "object": "this-unit"
+      },
+      "effect": {
+        "type": "roll-modifier",
+        "target": "event-subject",
+        "modifier": {
+          "roll": "charge",
+          "operation": "subtract",
+          "value": 2,
+          "not_cumulative": "negative-modifiers"
+        }
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "phase-started",
+      "condition": {
+        "operator": "and",
+        "operands": [
+          {
+            "type": "phase-is",
+            "parameters": {
+              "phase": "charge"
+            }
+          },
+          {
+            "type": "player-turn-is",
+            "parameters": {
+              "turn": "opponent-turn"
+            }
+          }
+        ]
+      }
+    },
+    "source_digest": "537a08c6b1ed734720a1cce18b8191ef237e401f1b025d4b285167fa20fc1e7d"
   },
   {
     "ability_id": "skinshift-pactbound-zealots-chaos-space-marines",
@@ -16437,19 +16627,75 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "chaos-space-marines",
     "detachment_id": "soulforged-warpack",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "matches",
+        "parameters": {
+          "subject": "event-subject",
+          "filter": {
+            "within": {
+              "of": "this-model",
+              "range": {
+                "inches": 3
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "ability-modifier",
+            "target": "event-subject",
+            "modifier": {
+              "ability": {
+                "event": "used",
+                "event_var": "pact"
+              },
+              "aspect": "mortal-wounds",
+              "operation": "add",
+              "value": 1
+            }
+          },
+          {
+            "type": "re-roll",
+            "target": "event-subject",
+            "modifier": {
+              "roll": "hit",
+              "result_scope": "any-result"
+            }
+          }
+        ]
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "used",
+      "filter": {
+        "kind": "contract"
+      },
+      "binds_event_variable": "pact",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "DAEMON",
+          "HERETIC ASTARTES",
+          "VEHICLE"
+        ]
+      }
+    },
+    "source_digest": "978855a1bbdbae661a9f1388fc89c9c5024825067b87012b0d8d0f72e61c1fdd"
   },
   {
     "ability_id": "terrorglut-parasite-nightmare-hunt-chaos-space-marines",

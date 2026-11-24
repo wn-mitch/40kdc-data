@@ -315,7 +315,7 @@ func TestEffectTranslationCorpus(t *testing.T) {
 	}
 	for _, c := range cases {
 		ability := map[string]any{"effect": c["effect"]}
-		for _, key := range []string{"scope", "usage", "trigger", "applies_to", "optional"} {
+		for _, key := range []string{"scope", "usage", "trigger", "applies_to", "optional", "ability_id"} {
 			if c[key] != nil {
 				ability[key] = c[key]
 			}

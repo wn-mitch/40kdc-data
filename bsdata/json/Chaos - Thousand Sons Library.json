@@ -35039,7 +35039,7 @@
                   {
                     "name": "Warpmeld Sacrifice",
                     "id": "a2f2-ea70-4522-498f",
-                    "description": "Until the end of the phase:\n  - When an enemy unit targets a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword, you can use this ability:\n    - If the target unit is the same unit as that unit, subtract 1 from the attacking unit's Wound rolls.\n    - At the end of each phase, until the end of the phase, that unit suffers D3 mortal wounds.\n  - When a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword is selected to shoot, you can use this ability or when a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword is selected to fight, you can use this ability:\n    - Add 1 to the triggering unit's Wound rolls.\n    - At the end of each phase, until the end of the phase, the triggering unit suffers D3 mortal wounds.",
+                    "description": "Until the end of the phase:\n  - When an enemy unit targets a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword, you can use this ability:\n    - If the target unit is the same unit as that unit, subtract 1 from the attacking unit's Wound rolls.\n    - At the end of the phase, that unit suffers D3 mortal wounds.\n  - When a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword is selected to shoot, you can use this ability or when a friendly MUTANT TZEENTCH unit with the INFANTRY or MOUNTED keyword is selected to fight, you can use this ability:\n    - Add 1 to the triggering unit's Wound rolls.\n    - At the end of the phase, the triggering unit suffers D3 mortal wounds.",
                     "hidden": false
                   }
                 ]

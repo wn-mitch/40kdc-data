@@ -85,7 +85,8 @@ function lowerDelayedDestruction(
     // Nested, the phase end is scheduled by each destruction: only a once-only destruction ("first time" with its
     // usage limit) keeps it to one, and "and" joins the moments rather than ordering them.
     const ordered = history.start_byte < delayed.start_byte && !/\band\b/iu.test(between);
-    const once = /\bfirst time\b/iu.test(sourceText) && hasUsage && !/\beach time\b/iu.test(sourceText);
+    // A Stratagem's TARGET is the model "that was just destroyed" when it is used: one destruction per use.
+    const once = (/\bfirst time\b/iu.test(sourceText) && hasUsage && !/\beach time\b/iu.test(sourceText)) || history.fragment === "TARGET";
     return ordered && once ? { nest: true } : { error: NAMED_MODEL_ERROR };
   }
   if (/\band\b/iu.test(between)) return { error: NESTED_MOMENT_ERROR };

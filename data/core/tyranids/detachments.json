@@ -57,7 +57,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "2026-10-14"
+      "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 3,
     "force_dispositions": [
@@ -242,7 +242,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "2026-10-14"
+      "dataslate": "pre-launch-provisional"
     },
     "detachment_points": 3,
     "force_dispositions": [
@@ -280,7 +280,7 @@
     ],
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "detachment_points": 2,
     "force_dispositions": [

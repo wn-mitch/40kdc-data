@@ -11,7 +11,7 @@ const catalogs = new Map<string, readonly UnitIdentity[]>();
  * The faction's datasheets: its own units.json and those of its shared-roster parents (a Space Marine
  * chapter fields the adeptus-astartes units), one entry per unit id.
  */
-function unitsIn(context: UnitNameContext): readonly UnitIdentity[] {
+export function unitsIn(context: UnitNameContext): readonly UnitIdentity[] {
   if (context.units) return context.units;
   const cached = catalogs.get(context.faction_id);
   if (cached) return cached;

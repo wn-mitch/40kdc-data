@@ -13,7 +13,7 @@ import { passOffer, wrapNamedChain } from "./compile-named-selections.js";
 import { refuseUnwrappedThatMany, wrapThatMany } from "./compile-that-many.js";
 import { isRollMarker, resolveRolls } from "./compile-dice.js";
 import { foldBandSelection } from "./compile-band-selection.js";
-import { boundAttackDesignation, designation, directEntry, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle } from "./compile-wrappers.js";
+import { boundAttackDesignation, designation, directEntry, MOMENT_UNIT, selectUnit, wrapAura, wrapForEachUnit, wrapLeaderTarget, wrapRulesBundle } from "./compile-wrappers.js";
 import { filterObjectMoment, wrapModelAura } from "./compile-model-level.js";
 import { auraPart, namesUnboundRecipient } from "./compile-aura-parts.js";
 import { isForbiddenSetUp } from "./compile-set-up-placement.js";
@@ -58,7 +58,7 @@ const STRATAGEM_FAMILIES = new Set(["use-window", "stratagem-target", "triggerin
 const LASTING_EFFECTS = new Set([
   "ability-grant", "ability-modifier", "act-on-death", "borrow-weapons", "cost-modifier", "counts-as", "damage-reduction",
   "destruction-rule", "feel-no-pain", "ignore-modifiers", "invulnerable-save", "keyword-grant",
-  "move-modifier", "named-region-state", "permission", "re-roll", "roll-modifier", "roll-result", "rule-state", "stat-modifier",
+  "move-modifier", "named-region-state", "order-share", "orders-modifier", "permission", "re-roll", "roll-modifier", "roll-result", "rule-state", "stat-modifier",
   "targeting", "test-exemption", "transport-capacity", "weapon-ability-grant", "weapon-ability-range", "weapon-grant",
 ]);
 
@@ -116,7 +116,7 @@ export function assemblePart(
   } = frame;
   let { optional, optionalSentence } = frame;
   const { planned, split, boundDuration, window } = plan;
-  const { firstEffectIndex, partStarts, afterDestruction, afterThisUse, named, namedPass, delayed, fold, selectionLimit, target, nearTarget, selected, pair, independent, designatedSpends, direct } = bindings;
+  const { firstEffectIndex, partStarts, afterDestruction, afterThisUse, named, namedPass, delayed, fold, selectionLimit, target, nearTarget, selected, fromMoment, optionSelections, pair, independent, designatedSpends, direct } = bindings;
   // A Stratagem's RESTRICTIONS apply to its use as a whole, so they belong to the first part, not to the moment printed before them.
   const partOf = (index: number) => list[index]!.fragment === "RESTRICTIONS" ? 0 : partStarts.filter((part) => part.index < index).length;
   // Each effect's own duration wraps its node before the parts are built. Under a window, an effect that
@@ -182,6 +182,9 @@ export function assemblePart(
     rolls.filter((leaf) => partOf(list.indexOf(leaf)) === part).map((leaf) => {
       const poolLeaf = leaf.parameters.pool_condition as CompileLeaf | undefined;
       if (poolLeaf !== undefined) return { ...leaf, parameters: { ...leaf.parameters, pool_condition: condition(poolLeaf) } };
+      // Additional dice under a condition (compile-dice-variants.ts foldExtraDice).
+      const extra = leaf.parameters.extra_dice as { count: number; leaf: CompileLeaf } | undefined;
+      if (extra !== undefined) return { ...leaf, parameters: { ...leaf.parameters, extra_dice: { count: extra.count, condition: condition(extra.leaf) } } };
       const bonus = leaf.parameters.conditional_bonus as { value: number; leaf: CompileLeaf; following?: CompileLeaf } | undefined;
       if (bonus === undefined) return leaf;
       return { ...leaf, parameters: { ...leaf.parameters, conditional_bonus: { value: bonus.value, node: condition(bonusCondition(bonus, sourceText)) } } };
@@ -209,11 +212,11 @@ export function assemblePart(
   // A second loop in a later part leaves the record's own part its first loop.
   const recordLoop = forEachPart > 0 ? firstPartLoop(list, (leaf) => partOf(list.indexOf(leaf))) : null;
   if (forEachPart > 0) {
-    const own = pieces[forEachPart]!;
+    const [own, caps] = splitUseCaps(pieces[forEachPart]!);
     const each = forEachLeaf!;
-    const looped = attempt(() => wrapForEachUnit(each, own.length === 1 ? own[0]! : { type: "sequence", steps: own }));
-    if (looped === null) return { ok: false, signature, errors };
-    pieces[forEachPart] = [looped];
+    const looped = own.length === 0 ? null : attempt(() => wrapForEachUnit(each, own.length === 1 ? own[0]! : { type: "sequence", steps: own }));
+    if (looped === null) return { ok: false, signature, errors: own.length === 0 ? [...errors, "A for-each loop holds only a cap on the ability's own gains."] : errors };
+    pieces[forEachPart] = [looped, ...caps];
   }
   let steps = pieces[0]!;
   // Under a window, the effects that last within it sit in one window part, which takes the moment as its trigger below.
@@ -281,7 +284,7 @@ export function assemblePart(
   }
   const pairCandidateEligibility = pairCandidates.length ? attempt(() => allOf(pairCandidates.map((at) => condition(list[at]!)))) : null;
 
-  if (selections.length === 1 && selected.length > 0) {
+  if ((selections.length === 1 || fromMoment) && selected.length > 0) {
     // "Ranged attacks that target that unit": an attack-type gate says which attacks against the
     // designated unit are changed, so it narrows the designation's effect, not the selection. The
     // attacker gate ("that disembarked from this TRANSPORT") narrows it the same way.
@@ -290,7 +293,8 @@ export function assemblePart(
     // An effect on the designated unit itself (bindings' `direct`) is the designation's own entry.
     const directOwn = direct.length ? attempt(() => directEntry(direct, rolls)) : null;
     if (direct.length && directOwn === null) return { ok: false, signature, errors };
-    body = attempt(() => designation(options.name, selections[0]!, list, gated(attackGates, body!), durations[0], eligibility, selectionLimit, false, directOwn));
+    // "that targets that enemy unit" with no selection: the moment's unit is designated (fromMoment).
+    body = attempt(() => designation(options.name, fromMoment ? MOMENT_UNIT : selections[0]!, list, gated(attackGates, body!), durations[0], eligibility, selectionLimit, false, directOwn));
     // The lifted spends come before the designation, so the designation's read of them is set when it is tested.
     if (body && designatedSpends.length) body = { type: "sequence", steps: [...designatedSpends.map((item) => gated(item.gate, item.node)), body] };
   }
@@ -316,6 +320,10 @@ export function assemblePart(
       ...(selectUnit(selections[0]!, body!, { eligibility, selectionLimit }).selector as Node),
       ...(existing.bind_as === undefined ? {} : { bind_as: existing.bind_as }),
     };
+  }
+  else if (optionSelections && body) {
+    // Each option of the "Or:" choice makes its own selection, in printed order; the option's effects name that unit.
+    body = attempt(() => selectInOptions(body!, selections, eligibilityIndexes.length > 0 || selected.length > 0 || selectionLimit !== null || maxCount !== undefined));
   }
   else if (named && body) {
     // Selections bound apart and named one by one: each nests in the one before it, with its own conditions.
@@ -365,10 +373,14 @@ export function assemblePart(
     const firstItems = pieceItems.filter((item) => partOf(item.index) === 0);
     const outside = !recordLoop && partStarts.length === 0 && window === null && body === unwrapped && body.type === "sequence" && steps.length === firstItems.length
       ? stepsBeforeLoop(steps, firstItems.map((item) => places[item.index]!.sentence), places[list.indexOf(each)]!.sentence) : 0;
-    const looped: Node = outside === 0 ? body! : steps.length - outside === 1 ? steps[outside]! : { type: "sequence", steps: steps.slice(outside) };
+    const whole: Node = outside === 0 ? body! : steps.length - outside === 1 ? steps[outside]! : { type: "sequence", steps: steps.slice(outside) };
+    const [inLoop, caps] = splitUseCaps(whole.type === "sequence" ? whole.steps as Node[] : [whole]);
+    if (inLoop.length === 0) return { ok: false, signature, errors: [...errors, "A for-each loop holds only a cap on the ability's own gains."] };
+    const looped: Node = caps.length === 0 ? whole : inLoop.length === 1 ? inLoop[0]! : { type: "sequence", steps: inLoop };
     // "Roll one D6. On a 6, …; each unit within 6\" …": the loop runs in the band's outcome (compile-band-loop.ts).
     body = attempt(() => loopUnderBand(list, each, sourceText) ? wrapBandLoop(each, looped) : wrapForEachUnit(each, looped));
-    if (body && outside > 0) body = { type: "sequence", steps: [...steps.slice(0, outside), body] };
+    if (body && caps.length) body = { type: "sequence", steps: [body, ...caps] };
+    if (body && outside > 0) body = { type: "sequence", steps: [...steps.slice(0, outside), ...(body.type === "sequence" && caps.length ? body.steps as Node[] : [body])] };
     // "The maximum number of units that can be … depends on the battle size": the loop's cap on the units it affects.
     if (body && battleSizeCount && selections.length === 0) body = { ...body, max_affected: maxCount };
     if (body && afterLoop.length) body = { type: "sequence", steps: [body, ...afterLoop.map((item) => gated(item.gate, item.node))] };
@@ -484,7 +496,8 @@ export function assemblePart(
   });
   moments.forEach((moment, position) => { if (list[triggerIndexes[position]!]!.fragment === "WHEN") moments[position] = gatedMoment(moment, usabilityNodes); });
   const asTrigger = (nodes: Node[]) => nodes.length === 0 ? null : nodes.length === 1 ? nodes[0]! : nodes;
-  const leading = moments.filter((_, position) => !delayed.dropped.has(position) && !partStarts.some((part) => part.moments.includes(position)));
+  const leadingPositions = moments.map((_, position) => position).filter((position) => !delayed.dropped.has(position) && !partStarts.some((part) => part.moments.includes(position)));
+  const leading = leadingPositions.map((position) => moments[position]!);
   let entryTrigger = asTrigger(leading);
   // The end of the phase in which a named model was destroyed: the destruction's part holds the phase end for that phase.
   for (const position of delayed.nested) body = { type: "ability-part", trigger: moments[position]!, effect: body, duration: "phase" };
@@ -589,8 +602,13 @@ export function assemblePart(
       scopeDuration = "permanent";
     }
     if (usagePart !== -1) usages.splice(0);
-    body = partSteps.length === 1 ? partSteps[0]! : { type: "sequence", steps: partSteps };
-    entryTrigger = null;
+    // A Stratagem's TARGET destruction ("one model from your army that was just destroyed") is the moment it is used:
+    // when every later moment nests in that moment's part, the part is the whole record and its moment the record's trigger.
+    const targetEntry = entryPart !== null && partSteps.length === 1 && partSteps[0]!.trigger === entryPart.trigger
+      && Object.keys(partSteps[0]!).every((key) => key === "type" || key === "trigger" || key === "effect")
+      && leadingPositions.length > 0 && leadingPositions.every((position) => list[triggerIndexes[position]!]!.fragment === "TARGET");
+    body = targetEntry ? partSteps[0]!.effect as Node : partSteps.length === 1 ? partSteps[0]! : { type: "sequence", steps: partSteps };
+    if (!targetEntry) entryTrigger = null;
   }
   let resolved: ReturnType<typeof resolveEntry>;
   try {
@@ -631,6 +649,14 @@ export function assemblePart(
  * A selection's eligibility condition as the DSL reads it. "This unit" in a hit's eligibility is the
  * candidate being selected, so a hit-by-attacks names its unit as this-unit; the leaf is otherwise unchanged.
  */
+/**
+ * A cap on what one use of the ability gains ("You cannot gain more than 3 Pain tokens as a result of … caused by
+ * this Stratagem") limits that use as a whole, so a for-each loop never repeats it: it follows the loop.
+ */
+function splitUseCaps(nodes: readonly Node[]): [Node[], Node[]] {
+  return [nodes.filter((node) => node.type !== "resource-gain-cap"), nodes.filter((node) => node.type === "resource-gain-cap")];
+}
+
 /** Lifetimes that end within the phase they start in. */
 const WITHIN_PHASE = new Set(["attack-sequence", "resolution", "after-resolving", "one-use", "until-this-unit-has-shot"]);
 
@@ -644,4 +670,24 @@ function bonusCondition(bonus: { leaf: CompileLeaf; following?: CompileLeaf }, s
   const folded = foldUnitFilters([bonus.leaf, bonus.following], sourceText);
   if (folded.length !== 1) throw new CompileError("A conditional change's distance does not take the unit-filter after it.");
   return folded[0]!;
+}
+
+/**
+ * "Select one X unit. That unit heals 2D6 wounds. Or: Select one destroyed X unit. …": the one choice
+ * in the body, with each option wrapped in the selection printed in it. Refuses a choice whose
+ * options do not match the selections one to one, and selections with conditions, limits or counts
+ * of their own, which an option's select does not carry yet.
+ */
+function selectInOptions(body: Node, selections: readonly CompileLeaf[], qualified: boolean): Node {
+  if (qualified) throw new CompileError("A selection inside an \"Or:\" option takes only its unit-filter; conditions, limits and counts on it are not carried.");
+  const wrap = (node: Node): Node => {
+    if (node.type === "choice") {
+      const options = node.options as Node[];
+      if (options.length !== selections.length) throw new CompileError("Each option of an \"Or:\" choice makes one selection; the options and selections do not match.");
+      return { ...node, options: options.map((option, at) => selectUnit(selections[at]!, option, {})) };
+    }
+    if (node.type === "ability-part" || node.type === "conditional") return { ...node, effect: wrap(node.effect as Node) };
+    throw new CompileError("The selections of an \"Or:\" choice need the choice to be the ability's effect.");
+  };
+  return wrap(body);
 }

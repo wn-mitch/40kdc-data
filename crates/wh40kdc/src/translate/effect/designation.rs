@@ -8,7 +8,7 @@ use super::menu::duration_clauses;
 use super::select::*;
 use super::words::*;
 use super::{empty_value, inline};
-use crate::translate::condition::{nn, obj, P};
+use crate::translate::condition::{nn, obj, or_list, unit_ref_phrase, P};
 
 /// "(your Suppressed target)" — a designate-target mark's parenthetical.
 pub(crate) fn designation_label(designation: Option<&Value>) -> String {
@@ -31,6 +31,10 @@ pub(super) fn has_word_suffix(s: &str, word: &str) -> bool {
 }
 
 pub(crate) fn designation_target_subject(sel: &P) -> String {
+    // "that enemy unit", the moment's unit: designated with no choice.
+    if let Some(from) = nn(sel, "from") {
+        return unit_ref_phrase(Some(from), "the unit");
+    }
     let selector = obj(sel.get("selector"));
     if sv(sel, "kind") == Some("objective") {
         super::bind::objective_selector_phrase(selector)
@@ -61,6 +65,41 @@ pub(crate) fn designation_attacker_phrase(applies: &P, block: bool) -> String {
         selector.insert("filter".into(), Value::Object(filter));
         selector_subject(&selector, false, false)
     };
+    // "each time an ARMIGER model in the lead target or the bondsmen target makes an attack": the
+    // attacks of the Stratagem targets the entry names, optionally only those of its models the
+    // filter admits.
+    if let Some(refs) = nn(applies, "attacker") {
+        let refs: Vec<&Value> = match refs.as_array() {
+            Some(list) => list.iter().collect(),
+            None => vec![refs],
+        };
+        let noun = match model_filter {
+            Some(model) => subject(model, true, true),
+            None => "model".to_string(),
+        };
+        let article = if noun
+            .chars()
+            .next()
+            .is_some_and(|c| "aeiouAEIOU".contains(c))
+        {
+            "an"
+        } else {
+            "a"
+        };
+        let units: Vec<String> = refs
+            .into_iter()
+            .map(|unit_ref| unit_ref_phrase(Some(unit_ref), "the unit"))
+            .collect();
+        return format!(
+            "each time {article} {noun} in {} {}",
+            or_list(&units),
+            if block {
+                "makes an attack against it"
+            } else {
+                "attacks it"
+            }
+        );
+    }
     let attacker = match (model_filter, unit_filter) {
         (Some(model), Some(unit)) => format!(
             "a {} in a {}",

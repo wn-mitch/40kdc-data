@@ -34,9 +34,9 @@ var damageStats = map[string]bool{"A": true, "S": true, "T": true, "Sv": true, "
 var nonDamageEffectTypes = map[string]bool{
 	"heal": true, "move": true, "mortal-wounds": true, "set-up": true, "permission": true, "cost-modifier": true,
 	"stance-selection-capacity": true, "move-modifier": true, "army-rule": true, "keyword-grant": true,
-	"act-on-death": true, "cp-gain": true, "resource-gain": true, "add-unit": true, "split-unit": true,
+	"act-on-death": true, "cp-gain": true, "resource-gain": true, "resource-gain-cap": true, "add-unit": true, "split-unit": true,
 	"transport-capacity": true, "destroy-models": true, "designate": true, "test": true, "targeting": true,
-	"state-change": true, "no-effect": true, "oath-modifier": true, "objective-sticky": true, "counts-as": true,
+	"state-change": true, "no-effect": true, "oath-modifier": true, "objective-sticky": true, "region-extend": true, "counts-as": true,
 	"marker": true, "test-exemption": true, "return-models": true,
 }
 

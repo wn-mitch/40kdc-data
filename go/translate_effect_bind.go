@@ -28,6 +28,10 @@ func rollHead(e map[string]any) string {
 	if stat, ok := asMap(e["count_stat"]); ok && stat != nil {
 		return "roll a number of " + diceCase(e["dice"]) + " equal to the " + cstr(stat["stat"]) + " characteristic of " + unitRefPhrase(stat["of"], "this unit") + extra + kind
 	}
+	// As many dice as a count from the battle's history: "equal to the number of mortal wounds the unit suffered this phase".
+	if history, ok := asMap(e["count_history"]); ok && history != nil {
+		return "roll a number of " + diceCase(e["dice"]) + " equal to the number of mortal wounds " + unitRefPhrase(history["subject"], "the unit") + " suffered this " + cstr(history["window"]) + extra + kind
+	}
 	return "roll " + diceCase(e["dice"]) + extra + kind
 }
 
@@ -60,8 +64,9 @@ func objectiveSelectionLimit(sel map[string]any) string {
 }
 
 func selectObjectiveLead(sel map[string]any) string {
+	// "for each objective marker …" when the selector has no count (every matching marker), else "select …".
 	verb := "select"
-	if sel["count"] == "each" {
+	if sel["count"] == nil {
 		verb = "for"
 	}
 	return verb + " " + objectiveSelectorPhrase(sel) + objectiveSelectionLimit(sel)

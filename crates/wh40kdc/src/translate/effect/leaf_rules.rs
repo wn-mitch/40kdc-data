@@ -34,7 +34,21 @@ pub(super) fn marker(m: &P, ctx: &Ctx) -> String {
         } else {
             ""
         };
-        return format!("move the {label} marker{unmoved}{dist}{consume}");
+        // "set up that marker anywhere on the battlefield that is more than 8\" horizontally away from all enemy units".
+        let away = nn(m, "min_enemy_distance")
+            .map(|d| {
+                format!(
+                    "{} more than {} horizontally away from all enemy units",
+                    if nn(m, "distance").is_some() {
+                        ","
+                    } else {
+                        " anywhere on the battlefield"
+                    },
+                    range_phrase(Some(d))
+                )
+            })
+            .unwrap_or_default();
+        return format!("move the {label} marker{unmoved}{dist}{away}{consume}");
     }
     if sv(m, "operation") == Some("remove") {
         return format!("remove that {label} marker from the battlefield");
@@ -186,8 +200,11 @@ pub(super) fn resource_die(m: &P) -> String {
         );
     }
     let value = sv(m, "value");
+    // roll-result: "with a value equal to that result", the roll that gated the gain.
     let shown = if value == Some("highest") {
         "the highest result".to_string()
+    } else if value == Some("roll-result") {
+        "that result".to_string()
     } else {
         jstr(m.get("value"))
     };

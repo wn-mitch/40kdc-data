@@ -15,7 +15,7 @@ import type { FlatFamily } from "./types.js";
 const FILTER_SIDES = ["friendly", "enemy", "any"] as const;
 const BASE_FILTER_STATES = ["unengaged", "battle-shocked"] as const;
 const NOT_BATTLE_SHOCKED = "not-battle-shocked";
-const ENGAGED_OR_HIDDEN = ["engaged", "hidden"] as const;
+const ENGAGED_OR_HIDDEN = ["engaged", "hidden", "destroyed"] as const;
 const HELD_IN = ["strategic-reserves", "cult-ambush"] as const;
 const AMONG_TARGETS = "stratagem-targets";
 const TARGET_PICKS = ["one", "every", "any"] as const;
@@ -242,7 +242,7 @@ const UNIT_FILTER_SCHEMA = {
     keywords: STRING_LIST_SCHEMA,
     any_keywords: { type: "array", minItems: 2, uniqueItems: true, items: { type: "string", minLength: 1 } },
     excluded_keywords: STRING_LIST_SCHEMA,
-    states: { type: "array", minItems: 1, uniqueItems: true, items: { enum: ["unengaged", "battle-shocked", "not-battle-shocked", "engaged", "hidden"] } },
+    states: { type: "array", minItems: 1, uniqueItems: true, items: { enum: ["unengaged", "battle-shocked", "not-battle-shocked", "engaged", "hidden", "destroyed"] } },
     other: { const: true },
     visible: { const: true },
     level: { const: "model" },
@@ -292,10 +292,10 @@ const UNIT_FILTER_SCHEMA = {
 export const UNIT_FILTER_FAMILIES: readonly FlatFamily[] = [
   {
     id: "unit-filter",
-    version: 20,
+    version: 21,
     role: "CONDITION",
     label: "Which units",
-    description: "The units an aura reaches or a selection may pick: friendly, enemy or any (a phrase naming no side means friendly), optionally with unit keywords they all have, keywords one of which they have (\"NECRONS VEHICLE or NECRONS MOUNTED\": NECRONS, and VEHICLE or MOUNTED), keywords they must not have (excluded_keywords), keywords they must not have all of (excluded_all_keywords), states they are in (unengaged, battle-shocked, not-battle-shocked, engaged, hidden; engaged cannot be unengaged in the same filter), other than this unit, and visible; level model when it names models (\"One ADEPTUS CUSTODES model\"). A keyword can start with an apostrophe as the rules print it ('ARDMOB). It names no range or count: the aura-range after it or the select-unit before it does. "
+    description: "The units an aura reaches or a selection may pick: friendly, enemy or any (a phrase naming no side means friendly), optionally with unit keywords they all have, keywords one of which they have (\"NECRONS VEHICLE or NECRONS MOUNTED\": NECRONS, and VEHICLE or MOUNTED), keywords they must not have (excluded_keywords), keywords they must not have all of (excluded_all_keywords), states they are in (unengaged, battle-shocked, not-battle-shocked, engaged, hidden, destroyed: \"Select one friendly destroyed X unit\"; engaged cannot be unengaged in the same filter), other than this unit, and visible; level model when it names models (\"One ADEPTUS CUSTODES model\"). A keyword can start with an apostrophe as the rules print it ('ARDMOB). It names no range or count: the aura-range after it or the select-unit before it does. "
       + "held_in names where a unit off the battlefield is held: strategic-reserves, or cult-ambush (\"Units in Cult Ambush\"). excluded_abilities: matching units have none of these abilities (by record id, e.g. lone-operative). "
       + "alternatives: two or more {keywords, excluded_keywords, states}, any one of which a unit matches (\"LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit\" is [LEGIO CYBERNETICA] and [ADEPTUS MECHANICUS, VEHICLE]; \"PSYKER or Battle-shocked unit\" is [PSYKER] and states [battle-shocked]); each alternative keeps its own exclusions and states, side, level and the filter's own keywords, exclusions and states hold for every alternative, and it does not go with any_keywords. "
       + "among stratagem-targets, always with targets: the filter picks among this Stratagem's targets (\"your **VEHICLE** unit\", \"that **TRANSPORT**\", \"those units\"), not among all units; targets one = the single target it matches, every = all matching targets (in a condition: \"both of those units\"), any = any one matching target (in a condition: \"one of those units\"; an effect or moment applies to each); side any when no side is printed. among matched-units: the units an earlier unit-position of matching-unit introduced (\"one of those VEHICLE units\"), friendly or enemy, with no targets. "

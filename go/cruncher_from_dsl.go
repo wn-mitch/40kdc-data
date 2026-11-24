@@ -60,6 +60,8 @@ type dslOpts struct {
 	// selections lists the effect's selections in document order
 	// (selectionOrder), which number their lever ids.
 	selections []string
+	// spentMax is the most each bound spend of the effect can spend (spentMaxima), by its bind_as name.
+	spentMax map[string]float64
 }
 
 // attackRollInfo is the hit or wound roll a single after-roll trigger fires on; outcome is ""
@@ -153,6 +155,7 @@ func translateEffect(effect any, source map[string]any, context map[string]any, 
 		}
 	}
 	opts.selections = selectionOrder(effect)
+	opts.spentMax = spentMaxima(effect)
 	dslWalk(effect, source, opts, out)
 	if act == nil || (act["usage"] == nil && act["cost"] == nil && act["optional"] != true) {
 		return out
@@ -274,16 +277,11 @@ var unresolvedTargets = map[string]bool{"event-subject": true, "event-object": t
 // designated unit, or an unsupported debuff on it.
 func designateEntry(n, applies map[string]any, source map[string]any, opts dslOpts, out *effectTranslation) {
 	if applies["to"] == "attackers-of-target" || applies["to"] == "bearer-attacks-target" {
-		for _, rawFilter := range []any{applies["attacker_filter"], applies["attacker_unit_filter"]} {
+		for _, rawFilter := range []any{applies["attacker"], applies["attacker_filter"], applies["attacker_unit_filter"]} {
 			if rawFilter == nil {
 				continue
 			}
-			filter, ok := asMap(rawFilter)
-			if !ok || filter == nil {
-				out.unsupported = append(out.unsupported, unsup("designate-target attacker filter is unresolved", n))
-				return
-			}
-			verdict := matchesUnitFilter(filter, opts.context, "attacker", "friendly")
+			verdict := attackerVerdict(rawFilter, opts.context)
 			if verdict == false {
 				return
 			}
@@ -436,6 +434,12 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 	}
 	if hasUnresolvedFidelityBinding(n) {
 		out.unsupported = append(out.unsupported, unsup(fidelityBindingReason, n))
+		return
+	}
+	// "add the number of YP you just spent": a lever at the most the spend can spend; the player
+	// vouches for spending it.
+	if atMost, spend := spentAtMost(n, opts.spentMax); atMost != nil {
+		offerLever(atMost, source, opts, out, leverSpec{id: opts.abilityID + "#spent-max", label: "Spending the most", requires: []any{spend}})
 		return
 	}
 	// A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed size here:
@@ -2028,10 +2032,27 @@ func translateFeelNoPain(node, source map[string]any, opts dslOpts, out *effectT
 	rawAgainst, present := modifier["against"]
 	scope := "all"
 	if present {
-		if rawAgainst == "all" || rawAgainst == "mortal" {
+		if list, isList := rawAgainst.([]any); isList {
+			// A list naming mortal wounds folds into the mortal stream; psychic attacks and
+			// Devastating Wounds criticals are invisible to the buff layer.
+			hasMortal := false
+			for _, item := range list {
+				if item == "mortal" {
+					hasMortal = true
+				}
+			}
+			if !hasMortal {
+				out.unsupported = append(out.unsupported, unsup("feel-no-pain: against a list without mortal wounds (psychic attacks and Devastating Wounds criticals are not tracked by the buff layer)", node))
+				return
+			}
+			scope = "mortal"
+		} else if rawAgainst == "all" || rawAgainst == "mortal" {
 			scope = rawAgainst.(string)
 		} else if rawAgainst == "psychic-and-mortal" {
 			scope = "mortal"
+		} else if rawAgainst == "damage-1-unmodified" {
+			out.unsupported = append(out.unsupported, unsup("feel-no-pain: against \"damage-1-unmodified\" (the buff layer does not split Feel No Pain by an attack's Damage)", node))
+			return
 		} else if rawAgainst == "psychic" {
 			out.unsupported = append(out.unsupported, unsup("feel-no-pain: against \"psychic\" (psychic attacks are not tracked by the buff layer)", node))
 			return
@@ -2158,6 +2179,10 @@ func translateDamageReduction(node, source map[string]any, opts dslOpts, out *ef
 	}
 	if reduction == "half" {
 		out.unsupported = append(out.unsupported, unsup("damage-reduction: halving Damage is not modelled by the buff layer", node))
+		return
+	}
+	if reduction == "to-one" {
+		out.unsupported = append(out.unsupported, unsup("damage-reduction: setting Damage to 1 is not modelled by the buff layer", node))
 		return
 	}
 	out.unsupported = append(out.unsupported, unsup("damage-reduction: unrecognised reduction \""+jsStr(reduction)+"\"", node))
@@ -3904,4 +3929,33 @@ func marksOnly(node any) bool {
 		return true
 	}
 	return false
+}
+
+// attackerVerdict reports whether the crunched attacker is the one a designation's attacker entry
+// names: a unit filter, a unit-ref, or a list of unit-refs any one of which may make the attack.
+// nil means unknown.
+func attackerVerdict(raw any, ctx map[string]any) any {
+	refs, isList := raw.([]any)
+	if !isList {
+		refs = []any{raw}
+	}
+	allFalse := true
+	for _, ref := range refs {
+		filter, ok := asMap(ref)
+		if !ok || filter == nil {
+			allFalse = false
+			continue
+		}
+		verdict := matchesUnitFilter(filter, ctx, "attacker", "friendly")
+		if verdict == true {
+			return true
+		}
+		if verdict != false {
+			allFalse = false
+		}
+	}
+	if allFalse {
+		return false
+	}
+	return nil
 }

@@ -77,3 +77,19 @@ export function weaponNameList(value: unknown, label: string): string[] {
   if (new Set(value).size !== value.length) throw new TypeError(`${label} lists a weapon name twice.`);
   return value as string[];
 }
+
+/**
+ * What a modifier does not stack with ("this is not cumulative with any other negative modifiers to
+ * that Charge roll", "not cumulative with the REAVERS' Matchless Swiftness ability"): every other
+ * negative modifier to the same roll or characteristic, or the one named ability's own change.
+ */
+export const NOT_CUMULATIVE_SCHEMA = {
+  anyOf: [{ const: "negative-modifiers" }, { type: "object", required: ["ability"], properties: { ability: ENTITY_ID_SCHEMA }, additionalProperties: false }],
+  "x-optional": true,
+};
+
+export function notCumulative(value: unknown, label: string): string | Params {
+  if (value === "negative-modifiers") return value;
+  if (isObject(value) && Object.keys(value).length === 1 && typeof value.ability === "string" && ENTITY_ID.test(value.ability)) return { ability: value.ability };
+  throw new TypeError(`${label} is negative-modifiers or {ability: id}.`);
+}

@@ -228,13 +228,17 @@ func liveTriggers(triggers []map[string]any) []map[string]any {
 	return out
 }
 
-// allModels reports whether every trigger names a model as its role (its subject or object).
+// allModels reports whether every trigger names a model as its role (its subject or object): a
+// model-level filter, or one model of this unit (model-in-this-unit).
 func allModels(triggers []map[string]any, role string) bool {
 	live := liveTriggers(triggers)
 	if len(live) == 0 {
 		return false
 	}
 	for _, t := range live {
+		if t[role] == "model-in-this-unit" {
+			continue
+		}
 		if mapOr(t[role])["level"] != "model" {
 			return false
 		}
@@ -287,12 +291,64 @@ func modelEventRefs(v any, triggers []map[string]any) any {
 		}
 		return v
 	}
+	v = transportRefs(v, triggers)
 	object := allModels(triggers, "object")
 	subject := allModels(triggers, "subject")
 	if !object && !subject {
 		return v
 	}
 	return rewrite(v, object, subject)
+}
+
+// eventObjectTransport is the describer's spelling of `event-object` under a disembarked moment:
+// the Transport the unit disembarked from.
+const eventObjectTransport = "event-object-transport"
+
+// transportRefs returns v with its `event-object` refs spelled eventObjectTransport when every
+// trigger is a disembarked moment. Inside an `ability-part` with a trigger of its own, the ref names
+// that part's event and is left alone.
+func transportRefs(v any, triggers []map[string]any) any {
+	live := 0
+	for _, t := range triggers {
+		if t["event"] == nil {
+			continue
+		}
+		live++
+		if t["event"] != "disembarked" {
+			return v
+		}
+	}
+	if live == 0 {
+		return v
+	}
+	var rewrite func(v any) any
+	rewrite = func(v any) any {
+		switch x := v.(type) {
+		case string:
+			if x == "event-object" {
+				return eventObjectTransport
+			}
+		case []any:
+			out := make([]any, len(x))
+			for i, item := range x {
+				out[i] = rewrite(item)
+			}
+			return out
+		case map[string]any:
+			own := x["type"] == "ability-part" && x["trigger"] != nil
+			out := make(map[string]any, len(x))
+			for k, item := range x {
+				if own && k == "effect" {
+					out[k] = item
+				} else {
+					out[k] = rewrite(item)
+				}
+			}
+			return out
+		}
+		return v
+	}
+	return rewrite(v)
 }
 
 var rolePhrases = map[string]string{
@@ -305,6 +361,7 @@ var rolePhrases = map[string]string{
 	eventSubjectModel:    "the triggering model",
 	"event-object":       "that unit",
 	eventObjectModel:     "that model",
+	eventObjectTransport: "the Transport",
 	"stratagem-target":   "the Stratagem's target",
 	"selected-unit":      "the selected unit",
 	"recipient":          "this unit",
@@ -656,6 +713,14 @@ func objectivePhrase(f map[string]any, plural bool, noun string) string {
 	if hasWithin && !unitControls {
 		s += " within " + rangePhrase(within["range"]) + " of " + placeRefPhrase(within["of"])
 	}
+	// "visible to one or more models in your unit".
+	if f["visible_to"] != nil {
+		who := "one or more models in the unit"
+		if f["visible_to"] != "this-unit" {
+			who = unitRefPhrase(f["visible_to"], "the unit")
+		}
+		s += " visible to " + who
+	}
 	// "that your unit was controlling when it was destroyed": the unit's control when the rule was triggered.
 	if f["controlled_by_unit"] != nil {
 		when := "when the rule was triggered"
@@ -670,6 +735,14 @@ func objectivePhrase(f map[string]any, plural bool, noun string) string {
 			phrase = phrase[:loc[0]] + "units" + phrase[loc[1]:]
 		}
 		s += ", with no " + phrase + " within range of it"
+	}
+	// "that has a friendly unit with this ability within range of it".
+	if held, ok := asMap(f["occupied_by"]); ok && held != nil {
+		phrase := leadingArticleRe.ReplaceAllString(unitFilterPhrase(held), "")
+		if loc := unitWordRe.FindStringIndex(phrase); loc != nil {
+			phrase = phrase[:loc[0]] + "units" + phrase[loc[1]:]
+		}
+		s += ", with one or more " + phrase + " within range of it"
 	}
 	return s
 }

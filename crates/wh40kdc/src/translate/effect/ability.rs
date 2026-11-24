@@ -12,7 +12,7 @@ use crate::generated::{
     Ability, AbilityTrigger, AbilityUsage, EffectNode, KeywordPredicate, Scope,
 };
 use crate::translate::condition::{
-    and_list, condition_lead_in_for, is_defensive_effect, nn, obj, or_list,
+    and_list, condition_lead_in_for, is_defensive_effect, nn, obj, or_list, truthy,
 };
 use crate::translate::dekebab;
 
@@ -130,8 +130,12 @@ pub(super) fn render_top_level(
     usage: Option<&Value>,
     trigger: Option<&Value>,
     optional: bool,
+    self_id: Option<&str>,
 ) -> String {
-    let mut ctx = Ctx::default();
+    let mut ctx = Ctx {
+        self_id: self_id.map(str::to_string),
+        ..Ctx::default()
+    };
     // Every trigger's object (subject) is a model: the effect's `event-object` reads "that model"
     // (`event-subject` "the triggering model").
     let rewritten = crate::translate::condition::model_event_refs(e, &normalize_triggers(trigger));
@@ -384,13 +388,28 @@ pub fn describe_ability_parts_with_optional(
     trigger: Option<&AbilityTrigger>,
     optional: bool,
 ) -> String {
-    describe_ability_value_with_optional(
+    describe_ability_parts_for(e, scope, applies_to, usage, trigger, optional, None)
+}
+
+/// [`describe_ability_parts_with_optional`] with the record's own `ability_id`: a Stratagem's
+/// restriction on its own use reads "you cannot use this Stratagem".
+pub fn describe_ability_parts_for(
+    e: &EffectNode,
+    scope: Option<&Scope>,
+    applies_to: Option<&KeywordPredicate>,
+    usage: Option<&AbilityUsage>,
+    trigger: Option<&AbilityTrigger>,
+    optional: bool,
+    ability_id: Option<&str>,
+) -> String {
+    describe_ability_value_for(
         &to_value(e),
         scope.map(to_value).as_ref(),
         applies_to,
         usage.map(to_value).as_ref(),
         trigger.map(to_value).as_ref(),
         optional,
+        ability_id,
     )
 }
 
@@ -404,7 +423,21 @@ pub fn describe_ability_value_with_optional(
     trigger: Option<&Value>,
     optional: bool,
 ) -> String {
-    let rendered = render_top_level(e, scope, usage, trigger, optional);
+    describe_ability_value_for(e, scope, applies_to, usage, trigger, optional, None)
+}
+
+/// [`describe_ability_value_with_optional`] with the record's own `ability_id` (see
+/// [`describe_ability_parts_for`]).
+pub fn describe_ability_value_for(
+    e: &Value,
+    scope: Option<&Value>,
+    applies_to: Option<&KeywordPredicate>,
+    usage: Option<&Value>,
+    trigger: Option<&Value>,
+    optional: bool,
+    ability_id: Option<&str>,
+) -> String {
+    let rendered = render_top_level(e, scope, usage, trigger, optional, ability_id);
     let base = if optional {
         with_optionality(&rendered)
     } else {
@@ -420,13 +453,14 @@ pub fn describe_ability_value_with_optional(
 
 /// Full generated text for an ability. Mirrors `describeAbility`.
 pub fn describe_ability(a: &Ability) -> String {
-    describe_ability_parts_with_optional(
+    describe_ability_parts_for(
         &a.effect,
         Some(&a.scope),
         a.applies_to.as_ref(),
         a.usage.as_ref(),
         a.trigger.as_ref(),
         a.optional == Some(true),
+        Some(a.ability_id.as_str()),
     )
 }
 
@@ -465,6 +499,10 @@ pub(super) fn with_aura_recipient(t: &Value, effect: &P, ctx: &Ctx) -> Value {
 
 /// A part's moment phrases, naming the unit its aura reaches when the moment is the recipient's.
 pub(super) fn part_trigger_phrases(e: &P) -> String {
+    // A part armed for the phase that fires when the phase ends fires once, at the end of this phase.
+    if is_this_phase_end(e) {
+        return "at the end of the phase".to_string();
+    }
     let effect = obj(e.get("effect"));
     normalize_triggers(e.get("trigger"))
         .into_iter()
@@ -478,4 +516,73 @@ pub(super) fn part_trigger_phrases(e: &P) -> String {
         .filter(|s| !s.is_empty())
         .collect::<Vec<_>>()
         .join(" or ")
+}
+
+/// A part armed for the phase (`duration: "phase"`) whose trigger is only the end of a phase,
+/// with no phase, turn or other gate named.
+pub(super) fn is_this_phase_end(e: &P) -> bool {
+    // The typed round-trip writes a trigger's default `optional: false`; it names no gate.
+    let gates = |t: &P| {
+        t.iter()
+            .filter(|(k, v)| {
+                !v.is_null() && (k.as_str() != "optional" || **v != Value::Bool(false))
+            })
+            .count()
+    };
+    sv(e, "duration") == Some("phase")
+        && e.get("trigger")
+            .and_then(Value::as_object)
+            .is_some_and(|t| gates(t) == 1 && sv(t, "event") == Some("phase-ended"))
+}
+
+/// What leads a part: its moment, usage limit, duration, name, the choice to use it and its cost.
+pub(super) fn part_head(e: &P) -> String {
+    let moment = part_trigger_phrases(e);
+    let level = match nn(e, "level") {
+        Some(l) if sv(e, "kind") == Some("psychic") => format!(" (Psychic level {})", jv(l)),
+        _ => String::new(),
+    };
+    let optional = truthy_key(e, "optional");
+    // A named part that always applies is a labelled rule ("Kine Shield: ..."), not one to use.
+    let label = if truthy_key(e, "name") && moment.is_empty() && !optional {
+        format!("{}{level}", jstr(e.get("name")))
+    } else {
+        String::new()
+    };
+    let named = if !label.is_empty() {
+        String::new()
+    } else if truthy_key(e, "name") {
+        format!(
+            "{}{}{level}",
+            if optional { "you can use " } else { "use " },
+            jstr(e.get("name"))
+        )
+    } else if optional {
+        "you can".to_string()
+    } else {
+        String::new()
+    };
+    let cost = match e.get("cost").filter(|c| truthy(Some(c))) {
+        Some(c) => format!("by paying this cost ({})", inline(c, &Ctx::default())),
+        None => String::new(),
+    };
+    let usage = match e.get("usage").filter(|u| truthy(Some(u))) {
+        Some(u) => usage_clause(u),
+        None => String::new(),
+    };
+    // Skip when the inner designate-target / persistent-designation already prints the same duration.
+    let inner_map = obj(e.get("effect"));
+    let own_desig_dur = matches!(ty(inner_map), "designate-target" | "persistent-designation")
+        && nn(inner_map, "duration") == nn(e, "duration");
+    let trail = if own_desig_dur || is_this_phase_end(e) {
+        ""
+    } else {
+        duration_clauses(e.get("duration")).1
+    };
+    // A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
+    let trail = match trail.strip_suffix("control it") {
+        Some(head) => format!("{head}control that objective marker"),
+        None => trail.to_string(),
+    };
+    join_nonempty(&[&label, &moment, &usage, &trail, &named, &cost], ", ")
 }

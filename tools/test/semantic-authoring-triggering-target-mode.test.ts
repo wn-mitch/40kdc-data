@@ -123,7 +123,7 @@ describe("Semantic authoring Stratagem that targets the triggering unit or a uni
 });
 
 describe("Semantic authoring unit-keyword match all", () => {
-  const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("unit-keyword", parameters, 8);
+  const normalize = (parameters: Record<string, unknown>) => normalizeFingerprintParameters("unit-keyword", parameters, 9);
 
   it("keeps match all on two or more keywords, and several keywords without it stay alternatives", () => {
     expect(normalize({ keywords: ["ALPHA", "BETA"], subject: "this-unit", negated: false, match: "all" })).toMatchObject({ match: "all" });

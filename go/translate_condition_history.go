@@ -220,6 +220,14 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		if p["count"] != nil {
 			times = " (" + amount + " times)"
 		}
+		// A Dark Pact's Leadership test: "the unit made a Dark Pact and passed its Leadership test this phase".
+		if p["subject"] != nil && f["roll"] == "dark-pact" && (f["result"] == "success" || f["result"] == "failure") && p["count"] == nil {
+			outcome := "failed"
+			if f["result"] == "success" {
+				outcome = "passed"
+			}
+			return trimEnd(neg + who + " made a Dark Pact and " + outcome + " its Leadership test " + windowPhrase(p["window"]))
+		}
 		// Whose roll it was, when the subject names one: "this unit made a battle-shock roll and failed it".
 		if p["subject"] != nil {
 			outcome := ""
@@ -237,6 +245,10 @@ func describeHappenedCore(p map[string]any, negated bool) string {
 		return trimEnd(neg + withArticle(rollWord(f["roll"])+" roll") + " " + result + windowPhrase(p["window"]) + times)
 	case "damage-allocated":
 		obj := unitRefPhrase(p["object"], "this unit")
+		// "which inflicted one or more mortal wounds on your unit this phase": who caused them.
+		if f["attack_type"] == "mortal" && f["by"] != nil {
+			return strings.TrimRight(neg+unitRefPhrase(f["by"], "the unit")+" inflicted one or more mortal wounds on "+obj+" "+windowPhrase(p["window"]), " ")
+		}
 		atk := ""
 		if jsTruthy(f["attack_type"]) {
 			atk = cstr(f["attack_type"]) + " "

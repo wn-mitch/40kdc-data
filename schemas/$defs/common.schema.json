@@ -530,9 +530,10 @@
         "on-battlefield",
         "hidden",
         "fights-first",
-        "benefit-of-cover"
+        "benefit-of-cover",
+        "destroyed"
       ],
-      "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves."
+      "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves. destroyed: the unit has been destroyed (\"Select one friendly destroyed X unit\"); only a rule that returns a destroyed unit selects it."
     },
     "unit-filter": {
       "type": "object",
@@ -808,7 +809,7 @@
             "bearer-transport",
             "ability-unit"
           ],
-          "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked."
+          "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked."
         },
         {
           "$ref": "#/$defs/unit-filter"
@@ -1222,6 +1223,10 @@
           },
           "description": "Only objective markers within this range of `of` (default the model with the ability)."
         },
+        "visible_to": {
+          "$ref": "#/$defs/unit-ref",
+          "description": "Only objective markers visible to this unit (one or more of its models) or model (\"visible to one or more models in your unit\")."
+        },
         "controlled_by_unit": {
           "$ref": "#/$defs/unit-ref",
           "description": "Only the objective marker this unit was controlling (its models' Level of Control) at the moment the rule was triggered (\"an objective your unit was controlling when it was destroyed\")."
@@ -1229,6 +1234,10 @@
         "controlled_at": {
           "const": "previous-phase-end",
           "description": "When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one (\"an objective your unit was controlling at the end of the previous phase\"). Only with controlled_by_unit."
+        },
+        "occupied_by": {
+          "$ref": "#/$defs/unit-filter",
+          "description": "Only objective markers with one or more units matching this filter within range of them (\"that has a friendly unit with this ability within range of it\")."
         },
         "clear_of": {
           "$ref": "#/$defs/unit-filter",
@@ -1472,16 +1481,28 @@
         },
         "by": {
           "$ref": "#/$defs/unit-ref",
-          "description": "Who caused it (the unit or model whose attack destroyed the object)."
+          "description": "Who caused it (the unit or model whose attack destroyed the object; on state-changed, the unit whose attacks changed the subject's strength)."
         },
         "timing": {
           "enum": [
             "before-removal",
             "after-attacks",
             "after-set-up",
-            "after-emergency-disembark"
+            "after-emergency-disembark",
+            "before-deadly-demise",
+            "before-marker-removal"
           ],
-          "description": "destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up)."
+          "description": "destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal)."
+        },
+        "last": {
+          "const": true,
+          "description": "model-destroyed: the destroyed model is the last model in its unit that matches the object filter (\"the last Guardian Defender model in this unit\")."
+        },
+        "via": {
+          "enum": [
+            "ability"
+          ],
+          "description": "resource-gained: what the gain was the result of (\"gains a CP as the result of an ability\")."
         },
         "phase": {
           "$ref": "#/$defs/phase",
@@ -1601,8 +1622,13 @@
     "battle-size-value": {
       "type": "object",
       "additionalProperties": false,
-      "description": "One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
+      "description": "One value per battle size (Incursion, Strike Force, Onslaught), plus an optional value for a Combat Patrol battle. Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
       "properties": {
+        "combat-patrol": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The value when playing a Combat Patrol battle."
+        },
         "incursion": {
           "type": "integer",
           "minimum": 0
@@ -1634,9 +1660,10 @@
         "models-equipped-with",
         "enemy-units-in-range",
         "wounds-lost",
-        "battle-round"
+        "battle-round",
+        "enemy-units-hit"
       ],
-      "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number."
+      "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number. enemy-units-hit: the enemy units hit by one or more of the attacks of the triggering attack sequence (\"those attacks\")."
     },
     "roll-reference": {
       "type": "object",
@@ -1682,6 +1709,24 @@
           "successes_on": {
             "maximum": 5
           }
+        }
+      }
+    },
+    "spent-reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spent"
+      ],
+      "description": "The amount a resource-spend of this ability bound with bind_as spent during this use (0 when it spent none). With per N: one for every N of it, rounded down (\"for every 2YP you just spent\").",
+      "properties": {
+        "spent": {
+          "$ref": "#/$defs/entity-id",
+          "description": "The bind_as name of the resource-spend whose amount this reads; that spend comes before the reader."
+        },
+        "per": {
+          "type": "integer",
+          "minimum": 2
         }
       }
     },
@@ -1786,7 +1831,7 @@
       ]
     },
     "quantity": {
-      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.",
+      "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound (\"the number of YP you spent\").",
       "oneOf": [
         {
           "type": "integer",
@@ -1809,6 +1854,9 @@
         },
         {
           "$ref": "#/$defs/unit-characteristic"
+        },
+        {
+          "$ref": "#/$defs/spent-reference"
         }
       ]
     },
@@ -2022,6 +2070,20 @@
         "const": "any"
       },
       "description": "A definite player: friendly or enemy (an owner other than any)."
+    },
+    "battle-round-threshold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "battle_round_plus"
+      ],
+      "properties": {
+        "battle_round_plus": {
+          "const": 1,
+          "description": "The current battle round number plus this: 1 is a result greater than the current battle round number."
+        }
+      },
+      "description": "A roll threshold read from the battle round when the roll is made (\"if the result is greater than the current battle round number\")."
     }
   }
 }

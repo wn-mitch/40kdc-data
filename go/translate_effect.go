@@ -56,6 +56,14 @@ func scalingWording(s map[string]any) string {
 		}
 		return "for every " + per + " of " + scaleSource(s) + maxTail
 	}
+	// "for each assailed enemy unit hit by those attacks": one counted unit at a time.
+	if s["of"] == "enemy-units-hit" && jsNumber(s["per"]) == 1 {
+		designated := ""
+		if s["designated"] != nil {
+			designated = dekebab(ejstr(s["designated"])) + " "
+		}
+		return "for each " + designated + "enemy unit hit by those attacks" + maxTail
+	}
 	c := "for every " + ejstr(s["per"]) + " " + scaleSource(s)
 	if s["within"] != nil {
 		rangeText := rangePhrase(s["within"])
@@ -566,8 +574,11 @@ func describeEffectInlineBase(e map[string]any, ctx effCtx) string {
 		}
 		return "take a " + testName(risk["test"]) + " test (on a failure, " + onFail + "), then " + describeEffectInline(mapOr(e["reward"]), ctx)
 	case "issue-orders":
+		if e["same_order"] == true {
+			return "issue the same Order to another eligible unit" + orderLimit(e) + asIfPhase(e)
+		}
 		if e["menu_from"] != nil {
-			return "issue Orders from " + abilityLabel(e["menu_from"]) + orderRecipient(e) + onlyOrders(e) + orderLimit(e)
+			return "issue Orders from " + abilityLabel(e["menu_from"]) + orderRecipient(e) + onlyOrders(e) + orderLimit(e) + asIfPhase(e)
 		}
 		var names []string
 		for _, o := range getList(e, "options") {
@@ -938,6 +949,11 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 		if e["issuer"] != nil {
 			issue = orderModels(e["issuer"], ctx) + " can issue"
 		}
+		asIf := asIfPhase(e)
+		if e["same_order"] == true {
+			// "it can issue the same Order to another SQUADRON unit": the Order just issued, again.
+			return indent + arrow + issue + " " + sameOrderTarget(e["count"], units) + rng + notStates + orderLimit(e) + asIf + "."
+		}
 		if e["menu_from"] != nil {
 			// An officer's datasheet: how many of its army rule's Orders it issues, and to which units.
 			orders := "Orders"
@@ -948,12 +964,12 @@ func describeEffect(e map[string]any, depth int, ctx effCtx) string {
 			if e["issuer"] != nil {
 				who = issue
 			}
-			return indent + arrow + who + " up to " + n + " " + orders + " from " + abilityLabel(e["menu_from"]) + " to " + orderTo(e, units) + rng + notStates + onlyOrders(e) + orderLimit(e) + "."
+			return indent + arrow + who + " up to " + n + " " + orders + " from " + abilityLabel(e["menu_from"]) + " to " + orderTo(e, units) + rng + notStates + onlyOrders(e) + orderLimit(e) + asIf + "."
 		}
-		lines := []string{indent + arrow + issue + " up to " + n + " Orders to " + orderTo(e, units) + rng + notStates + orderLimit(e) + ", each one of:"}
+		lines := []string{indent + arrow + issue + " up to " + n + " Orders to " + orderTo(e, units) + rng + notStates + orderLimit(e) + asIf + ", each one of:"}
 		for _, o := range getList(e, "options") {
 			om := mapOr(o)
-			lines = append(lines, indent+"  - "+ejstr(om["name"])+": "+capitalize(describeEffectInline(mapOr(om["effect"]), ctx))+".")
+			lines = append(lines, indent+"  - "+ejstr(om["name"])+optionRecipients(om, ctx)+": "+capitalize(describeEffectInline(mapOr(om["effect"]), ctx))+".")
 		}
 		for _, rule := range orderRuleSentences(e, ctx) {
 			lines = append(lines, indent+rule)

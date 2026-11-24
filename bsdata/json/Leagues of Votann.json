@@ -25155,7 +25155,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "After this unit resolves its attacks, during your Shooting phase, you gain 1 YP for each assailed enemy unit hit by those attacks (to a maximum of 3).",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -25785,7 +25785,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "When this unit is selected to shoot, you can use this ability, once per battle per model, until the end of the phase:\n  - Spend up to 3 YP.\n  - Add the amount you spent to the Damage characteristic of ranged weapons equipped by this model.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26037,7 +26037,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "At the start of the Reinforcements step, you can use this ability:\n  - Select one friendly BESERKS CTHONIAN unit that is visible to this model:\n    - Spend any number of YP.\n    - Return 1 destroyed model (excluding CHARACTER models) to that unit, each with its full wounds remaining.\n    - Return 1 destroyed model (excluding CHARACTER models) for every 2 you spent to that unit, each with its full wounds remaining.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26415,7 +26415,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "When this unit is selected to fight, you can use this ability, until the end of the phase:\n  - Spend up to 2 YP.\n  - Add the amount you spent to the Damage characteristic of melee weapons equipped by this model.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26829,7 +26829,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "When a model in this unit is destroyed, while making melee attacks, unless that unit has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
+                    "$text": "When a model in this unit is destroyed, while making melee attacks, unless that model has fought this phase, roll one D6. On a 4+, leave that model on the battlefield; after the attacking unit has finished making its attacks, it can fight. Remove it after it has fought.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]
@@ -26991,7 +26991,7 @@
                 "characteristics": [
                   {
                     "name": "Description",
-                    "$text": "Nothing happens.",
+                    "$text": "At the end of your turn, while this model is on the battlefield, if you gained at most 2 YP this turn, you gain a number of YP equal to the difference between 3 and the YP you gained this turn.",
                     "typeId": "9b8f-694b-e5e-b573"
                   }
                 ]

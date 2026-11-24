@@ -53,7 +53,12 @@ from wh40kdc.translate.condition_refs import (
     with_article,
     within_clause,
 )
-from wh40kdc.translate.effect_words import dice_case, dice_table_result_label, weapon_noun
+from wh40kdc.translate.effect_words import (
+    dice_case,
+    dice_table_result_label,
+    resource_noun,
+    weapon_noun,
+)
 
 # Shared helpers re-exported for the trigger, timing, effect and scoring describers.
 __all__ = [
@@ -221,6 +226,7 @@ _VERB_NEGATED = frozenset(
         "destroyed-in-tagged-terrain",
         "army-faction",
         "battle-size",
+        "game-mode",
     }
 )
 
@@ -646,6 +652,13 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         if p.get("by") is not None:
             by_phrase = unit_ref_phrase(p["by"], "this unit")
             by = f" by {'this unit' if by_phrase == 'the unit' else by_phrase}"
+        # "If that enemy unit was unravelling at the start of the phase": the designation as it
+        # was then.
+        if p.get("at") in ("phase-start", "turn-start"):
+            was = "was not" if negated else "was"
+            then = "phase" if p.get("at") == "phase-start" else "turn"
+            tag = _designation_phrase(_str(p.get("tag")))
+            return f"{_subject_of(p)} {was} {tag}{by} at the start of the {then}"
         return f"{_subject_of(p)} is {nt}{_designation_phrase(_str(p.get('tag')))}{by}"
     if ctype == "resource":
         if p.get("below_max") is True:
@@ -655,6 +668,22 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
                 "at the end of your opponent's previous turn"
             )
         amount = count_phrase(p.get("count"))
+        # "you gained fewer than 3YP this turn": this turn's gains, not what the pool holds.
+        if p.get("gained") == "turn":
+            verb = "did not gain" if negated else "gained"
+            return f"you {verb} {amount} {resource_noun(p.get('pool'), None, 2)} this turn"
+        # "if your opponent has one or more Flux tokens": the opponent's holding of a pool
+        # both players hold.
+        if p.get("holder") == "opponent":
+            verb = "does not have" if negated else "has"
+            return f"your opponent {verb} {amount} {resource_noun(p.get('pool'), None, 2)}"
+        # "while you have 0 Pain tokens": an empty pool of the player's.
+        bounds = _obj(p.get("count"))
+        minimum = bounds.get("min")
+        maximum = bounds.get("max")
+        if maximum == 0 and not isinstance(maximum, bool) and minimum is None:
+            verb = "do not have" if negated else "have"
+            return f"you {verb} 0 {resource_noun(p.get('pool'), None, 2)}"
         # A pool is the player's ("If you have 3 or more Pact points").
         return f"you have {amount} {dekebab(_str(p.get('pool')))}"
     if ctype == "roll-total":
@@ -721,6 +750,10 @@ def _describe_predicate(c: Condition, negated: bool) -> str:
         )
     if ctype == "battle-size":
         return f"the battle size is {nt}{title_case(_str(p.get('size')))}"
+    if ctype == "game-mode":
+        raw_modes = p.get("modes")
+        modes = raw_modes if isinstance(raw_modes, list) else []
+        return f"the battle is {nt}a {' or '.join(title_case(_str(mode)) for mode in modes)} battle"
     if ctype == "army-faction":
         faction = _str(p.get("faction")).replace("-", " ").upper()
         return f"your Army Faction is {nt}{faction}"

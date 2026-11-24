@@ -35,6 +35,8 @@ from wh40kdc.cruncher.from_dsl_shapes import (
     own_designation_gate,
     roll_label,
     scaled_to_cap,
+    spent_at_most,
+    spent_maxima,
     stance_gate_fields,
     unsized_value_reason,
 )
@@ -185,7 +187,16 @@ def _translate_effect(
     }
     # The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
     effect, opts = _on_attack_roll(activation.get("trigger") if activation else None, effect, opts)
-    _walk(effect, source, {**opts, "selections": _selection.selection_order(effect)}, out)
+    _walk(
+        effect,
+        source,
+        {
+            **opts,
+            "selections": _selection.selection_order(effect),
+            "spentMax": spent_maxima(effect),
+        },
+        out,
+    )
     if activation and (
         activation.get("usage") is not None
         or activation.get("cost") is not None
@@ -371,12 +382,13 @@ def _designate_entry(
     """One ``applies`` entry of a designate-target: a lever for attacks on the unit, or a debuff."""
     if applies.get("to") in ("attackers-of-target", "bearer-attacks-target"):
         for filt in (
+            applies.get("attacker"),
             applies.get("attacker_filter"),
             applies.get("attacker_unit_filter"),
         ):
             if filt is None:
                 continue
-            verdict = _matches_unit_filter(filt, opts["context"], "attacker", "friendly")
+            verdict = _attacker_verdict(filt, opts["context"])
             if verdict is False:
                 return
             if verdict == "unknown":
@@ -480,6 +492,22 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
             return
     if _has_unresolved_fidelity_binding(node):
         out["unsupported"].append({"reason": _FIDELITY_BINDING_REASON, "effectFragment": node})
+        return
+    # "add the number of YP you just spent": a lever at the most the spend can spend; the player
+    # vouches for spending it.
+    spent_most = spent_at_most(node, opts.get("spentMax"))
+    if spent_most is not None:
+        _selection.offer_lever(
+            spent_most[0],
+            source,
+            opts,
+            out,
+            {
+                "id": f"{opts['abilityId']}#spent-max",
+                "label": "Spending the most",
+                "requires": [spent_most[1]],
+            },
+        )
         return
     # A scaled or bound value (a count on the board, the battle size, a bound roll) has no fixed
     # size here: applying the printed value would over- or under-state it.
@@ -1476,10 +1504,36 @@ def _translate_feel_no_pain(
     raw_scope = modifier.get("against")
     scope = "all"
     if raw_scope is not None:
-        if raw_scope in ("all", "mortal"):
+        if isinstance(raw_scope, list):
+            # A list naming mortal wounds folds into the mortal stream; psychic attacks and
+            # Devastating Wounds criticals are invisible to the buff layer.
+            if "mortal" not in raw_scope:
+                out["unsupported"].append(
+                    {
+                        "reason": (
+                            "feel-no-pain: against a list without mortal wounds (psychic attacks "
+                            "and Devastating Wounds criticals are not tracked by the buff layer)"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
+                return
+            scope = "mortal"
+        elif raw_scope in ("all", "mortal"):
             scope = raw_scope
         elif raw_scope == "psychic-and-mortal":
             scope = "mortal"
+        elif raw_scope == "damage-1-unmodified":
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        'feel-no-pain: against "damage-1-unmodified" (the buff layer does not '
+                        "split Feel No Pain by an attack's Damage)"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+            return
         elif raw_scope == "psychic":
             out["unsupported"].append(
                 {
@@ -1772,6 +1826,14 @@ def _translate_damage_reduction(
         out["unsupported"].append(
             {
                 "reason": "damage-reduction: halving Damage is not modelled by the buff layer",
+                "effectFragment": node,
+            }
+        )
+        return
+    if reduction == "to-one":
+        out["unsupported"].append(
+            {
+                "reason": "damage-reduction: setting Damage to 1 is not modelled by the buff layer",
                 "effectFragment": node,
             }
         )
@@ -4864,3 +4926,16 @@ def _has_unresolved_fidelity_binding(node: dict[str, Any]) -> bool:
         or source_binding
         or (node_type == "named-region-state" and consumer.get("attack_condition") is not None)
     )
+
+
+def _attacker_verdict(filt: Any, ctx: Any) -> Any:
+    """Whether the crunched attacker is the one a designation's attacker entry names.
+
+    The entry is a unit filter, a unit-ref, or a list of unit-refs any one of which may attack.
+    """
+    if not isinstance(filt, list):
+        return _matches_unit_filter(filt, ctx, "attacker", "friendly")
+    verdicts = [_matches_unit_filter(ref, ctx, "attacker", "friendly") for ref in filt]
+    if any(verdict is True for verdict in verdicts):
+        return True
+    return False if all(verdict is False for verdict in verdicts) else "unknown"

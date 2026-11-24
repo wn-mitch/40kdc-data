@@ -50,6 +50,8 @@ function optionIds(ability: Node): string[] {
     if (OPTION_MENUS.has(String(value.type)) && Array.isArray(value.options)) {
       for (const option of value.options) if (node(option) && typeof option.id === "string") result.push(option.id);
     }
+    // A named choice is itself an option other rules make happen again (Feed the Swarm's Regenerate).
+    if (value.type === "choice" && typeof value.id === "string") result.push(value.id);
   });
   return result;
 }
@@ -181,6 +183,10 @@ export async function checkDslContract(root: string, result: ValidationResult): 
         // References name options by id, so a positional id re-points them when options are reordered.
         if (/^option-\d+$/.test(option.id)) issues.push({ path: `${path}/options/${at}/id`, message: `positional option id "${option.id}": name the option by its slug` });
       });
+      if (value.type === "choice" && typeof value.id === "string") {
+        if (seen.has(value.id)) issues.push({ path: `${path}/id`, message: `duplicate option id "${value.id}" within this ability` });
+        seen.add(value.id);
+      }
       if (value.type === "ability-activate" && node(value.modifier)) {
         const modifier = value.modifier;
         if (typeof modifier.ability === "string") {

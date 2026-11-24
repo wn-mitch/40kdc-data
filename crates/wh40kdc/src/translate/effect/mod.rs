@@ -24,6 +24,7 @@ mod leaf_rules;
 mod leaf_shapes;
 mod menu;
 mod move_type;
+mod orders;
 mod placement;
 mod quantity;
 mod recipient_gate;
@@ -31,10 +32,12 @@ mod region;
 mod ritual;
 mod select;
 mod subject;
-mod words;
+pub(crate) mod words;
 
+use ability::part_head;
 pub use ability::{
-    describe_ability, describe_ability_parts, describe_ability_parts_with_optional,
+    describe_ability, describe_ability_parts, describe_ability_parts_for,
+    describe_ability_parts_with_optional, describe_ability_value_for,
     describe_ability_value_with_optional, describe_applies_to, describe_effect,
     describe_effect_inline, describe_effect_with_scope, describe_scope,
 };
@@ -51,11 +54,11 @@ pub(crate) use dice::dice_table_result_label;
 use dice::*;
 use leaf::{describe_leaf, LEAF_TYPES};
 pub(crate) use menu::usage_clause;
-use menu::{duration_clauses, menu_inline, scaling_clause};
+use menu::{menu_inline, scaling_clause};
 use region::{describe_named_region_conditional, describe_named_region_state};
 use select::*;
 use words::*;
-pub(crate) use words::{bracket_keyword, dice_case, title_case, weapon_noun};
+pub(crate) use words::{bracket_keyword, dice_case, resource_noun, title_case, weapon_noun};
 
 const CONTAINER_TYPES: &[&str] = &[
     "roll",
@@ -463,58 +466,6 @@ fn own_choice_prompt(e: &P) -> String {
     format!("choose one of the following{label}")
 }
 
-/// What leads a part: its moment, usage limit, duration, name, the choice to use it and its cost.
-fn part_head(e: &P) -> String {
-    let moment = ability::part_trigger_phrases(e);
-    let level = match nn(e, "level") {
-        Some(l) if sv(e, "kind") == Some("psychic") => format!(" (Psychic level {})", jv(l)),
-        _ => String::new(),
-    };
-    let optional = truthy_key(e, "optional");
-    // A named part that always applies is a labelled rule ("Kine Shield: ..."), not one to use.
-    let label = if truthy_key(e, "name") && moment.is_empty() && !optional {
-        format!("{}{level}", jstr(e.get("name")))
-    } else {
-        String::new()
-    };
-    let named = if !label.is_empty() {
-        String::new()
-    } else if truthy_key(e, "name") {
-        format!(
-            "{}{}{level}",
-            if optional { "you can use " } else { "use " },
-            jstr(e.get("name"))
-        )
-    } else if optional {
-        "you can".to_string()
-    } else {
-        String::new()
-    };
-    let cost = match e.get("cost").filter(|c| truthy(Some(c))) {
-        Some(c) => format!("by paying this cost ({})", inline(c, &Ctx::default())),
-        None => String::new(),
-    };
-    let usage = match e.get("usage").filter(|u| truthy(Some(u))) {
-        Some(u) => usage_clause(u),
-        None => String::new(),
-    };
-    // Skip when the inner designate-target / persistent-designation already prints the same duration.
-    let inner_map = obj(e.get("effect"));
-    let own_desig_dur = matches!(ty(inner_map), "designate-target" | "persistent-designation")
-        && nn(inner_map, "duration") == nn(e, "duration");
-    let (_, raw_trail) = if own_desig_dur {
-        ("", "")
-    } else {
-        duration_clauses(e.get("duration"))
-    };
-    // A part's own control-lost duration leads it, with no objective marker before it for "it" to name.
-    let trail = match raw_trail.strip_suffix("control it") {
-        Some(head) => format!("{head}control that objective marker"),
-        None => raw_trail.to_string(),
-    };
-    join_nonempty(&[&label, &moment, &usage, &trail, &named, &cost], ", ")
-}
-
 /// Whether an ability-part's own trigger already names a destruction or allocation event.
 pub(super) fn part_trigger_ctx(e: &P, ctx: &Ctx) -> Ctx {
     let ts = menu::normalize_triggers(e.get("trigger"));
@@ -539,7 +490,6 @@ pub(super) fn part_trigger_ctx(e: &P, ctx: &Ctx) -> Ctx {
     }
     out
 }
-
 /// A part with its own trigger: its effect's event refs read as that trigger's model, if it names one.
 pub(super) fn part_with_model_refs(e: &P) -> P {
     let triggers = menu::normalize_triggers(e.get("trigger"));
@@ -812,12 +762,18 @@ fn inline_base(e: &P, ctx: &Ctx) -> String {
                 inline(child(e, "reward"), ctx)
             )
         }
+        "issue-orders" if e.get("same_order") == Some(&Value::Bool(true)) => format!(
+            "issue the same Order to another eligible unit{}{}",
+            block::order_limit(e),
+            orders::as_if_phase(e)
+        ),
         "issue-orders" if nn(e, "menu_from").is_some() => format!(
-            "issue Orders from {}{}{}{}",
+            "issue Orders from {}{}{}{}{}",
             ability_label(nn(e, "menu_from")),
             block::order_recipient(e),
             block::only_orders(e),
-            block::order_limit(e)
+            block::order_limit(e),
+            orders::as_if_phase(e)
         ),
         "issue-orders" => format!(
             "issue Orders{}{}, each one of: {}",

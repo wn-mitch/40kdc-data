@@ -340,6 +340,11 @@ export type ComposedEntry = { type: string; reason: string; pinnedTest: string }
  */
 export const COMPOSED: readonly ComposedEntry[] = [
   {
+    type: "order-share",
+    reason: "An order-share leaf names a Stratagem's two targets, so it compiles only beside two stratagem-target (TARGET) leaves; alone it has no pair to share Orders between.",
+    pinnedTest: "tools/test/semantic-authoring-orders.test.ts (Orders shared between a Stratagem's two targets)",
+  },
+  {
     type: "dice-gated",
     reason: "Needs a dice-roll (EVENT) leaf plus one roll-result (CONDITION) band reaching the die's top face; dice-roll alone has no band to gate on.",
     pinnedTest: "tools/test/semantic-authoring-compile-containers.test.ts (dice-roll + roll-result -> dice-gated) and semantic-authoring-compose.test.ts:186",
@@ -368,6 +373,11 @@ export const COMPOSED: readonly ComposedEntry[] = [
     type: "ritual-menu",
     reason: "Needs ritual-menu-open plus the Psychic test's dice-roll, a ritual-manifest, a per-army once-per-turn usage-limit and named-options carrying warp_charge; the opener alone has no test or Rituals.",
     pinnedTest: "tools/test/semantic-authoring-ritual-menu.test.ts:83",
+  },
+  {
+    type: "reserves-schedule",
+    reason: "Needs the reserves-schedule (EFFECT) leaf plus its unit-filter and battle-round rows, and resolves each row's datasheet against the units context the sweep does not supply.",
+    pinnedTest: "tools/test/semantic-authoring-combat-patrol.test.ts (rows fold into reserves-schedule entries)",
   },
 ];
 

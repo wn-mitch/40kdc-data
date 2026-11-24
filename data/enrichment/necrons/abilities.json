@@ -8667,19 +8667,41 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "canoptek-court",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "dice-gated",
+      "dice": "D6",
+      "threshold": 2,
+      "comparison": "gte",
+      "on_success": {
+        "type": "cp-gain",
+        "target": "this-model",
+        "modifier": {
+          "amount": 1
+        }
+      },
+      "on_fail": null
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "resource-gained",
+      "filter": {
+        "pool": "command-point",
+        "via": "ability"
+      },
+      "subject": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "2963ce1941b29b67d87c137e156eb66c558fb8f4323ac45bda861b914a955390"
   },
   {
     "ability_id": "blood-fuelled-cruelty-annihilation-legion-necrons",
@@ -9793,19 +9815,56 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "pantheon-of-woe",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "permission",
+          "target": "this-model",
+          "modifier": {
+            "activity": "use-stratagem",
+            "allow": true,
+            "despite": [
+              "destroyed"
+            ]
+          }
+        },
+        {
+          "type": "roll-result",
+          "target": "this-unit",
+          "modifier": {
+            "roll": "deadly-demise",
+            "succeeds_on": 3
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "model-destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "MONSTER",
+          "NECRONS"
+        ],
+        "level": "model",
+        "member_of": "this-unit"
+      },
+      "filter": {
+        "timing": "before-deadly-demise"
+      }
+    },
+    "source_digest": "fa76137ab07ee4f76b824dca958a349c863299bdfcae9f699bcd6b4eca827041"
   },
   {
     "ability_id": "dread-majesty-aura-starshatter-arsenal-necrons",
@@ -10815,19 +10874,52 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "pantheon-of-woe",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "conditional",
+      "condition": {
+        "type": "designated",
+        "parameters": {
+          "subject": "event-object",
+          "tag": "unravelling",
+          "at": "phase-start"
+        }
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "this-unit",
+        "modifier": {
+          "ability": "reanimation-protocols-necrons"
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "destroyed",
+      "subject": {
+        "owner": "friendly",
+        "all_of": [
+          "MONSTER",
+          "NECRONS"
+        ]
+      },
+      "object": {
+        "owner": "enemy"
+      }
+    },
+    "usage": {
+      "frequency": "once-per-turn",
+      "per": "army"
+    },
+    "source_digest": "a3d89cc0c9a3c49cf452760d54e645f9d67e8e0ee2082a387b20596a6c3aff37"
   },
   {
     "ability_id": "merciless-reclamation-starshatter-arsenal-necrons",
@@ -11356,19 +11448,43 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "annihilation-legion",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-activate",
+      "target": "this-unit",
+      "modifier": {
+        "ability": "reanimation-protocols-necrons"
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "destroyed",
+        "subject": "this-unit",
+        "object": {
+          "owner": "enemy"
+        }
+      },
+      {
+        "event": "state-changed",
+        "filter": {
+          "strength": "below-half",
+          "by": "this-unit"
+        },
+        "subject": {
+          "owner": "enemy"
+        }
+      }
+    ],
+    "source_digest": "3f662c3ea0838019eb8dd2d6d323c3d6a2826f9addba141ec4efebaf96088cec"
   },
   {
     "ability_id": "nanoassembly-protocols-obeisance-phalanx-necrons",
@@ -13117,19 +13233,97 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "necrons",
     "detachment_id": "amonhotekhs-guard",
     "ability_type": "detachment",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-part",
+          "trigger": {
+            "event": "phase-ended",
+            "condition": {
+              "operator": "and",
+              "operands": [
+                {
+                  "type": "phase-is",
+                  "parameters": {
+                    "phase": "command"
+                  }
+                },
+                {
+                  "type": "player-turn-is",
+                  "parameters": {
+                    "turn": "your-turn"
+                  }
+                }
+              ]
+            },
+            "optional": true
+          },
+          "duration": "until-next-command-phase",
+          "effect": {
+            "type": "select-units",
+            "selector": {
+              "filter": {
+                "owner": "friendly",
+                "all_of": [
+                  "AMONHOTEKH'S GUARD"
+                ]
+              },
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            "effect": {
+              "type": "stat-modifier",
+              "target": "selected-unit",
+              "modifier": {
+                "stat": "OC",
+                "operation": "add",
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "game-mode",
+            "parameters": {
+              "modes": [
+                "combat-patrol"
+              ]
+            }
+          },
+          "effect": {
+            "type": "reserves-schedule",
+            "target": {
+              "owner": "friendly"
+            },
+            "modifier": {
+              "entries": [
+                {
+                  "unit_id": "amonhotekhs-guard-canoptek-doomstalker",
+                  "battle_round": 3
+                }
+              ],
+              "set_up": "wholly-within-deployment-zone"
+            }
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "source_digest": "a81f1654abfa773db907dad1c6e6bfedb2c25e077463b6d1f9f88d82dea8d3ea"
   },
   {
     "ability_id": "territorial-obsession-obeisance-phalanx-necrons",

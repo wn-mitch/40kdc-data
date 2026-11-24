@@ -337,6 +337,10 @@ verbatim (no dataset lookup, so parity is independent of duplicate-ability-id
 resolution); the other fields may each be omitted or `null`. An optional `optional: true`
 (the ability record's `optional`) marks the ability as the player's choice: its
 text gains a leading `You can: ` unless it already opens with "You can ".
+An optional `ability_id` (the record's own id) lets a Stratagem's restriction on
+its own use read as itself: a `permission` with `activity: "use-stratagem"`,
+`allow: false` and a `stratagem` equal to `ability_id` renders "you cannot use
+this Stratagem".
 Response value is `{"text": "<multi-line ASCII string>"}` — container nodes
 render block-style with two-space indentation and an ASCII `-> ` arrow, a usage
 limit or trigger opens the sentence, the scope's duration is woven into it, and
@@ -344,7 +348,7 @@ a present `applies_to` filter renders as a trailing `Applies to: …` line
 (`all_of` reads as an AND set, `any_of` as "at least one of", `none_of` and
 `not_all_of` as exclusions; a filter with no keywords renders no line).
 Equivalent to TS `describeAbility({effect, scope, usage, trigger, applies_to,
-optional})` / Rust `describe_ability_parts_with_optional`. The
+optional, ability_id})` / Rust `describe_ability_parts_with_optional`. The
 differ compares the value structurally (exact string equality). A non-object
 `effect` returns `error_kind: "INVALID_INPUT"`.
 

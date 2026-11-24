@@ -269,10 +269,13 @@ def _live_triggers(trigger: Any) -> list[dict[str, Any]]:
 
 
 def _all_models(triggers: list[Any], role: str) -> bool:
-    """Whether every trigger names a model as its `role` (its subject or object)."""
+    """Whether every trigger names a model as its `role` (its subject or object): a
+    model-level filter, or one model of this unit (`model-in-this-unit`)."""
     live = _live_triggers(triggers)
     return bool(live) and all(
-        isinstance(t.get(role), dict) and t[role].get("level") == "model" for t in live
+        t.get(role) == "model-in-this-unit"
+        or (isinstance(t.get(role), dict) and t[role].get("level") == "model")
+        for t in live
     )
 
 
@@ -310,9 +313,34 @@ def model_event_refs(value: Any, triggers: list[Any]) -> Any:
             return out
         return v
 
+    value = _transport_refs(value, triggers)
     obj_ = _all_models(triggers, "object")
     subj = _all_models(triggers, "subject")
     return rewrite(value, obj_, subj) if obj_ or subj else value
+
+
+EVENT_OBJECT_TRANSPORT = "event-object-transport"
+
+
+def _transport_refs(value: Any, triggers: list[Any]) -> Any:
+    """`value` with its `event-object` refs spelled `EVENT_OBJECT_TRANSPORT` when every trigger is
+    a disembarked moment. Inside an `ability-part` with a trigger of its own, the ref names that
+    part's event and is left alone."""
+    live = [t for t in triggers if isinstance(t, dict) and t.get("event") is not None]
+    if not live or not all(t.get("event") == "disembarked" for t in live):
+        return value
+
+    def rewrite(v: Any) -> Any:
+        if v == "event-object":
+            return EVENT_OBJECT_TRANSPORT
+        if isinstance(v, list):
+            return [rewrite(x) for x in v]
+        if isinstance(v, dict):
+            own = v.get("type") == "ability-part" and v.get("trigger") is not None
+            return {k: (x if own and k == "effect" else rewrite(x)) for k, x in v.items()}
+        return v
+
+    return rewrite(value)
 
 
 _ROLE_PHRASES: dict[str, str] = {
@@ -325,6 +353,7 @@ _ROLE_PHRASES: dict[str, str] = {
     "event-subject-model": "the triggering model",
     "event-object": "that unit",
     "event-object-model": "that model",
+    "event-object-transport": "the Transport",
     "stratagem-target": "the Stratagem's target",
     "selected-unit": "the selected unit",
     "recipient": "this unit",
@@ -604,6 +633,11 @@ def _objective_phrase(f: Any, plural: bool = False, noun: str = "objective") -> 
         s += f" tagged {dekebab(_str(f['designated']))}"
     if f.get("within") is not None and not unit_controls:
         s += f" within {range_phrase(within.get('range'))} of {place_ref_phrase(within.get('of'))}"
+    # "visible to one or more models in your unit".
+    if f.get("visible_to") is not None:
+        to = f["visible_to"]
+        who = "one or more models in the unit" if to == "this-unit" else unit_ref_phrase(to)
+        s += f" visible to {who}"
     # "that your unit was controlling when it was destroyed": the unit's control when the rule was
     # triggered.
     if f.get("controlled_by_unit") is not None:
@@ -618,6 +652,11 @@ def _objective_phrase(f: Any, plural: bool = False, noun: str = "objective") -> 
         bare = re.sub(r"^an? ", "", unit_filter_phrase(f["clear_of"]))
         clear = re.sub(r"\bunit\b", "units", bare, count=1)
         s += f", with no {clear} within range of it"
+    # "that has a friendly unit with this ability within range of it".
+    if f.get("occupied_by") is not None:
+        bare = re.sub(r"^an? ", "", unit_filter_phrase(f["occupied_by"]))
+        held = re.sub(r"\bunit\b", "units", bare, count=1)
+        s += f", with one or more {held} within range of it"
     return s
 
 

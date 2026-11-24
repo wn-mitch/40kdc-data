@@ -32,7 +32,7 @@ export type Keyword = string;
  */
 export type KeywordList = Keyword[];
 /**
- * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
+ * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound ("the number of YP you spent").
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "quantity".
@@ -44,14 +44,15 @@ export type Quantity =
   | RollReference
   | CountOf
   | UnitRating
-  | UnitCharacteristic;
+  | UnitCharacteristic
+  | SpentReference;
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "dice-expression".
  */
 export type DiceExpression = string;
 /**
- * What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number.
+ * What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number. enemy-units-hit: the enemy units hit by one or more of the attacks of the triggering attack sequence ("those attacks").
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "scaling-source".
@@ -66,7 +67,8 @@ export type ScalingSource =
   | "models-equipped-with"
   | "enemy-units-in-range"
   | "wounds-lost"
-  | "battle-round";
+  | "battle-round"
+  | "enemy-units-hit";
 /**
  * A single non-tiered distance reference.
  *
@@ -308,7 +310,7 @@ export type TerrainAreaKeyword = "obscuring" | "hidden" | "plunging-fire";
  */
 export type Owner = "friendly" | "enemy" | "any";
 /**
- * Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.
+ * Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves. destroyed: the unit has been destroyed ("Select one friendly destroyed X unit"); only a rule that returns a destroyed unit selects it.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "unit-state".
@@ -322,7 +324,8 @@ export type UnitState =
   | "on-battlefield"
   | "hidden"
   | "fights-first"
-  | "benefit-of-cover";
+  | "benefit-of-cover"
+  | "destroyed";
 /**
  * Not units that have every listed keyword ("excluding MONSTER CHARACTER units" excludes only units that are both).
  */
@@ -480,6 +483,7 @@ export type SimpleCondition =
   | DestroyedWhileOnObjectiveCondition
   | DestroyedInTaggedTerrainCondition
   | BattleSizeCondition
+  | GameModeCondition
   | ArmyFactionCondition
   | ArmyIncludesCondition
   | MovedOverCondition
@@ -782,9 +786,11 @@ export type SingleEffect =
   | CpGainEffect
   | CostModifierEffect
   | ResourceGainEffect
+  | ResourceGainCapEffect
   | ResourceSpendEffect
   | ResourceDieEffect
   | ObjectiveStickyEffect
+  | RegionExtendEffect
   | DesignateEffect
   | ArmyRuleEffect
   | TestExemptionEffect
@@ -792,7 +798,10 @@ export type SingleEffect =
   | CharacteristicResolutionEffect
   | BorrowWeaponsEffect
   | SelectWeaponEffect
-  | WeaponAbilityRangeEffect;
+  | WeaponAbilityRangeEffect
+  | OrdersModifierEffect
+  | OrderShareEffect
+  | ReservesScheduleEffect;
 /**
  * How long an effect, a part or a designation lasts; resolution lasts only while resolving this activation; while-leading ends when the bearer stops leading; after-resolving ends after this activation resolves. The remaining values are phase, turn, battle-round, battle, explicit phase edges, attack-sequence, permanent, and domain-specific expiry windows.
  *
@@ -866,9 +875,9 @@ export type DiceGatedEffect = {
   type: "dice-gated";
   dice?: DiceExpression;
   /**
-   * Fixed threshold or model characteristic to compare against
+   * Fixed threshold, model characteristic, or a value read from the battle round to compare against
    */
-  threshold?: number | ("leadership" | "toughness" | "save");
+  threshold?: number | ("leadership" | "toughness" | "save") | BattleRoundThreshold;
   comparison?: "gt" | "gte" | "lt" | "lte" | "eq";
   on_success?: EffectNode | null;
   on_fail?: EffectNode | null;
@@ -964,6 +973,52 @@ export type AbilityTrigger = Trigger | [Trigger, ...Trigger[]];
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
 export type AbilityDSLCondition4 = SimpleCondition | CompoundCondition;
+/**
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "roll-effect".
+ */
+export type RollEffect = {
+  [k: string]: unknown;
+} & {
+  type: "roll";
+  dice: DiceExpression;
+  /**
+   * Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).
+   */
+  count_stat?: {
+    stat: ("M" | "T" | "W" | "OC" | "A") &
+      (
+        | "M"
+        | "T"
+        | "Sv"
+        | "W"
+        | "Ld"
+        | "OC"
+        | "A"
+        | "WS"
+        | "BS"
+        | "S"
+        | "AP"
+        | "D"
+        | "Range"
+        | "detection-range"
+        | "psyker-level"
+      );
+    of: UnitRef;
+  };
+  /**
+   * Roll as many of `dice` (one die, such as D6) as a count from the battle's history: of mortal-wounds-suffered, the mortal wounds `subject` suffered in `window` ("a number of dice equal to the number of mortal wounds your unit suffered this phase").
+   */
+  count_history?: {
+    of: "mortal-wounds-suffered";
+    subject: UnitRef;
+    window: "phase";
+  };
+  extra_dice_pool?: string;
+  kind?: RollKind;
+  roll_var: string;
+  effect: EffectNode;
+};
 /**
  * A predicate, or and/or/not over predicates. Every predicate sits on one axis (clock, army, identity, composition, state, history, position, board, attack, visibility, designation, resource) and names the unit it tests with `subject` (a unit-ref, default this-unit). Negation is only the `not` operator.
  */
@@ -1213,12 +1268,16 @@ export interface CountBounds {
   max?: Quantity;
 }
 /**
- * One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.
+ * One value per battle size (Incursion, Strike Force, Onslaught), plus an optional value for a Combat Patrol battle. Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "battle-size-value".
  */
 export interface BattleSizeValue {
+  /**
+   * The value when playing a Combat Patrol battle.
+   */
+  "combat-patrol"?: number;
   incursion: number;
   "strike-force": number;
   onslaught: number;
@@ -1280,6 +1339,19 @@ export interface UnitRating {
  */
 export interface UnitCharacteristic {
   characteristic: Stat;
+}
+/**
+ * The amount a resource-spend of this ability bound with bind_as spent during this use (0 when it spent none). With per N: one for every N of it, rounded down ("for every 2YP you just spent").
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "spent-reference".
+ */
+export interface SpentReference {
+  /**
+   * Kebab-case identifier
+   */
+  spent: string;
+  per?: number;
 }
 /**
  * A stable identifier assigned to the same entity by an external data source.
@@ -1664,6 +1736,38 @@ export interface ObjectiveFilter {
   /**
    * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
    */
+  visible_to?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
   controlled_by_unit?:
     | (
         | "this-unit"
@@ -1697,12 +1801,289 @@ export interface ObjectiveFilter {
    * When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one ("an objective your unit was controlling at the end of the previous phase"). Only with controlled_by_unit.
    */
   controlled_at?: "previous-phase-end";
-  clear_of?: UnitFilter1;
+  occupied_by?: UnitFilter1;
+  clear_of?: UnitFilter2;
+}
+/**
+ * Only objective markers with one or more units matching this filter within range of them ("that has a friendly unit with this ability within range of it").
+ */
+export interface UnitFilter1 {
+  owner?: Owner;
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList1;
+  shares_any_of?: KeywordList2;
+  /**
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
+   */
+  designated?: string;
+  state?: UnitState;
+  /**
+   * Only units in none of these states ("unengaged", "not Battle-shocked").
+   *
+   * @minItems 1
+   */
+  not_states?: [UnitState, ...UnitState[]];
+  /**
+   * model: the filter matches individual models. Default unit.
+   */
+  level?: "unit" | "model";
+  /**
+   * Exact model-profile names; alternatives. This predicate applies only to individual models.
+   *
+   * @minItems 1
+   */
+  model_names?: [string, ...string[]];
+  /**
+   * Exact owning-faction unit identities; this predicate applies only to whole units.
+   *
+   * @minItems 1
+   */
+  unit_ids?: [EntityId, ...EntityId[]];
+  /**
+   * Actual attachment membership role, not a capability keyword.
+   */
+  attachment_role?: "bodyguard" | "leader";
+  /**
+   * Only units visible to the named observer.
+   */
+  visible?: {
+    to: UnitRef;
+  };
+  /**
+   * Only units within (wholly within, if set) this range of `of` (default the unit with the ability): aura recipients.
+   */
+  within?: {
+    range: RangeRef;
+    of?: PlaceRef;
+    wholly?: true;
+  };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  excluding?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  designated_by?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
+   */
+  not_designated?: string;
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  embarked_in?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  member_of?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  engaged_with?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  not_engaged_with?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Units with every listed ability.
+   *
+   * @minItems 1
+   */
+  has_ability?: [EntityId, ...EntityId[]];
+  /**
+   * has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
+   */
+  has_ability_models?: {
+    none_of: KeywordList3;
+  };
+  /**
+   * Units with none of the listed abilities.
+   *
+   * @minItems 1
+   */
+  lacks_ability?: [EntityId, ...EntityId[]];
 }
 /**
  * Only objective markers with no unit matching this filter within range of them ("has no enemy units (excluding AIRCRAFT units) within range of it").
  */
-export interface UnitFilter1 {
+export interface UnitFilter2 {
   owner?: Owner;
   all_of?: KeywordList;
   any_of?: KeywordList;
@@ -2435,9 +2816,23 @@ export interface EventFilter {
         stratagem_target: EntityId;
       };
   /**
-   * destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).
+   * destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal).
    */
-  timing?: "before-removal" | "after-attacks" | "after-set-up" | "after-emergency-disembark";
+  timing?:
+    | "before-removal"
+    | "after-attacks"
+    | "after-set-up"
+    | "after-emergency-disembark"
+    | "before-deadly-demise"
+    | "before-marker-removal";
+  /**
+   * model-destroyed: the destroyed model is the last model in its unit that matches the object filter ("the last Guardian Defender model in this unit").
+   */
+  last?: true;
+  /**
+   * resource-gained: what the gain was the result of ("gains a CP as the result of an ability").
+   */
+  via?: "ability";
   /**
    * The five official game phases. Unchanged between 10th and 11th edition — 11e reorders Pile In timing within the Fight phase but adds no top-level phase.
    */
@@ -2656,7 +3051,7 @@ export interface VisibleCondition {
   };
 }
 /**
- * [designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.
+ * [designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it. A unit subject is tested here only with `at` (its designation as it was then); otherwise it is a `matches` filter.
  */
 export interface DesignatedCondition {
   type: "designated";
@@ -2672,7 +3067,7 @@ export interface DesignatedCondition {
       };
 }
 /**
- * [resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.
+ * [resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held. holder opponent: count bounds what the opponent holds.
  */
 export interface ResourceCondition {
   type: "resource";
@@ -2688,6 +3083,14 @@ export interface ResourceCondition {
       owner?: "friendly" | "enemy" | "any";
     };
     at?: Snapshot;
+    /**
+     * count bounds how much of the pool you gained this turn ("you gained fewer than 3YP this turn"), not how much it holds.
+     */
+    gained?: "turn";
+    /**
+     * count bounds what your opponent holds of a pool both players hold ("if your opponent has one or more Flux tokens"). Absent, the pool is yours.
+     */
+    holder?: "opponent";
   };
 }
 /**
@@ -2749,6 +3152,18 @@ export interface BattleSizeCondition {
   type: "battle-size";
   parameters: {
     size: "incursion" | "strike-force" | "onslaught";
+  };
+}
+/**
+ * [clock] The battle is being played in one of these game modes ("When playing a Combat Patrol battle").
+ */
+export interface GameModeCondition {
+  type: "game-mode";
+  parameters: {
+    /**
+     * @minItems 1
+     */
+    modes: [GameModeId, ...GameModeId[]];
   };
 }
 /**
@@ -2911,6 +3326,18 @@ export interface EndsNearest {
   instead_of?: "closest-enemy-unit";
   optional?: true;
   waives?: "closest-enemy-model";
+}
+/**
+ * A roll threshold read from the battle round when the roll is made ("if the result is greater than the current battle round number").
+ *
+ * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
+ * via the `definition` "battle-round-threshold".
+ */
+export interface BattleRoundThreshold {
+  /**
+   * The current battle round number plus this: 1 is a result greater than the current battle round number.
+   */
+  battle_round_plus: 1;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -3817,6 +4244,14 @@ export interface StatModifierEffect {
   type: "stat-modifier";
   target: UnitRef;
   modifier: {
+    /**
+     * The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+     */
+    not_cumulative?:
+      | "negative-modifiers"
+      | {
+          ability: EntityId;
+        };
     stat: Stat;
     operation: "add" | "subtract" | "set" | "improve" | "worsen" | "multiply" | "halve";
     value?: Quantity;
@@ -3855,6 +4290,10 @@ export interface Scaling {
    */
   evaluated?: "live" | "on-apply";
   within?: RangeRef;
+  /**
+   * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
+   */
+  designated?: string;
 }
 /**
  * [characteristic] Ignore modifiers to characteristics or rolls (all of them, or only worsening ones).
@@ -3879,6 +4318,10 @@ export interface IgnoreModifiersEffect {
      */
     except_rolls?: [RollKind, ...RollKind[]];
     only?: "worsening" | "improving";
+    /**
+     * The player picks which of these modifiers to ignore and can keep any of them ("can ignore any or all modifiers to …"). Absent: every named modifier is ignored.
+     */
+    choice?: "any-or-all";
     incoming?: true;
     weapons?: WeaponScope;
   };
@@ -3891,6 +4334,14 @@ export interface RollModifierEffect {
   type: "roll-modifier";
   target: UnitRef;
   modifier: {
+    /**
+     * The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+     */
+    not_cumulative?:
+      | "negative-modifiers"
+      | {
+          ability: EntityId;
+        };
     roll: RollSelector;
     operation: "add" | "subtract" | "halve";
     value?: Quantity;
@@ -3989,7 +4440,7 @@ export interface WeaponGrantEffect {
   scaling?: Scaling;
 }
 /**
- * [ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options.
+ * [ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, the number of mortal wounds a bound use inflicts when it inflicts any (mortal-wounds), or how many times one unit can be affected by it (received).
  */
 export interface AbilityModifierEffect {
   type: "ability-modifier";
@@ -4021,7 +4472,10 @@ export interface AbilityModifierEffect {
       | "start-round"
       | "end-round"
       | "threshold"
-      | "options";
+      | "options"
+      | "amount"
+      | "received"
+      | "mortal-wounds";
     operation: "add" | "subtract" | "set" | "lift-limit";
     value?: number | string;
     cap?: number;
@@ -4034,6 +4488,7 @@ export interface AbilityModifierEffect {
        */
       id?: string;
       name: string;
+      eligible?: KeywordPredicate1;
       effect: EffectNode;
     };
     /**
@@ -4067,6 +4522,15 @@ export interface StanceOptionRef1 {
 export interface NamedAbilityRef1 {
   ability_id: EntityId;
   definition_id: EntityId;
+}
+/**
+ * The only friendly units the added Order can be issued to ("This Order can only be issued to K units").
+ */
+export interface KeywordPredicate1 {
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -4158,6 +4622,10 @@ export interface ChoiceEffect {
    * @minItems 2
    */
   options: [EffectNode, EffectNode, ...EffectNode[]];
+  /**
+   * Kebab-case identifier
+   */
+  id?: string;
   choice_label?: string;
   choice_prompt?: string;
   /**
@@ -4408,9 +4876,17 @@ export interface ForEachUnitEffect {
   selector: UnitSelector;
   effect: EffectNode;
   /**
-   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
+   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound ("the number of YP you spent").
    */
-  max_affected?: number | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating | UnitCharacteristic;
+  max_affected?:
+    | number
+    | DiceExpression
+    | BattleSizeValue
+    | RollReference
+    | CountOf
+    | UnitRating
+    | UnitCharacteristic
+    | SpentReference;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -4461,10 +4937,14 @@ export interface AuraEffect {
 export interface DesignateTargetEffect {
   type: "designate-target";
   designation: string;
-  select: {
-    kind: "unit" | "objective";
-    selector: UnitSelector | ObjectiveSelector;
-  };
+  select:
+    | {
+        [k: string]: unknown;
+      }
+    | {
+        kind?: "unit";
+        [k: string]: unknown;
+      };
   /**
    * What the designation does: one entry, or one entry per `to` when it does more than one thing to the designated unit ("that enemy unit cannot have the Benefit of Cover, and each time a friendly unit makes an attack that targets that unit, …"). Each entry of a list names a different `to`; a list never holds bound-unit-attacks-reference.
    */
@@ -4504,6 +4984,10 @@ export interface DesignationApplies {
   to: "target" | "attackers-of-target" | "bearer-attacks-target" | "bound-unit-attacks-reference";
   effect: EffectNode;
   attacker_filter?: UnitFilter;
+  /**
+   * The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, "each time a model in your WRAITH CONSTRUCT unit makes an attack"), or any one of several ("each time one of your ARMIGER models makes an attack", with attacker_filter naming the keywords each attacking model has).
+   */
+  attacker?: UnitRef | [UnitRef, UnitRef, ...UnitRef[]];
   attacker_unit_filter?: UnitFilter;
   beneficiary?: EventOrSelectionReference;
   reference?: SelectionReference;
@@ -4545,7 +5029,7 @@ export interface IssueOrdersEffect {
          */
         per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
       };
-  eligible?: KeywordPredicate1;
+  eligible?: KeywordPredicate2;
   /**
    * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
    */
@@ -4582,7 +5066,7 @@ export interface IssueOrdersEffect {
    * The Order does not count toward the Orders the officer can issue this turn.
    */
   counts_toward_limit?: false;
-  issuer?: KeywordPredicate2;
+  issuer?: KeywordPredicate3;
   /**
    * Units in any of these states cannot be issued an Order.
    *
@@ -4599,7 +5083,7 @@ export interface IssueOrdersEffect {
    * A unit is affected by at most one Order at a time; an Order issued to it later replaces the current one.
    */
   one_at_a_time?: true;
-  benefit?: KeywordPredicate3;
+  benefit?: KeywordPredicate4;
   /**
    * @minItems 1
    */
@@ -4611,6 +5095,7 @@ export interface IssueOrdersEffect {
       id?: string;
       name: string;
       effect: EffectNode;
+      eligible?: KeywordPredicate5;
     },
     ...{
       /**
@@ -4619,6 +5104,7 @@ export interface IssueOrdersEffect {
       id?: string;
       name: string;
       effect: EffectNode;
+      eligible?: KeywordPredicate5;
     }[]
   ];
   /**
@@ -4631,18 +5117,21 @@ export interface IssueOrdersEffect {
    * @minItems 1
    */
   only_options?: [EntityId, ...EntityId[]];
+  /**
+   * The Orders are issued as if it were this phase ("as if it were your Command phase").
+   */
+  as_if_phase?: "command";
+  /**
+   * Issue again the Order the triggering use just issued, rather than a pick from a menu.
+   */
+  same_order?: true;
+  /**
+   * The unit the triggering use's Order already went to cannot receive it again ("to another unit").
+   */
+  exclude?: "event-object";
 }
 /**
  * Which friendly units may receive an Order, by keyword.
- */
-export interface KeywordPredicate1 {
-  all_of?: KeywordList;
-  any_of?: KeywordList;
-  none_of?: KeywordList;
-  not_all_of?: KeywordList;
-}
-/**
- * Which models with this ability issue Orders, by keyword; each one's datasheet sets how many Orders it issues and which units may receive them.
  */
 export interface KeywordPredicate2 {
   all_of?: KeywordList;
@@ -4651,9 +5140,27 @@ export interface KeywordPredicate2 {
   not_all_of?: KeywordList;
 }
 /**
- * Only models with these keywords gain the benefit of an Order issued to their unit.
+ * Which models with this ability issue Orders, by keyword; each one's datasheet sets how many Orders it issues and which units may receive them.
  */
 export interface KeywordPredicate3 {
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList;
+}
+/**
+ * Only models with these keywords gain the benefit of an Order issued to their unit.
+ */
+export interface KeywordPredicate4 {
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList;
+}
+/**
+ * Only units with these keywords can be issued this Order ("This Order can only be issued to ARMOURED SKIRMISHER units").
+ */
+export interface KeywordPredicate5 {
   all_of?: KeywordList;
   any_of?: KeywordList;
   none_of?: KeywordList;
@@ -4812,6 +5319,10 @@ export interface ResourceActionMenuTrigger {
    */
   binds_die_variable?: string;
   /**
+   * Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.
+   */
+  binds_roll_variable?: string;
+  /**
    * Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.
    */
   binds_selected_die_variable?: string;
@@ -4927,6 +5438,10 @@ export interface Trigger {
    * Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}.
    */
   binds_die_variable?: string;
+  /**
+   * Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.
+   */
+  binds_roll_variable?: string;
   /**
    * Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.
    */
@@ -5045,42 +5560,6 @@ export interface PersistentDesignationEffect {
  */
 export interface NoEffectEffect {
   type: "no-effect";
-}
-/**
- * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
- * via the `definition` "roll-effect".
- */
-export interface RollEffect {
-  type: "roll";
-  dice: DiceExpression;
-  /**
-   * Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).
-   */
-  count_stat?: {
-    stat: ("M" | "T" | "W" | "OC" | "A") &
-      (
-        | "M"
-        | "T"
-        | "Sv"
-        | "W"
-        | "Ld"
-        | "OC"
-        | "A"
-        | "WS"
-        | "BS"
-        | "S"
-        | "AP"
-        | "D"
-        | "Range"
-        | "detection-range"
-        | "psyker-level"
-      );
-    of: UnitRef;
-  };
-  extra_dice_pool?: string;
-  kind?: RollKind;
-  roll_var: string;
-  effect: EffectNode;
 }
 /**
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
@@ -5235,9 +5714,17 @@ export interface MoveTypeEffect {
         per_battle_round: [NonTieredRangeRef, ...NonTieredRangeRef[]];
       };
   /**
-   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
+   * A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound ("the number of YP you spent").
    */
-  distance?: number | DiceExpression | BattleSizeValue | RollReference | CountOf | UnitRating | UnitCharacteristic;
+  distance?:
+    | number
+    | DiceExpression
+    | BattleSizeValue
+    | RollReference
+    | CountOf
+    | UnitRating
+    | UnitCharacteristic
+    | SpentReference;
   eligible_if?: AbilityDSLCondition5;
   /**
    * What resolves before the unit moves.
@@ -5331,7 +5818,7 @@ export interface MoveTypeEffect {
     | MoveTypeEffect;
 }
 /**
- * One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).
+ * One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired); count_from takes the count from the unit's loadout.
  *
  * This interface was referenced by `0KdcBundledSchemas`'s JSON-Schema
  * via the `definition` "ability-usage-limit".
@@ -5349,9 +5836,13 @@ export interface AbilityUsageLimit {
     | "first-time-this-turn";
   count?: number;
   per?: "army" | "unit" | "model";
+  /**
+   * How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.
+   */
+  count_from?: "equipped-wargear";
 }
 /**
- * [ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, "the selected combat doctrine is active for this unit" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.
+ * [ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, "the selected combat doctrine is active for this unit" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. immediate: the one option resolves once, now, instead of becoming active. override: the activation resolves with this amount instead of its own.
  */
 export interface AbilityActivateEffect {
   type: "ability-activate";
@@ -5360,6 +5851,10 @@ export interface AbilityActivateEffect {
     ability: EntityId;
     procedure?: "oath";
     option?: string;
+    /**
+     * The named option resolves once, now, for the target ("Your unit immediately Regenerates"), instead of becoming active. Requires option.
+     */
+    immediate?: true;
     /**
      * @minItems 2
      */
@@ -5432,6 +5927,7 @@ export interface PermissionEffect {
         | "fell-back"
         | "destroyed"
         | "transport-advanced"
+        | "embarked"
       ),
       ...(
         | "engaged"
@@ -5445,6 +5941,7 @@ export interface PermissionEffect {
         | "fell-back"
         | "destroyed"
         | "transport-advanced"
+        | "embarked"
       )[]
     ];
     into?: UnitRef;
@@ -5653,7 +6150,13 @@ export interface RuleStateEffect {
   modifier: {
     direction: "granted" | "suppressed" | "exchanged";
     rule_kind: "core-rule" | "keyword" | "ability" | "faction-rule";
-    rule: string | NamedAbilityRef | StanceOptionRef;
+    rule:
+      | string
+      | NamedAbilityRef
+      | StanceOptionRef
+      | {
+          ability_keyword: string;
+        };
     exchange_with?: NamedAbilityRef;
     except_from?: "this-ability";
     /**
@@ -5661,6 +6164,14 @@ export interface RuleStateEffect {
      */
     any_army_faction?: true;
     attacks?: EventBoundReference3;
+    /**
+     * Kebab-case identifier
+     */
+    sub_rule?: string;
+    /**
+     * What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it.
+     */
+    aspect?: "mortal-wounds";
   };
   scaling?: Scaling;
 }
@@ -5698,7 +6209,7 @@ export interface DamageReductionEffect {
   type: "damage-reduction";
   target: UnitRef;
   modifier: {
-    reduction: number | ("half" | "to-zero");
+    reduction: number | ("half" | "to-zero" | "to-one");
     weapons?: WeaponScope;
   };
   scaling?: Scaling;
@@ -5711,7 +6222,16 @@ export interface FeelNoPainEffect {
   target: UnitRef;
   modifier: {
     threshold: number | UnitRating;
-    against?: "all" | "mortal" | "psychic" | "psychic-and-mortal";
+    /**
+     * What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).
+     */
+    against?:
+      | ("all" | "mortal" | "psychic" | "psychic-and-mortal" | "damage-1-unmodified")
+      | [
+          "mortal" | "psychic" | "devastating-wounds",
+          "mortal" | "psychic" | "devastating-wounds",
+          ...("mortal" | "psychic" | "devastating-wounds")[]
+        ];
   };
   scaling?: Scaling;
 }
@@ -5824,6 +6344,10 @@ export interface DestroyModelsEffect {
     count: Quantity | "all";
     remove_from_play?: true;
     ignore_death_triggers?: true;
+    /**
+     * The destroyed unit's controlling player picks which models ("one model in that unit is destroyed (chosen by its controlling player)"). Absent, the player using the ability picks.
+     */
+    chosen_by?: "controlling-player";
   };
   scaling?: Scaling;
 }
@@ -5834,7 +6358,10 @@ export interface ActOnDeathEffect {
   type: "act-on-death";
   target: UnitRef;
   modifier: {
-    act: "fight" | "shoot";
+    /**
+     * What the destroyed model can do: fight, shoot, or either (shoot-or-fight).
+     */
+    act: "fight" | "shoot" | "shoot-or-fight";
     resolution?: string;
     removal?: string;
     gate?: DeathGate;
@@ -5849,7 +6376,7 @@ export interface ActOnDeathEffect {
 export interface DeathGate {
   dice: DiceExpression;
   comparison: Comparison;
-  threshold: Quantity;
+  threshold: Quantity | BattleRoundThreshold;
   modifiers: {
     condition: AbilityDSLCondition1;
     value: Quantity;
@@ -6005,6 +6532,12 @@ export interface MoveEffect {
       wholly?: true;
     };
     ends_when?: AbilityDSLCondition7;
+    /**
+     * For this move only, its models move as if they had these keywords ("move as if they have the FLY keyword").
+     *
+     * @minItems 1
+     */
+    as_if_keywords?: ["FLY", ..."FLY"[]];
     keeps_eligible?: true;
     ends_nearest?: EndsNearest1;
     /**
@@ -6149,6 +6682,12 @@ export interface MoveModifierEffect {
       modes: "any" | [MoveMode, ...MoveMode[]];
       ignore_before_moving?: true;
     };
+    /**
+     * An Advance with no roll (advance) that does not stack with the named ability's own Move bonus ("this is not cumulative with the REAVERS' Matchless Swiftness ability").
+     */
+    not_cumulative?: {
+      ability: EntityId;
+    };
   };
   scaling?: Scaling;
 }
@@ -6167,7 +6706,7 @@ export interface EndsNearest2 {
   waives?: "closest-enemy-model";
 }
 /**
- * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.
+ * [placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as. from destroyed: a destroyed unit is returned and set up (with to: strategic-reserves, placed into Strategic Reserves).
  */
 export interface SetUpEffect {
   type: "set-up";
@@ -6175,7 +6714,7 @@ export interface SetUpEffect {
   modifier: {
     allow?: boolean;
     to: "battlefield" | "strategic-reserves";
-    from?: "strategic-reserves" | "transport" | "battlefield";
+    from?: "strategic-reserves" | "transport" | "battlefield" | "destroyed";
     /**
      * deep-strike: set up using the Deep Strike rules. cult-ambush: set up using a Cult Ambush marker (by default touching it, and the marker is then removed).
      */
@@ -6438,6 +6977,9 @@ export interface ResourceGainEffect {
       | ("variable" | "any")
       | {
           pool: string;
+        }
+      | {
+          difference_to: number;
         };
     /**
      * The pool becomes the amount instead of gaining it ('you must pledge a number'); amount any is a number the player picks.
@@ -6448,6 +6990,18 @@ export interface ResourceGainEffect {
   scaling?: Scaling;
 }
 /**
+ * [resource] You cannot gain more than max of a pool from one source this ability causes (source failed-battle-shock: the failed Battle-shock tests it causes).
+ */
+export interface ResourceGainCapEffect {
+  type: "resource-gain-cap";
+  target: UnitRef;
+  modifier: {
+    pool: string;
+    max: number;
+    source: "failed-battle-shock";
+  };
+}
+/**
  * [resource] Spend from a resource pool only when it has sufficient balance; the spend fails as a whole rather than producing a negative or clamped pool. face: spend dice showing this value; requirement: spend dice forming this pair, triple or run.
  */
 export interface ResourceSpendEffect {
@@ -6455,7 +7009,19 @@ export interface ResourceSpendEffect {
   target: UnitRef;
   modifier: {
     pool: string;
-    amount: Quantity | ("all" | "one-or-more" | "by-table");
+    /**
+     * A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table.
+     */
+    amount:
+      | Quantity
+      | ("all" | "one-or-more" | "by-table" | "any")
+      | {
+          up_to: number;
+          /**
+           * The least the player can choose, if not 0 ("spend 1-3 Pain tokens").
+           */
+          at_least?: number;
+        };
     label?: string;
     face?: number;
     requirement?: DiceRequirementSpec;
@@ -6514,6 +7080,10 @@ export interface ResourceSpendEffect {
       | {
           stratagem_target: EntityId;
         };
+    /**
+     * Kebab-case identifier
+     */
+    bind_as?: string;
   };
   scaling?: Scaling;
 }
@@ -6526,7 +7096,7 @@ export interface ResourceDieEffect {
   modifier: {
     pool: string;
     operation: "add" | "substitute";
-    value?: number | ("rolled" | "highest");
+    value?: number | ("rolled" | "highest" | "roll-result");
     count?: Quantity;
     count_per_pool?: string;
     consumes_pool?: true;
@@ -6587,6 +7157,38 @@ export interface ObjectiveFilter1 {
   /**
    * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
    */
+  visible_to?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
   controlled_by_unit?:
     | (
         | "this-unit"
@@ -6620,7 +7222,50 @@ export interface ObjectiveFilter1 {
    * When controlled_by_unit's control is read, if not when the rule was triggered: previous-phase-end is the end of the phase before the current one ("an objective your unit was controlling at the end of the previous phase"). Only with controlled_by_unit.
    */
   controlled_at?: "previous-phase-end";
-  clear_of?: UnitFilter1;
+  occupied_by?: UnitFilter1;
+  clear_of?: UnitFilter2;
+}
+/**
+ * [board] An area of the battlefield is within a region an army rule defines ("the selected areas of the battlefield are within your army's Shadow of Chaos") for the effect's duration: one territory, several territories, or the area within a range of the objective markers a filter names.
+ */
+export interface RegionExtendEffect {
+  type: "region-extend";
+  target: UnitRef;
+  modifier: {
+    region: NamedRegionRef;
+    area:
+      | {
+          territory:
+            | "no-mans-land"
+            | "enemy-deployment-zone"
+            | "your-deployment-zone"
+            | "enemy-territory"
+            | "your-territory";
+        }
+      | {
+          /**
+           * @minItems 2
+           */
+          territories: [
+            "no-mans-land" | "enemy-deployment-zone" | "your-deployment-zone" | "enemy-territory" | "your-territory",
+            "no-mans-land" | "enemy-deployment-zone" | "your-deployment-zone" | "enemy-territory" | "your-territory",
+            ...(
+              | "no-mans-land"
+              | "enemy-deployment-zone"
+              | "your-deployment-zone"
+              | "enemy-territory"
+              | "your-territory"
+            )[]
+          ];
+        }
+      | {
+          objective_range: {
+            objective: ObjectiveFilter;
+            inches: number;
+          };
+        };
+  };
+  scaling?: Scaling;
 }
 /**
  * [designation] Tag a unit, objective or terrain area (or clear the tag).
@@ -6711,7 +7356,7 @@ export interface ArmyRuleEffect {
      * What max counts (default units).
      */
     measure?: "units" | "models" | "points";
-    per?: UnitFilter2;
+    per?: UnitFilter3;
     /**
      * Limits the rule's units are left out of: retinue-limit (composition: the Retinue cap), enhancement-limit (limit-exemption: the army's Enhancement cap), strategic-reserves-points (limit-exemption: the points cap for Strategic Reserves).
      *
@@ -6721,8 +7366,8 @@ export interface ArmyRuleEffect {
       "retinue-limit" | "enhancement-limit" | "strategic-reserves-points",
       ...("retinue-limit" | "enhancement-limit" | "strategic-reserves-points")[]
     ];
-    attach_as?: UnitFilter3;
-    can_lead?: UnitFilter4;
+    attach_as?: UnitFilter4;
+    can_lead?: UnitFilter5;
     detachment?: EntityId;
     tag?: string;
     led_by?: string;
@@ -6731,282 +7376,6 @@ export interface ArmyRuleEffect {
     enhancement_kind?: string;
   };
   scaling?: Scaling;
-}
-/**
- * Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
- */
-export interface UnitFilter2 {
-  owner?: Owner;
-  all_of?: KeywordList;
-  any_of?: KeywordList;
-  none_of?: KeywordList;
-  not_all_of?: KeywordList1;
-  shares_any_of?: KeywordList2;
-  /**
-   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
-   *
-   * @minItems 2
-   */
-  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
-  /**
-   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
-   */
-  designated?: string;
-  state?: UnitState;
-  /**
-   * Only units in none of these states ("unengaged", "not Battle-shocked").
-   *
-   * @minItems 1
-   */
-  not_states?: [UnitState, ...UnitState[]];
-  /**
-   * model: the filter matches individual models. Default unit.
-   */
-  level?: "unit" | "model";
-  /**
-   * Exact model-profile names; alternatives. This predicate applies only to individual models.
-   *
-   * @minItems 1
-   */
-  model_names?: [string, ...string[]];
-  /**
-   * Exact owning-faction unit identities; this predicate applies only to whole units.
-   *
-   * @minItems 1
-   */
-  unit_ids?: [EntityId, ...EntityId[]];
-  /**
-   * Actual attachment membership role, not a capability keyword.
-   */
-  attachment_role?: "bodyguard" | "leader";
-  /**
-   * Only units visible to the named observer.
-   */
-  visible?: {
-    to: UnitRef;
-  };
-  /**
-   * Only units within (wholly within, if set) this range of `of` (default the unit with the ability): aura recipients.
-   */
-  within?: {
-    range: RangeRef;
-    of?: PlaceRef;
-    wholly?: true;
-  };
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  excluding?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  designated_by?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
-   */
-  not_designated?: string;
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  embarked_in?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  member_of?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  engaged_with?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
-   */
-  not_engaged_with?:
-    | (
-        | "this-unit"
-        | "this-model"
-        | "model-in-this-unit"
-        | "attacker"
-        | "defender"
-        | "event-subject"
-        | "event-object"
-        | "stratagem-target"
-        | "selected-unit"
-        | "recipient"
-        | "bearer-transport"
-        | "ability-unit"
-      )
-    | UnitFilter
-    | {
-        event_var: string;
-        /**
-         * The bound event's object (the unit it was aimed at) instead of its actor.
-         */
-        role?: "object";
-      }
-    | {
-        selection_var: string;
-      }
-    | {
-        stratagem_target: EntityId;
-      };
-  /**
-   * Units with every listed ability.
-   *
-   * @minItems 1
-   */
-  has_ability?: [EntityId, ...EntityId[]];
-  /**
-   * has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
-   */
-  has_ability_models?: {
-    none_of: KeywordList3;
-  };
-  /**
-   * Units with none of the listed abilities.
-   *
-   * @minItems 1
-   */
-  lacks_ability?: [EntityId, ...EntityId[]];
 }
 /**
  * Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
@@ -7561,6 +7930,282 @@ export interface UnitFilter4 {
   lacks_ability?: [EntityId, ...EntityId[]];
 }
 /**
+ * Any unit (or model, with level: model) matching every listed property. Reads as 'a unit that…'.
+ */
+export interface UnitFilter5 {
+  owner?: Owner;
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList1;
+  shares_any_of?: KeywordList2;
+  /**
+   * Only units matching at least one of these filters, as well as every other listed property ("LEGIO CYBERNETICA or ADEPTUS MECHANICUS VEHICLE unit"; "PSYKER or Battle-shocked unit"). Each alternative keeps its own keywords, exclusions and states; their keywords are never pooled into one requirement.
+   *
+   * @minItems 2
+   */
+  any_of_filters?: [UnitFilter, UnitFilter, ...UnitFilter[]];
+  /**
+   * The unit carries this designation (a tag an effect applied). warlord: the unit contains the Warlord model.
+   */
+  designated?: string;
+  state?: UnitState;
+  /**
+   * Only units in none of these states ("unengaged", "not Battle-shocked").
+   *
+   * @minItems 1
+   */
+  not_states?: [UnitState, ...UnitState[]];
+  /**
+   * model: the filter matches individual models. Default unit.
+   */
+  level?: "unit" | "model";
+  /**
+   * Exact model-profile names; alternatives. This predicate applies only to individual models.
+   *
+   * @minItems 1
+   */
+  model_names?: [string, ...string[]];
+  /**
+   * Exact owning-faction unit identities; this predicate applies only to whole units.
+   *
+   * @minItems 1
+   */
+  unit_ids?: [EntityId, ...EntityId[]];
+  /**
+   * Actual attachment membership role, not a capability keyword.
+   */
+  attachment_role?: "bodyguard" | "leader";
+  /**
+   * Only units visible to the named observer.
+   */
+  visible?: {
+    to: UnitRef;
+  };
+  /**
+   * Only units within (wholly within, if set) this range of `of` (default the unit with the ability): aura recipients.
+   */
+  within?: {
+    range: RangeRef;
+    of?: PlaceRef;
+    wholly?: true;
+  };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  excluding?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  designated_by?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * A designation (a tag an effect applies: spotted, observer, afflicted, riled-up). Kebab-case id; the describer prints the rules' term from its label table and integrity rejects ids outside the registry. Upper-case legacy spellings are accepted until the record repair normalises them. warlord is the list-building designation: the model chosen as Warlord when mustering. A unit carries it when it contains the Warlord model; a rule may test it but never apply it.
+   */
+  not_designated?: string;
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  embarked_in?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  member_of?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  engaged_with?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.
+   */
+  not_engaged_with?:
+    | (
+        | "this-unit"
+        | "this-model"
+        | "model-in-this-unit"
+        | "attacker"
+        | "defender"
+        | "event-subject"
+        | "event-object"
+        | "stratagem-target"
+        | "selected-unit"
+        | "recipient"
+        | "bearer-transport"
+        | "ability-unit"
+      )
+    | UnitFilter
+    | {
+        event_var: string;
+        /**
+         * The bound event's object (the unit it was aimed at) instead of its actor.
+         */
+        role?: "object";
+      }
+    | {
+        selection_var: string;
+      }
+    | {
+        stratagem_target: EntityId;
+      };
+  /**
+   * Units with every listed ability.
+   *
+   * @minItems 1
+   */
+  has_ability?: [EntityId, ...EntityId[]];
+  /**
+   * has_ability holds when every model in the unit, except models with any keyword in none_of, has each listed ability ("every model (excluding CHARACTER models) in that unit has this ability"). Without it, has_ability reads the unit.
+   */
+  has_ability_models?: {
+    none_of: KeywordList3;
+  };
+  /**
+   * Units with none of the listed abilities.
+   *
+   * @minItems 1
+   */
+  lacks_ability?: [EntityId, ...EntityId[]];
+}
+/**
  * [test] The target does not need to take this test again within the window (no further Battle-shock tests this phase).
  */
 export interface TestExemptionEffect {
@@ -7634,6 +8279,112 @@ export interface WeaponAbilityRangeEffect {
   modifier: {
     keyword: WeaponKeywordSelector;
     range: RangeRef;
+  };
+}
+/**
+ * [orders] Changes how the target issues Orders without issuing one itself: only `only_options` of a menu, to the `recipients` units (made eligible with `adds_recipients`), any number of them (`count` any), regardless of range (`range` unlimited), to recipients within `range_proxy.inches` of a marker as if the issuer were within that distance of them, or while the issuer is not on the battlefield (`off_battlefield`).
+ */
+export interface OrdersModifierEffect {
+  type: "orders-modifier";
+  target: UnitRef;
+  modifier: {
+    /**
+     * Only these Orders, each an option of an Orders menu.
+     *
+     * @minItems 1
+     */
+    only_options?: [
+      {
+        ability_id: EntityId;
+        option_id: EntityId;
+      },
+      ...{
+        ability_id: EntityId;
+        option_id: EntityId;
+      }[]
+    ];
+    recipients?: KeywordPredicate6;
+    /**
+     * The recipients become eligible to receive Orders from the target.
+     */
+    adds_recipients?: true;
+    /**
+     * To any number of eligible units.
+     */
+    count?: "any";
+    /**
+     * Regardless of range.
+     */
+    range?: "unlimited";
+    /**
+     * To recipients within this distance of the marker, as if the issuer were within this distance of them.
+     */
+    range_proxy?: {
+      marker: EntityId;
+      inches: number;
+    };
+    /**
+     * Even while the target is not on the battlefield (embarked, in reserves).
+     */
+    off_battlefield?: true;
+  };
+}
+/**
+ * The friendly units the change reaches, by keyword.
+ */
+export interface KeywordPredicate6 {
+  all_of?: KeywordList;
+  any_of?: KeywordList;
+  none_of?: KeywordList;
+  not_all_of?: KeywordList;
+}
+/**
+ * [orders] Orders affecting the target also affect `modifier.with`; `mutual`: and vice versa.
+ */
+export interface OrderShareEffect {
+  type: "order-share";
+  target: UnitRef;
+  modifier: {
+    with: UnitRef;
+    mutual?: true;
+  };
+}
+/**
+ * [army] Each listed datasheet's units must start the battle in Strategic Reserves and cannot be set up on the battlefield before that entry's battle round (a Combat Patrol detachment's arrival schedule). `set_up` is where they must be set up when they arrive.
+ */
+export interface ReservesScheduleEffect {
+  type: "reserves-schedule";
+  target: UnitRef;
+  modifier: {
+    /**
+     * @minItems 1
+     */
+    entries: [
+      {
+        /**
+         * Kebab-case identifier
+         */
+        unit_id: string;
+        /**
+         * The first battle round in which those units can be set up on the battlefield.
+         */
+        battle_round: number;
+      },
+      ...{
+        /**
+         * Kebab-case identifier
+         */
+        unit_id: string;
+        /**
+         * The first battle round in which those units can be set up on the battlefield.
+         */
+        battle_round: number;
+      }[]
+    ];
+    /**
+     * Where the units must be set up when they arrive.
+     */
+    set_up?: "wholly-within-deployment-zone";
   };
 }
 /**
@@ -8997,6 +9748,10 @@ export interface Trigger1 {
    * Binds the generated Miracle die identity from a resource-generation trigger; consumers refer only as {die_var: ID}.
    */
   binds_die_variable?: string;
+  /**
+   * Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.
+   */
+  binds_roll_variable?: string;
   /**
    * Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.
    */

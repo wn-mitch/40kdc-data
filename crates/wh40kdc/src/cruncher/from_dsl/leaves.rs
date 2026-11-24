@@ -428,9 +428,29 @@ pub(super) fn feel_no_pain(node: &Obj, opts: &WalkOpts, out: &mut Out) {
     };
     let mortal = match m.get("against") {
         None => false,
+        // A list naming mortal wounds folds into the mortal stream; psychic attacks and Devastating
+        // Wounds criticals are invisible to the buff layer.
+        Some(Value::Array(items)) => {
+            if items.iter().any(|item| item.as_str() == Some("mortal")) {
+                true
+            } else {
+                out.unsupported(
+                    "feel-no-pain: against a list without mortal wounds (psychic attacks and Devastating Wounds criticals are not tracked by the buff layer)",
+                    node,
+                );
+                return;
+            }
+        }
         Some(a) => match a.as_str() {
             Some("all") => false,
             Some("mortal" | "psychic-and-mortal") => true,
+            Some("damage-1-unmodified") => {
+                out.unsupported(
+                    "feel-no-pain: against \"damage-1-unmodified\" (the buff layer does not split Feel No Pain by an attack's Damage)",
+                    node,
+                );
+                return;
+            }
             Some("psychic") => {
                 out.unsupported(
                     "feel-no-pain: against \"psychic\" (psychic attacks are not tracked by the buff layer)",
@@ -580,6 +600,13 @@ pub(super) fn damage_reduction(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         Some("half") => {
             out.unsupported(
                 "damage-reduction: halving Damage is not modelled by the buff layer",
+                node,
+            );
+            return;
+        }
+        Some("to-one") => {
+            out.unsupported(
+                "damage-reduction: setting Damage to 1 is not modelled by the buff layer",
                 node,
             );
             return;

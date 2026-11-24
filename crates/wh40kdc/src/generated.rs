@@ -388,6 +388,10 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityAbilityType {
 ///    "ignore_consumed": {
 ///      "const": true
 ///    },
+///    "immediate": {
+///      "description": "The named option resolves once, now, for the target (\"Your unit immediately Regenerates\"), instead of becoming active. Requires option.",
+///      "const": true
+///    },
 ///    "option": {
 ///      "type": "string",
 ///      "minLength": 1
@@ -468,6 +472,9 @@ pub struct AbilityActivateEffectModifier {
     pub exclusive: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_consumed: ::std::option::Option<::serde_json::Value>,
+    ///The named option resolves once, now, for the target ("Your unit immediately Regenerates"), instead of becoming active. Requires option.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub immediate: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub option: ::std::option::Option<AbilityActivateEffectModifierOption>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -1391,6 +1398,10 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityInteractionsItemT
 ///        "effect": {
 ///          "$ref": "#/$defs/effect-node"
 ///        },
+///        "eligible": {
+///          "description": "The only friendly units the added Order can be issued to (\"This Order can only be issued to K units\").",
+///          "$ref": "#/$defs/keyword-predicate"
+///        },
 ///        "id": {
 ///          "description": "The added option's stable id; other rules link it as {ability_id, option_id} with this record's id.",
 ///          "$ref": "#/$defs/entity-id"
@@ -1415,7 +1426,10 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityInteractionsItemT
 ///        "start-round",
 ///        "end-round",
 ///        "threshold",
-///        "options"
+///        "options",
+///        "amount",
+///        "received",
+///        "mortal-wounds"
 ///      ]
 ///    },
 ///    "cap": {
@@ -1778,6 +1792,10 @@ for AbilityModifierEffectModifierAbilityVariant5Keyword {
 ///    "effect": {
 ///      "$ref": "#/$defs/effect-node"
 ///    },
+///    "eligible": {
+///      "description": "The only friendly units the added Order can be issued to (\"This Order can only be issued to K units\").",
+///      "$ref": "#/$defs/keyword-predicate"
+///    },
 ///    "id": {
 ///      "description": "The added option's stable id; other rules link it as {ability_id, option_id} with this record's id.",
 ///      "$ref": "#/$defs/entity-id"
@@ -1795,6 +1813,9 @@ for AbilityModifierEffectModifierAbilityVariant5Keyword {
 #[serde(deny_unknown_fields)]
 pub struct AbilityModifierEffectModifierAddOption {
     pub effect: EffectNode,
+    ///The only friendly units the added Order can be issued to ("This Order can only be issued to K units").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub eligible: ::std::option::Option<KeywordPredicate>,
     ///The added option's stable id; other rules link it as {ability_id, option_id} with this record's id.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<EntityId>,
@@ -1893,7 +1914,10 @@ impl<'de> ::serde::Deserialize<'de> for AbilityModifierEffectModifierAddOptionNa
 ///    "start-round",
 ///    "end-round",
 ///    "threshold",
-///    "options"
+///    "options",
+///    "amount",
+///    "received",
+///    "mortal-wounds"
 ///  ]
 ///}
 /// ```
@@ -1935,6 +1959,12 @@ pub enum AbilityModifierEffectModifierAspect {
     Threshold,
     #[serde(rename = "options")]
     Options,
+    #[serde(rename = "amount")]
+    Amount,
+    #[serde(rename = "received")]
+    Received,
+    #[serde(rename = "mortal-wounds")]
+    MortalWounds,
 }
 impl ::std::fmt::Display for AbilityModifierEffectModifierAspect {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -1951,6 +1981,9 @@ impl ::std::fmt::Display for AbilityModifierEffectModifierAspect {
             Self::EndRound => f.write_str("end-round"),
             Self::Threshold => f.write_str("threshold"),
             Self::Options => f.write_str("options"),
+            Self::Amount => f.write_str("amount"),
+            Self::Received => f.write_str("received"),
+            Self::MortalWounds => f.write_str("mortal-wounds"),
         }
     }
 }
@@ -1972,6 +2005,9 @@ impl ::std::str::FromStr for AbilityModifierEffectModifierAspect {
             "end-round" => Ok(Self::EndRound),
             "threshold" => Ok(Self::Threshold),
             "options" => Ok(Self::Options),
+            "amount" => Ok(Self::Amount),
+            "received" => Ok(Self::Received),
+            "mortal-wounds" => Ok(Self::MortalWounds),
             _ => Err("invalid value".into()),
         }
     }
@@ -2997,13 +3033,13 @@ impl ::std::convert::From<::std::vec::Vec<AbilityUsageLimit>> for AbilityUsage {
         Self::Array(value)
     }
 }
-///One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).
+///One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired); count_from takes the count from the unit's loadout.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired).",
+///  "description": "One usage limit: once per turn/phase/battle round, N per battle, with an optional per-army/unit/model granularity. Once per battle is frequency n-per-battle, count 1 (scope.duration one-use is retired); count_from takes the count from the unit's loadout.",
 ///  "type": "object",
 ///  "required": [
 ///    "frequency"
@@ -3012,6 +3048,12 @@ impl ::std::convert::From<::std::vec::Vec<AbilityUsageLimit>> for AbilityUsage {
 ///    "count": {
 ///      "type": "integer",
 ///      "minimum": 1.0
+///    },
+///    "count_from": {
+///      "description": "How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.",
+///      "enum": [
+///        "equipped-wargear"
+///      ]
 ///    },
 ///    "frequency": {
 ///      "type": "string",
@@ -3045,9 +3087,83 @@ impl ::std::convert::From<::std::vec::Vec<AbilityUsageLimit>> for AbilityUsage {
 pub struct AbilityUsageLimit {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<::std::num::NonZeroU64>,
+    ///How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count_from: ::std::option::Option<AbilityUsageLimitCountFrom>,
     pub frequency: AbilityUsageLimitFrequency,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub per: ::std::option::Option<AbilityUsageLimitPer>,
+}
+///How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "How many uses an n-per-battle limit allows, read from the unit instead of a fixed count: equipped-wargear is one use for each copy of the wargear that carries this ability the unit is equipped with.",
+///  "enum": [
+///    "equipped-wargear"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum AbilityUsageLimitCountFrom {
+    #[serde(rename = "equipped-wargear")]
+    EquippedWargear,
+}
+impl ::std::fmt::Display for AbilityUsageLimitCountFrom {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::EquippedWargear => f.write_str("equipped-wargear"),
+        }
+    }
+}
+impl ::std::str::FromStr for AbilityUsageLimitCountFrom {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "equipped-wargear" => Ok(Self::EquippedWargear),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for AbilityUsageLimitCountFrom {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for AbilityUsageLimitCountFrom {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for AbilityUsageLimitCountFrom {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`AbilityUsageLimitFrequency`
 ///
@@ -3253,9 +3369,11 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityUsageLimitPer {
 ///  ],
 ///  "properties": {
 ///    "act": {
+///      "description": "What the destroyed model can do: fight, shoot, or either (shoot-or-fight).",
 ///      "enum": [
 ///        "fight",
-///        "shoot"
+///        "shoot",
+///        "shoot-or-fight"
 ///      ]
 ///    },
 ///    "eligibility": {
@@ -3280,6 +3398,7 @@ impl ::std::convert::TryFrom<::std::string::String> for AbilityUsageLimitPer {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ActOnDeathEffectModifier {
+    ///What the destroyed model can do: fight, shoot, or either (shoot-or-fight).
     pub act: ActOnDeathEffectModifierAct,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub eligibility: ::std::option::Option<Condition>,
@@ -3290,15 +3409,17 @@ pub struct ActOnDeathEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub resolution: ::std::option::Option<ActOnDeathEffectModifierResolution>,
 }
-///`ActOnDeathEffectModifierAct`
+///What the destroyed model can do: fight, shoot, or either (shoot-or-fight).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "What the destroyed model can do: fight, shoot, or either (shoot-or-fight).",
 ///  "enum": [
 ///    "fight",
-///    "shoot"
+///    "shoot",
+///    "shoot-or-fight"
 ///  ]
 ///}
 /// ```
@@ -3320,12 +3441,15 @@ pub enum ActOnDeathEffectModifierAct {
     Fight,
     #[serde(rename = "shoot")]
     Shoot,
+    #[serde(rename = "shoot-or-fight")]
+    ShootOrFight,
 }
 impl ::std::fmt::Display for ActOnDeathEffectModifierAct {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Fight => f.write_str("fight"),
             Self::Shoot => f.write_str("shoot"),
+            Self::ShootOrFight => f.write_str("shoot-or-fight"),
         }
     }
 }
@@ -3337,6 +3461,7 @@ impl ::std::str::FromStr for ActOnDeathEffectModifierAct {
         match value {
             "fight" => Ok(Self::Fight),
             "shoot" => Ok(Self::Shoot),
+            "shoot-or-fight" => Ok(Self::ShootOrFight),
             _ => Err("invalid value".into()),
         }
     }
@@ -7615,6 +7740,33 @@ impl ::std::default::Default for BattleRoundConditionParameters {
         }
     }
 }
+///A roll threshold read from the battle round when the roll is made ("if the result is greater than the current battle round number").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "A roll threshold read from the battle round when the roll is made (\"if the result is greater than the current battle round number\").",
+///  "type": "object",
+///  "required": [
+///    "battle_round_plus"
+///  ],
+///  "properties": {
+///    "battle_round_plus": {
+///      "description": "The current battle round number plus this: 1 is a result greater than the current battle round number.",
+///      "const": 1
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct BattleRoundThreshold {
+    ///The current battle round number plus this: 1 is a result greater than the current battle round number.
+    pub battle_round_plus: ::serde_json::Value,
+}
 ///11e battle size, which sets the army's points limit and detachment-point budget: 'incursion' = 1000 pts / 2 detachment points; 'strike-force' = 2000 pts / 3 detachment points.
 ///
 /// <details><summary>JSON schema</summary>
@@ -7802,13 +7954,13 @@ for BattleSizeConditionParametersSize {
         value.parse()
     }
 }
-///One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.
+///One value per battle size (Incursion, Strike Force, Onslaught), plus an optional value for a Combat Patrol battle. Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "One value per battle size (Incursion, Strike Force, Onslaught). Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
+///  "description": "One value per battle size (Incursion, Strike Force, Onslaught), plus an optional value for a Combat Patrol battle. Accepted wherever a count, amount or cap is: the value that applies is the one for the battle being played.",
 ///  "type": "object",
 ///  "required": [
 ///    "incursion",
@@ -7816,6 +7968,11 @@ for BattleSizeConditionParametersSize {
 ///    "strike-force"
 ///  ],
 ///  "properties": {
+///    "combat-patrol": {
+///      "description": "The value when playing a Combat Patrol battle.",
+///      "type": "integer",
+///      "minimum": 0.0
+///    },
 ///    "incursion": {
 ///      "type": "integer",
 ///      "minimum": 0.0
@@ -7836,6 +7993,13 @@ for BattleSizeConditionParametersSize {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct BattleSizeValue {
+    ///The value when playing a Combat Patrol battle.
+    #[serde(
+        rename = "combat-patrol",
+        default,
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub combat_patrol: ::std::option::Option<u64>,
     pub incursion: u64,
     pub onslaught: u64,
     #[serde(rename = "strike-force")]
@@ -8197,6 +8361,10 @@ for CharacteristicResolutionEffectModifierTie {
 ///        "opponent"
 ///      ]
 ///    },
+///    "id": {
+///      "description": "A stable id for the whole choice: other rules make it happen again as an option of this record (ability-activate option, or an ability-modifier naming {ability_id, option_id}), such as Feed the Swarm's Regenerate.",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "max_choices": {
 ///      "description": "Maximum number of distinct options selected at this activation; defaults to one.",
 ///      "type": "integer",
@@ -8240,6 +8408,9 @@ pub struct ChoiceEffect {
     ///Who picks the option: the opponent ("your opponent must decide whether that unit will take cover or stand firm"). Absent, the player using the ability picks.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub chosen_by: ::std::option::Option<ChoiceEffectChosenBy>,
+    ///A stable id for the whole choice: other rules make it happen again as an option of this record (ability-activate option, or an ability-modifier naming {ability_id, option_id}), such as Feed the Swarm's Regenerate.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<EntityId>,
     ///Maximum number of distinct options selected at this activation; defaults to one.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub max_choices: ::std::option::Option<::std::num::NonZeroU64>,
@@ -9755,8 +9926,37 @@ impl ::std::convert::From<::serde_json::Value> for CountOfCountOf {
 ///{
 ///  "type": "object",
 ///  "properties": {
+///    "for_abilities": {
+///      "description": "The abilities the unit counts as within range for, and only those (\"for the purposes of the Psychic Guidance and Spirit Guides abilities\").",
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/entity-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
+///    "for_weapon_ability": {
+///      "description": "The weapon ability a model_count applies to.",
+///      "enum": [
+///        "blast"
+///      ]
+///    },
 ///    "in_region": {
 ///      "$ref": "#/$defs/region-ref"
+///    },
+///    "model_count": {
+///      "description": "The unit counts as containing fewer than `below` models, for for_weapon_ability's purposes only (\"treated as containing fewer than five models for the purpose of the [BLAST] ability\").",
+///      "type": "object",
+///      "required": [
+///        "below"
+///      ],
+///      "properties": {
+///        "below": {
+///          "type": "integer",
+///          "minimum": 2.0
+///        }
+///      },
+///      "additionalProperties": false
 ///    },
 ///    "of": {
 ///      "$ref": "#/$defs/unit-ref"
@@ -9772,8 +9972,18 @@ impl ::std::convert::From<::serde_json::Value> for CountOfCountOf {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct CountsAsEffectModifier {
+    ///The abilities the unit counts as within range for, and only those ("for the purposes of the Psychic Guidance and Spirit Guides abilities").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub for_abilities: ::std::option::Option<Vec<EntityId>>,
+    ///The weapon ability a model_count applies to.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub for_weapon_ability: ::std::option::Option<
+        CountsAsEffectModifierForWeaponAbility,
+    >,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub in_region: ::std::option::Option<RegionRef>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub model_count: ::std::option::Option<CountsAsEffectModifierModelCount>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub of: ::std::option::Option<UnitRef>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -9782,11 +9992,113 @@ pub struct CountsAsEffectModifier {
 impl ::std::default::Default for CountsAsEffectModifier {
     fn default() -> Self {
         Self {
+            for_abilities: Default::default(),
+            for_weapon_ability: Default::default(),
             in_region: Default::default(),
+            model_count: Default::default(),
             of: Default::default(),
             within: Default::default(),
         }
     }
+}
+///The weapon ability a model_count applies to.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The weapon ability a model_count applies to.",
+///  "enum": [
+///    "blast"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum CountsAsEffectModifierForWeaponAbility {
+    #[serde(rename = "blast")]
+    Blast,
+}
+impl ::std::fmt::Display for CountsAsEffectModifierForWeaponAbility {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Blast => f.write_str("blast"),
+        }
+    }
+}
+impl ::std::str::FromStr for CountsAsEffectModifierForWeaponAbility {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "blast" => Ok(Self::Blast),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for CountsAsEffectModifierForWeaponAbility {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for CountsAsEffectModifierForWeaponAbility {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CountsAsEffectModifierForWeaponAbility {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///The unit counts as containing fewer than `below` models, for for_weapon_ability's purposes only ("treated as containing fewer than five models for the purpose of the [BLAST] ability").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The unit counts as containing fewer than `below` models, for for_weapon_ability's purposes only (\"treated as containing fewer than five models for the purpose of the [BLAST] ability\").",
+///  "type": "object",
+///  "required": [
+///    "below"
+///  ],
+///  "properties": {
+///    "below": {
+///      "type": "integer",
+///      "minimum": 2.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct CountsAsEffectModifierModelCount {
+    pub below: i64,
 }
 ///`CpGainEffectModifier`
 ///
@@ -9832,7 +10144,8 @@ pub struct CpGainEffectModifier {
 ///        {
 ///          "enum": [
 ///            "half",
-///            "to-zero"
+///            "to-zero",
+///            "to-one"
 ///          ]
 ///        }
 ///      ]
@@ -9866,7 +10179,8 @@ pub struct DamageReductionEffectModifier {
 ///    {
 ///      "enum": [
 ///        "half",
-///        "to-zero"
+///        "to-zero",
+///        "to-one"
 ///      ]
 ///    }
 ///  ]
@@ -9947,7 +10261,8 @@ for DamageReductionEffectModifierReduction {
 ///{
 ///  "enum": [
 ///    "half",
-///    "to-zero"
+///    "to-zero",
+///    "to-one"
 ///  ]
 ///}
 /// ```
@@ -9969,12 +10284,15 @@ pub enum DamageReductionEffectModifierReductionVariant1 {
     Half,
     #[serde(rename = "to-zero")]
     ToZero,
+    #[serde(rename = "to-one")]
+    ToOne,
 }
 impl ::std::fmt::Display for DamageReductionEffectModifierReductionVariant1 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Half => f.write_str("half"),
             Self::ToZero => f.write_str("to-zero"),
+            Self::ToOne => f.write_str("to-one"),
         }
     }
 }
@@ -9986,6 +10304,7 @@ impl ::std::str::FromStr for DamageReductionEffectModifierReductionVariant1 {
         match value {
             "half" => Ok(Self::Half),
             "to-zero" => Ok(Self::ToZero),
+            "to-one" => Ok(Self::ToOne),
             _ => Err("invalid value".into()),
         }
     }
@@ -10161,7 +10480,14 @@ impl<'de> ::serde::Deserialize<'de> for DataslateVersion {
 ///      }
 ///    },
 ///    "threshold": {
-///      "$ref": "#/$defs/quantity"
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/quantity"
+///        },
+///        {
+///          "$ref": "#/$defs/battle-round-threshold"
+///        }
+///      ]
 ///    }
 ///  },
 ///  "additionalProperties": false
@@ -10174,7 +10500,7 @@ pub struct DeathGate {
     pub comparison: Comparison,
     pub dice: DiceExpression,
     pub modifiers: ::std::vec::Vec<DeathGateModifiersItem>,
-    pub threshold: Quantity,
+    pub threshold: DeathGateThreshold,
 }
 ///`DeathGateModifiersItem`
 ///
@@ -10204,6 +10530,39 @@ pub struct DeathGate {
 pub struct DeathGateModifiersItem {
     pub condition: Condition,
     pub value: Quantity,
+}
+///`DeathGateThreshold`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/quantity"
+///    },
+///    {
+///      "$ref": "#/$defs/battle-round-threshold"
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum DeathGateThreshold {
+    Quantity(Quantity),
+    BattleRoundThreshold(BattleRoundThreshold),
+}
+impl ::std::convert::From<Quantity> for DeathGateThreshold {
+    fn from(value: Quantity) -> Self {
+        Self::Quantity(value)
+    }
+}
+impl ::std::convert::From<BattleRoundThreshold> for DeathGateThreshold {
+    fn from(value: BattleRoundThreshold) -> Self {
+        Self::BattleRoundThreshold(value)
+    }
 }
 ///`DefiniteOwner`
 ///
@@ -11090,11 +11449,38 @@ impl ::std::convert::From<UnitRef> for DesignateEffectModifierSubject {
 ///    },
 ///    "select": {
 ///      "type": "object",
+///      "oneOf": [
+///        {
+///          "not": {
+///            "required": [
+///              "from"
+///            ]
+///          },
+///          "required": [
+///            "selector"
+///          ]
+///        },
+///        {
+///          "required": [
+///            "from"
+///          ],
+///          "properties": {
+///            "kind": {
+///              "const": "unit"
+///            }
+///          }
+///        }
+///      ],
 ///      "required": [
-///        "kind",
-///        "selector"
+///        "kind"
 ///      ],
 ///      "properties": {
+///        "from": {
+///          "description": "The unit is the unit of the ability's moment (\"just after an enemy unit has shot … attacks that target that enemy unit\"), designated with no choice; the select then has no selector.",
+///          "enum": [
+///            "event-subject"
+///          ]
+///        },
 ///        "kind": {
 ///          "enum": [
 ///            "unit",
@@ -11220,6 +11606,9 @@ for DesignateTargetEffectApplies {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DesignateTargetEffectAppliesArrayItem {
+    ///The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, "each time a model in your WRAITH CONSTRUCT unit makes an attack"), or any one of several ("each time one of your ARMIGER models makes an attack", with attacker_filter naming the keywords each attacking model has).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub attacker: ::std::option::Option<DesignateTargetEffectAppliesArrayItemAttacker>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attacker_filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -11230,6 +11619,46 @@ pub struct DesignateTargetEffectAppliesArrayItem {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub reference: ::std::option::Option<SelectionReference>,
     pub to: DesignateTargetEffectAppliesArrayItemTo,
+}
+///The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, "each time a model in your WRAITH CONSTRUCT unit makes an attack"), or any one of several ("each time one of your ARMIGER models makes an attack", with attacker_filter naming the keywords each attacking model has).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, \"each time a model in your WRAITH CONSTRUCT unit makes an attack\"), or any one of several (\"each time one of your ARMIGER models makes an attack\", with attacker_filter naming the keywords each attacking model has).",
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/unit-ref"
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum DesignateTargetEffectAppliesArrayItemAttacker {
+    UnitRef(UnitRef),
+    Array(Vec<UnitRef>),
+}
+impl ::std::convert::From<UnitRef> for DesignateTargetEffectAppliesArrayItemAttacker {
+    fn from(value: UnitRef) -> Self {
+        Self::UnitRef(value)
+    }
+}
+impl ::std::convert::From<Vec<UnitRef>>
+for DesignateTargetEffectAppliesArrayItemAttacker {
+    fn from(value: Vec<UnitRef>) -> Self {
+        Self::Array(value)
+    }
 }
 ///`DesignateTargetEffectAppliesArrayItemTo`
 ///
@@ -11394,11 +11823,38 @@ impl<'de> ::serde::Deserialize<'de> for DesignateTargetEffectDesignation {
 /// ```json
 ///{
 ///  "type": "object",
+///  "oneOf": [
+///    {
+///      "not": {
+///        "required": [
+///          "from"
+///        ]
+///      },
+///      "required": [
+///        "selector"
+///      ]
+///    },
+///    {
+///      "required": [
+///        "from"
+///      ],
+///      "properties": {
+///        "kind": {
+///          "const": "unit"
+///        }
+///      }
+///    }
+///  ],
 ///  "required": [
-///    "kind",
-///    "selector"
+///    "kind"
 ///  ],
 ///  "properties": {
+///    "from": {
+///      "description": "The unit is the unit of the ability's moment (\"just after an enemy unit has shot … attacks that target that enemy unit\"), designated with no choice; the select then has no selector.",
+///      "enum": [
+///        "event-subject"
+///      ]
+///    },
 ///    "kind": {
 ///      "enum": [
 ///        "unit",
@@ -11421,12 +11877,19 @@ impl<'de> ::serde::Deserialize<'de> for DesignateTargetEffectDesignation {
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct DesignateTargetEffectSelect {
-    pub kind: DesignateTargetEffectSelectKind,
-    pub selector: DesignateTargetEffectSelectSelector,
+#[serde(untagged, deny_unknown_fields)]
+pub enum DesignateTargetEffectSelect {
+    Variant0 {
+        kind: DesignateTargetEffectSelectVariant0Kind,
+        selector: DesignateTargetEffectSelectVariant0Selector,
+    },
+    Variant1 {
+        ///The unit is the unit of the ability's moment ("just after an enemy unit has shot … attacks that target that enemy unit"), designated with no choice; the select then has no selector.
+        from: DesignateTargetEffectSelectVariant1From,
+        kind: DesignateTargetEffectSelectVariant1Kind,
+    },
 }
-///`DesignateTargetEffectSelectKind`
+///`DesignateTargetEffectSelectVariant0Kind`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -11451,13 +11914,13 @@ pub struct DesignateTargetEffectSelect {
     PartialEq,
     PartialOrd
 )]
-pub enum DesignateTargetEffectSelectKind {
+pub enum DesignateTargetEffectSelectVariant0Kind {
     #[serde(rename = "unit")]
     Unit,
     #[serde(rename = "objective")]
     Objective,
 }
-impl ::std::fmt::Display for DesignateTargetEffectSelectKind {
+impl ::std::fmt::Display for DesignateTargetEffectSelectVariant0Kind {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Unit => f.write_str("unit"),
@@ -11465,7 +11928,7 @@ impl ::std::fmt::Display for DesignateTargetEffectSelectKind {
         }
     }
 }
-impl ::std::str::FromStr for DesignateTargetEffectSelectKind {
+impl ::std::str::FromStr for DesignateTargetEffectSelectVariant0Kind {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -11477,7 +11940,7 @@ impl ::std::str::FromStr for DesignateTargetEffectSelectKind {
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for DesignateTargetEffectSelectKind {
+impl ::std::convert::TryFrom<&str> for DesignateTargetEffectSelectVariant0Kind {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -11486,7 +11949,7 @@ impl ::std::convert::TryFrom<&str> for DesignateTargetEffectSelectKind {
     }
 }
 impl ::std::convert::TryFrom<&::std::string::String>
-for DesignateTargetEffectSelectKind {
+for DesignateTargetEffectSelectVariant0Kind {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -11494,7 +11957,8 @@ for DesignateTargetEffectSelectKind {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<::std::string::String> for DesignateTargetEffectSelectKind {
+impl ::std::convert::TryFrom<::std::string::String>
+for DesignateTargetEffectSelectVariant0Kind {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -11502,7 +11966,7 @@ impl ::std::convert::TryFrom<::std::string::String> for DesignateTargetEffectSel
         value.parse()
     }
 }
-///`DesignateTargetEffectSelectSelector`
+///`DesignateTargetEffectSelectVariant0Selector`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -11520,18 +11984,163 @@ impl ::std::convert::TryFrom<::std::string::String> for DesignateTargetEffectSel
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-pub struct DesignateTargetEffectSelectSelector {
+pub struct DesignateTargetEffectSelectVariant0Selector {
     #[serde(flatten, default, skip_serializing_if = "::std::option::Option::is_none")]
     pub subtype_0: ::std::option::Option<UnitSelector>,
     #[serde(flatten, default, skip_serializing_if = "::std::option::Option::is_none")]
     pub subtype_1: ::std::option::Option<ObjectiveSelector>,
 }
-impl ::std::default::Default for DesignateTargetEffectSelectSelector {
+impl ::std::default::Default for DesignateTargetEffectSelectVariant0Selector {
     fn default() -> Self {
         Self {
             subtype_0: Default::default(),
             subtype_1: Default::default(),
         }
+    }
+}
+///The unit is the unit of the ability's moment ("just after an enemy unit has shot … attacks that target that enemy unit"), designated with no choice; the select then has no selector.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The unit is the unit of the ability's moment (\"just after an enemy unit has shot … attacks that target that enemy unit\"), designated with no choice; the select then has no selector.",
+///  "enum": [
+///    "event-subject"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DesignateTargetEffectSelectVariant1From {
+    #[serde(rename = "event-subject")]
+    EventSubject,
+}
+impl ::std::fmt::Display for DesignateTargetEffectSelectVariant1From {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::EventSubject => f.write_str("event-subject"),
+        }
+    }
+}
+impl ::std::str::FromStr for DesignateTargetEffectSelectVariant1From {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "event-subject" => Ok(Self::EventSubject),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DesignateTargetEffectSelectVariant1From {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for DesignateTargetEffectSelectVariant1From {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DesignateTargetEffectSelectVariant1From {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DesignateTargetEffectSelectVariant1Kind`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "unit"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum DesignateTargetEffectSelectVariant1Kind {
+    #[serde(rename = "unit")]
+    Unit,
+}
+impl ::std::fmt::Display for DesignateTargetEffectSelectVariant1Kind {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Unit => f.write_str("unit"),
+        }
+    }
+}
+impl ::std::str::FromStr for DesignateTargetEffectSelectVariant1Kind {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "unit" => Ok(Self::Unit),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DesignateTargetEffectSelectVariant1Kind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for DesignateTargetEffectSelectVariant1Kind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DesignateTargetEffectSelectVariant1Kind {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`DesignateTargetEffectType`
@@ -11630,12 +12239,21 @@ impl ::std::convert::TryFrom<::std::string::String> for DesignateTargetEffectTyp
 ///      "required": [
 ///        "count"
 ///      ]
+///    },
+///    {
+///      "required": [
+///        "at"
+///      ]
 ///    }
 ///  ],
 ///  "required": [
 ///    "tag"
 ///  ],
 ///  "properties": {
+///    "at": {
+///      "description": "Read the designation as it was then (\"if that enemy unit was unravelling at the start of the phase\"), not at the moment of the check.",
+///      "$ref": "#/$defs/snapshot"
+///    },
 ///    "by": {
 ///      "description": "The unit that applied the designation (their Spotted unit; one marked by a MARKERLIGHT Observer).",
 ///      "$ref": "#/$defs/unit-ref"
@@ -11687,6 +12305,16 @@ pub enum DesignatedConditionParameters {
         count: CountBounds,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         subject: ::std::option::Option<DesignatedConditionParametersVariant1Subject>,
+        tag: DesignationId,
+    },
+    Variant2 {
+        ///Read the designation as it was then ("if that enemy unit was unravelling at the start of the phase"), not at the moment of the check.
+        at: Snapshot,
+        ///The unit that applied the designation (their Spotted unit; one marked by a MARKERLIGHT Observer).
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        by: ::std::option::Option<UnitRef>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        subject: ::std::option::Option<DesignatedConditionParametersVariant2Subject>,
         tag: DesignationId,
     },
 }
@@ -11847,7 +12475,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///        },
 ///        {
 ///          "not": {
-///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///            "type": "string",
 ///            "enum": [
 ///              "this-unit",
@@ -11947,7 +12575,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12029,7 +12657,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12114,7 +12742,7 @@ for DesignatedConditionParametersVariant0SubjectVariant0 {
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12230,7 +12858,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///        },
 ///        {
 ///          "not": {
-///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///            "type": "string",
 ///            "enum": [
 ///              "this-unit",
@@ -12300,7 +12928,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12397,7 +13025,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12482,7 +13110,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant0 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12594,7 +13222,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///        },
 ///        {
 ///          "not": {
-///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///            "type": "string",
 ///            "enum": [
 ///              "this-unit",
@@ -12668,7 +13296,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12769,7 +13397,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12850,7 +13478,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant1 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -12961,7 +13589,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///        },
 ///        {
 ///          "not": {
-///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///            "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///            "type": "string",
 ///            "enum": [
 ///              "this-unit",
@@ -13036,7 +13664,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -13137,7 +13765,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -13219,7 +13847,7 @@ pub enum DesignatedConditionParametersVariant0SubjectVariant0Variant2 {}
 ///          },
 ///          {
 ///            "not": {
-///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///              "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///              "type": "string",
 ///              "enum": [
 ///                "this-unit",
@@ -13335,6 +13963,43 @@ impl ::std::convert::From<UnitRef> for DesignatedConditionParametersVariant1Subj
         Self::UnitRef(value)
     }
 }
+///`DesignatedConditionParametersVariant2Subject`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    {
+///      "type": "object",
+///      "required": [
+///        "objective"
+///      ],
+///      "properties": {
+///        "objective": {
+///          "$ref": "#/$defs/objective-filter"
+///        }
+///      },
+///      "additionalProperties": false
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged, deny_unknown_fields)]
+pub enum DesignatedConditionParametersVariant2Subject {
+    UnitRef(UnitRef),
+    Object { objective: ObjectiveFilter },
+}
+impl ::std::convert::From<UnitRef> for DesignatedConditionParametersVariant2Subject {
+    fn from(value: UnitRef) -> Self {
+        Self::UnitRef(value)
+    }
+}
 ///`DesignationApplies`
 ///
 /// <details><summary>JSON schema</summary>
@@ -13347,6 +14012,22 @@ impl ::std::convert::From<UnitRef> for DesignatedConditionParametersVariant1Subj
 ///    "to"
 ///  ],
 ///  "properties": {
+///    "attacker": {
+///      "description": "The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, \"each time a model in your WRAITH CONSTRUCT unit makes an attack\"), or any one of several (\"each time one of your ARMIGER models makes an attack\", with attacker_filter naming the keywords each attacking model has).",
+///      "oneOf": [
+///        {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        {
+///          "type": "array",
+///          "items": {
+///            "$ref": "#/$defs/unit-ref"
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
+///        }
+///      ]
+///    },
 ///    "attacker_filter": {
 ///      "$ref": "#/$defs/unit-filter"
 ///    },
@@ -13378,6 +14059,9 @@ impl ::std::convert::From<UnitRef> for DesignatedConditionParametersVariant1Subj
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DesignationApplies {
+    ///The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, "each time a model in your WRAITH CONSTRUCT unit makes an attack"), or any one of several ("each time one of your ARMIGER models makes an attack", with attacker_filter naming the keywords each attacking model has).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub attacker: ::std::option::Option<DesignationAppliesAttacker>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attacker_filter: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -13388,6 +14072,45 @@ pub struct DesignationApplies {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub reference: ::std::option::Option<SelectionReference>,
     pub to: DesignationAppliesTo,
+}
+///The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, "each time a model in your WRAITH CONSTRUCT unit makes an attack"), or any one of several ("each time one of your ARMIGER models makes an attack", with attacker_filter naming the keywords each attacking model has).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The units whose attacks against the designated unit this entry covers: a Stratagem target ({stratagem_target: name}, \"each time a model in your WRAITH CONSTRUCT unit makes an attack\"), or any one of several (\"each time one of your ARMIGER models makes an attack\", with attacker_filter naming the keywords each attacking model has).",
+///  "oneOf": [
+///    {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/unit-ref"
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum DesignationAppliesAttacker {
+    UnitRef(UnitRef),
+    Array(Vec<UnitRef>),
+}
+impl ::std::convert::From<UnitRef> for DesignationAppliesAttacker {
+    fn from(value: UnitRef) -> Self {
+        Self::UnitRef(value)
+    }
+}
+impl ::std::convert::From<Vec<UnitRef>> for DesignationAppliesAttacker {
+    fn from(value: Vec<UnitRef>) -> Self {
+        Self::Array(value)
+    }
 }
 ///`DesignationAppliesTo`
 ///
@@ -13560,6 +14283,10 @@ impl<'de> ::serde::Deserialize<'de> for DesignationId {
 ///    "count"
 ///  ],
 ///  "properties": {
+///    "chosen_by": {
+///      "description": "The destroyed unit's controlling player picks which models (\"one model in that unit is destroyed (chosen by its controlling player)\"). Absent, the player using the ability picks.",
+///      "const": "controlling-player"
+///    },
 ///    "count": {
 ///      "oneOf": [
 ///        {
@@ -13584,6 +14311,9 @@ impl<'de> ::serde::Deserialize<'de> for DesignationId {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DestroyModelsEffectModifier {
+    ///The destroyed unit's controlling player picks which models ("one model in that unit is destroyed (chosen by its controlling player)"). Absent, the player using the ability picks.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub chosen_by: ::std::option::Option<::serde_json::Value>,
     pub count: DestroyModelsEffectModifierCount,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ignore_death_triggers: ::std::option::Option<::serde_json::Value>,
@@ -14455,7 +15185,7 @@ impl<'de> ::serde::Deserialize<'de> for DiceExpression {
 ///      "additionalProperties": false
 ///    },
 ///    "threshold": {
-///      "description": "Fixed threshold or model characteristic to compare against",
+///      "description": "Fixed threshold, model characteristic, or a value read from the battle round to compare against",
 ///      "oneOf": [
 ///        {
 ///          "type": "integer"
@@ -14467,6 +15197,9 @@ impl<'de> ::serde::Deserialize<'de> for DiceExpression {
 ///            "toughness",
 ///            "save"
 ///          ]
+///        },
+///        {
+///          "$ref": "#/$defs/battle-round-threshold"
 ///        }
 ///      ]
 ///    },
@@ -14506,7 +15239,7 @@ pub struct DiceGatedEffect {
     pub rider: ::std::option::Option<bool>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub test: ::std::option::Option<DiceGatedEffectTest>,
-    ///Fixed threshold or model characteristic to compare against
+    ///Fixed threshold, model characteristic, or a value read from the battle round to compare against
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub threshold: ::std::option::Option<DiceGatedEffectThreshold>,
     #[serde(rename = "type")]
@@ -14676,13 +15409,13 @@ pub struct DiceGatedEffectTestModifiersItem {
     pub condition: Condition,
     pub value: i64,
 }
-///Fixed threshold or model characteristic to compare against
+///Fixed threshold, model characteristic, or a value read from the battle round to compare against
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "Fixed threshold or model characteristic to compare against",
+///  "description": "Fixed threshold, model characteristic, or a value read from the battle round to compare against",
 ///  "oneOf": [
 ///    {
 ///      "type": "integer"
@@ -14694,6 +15427,9 @@ pub struct DiceGatedEffectTestModifiersItem {
 ///        "toughness",
 ///        "save"
 ///      ]
+///    },
+///    {
+///      "$ref": "#/$defs/battle-round-threshold"
 ///    }
 ///  ]
 ///}
@@ -14704,52 +15440,7 @@ pub struct DiceGatedEffectTestModifiersItem {
 pub enum DiceGatedEffectThreshold {
     Integer(i64),
     String(DiceGatedEffectThresholdString),
-}
-impl ::std::str::FromStr for DiceGatedEffectThreshold {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if let Ok(v) = value.parse() {
-            Ok(Self::Integer(v))
-        } else if let Ok(v) = value.parse() {
-            Ok(Self::String(v))
-        } else {
-            Err("string conversion failed for all variants".into())
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DiceGatedEffectThreshold {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<&::std::string::String> for DiceGatedEffectThreshold {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for DiceGatedEffectThreshold {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::fmt::Display for DiceGatedEffectThreshold {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match self {
-            Self::Integer(x) => x.fmt(f),
-            Self::String(x) => x.fmt(f),
-        }
-    }
+    BattleRoundThreshold(BattleRoundThreshold),
 }
 impl ::std::convert::From<i64> for DiceGatedEffectThreshold {
     fn from(value: i64) -> Self {
@@ -14759,6 +15450,11 @@ impl ::std::convert::From<i64> for DiceGatedEffectThreshold {
 impl ::std::convert::From<DiceGatedEffectThresholdString> for DiceGatedEffectThreshold {
     fn from(value: DiceGatedEffectThresholdString) -> Self {
         Self::String(value)
+    }
+}
+impl ::std::convert::From<BattleRoundThreshold> for DiceGatedEffectThreshold {
+    fn from(value: BattleRoundThreshold) -> Self {
+        Self::BattleRoundThreshold(value)
     }
 }
 ///`DiceGatedEffectThresholdString`
@@ -17006,7 +17702,7 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      ]
 ///    },
 ///    "by": {
-///      "description": "Who caused it (the unit or model whose attack destroyed the object).",
+///      "description": "Who caused it (the unit or model whose attack destroyed the object; on state-changed, the unit whose attacks changed the subject's strength).",
 ///      "$ref": "#/$defs/unit-ref"
 ///    },
 ///    "caused_by": {
@@ -17051,6 +17747,10 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///        "doctrine",
 ///        "contract"
 ///      ]
+///    },
+///    "last": {
+///      "description": "model-destroyed: the destroyed model is the last model in its unit that matches the object filter (\"the last Guardian Defender model in this unit\").",
+///      "const": true
 ///    },
 ///    "marker": {
 ///      "type": "string",
@@ -17147,12 +17847,14 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      ]
 ///    },
 ///    "timing": {
-///      "description": "destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).",
+///      "description": "destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal).",
 ///      "enum": [
 ///        "before-removal",
 ///        "after-attacks",
 ///        "after-set-up",
-///        "after-emergency-disembark"
+///        "after-emergency-disembark",
+///        "before-deadly-demise",
+///        "before-marker-removal"
 ///      ]
 ///    },
 ///    "to": {
@@ -17218,6 +17920,12 @@ impl<'de> ::serde::Deserialize<'de> for EventBoundReferenceEventVar {
 ///      },
 ///      "additionalProperties": false
 ///    },
+///    "via": {
+///      "description": "resource-gained: what the gain was the result of (\"gains a CP as the result of an ability\").",
+///      "enum": [
+///        "ability"
+///      ]
+///    },
 ///    "weapons": {
 ///      "$ref": "#/$defs/weapon-scope"
 ///    }
@@ -17237,7 +17945,7 @@ pub struct EventFilter {
     pub all_attacks: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attack_type: ::std::option::Option<EventFilterAttackType>,
-    ///Who caused it (the unit or model whose attack destroyed the object).
+    ///Who caused it (the unit or model whose attack destroyed the object; on state-changed, the unit whose attacks changed the subject's strength).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub by: ::std::option::Option<UnitRef>,
     ///The exact bound event that caused this event. Actor equality alone never establishes this causal relation.
@@ -17257,6 +17965,9 @@ pub struct EventFilter {
     ///targets-selected / attacks-resolved / used: which kind of targeting, attack or rule.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub kind: ::std::option::Option<EventFilterKind>,
+    ///model-destroyed: the destroyed model is the last model in its unit that matches the object filter ("the last Guardian Defender model in this unit").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub last: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub marker: ::std::option::Option<EventFilterMarker>,
     ///A move type's named mode (a Fall Back's desperate escape, a combat disembark).
@@ -17289,7 +18000,7 @@ pub struct EventFilter {
     pub tag: ::std::option::Option<DesignationId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub through: ::std::option::Option<EventFilterThrough>,
-    ///destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).
+    ///destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub timing: ::std::option::Option<EventFilterTiming>,
     ///selected: what the unit was selected to do. attack means shoot or fight.
@@ -17302,6 +18013,9 @@ pub struct EventFilter {
     pub unmodified: ::std::option::Option<EventFilterUnmodified>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub usage: ::std::option::Option<EventFilterUsage>,
+    ///resource-gained: what the gain was the result of ("gains a CP as the result of an ability").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub via: ::std::option::Option<EventFilterVia>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapons: ::std::option::Option<WeaponScope>,
 }
@@ -17318,6 +18032,7 @@ impl ::std::default::Default for EventFilter {
             from: Default::default(),
             id: Default::default(),
             kind: Default::default(),
+            last: Default::default(),
             marker: Default::default(),
             mode: Default::default(),
             move_types: Default::default(),
@@ -17337,6 +18052,7 @@ impl ::std::default::Default for EventFilter {
             transport: Default::default(),
             unmodified: Default::default(),
             usage: Default::default(),
+            via: Default::default(),
             weapons: Default::default(),
         }
     }
@@ -18388,18 +19104,20 @@ impl ::std::convert::TryFrom<::std::string::String> for EventFilterThrough {
         value.parse()
     }
 }
-///destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).
+///destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal).
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "destroyed: resolve before the model is removed (before-removal), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up).",
+///  "description": "destroyed: resolve before the model is removed (before-removal), before its Deadly Demise roll is made, which is also before it is removed (before-deadly-demise), after the attacking unit has finished making its attacks (after-attacks), or once the units embarked within the destroyed model have made their emergency disembark moves (after-emergency-disembark); disembarked: resolve once the unit has been set up (after-set-up); move-ended: resolve before the markers the move ended near are removed (before-marker-removal).",
 ///  "enum": [
 ///    "before-removal",
 ///    "after-attacks",
 ///    "after-set-up",
-///    "after-emergency-disembark"
+///    "after-emergency-disembark",
+///    "before-deadly-demise",
+///    "before-marker-removal"
 ///  ]
 ///}
 /// ```
@@ -18425,6 +19143,10 @@ pub enum EventFilterTiming {
     AfterSetUp,
     #[serde(rename = "after-emergency-disembark")]
     AfterEmergencyDisembark,
+    #[serde(rename = "before-deadly-demise")]
+    BeforeDeadlyDemise,
+    #[serde(rename = "before-marker-removal")]
+    BeforeMarkerRemoval,
 }
 impl ::std::fmt::Display for EventFilterTiming {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -18433,6 +19155,8 @@ impl ::std::fmt::Display for EventFilterTiming {
             Self::AfterAttacks => f.write_str("after-attacks"),
             Self::AfterSetUp => f.write_str("after-set-up"),
             Self::AfterEmergencyDisembark => f.write_str("after-emergency-disembark"),
+            Self::BeforeDeadlyDemise => f.write_str("before-deadly-demise"),
+            Self::BeforeMarkerRemoval => f.write_str("before-marker-removal"),
         }
     }
 }
@@ -18446,6 +19170,8 @@ impl ::std::str::FromStr for EventFilterTiming {
             "after-attacks" => Ok(Self::AfterAttacks),
             "after-set-up" => Ok(Self::AfterSetUp),
             "after-emergency-disembark" => Ok(Self::AfterEmergencyDisembark),
+            "before-deadly-demise" => Ok(Self::BeforeDeadlyDemise),
+            "before-marker-removal" => Ok(Self::BeforeMarkerRemoval),
             _ => Err("invalid value".into()),
         }
     }
@@ -18744,6 +19470,77 @@ pub struct EventFilterUnmodified {
 pub struct EventFilterUsage {
     pub count: ::serde_json::Value,
     pub frequency: ::serde_json::Value,
+}
+///resource-gained: what the gain was the result of ("gains a CP as the result of an ability").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "resource-gained: what the gain was the result of (\"gains a CP as the result of an ability\").",
+///  "enum": [
+///    "ability"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum EventFilterVia {
+    #[serde(rename = "ability")]
+    Ability,
+}
+impl ::std::fmt::Display for EventFilterVia {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Ability => f.write_str("ability"),
+        }
+    }
+}
+impl ::std::str::FromStr for EventFilterVia {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "ability" => Ok(Self::Ability),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for EventFilterVia {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for EventFilterVia {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for EventFilterVia {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`EventOrSelectionReference`
 ///
@@ -19690,11 +20487,29 @@ impl<'de> ::serde::Deserialize<'de> for FactionName {
 ///  ],
 ///  "properties": {
 ///    "against": {
-///      "enum": [
-///        "all",
-///        "mortal",
-///        "psychic",
-///        "psychic-and-mortal"
+///      "description": "What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).",
+///      "oneOf": [
+///        {
+///          "enum": [
+///            "all",
+///            "mortal",
+///            "psychic",
+///            "psychic-and-mortal",
+///            "damage-1-unmodified"
+///          ]
+///        },
+///        {
+///          "type": "array",
+///          "items": {
+///            "enum": [
+///              "mortal",
+///              "psychic",
+///              "devastating-wounds"
+///            ]
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
+///        }
 ///      ]
 ///    },
 ///    "threshold": {
@@ -19717,11 +20532,63 @@ impl<'de> ::serde::Deserialize<'de> for FactionName {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct FeelNoPainEffectModifier {
+    ///What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub against: ::std::option::Option<FeelNoPainEffectModifierAgainst>,
     pub threshold: FeelNoPainEffectModifierThreshold,
 }
-///`FeelNoPainEffectModifierAgainst`
+///What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "What the Feel No Pain covers: every wound (all), mortal wounds, Psychic Attacks, both (psychic-and-mortal), attacks with an unmodified Damage characteristic of 1 (damage-1-unmodified), or a list of two or more kinds (devastating-wounds: Critical Wounds caused by attacks with [DEVASTATING WOUNDS]).",
+///  "oneOf": [
+///    {
+///      "enum": [
+///        "all",
+///        "mortal",
+///        "psychic",
+///        "psychic-and-mortal",
+///        "damage-1-unmodified"
+///      ]
+///    },
+///    {
+///      "type": "array",
+///      "items": {
+///        "enum": [
+///          "mortal",
+///          "psychic",
+///          "devastating-wounds"
+///        ]
+///      },
+///      "minItems": 2,
+///      "uniqueItems": true
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(untagged)]
+pub enum FeelNoPainEffectModifierAgainst {
+    Variant0(FeelNoPainEffectModifierAgainstVariant0),
+    Variant1(Vec<FeelNoPainEffectModifierAgainstVariant1Item>),
+}
+impl ::std::convert::From<FeelNoPainEffectModifierAgainstVariant0>
+for FeelNoPainEffectModifierAgainst {
+    fn from(value: FeelNoPainEffectModifierAgainstVariant0) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<Vec<FeelNoPainEffectModifierAgainstVariant1Item>>
+for FeelNoPainEffectModifierAgainst {
+    fn from(value: Vec<FeelNoPainEffectModifierAgainstVariant1Item>) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`FeelNoPainEffectModifierAgainstVariant0`
 ///
 /// <details><summary>JSON schema</summary>
 ///
@@ -19731,7 +20598,8 @@ pub struct FeelNoPainEffectModifier {
 ///    "all",
 ///    "mortal",
 ///    "psychic",
-///    "psychic-and-mortal"
+///    "psychic-and-mortal",
+///    "damage-1-unmodified"
 ///  ]
 ///}
 /// ```
@@ -19748,7 +20616,7 @@ pub struct FeelNoPainEffectModifier {
     PartialEq,
     PartialOrd
 )]
-pub enum FeelNoPainEffectModifierAgainst {
+pub enum FeelNoPainEffectModifierAgainstVariant0 {
     #[serde(rename = "all")]
     All,
     #[serde(rename = "mortal")]
@@ -19757,18 +20625,21 @@ pub enum FeelNoPainEffectModifierAgainst {
     Psychic,
     #[serde(rename = "psychic-and-mortal")]
     PsychicAndMortal,
+    #[serde(rename = "damage-1-unmodified")]
+    Damage1Unmodified,
 }
-impl ::std::fmt::Display for FeelNoPainEffectModifierAgainst {
+impl ::std::fmt::Display for FeelNoPainEffectModifierAgainstVariant0 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::All => f.write_str("all"),
             Self::Mortal => f.write_str("mortal"),
             Self::Psychic => f.write_str("psychic"),
             Self::PsychicAndMortal => f.write_str("psychic-and-mortal"),
+            Self::Damage1Unmodified => f.write_str("damage-1-unmodified"),
         }
     }
 }
-impl ::std::str::FromStr for FeelNoPainEffectModifierAgainst {
+impl ::std::str::FromStr for FeelNoPainEffectModifierAgainstVariant0 {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -19778,11 +20649,12 @@ impl ::std::str::FromStr for FeelNoPainEffectModifierAgainst {
             "mortal" => Ok(Self::Mortal),
             "psychic" => Ok(Self::Psychic),
             "psychic-and-mortal" => Ok(Self::PsychicAndMortal),
+            "damage-1-unmodified" => Ok(Self::Damage1Unmodified),
             _ => Err("invalid value".into()),
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for FeelNoPainEffectModifierAgainst {
+impl ::std::convert::TryFrom<&str> for FeelNoPainEffectModifierAgainstVariant0 {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -19791,7 +20663,7 @@ impl ::std::convert::TryFrom<&str> for FeelNoPainEffectModifierAgainst {
     }
 }
 impl ::std::convert::TryFrom<&::std::string::String>
-for FeelNoPainEffectModifierAgainst {
+for FeelNoPainEffectModifierAgainstVariant0 {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &::std::string::String,
@@ -19799,7 +20671,90 @@ for FeelNoPainEffectModifierAgainst {
         value.parse()
     }
 }
-impl ::std::convert::TryFrom<::std::string::String> for FeelNoPainEffectModifierAgainst {
+impl ::std::convert::TryFrom<::std::string::String>
+for FeelNoPainEffectModifierAgainstVariant0 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`FeelNoPainEffectModifierAgainstVariant1Item`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "mortal",
+///    "psychic",
+///    "devastating-wounds"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum FeelNoPainEffectModifierAgainstVariant1Item {
+    #[serde(rename = "mortal")]
+    Mortal,
+    #[serde(rename = "psychic")]
+    Psychic,
+    #[serde(rename = "devastating-wounds")]
+    DevastatingWounds,
+}
+impl ::std::fmt::Display for FeelNoPainEffectModifierAgainstVariant1Item {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Mortal => f.write_str("mortal"),
+            Self::Psychic => f.write_str("psychic"),
+            Self::DevastatingWounds => f.write_str("devastating-wounds"),
+        }
+    }
+}
+impl ::std::str::FromStr for FeelNoPainEffectModifierAgainstVariant1Item {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "mortal" => Ok(Self::Mortal),
+            "psychic" => Ok(Self::Psychic),
+            "devastating-wounds" => Ok(Self::DevastatingWounds),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for FeelNoPainEffectModifierAgainstVariant1Item {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for FeelNoPainEffectModifierAgainstVariant1Item {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for FeelNoPainEffectModifierAgainstVariant1Item {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -20610,6 +21565,35 @@ pub struct GameMode {
     ///Whether this mode counts toward the dataset's headline competitive-coverage metric. Only matched-play is competitive; non-competitive modes are tracked on their own coverage dimension.
     pub is_competitive: bool,
     pub name: GameModeName,
+}
+///`GameModeConditionParameters`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "modes"
+///  ],
+///  "properties": {
+///    "modes": {
+///      "type": "array",
+///      "items": {
+///        "$ref": "#/$defs/game-mode-id"
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct GameModeConditionParameters {
+    pub modes: Vec<GameModeId>,
 }
 ///Community-authored summary of the mode (original prose only — no reproduced rules text).
 ///
@@ -21868,6 +22852,10 @@ impl<'de> ::serde::Deserialize<'de> for HullShapeName {
 ///    "what"
 ///  ],
 ///  "properties": {
+///    "choice": {
+///      "description": "The player picks which of these modifiers to ignore and can keep any of them (\"can ignore any or all modifiers to …\"). Absent: every named modifier is ignored.",
+///      "const": "any-or-all"
+///    },
 ///    "except_rolls": {
 ///      "description": "Rolls left out of an \"any roll\" list (rolls [\"all\"]): their modifiers still apply (\"excluding modifiers to saving throws\").",
 ///      "type": "array",
@@ -21919,6 +22907,9 @@ impl<'de> ::serde::Deserialize<'de> for HullShapeName {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct IgnoreModifiersEffectModifier {
+    ///The player picks which of these modifiers to ignore and can keep any of them ("can ignore any or all modifiers to …"). Absent: every named modifier is ignored.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub choice: ::std::option::Option<::serde_json::Value>,
     ///Rolls left out of an "any roll" list (rolls ["all"]): their modifiers still apply ("excluding modifiers to saving throws").
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub except_rolls: ::std::option::Option<Vec<RollKind>>,
@@ -22412,6 +23403,12 @@ pub struct InvulnerableSaveEffectModifier {
 ///    "type"
 ///  ],
 ///  "properties": {
+///    "as_if_phase": {
+///      "description": "The Orders are issued as if it were this phase (\"as if it were your Command phase\").",
+///      "enum": [
+///        "command"
+///      ]
+///    },
 ///    "benefit": {
 ///      "description": "Only models with these keywords gain the benefit of an Order issued to their unit.",
 ///      "$ref": "#/$defs/keyword-predicate"
@@ -22438,6 +23435,10 @@ pub struct InvulnerableSaveEffectModifier {
 ///      },
 ///      "minItems": 1,
 ///      "uniqueItems": true
+///    },
+///    "exclude": {
+///      "description": "The unit the triggering use's Order already went to cannot receive it again (\"to another unit\").",
+///      "const": "event-object"
 ///    },
 ///    "ineligible_states": {
 ///      "description": "Units in any of these states cannot be issued an Order.",
@@ -22483,6 +23484,10 @@ pub struct InvulnerableSaveEffectModifier {
 ///          "effect": {
 ///            "$ref": "#/$defs/effect-node"
 ///          },
+///          "eligible": {
+///            "description": "Only units with these keywords can be issued this Order (\"This Order can only be issued to ARMOURED SKIRMISHER units\").",
+///            "$ref": "#/$defs/keyword-predicate"
+///          },
 ///          "id": {
 ///            "description": "Stable id other rules reference this Order by (\"affected by the Take Aim! Order\").",
 ///            "type": "string",
@@ -22505,6 +23510,10 @@ pub struct InvulnerableSaveEffectModifier {
 ///      "description": "The one unit the Order goes to (the unit the trigger names), in place of an eligible unit the officer picks.",
 ///      "$ref": "#/$defs/unit-ref"
 ///    },
+///    "same_order": {
+///      "description": "Issue again the Order the triggering use just issued, rather than a pick from a menu.",
+///      "const": true
+///    },
 ///    "type": {
 ///      "type": "string",
 ///      "enum": [
@@ -22513,13 +23522,16 @@ pub struct InvulnerableSaveEffectModifier {
 ///    }
 ///  },
 ///  "additionalProperties": false,
-///  "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit. A per-officer record prints no menu: `menu_from` names the ability holding it, and `only_options` narrows it."
+///  "$comment": "An officer issues up to `count` Orders per round to eligible friendly units within `range` inches, each a pick from the `options` menu (Astra Militarum Voice of Command). `count`/`eligible` are typically per-officer-datasheet; the shared menu lives on the army rule. Each option carries a `name` and the `effect` the chosen Order applies to the receiving unit. A per-officer record prints no menu: `menu_from` names the ability holding it, and `only_options` narrows it. `as_if_phase` issues them as if it were that phase. `same_order` issues the Order the moment just issued again, to another eligible unit (`exclude` names the unit it already went to); it lists no menu. An option's `eligible` narrows which units that one Order can be issued to."
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct IssueOrdersEffect {
+    ///The Orders are issued as if it were this phase ("as if it were your Command phase").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub as_if_phase: ::std::option::Option<IssueOrdersEffectAsIfPhase>,
     ///Only models with these keywords gain the benefit of an Order issued to their unit.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub benefit: ::std::option::Option<KeywordPredicate>,
@@ -22534,6 +23546,9 @@ pub struct IssueOrdersEffect {
     ///An Order stops affecting a unit that enters any of these states.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ends_on: ::std::option::Option<Vec<IssueOrdersEffectEndsOnItem>>,
+    ///The unit the triggering use's Order already went to cannot receive it again ("to another unit").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub exclude: ::std::option::Option<::serde_json::Value>,
     ///Units in any of these states cannot be issued an Order.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub ineligible_states: ::std::option::Option<
@@ -22559,8 +23574,82 @@ pub struct IssueOrdersEffect {
     ///The one unit the Order goes to (the unit the trigger names), in place of an eligible unit the officer picks.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub recipient: ::std::option::Option<UnitRef>,
+    ///Issue again the Order the triggering use just issued, rather than a pick from a menu.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_order: ::std::option::Option<::serde_json::Value>,
     #[serde(rename = "type")]
     pub type_: IssueOrdersEffectType,
+}
+///The Orders are issued as if it were this phase ("as if it were your Command phase").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The Orders are issued as if it were this phase (\"as if it were your Command phase\").",
+///  "enum": [
+///    "command"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum IssueOrdersEffectAsIfPhase {
+    #[serde(rename = "command")]
+    Command,
+}
+impl ::std::fmt::Display for IssueOrdersEffectAsIfPhase {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Command => f.write_str("command"),
+        }
+    }
+}
+impl ::std::str::FromStr for IssueOrdersEffectAsIfPhase {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "command" => Ok(Self::Command),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for IssueOrdersEffectAsIfPhase {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for IssueOrdersEffectAsIfPhase {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for IssueOrdersEffectAsIfPhase {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`IssueOrdersEffectEndsOnItem`
 ///
@@ -22719,6 +23808,10 @@ for IssueOrdersEffectIneligibleStatesItem {
 ///    "effect": {
 ///      "$ref": "#/$defs/effect-node"
 ///    },
+///    "eligible": {
+///      "description": "Only units with these keywords can be issued this Order (\"This Order can only be issued to ARMOURED SKIRMISHER units\").",
+///      "$ref": "#/$defs/keyword-predicate"
+///    },
 ///    "id": {
 ///      "description": "Stable id other rules reference this Order by (\"affected by the Take Aim! Order\").",
 ///      "type": "string",
@@ -22737,6 +23830,9 @@ for IssueOrdersEffectIneligibleStatesItem {
 #[serde(deny_unknown_fields)]
 pub struct IssueOrdersEffectOptionsItem {
     pub effect: EffectNode,
+    ///Only units with these keywords can be issued this Order ("This Order can only be issued to ARMOURED SKIRMISHER units").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub eligible: ::std::option::Option<KeywordPredicate>,
     ///Stable id other rules reference this Order by ("affected by the Take Aim! Order").
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<IssueOrdersEffectOptionsItemId>,
@@ -23869,7 +24965,7 @@ for LoadoutConditionParametersUniform {
 ///      "minLength": 1
 ///    },
 ///    "min_enemy_distance": {
-///      "description": "Place: more than this distance horizontally away from all enemy units.",
+///      "description": "Place or relocate: more than this distance horizontally away from all enemy units (a relocate with no distance goes anywhere on the battlefield that is).",
 ///      "$ref": "#/$defs/range-ref"
 ///    },
 ///    "near": {
@@ -23914,7 +25010,7 @@ pub struct MarkerEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub distance: ::std::option::Option<RangeRef>,
     pub label: MarkerEffectModifierLabel,
-    ///Place: more than this distance horizontally away from all enemy units.
+    ///Place or relocate: more than this distance horizontally away from all enemy units (a relocate with no distance goes anywhere on the battlefield that is).
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub min_enemy_distance: ::std::option::Option<RangeRef>,
     ///Place: (wholly) within range of each named place ("within 1\" of that unit"). distance on a place has no stated reference point; near names one.
@@ -24905,6 +26001,24 @@ pub struct ModelProfileConditionParameters {
 ///            }
 ///          ]
 ///        },
+///        "extra_dice": {
+///          "description": "Rolls this many additional dice, past any max_dice, when condition holds (\"rolling two additional D6 if you spent YP during this use\").",
+///          "type": "object",
+///          "required": [
+///            "condition",
+///            "count"
+///          ],
+///          "properties": {
+///            "condition": {
+///              "$ref": "#/$defs/condition"
+///            },
+///            "count": {
+///              "type": "integer",
+///              "minimum": 1.0
+///            }
+///          },
+///          "additionalProperties": false
+///        },
 ///        "for_each": {
 ///          "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets.",
 ///          "$ref": "#/$defs/unit-selector"
@@ -25071,6 +26185,24 @@ impl ::std::convert::TryFrom<::std::string::String> for MortalWoundsEffectModifi
 ///        }
 ///      ]
 ///    },
+///    "extra_dice": {
+///      "description": "Rolls this many additional dice, past any max_dice, when condition holds (\"rolling two additional D6 if you spent YP during this use\").",
+///      "type": "object",
+///      "required": [
+///        "condition",
+///        "count"
+///      ],
+///      "properties": {
+///        "condition": {
+///          "$ref": "#/$defs/condition"
+///        },
+///        "count": {
+///          "type": "integer",
+///          "minimum": 1.0
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "for_each": {
 ///      "description": "One die (dice per candidate) for each unit or model the selector matches (\"one D6 for each WRACKS model in your unit\"); per_model names the two fixed sets.",
 ///      "$ref": "#/$defs/unit-selector"
@@ -25115,6 +26247,8 @@ pub struct MortalWoundsEffectModifierRoll {
     #[serde(default = "defaults::mortal_wounds_effect_modifier_roll_comparison")]
     pub comparison: MortalWoundsEffectModifierRollComparison,
     pub dice: MortalWoundsEffectModifierRollDice,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub extra_dice: ::std::option::Option<MortalWoundsEffectModifierRollExtraDice>,
     ///One die (dice per candidate) for each unit or model the selector matches ("one D6 for each WRACKS model in your unit"); per_model names the two fixed sets.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub for_each: ::std::option::Option<UnitSelector>,
@@ -25293,6 +26427,37 @@ impl ::std::convert::From<DiceExpression> for MortalWoundsEffectModifierRollDice
         Self::DiceExpression(value)
     }
 }
+///Rolls this many additional dice, past any max_dice, when condition holds ("rolling two additional D6 if you spent YP during this use").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Rolls this many additional dice, past any max_dice, when condition holds (\"rolling two additional D6 if you spent YP during this use\").",
+///  "type": "object",
+///  "required": [
+///    "condition",
+///    "count"
+///  ],
+///  "properties": {
+///    "condition": {
+///      "$ref": "#/$defs/condition"
+///    },
+///    "count": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct MortalWoundsEffectModifierRollExtraDice {
+    pub condition: Condition,
+    pub count: ::std::num::NonZeroU64,
+}
 ///One die (dice per candidate) for each attack the attacking unit allocated to a model in this unit ("each time a melee attack is allocated to a model in this unit, … roll one D6"), rolled once that unit has finished making its attacks.
 ///
 /// <details><summary>JSON schema</summary>
@@ -25429,6 +26594,17 @@ for MortalWoundsEffectModifierRollPerAttackAttackType {
 ///        "movement-phase"
 ///      ]
 ///    },
+///    "as_if_keywords": {
+///      "description": "For this move only, its models move as if they had these keywords (\"move as if they have the FLY keyword\").",
+///      "type": "array",
+///      "items": {
+///        "enum": [
+///          "FLY"
+///        ]
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
 ///    "counts_as_move": {
 ///      "description": "The move counts as this kind of move for rules that check what the unit did this turn.",
 ///      "$ref": "#/$defs/movement-kind"
@@ -25558,6 +26734,9 @@ pub struct MoveEffectModifier {
     ///The move is made as if it were your Movement phase, outside it.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub as_if: ::std::option::Option<MoveEffectModifierAsIf>,
+    ///For this move only, its models move as if they had these keywords ("move as if they have the FLY keyword").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub as_if_keywords: ::std::option::Option<Vec<MoveEffectModifierAsIfKeywordsItem>>,
     ///The move counts as this kind of move for rules that check what the unit did this turn.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub counts_as_move: ::std::option::Option<MovementKind>,
@@ -25652,6 +26831,78 @@ impl ::std::convert::TryFrom<&::std::string::String> for MoveEffectModifierAsIf 
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for MoveEffectModifierAsIf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`MoveEffectModifierAsIfKeywordsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "FLY"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum MoveEffectModifierAsIfKeywordsItem {
+    #[serde(rename = "FLY")]
+    Fly,
+}
+impl ::std::fmt::Display for MoveEffectModifierAsIfKeywordsItem {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Fly => f.write_str("FLY"),
+        }
+    }
+}
+impl ::std::str::FromStr for MoveEffectModifierAsIfKeywordsItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "FLY" => Ok(Self::Fly),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for MoveEffectModifierAsIfKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for MoveEffectModifierAsIfKeywordsItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for MoveEffectModifierAsIfKeywordsItem {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -26491,6 +27742,19 @@ impl ::std::convert::TryFrom<::std::string::String> for MoveMode {
 ///    "no_end_in_engagement": {
 ///      "const": true
 ///    },
+///    "not_cumulative": {
+///      "description": "An Advance with no roll (advance) that does not stack with the named ability's own Move bonus (\"this is not cumulative with the REAVERS' Matchless Swiftness ability\").",
+///      "type": "object",
+///      "required": [
+///        "ability"
+///      ],
+///      "properties": {
+///        "ability": {
+///          "$ref": "#/$defs/entity-id"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "passthrough": {
 ///      "type": "array",
 ///      "items": {
@@ -26587,6 +27851,8 @@ pub struct MoveModifierEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub no_end_in_engagement: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_cumulative: ::std::option::Option<MoveModifierEffectModifierNotCumulative>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub passthrough: ::std::option::Option<
         Vec<MoveModifierEffectModifierPassthroughItem>,
     >,
@@ -26605,6 +27871,7 @@ impl ::std::default::Default for MoveModifierEffectModifier {
             maximum: Default::default(),
             mode_choice: Default::default(),
             no_end_in_engagement: Default::default(),
+            not_cumulative: Default::default(),
             passthrough: Default::default(),
         }
     }
@@ -27060,6 +28327,31 @@ impl ::std::convert::From<Vec<MoveMode>> for MoveModifierEffectModifierModeChoic
     fn from(value: Vec<MoveMode>) -> Self {
         Self::Variant1(value)
     }
+}
+///An Advance with no roll (advance) that does not stack with the named ability's own Move bonus ("this is not cumulative with the REAVERS' Matchless Swiftness ability").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "An Advance with no roll (advance) that does not stack with the named ability's own Move bonus (\"this is not cumulative with the REAVERS' Matchless Swiftness ability\").",
+///  "type": "object",
+///  "required": [
+///    "ability"
+///  ],
+///  "properties": {
+///    "ability": {
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct MoveModifierEffectModifierNotCumulative {
+    pub ability: EntityId,
 }
 ///`MoveModifierEffectModifierPassthroughItem`
 ///
@@ -29959,6 +31251,10 @@ pub struct OathStateConditionParameters {
 ///      "description": "A mission-specific named objective.",
 ///      "$ref": "#/$defs/entity-id"
 ///    },
+///    "occupied_by": {
+///      "description": "Only objective markers with one or more units matching this filter within range of them (\"that has a friendly unit with this ability within range of it\").",
+///      "$ref": "#/$defs/unit-filter"
+///    },
 ///    "outside_territory": {
 ///      "description": "The objective is not in this territory (\"not in your opponent's deployment zone\").",
 ///      "enum": [
@@ -29990,6 +31286,10 @@ pub struct OathStateConditionParameters {
 ///        "your-deployment-zone",
 ///        "enemy-deployment-zone"
 ///      ]
+///    },
+///    "visible_to": {
+///      "description": "Only objective markers visible to this unit (one or more of its models) or model (\"visible to one or more models in your unit\").",
+///      "$ref": "#/$defs/unit-ref"
 ///    },
 ///    "within": {
 ///      "description": "Only objective markers within this range of `of` (default the model with the ability).",
@@ -30034,6 +31334,9 @@ pub struct ObjectiveFilter {
     ///A mission-specific named objective.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<EntityId>,
+    ///Only objective markers with one or more units matching this filter within range of them ("that has a friendly unit with this ability within range of it").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub occupied_by: ::std::option::Option<::std::boxed::Box<UnitFilter>>,
     ///The objective is not in this territory ("not in your opponent's deployment zone").
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub outside_territory: ::std::option::Option<ObjectiveFilterOutsideTerritory>,
@@ -30044,6 +31347,9 @@ pub struct ObjectiveFilter {
     pub selection_var: ::std::option::Option<ObjectiveFilterSelectionVar>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub territory: ::std::option::Option<ObjectiveFilterTerritory>,
+    ///Only objective markers visible to this unit (one or more of its models) or model ("visible to one or more models in your unit").
+    #[serde(default)]
+    pub visible_to: ::std::boxed::Box<::std::option::Option<UnitRef>>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub within: ::std::option::Option<ObjectiveFilterWithin>,
 }
@@ -30057,10 +31363,12 @@ impl ::std::default::Default for ObjectiveFilter {
             designated: Default::default(),
             home_of: Default::default(),
             name: Default::default(),
+            occupied_by: Default::default(),
             outside_territory: Default::default(),
             role: Default::default(),
             selection_var: Default::default(),
             territory: Default::default(),
+            visible_to: Default::default(),
             within: Default::default(),
         }
     }
@@ -30754,6 +32062,218 @@ pub struct OperationMarkersConditionParametersWithin {
     pub of: PlaceRef,
     pub range: RangeRef,
 }
+///`OrderShareEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "with"
+///  ],
+///  "properties": {
+///    "mutual": {
+///      "const": true
+///    },
+///    "with": {
+///      "$ref": "#/$defs/unit-ref"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct OrderShareEffectModifier {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub mutual: ::std::option::Option<::serde_json::Value>,
+    pub with: UnitRef,
+}
+///`OrdersModifierEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "minProperties": 1,
+///  "properties": {
+///    "adds_recipients": {
+///      "description": "The recipients become eligible to receive Orders from the target.",
+///      "const": true
+///    },
+///    "count": {
+///      "description": "To any number of eligible units.",
+///      "const": "any"
+///    },
+///    "off_battlefield": {
+///      "description": "Even while the target is not on the battlefield (embarked, in reserves).",
+///      "const": true
+///    },
+///    "only_options": {
+///      "description": "Only these Orders, each an option of an Orders menu.",
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "ability_id",
+///          "option_id"
+///        ],
+///        "properties": {
+///          "ability_id": {
+///            "$ref": "#/$defs/entity-id"
+///          },
+///          "option_id": {
+///            "$ref": "#/$defs/entity-id"
+///          }
+///        },
+///        "additionalProperties": false
+///      },
+///      "minItems": 1,
+///      "uniqueItems": true
+///    },
+///    "range": {
+///      "description": "Regardless of range.",
+///      "const": "unlimited"
+///    },
+///    "range_proxy": {
+///      "description": "To recipients within this distance of the marker, as if the issuer were within this distance of them.",
+///      "type": "object",
+///      "required": [
+///        "inches",
+///        "marker"
+///      ],
+///      "properties": {
+///        "inches": {
+///          "type": "integer",
+///          "maximum": 48.0,
+///          "minimum": 1.0
+///        },
+///        "marker": {
+///          "$ref": "#/$defs/entity-id"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    "recipients": {
+///      "description": "The friendly units the change reaches, by keyword.",
+///      "$ref": "#/$defs/keyword-predicate"
+///    }
+///  },
+///  "additionalProperties": false,
+///  "dependentRequired": {
+///    "adds_recipients": [
+///      "recipients"
+///    ],
+///    "range_proxy": [
+///      "recipients"
+///    ]
+///  }
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct OrdersModifierEffectModifier {
+    ///The recipients become eligible to receive Orders from the target.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub adds_recipients: ::std::option::Option<::serde_json::Value>,
+    ///To any number of eligible units.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count: ::std::option::Option<::serde_json::Value>,
+    ///Even while the target is not on the battlefield (embarked, in reserves).
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub off_battlefield: ::std::option::Option<::serde_json::Value>,
+    ///Only these Orders, each an option of an Orders menu.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub only_options: ::std::option::Option<
+        Vec<OrdersModifierEffectModifierOnlyOptionsItem>,
+    >,
+    ///Regardless of range.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub range: ::std::option::Option<::serde_json::Value>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub range_proxy: ::std::option::Option<OrdersModifierEffectModifierRangeProxy>,
+    ///The friendly units the change reaches, by keyword.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub recipients: ::std::option::Option<KeywordPredicate>,
+}
+impl ::std::default::Default for OrdersModifierEffectModifier {
+    fn default() -> Self {
+        Self {
+            adds_recipients: Default::default(),
+            count: Default::default(),
+            off_battlefield: Default::default(),
+            only_options: Default::default(),
+            range: Default::default(),
+            range_proxy: Default::default(),
+            recipients: Default::default(),
+        }
+    }
+}
+///`OrdersModifierEffectModifierOnlyOptionsItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "ability_id",
+///    "option_id"
+///  ],
+///  "properties": {
+///    "ability_id": {
+///      "$ref": "#/$defs/entity-id"
+///    },
+///    "option_id": {
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct OrdersModifierEffectModifierOnlyOptionsItem {
+    pub ability_id: EntityId,
+    pub option_id: EntityId,
+}
+///To recipients within this distance of the marker, as if the issuer were within this distance of them.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "To recipients within this distance of the marker, as if the issuer were within this distance of them.",
+///  "type": "object",
+///  "required": [
+///    "inches",
+///    "marker"
+///  ],
+///  "properties": {
+///    "inches": {
+///      "type": "integer",
+///      "maximum": 48.0,
+///      "minimum": 1.0
+///    },
+///    "marker": {
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct OrdersModifierEffectModifierRangeProxy {
+    pub inches: ::std::num::NonZeroU64,
+    pub marker: EntityId,
+}
 ///Which player a unit, objective or resource belongs to.
 ///
 /// <details><summary>JSON schema</summary>
@@ -31009,7 +32529,8 @@ impl ::std::convert::TryFrom<::std::string::String> for Period {
 ///          "advanced",
 ///          "fell-back",
 ///          "destroyed",
-///          "transport-advanced"
+///          "transport-advanced",
+///          "embarked"
 ///        ]
 ///      },
 ///      "minItems": 1,
@@ -31525,7 +33046,8 @@ for PermissionEffectModifierCountsAsUntil {
 ///    "advanced",
 ///    "fell-back",
 ///    "destroyed",
-///    "transport-advanced"
+///    "transport-advanced",
+///    "embarked"
 ///  ]
 ///}
 /// ```
@@ -31565,6 +33087,8 @@ pub enum PermissionEffectModifierDespiteItem {
     Destroyed,
     #[serde(rename = "transport-advanced")]
     TransportAdvanced,
+    #[serde(rename = "embarked")]
+    Embarked,
 }
 impl ::std::fmt::Display for PermissionEffectModifierDespiteItem {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -31580,6 +33104,7 @@ impl ::std::fmt::Display for PermissionEffectModifierDespiteItem {
             Self::FellBack => f.write_str("fell-back"),
             Self::Destroyed => f.write_str("destroyed"),
             Self::TransportAdvanced => f.write_str("transport-advanced"),
+            Self::Embarked => f.write_str("embarked"),
         }
     }
 }
@@ -31600,6 +33125,7 @@ impl ::std::str::FromStr for PermissionEffectModifierDespiteItem {
             "fell-back" => Ok(Self::FellBack),
             "destroyed" => Ok(Self::Destroyed),
             "transport-advanced" => Ok(Self::TransportAdvanced),
+            "embarked" => Ok(Self::Embarked),
             _ => Err("invalid value".into()),
         }
     }
@@ -34674,13 +36200,13 @@ for PlayerTurnIsConditionParametersTurn {
         value.parse()
     }
 }
-///A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.
+///A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound ("the number of YP you spent").
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics.",
+///  "description": "A count, amount or value: a number, a dice expression (D3, 2D6, D6+1), one value per battle size, the result of a bound roll, or a count of something on the battlefield, the rating the unit prints for this rule, or one of the target unit's characteristics, or the amount a resource spend of this ability bound (\"the number of YP you spent\").",
 ///  "oneOf": [
 ///    {
 ///      "type": "integer",
@@ -34703,6 +36229,9 @@ for PlayerTurnIsConditionParametersTurn {
 ///    },
 ///    {
 ///      "$ref": "#/$defs/unit-characteristic"
+///    },
+///    {
+///      "$ref": "#/$defs/spent-reference"
 ///    }
 ///  ]
 ///}
@@ -34718,6 +36247,7 @@ pub enum Quantity {
     CountOf(CountOf),
     UnitRating(UnitRating),
     UnitCharacteristic(UnitCharacteristic),
+    SpentReference(SpentReference),
 }
 impl ::std::convert::From<u64> for Quantity {
     fn from(value: u64) -> Self {
@@ -34752,6 +36282,11 @@ impl ::std::convert::From<UnitRating> for Quantity {
 impl ::std::convert::From<UnitCharacteristic> for Quantity {
     fn from(value: UnitCharacteristic) -> Self {
         Self::UnitCharacteristic(value)
+    }
+}
+impl ::std::convert::From<SpentReference> for Quantity {
+    fn from(value: SpentReference) -> Self {
+        Self::SpentReference(value)
     }
 }
 ///One reference for every distance. A per_battle_round table is indexed from battle round 1; each later round uses the next entry and the final entry continues for all subsequent rounds. Tier entries are non-tiered range refs, so nested tables are forbidden.
@@ -35417,6 +36952,395 @@ impl<'de> ::serde::Deserialize<'de> for ReRollEffectModifierVariant1Pool {
             })
     }
 }
+///`RegionExtendEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "area",
+///    "region"
+///  ],
+///  "properties": {
+///    "area": {
+///      "oneOf": [
+///        {
+///          "type": "object",
+///          "required": [
+///            "territory"
+///          ],
+///          "properties": {
+///            "territory": {
+///              "enum": [
+///                "no-mans-land",
+///                "enemy-deployment-zone",
+///                "your-deployment-zone",
+///                "enemy-territory",
+///                "your-territory"
+///              ]
+///            }
+///          },
+///          "additionalProperties": false
+///        },
+///        {
+///          "description": "Every listed territory.",
+///          "type": "object",
+///          "required": [
+///            "territories"
+///          ],
+///          "properties": {
+///            "territories": {
+///              "type": "array",
+///              "items": {
+///                "enum": [
+///                  "no-mans-land",
+///                  "enemy-deployment-zone",
+///                  "your-deployment-zone",
+///                  "enemy-territory",
+///                  "your-territory"
+///                ]
+///              },
+///              "minItems": 2,
+///              "uniqueItems": true
+///            }
+///          },
+///          "additionalProperties": false
+///        },
+///        {
+///          "description": "The area within inches of each objective marker the filter names (\"within 6\\\" of that objective marker\").",
+///          "type": "object",
+///          "required": [
+///            "objective_range"
+///          ],
+///          "properties": {
+///            "objective_range": {
+///              "type": "object",
+///              "required": [
+///                "inches",
+///                "objective"
+///              ],
+///              "properties": {
+///                "inches": {
+///                  "type": "integer",
+///                  "maximum": 24.0,
+///                  "minimum": 1.0
+///                },
+///                "objective": {
+///                  "$ref": "#/$defs/objective-filter"
+///                }
+///              },
+///              "additionalProperties": false
+///            }
+///          },
+///          "additionalProperties": false
+///        }
+///      ]
+///    },
+///    "region": {
+///      "$ref": "#/$defs/named-region-ref"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RegionExtendEffectModifier {
+    pub area: RegionExtendEffectModifierArea,
+    pub region: NamedRegionRef,
+}
+///`RegionExtendEffectModifierArea`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "oneOf": [
+///    {
+///      "type": "object",
+///      "required": [
+///        "territory"
+///      ],
+///      "properties": {
+///        "territory": {
+///          "enum": [
+///            "no-mans-land",
+///            "enemy-deployment-zone",
+///            "your-deployment-zone",
+///            "enemy-territory",
+///            "your-territory"
+///          ]
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "description": "Every listed territory.",
+///      "type": "object",
+///      "required": [
+///        "territories"
+///      ],
+///      "properties": {
+///        "territories": {
+///          "type": "array",
+///          "items": {
+///            "enum": [
+///              "no-mans-land",
+///              "enemy-deployment-zone",
+///              "your-deployment-zone",
+///              "enemy-territory",
+///              "your-territory"
+///            ]
+///          },
+///          "minItems": 2,
+///          "uniqueItems": true
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "description": "The area within inches of each objective marker the filter names (\"within 6\\\" of that objective marker\").",
+///      "type": "object",
+///      "required": [
+///        "objective_range"
+///      ],
+///      "properties": {
+///        "objective_range": {
+///          "type": "object",
+///          "required": [
+///            "inches",
+///            "objective"
+///          ],
+///          "properties": {
+///            "inches": {
+///              "type": "integer",
+///              "maximum": 24.0,
+///              "minimum": 1.0
+///            },
+///            "objective": {
+///              "$ref": "#/$defs/objective-filter"
+///            }
+///          },
+///          "additionalProperties": false
+///        }
+///      },
+///      "additionalProperties": false
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub enum RegionExtendEffectModifierArea {
+    #[serde(rename = "territory")]
+    Territory(RegionExtendEffectModifierAreaTerritory),
+    ///Every listed territory.
+    #[serde(rename = "territories")]
+    Territories(Vec<RegionExtendEffectModifierAreaTerritoriesItem>),
+    ///The area within inches of each objective marker the filter names ("within 6\" of that objective marker").
+    #[serde(rename = "objective_range")]
+    ObjectiveRange { inches: ::std::num::NonZeroU64, objective: ObjectiveFilter },
+}
+impl ::std::convert::From<RegionExtendEffectModifierAreaTerritory>
+for RegionExtendEffectModifierArea {
+    fn from(value: RegionExtendEffectModifierAreaTerritory) -> Self {
+        Self::Territory(value)
+    }
+}
+impl ::std::convert::From<Vec<RegionExtendEffectModifierAreaTerritoriesItem>>
+for RegionExtendEffectModifierArea {
+    fn from(value: Vec<RegionExtendEffectModifierAreaTerritoriesItem>) -> Self {
+        Self::Territories(value)
+    }
+}
+///`RegionExtendEffectModifierAreaTerritoriesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "no-mans-land",
+///    "enemy-deployment-zone",
+///    "your-deployment-zone",
+///    "enemy-territory",
+///    "your-territory"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RegionExtendEffectModifierAreaTerritoriesItem {
+    #[serde(rename = "no-mans-land")]
+    NoMansLand,
+    #[serde(rename = "enemy-deployment-zone")]
+    EnemyDeploymentZone,
+    #[serde(rename = "your-deployment-zone")]
+    YourDeploymentZone,
+    #[serde(rename = "enemy-territory")]
+    EnemyTerritory,
+    #[serde(rename = "your-territory")]
+    YourTerritory,
+}
+impl ::std::fmt::Display for RegionExtendEffectModifierAreaTerritoriesItem {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::NoMansLand => f.write_str("no-mans-land"),
+            Self::EnemyDeploymentZone => f.write_str("enemy-deployment-zone"),
+            Self::YourDeploymentZone => f.write_str("your-deployment-zone"),
+            Self::EnemyTerritory => f.write_str("enemy-territory"),
+            Self::YourTerritory => f.write_str("your-territory"),
+        }
+    }
+}
+impl ::std::str::FromStr for RegionExtendEffectModifierAreaTerritoriesItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "no-mans-land" => Ok(Self::NoMansLand),
+            "enemy-deployment-zone" => Ok(Self::EnemyDeploymentZone),
+            "your-deployment-zone" => Ok(Self::YourDeploymentZone),
+            "enemy-territory" => Ok(Self::EnemyTerritory),
+            "your-territory" => Ok(Self::YourTerritory),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RegionExtendEffectModifierAreaTerritoriesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for RegionExtendEffectModifierAreaTerritoriesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for RegionExtendEffectModifierAreaTerritoriesItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`RegionExtendEffectModifierAreaTerritory`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "no-mans-land",
+///    "enemy-deployment-zone",
+///    "your-deployment-zone",
+///    "enemy-territory",
+///    "your-territory"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RegionExtendEffectModifierAreaTerritory {
+    #[serde(rename = "no-mans-land")]
+    NoMansLand,
+    #[serde(rename = "enemy-deployment-zone")]
+    EnemyDeploymentZone,
+    #[serde(rename = "your-deployment-zone")]
+    YourDeploymentZone,
+    #[serde(rename = "enemy-territory")]
+    EnemyTerritory,
+    #[serde(rename = "your-territory")]
+    YourTerritory,
+}
+impl ::std::fmt::Display for RegionExtendEffectModifierAreaTerritory {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::NoMansLand => f.write_str("no-mans-land"),
+            Self::EnemyDeploymentZone => f.write_str("enemy-deployment-zone"),
+            Self::YourDeploymentZone => f.write_str("your-deployment-zone"),
+            Self::EnemyTerritory => f.write_str("enemy-territory"),
+            Self::YourTerritory => f.write_str("your-territory"),
+        }
+    }
+}
+impl ::std::str::FromStr for RegionExtendEffectModifierAreaTerritory {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "no-mans-land" => Ok(Self::NoMansLand),
+            "enemy-deployment-zone" => Ok(Self::EnemyDeploymentZone),
+            "your-deployment-zone" => Ok(Self::YourDeploymentZone),
+            "enemy-territory" => Ok(Self::EnemyTerritory),
+            "your-territory" => Ok(Self::YourTerritory),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RegionExtendEffectModifierAreaTerritory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for RegionExtendEffectModifierAreaTerritory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for RegionExtendEffectModifierAreaTerritory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///A region of the battlefield.
 ///
 /// <details><summary>JSON schema</summary>
@@ -35680,6 +37604,170 @@ impl ::std::convert::TryFrom<&::std::string::String> for RegionRefTerritory {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for RegionRefTerritory {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`ReservesScheduleEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "entries"
+///  ],
+///  "properties": {
+///    "entries": {
+///      "type": "array",
+///      "items": {
+///        "type": "object",
+///        "required": [
+///          "battle_round",
+///          "unit_id"
+///        ],
+///        "properties": {
+///          "battle_round": {
+///            "description": "The first battle round in which those units can be set up on the battlefield.",
+///            "type": "integer",
+///            "maximum": 5.0,
+///            "minimum": 2.0
+///          },
+///          "unit_id": {
+///            "description": "The datasheet (unit id) whose units the entry schedules.",
+///            "$ref": "#/$defs/entity-id"
+///          }
+///        },
+///        "additionalProperties": false
+///      },
+///      "minItems": 1
+///    },
+///    "set_up": {
+///      "description": "Where the units must be set up when they arrive.",
+///      "enum": [
+///        "wholly-within-deployment-zone"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ReservesScheduleEffectModifier {
+    pub entries: ::std::vec::Vec<ReservesScheduleEffectModifierEntriesItem>,
+    ///Where the units must be set up when they arrive.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub set_up: ::std::option::Option<ReservesScheduleEffectModifierSetUp>,
+}
+///`ReservesScheduleEffectModifierEntriesItem`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "battle_round",
+///    "unit_id"
+///  ],
+///  "properties": {
+///    "battle_round": {
+///      "description": "The first battle round in which those units can be set up on the battlefield.",
+///      "type": "integer",
+///      "maximum": 5.0,
+///      "minimum": 2.0
+///    },
+///    "unit_id": {
+///      "description": "The datasheet (unit id) whose units the entry schedules.",
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ReservesScheduleEffectModifierEntriesItem {
+    ///The first battle round in which those units can be set up on the battlefield.
+    pub battle_round: i64,
+    ///The datasheet (unit id) whose units the entry schedules.
+    pub unit_id: EntityId,
+}
+///Where the units must be set up when they arrive.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Where the units must be set up when they arrive.",
+///  "enum": [
+///    "wholly-within-deployment-zone"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ReservesScheduleEffectModifierSetUp {
+    #[serde(rename = "wholly-within-deployment-zone")]
+    WhollyWithinDeploymentZone,
+}
+impl ::std::fmt::Display for ReservesScheduleEffectModifierSetUp {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::WhollyWithinDeploymentZone => {
+                f.write_str("wholly-within-deployment-zone")
+            }
+        }
+    }
+}
+impl ::std::str::FromStr for ReservesScheduleEffectModifierSetUp {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "wholly-within-deployment-zone" => Ok(Self::WhollyWithinDeploymentZone),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ReservesScheduleEffectModifierSetUp {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ReservesScheduleEffectModifierSetUp {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ReservesScheduleEffectModifierSetUp {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -37056,6 +39144,14 @@ impl ::std::convert::From<Trigger> for ResourceActionMenuTrigger {
 ///    "count": {
 ///      "$ref": "#/$defs/count-bounds"
 ///    },
+///    "gained": {
+///      "description": "count bounds how much of the pool you gained this turn (\"you gained fewer than 3YP this turn\"), not how much it holds.",
+///      "const": "turn"
+///    },
+///    "holder": {
+///      "description": "count bounds what your opponent holds of a pool both players hold (\"if your opponent has one or more Flux tokens\"). Absent, the pool is yours.",
+///      "const": "opponent"
+///    },
 ///    "pool": {
 ///      "type": "string",
 ///      "minLength": 1
@@ -37076,7 +39172,15 @@ impl ::std::convert::From<Trigger> for ResourceActionMenuTrigger {
 ///      "additionalProperties": false
 ///    }
 ///  },
-///  "additionalProperties": false
+///  "additionalProperties": false,
+///  "dependentRequired": {
+///    "gained": [
+///      "count"
+///    ],
+///    "holder": [
+///      "count"
+///    ]
+///  }
 ///}
 /// ```
 /// </details>
@@ -37089,6 +39193,12 @@ pub struct ResourceConditionParameters {
     pub below_max: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count: ::std::option::Option<CountBounds>,
+    ///count bounds how much of the pool you gained this turn ("you gained fewer than 3YP this turn"), not how much it holds.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub gained: ::std::option::Option<::serde_json::Value>,
+    ///count bounds what your opponent holds of a pool both players hold ("if your opponent has one or more Flux tokens"). Absent, the pool is yours.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub holder: ::std::option::Option<::serde_json::Value>,
     pub pool: ResourceConditionParametersPool,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub source_ability: ::std::option::Option<ResourceConditionParametersSourceAbility>,
@@ -37244,7 +39354,8 @@ pub struct ResourceConditionParametersSourceAbility {
 ///        {
 ///          "enum": [
 ///            "rolled",
-///            "highest"
+///            "highest",
+///            "roll-result"
 ///          ]
 ///        }
 ///      ]
@@ -37509,7 +39620,8 @@ impl<'de> ::serde::Deserialize<'de> for ResourceDieEffectModifierPool {
 ///    {
 ///      "enum": [
 ///        "rolled",
-///        "highest"
+///        "highest",
+///        "roll-result"
 ///      ]
 ///    }
 ///  ]
@@ -37587,7 +39699,8 @@ for ResourceDieEffectModifierValue {
 ///{
 ///  "enum": [
 ///    "rolled",
-///    "highest"
+///    "highest",
+///    "roll-result"
 ///  ]
 ///}
 /// ```
@@ -37609,12 +39722,15 @@ pub enum ResourceDieEffectModifierValueVariant1 {
     Rolled,
     #[serde(rename = "highest")]
     Highest,
+    #[serde(rename = "roll-result")]
+    RollResult,
 }
 impl ::std::fmt::Display for ResourceDieEffectModifierValueVariant1 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Rolled => f.write_str("rolled"),
             Self::Highest => f.write_str("highest"),
+            Self::RollResult => f.write_str("roll-result"),
         }
     }
 }
@@ -37626,6 +39742,7 @@ impl ::std::str::FromStr for ResourceDieEffectModifierValueVariant1 {
         match value {
             "rolled" => Ok(Self::Rolled),
             "highest" => Ok(Self::Highest),
+            "roll-result" => Ok(Self::RollResult),
             _ => Err("invalid value".into()),
         }
     }
@@ -37649,6 +39766,190 @@ for ResourceDieEffectModifierValueVariant1 {
 }
 impl ::std::convert::TryFrom<::std::string::String>
 for ResourceDieEffectModifierValueVariant1 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`ResourceGainCapEffectModifier`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "object",
+///  "required": [
+///    "max",
+///    "pool",
+///    "source"
+///  ],
+///  "properties": {
+///    "max": {
+///      "type": "integer",
+///      "minimum": 1.0
+///    },
+///    "pool": {
+///      "type": "string",
+///      "minLength": 1
+///    },
+///    "source": {
+///      "enum": [
+///        "failed-battle-shock"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ResourceGainCapEffectModifier {
+    pub max: ::std::num::NonZeroU64,
+    pub pool: ResourceGainCapEffectModifierPool,
+    pub source: ResourceGainCapEffectModifierSource,
+}
+///`ResourceGainCapEffectModifierPool`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct ResourceGainCapEffectModifierPool(::std::string::String);
+impl ::std::ops::Deref for ResourceGainCapEffectModifierPool {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<ResourceGainCapEffectModifierPool> for ::std::string::String {
+    fn from(value: ResourceGainCapEffectModifierPool) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for ResourceGainCapEffectModifierPool {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for ResourceGainCapEffectModifierPool {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ResourceGainCapEffectModifierPool {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ResourceGainCapEffectModifierPool {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for ResourceGainCapEffectModifierPool {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`ResourceGainCapEffectModifierSource`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "failed-battle-shock"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum ResourceGainCapEffectModifierSource {
+    #[serde(rename = "failed-battle-shock")]
+    FailedBattleShock,
+}
+impl ::std::fmt::Display for ResourceGainCapEffectModifierSource {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::FailedBattleShock => f.write_str("failed-battle-shock"),
+        }
+    }
+}
+impl ::std::str::FromStr for ResourceGainCapEffectModifierSource {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "failed-battle-shock" => Ok(Self::FailedBattleShock),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ResourceGainCapEffectModifierSource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for ResourceGainCapEffectModifierSource {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ResourceGainCapEffectModifierSource {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -37689,6 +39990,20 @@ for ResourceDieEffectModifierValueVariant1 {
 ///            "pool": {
 ///              "type": "string",
 ///              "minLength": 1
+///            }
+///          },
+///          "additionalProperties": false
+///        },
+///        {
+///          "description": "The amount by which the pool's gains this turn fall short of difference_to (\"you gained fewer than 3YP this turn … gain YP equal to the difference\"); 0 when they reach it.",
+///          "type": "object",
+///          "required": [
+///            "difference_to"
+///          ],
+///          "properties": {
+///            "difference_to": {
+///              "type": "integer",
+///              "minimum": 1.0
 ///            }
 ///          },
 ///          "additionalProperties": false
@@ -37752,6 +40067,20 @@ pub struct ResourceGainEffectModifier {
 ///        }
 ///      },
 ///      "additionalProperties": false
+///    },
+///    {
+///      "description": "The amount by which the pool's gains this turn fall short of difference_to (\"you gained fewer than 3YP this turn … gain YP equal to the difference\"); 0 when they reach it.",
+///      "type": "object",
+///      "required": [
+///        "difference_to"
+///      ],
+///      "properties": {
+///        "difference_to": {
+///          "type": "integer",
+///          "minimum": 1.0
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
@@ -37763,6 +40092,7 @@ pub enum ResourceGainEffectModifierAmount {
     Variant0(Quantity),
     Variant1(ResourceGainEffectModifierAmountVariant1),
     Variant2 { pool: ResourceGainEffectModifierAmountVariant2Pool },
+    Variant3 { difference_to: ::std::num::NonZeroU64 },
 }
 impl ::std::convert::From<Quantity> for ResourceGainEffectModifierAmount {
     fn from(value: Quantity) -> Self {
@@ -38355,6 +40685,7 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 ///  ],
 ///  "properties": {
 ///    "amount": {
+///      "description": "A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table.",
 ///      "oneOf": [
 ///        {
 ///          "$ref": "#/$defs/quantity"
@@ -38363,8 +40694,28 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 ///          "enum": [
 ///            "all",
 ///            "one-or-more",
-///            "by-table"
+///            "by-table",
+///            "any"
 ///          ]
+///        },
+///        {
+///          "description": "Any amount from 0 (or at_least) to up_to, as the player chooses (\"spend up to 2YP\", \"spend 1-3 Pain tokens\").",
+///          "type": "object",
+///          "required": [
+///            "up_to"
+///          ],
+///          "properties": {
+///            "at_least": {
+///              "description": "The least the player can choose, if not 0 (\"spend 1-3 Pain tokens\").",
+///              "type": "integer",
+///              "minimum": 1.0
+///            },
+///            "up_to": {
+///              "type": "integer",
+///              "minimum": 1.0
+///            }
+///          },
+///          "additionalProperties": false
 ///        }
 ///      ]
 ///    },
@@ -38400,6 +40751,10 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 ///      },
 ///      "minItems": 1
 ///    },
+///    "bind_as": {
+///      "description": "Names the amount this spend spent, for a later spent-reference quantity ({spent: bind_as}) in the same ability.",
+///      "$ref": "#/$defs/entity-id"
+///    },
 ///    "face": {
 ///      "type": "integer",
 ///      "maximum": 6.0,
@@ -38428,10 +40783,14 @@ impl ::std::convert::TryFrom<::std::string::String> for ResourcePoolPoolType {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ResourceSpendEffectModifier {
+    ///A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table.
     pub amount: ResourceSpendEffectModifierAmount,
     ///With amount by-table: the amount for a unit of one of unit_ids at that Starting Strength (attached CHARACTER models not counted). table_of names the unit; a unit no row matches cannot pay.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub amount_table: ::std::vec::Vec<ResourceSpendEffectModifierAmountTableItem>,
+    ///Names the amount this spend spent, for a later spent-reference quantity ({spent: bind_as}) in the same ability.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub bind_as: ::std::option::Option<EntityId>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub face: ::std::option::Option<::std::num::NonZeroU64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -38443,12 +40802,13 @@ pub struct ResourceSpendEffectModifier {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub table_of: ::std::option::Option<UnitRef>,
 }
-///`ResourceSpendEffectModifierAmount`
+///A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
+///  "description": "A fixed amount; all of the pool; one-or-more or any (the player chooses how many: at least one, or any number including none); {up_to} (none up to that many); or by-table.",
 ///  "oneOf": [
 ///    {
 ///      "$ref": "#/$defs/quantity"
@@ -38457,18 +40817,44 @@ pub struct ResourceSpendEffectModifier {
 ///      "enum": [
 ///        "all",
 ///        "one-or-more",
-///        "by-table"
+///        "by-table",
+///        "any"
 ///      ]
+///    },
+///    {
+///      "description": "Any amount from 0 (or at_least) to up_to, as the player chooses (\"spend up to 2YP\", \"spend 1-3 Pain tokens\").",
+///      "type": "object",
+///      "required": [
+///        "up_to"
+///      ],
+///      "properties": {
+///        "at_least": {
+///          "description": "The least the player can choose, if not 0 (\"spend 1-3 Pain tokens\").",
+///          "type": "integer",
+///          "minimum": 1.0
+///        },
+///        "up_to": {
+///          "type": "integer",
+///          "minimum": 1.0
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-#[serde(untagged)]
+#[serde(untagged, deny_unknown_fields)]
 pub enum ResourceSpendEffectModifierAmount {
     Variant0(Quantity),
     Variant1(ResourceSpendEffectModifierAmountVariant1),
+    Variant2 {
+        ///The least the player can choose, if not 0 ("spend 1-3 Pain tokens").
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        at_least: ::std::option::Option<::std::num::NonZeroU64>,
+        up_to: ::std::num::NonZeroU64,
+    },
 }
 impl ::std::convert::From<Quantity> for ResourceSpendEffectModifierAmount {
     fn from(value: Quantity) -> Self {
@@ -38531,7 +40917,8 @@ pub struct ResourceSpendEffectModifierAmountTableItem {
 ///  "enum": [
 ///    "all",
 ///    "one-or-more",
-///    "by-table"
+///    "by-table",
+///    "any"
 ///  ]
 ///}
 /// ```
@@ -38555,6 +40942,8 @@ pub enum ResourceSpendEffectModifierAmountVariant1 {
     OneOrMore,
     #[serde(rename = "by-table")]
     ByTable,
+    #[serde(rename = "any")]
+    Any,
 }
 impl ::std::fmt::Display for ResourceSpendEffectModifierAmountVariant1 {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -38562,6 +40951,7 @@ impl ::std::fmt::Display for ResourceSpendEffectModifierAmountVariant1 {
             Self::All => f.write_str("all"),
             Self::OneOrMore => f.write_str("one-or-more"),
             Self::ByTable => f.write_str("by-table"),
+            Self::Any => f.write_str("any"),
         }
     }
 }
@@ -38574,6 +40964,7 @@ impl ::std::str::FromStr for ResourceSpendEffectModifierAmountVariant1 {
             "all" => Ok(Self::All),
             "one-or-more" => Ok(Self::OneOrMore),
             "by-table" => Ok(Self::ByTable),
+            "any" => Ok(Self::Any),
             _ => Err("invalid value".into()),
         }
     }
@@ -40145,6 +42536,31 @@ impl ::std::convert::TryFrom<::std::string::String> for RitualMenuEffectType {
 ///    "type"
 ///  ],
 ///  "properties": {
+///    "count_history": {
+///      "description": "Roll as many of `dice` (one die, such as D6) as a count from the battle's history: of mortal-wounds-suffered, the mortal wounds `subject` suffered in `window` (\"a number of dice equal to the number of mortal wounds your unit suffered this phase\").",
+///      "type": "object",
+///      "required": [
+///        "of",
+///        "subject",
+///        "window"
+///      ],
+///      "properties": {
+///        "of": {
+///          "enum": [
+///            "mortal-wounds-suffered"
+///          ]
+///        },
+///        "subject": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "window": {
+///          "enum": [
+///            "phase"
+///          ]
+///        }
+///      },
+///      "additionalProperties": false
+///    },
 ///    "count_stat": {
 ///      "description": "Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).",
 ///      "type": "object",
@@ -40207,6 +42623,8 @@ impl ::std::convert::TryFrom<::std::string::String> for RitualMenuEffectType {
 #[serde(deny_unknown_fields)]
 pub struct RollEffect {
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub count_history: ::std::option::Option<RollEffectCountHistory>,
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub count_stat: ::std::option::Option<RollEffectCountStat>,
     pub dice: DiceExpression,
     pub effect: EffectNode,
@@ -40217,6 +42635,185 @@ pub struct RollEffect {
     pub roll_var: RollEffectRollVar,
     #[serde(rename = "type")]
     pub type_: RollEffectType,
+}
+///Roll as many of `dice` (one die, such as D6) as a count from the battle's history: of mortal-wounds-suffered, the mortal wounds `subject` suffered in `window` ("a number of dice equal to the number of mortal wounds your unit suffered this phase").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Roll as many of `dice` (one die, such as D6) as a count from the battle's history: of mortal-wounds-suffered, the mortal wounds `subject` suffered in `window` (\"a number of dice equal to the number of mortal wounds your unit suffered this phase\").",
+///  "type": "object",
+///  "required": [
+///    "of",
+///    "subject",
+///    "window"
+///  ],
+///  "properties": {
+///    "of": {
+///      "enum": [
+///        "mortal-wounds-suffered"
+///      ]
+///    },
+///    "subject": {
+///      "$ref": "#/$defs/unit-ref"
+///    },
+///    "window": {
+///      "enum": [
+///        "phase"
+///      ]
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct RollEffectCountHistory {
+    pub of: RollEffectCountHistoryOf,
+    pub subject: UnitRef,
+    pub window: RollEffectCountHistoryWindow,
+}
+///`RollEffectCountHistoryOf`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "mortal-wounds-suffered"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RollEffectCountHistoryOf {
+    #[serde(rename = "mortal-wounds-suffered")]
+    MortalWoundsSuffered,
+}
+impl ::std::fmt::Display for RollEffectCountHistoryOf {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::MortalWoundsSuffered => f.write_str("mortal-wounds-suffered"),
+        }
+    }
+}
+impl ::std::str::FromStr for RollEffectCountHistoryOf {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "mortal-wounds-suffered" => Ok(Self::MortalWoundsSuffered),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RollEffectCountHistoryOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RollEffectCountHistoryOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RollEffectCountHistoryOf {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`RollEffectCountHistoryWindow`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "enum": [
+///    "phase"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RollEffectCountHistoryWindow {
+    #[serde(rename = "phase")]
+    Phase,
+}
+impl ::std::fmt::Display for RollEffectCountHistoryWindow {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Phase => f.write_str("phase"),
+        }
+    }
+}
+impl ::std::str::FromStr for RollEffectCountHistoryWindow {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "phase" => Ok(Self::Phase),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RollEffectCountHistoryWindow {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RollEffectCountHistoryWindow {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RollEffectCountHistoryWindow {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///Roll as many of `dice` (one die, such as D6) as this characteristic of `of` (as many D6 as the selected model's Toughness).
 ///
@@ -40800,6 +43397,26 @@ impl ::std::convert::TryFrom<::std::string::String> for RollKindVariant0 {
 ///    "incoming": {
 ///      "const": true
 ///    },
+///    "not_cumulative": {
+///      "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+///      "oneOf": [
+///        {
+///          "const": "negative-modifiers"
+///        },
+///        {
+///          "type": "object",
+///          "required": [
+///            "ability"
+///          ],
+///          "properties": {
+///            "ability": {
+///              "$ref": "#/$defs/entity-id"
+///            }
+///          },
+///          "additionalProperties": false
+///        }
+///      ]
+///    },
 ///    "operation": {
 ///      "enum": [
 ///        "add",
@@ -40831,6 +43448,9 @@ pub struct RollModifierEffectModifier {
     pub cap: ::std::option::Option<u64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub incoming: ::std::option::Option<::serde_json::Value>,
+    ///The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_cumulative: ::std::option::Option<RollModifierEffectModifierNotCumulative>,
     pub operation: RollModifierEffectModifierOperation,
     pub roll: RollSelector,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -40839,6 +43459,45 @@ pub struct RollModifierEffectModifier {
     pub value_from: ::std::option::Option<::serde_json::Value>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapons: ::std::option::Option<WeaponScope>,
+}
+///The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+///  "oneOf": [
+///    {
+///      "const": "negative-modifiers"
+///    },
+///    {
+///      "type": "object",
+///      "required": [
+///        "ability"
+///      ],
+///      "properties": {
+///        "ability": {
+///          "$ref": "#/$defs/entity-id"
+///        }
+///      },
+///      "additionalProperties": false
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+pub enum RollModifierEffectModifierNotCumulative {
+    #[serde(rename = "negative-modifiers")]
+    NegativeModifiers,
+    #[serde(rename = "ability")]
+    Ability(EntityId),
+}
+impl ::std::convert::From<EntityId> for RollModifierEffectModifierNotCumulative {
+    fn from(value: EntityId) -> Self {
+        Self::Ability(value)
+    }
 }
 ///`RollModifierEffectModifierOperation`
 ///
@@ -41904,6 +44563,12 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 ///      "description": "A granted faction rule the holder can use whatever your Army Faction is (\"even though your Army Faction is not X\"): the rule's own Army Faction requirement does not apply to it.",
 ///      "const": true
 ///    },
+///    "aspect": {
+///      "description": "What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it.",
+///      "enum": [
+///        "mortal-wounds"
+///      ]
+///    },
 ///    "attacks": {
 ///      "description": "Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this.",
 ///      "$ref": "#/$defs/event-bound-reference"
@@ -41932,6 +44597,20 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 ///        },
 ///        {
 ///          "$ref": "#/$defs/stance-option-ref"
+///        },
+///        {
+///          "description": "Every ability tagged with this keyword (\"Pain abilities\" is PAIN). Only with direction suppressed and rule_kind ability.",
+///          "type": "object",
+///          "required": [
+///            "ability_keyword"
+///          ],
+///          "properties": {
+///            "ability_keyword": {
+///              "type": "string",
+///              "pattern": "^[A-Z][A-Z0-9 -]*[A-Z0-9]$"
+///            }
+///          },
+///          "additionalProperties": false
 ///        }
 ///      ]
 ///    },
@@ -41942,9 +44621,21 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateCoreRuleSlug {
 ///        "ability",
 ///        "faction-rule"
 ///      ]
+///    },
+///    "sub_rule": {
+///      "description": "A named section of the suppressed faction rule (\"your army's Daemonic Terror rule\"); only its aspect is off for the target.",
+///      "$ref": "#/$defs/entity-id"
 ///    }
 ///  },
-///  "additionalProperties": false
+///  "additionalProperties": false,
+///  "dependentRequired": {
+///    "aspect": [
+///      "sub_rule"
+///    ],
+///    "sub_rule": [
+///      "aspect"
+///    ]
+///  }
 ///}
 /// ```
 /// </details>
@@ -41954,6 +44645,9 @@ pub struct RuleStateEffectModifier {
     ///A granted faction rule the holder can use whatever your Army Faction is ("even though your Army Faction is not X"): the rule's own Army Faction requirement does not apply to it.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub any_army_faction: ::std::option::Option<::serde_json::Value>,
+    ///What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub aspect: ::std::option::Option<RuleStateEffectModifierAspect>,
     ///Only the attacks of the event a trigger bound with binds_event_variable: the attacks a shooting selection goes on to make, or the attacks of a shooting just resolved. With attacking-ends-hidden suppressed, those attacks never count toward the Hidden rule's ranged-attack clause; the effect's duration does not limit this.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub attacks: ::std::option::Option<EventBoundReference>,
@@ -41964,6 +44658,80 @@ pub struct RuleStateEffectModifier {
     pub exchange_with: ::std::option::Option<NamedAbilityRef>,
     pub rule: RuleStateEffectModifierRule,
     pub rule_kind: RuleStateEffectModifierRuleKind,
+    ///A named section of the suppressed faction rule ("your army's Daemonic Terror rule"); only its aspect is off for the target.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub sub_rule: ::std::option::Option<EntityId>,
+}
+///What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "What the section no longer does to the target: mortal-wounds, it inflicts no mortal wounds on it.",
+///  "enum": [
+///    "mortal-wounds"
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd
+)]
+pub enum RuleStateEffectModifierAspect {
+    #[serde(rename = "mortal-wounds")]
+    MortalWounds,
+}
+impl ::std::fmt::Display for RuleStateEffectModifierAspect {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::MortalWounds => f.write_str("mortal-wounds"),
+        }
+    }
+}
+impl ::std::str::FromStr for RuleStateEffectModifierAspect {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "mortal-wounds" => Ok(Self::MortalWounds),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for RuleStateEffectModifierAspect {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for RuleStateEffectModifierAspect {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for RuleStateEffectModifierAspect {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`RuleStateEffectModifierDirection`
 ///
@@ -42063,17 +44831,32 @@ for RuleStateEffectModifierDirection {
 ///    },
 ///    {
 ///      "$ref": "#/$defs/stance-option-ref"
+///    },
+///    {
+///      "description": "Every ability tagged with this keyword (\"Pain abilities\" is PAIN). Only with direction suppressed and rule_kind ability.",
+///      "type": "object",
+///      "required": [
+///        "ability_keyword"
+///      ],
+///      "properties": {
+///        "ability_keyword": {
+///          "type": "string",
+///          "pattern": "^[A-Z][A-Z0-9 -]*[A-Z0-9]$"
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
 /// ```
 /// </details>
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
-#[serde(untagged)]
+#[serde(untagged, deny_unknown_fields)]
 pub enum RuleStateEffectModifierRule {
     String(RuleStateEffectModifierRuleString),
     NamedAbilityRef(NamedAbilityRef),
     StanceOptionRef(StanceOptionRef),
+    Object { ability_keyword: RuleStateEffectModifierRuleObjectAbilityKeyword },
 }
 impl ::std::convert::From<RuleStateEffectModifierRuleString>
 for RuleStateEffectModifierRule {
@@ -42175,6 +44958,83 @@ impl ::std::convert::TryFrom<::std::string::String> for RuleStateEffectModifierR
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///`RuleStateEffectModifierRuleObjectAbilityKeyword`
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "type": "string",
+///  "pattern": "^[A-Z][A-Z0-9 -]*[A-Z0-9]$"
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct RuleStateEffectModifierRuleObjectAbilityKeyword(::std::string::String);
+impl ::std::ops::Deref for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<RuleStateEffectModifierRuleObjectAbilityKeyword>
+for ::std::string::String {
+    fn from(value: RuleStateEffectModifierRuleObjectAbilityKeyword) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[A-Z][A-Z0-9 -]*[A-Z0-9]$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[A-Z][A-Z0-9 -]*[A-Z0-9]$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String>
+for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RuleStateEffectModifierRuleObjectAbilityKeyword {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
     }
 }
 ///`RuleStateEffectModifierRuleString`
@@ -42403,6 +45263,10 @@ pub struct SameUnitConditionParameters {
 ///    "per"
 ///  ],
 ///  "properties": {
+///    "designated": {
+///      "description": "enemy-units-hit: only units carrying this designation are counted (\"each assailed enemy unit hit by those attacks\").",
+///      "$ref": "#/$defs/designation-id"
+///    },
 ///    "evaluated": {
 ///      "description": "When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).",
 ///      "default": "live",
@@ -42461,6 +45325,9 @@ pub struct SameUnitConditionParameters {
 #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Scaling {
+    ///enemy-units-hit: only units carrying this designation are counted ("each assailed enemy unit hit by those attacks").
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub designated: ::std::option::Option<DesignationId>,
     ///When the count is taken. live (absent): at each use of the effect. on-apply: once, when the rule applies, and fixed for the rule's duration (a count in a rule that starts at a moment and lasts).
     #[serde(default = "defaults::scaling_evaluated")]
     pub evaluated: ScalingEvaluated,
@@ -42744,13 +45611,13 @@ impl ::std::default::Default for ScalingRound {
         ScalingRound::Down
     }
 }
-///What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number.
+///What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number. enemy-units-hit: the enemy units hit by one or more of the attacks of the triggering attack sequence ("those attacks").
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number.",
+///  "description": "What a count or a scaling block counts. models-embarked-in-bearer: passengers only. embarked-models-oc: the summed Objective Control of the passengers. models-equipped-with: models in the bearer's unit equipped with `wargear`. battle-round: the current battle round number. enemy-units-hit: the enemy units hit by one or more of the attacks of the triggering attack sequence (\"those attacks\").",
 ///  "type": "string",
 ///  "enum": [
 ///    "enemy-models-in-range",
@@ -42762,7 +45629,8 @@ impl ::std::default::Default for ScalingRound {
 ///    "models-equipped-with",
 ///    "enemy-units-in-range",
 ///    "wounds-lost",
-///    "battle-round"
+///    "battle-round",
+///    "enemy-units-hit"
 ///  ]
 ///}
 /// ```
@@ -42800,6 +45668,8 @@ pub enum ScalingSource {
     WoundsLost,
     #[serde(rename = "battle-round")]
     BattleRound,
+    #[serde(rename = "enemy-units-hit")]
+    EnemyUnitsHit,
 }
 impl ::std::fmt::Display for ScalingSource {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -42816,6 +45686,7 @@ impl ::std::fmt::Display for ScalingSource {
             Self::EnemyUnitsInRange => f.write_str("enemy-units-in-range"),
             Self::WoundsLost => f.write_str("wounds-lost"),
             Self::BattleRound => f.write_str("battle-round"),
+            Self::EnemyUnitsHit => f.write_str("enemy-units-hit"),
         }
     }
 }
@@ -42835,6 +45706,7 @@ impl ::std::str::FromStr for ScalingSource {
             "enemy-units-in-range" => Ok(Self::EnemyUnitsInRange),
             "wounds-lost" => Ok(Self::WoundsLost),
             "battle-round" => Ok(Self::BattleRound),
+            "enemy-units-hit" => Ok(Self::EnemyUnitsHit),
             _ => Err("invalid value".into()),
         }
     }
@@ -45099,7 +47971,7 @@ impl ::std::convert::TryFrom<::std::string::String> for SecondaryCardWhenDrawnOp
 ///    }
 ///  },
 ///  "additionalProperties": false,
-///  "$comment": "Select objective markers matching the selector and bind each as bind_as; the nested effect refers to it as {objective: {selection_var}} (designate subject, within of)."
+///  "$comment": "Select objective markers matching the selector and bind each as bind_as; the nested effect refers to it as {objective: {selection_var}} (designate subject, within of). A selector without count is no choice: the nested effect resolves once for each matching marker (\"for each objective you control that ...\")."
 ///}
 /// ```
 /// </details>
@@ -45678,7 +48550,8 @@ impl ::std::convert::TryFrom<::std::string::String> for SequenceEffectType {
 ///      "enum": [
 ///        "strategic-reserves",
 ///        "transport",
-///        "battlefield"
+///        "battlefield",
+///        "destroyed"
 ///      ]
 ///    },
 ///    "ignore_limits": {
@@ -45905,7 +48778,8 @@ pub struct SetUpEffectModifier {
 ///  "enum": [
 ///    "strategic-reserves",
 ///    "transport",
-///    "battlefield"
+///    "battlefield",
+///    "destroyed"
 ///  ]
 ///}
 /// ```
@@ -45929,6 +48803,8 @@ pub enum SetUpEffectModifierFrom {
     Transport,
     #[serde(rename = "battlefield")]
     Battlefield,
+    #[serde(rename = "destroyed")]
+    Destroyed,
 }
 impl ::std::fmt::Display for SetUpEffectModifierFrom {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -45936,6 +48812,7 @@ impl ::std::fmt::Display for SetUpEffectModifierFrom {
             Self::StrategicReserves => f.write_str("strategic-reserves"),
             Self::Transport => f.write_str("transport"),
             Self::Battlefield => f.write_str("battlefield"),
+            Self::Destroyed => f.write_str("destroyed"),
         }
     }
 }
@@ -45948,6 +48825,7 @@ impl ::std::str::FromStr for SetUpEffectModifierFrom {
             "strategic-reserves" => Ok(Self::StrategicReserves),
             "transport" => Ok(Self::Transport),
             "battlefield" => Ok(Self::Battlefield),
+            "destroyed" => Ok(Self::Destroyed),
             _ => Err("invalid value".into()),
         }
     }
@@ -47178,7 +50056,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///    },
 ///    {
 ///      "title": "designated condition",
-///      "description": "[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.",
+///      "description": "[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it. A unit subject is tested here only with `at` (its designation as it was then); otherwise it is a `matches` filter.",
 ///      "type": "object",
 ///      "required": [
 ///        "parameters",
@@ -47196,7 +50074,7 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///    },
 ///    {
 ///      "title": "resource condition",
-///      "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.",
+///      "description": "[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held. holder opponent: count bounds what the opponent holds.",
 ///      "type": "object",
 ///      "required": [
 ///        "parameters",
@@ -47295,6 +50173,24 @@ impl ::std::convert::TryFrom<::std::string::String> for Side {
 ///        },
 ///        "type": {
 ///          "const": "battle-size"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "title": "game-mode condition",
+///      "description": "[clock] The battle is being played in one of these game modes (\"When playing a Combat Patrol battle\").",
+///      "type": "object",
+///      "required": [
+///        "parameters",
+///        "type"
+///      ],
+///      "properties": {
+///        "parameters": {
+///          "$ref": "#/$defs/game-mode-condition-parameters"
+///        },
+///        "type": {
+///          "const": "game-mode"
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -47582,12 +50478,12 @@ pub enum SimpleCondition {
     Visible { parameters: VisibleConditionParameters },
     /**designated condition
 
-[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it.*/
+[designation] The subject carries this designation. With the optional inclusive `count` bounds, counts how many units or objectives carry it. A unit subject is tested here only with `at` (its designation as it was then); otherwise it is a `matches` filter.*/
     #[serde(rename = "designated")]
     Designated { parameters: DesignatedConditionParameters },
     /**resource condition
 
-[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent.*/
+[resource] A resource pool holds at least / at most this much. below_max: fewer uses than its maximum have been spent. gained turn: count bounds the amount of the pool gained this turn instead of the amount held. holder opponent: count bounds what the opponent holds.*/
     #[serde(rename = "resource")]
     Resource { parameters: ResourceConditionParameters },
     /**operation-markers condition
@@ -47624,6 +50520,11 @@ pub enum SimpleCondition {
 [clock] The battle is being played at this battle size.*/
     #[serde(rename = "battle-size")]
     BattleSize { parameters: BattleSizeConditionParameters },
+    /**game-mode condition
+
+[clock] The battle is being played in one of these game modes ("When playing a Combat Patrol battle").*/
+    #[serde(rename = "game-mode")]
+    GameMode { parameters: GameModeConditionParameters },
     /**army-faction condition
 
 [army] Your Army Faction is this faction.*/
@@ -47919,7 +50820,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "ability-modifier effect",
-///      "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options.",
+///      "description": "[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, the number of mortal wounds a bound use inflicts when it inflicts any (mortal-wounds), or how many times one unit can be affected by it (received).",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -47944,7 +50845,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "ability-activate effect",
-///      "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, \"the selected combat doctrine is active for this unit\" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.",
+///      "description": "[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, \"the selected combat doctrine is active for this unit\" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. immediate: the one option resolves once, now, instead of becoming active. override: the activation resolves with this amount instead of its own.",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -48394,7 +51295,7 @@ pub enum SimpleCondition {
 ///    },
 ///    {
 ///      "title": "set-up effect",
-///      "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.",
+///      "description": "[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as. from destroyed: a destroyed unit is returned and set up (with to: strategic-reserves, placed into Strategic Reserves).",
 ///      "type": "object",
 ///      "required": [
 ///        "modifier",
@@ -48593,6 +51494,28 @@ pub enum SimpleCondition {
 ///      "additionalProperties": false
 ///    },
 ///    {
+///      "title": "resource-gain-cap effect",
+///      "description": "[resource] You cannot gain more than max of a pool from one source this ability causes (source failed-battle-shock: the failed Battle-shock tests it causes).",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/resource-gain-cap-effect-modifier"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "resource-gain-cap"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
 ///      "title": "resource-spend effect",
 ///      "description": "[resource] Spend from a resource pool only when it has sufficient balance; the spend fails as a whole rather than producing a negative or clamped pool. face: spend dice showing this value; requirement: spend dice forming this pair, triple or run.",
 ///      "type": "object",
@@ -48662,6 +51585,31 @@ pub enum SimpleCondition {
 ///        },
 ///        "type": {
 ///          "const": "objective-sticky"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "title": "region-extend effect",
+///      "description": "[board] An area of the battlefield is within a region an army rule defines (\"the selected areas of the battlefield are within your army's Shadow of Chaos\") for the effect's duration: one territory, several territories, or the area within a range of the objective markers a filter names.",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/region-extend-effect-modifier"
+///        },
+///        "scaling": {
+///          "$ref": "#/$defs/scaling"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "region-extend"
 ///        }
 ///      },
 ///      "additionalProperties": false
@@ -48862,6 +51810,72 @@ pub enum SimpleCondition {
 ///        }
 ///      },
 ///      "additionalProperties": false
+///    },
+///    {
+///      "title": "orders-modifier effect",
+///      "description": "[orders] Changes how the target issues Orders without issuing one itself: only `only_options` of a menu, to the `recipients` units (made eligible with `adds_recipients`), any number of them (`count` any), regardless of range (`range` unlimited), to recipients within `range_proxy.inches` of a marker as if the issuer were within that distance of them, or while the issuer is not on the battlefield (`off_battlefield`).",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/orders-modifier-effect-modifier"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "orders-modifier"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "title": "order-share effect",
+///      "description": "[orders] Orders affecting the target also affect `modifier.with`; `mutual`: and vice versa.",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/order-share-effect-modifier"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "order-share"
+///        }
+///      },
+///      "additionalProperties": false
+///    },
+///    {
+///      "title": "reserves-schedule effect",
+///      "description": "[army] Each listed datasheet's units must start the battle in Strategic Reserves and cannot be set up on the battlefield before that entry's battle round (a Combat Patrol detachment's arrival schedule). `set_up` is where they must be set up when they arrive.",
+///      "type": "object",
+///      "required": [
+///        "modifier",
+///        "target",
+///        "type"
+///      ],
+///      "properties": {
+///        "modifier": {
+///          "$ref": "#/$defs/reserves-schedule-effect-modifier"
+///        },
+///        "target": {
+///          "$ref": "#/$defs/unit-ref"
+///        },
+///        "type": {
+///          "const": "reserves-schedule"
+///        }
+///      },
+///      "additionalProperties": false
 ///    }
 ///  ]
 ///}
@@ -48973,7 +51987,7 @@ pub enum SingleEffect {
     },
     /**ability-modifier effect
 
-[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options.*/
+[ability] Change one named ability: its uses, range, targets, recipients, selections, how many can apply at once, duration, start round, threshold or options, the amount it resolves with, the number of mortal wounds a bound use inflicts when it inflicts any (mortal-wounds), or how many times one unit can be affected by it (received).*/
     #[serde(rename = "ability-modifier")]
     AbilityModifier {
         modifier: AbilityModifierEffectModifier,
@@ -48983,7 +51997,7 @@ pub enum SingleEffect {
     },
     /**ability-activate effect
 
-[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, "the selected combat doctrine is active for this unit" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. override: the activation resolves with this amount instead of its own.*/
+[ability] Make a named ability resolve now, or make options of it active: option (one), options (two or more together) or all_options (every one). select: which option is picked now (by a fresh roll, by the player, or by event: the option the triggering use of another ability selected, "the selected combat doctrine is active for this unit" after a Strategic Acumen use; excluding: army-active, never the option active for your army; count: how many, from: only among these; option_var: the pick is made once and bound under this name, so every unit a surrounding aura or loop applies it to shares it). exclusive: the activated options replace any already active; without it they join them. ignore_consumed: the option may be picked even if a once-per-battle selection already used it. immediate: the one option resolves once, now, instead of becoming active. override: the activation resolves with this amount instead of its own.*/
     #[serde(rename = "ability-activate")]
     AbilityActivate {
         modifier: AbilityActivateEffectModifier,
@@ -49163,7 +52177,7 @@ pub enum SingleEffect {
     },
     /**set-up effect
 
-[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as.*/
+[placement] Set the target up: onto the battlefield or into Strategic Reserves, with the placement limits the rule prints. allow: false forbids that set-up instead. mandatory: it must be set up this way. arrives: it arrives in your next Movement phase. allow_first_round: it can be set up this way even in the first battle round (with arrives, that arrival). wounds_remaining: the wounds a model set (back) up has; detach: it is set up as its own unit, no longer part of its attached unit; starting_strength: the Starting Strength of the unit it is set up as. from destroyed: a destroyed unit is returned and set up (with to: strategic-reserves, placed into Strategic Reserves).*/
     #[serde(rename = "set-up")]
     SetUp {
         modifier: SetUpEffectModifier,
@@ -49241,6 +52255,11 @@ pub enum SingleEffect {
         scaling: ::std::option::Option<Scaling>,
         target: UnitRef,
     },
+    /**resource-gain-cap effect
+
+[resource] You cannot gain more than max of a pool from one source this ability causes (source failed-battle-shock: the failed Battle-shock tests it causes).*/
+    #[serde(rename = "resource-gain-cap")]
+    ResourceGainCap { modifier: ResourceGainCapEffectModifier, target: UnitRef },
     /**resource-spend effect
 
 [resource] Spend from a resource pool only when it has sufficient balance; the spend fails as a whole rather than producing a negative or clamped pool. face: spend dice showing this value; requirement: spend dice forming this pair, triple or run.*/
@@ -49268,6 +52287,16 @@ pub enum SingleEffect {
     ObjectiveSticky {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         modifier: ::std::option::Option<ObjectiveStickyEffectModifier>,
+        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        scaling: ::std::option::Option<Scaling>,
+        target: UnitRef,
+    },
+    /**region-extend effect
+
+[board] An area of the battlefield is within a region an army rule defines ("the selected areas of the battlefield are within your army's Shadow of Chaos") for the effect's duration: one territory, several territories, or the area within a range of the objective markers a filter names.*/
+    #[serde(rename = "region-extend")]
+    RegionExtend {
+        modifier: RegionExtendEffectModifier,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         scaling: ::std::option::Option<Scaling>,
         target: UnitRef,
@@ -49347,6 +52376,21 @@ pub enum SingleEffect {
 [ability] The named weapon ability's test applies out to the given range instead of its printed range: keyword benefit when the target is within weapon range.*/
     #[serde(rename = "weapon-ability-range")]
     WeaponAbilityRange { modifier: WeaponAbilityRangeEffectModifier, target: UnitRef },
+    /**orders-modifier effect
+
+[orders] Changes how the target issues Orders without issuing one itself: only `only_options` of a menu, to the `recipients` units (made eligible with `adds_recipients`), any number of them (`count` any), regardless of range (`range` unlimited), to recipients within `range_proxy.inches` of a marker as if the issuer were within that distance of them, or while the issuer is not on the battlefield (`off_battlefield`).*/
+    #[serde(rename = "orders-modifier")]
+    OrdersModifier { modifier: OrdersModifierEffectModifier, target: UnitRef },
+    /**order-share effect
+
+[orders] Orders affecting the target also affect `modifier.with`; `mutual`: and vice versa.*/
+    #[serde(rename = "order-share")]
+    OrderShare { modifier: OrderShareEffectModifier, target: UnitRef },
+    /**reserves-schedule effect
+
+[army] Each listed datasheet's units must start the battle in Strategic Reserves and cannot be set up on the battlefield before that entry's battle round (a Combat Patrol detachment's arrival schedule). `set_up` is where they must be set up when they arrive.*/
+    #[serde(rename = "reserves-schedule")]
+    ReservesSchedule { modifier: ReservesScheduleEffectModifier, target: UnitRef },
 }
 ///`Snapshot`
 ///
@@ -49525,6 +52569,39 @@ impl ::std::convert::TryFrom<::std::string::String> for SourceType {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///The amount a resource-spend of this ability bound with bind_as spent during this use (0 when it spent none). With per N: one for every N of it, rounded down ("for every 2YP you just spent").
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The amount a resource-spend of this ability bound with bind_as spent during this use (0 when it spent none). With per N: one for every N of it, rounded down (\"for every 2YP you just spent\").",
+///  "type": "object",
+///  "required": [
+///    "spent"
+///  ],
+///  "properties": {
+///    "per": {
+///      "type": "integer",
+///      "minimum": 2.0
+///    },
+///    "spent": {
+///      "description": "The bind_as name of the resource-spend whose amount this reads; that spend comes before the reader.",
+///      "$ref": "#/$defs/entity-id"
+///    }
+///  },
+///  "additionalProperties": false
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SpentReference {
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub per: ::std::option::Option<i64>,
+    ///The bind_as name of the resource-spend whose amount this reads; that spend comes before the reader.
+    pub spent: EntityId,
 }
 ///`SplitUnitEffectModifier`
 ///
@@ -51184,6 +54261,26 @@ impl ::std::convert::TryFrom<::std::string::String> for Stat {
 ///    "minimum": {
 ///      "type": "number"
 ///    },
+///    "not_cumulative": {
+///      "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+///      "oneOf": [
+///        {
+///          "const": "negative-modifiers"
+///        },
+///        {
+///          "type": "object",
+///          "required": [
+///            "ability"
+///          ],
+///          "properties": {
+///            "ability": {
+///              "$ref": "#/$defs/entity-id"
+///            }
+///          },
+///          "additionalProperties": false
+///        }
+///      ]
+///    },
 ///    "operation": {
 ///      "enum": [
 ///        "add",
@@ -51218,12 +54315,54 @@ pub struct StatModifierEffectModifier {
     pub maximum: ::std::option::Option<f64>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub minimum: ::std::option::Option<f64>,
+    ///The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_cumulative: ::std::option::Option<StatModifierEffectModifierNotCumulative>,
     pub operation: StatModifierEffectModifierOperation,
     pub stat: Stat,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub value: ::std::option::Option<Quantity>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub weapons: ::std::option::Option<WeaponScope>,
+}
+///The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "The modifier does not stack with any other negative modifier to the same roll or characteristic (negative-modifiers), or with the named ability's own modifier.",
+///  "oneOf": [
+///    {
+///      "const": "negative-modifiers"
+///    },
+///    {
+///      "type": "object",
+///      "required": [
+///        "ability"
+///      ],
+///      "properties": {
+///        "ability": {
+///          "$ref": "#/$defs/entity-id"
+///        }
+///      },
+///      "additionalProperties": false
+///    }
+///  ]
+///}
+/// ```
+/// </details>
+#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+pub enum StatModifierEffectModifierNotCumulative {
+    #[serde(rename = "negative-modifiers")]
+    NegativeModifiers,
+    #[serde(rename = "ability")]
+    Ability(EntityId),
+}
+impl ::std::convert::From<EntityId> for StatModifierEffectModifierNotCumulative {
+    fn from(value: EntityId) -> Self {
+        Self::Ability(value)
+    }
 }
 ///`StatModifierEffectModifierOperation`
 ///
@@ -55803,6 +58942,11 @@ impl ::std::convert::TryFrom<::std::string::String> for TransportOccupancySubjec
 ///      "minLength": 1,
 ///      "$comment": "Names the triggering event's bound object for later reference by a condition in the same reactive action. Internal only; never rendered."
 ///    },
+///    "binds_roll_variable": {
+///      "description": "Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.",
+///      "type": "string",
+///      "minLength": 1
+///    },
 ///    "binds_selected_die_variable": {
 ///      "description": "Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.",
 ///      "type": "string",
@@ -55897,6 +59041,9 @@ pub struct Trigger {
     pub binds_die_variable: ::std::option::Option<TriggerBindsDieVariable>,
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub binds_event_variable: ::std::option::Option<TriggerBindsEventVariable>,
+    ///Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.
+    #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+    pub binds_roll_variable: ::std::option::Option<TriggerBindsRollVariable>,
     ///Binds the controller-selected Miracle die among those used in the triggering Act of Faith; consumers refer only as {die_var: ID}.
     #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
     pub binds_selected_die_variable: ::std::option::Option<
@@ -56057,6 +59204,79 @@ impl ::std::convert::TryFrom<::std::string::String> for TriggerBindsEventVariabl
     }
 }
 impl<'de> ::serde::Deserialize<'de> for TriggerBindsEventVariable {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.
+///
+/// <details><summary>JSON schema</summary>
+///
+/// ```json
+///{
+///  "description": "Binds the total of the triggering roll (a Dark Pact's Leadership test) for a roll-total condition in the same reactive action. Internal only; never rendered.",
+///  "type": "string",
+///  "minLength": 1
+///}
+/// ```
+/// </details>
+#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[serde(transparent)]
+pub struct TriggerBindsRollVariable(::std::string::String);
+impl ::std::ops::Deref for TriggerBindsRollVariable {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TriggerBindsRollVariable> for ::std::string::String {
+    fn from(value: TriggerBindsRollVariable) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for TriggerBindsRollVariable {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TriggerBindsRollVariable {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<&::std::string::String> for TriggerBindsRollVariable {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TriggerBindsRollVariable {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TriggerBindsRollVariable {
     fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -61197,7 +64417,7 @@ pub struct UnitRating {
 ///  "description": "Which unit a predicate or trigger talks about. A fixed role, a filter for 'any unit that…', or a unit bound by an earlier trigger or selection.",
 ///  "oneOf": [
 ///    {
-///      "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///      "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///      "type": "string",
 ///      "enum": [
 ///        "this-unit",
@@ -61290,13 +64510,13 @@ impl ::std::convert::From<UnitFilter> for UnitRef {
         Self::Variant1(value)
     }
 }
-///this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.
+///this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
+///  "description": "this-unit: the unit with the ability (attached units included), and inside an ability-grant's definition the unit it is granted to; the default subject, and in an eligibility filter the candidate being checked. this-model: the model with the ability, and inside an ability-grant's definition the model it is granted to. model-in-this-unit: any model in this unit. attacker / defender: the two units of the attack being resolved. event-subject / event-object: the unit whose action fired the trigger, and the unit it was aimed at (for a unit-destroyed moment, the unit destroyed; for a disembarked moment, the Transport it disembarked from). stratagem-target: the Stratagem's TARGET. selected-unit: a unit the ability tells the player to select. recipient: the unit an effect or aura is being applied to. bearer-transport: the Transport the unit with the ability is embarked within. ability-unit: the unit with the ability (inside an ability-grant's definition, the unit it is granted to), even inside a selection's eligibility, where this-unit names the candidate being checked.",
 ///  "type": "string",
 ///  "enum": [
 ///    "this-unit",
@@ -61775,13 +64995,13 @@ impl<'de> ::serde::Deserialize<'de> for UnitSelectorBindAs {
             })
     }
 }
-///Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.
+///Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves. destroyed: the unit has been destroyed ("Select one friendly destroyed X unit"); only a rule that returns a destroyed unit selects it.
 ///
 /// <details><summary>JSON schema</summary>
 ///
 /// ```json
 ///{
-///  "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves.",
+///  "description": "Core-rules states a unit is in. Each state's opposite is the state under `not` (unengaged is not engaged). in-strategic-reserves: in Strategic Reserves, which the rules also call Reserves. in-cult-ambush: in the Genestealer Cults' Cult Ambush, a type of Strategic Reserves, so a unit in Cult Ambush is also in-strategic-reserves. destroyed: the unit has been destroyed (\"Select one friendly destroyed X unit\"); only a rule that returns a destroyed unit selects it.",
 ///  "type": "string",
 ///  "enum": [
 ///    "engaged",
@@ -61792,7 +65012,8 @@ impl<'de> ::serde::Deserialize<'de> for UnitSelectorBindAs {
 ///    "on-battlefield",
 ///    "hidden",
 ///    "fights-first",
-///    "benefit-of-cover"
+///    "benefit-of-cover",
+///    "destroyed"
 ///  ]
 ///}
 /// ```
@@ -61828,6 +65049,8 @@ pub enum UnitState {
     FightsFirst,
     #[serde(rename = "benefit-of-cover")]
     BenefitOfCover,
+    #[serde(rename = "destroyed")]
+    Destroyed,
 }
 impl ::std::fmt::Display for UnitState {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
@@ -61841,6 +65064,7 @@ impl ::std::fmt::Display for UnitState {
             Self::Hidden => f.write_str("hidden"),
             Self::FightsFirst => f.write_str("fights-first"),
             Self::BenefitOfCover => f.write_str("benefit-of-cover"),
+            Self::Destroyed => f.write_str("destroyed"),
         }
     }
 }
@@ -61859,6 +65083,7 @@ impl ::std::str::FromStr for UnitState {
             "hidden" => Ok(Self::Hidden),
             "fights-first" => Ok(Self::FightsFirst),
             "benefit-of-cover" => Ok(Self::BenefitOfCover),
+            "destroyed" => Ok(Self::Destroyed),
             _ => Err("invalid value".into()),
         }
     }
@@ -65592,10 +68817,11 @@ fn effect_node_from_value(
             | "act-on-death" | "split-unit" | "add-unit" | "destruction-rule" | "move"
             | "move-modifier" | "set-up" | "marker" | "transport-capacity" | "test"
             | "state-change" | "cp-gain" | "cost-modifier" | "resource-gain"
-            | "resource-spend" | "resource-die" | "objective-sticky" | "designate"
-            | "army-rule" | "test-exemption" | "datasheet-swap"
-            | "characteristic-resolution" | "borrow-weapons" | "select-weapon"
-            | "weapon-ability-range",
+            | "resource-gain-cap" | "resource-spend" | "resource-die"
+            | "objective-sticky" | "region-extend" | "designate" | "army-rule"
+            | "test-exemption" | "datasheet-swap" | "characteristic-resolution"
+            | "borrow-weapons" | "select-weapon" | "weapon-ability-range"
+            | "orders-modifier" | "order-share" | "reserves-schedule",
         ) => |v| ::serde_json::from_value(v).map(EffectNode::SingleEffect),
         Some("stance-select") => {
             |v| ::serde_json::from_value(v).map(EffectNode::StanceSelectEffect)

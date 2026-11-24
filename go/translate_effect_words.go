@@ -36,6 +36,10 @@ type effCtx struct {
 	eachModel bool
 	// suppressWeaponType: an enclosing attack-is already stated this attack type ("ranged"/"melee"), so bare weapon-type filters don't repeat it.
 	suppressWeaponType string
+	// eachUnit: inside a for-each-unit over units, each pass's unit (the recipient) reads "that unit".
+	eachUnit bool
+	// self: the id of the record being described; a permission naming it is "this Stratagem".
+	self string
 }
 
 // ejstr is JS-template stringification: null -> "?", arrays join with ", ",
@@ -347,6 +351,12 @@ func esigned(operation, value any) string {
 
 // formatComparison renders a dice comparison ("a 4+", "a 3 or less", ...).
 func formatComparison(comp string, threshold any) string {
+	// A threshold read from the battle round: "a result greater than the current battle round number".
+	if m, ok := asMap(threshold); ok && m != nil && (comp == "gte" || comp == "") {
+		if n, ok := m["battle_round_plus"].(float64); ok && n == 1 {
+			return "a result greater than the current battle round number"
+		}
+	}
 	th := ejstr(threshold)
 	switch comp {
 	case "lte":
@@ -501,6 +511,7 @@ var roleSubjects = map[string]string{
 	eventSubjectModel:    "the triggering model",
 	"event-object":       "that unit",
 	eventObjectModel:     "that model",
+	eventObjectTransport: "the Transport",
 	"stratagem-target":   "that unit",
 	"bearer-transport":   "the Transport this unit is embarked within",
 	"ability-unit":       "this unit",
@@ -654,7 +665,7 @@ func effectSubject(target any, ctx effCtx) string {
 		if ctx.eachModel || ctx.selectedModel {
 			return "that model"
 		}
-		if ctx.auraRecipient || ctx.selectedUnit {
+		if ctx.auraRecipient || ctx.selectedUnit || ctx.eachUnit {
 			return "that unit"
 		}
 		return "this unit"

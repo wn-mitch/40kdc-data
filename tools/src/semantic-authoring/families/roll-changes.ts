@@ -1,6 +1,7 @@
 import { ANTECEDENT } from "../antecedent-families.js";
 import { boundedInteger, enumOrSource, enumSet, enumValue, exactKeys, integerOrSource } from "../family-validation.js";
 import type { FlatFamily } from "./types.js";
+import { NOT_CUMULATIVE_SCHEMA, notCumulative } from "./buffs-and-weapons-shared.js";
 import {
   type Input, KEBAB_ID, SOURCE, BASIC_ROLLS, ROLL_KINDS, WEAPON_TYPES, ROLL_SUBJECTS, ABILITY_ROLL, STATS,
   isAbilityRoll, abilityRoll, pickedRolls, allowedKeys,
@@ -39,8 +40,8 @@ function weaponNameList(value: unknown, label: string): string[] {
 }
 
 function normalizeRollModifier(input: Input): Input {
-  allowedKeys(input, ["roll", "rolls", "operation", "value", "weapon_type", "subject", "weapon_name", "weapon_names", "cap"],
-    "roll-modifier parameters must be roll or rolls, operation, value, and optional weapon_type, subject, weapon_name or weapon_names, and cap only.");
+  allowedKeys(input, ["roll", "rolls", "operation", "value", "weapon_type", "subject", "weapon_name", "weapon_names", "cap", "not_cumulative"],
+    "roll-modifier parameters must be roll or rolls, operation, value, and optional weapon_type, subject, weapon_name or weapon_names, cap and not_cumulative only.");
   if (!("rolls" in input) && !("roll" in input)) throw new TypeError("roll-modifier names a roll or rolls.");
   if ("rolls" in input && "roll" in input) throw new TypeError("roll-modifier names a roll or rolls, not both.");
   const operation = enumValue(input.operation, ["add", "subtract", "halve"], "roll-modifier.operation");
@@ -111,6 +112,10 @@ function normalizeRollModifier(input: Input): Input {
   if (input.subject !== undefined) result.subject = enumValue(input.subject, ROLL_SUBJECTS, "roll-modifier.subject");
   if (input.weapon_name !== undefined) result.weapon_name = weaponName(input.weapon_name, "roll-modifier.weapon_name");
   if (input.weapon_names !== undefined) result.weapon_names = weaponNameList(input.weapon_names, "roll-modifier.weapon_names");
+  if (input.not_cumulative !== undefined) {
+    if (input.not_cumulative === "negative-modifiers" && operation !== "subtract") throw new TypeError("roll-modifier.not_cumulative negative-modifiers belongs to a subtracted modifier.");
+    result.not_cumulative = notCumulative(input.not_cumulative, "roll-modifier.not_cumulative");
+  }
   return result;
 }
 
@@ -149,19 +154,22 @@ function normalizeReroll(input: Input): Input {
 // ignore-modifiers
 
 const IGNORE_ONLY = ["worsening", "improving"] as const;
+/** any-or-all: the player picks which of the modifiers to ignore ("can ignore any or all modifiers"). */
+const IGNORE_CHOICES = ["any-or-all"] as const;
 const EXCEPTABLE_ROLLS = ROLL_KINDS.filter((roll) => roll !== "all" && roll !== "any");
 
 function normalizeIgnoreModifiers(input: Input): Input {
   const { except_rolls: except, ...rest } = input;
-  const subject = enumValue(rest.subject, ["this-unit", "this-model", ANTECEDENT], "ignore-modifiers.subject");
+  const subject = enumValue(rest.subject, ["this-unit", "this-model", ANTECEDENT, "attack"], "ignore-modifiers.subject");
   const kinds = enumSet(rest.what, ["characteristics", "rolls"], "ignore-modifiers.what");
-  const allowed = ["subject", "what", "only", "weapon_type", ...(kinds.includes("characteristics") ? ["stats"] : []), ...(kinds.includes("rolls") ? ["rolls"] : [])];
-  allowedKeys(rest, allowed, "ignore-modifiers parameters must be subject, what, only, weapon_type, except_rolls, and stats/rolls only for the kinds what names.");
+  const allowed = ["subject", "what", "only", "weapon_type", "choice", ...(kinds.includes("characteristics") ? ["stats"] : []), ...(kinds.includes("rolls") ? ["rolls"] : [])];
+  allowedKeys(rest, allowed, "ignore-modifiers parameters must be subject, what, only, weapon_type, choice, except_rolls, and stats/rolls only for the kinds what names.");
   const result: Input = { subject, what: kinds };
   if (rest.stats !== undefined) result.stats = enumSet(rest.stats, STATS, "ignore-modifiers.stats");
   if (kinds.includes("rolls")) result.rolls = enumSet(rest.rolls, ROLL_KINDS, "ignore-modifiers.rolls");
   if (rest.only !== undefined) result.only = enumValue(rest.only, IGNORE_ONLY, "ignore-modifiers.only");
   if (rest.weapon_type !== undefined) result.weapon_type = enumValue(rest.weapon_type, WEAPON_TYPES, "ignore-modifiers.weapon_type");
+  if (rest.choice !== undefined) result.choice = enumValue(rest.choice, IGNORE_CHOICES, "ignore-modifiers.choice");
   if (except === undefined) return result;
   const rolls = Array.isArray(result.rolls) ? result.rolls : [];
   if (!rolls.some((roll) => roll === "all" || roll === "any")) throw new TypeError("ignore-modifiers.except_rolls leaves rolls out of an \"any roll\" list: rolls must be all or any.");
@@ -221,17 +229,17 @@ function normalizeRollAutoResult(input: Input): Input {
 export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
   {
     id: "critical-hit-threshold",
-    version: 1,
+    version: 2,
     role: "EFFECT",
     label: "Change critical-hit threshold",
-    description: "Changes the unmodified result needed for a Critical Hit, not the Hit roll needed to score a hit.",
+    description: "Changes the unmodified result needed for a Critical Hit, not the Hit roll needed to score a hit. value success: every successful roll is a critical one (\"each successful Hit roll scores a Critical Hit\").",
     starter: { value: null },
     parameterSchema: {
       type: "object",
       required: ["value"],
       properties: {
         roll: { anyOf: [{ enum: BASIC_ROLLS }, SOURCE] },
-        value: { anyOf: [{ type: "integer" }, SOURCE, { const: "source" }] },
+        value: { anyOf: [{ type: "integer" }, SOURCE, { enum: ["source", "success"] }] },
       },
       additionalProperties: false,
     },
@@ -239,16 +247,16 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
       if (!Object.keys(input).every((key) => key === "roll" || key === "value") || !Object.hasOwn(input, "value")) {
         throw new TypeError("critical-hit-threshold parameters must contain value and optional roll only.");
       }
-      const value = input.value === "source" ? "source" : integerOrSource(input.value, "critical-hit-threshold.value");
+      const value = input.value === "source" || input.value === "success" ? input.value : integerOrSource(input.value, "critical-hit-threshold.value");
       return input.roll === undefined ? { value } : { roll: enumOrSource(input.roll, BASIC_ROLLS, "critical-hit-threshold.roll"), value };
     },
   },
   {
     id: "roll-modifier",
-    version: 13,
+    version: 14,
     role: "EFFECT",
     label: "Change a roll",
-    description: "Adds to, subtracts from, or halves a named roll. roll is a Hit, Wound, Charge, Advance, save, Leadership, Battle-shock or Damage roll, a Hazardous, Psychic or Desperate Escape test, preceding (the roll or test the record made just before, bound when the record compiles), manoeuvre (the performing unit's Agile Manoeuvre roll, which adds and takes event-subject as its subject), deadly-demise (the roll a Deadly Demise ability makes when its bearer is destroyed), or {ability: id} (the dice that named ability rolls); rolls instead applies the same change to each of two or more named rolls (\"add 1 to Advance and Charge rolls\"). value is a number or that-many: as many as the mortal wounds printed before it in its sentence, from the same roll (it needs operation add, and takes no cap or rolls). halve takes no value or cap. weapon_type limits a Hit, Wound or Damage roll change to melee or ranged weapons; weapon_name (one printed name) or weapon_names (two to eight) limit a hit, wound, damage or hazard roll to those weapons (\"+1 to hazard rolls made for its X and Y weapons\"). cap: the modifier adds no more than N in total (\"to a maximum of +2\"). subject: the unit whose rolls these are (\"add 1 to Charge rolls made for that unit\"); antecedent points back to an earlier leaf's unit. Without it, the rolls are this unit's (or the attacker's, against an attack on this unit).",
+    description: "Adds to, subtracts from, or halves a named roll. roll is a Hit, Wound, Charge, Advance, save, Leadership, Battle-shock or Damage roll, a Hazardous, Psychic or Desperate Escape test, preceding (the roll or test the record made just before, bound when the record compiles), manoeuvre (the performing unit's Agile Manoeuvre roll, which adds and takes event-subject as its subject), deadly-demise (the roll a Deadly Demise ability makes when its bearer is destroyed), or {ability: id} (the dice that named ability rolls); rolls instead applies the same change to each of two or more named rolls (\"add 1 to Advance and Charge rolls\"). value is a number or that-many: as many as the mortal wounds printed before it in its sentence, from the same roll (it needs operation add, and takes no cap or rolls). halve takes no value or cap. weapon_type limits a Hit, Wound or Damage roll change to melee or ranged weapons; weapon_name (one printed name) or weapon_names (two to eight) limit a hit, wound, damage or hazard roll to those weapons (\"+1 to hazard rolls made for its X and Y weapons\"). cap: the modifier adds no more than N in total (\"to a maximum of +2\"). subject: the unit whose rolls these are (\"add 1 to Charge rolls made for that unit\"); antecedent points back to an earlier leaf's unit. Without it, the rolls are this unit's (or the attacker's, against an attack on this unit). not_cumulative: the modifier does not stack with any other negative modifier to that roll (negative-modifiers, with operation subtract) or with the named ability's own modifier ({ability: id}).",
     starter: { roll: "", operation: "", value: null },
     parameterSchema: {
       type: "object",
@@ -263,6 +271,7 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
         weapon_name: { type: "string", minLength: 1, "x-optional": true },
         weapon_names: { type: "array", items: { type: "string", minLength: 1 }, minItems: 2, maxItems: 8, uniqueItems: true, "x-optional": true },
         cap: { type: "integer", minimum: 1, maximum: CAP_MAX, "x-optional": true },
+        not_cumulative: NOT_CUMULATIVE_SCHEMA,
       },
       additionalProperties: false,
     },
@@ -273,7 +282,7 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
     version: 8,
     role: "EFFECT",
     label: "Re-roll a roll",
-    description: "Repeats Hit, Wound, or another named roll; subset says which results may be re-rolled (ones, ones-and-twos: a failed roll of 1 or 2, failed, or all), count how many rolls, up to 12 (\"re-roll one Hit roll\", \"re-roll up to six of the D6\"), and weapon_type whether only melee or ranged weapons' rolls count. rolls can list several rolls instead of roll: the player picks one of them (\"re-roll one Hit roll, one Wound roll or one Damage roll\"), or with each, every listed roll can be re-rolled (\"re-roll Hit rolls and Wound rolls\") and a count applies to each. roll can be manoeuvre (the performing unit's own Agile Manoeuvre roll, bound by a manoeuvre moment in the same clause) or an object {ability: id} (the dice a named ability rolls). subject: the unit whose rolls these are (\"you can re-roll Charge rolls made for that unit\"); antecedent points back to an earlier leaf's unit. Without it, the rolls are this unit's (or the attacker's, against an attack on this unit).",
+    description: "Repeats Hit, Wound, or another named roll; subset says which results may be re-rolled (ones, ones-and-twos: a failed roll of 1 or 2, failed, or all), count how many rolls, up to 12 (\"re-roll one Hit roll\", \"re-roll up to six of the D6\"), and weapon_type whether only melee or ranged weapons' rolls count. rolls can list several rolls instead of roll: the player picks one of them (\"re-roll one Hit roll, one Wound roll or one Damage roll\"), or with each, every listed roll can be re-rolled (\"re-roll Hit rolls and Wound rolls\") and a count applies to each. roll can be manoeuvre (the performing unit's own Agile Manoeuvre roll, bound by a manoeuvre moment in the same clause) or an object {ability: id} (the dice a named ability rolls). subject: the unit whose rolls these are (\"you can re-roll Charge rolls made for that unit\"); antecedent points back to an earlier leaf's unit. Without it, the rolls are this unit's (or the attacker's, against an attack on this unit). not_cumulative: the modifier does not stack with any other negative modifier to that roll (negative-modifiers, with operation subtract) or with the named ability's own modifier ({ability: id}).",
     starter: { roll: "", subset: "", weapon_type: "all" },
     parameterSchema: {
       type: "object",
@@ -293,22 +302,23 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "ignore-modifiers",
-    version: 4,
+    version: 6,
     role: "EFFECT",
     label: "Ignore modifiers",
-    description: "Ignores modifiers to named characteristics and/or rolls (all of them, or only worsening or improving ones). `what` lists the kinds one list names (\"BS, Hit rolls and Wound rolls\" is both); with no stats named, every characteristic is covered. except_rolls: the rolls an \"any roll\" list leaves out, whose modifiers still apply (\"any roll or test made for it (excluding modifiers to saving throws)\"); only with rolls all or any. The subject can be antecedent: the units a unit-filter right before it matches, or a selected unit (\"Friendly X units can ignore modifiers to …\").",
+    description: "Ignores modifiers to named characteristics and/or rolls (all of them, or only worsening or improving ones). `what` lists the kinds one list names (\"BS, Hit rolls and Wound rolls\" is both); with no stats named, every characteristic is covered. except_rolls: the rolls an \"any roll\" list leaves out, whose modifiers still apply (\"any roll or test made for it (excluding modifiers to saving throws)\"); only with rolls all or any. The subject can be antecedent: the units a unit-filter right before it matches, or a selected unit (\"Friendly X units can ignore modifiers to …\"). Subject attack: the modifiers to \"that attack\", ignored by whoever makes it (the attacker). choice any-or-all: the player picks which of those modifiers to ignore and can keep the rest (\"can ignore any or all modifiers to …\").",
     starter: { subject: "this-unit", what: [] },
     parameterSchema: {
       type: "object",
       required: ["subject", "what"],
       properties: {
-        subject: { enum: ["this-unit", "this-model", ANTECEDENT] },
+        subject: { enum: ["this-unit", "this-model", ANTECEDENT, "attack"] },
         what: { type: "array", items: { enum: ["characteristics", "rolls"] }, minItems: 1, uniqueItems: true },
         stats: { type: "array", items: { enum: STATS }, minItems: 1, uniqueItems: true },
         rolls: { type: "array", items: { enum: ROLL_KINDS }, minItems: 1, uniqueItems: true },
         only: { enum: IGNORE_ONLY },
         weapon_type: { enum: WEAPON_TYPES },
         except_rolls: { type: "array", items: { enum: EXCEPTABLE_ROLLS }, minItems: 1, uniqueItems: true, "x-optional": true },
+        choice: { enum: IGNORE_CHOICES, "x-optional": true },
       },
       additionalProperties: false,
     },
@@ -316,16 +326,21 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "roll-result",
-    version: 3,
+    version: 4,
     role: "CONDITION",
     label: "On a roll of",
-    description: "A minimum result (\"on a 2+\") names only from; the dice leaf supplies the upper bound. An explicit band (\"on a 2-5\") or exact result (\"on a 6\") also names to. unmodified true: the band reads the die before any modifier (\"on an unmodified 6\"); after a moment that is a roll, with no dice of the ability's own between, it narrows that moment to those faces.",
+    description: "A minimum result (\"on a 2+\") names only from; the dice leaf supplies the upper bound. An explicit band (\"on a 2-5\") or exact result (\"on a 6\") also names to. from {battle_round_plus: 1}, alone: the result must be greater than the current battle round number (\"if the result is greater than the current battle round number\"). unmodified true: the band reads the die before any modifier (\"on an unmodified 6\"); after a moment that is a roll, with no dice of the ability's own between, it narrows that moment to those faces.",
     starter: { from: null },
     parameterSchema: {
       type: "object",
       required: ["from"],
       properties: {
-        from: { type: "integer", minimum: 1, maximum: 12 },
+        from: {
+          anyOf: [
+            { type: "integer", minimum: 1, maximum: 12 },
+            { type: "object", required: ["battle_round_plus"], properties: { battle_round_plus: { const: 1 } }, additionalProperties: false },
+          ],
+        },
         to: { type: "integer", minimum: 1, maximum: 12 },
         unmodified: { const: true, "x-optional": true },
       },
@@ -336,6 +351,13 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
       if ("unmodified" in input && unmodified !== true) throw new TypeError("roll-result.unmodified is true or absent.");
       const hasUpperBound = "to" in rest;
       exactKeys(rest, hasUpperBound ? ["from", "to"] : ["from"], "roll-result");
+      // "Greater than the current battle round number": the round plus one, read when the roll is made.
+      if (typeof rest.from === "object" && rest.from !== null) {
+        exactKeys(rest.from as Record<string, unknown>, ["battle_round_plus"], "roll-result.from");
+        if ((rest.from as Record<string, unknown>).battle_round_plus !== 1) throw new TypeError("roll-result.from battle_round_plus is 1: greater than the current battle round number.");
+        if (hasUpperBound || "unmodified" in input) throw new TypeError("roll-result.from battle_round_plus stands alone, with no to or unmodified.");
+        return { from: { battle_round_plus: 1 } };
+      }
       const from = boundedInteger(rest.from, 1, 12, "roll-result.from");
       return {
         from,
@@ -349,7 +371,7 @@ export const ROLL_CHANGES_FAMILIES: readonly FlatFamily[] = [
     version: 6,
     role: "EFFECT",
     label: "Fix a roll's result",
-    description: "A roll always succeeds only on an unmodified N+ (succeeds-on, value 2 to 6), always fails on an unmodified N or less (fails-on, value 1 to 5, one roll and no count), always counts as an unmodified 6, or automatically passes (a Battle-shock or similar test); or the player picks its result from values, two or more of 1 to 6, in place of rolling it (chosen: roll, values and optionally subject only). `count: 1` names a single roll the player picks, and `rolls` lists several rolls to pick it from (\"change the result of one Hit roll, one Wound roll or one saving throw to an unmodified 6\"). roll can be dark-pact: the Leadership test a Dark Pact requires, which only passes automatically or is chosen. subject: the unit whose roll it is (\"after making a Hit roll … change the result of that roll\": the model whose roll it is); antecedent points back to an earlier leaf's unit. Without it, the rolls are this unit's (or the attacker's, against an attack on this unit).",
+    description: "A roll always succeeds only on an unmodified N+ (succeeds-on, value 2 to 6), always fails on an unmodified N or less (fails-on, value 1 to 5, one roll and no count), always counts as an unmodified 6, or automatically passes (a Battle-shock or similar test); or the player picks its result from values, two or more of 1 to 6, in place of rolling it (chosen: roll, values and optionally subject only). `count: 1` names a single roll the player picks, and `rolls` lists several rolls to pick it from (\"change the result of one Hit roll, one Wound roll or one saving throw to an unmodified 6\"). roll can be dark-pact: the Leadership test a Dark Pact requires, which only passes automatically or is chosen. subject: the unit whose roll it is (\"after making a Hit roll … change the result of that roll\": the model whose roll it is); antecedent points back to an earlier leaf's unit. Without it, the rolls are this unit's (or the attacker's, against an attack on this unit). not_cumulative: the modifier does not stack with any other negative modifier to that roll (negative-modifiers, with operation subtract) or with the named ability's own modifier ({ability: id}).",
     starter: { roll: "", outcome: "" },
     parameterSchema: {
       type: "object",

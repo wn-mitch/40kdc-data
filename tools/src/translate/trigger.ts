@@ -5,7 +5,7 @@
  */
 import { dekebab, describeCondition, moveKinds, rangePhrase, stepWindow, titleCase, unitFilterPhrase, type Condition } from "./condition.js";
 import { alternativeFilters, eventRelationPhrase, keywordAlternatives, namedUsePhrase, ord, placeRefPhrase, rollWord, statePhrase, unitRefPhrase, usedAbilityPhrase, withArticle } from "./condition-refs.js";
-import { bracketKeyword, weaponNoun } from "./effect-words.js";
+import { bracketKeyword, resourceNoun, weaponNoun } from "./effect-words.js";
 
 type P = Record<string, unknown>;
 
@@ -24,6 +24,7 @@ export interface AbilityTrigger {
   binds_event_variable?: string;
   binds_die_variable?: string;
   binds_selected_die_variable?: string;
+  binds_roll_variable?: string;
   source_ability?: { ability_id: string; owner: string; keywords?: string[] };
 }
 
@@ -119,6 +120,11 @@ function objectPhrase(ref: unknown): string {
   return dekebab(str(ref));
 }
 
+/** Whether a trigger's object is a unit filter (an object), not a role. */
+function isFilterObject(ref: unknown): boolean {
+  return typeof ref === "object" && ref !== null && !Array.isArray(ref);
+}
+
 /** The unit a used Stratagem targets: "this unit" for the holder's own role, else the object filter. */
 function stratagemTarget(ref: unknown): string {
   return typeof ref === "object" && ref !== null && !Array.isArray(ref) ? objectPhrase(ref) : "this unit";
@@ -129,7 +135,7 @@ const ROLL_NOUN: Record<string, string> = {
   advance: "Advance roll", "battle-shock": "Battle-shock test", leadership: "Leadership test", hazard: "Hazard roll",
   psychic: "Psychic test", "desperate-escape": "Desperate Escape test", "dark-pact": "Dark Pact Leadership test",
   "blessings-of-khorne": "Blessings of Khorne roll", manoeuvre: "Agile Manoeuvre roll", channelling: "Channel the Warp roll",
-  "deadly-demise": "Deadly Demise roll",
+  "deadly-demise": "Deadly Demise roll", attacks: "roll to determine the number of attacks",
 };
 const TEST_ROLLS = new Set(["battle-shock", "leadership", "desperate-escape"]);
 
@@ -269,6 +275,8 @@ function eventPhrase(t: AbilityTrigger): string {
       return t.object != null && t.object !== "this-unit" ? `${allocated} to ${objectPhrase(t.object)}` : allocated;
     }
     case "attacks-resolved":
+      // A bound unit's attacks of either kind: "after that unit has finished making its attacks".
+      if (typeof t.subject === "object" && t.object == null && f.kind == null && typeof (t.subject as P).event_var === "string") return `after ${who} has finished making its attacks`;
       if (typeof t.subject === "object") return t.object != null ? `after ${who} has shot and targeted ${objectPhrase(t.object)}` : `after ${who} ${f.kind === "fight" ? "fights" : f.kind === "attack" ? "resolves its attacks" : "shoots"}`;
       return f.kind === "fight" ? `after ${who} resolves its attacks in a fight` : `after ${who} resolves its attacks`;
     case "destroyed": {
@@ -289,6 +297,8 @@ function eventPhrase(t: AbilityTrigger): string {
       }
       if (f.first === true) return "the first time a model in this unit is destroyed";
       const obj = t.object;
+      // "When the last Guardian Defender model in this unit is destroyed".
+      if (f.last === true) return `when the last ${lastModelPhrase(obj)} is destroyed`;
       // A subject names who destroyed the model: "each time this unit destroys an enemy CHARACTER model".
       if (t.subject != null) {
         if (obj === "this-model") return `when this model is destroyed by ${who}`;
@@ -321,11 +331,15 @@ function eventPhrase(t: AbilityTrigger): string {
       if (opponent && f.kind === "ability" && f.id == null) return "each time your opponent uses an ability";
       if (f.kind === "ritual" && f.result === "success") return `each time ${who} manifests a Ritual`;
       if (f.kind === "act-of-faith") return f.result === "success" ? "after an Act of Faith is completed" : "when an Act of Faith is performed";
+      // "after the bearer issues an Order to a SQUADRON unit": who issued it, and the unit it went to.
+      if (f.kind === "order" && isFilterObject(t.object)) return `each time ${who} issues an Order to ${objectPhrase(t.object)}`;
       if (f.kind === "order" && t.object != null) return "each time an Order is issued to the unit";
       if (f.kind === "contract" && f.result === "success") return "each time you complete a Contract";
       return `each time ${who} ${USED[str(f.kind)] ?? `uses ${dekebab(str(f.kind))}`}`;
     }
     case "state-changed":
+      // "Caused an enemy unit that was not Below Half-strength to become Below Half-strength".
+      if (f.by != null && f.strength != null) return `when ${f.by === "this-unit" ? "this unit" : unitRefPhrase(f.by)} causes ${who} to ${f.strength === "below-half" ? "become Below Half-strength" : "fall below its Starting Strength"}`;
       if (f.strength === "below-half") return `when ${who} becomes Below Half-strength`;
       if (f.strength === "below-starting") return `when ${who} falls below its Starting Strength`;
       return `when ${who} becomes ${capWord(str(f.state))}`;
@@ -339,11 +353,13 @@ function eventPhrase(t: AbilityTrigger): string {
       return "when you gain control of an objective";
     case "resource-gained":
       if (f.pool === "miracle-dice") return "when a Miracle die is generated";
-      if (f.pool === "cp") return `each time ${typeof t.subject === "object" && (t.subject as P).owner === "enemy" ? "your opponent gains" : "you gain"} a CP`;
+      if (f.pool === "cp" || f.pool === "command-point") return `each time ${typeof t.subject === "object" && (t.subject as P).owner === "enemy" ? "your opponent gains" : "you gain"} a CP${f.via === "ability" ? " as the result of an ability" : ""}`;
       return `each time ${dekebab(str(f.pool))} is gained`;
     case "resource-spent":
       if (f.pool === "flux") return "each time a Flux token is spent";
       if (f.pool === "yield-points") return "each time you spend Yield points";
+      // "When you spend 1 Pain token to Empower that friendly unit": the unit the spend Empowers.
+      if (f.tag === "empowered") return `each time you spend ${resourceNoun(f.pool, undefined)} to Empower ${t.object != null ? objectPhrase(t.object) : "a unit"}`;
       return `each time ${dekebab(str(f.pool))} is spent`;
     default:
       return `when ${dekebab(str(t.event))}`;
@@ -445,6 +461,13 @@ function roundBoundary(t: AbilityTrigger): string | null {
   return null;
 }
 
+/** The model a last-model destruction names: "GUARDIAN DEFENDER model in this unit". */
+function lastModelPhrase(obj: unknown): string {
+  const o = (typeof obj === "object" && obj !== null ? obj : {}) as P;
+  const keywords = Array.isArray(o.all_of) ? (o.all_of as string[]).join(" ") : Array.isArray(o.any_of) ? orList(o.any_of as string[]) : "";
+  const model = `${keywords ? `${keywords} ` : ""}model`;
+  return o.member_of === "this-unit" ? `${model} in this unit` : `${model} in ${objectPhrase(obj)}`;
+}
 /** Reactive trigger → front-of-sentence lead clause ("an enemy unit ends a move within 9\" of this model"). */
 export function describeTrigger(t: AbilityTrigger): string {
   const clock = t.event === "phase-started" || t.event === "phase-ended";
@@ -461,7 +484,7 @@ export function describeTrigger(t: AbilityTrigger): string {
   const f = (t.filter ?? {}) as P;
   s += destroyAttackPhrase(t, f);
   if (f.weapons != null && t.event !== "destroyed" && t.event !== "model-destroyed" && f.by == null) s += ` with ${weaponNoun({ weapons: f.weapons })}`;
-  if (f.by != null) {
+  if (f.by != null && !(t.event === "state-changed" && f.strength != null)) {
     const source = f.by === "this-unit" ? "this unit" : unitRefPhrase(f.by);
     const type = f.attack_type && t.event !== "destroyed" ? `${str(f.attack_type)} ` : "";
     const weapon = f.weapons != null ? ` with ${weaponNoun({ weapons: f.weapons })}` : "";
@@ -471,6 +494,10 @@ export function describeTrigger(t: AbilityTrigger): string {
   if (f.phase != null) s += ` in the ${capWord(str(f.phase))} phase`;
   // A destruction resolved once its attacker is done: "…, after the attacking unit has resolved its attacks".
   if (f.timing === "after-attacks") s += ", after the attacking unit has resolved its attacks";
+  // "Just after … is destroyed, before making its Deadly Demise roll".
+  if (f.timing === "before-deadly-demise") s += ", before its Deadly Demise roll is made";
+  // "Ends a move within 8 inches of your markers, before removing those markers".
+  if (f.timing === "before-marker-removal") s += ", before those markers are removed";
   if (t.proximity?.range != null) {
     const of = t.proximity.of == null || t.proximity.of === "this-unit" ? "this unit" : placeRefPhrase(t.proximity.of);
     s += ` within ${rangePhrase(t.proximity.range)} of ${of}`;

@@ -6465,7 +6465,7 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
     "source_digest": "1bca6475537a10530fc04df645d5b5a5e891b169697c59a1c02a3e8512ab2ab7",
     "version": "2025-q3",
@@ -6478,14 +6478,36 @@
     "effect": {
       "type": "conditional",
       "condition": {
-        "type": "matches",
-        "parameters": {
-          "filter": {
-            "all_of": [
-              "HARVESTER"
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "and",
+            "operands": [
+              {
+                "type": "phase-is",
+                "parameters": {
+                  "phase": "command"
+                }
+              },
+              {
+                "type": "player-turn-is",
+                "parameters": {
+                  "turn": "your-turn"
+                }
+              }
             ]
+          },
+          {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "HARVESTER"
+                ]
+              }
+            }
           }
-        }
+        ]
       },
       "effect": {
         "type": "select-units",
@@ -6499,7 +6521,7 @@
               "range": {
                 "inches": 6
               },
-              "of": "this-unit"
+              "of": "this-model"
             }
           },
           "count": {
@@ -6513,23 +6535,79 @@
         },
         "effect": {
           "type": "choice",
-          "choice_label": "regenerate",
           "options": [
             {
               "type": "heal",
               "target": "selected-unit",
               "modifier": {
-                "amount": "D3+1"
+                "amount": "D3+1",
+                "per": "one-model"
               }
             },
             {
-              "type": "return-models",
-              "target": "selected-unit",
-              "modifier": {
-                "count": 1
-              }
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "operator": "not",
+                    "operands": [
+                      {
+                        "type": "matches",
+                        "parameters": {
+                          "subject": "selected-unit",
+                          "filter": {
+                            "all_of": [
+                              "ENDLESS MULTITUDE"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "effect": {
+                    "type": "return-models",
+                    "target": {
+                      "level": "model",
+                      "member_of": "selected-unit",
+                      "all_of": [
+                        "INFANTRY"
+                      ],
+                      "none_of": [
+                        "CHARACTER"
+                      ]
+                    },
+                    "modifier": {
+                      "count": 1
+                    }
+                  }
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "matches",
+                    "parameters": {
+                      "subject": "selected-unit",
+                      "filter": {
+                        "all_of": [
+                          "ENDLESS MULTITUDE"
+                        ]
+                      }
+                    }
+                  },
+                  "effect": {
+                    "type": "return-models",
+                    "target": "selected-unit",
+                    "modifier": {
+                      "count": 3
+                    }
+                  }
+                }
+              ]
             }
-          ]
+          ],
+          "choice_label": "regenerate",
+          "id": "regenerate"
         }
       }
     },
@@ -7568,9 +7646,8 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [
       "terror-of-vardenghast"
     ],
@@ -7578,11 +7655,122 @@
     "detachment_id": null,
     "ability_type": "unit",
     "effect": {
-      "type": "no-effect"
+      "type": "choice",
+      "options": [
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "TERMAGANTS",
+                "VARDENGHAST SWARM"
+              ],
+              "not_states": [
+                "engaged"
+              ]
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          "effect": {
+            "type": "heal",
+            "target": "selected-unit",
+            "modifier": {
+              "amount": "2D6"
+            }
+          }
+        },
+        {
+          "type": "select-units",
+          "selector": {
+            "filter": {
+              "owner": "friendly",
+              "all_of": [
+                "TERMAGANTS",
+                "VARDENGHAST SWARM"
+              ],
+              "state": "destroyed"
+            },
+            "count": {
+              "min": 1,
+              "max": 1
+            }
+          },
+          "effect": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "heal",
+                "target": "selected-unit",
+                "modifier": {
+                  "amount": 10
+                }
+              },
+              {
+                "type": "set-up",
+                "target": "selected-unit",
+                "modifier": {
+                  "to": "strategic-reserves",
+                  "from": "destroyed"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": [
+      {
+        "event": "phase-started",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        },
+        "optional": true
+      },
+      {
+        "event": "phase-ended",
+        "condition": {
+          "operator": "and",
+          "operands": [
+            {
+              "type": "phase-is",
+              "parameters": {
+                "phase": "movement"
+              }
+            },
+            {
+              "type": "player-turn-is",
+              "parameters": {
+                "turn": "your-turn"
+              }
+            }
+          ]
+        },
+        "optional": true
+      }
+    ],
+    "source_digest": "829c1bad64132cf4a91e274da48152c84966d17ff96b3799a1671f26a09933bd"
   },
   {
     "ability_id": "biophagic-flow-aura-assimilation-swarm-tyranids",
@@ -7590,19 +7778,45 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "assimilation-swarm",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "aura",
+      "target": "friendly-within-aura",
+      "modifier": {
+        "range": {
+          "inches": 12
+        },
+        "effect": {
+          "type": "ability-modifier",
+          "target": "this-unit",
+          "modifier": {
+            "ability": {
+              "ability_id": "feed-the-swarm-tyranids",
+              "option_id": "regenerate"
+            },
+            "aspect": "range",
+            "operation": "set",
+            "value": 9
+          }
+        },
+        "eligible": {
+          "owner": "friendly",
+          "all_of": [
+            "HARVESTER"
+          ]
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "aura",
+    "source_digest": "1a91a9b5b6edcbd049de4a1146f184001d492d2593d45041d43df8f66964360b"
   },
   {
     "ability_id": "bounding-advance-unending-swarm-tyranids",
@@ -9525,19 +9739,37 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "unending-swarm",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "counts-as",
+      "target": "this-unit",
+      "modifier": {
+        "model_count": {
+          "below": 5
+        },
+        "for_weapon_ability": "blast"
+      }
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "targets-selected",
+      "filter": {
+        "kind": "attack"
+      },
+      "subject": {
+        "owner": "enemy"
+      },
+      "object": "this-unit"
+    },
+    "source_digest": "0b2fe8a05fd7b0b943cfb56530782964e4eb3034195f2c897ee3ec861c7ead0f"
   },
   {
     "ability_id": "psychoclastic-overload-the-vardenghast-swarm-tyranids",
@@ -9687,19 +9919,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "assimilation-swarm",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "ability-activate",
+          "target": "this-unit",
+          "modifier": {
+            "ability": "feed-the-swarm-tyranids",
+            "option": "regenerate",
+            "immediate": true
+          }
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "matches",
+            "parameters": {
+              "filter": {
+                "all_of": [
+                  "HARVESTER"
+                ]
+              }
+            }
+          },
+          "effect": {
+            "type": "ability-modifier",
+            "target": "this-unit",
+            "modifier": {
+              "ability": {
+                "ability_id": "feed-the-swarm-tyranids",
+                "option_id": "regenerate"
+              },
+              "aspect": "amount",
+              "operation": "set",
+              "value": 3
+            }
+          }
+        }
+      ]
     },
     "scope": {
-      "duration": "permanent"
-    }
+      "duration": "phase"
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "destroyed",
+      "subject": "this-unit",
+      "object": {
+        "owner": "enemy"
+      }
+    },
+    "source_digest": "35095cf4aa1faf0fe15522678dae230cdf25a50662d292d80bcd66dda5430905"
   },
   {
     "ability_id": "rapid-regeneration-invasion-fleet-tyranids",
@@ -9795,19 +10072,64 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "assimilation-swarm",
     "ability_type": "stratagem",
     "effect": {
-      "type": "no-effect"
+      "type": "select-units",
+      "selector": {
+        "filter": {
+          "owner": "friendly",
+          "all_of": [
+            "TYRANIDS"
+          ]
+        },
+        "count": {
+          "min": 1,
+          "max": 1
+        },
+        "eligibility": {
+          "type": "matches",
+          "parameters": {
+            "subject": "selected-unit",
+            "filter": {
+              "within": {
+                "of": "this-unit",
+                "range": {
+                  "inches": 6
+                }
+              }
+            }
+          }
+        }
+      },
+      "effect": {
+        "type": "ability-activate",
+        "target": "selected-unit",
+        "modifier": {
+          "ability": "feed-the-swarm-tyranids",
+          "option": "regenerate",
+          "immediate": true
+        }
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "reactive",
+    "trigger": {
+      "event": "destroyed",
+      "object": {
+        "owner": "friendly",
+        "all_of": [
+          "TYRANIDS"
+        ]
+      }
+    },
+    "source_digest": "81ca7bb5479e9a566b07bf800e75b84707f49dbbae8a203c57060ffe42d0aca1"
   },
   {
     "ability_id": "regenerating-monstrosity-assimilation-swarm-tyranids",
@@ -9815,19 +10137,30 @@
     "authored_by": "40kdc-community",
     "game_version": {
       "edition": "11th",
-      "dataslate": "pre-launch-provisional"
+      "dataslate": "2026-10-14"
     },
-    "stub": true,
     "unit_ids": [],
     "faction_id": "tyranids",
     "detachment_id": "assimilation-swarm",
     "ability_type": "enhancement",
     "effect": {
-      "type": "no-effect"
+      "type": "ability-modifier",
+      "target": "this-unit",
+      "modifier": {
+        "ability": {
+          "ability_id": "feed-the-swarm-tyranids",
+          "option_id": "regenerate"
+        },
+        "aspect": "received",
+        "operation": "set",
+        "value": 2
+      }
     },
     "scope": {
       "duration": "permanent"
-    }
+    },
+    "behavior": "passive",
+    "source_digest": "1e087b80123697124dcb4698c91838814cb1f0c2e875a47db2721b3d2bdbcc8e"
   },
   {
     "ability_id": "reinforced-hive-node-synaptic-nexus-tyranids",

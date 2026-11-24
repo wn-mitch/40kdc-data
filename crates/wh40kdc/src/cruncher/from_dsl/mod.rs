@@ -216,6 +216,9 @@ pub(crate) struct WalkOpts<'a> {
     /// The effect's selections in document order ([`selection::selection_order`]), which number
     /// their lever ids.
     selections: &'a [Value],
+    /// The most each bound spend of the effect can spend ([`selection::spent_maxima`]), by its
+    /// bind_as name.
+    spent_max: &'a std::collections::HashMap<String, Value>,
 }
 
 const STOCHASTIC_DICE_GATED: &str = "dice-gated effect: stochastic; not expressible as a buff";
@@ -438,6 +441,7 @@ fn translate_effect(
     };
     let source_value = serde_json::to_value(source).expect("a buff source serializes");
     let definitions = damage_leaves::own_definitions(&effect, ability_id);
+    let no_spends = std::collections::HashMap::new();
     let mut opts = WalkOpts {
         context,
         perspective,
@@ -452,6 +456,7 @@ fn translate_effect(
         definitions: &definitions,
         attack_roll: None,
         selections: &[],
+        spent_max: &no_spends,
     };
     // The record's own hit or wound trigger is the roll its effect acts on, as an ability part's is.
     let effect = match roll_mortals::on_attack_roll(trigger, &effect) {
@@ -463,6 +468,8 @@ fn translate_effect(
     };
     let selections = selection::selection_order(&effect);
     opts.selections = &selections;
+    let spent_max = selection::spent_maxima(&effect);
+    opts.spent_max = &spent_max;
     let mut out = Out::default();
     out.unsupported.extend(
         scoped
@@ -624,20 +631,46 @@ pub(crate) fn buff(opts: &WalkOpts, contribution: Value) -> Value {
     json!({ "source": opts.source, "contribution": contribution })
 }
 
+/// Whether the crunched attacker is the one a designation's attacker entry names: a unit filter, a
+/// unit-ref, or a list of unit-refs any one of which may make the attack.
+fn attacker_verdict(filter: &Value, context: &EngineContext) -> Option<bool> {
+    let Some(refs) = filter.as_array() else {
+        return conditions::matches_unit_filter(
+            filter,
+            context,
+            TranslationPerspective::Attacker,
+            "friendly",
+        );
+    };
+    let verdicts: Vec<Option<bool>> = refs
+        .iter()
+        .map(|unit_ref| {
+            conditions::matches_unit_filter(
+                unit_ref,
+                context,
+                TranslationPerspective::Attacker,
+                "friendly",
+            )
+        })
+        .collect();
+    if verdicts.contains(&Some(true)) {
+        Some(true)
+    } else if verdicts.iter().all(|verdict| *verdict == Some(false)) {
+        Some(false)
+    } else {
+        None
+    }
+}
+
 /// One `applies` entry of a designate-target: a lever for attacks against the designated unit, or
 /// an unsupported debuff on it.
 fn designate_entry(node: &Obj, applies: Option<&Obj>, opts: &WalkOpts, out: &mut Out) {
     if applies.is_some_and(|a| {
         is_str(a, "to", "attackers-of-target") || is_str(a, "to", "bearer-attacks-target")
     }) {
-        for key in ["attacker_filter", "attacker_unit_filter"] {
+        for key in ["attacker", "attacker_filter", "attacker_unit_filter"] {
             if let Some(filter) = applies.and_then(|applies| applies.get(key)) {
-                match conditions::matches_unit_filter(
-                    filter,
-                    opts.context,
-                    TranslationPerspective::Attacker,
-                    "friendly",
-                ) {
+                match attacker_verdict(filter, opts.context) {
                     Some(false) => return,
                     None => {
                         out.unsupported("designate-target attacker filter is unresolved", node);
@@ -791,6 +824,21 @@ pub(crate) fn walk(node: &Value, opts: &WalkOpts, out: &mut Out) {
     }
     if has_unresolved_fidelity_binding(current) {
         out.unsupported(FIDELITY_BINDING_REASON, current);
+        return;
+    }
+    // "add the number of YP you just spent": a lever at the most the spend can spend; the player
+    // vouches for spending it.
+    if let Some((at_most, spend)) = selection::spent_at_most(current, opts.spent_max) {
+        let id = format!("{}#spent-max", opts.ability_id);
+        selection::offer_lever(
+            &Value::Object(at_most),
+            opts,
+            out,
+            id,
+            "Spending the most",
+            vec![spend],
+            None,
+        );
         return;
     }
     // A scaled or bound value has no fixed size here: applying the printed value would misstate it.
@@ -1311,10 +1359,16 @@ fn unsized_value_reason(node: &Obj) -> Option<String> {
         let Some(v) = object(modifier.get(field)) else {
             continue;
         };
+        // "spend up to 2YP": the player picks how much a spend spends; it sizes no buff.
+        if ty == "resource-spend" && field == "amount" && v.contains_key("up_to") {
+            continue;
+        }
         let what = if v.get("roll_var").is_some_and(Value::is_string) {
             "a bound roll".to_string()
         } else if let Some(of) = v.get("count_of").and_then(Value::as_str) {
             format!("the number of {of}")
+        } else if v.get("spent").is_some_and(Value::is_string) {
+            "the amount spent".to_string()
         } else {
             "the battle size".to_string()
         };

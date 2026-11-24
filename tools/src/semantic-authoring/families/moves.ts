@@ -47,8 +47,11 @@ function makeMoveDistance(value: unknown): unknown {
   throw new TypeError("make-move.distance must be a non-negative integer, a dice expression, or an exact source snippet.");
 }
 
+/** Keywords a move can be made as if its models had (\"move as if they have the FLY keyword\"). */
+const MOVE_AS_IF_KEYWORDS = ["FLY"] as const;
+
 function makeMove(input: Params): Params {
-  keySet(input, ["subject", "move_type"], ["distance", "ends_within_inches", "counts_as_move", "mode", "mandatory"], "make-move");
+  keySet(input, ["subject", "move_type"], ["distance", "ends_within_inches", "counts_as_move", "mode", "mandatory", "as_if_keywords"], "make-move");
   if (input.mandatory !== undefined && typeof input.mandatory !== "boolean") throw new TypeError("make-move.mandatory is true, false or absent.");
   const result: Params = {
     subject: subjectOrSource(input.subject, MOVE_SUBJECTS, [ANTECEDENT, EVENT_SUBJECT, FILTERED_UNITS], "make-move.subject"),
@@ -64,6 +67,8 @@ function makeMove(input: Params): Params {
   }
   // "Must make … move" obliges the move; an optional move (false) is the absent form.
   if (input.mandatory === true) result.mandatory = true;
+  // "When doing so, models in this unit move as if they have the FLY keyword": for this move only.
+  if (input.as_if_keywords !== undefined) result.as_if_keywords = enumSet(input.as_if_keywords, MOVE_AS_IF_KEYWORDS, "make-move.as_if_keywords");
   return result;
 }
 
@@ -192,10 +197,10 @@ export const MOVES_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "make-move",
-    version: 8,
+    version: 9,
     role: "EFFECT",
     label: "Make a move",
-    description: "The target makes a named kind of move: normal, Advance, Fall Back, charge, Pile In, Consolidation, Surge, Scout, ingress, disembark, embark, or Pulse Jet. The target can be this unit, this model, the selected unit, the unit an earlier leaf introduced (antecedent), the triggering unit (event-subject), or the units a unit-filter names right before the move (filtered-units). distance (inches, D3, D6, 2D6, or a dice amount plus a number such as D3+3) and ends_within_inches are optional. counts_as_move is optional: for rules that check what the unit did this turn, the move counts as a different named kind of move (or as Remaining Stationary). mode is the disembark mode the move uses (rapid, tactical, combat, emergency, assault, shock) and needs move_type disembark. mandatory is true when the target must make the move (\"must make an ingress move\"); false or absent when it can.",
+    description: "The target makes a named kind of move: normal, Advance, Fall Back, charge, Pile In, Consolidation, Surge, Scout, ingress, disembark, embark, or Pulse Jet. The target can be this unit, this model, the selected unit, the unit an earlier leaf introduced (antecedent), the triggering unit (event-subject), or the units a unit-filter names right before the move (filtered-units). distance (inches, D3, D6, 2D6, or a dice amount plus a number such as D3+3) and ends_within_inches are optional. counts_as_move is optional: for rules that check what the unit did this turn, the move counts as a different named kind of move (or as Remaining Stationary). mode is the disembark mode the move uses (rapid, tactical, combat, emergency, assault, shock) and needs move_type disembark. mandatory is true when the target must make the move (\"must make an ingress move\"); false or absent when it can. as_if_keywords: for this move only, its models move as if they had these keywords (\"move as if they have the FLY keyword\").",
     starter: {"subject":"this-unit","move_type":""},
     parameterSchema: {
       "type": "object",
@@ -336,7 +341,8 @@ export const MOVES_FAMILIES: readonly FlatFamily[] = [
         },
         "mandatory": {
           "type": "boolean"
-        }
+        },
+        "as_if_keywords": { type: "array", items: { enum: [...MOVE_AS_IF_KEYWORDS] }, minItems: 1, uniqueItems: true, "x-optional": true }
       },
       "additionalProperties": false
     },

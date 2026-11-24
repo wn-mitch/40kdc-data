@@ -43,7 +43,7 @@ var verbNegated = map[string]bool{
 	"strength": true, "model-count": true, "wounds": true, "loadout": true, "equipped-weapon-count": true, "attachment": true, "has-ability": true,
 	"controls": true, "resource": true, "attack-compare": true, "happened-compare": true, "roll-total": true, "operation-markers": true,
 	"engagement-fronts": true, "destroyed-while-on-objective": true, "destroyed-in-tagged-terrain": true,
-	"army-faction": true, "battle-size": true,
+	"army-faction": true, "battle-size": true, "game-mode": true,
 }
 
 var negatePrefixes = [][2]string{
@@ -788,6 +788,18 @@ func describePredicate(c map[string]any, negated bool) string {
 			}
 			by = " by " + by
 		}
+		// "If that enemy unit was unravelling at the start of the phase": the designation as it was then.
+		if p["at"] == "phase-start" || p["at"] == "turn-start" {
+			was := "was"
+			if negated {
+				was = "was not"
+			}
+			then := "turn"
+			if p["at"] == "phase-start" {
+				then = "phase"
+			}
+			return subjectOf(p, "this unit") + " " + was + " " + designationPhrase(cstr(p["tag"]), false) + by + " at the start of the " + then
+		}
 		return subjectOf(p, "this unit") + " is " + neg + designationPhrase(cstr(p["tag"]), false) + by
 	case "roll-total":
 		// "the Psychic test result is 10+": the total of a roll an enclosing step bound.
@@ -801,6 +813,30 @@ func describePredicate(c map[string]any, negated bool) string {
 		if p["below_max"] == true {
 			source := mapOr(p["source_ability"])["ability_id"]
 			return neg + "the " + dekebab(cstr(source)) + " ability had unused selection capacity at the end of your opponent's previous turn"
+		}
+		// "you gained fewer than 3YP this turn": this turn's gains, not what the pool holds.
+		if p["gained"] == "turn" {
+			verb := "gained"
+			if negated {
+				verb = "did not gain"
+			}
+			return "you " + verb + " " + controlCountPhrase(p["count"]) + " " + resourceNoun(p["pool"], nil, 2.0) + " this turn"
+		}
+		// "if your opponent has one or more Flux tokens": the opponent's holding of a pool both players hold.
+		if p["holder"] == "opponent" {
+			verb := "has"
+			if negated {
+				verb = "does not have"
+			}
+			return "your opponent " + verb + " " + controlCountPhrase(p["count"]) + " " + resourceNoun(p["pool"], nil, 2.0)
+		}
+		// "while you have 0 Pain tokens": an empty pool of the player's.
+		if count := mapOr(p["count"]); count["max"] == 0.0 && count["min"] == nil {
+			verb := "have"
+			if negated {
+				verb = "do not have"
+			}
+			return "you " + verb + " 0 " + resourceNoun(p["pool"], nil, 2.0)
 		}
 		// A pool is the player's ("If you have 3 or more Pact points").
 		return "you have " + controlCountPhrase(p["count"]) + " " + dekebab(cstr(p["pool"]))
@@ -866,6 +902,13 @@ func describePredicate(c map[string]any, negated bool) string {
 		return neg + controlCountPhrase(p["count"]) + " enemy units destroyed " + where + " " + terrain
 	case "battle-size":
 		return "the battle size is " + neg + titleCase(cstr(p["size"]))
+	case "game-mode":
+		modes := cstrList(p["modes"])
+		names := make([]string, len(modes))
+		for i, mode := range modes {
+			names[i] = titleCase(mode)
+		}
+		return "the battle is " + neg + "a " + strings.Join(names, " or ") + " battle"
 	case "army-faction":
 		return "your Army Faction is " + neg + strings.ToUpper(strings.ReplaceAll(cstr(p["faction"]), "-", " "))
 	case "army-includes":

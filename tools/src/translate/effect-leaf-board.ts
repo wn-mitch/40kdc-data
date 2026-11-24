@@ -45,7 +45,10 @@ function mortalWounds(m: Record<string, unknown>, subj: string): string {
     const dice = many !== null ? (each && many === 1 ? "one D6" : `${many} D6`) : each ? `one ${diceCase(roll.dice)}` : diceCase(roll.dice);
     // "for each 1": a die at or under the threshold succeeds.
     const band = roll.comparison !== "lte" ? `${jstr(roll.threshold)}+` : Number(roll.threshold) === 1 ? "1" : `result of ${jstr(roll.threshold)} or less`;
-    return `roll ${dice}${each}${most}: for each ${band}, ${who} ${v(who, "suffers")} ${suffered}${psychic}${cap}`;
+    // "rolling two additional D6 if X": more dice when the condition holds.
+    const extra = roll.extra_dice as P | undefined;
+    const more = extra != null ? `, rolling ${jstr(extra.count)} additional D6 if ${describeCondition(extra.condition as Condition)}` : "";
+    return `roll ${dice}${each}${most}${more}: for each ${band}, ${who} ${v(who, "suffers")} ${suffered}${psychic}${cap}`;
   }
   const per = m.per === "model" ? ` for each model in ${pronoun(who) === "their" ? "them" : "it"}` : "";
   return `${who} ${v(who, "suffers")} ${suffered}${per}${psychic}${cap}`;
@@ -53,7 +56,18 @@ function mortalWounds(m: Record<string, unknown>, subj: string): string {
 
 const FNP_AGAINST: Record<string, string> = {
   mortal: " against mortal wounds", psychic: " against Psychic Attacks", "psychic-and-mortal": " against Psychic Attacks and mortal wounds",
+  "damage-1-unmodified": " against attacks with an unmodified Damage characteristic of 1",
 };
+/** One kind in a Feel No Pain's list of what it covers. */
+const FNP_AGAINST_ITEM: Record<string, string> = {
+  mortal: "mortal wounds", psychic: "Psychic Attacks", "devastating-wounds": "Critical Wounds caused by attacks with [DEVASTATING WOUNDS]",
+};
+
+/** " against mortal wounds", " against mortal wounds, Psychic Attacks and …": what a Feel No Pain covers, or nothing for all. */
+function fnpAgainst(against: unknown): string {
+  if (Array.isArray(against)) return ` against ${andList(against.map((item) => FNP_AGAINST_ITEM[jstr(item)] ?? dekebab(jstr(item))))}`;
+  return FNP_AGAINST[jstr(against)] ?? "";
+}
 
 /** "its full wounds", "half of its starting number of wounds", "3 wounds", "D3 wounds": what a set-up or returned model has left. */
 function woundsLeft(value: unknown): string {
@@ -84,6 +98,17 @@ function returnModels(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ct
   return `return ${what} to ${subj}${where}, each with ${w} remaining${detach}`;
 }
 
+/** "No Man's Land is within your army's Shadow of Chaos": an area joins a region an army rule defines. */
+function regionExtend(m: Record<string, unknown>): string {
+  const region = (m.region ?? {}) as P;
+  const area = (m.area ?? {}) as P;
+  const within = `within your army's ${titleCase(jstr(region.region_id).replace(/^the-/u, ""))}`;
+  if (Array.isArray(area.territories)) return `${andList(area.territories.map((territory) => regionPhrase({ territory })))} are ${within}`;
+  if (area.territory != null) return `${regionPhrase({ territory: area.territory })} is ${within}`;
+  const range = (area.objective_range ?? {}) as P;
+  return `the area of the battlefield within ${jstr(range.inches)}" of each ${objectivePhrase((range.objective ?? {}) as P)} is ${within}`;
+}
+
 function destroyModels(e: Leaf, m: Record<string, unknown>, subj: string): string {
   const modelTarget = e.target != null && typeof e.target === "object" && (e.target as P).level === "model";
   const what = modelTarget
@@ -95,11 +120,13 @@ function destroyModels(e: Leaf, m: Record<string, unknown>, subj: string): strin
   const verb = m.remove_from_play === true ? "remove" : "destroy";
   const tail = m.remove_from_play === true ? " from play" : "";
   const triggers = m.ignore_death_triggers === true ? ", ignoring any rules triggered by their destruction" : "";
-  return `${verb} ${what}${tail}${triggers}`;
+  // "(chosen by its controlling player)": the destroyed unit's owner picks which models.
+  const chooser = m.chosen_by === "controlling-player" ? " (chosen by its controlling player)" : "";
+  return `${verb} ${what}${tail}${chooser}${triggers}`;
 }
 
 function actOnDeath(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx): string {
-  const act = m.act === "shoot" ? "shoot" : "fight";
+  const act = m.act === "shoot" ? "shoot" : m.act === "shoot-or-fight" ? "shoot or fight" : "fight";
   const model = isEventObject(e.target) ? "a model in this unit" : subj === "this model" ? "this model" : typeof e.target === "object" && e.target != null && (e.target as P).level === "model" ? `a ${subj.replace(/^all /, "").replace(/\bmodels\b/, "model")}` : `a model in ${subj}`;
   const gate = m.gate as { dice?: unknown; threshold?: unknown; comparison?: unknown; modifiers?: { condition?: Condition; value?: unknown }[] } | undefined;
   const eligibility = m.eligibility != null ? conditionLeadIn(m.eligibility as Condition) : "";
@@ -109,7 +136,7 @@ function actOnDeath(e: Leaf, m: Record<string, unknown>, subj: string, ctx: Ctx)
   if (gate != null) {
     const before = eligibility ? ` ${eligibility}` : "";
     const adds = (gate.modifiers ?? []).map((g) => `, adding ${diceCase(g.value)} ${conditionLeadIn(g.condition ?? {})}`).join("");
-    const removal = m.removal === "after-destroyed-model-fights" ? `. Remove it after it has ${act === "shoot" ? "shot" : "fought"}` : ". Remove it after this unit has fought or at the end of the phase, whichever comes first";
+    const removal = m.removal === "after-destroyed-model-fights" ? `. Remove it after it has ${act === "shoot" ? "shot" : act === "shoot or fight" ? "shot or fought" : "fought"}` : ". Remove it after this unit has fought or at the end of the phase, whichever comes first";
     // Under a destroyed trigger the ability's lead-in already names the death: one lead-in only.
     const lead = ctx.destroyedTrigger ? (before ? `${before.trim()}, ` : "") : `each time ${model} is destroyed${before ? `,${before}` : ""}, `;
     return `${lead}roll one ${diceCase(gate.dice)}${adds}. On ${formatComparison(jstr(gate.comparison), gate.threshold)}, leave that model on the battlefield; ${resolution}${removal}`;
@@ -200,6 +227,7 @@ function move(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
   if (m.reach != null) s += ` within a Transport it is able to embark within, if every model is within ${rangePhrase(m.reach)} of that Transport instead of 3"`;
   if (m.as_if === "movement-phase") s += " as if it were your Movement phase";
   if (Array.isArray(m.passthrough)) s += `, moving over ${passthrough(m.passthrough)} as though they were not there`;
+  if (Array.isArray(m.as_if_keywords)) s += ` (when doing so, its models move as if they had the ${andList((m.as_if_keywords as unknown[]).map(jstr))} keyword${m.as_if_keywords.length > 1 ? "s" : ""})`;
   const ends = m.ends_within as P | undefined;
   if (ends != null) s += `, ending that move ${ends.wholly === true ? "wholly " : ""}within ${rangePhrase(ends.range)} of ${endsOf(ends.of, ctx)}`;
   if (m.ends_when != null) s += `; it must end that move where ${describeCondition(m.ends_when as Condition)}${m.ends_when_replaces === true ? " (instead of the usual threshold)" : ""}`;
@@ -236,7 +264,12 @@ function moveModifier(m: Record<string, unknown>, subj: string, ctx: Ctx): strin
     const moves = kinds ? `${kinds} moves` : "Move characteristic";
     clauses.push(!Number.isNaN(n) && n < 0 ? `subtract ${Math.abs(n)}" from ${ofOrPossessive(subj, moves)}` : `add ${diceCase(m.distance_bonus)}" to ${ofOrPossessive(subj, moves)}`);
   }
-  if (m.advance === "fixed-6" || m.advance === "fixed-8") clauses.push(`${subj} ${v(subj, "does")} not make an Advance roll; add ${m.advance.slice("fixed-".length)}" to ${pronoun(subj)} Move characteristic instead`);
+  if (m.advance === "fixed-6" || m.advance === "fixed-8") {
+    // "(this is not cumulative with the Matchless Swiftness ability)": the named ability's own Move bonus.
+    const nc = m.not_cumulative as P | undefined;
+    const trail = nc?.ability != null ? ` (this is not cumulative with the ${abilityLabel(nc.ability)} ability)` : "";
+    clauses.push(`${subj} ${v(subj, "does")} not make an Advance roll; add ${m.advance.slice("fixed-".length)}" to ${pronoun(subj)} Move characteristic instead${trail}`);
+  }
   if (Array.isArray(m.passthrough)) clauses.push(`${subj} can move over ${passthrough(m.passthrough)} as though they were not there`);
   if (m.no_end_in_engagement === true) clauses.push(`${subj} cannot end a move within Engagement Range of any enemy unit`);
   if (m.ends_nearest != null) clauses.push(endsNearestPhrase(m.ends_nearest as P, ctx, subj, `${pronoun(subj)} move`));
@@ -277,7 +310,9 @@ function setUp(m: Record<string, unknown>, subj: string, ctx: Ctx): string {
     const arrival = m.arrives === "next-movement-phase"
       ? `; ${it} ${arrives} in the Reinforcements step of your next Movement phase${m.allow_first_round === true ? ", even in the first battle round" : ""}`
       : m.allow_first_round === true ? `; ${it} can arrive in the first battle round` : "";
-    return `${m.allow === false ? noneOf(who) : who} ${can} be placed into Strategic Reserves${limits}${arrival}`;
+    // "That unit heals 10 wounds and is placed in strategic reserves": a destroyed unit returned.
+    const placed = m.from === "destroyed" ? "is returned to the battle and placed" : `${can} be placed`;
+    return `${m.allow === false ? noneOf(who) : who} ${placed} into Strategic Reserves${limits}${arrival}`;
   }
   const from = m.from === "strategic-reserves" ? " from Strategic Reserves" : m.from === "transport" ? " from its Transport" : "";
   const whoCan = m.allow === false ? noneOf(who) : who;
@@ -322,7 +357,12 @@ function marker(m: Record<string, unknown>, ctx: Ctx): string {
   const label = dekebab(jstr(m.label)).replace(/ marker$/i, "");
   const consume = m.consume === "on-use" ? "; using the marker consumes it" : "";
   const unmoved = m.not_moved_this_turn === true ? " that has not been moved this turn" : "";
-  if (m.operation === "relocate") return `move the ${label} marker${unmoved}${m.distance != null ? ` up to ${rangePhrase(m.distance)}` : ""}${consume}`;
+  if (m.operation === "relocate") {
+    // "set up that marker anywhere on the battlefield that is more than 8\" horizontally away from all enemy units".
+    const away = m.min_enemy_distance != null
+      ? `${m.distance != null ? "," : " anywhere on the battlefield"} more than ${rangePhrase(m.min_enemy_distance)} horizontally away from all enemy units` : "";
+    return `move the ${label} marker${unmoved}${m.distance != null ? ` up to ${rangePhrase(m.distance)}` : ""}${away}${consume}`;
+  }
   if (m.operation === "remove") return `remove that ${label} marker from the battlefield`;
   const where = m.placement != null ? ` ${dekebab(jstr(m.placement))}` : "";
   // "a 40mm circular Tunnel Marker": the diameter follows the noun, so the article stays the label's.
@@ -363,7 +403,8 @@ function resourceDie(m: Record<string, unknown>): string {
     const rolls = Array.isArray(m.rolls) ? (m.rolls as unknown[]).map(rollName) : ["dice"];
     return `discard a die from your ${pool} and use its value in place of ${withArticle(`${orList(rolls)} roll`)}`;
   }
-  const shown = m.value === "highest" ? "the highest result" : jstr(m.value);
+  // roll-result: "with a value equal to that result", the roll that gated the gain.
+  const shown = m.value === "highest" ? "the highest result" : m.value === "roll-result" ? "that result" : jstr(m.value);
   if (m.count_per_pool != null) {
     const per = resourceNoun(m.count_per_pool, null);
     const die = m.value === "rolled" ? "one rolled D6" : `one die showing ${shown}`;
@@ -407,6 +448,18 @@ function singular(group: string): string {
 function oneOf(group: string): string {
   const one = singular(group);
   return `${/^[aeiou]/i.test(one) ? "an" : "a"} ${one}`;
+}
+
+/**
+ * A Combat Patrol arrival schedule: "the following friendly units must start the battle in Strategic
+ * Reserves and cannot be set up on the battlefield before the battle round stated: Emperors Champion
+ * Vedrenn (battle round 2)".
+ */
+function reservesSchedule(m: Record<string, unknown>): string {
+  const entries = Array.isArray(m.entries) ? m.entries as Array<Record<string, unknown>> : [];
+  const rows = andList(entries.map((entry) => `${titleCase(jstr(entry.unit_id))} (battle round ${jstr(entry.battle_round)})`));
+  const setUp = m.set_up === "wholly-within-deployment-zone" ? "; when they are set up, they must be set up wholly within your deployment zone" : "";
+  return `the following friendly units must start the battle in Strategic Reserves and cannot be set up on the battlefield before the battle round stated: ${rows}${setUp}`;
 }
 
 function armyRule(m: Record<string, unknown>, subj: string, ctx: Ctx, target?: unknown): string {
@@ -519,14 +572,15 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
     case "mortal-wounds": return mortalWounds(m, subj);
     case "damage-reduction": {
       const r = jstr(m.reduction);
-      const how = r === "half" ? "halve the Damage of that attack" : r === "to-zero" ? "change the Damage of that attack to 0" : `subtract ${r} from the Damage characteristic of that attack`;
+      const how = r === "half" ? "halve the Damage of that attack" : r === "to-zero" ? "change the Damage of that attack to 0"
+        : r === "to-one" ? "change the Damage characteristic of that attack to 1" : `subtract ${r} from the Damage characteristic of that attack`;
       if (ctx.allocatedTrigger && m.weapons == null) return how;
       const attack = m.weapons != null ? `an attack with ${weaponNoun(m)}` : "an attack";
       return `each time ${attack} is allocated to ${subj}, ${how}`;
     }
     case "feel-no-pain": {
       const rated = isRatingRef(m.threshold);
-      return `${subj} ${v(subj, "has")} Feel No Pain ${rated ? "X" : jstr(m.threshold)}+${FNP_AGAINST[jstr(m.against)] ?? ""}${rated ? ", X being its rating" : ""}`;
+      return `${subj} ${v(subj, "has")} Feel No Pain ${rated ? "X" : jstr(m.threshold)}+${fnpAgainst(m.against)}${rated ? ", X being its rating" : ""}`;
     }
     case "invulnerable-save": {
       const scope = m.weapons as P | undefined;
@@ -566,6 +620,8 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       return n < 0 ? `you lose ${Math.abs(n)} CP` : `you gain ${jstr(m.amount)} CP`;
     }
     case "cost-modifier": return costModifier(m, subj);
+    // "You cannot gain more than 3 Pain tokens as a result of failed Battle-shock tests caused by this Stratagem".
+    case "resource-gain-cap": return `you cannot gain more than ${jstr(m.max)} ${resourceNoun(m.pool, null, m.max)} from failed Battle-shock tests this ability causes`;
     case "resource-gain": {
       // "you must pledge a number": the pool becomes the number picked, not one more.
       // "whose total psychic level does not exceed that unit's psyker level": the unit's own pool becomes its characteristic.
@@ -575,15 +631,24 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       if (m.amount != null && typeof m.amount === "object" && !Array.isArray(m.amount) && typeof (m.amount as P).pool === "string") {
         return `you gain a number of ${resourceNoun(m.pool, m.label, 2)} equal to your ${dekebab(jstr((m.amount as P).pool))}`;
       }
+      // "you gain an amount of YP equal to the difference": what this turn's gains fall short of N by.
+      if (m.amount != null && typeof m.amount === "object" && (m.amount as P).difference_to != null) {
+        return `you gain a number of ${resourceNoun(m.pool, m.label, 2)} equal to the difference between ${jstr((m.amount as P).difference_to)} and the ${resourceNoun(m.pool, m.label, 2)} you gained this turn`;
+      }
       if (m.amount != null && typeof m.amount === "object") return `you gain ${amountOf(m.amount, resourceNoun(m.pool, m.label, 1), resourceNoun(m.pool, m.label, 2))}`;
       const amount = m.amount === "variable" ? "a number of" : m.amount === "any" ? "any number of" : diceCase(m.amount);
       return `you gain ${amount} ${resourceNoun(m.pool, m.label, m.amount)}`;
     }
     case "resource-spend": {
       if (m.amount === "by-table") return `spend the ${resourceNoun(m.pool, m.label, 2)} the cost table gives for the datasheet and Starting Strength of ${effectSubject(m.table_of, ctx)} (${costTable(m.amount_table)})`;
-      const amount = m.amount === "all" ? "all your" : m.amount === "one-or-more" ? "one or more" : diceCase(m.amount);
+      const upTo = m.amount != null && typeof m.amount === "object" ? (m.amount as P).up_to : undefined;
+      // "Spend 1-3 Pain tokens": at_least is the least the player can choose.
+      const atLeast = upTo != null ? (m.amount as P).at_least : undefined;
+      if (upTo != null && atLeast != null) return `spend ${jstr(atLeast)}-${jstr(upTo)} ${resourceNoun(m.pool, m.label, upTo)}`;
+      if (upTo != null) return `spend up to ${jstr(upTo)} ${resourceNoun(m.pool, m.label, upTo)}`;
+      const amount = m.amount === "all" ? "all your" : m.amount === "one-or-more" ? "one or more" : m.amount === "any" ? "any number of" : diceCase(m.amount);
       const showing = m.face != null ? ` showing a ${jstr(m.face)}` : m.requirement != null ? ` forming a ${requirementPhrase(m.requirement)}` : "";
-      let noun = resourceNoun(m.pool, m.label, m.amount === "all" ? 2 : m.amount);
+      let noun = resourceNoun(m.pool, m.label, m.amount === "all" || m.amount === "any" ? 2 : m.amount);
       // A face or a pair/triple is only said of dice: "3 Blessings of Khorne dice forming a triple of 6+".
       if (showing && !/\b(die|dice)$/.test(noun)) noun += Number(jstr(m.amount)) === 1 ? " die" : " dice";
       return `spend ${amount} ${noun}${showing}`;
@@ -593,8 +658,10 @@ export function describeBoardLeaf(e: Leaf, m: Record<string, unknown>, subj: str
       // "That objective is secured": one marker, the one a select-objective bound.
       if (m.objective != null) return `${placeRefPhrase({ objective: m.objective })} remains under your control until your opponent's Level of Control over it is greater than yours at the end of a phase`;
       return `objective markers ${subj} ${v(subj, "controls")} remain under your control until your opponent's Level of Control over them is greater than yours at the end of a phase`;
+    case "region-extend": return regionExtend(m);
     case "designate": return designate(m, subj, ctx);
     case "army-rule": return armyRule(m, subj, ctx, e.target);
+    case "reserves-schedule": return reservesSchedule(m);
     default: {
       void inline;
       return `[${e.type ?? "unknown"}]`;

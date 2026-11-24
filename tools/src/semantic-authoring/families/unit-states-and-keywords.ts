@@ -133,7 +133,8 @@ function normalizeUnitState(input: Params): Params {
 
 // ---- unit-keyword ----
 
-const KEYWORD_SUBJECTS = [...WIDE_OR_ANTECEDENT, BEARER_TRANSPORT] as const;
+/** event-object: the moment's object ("if the destroyed model was a MAGUS"). */
+const KEYWORD_SUBJECTS = [...WIDE_OR_ANTECEDENT, BEARER_TRANSPORT, "event-object"] as const;
 
 /** unit-keyword's own list check: strings only, markdown dropped, upper case, each once, sorted. */
 function unitKeywordList(value: unknown): string[] {
@@ -181,8 +182,12 @@ const SELECTION_BY = ["event-subject", "this-unit", "selected-unit", ANTECEDENT]
 const SELECTION_TARGETS = ["this-unit", "this-model", "selected-unit", FOLLOWING_FILTER, ANTECEDENT] as const;
 
 function normalizeTargetIsSelected(input: Params): Params {
-  keysWithin(input, [], ["by", "target", "all_attacks", "negated"], "target-is-selected");
-  const { by, target, all_attacks: all, negated } = input;
+  keysWithin(input, [], ["by", "target", "all_attacks", "negated", "unit"], "target-is-selected");
+  const { by, target, all_attacks: all, negated, unit } = input;
+  if (unit !== undefined) {
+    if (Object.keys(input).length > 1) throw new TypeError("target-is-selected.unit stands alone.");
+    return { unit: enumValue(unit, ["event-subject"], "target-is-selected.unit") };
+  }
   if (by === undefined && target === undefined) {
     if (all !== undefined || negated !== undefined) throw new TypeError("target-is-selected.all_attacks and negated need by and target.");
     return {};
@@ -235,10 +240,10 @@ export const UNIT_STATES_AND_KEYWORDS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "unit-keyword",
-    version: 8,
+    version: 9,
     role: "CONDITION",
     label: "Unit has (or lacks) a keyword",
-    description: "The subject has one of the keywords, for example CHARACTER, or MONSTER or VEHICLE; with match all it has every listed keyword (two or more, not negated). A unit that can FLY has the FLY keyword. chosen_by, in place of keywords, says the subject has the keyword chosen by the named ability; a leaf names keywords or chosen_by, never both. The subject is this unit, this model, the attack's target, the attacking unit, the unit that triggered the ability, the effect's recipient, a unit the ability selected earlier, an earlier leaf's unit (antecedent), or the Transport the unit is embarked within (bearer-transport). A keyword can carry accented capitals (KÂHL) or start with an apostrophe ('ARDMOB) as the rules print it.",
+    description: "The subject has one of the keywords, for example CHARACTER, or MONSTER or VEHICLE; with match all it has every listed keyword (two or more, not negated). A unit that can FLY has the FLY keyword. chosen_by, in place of keywords, says the subject has the keyword chosen by the named ability; a leaf names keywords or chosen_by, never both. The subject is this unit, this model, the attack's target, the attacking unit, the unit that triggered the ability, the effect's recipient, a unit the ability selected earlier, an earlier leaf's unit (antecedent), the Transport the unit is embarked within (bearer-transport), or the moment's object (event-object: \"if the destroyed model was a MAGUS, PRIMUS or ACOLYTE ICONWARD\"). A keyword can carry accented capitals (KÂHL) or start with an apostrophe ('ARDMOB) as the rules print it.",
     starter: { keywords: [], subject: "", negated: false },
     parameterSchema: {
       type: "object",
@@ -260,10 +265,10 @@ export const UNIT_STATES_AND_KEYWORDS_FAMILIES: readonly FlatFamily[] = [
   },
   {
     id: "target-is-selected",
-    version: 3,
+    version: 4,
     role: "CONDITION",
     label: "Target is the selected unit",
-    description: "The attack targets the unit selected earlier in the ability (\"that unit\" after \"select one enemy unit\"). With by and target, always together, target was selected as a target by by in the moment the ability names (\"if one or more units with this ability are selected as a target of that charge\" = by antecedent, target this-unit); target following-filter is any unit the unit-filter right after this leaf matches. all_attacks and negated go only with by and target. all_attacks: target was selected as the target of every one of by's attacks, not just some (\"as the target of all of its attacks\"). negated: the selection did not happen (\"does not select your unit as the target of all of its attacks\" = all_attacks and negated).",
+    description: "The attack targets the unit selected earlier in the ability (\"that unit\" after \"select one enemy unit\"). With by and target, always together, target was selected as a target by by in the moment the ability names (\"if one or more units with this ability are selected as a target of that charge\" = by antecedent, target this-unit); target following-filter is any unit the unit-filter right after this leaf matches. all_attacks and negated go only with by and target. all_attacks: target was selected as the target of every one of by's attacks, not just some (\"as the target of all of its attacks\"). negated: the selection did not happen (\"does not select your unit as the target of all of its attacks\" = all_attacks and negated). unit event-subject, alone: the attack targets the unit of the ability's moment, which the ability designates with no selection (\"just after an enemy unit has shot\" … \"makes an attack that targets that enemy unit\").",
     starter: {},
     parameterSchema: {
       type: "object",
@@ -272,6 +277,7 @@ export const UNIT_STATES_AND_KEYWORDS_FAMILIES: readonly FlatFamily[] = [
         target: { enum: [...SELECTION_TARGETS], "x-optional": true },
         all_attacks: { const: true, "x-optional": true },
         negated: { type: "boolean", "x-optional": true },
+        unit: { enum: ["event-subject"], "x-optional": true },
       },
       additionalProperties: false,
     },

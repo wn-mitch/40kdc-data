@@ -23,9 +23,9 @@ var permissionDespite = map[string]string{
 	"engaged": "within Engagement Range of enemy units", "battle-shocked": "Battle-shocked", "shot-this-phase": "has already shot this phase",
 	"fought-this-phase": "has already fought this phase", "disembarked-this-turn": "disembarked this turn",
 	"stratagem-used-this-phase": "has already been targeted with that Stratagem this phase", "performing-action": "performing an Action",
-	"advanced": "Advanced this turn", "fell-back": "Fell Back this turn", "destroyed": "has just been destroyed",
+	"advanced": "Advanced this turn", "fell-back": "Fell Back this turn", "destroyed": "has just been destroyed", "embarked": "embarked within a Transport",
 }
-var permissionIsState = map[string]bool{"engaged": true, "battle-shocked": true, "performing-action": true}
+var permissionIsState = map[string]bool{"engaged": true, "battle-shocked": true, "performing-action": true, "embarked": true}
 var permissionAsIf = map[string]string{
 	"shooting-phase": " as if it were your Shooting phase", "fight-phase": " as if it were the Fight phase", "snap-shooting": " using the Snap Shooting rules",
 	"movement-phase": " as if it were your Movement phase", "charge-phase": " as if it were your Charge phase", "command-phase": " as if it were your Command phase",
@@ -106,6 +106,10 @@ func permissionConsequences(m map[string]any, it string) string {
 }
 
 func permissionLeaf(m map[string]any, subj string, ctx effCtx) string {
+	// "You cannot use this Stratagem": a Stratagem's restriction on its own use.
+	if m["activity"] == "use-stratagem" && m["allow"] == false && ctx.self != "" && m["stratagem"] == ctx.self {
+		return "you cannot use this Stratagem"
+	}
 	it := "it"
 	if strings.HasPrefix(subj, "all ") || unitsWordRe.MatchString(subj) {
 		it = "they"
