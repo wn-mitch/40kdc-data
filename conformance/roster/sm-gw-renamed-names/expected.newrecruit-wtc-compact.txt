@@ -2,7 +2,6 @@
 + LIST NAME: Imported roster
 + FACTION KEYWORD: Adeptus Astartes
 + DETACHMENT: Gladius Task Force
-+ FORCE DISPOSITION: Priority Assets
 + TOTAL ARMY POINTS: 310pts
 + POINTS LIMIT: 310pts
 +

@@ -6834,6 +6834,7 @@ This unit's Heroic Intervention ability has no limit on its number of uses, and 
               </rules>
               <categoryLinks>
                 <categoryLink name="Reconnaissance" id="a2b8-775b-1986-45da" hidden="false" primary="false" targetId="b4a7-5083-fe94-4d24"/>
+                <categoryLink name="Priority Assets" id="31ec-3762-2431-a20d" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
                 <categoryLink name="Detachment Tag: hearthband" id="091d-c9c9-d712-c288" hidden="false" primary="false" targetId="c152-e6a7-d2e9-2c03"/>
               </categoryLinks>
               <costs>

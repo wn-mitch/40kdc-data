@@ -9471,6 +9471,7 @@ Ranged weapons equipped by friendly NECRONS models with the MOUNTED or VEHICLE k
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="4882-89d9-b71a-0b01" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Purge the Foe" id="6ab0-f79b-9f7c-1f5b" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -9596,6 +9597,7 @@ While making ranged attacks, if the target is the closest eligible target, impro
               </rules>
               <categoryLinks>
                 <categoryLink name="Take and Hold" id="be0b-74f9-f757-2dd6" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
+                <categoryLink name="Priority Assets" id="11ca-c9b8-30e2-3e50" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
                 <categoryLink name="Detachment Tag: dynasty" id="0f89-f645-98a2-ae07" hidden="false" primary="false" targetId="3c1b-7744-8f7f-355e"/>
               </categoryLinks>
               <costs>

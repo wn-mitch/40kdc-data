@@ -34928,6 +34928,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "b4a7-5083-fe94-4d24"
+                  },
+                  {
+                    "name": "Disruption",
+                    "id": "d816-6772-c0ce-a5fb",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "ecf8-cf72-7d5b-1b5b"
                   }
                 ],
                 "constraints": [
@@ -35169,6 +35176,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Take and Hold",
+                    "id": "8a97-9c00-36ac-95c9",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "1cc1-f11a-4e8f-1bcc"
                   }
                 ],
                 "constraints": [

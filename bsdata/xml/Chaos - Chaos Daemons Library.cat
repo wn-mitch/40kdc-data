@@ -10900,6 +10900,7 @@ Against melee attacks, subtract 1 from the attacking unit's Hit rolls.</characte
               </rules>
               <categoryLinks>
                 <categoryLink name="Take and Hold" id="2884-819e-cdd9-043e" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
+                <categoryLink name="Disruption" id="5404-89c0-8e47-168a" hidden="false" primary="false" targetId="ecf8-cf72-7d5b-1b5b"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

@@ -24043,6 +24043,13 @@
                     "targetId": "1cc1-f11a-4e8f-1bcc"
                   },
                   {
+                    "name": "Reconnaissance",
+                    "id": "62f8-e611-608e-e882",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "b4a7-5083-fe94-4d24"
+                  },
+                  {
                     "name": "Detachment Tag: hosts",
                     "id": "ad13-eaeb-ef5a-c01b",
                     "hidden": false,

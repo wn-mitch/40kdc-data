@@ -7075,6 +7075,7 @@ Friendly TYRANIDS units gain the Catalyst ability:
               </rules>
               <categoryLinks>
                 <categoryLink name="Take and Hold" id="ef10-9ef4-ddb0-8474" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
+                <categoryLink name="Reconnaissance" id="62f8-e611-608e-e882" hidden="false" primary="false" targetId="b4a7-5083-fe94-4d24"/>
                 <categoryLink name="Detachment Tag: hosts" id="ad13-eaeb-ef5a-c01b" hidden="false" primary="false" targetId="d98e-36f2-ae09-0a88"/>
               </categoryLinks>
               <costs>

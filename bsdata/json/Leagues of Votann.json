@@ -24251,6 +24251,13 @@
                     "targetId": "b4a7-5083-fe94-4d24"
                   },
                   {
+                    "name": "Priority Assets",
+                    "id": "31ec-3762-2431-a20d",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
                     "name": "Detachment Tag: hearthband",
                     "id": "091d-c9c9-d712-c288",
                     "hidden": false,

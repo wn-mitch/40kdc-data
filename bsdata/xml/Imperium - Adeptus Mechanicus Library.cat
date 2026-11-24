@@ -8967,6 +8967,7 @@ When this model's unit is targeted with a Stratagem:
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="163b-0433-e8d0-4203" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Purge the Foe" id="a167-0d21-ac6f-a132" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

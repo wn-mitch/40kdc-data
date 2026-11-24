@@ -2,7 +2,6 @@
 + LIST NAME: all gas no breaks
 + FACTION KEYWORD: Chaos Daemons
 + DETACHMENT: Daemonic Incursion
-+ FORCE DISPOSITION: Take And Hold
 + TOTAL ARMY POINTS: 1995pts
 + POINTS LIMIT: 1995pts
 +

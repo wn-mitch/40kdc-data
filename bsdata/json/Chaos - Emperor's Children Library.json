@@ -25332,6 +25332,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Disruption",
+                    "id": "490b-da0e-9e41-eeba",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "ecf8-cf72-7d5b-1b5b"
                   }
                 ],
                 "constraints": [
@@ -25573,6 +25580,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Purge the Foe",
+                    "id": "6b37-6525-7735-d07a",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "6fe0-3dbe-f7e0-10bb"
                   }
                 ],
                 "constraints": [

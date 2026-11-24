@@ -21047,6 +21047,7 @@ At the start of each phase:
               </rules>
               <categoryLinks>
                 <categoryLink name="Disruption" id="83b6-f2bb-5a42-807f" hidden="false" primary="false" targetId="ecf8-cf72-7d5b-1b5b"/>
+                <categoryLink name="Purge the Foe" id="54b9-2ac6-bf5b-9145" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -21087,6 +21088,7 @@ While the target is within range of an objective marker, improve friendly HERETI
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="f486-a890-95cd-2d7c" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Reconnaissance" id="7621-c05e-0bf1-3863" hidden="false" primary="false" targetId="b4a7-5083-fe94-4d24"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -21264,6 +21266,7 @@ While the target is Battle-shocked, add 1 to friendly HERETIC ASTARTES models' W
               </rules>
               <categoryLinks>
                 <categoryLink name="Disruption" id="8fdf-362f-b066-7191" hidden="false" primary="false" targetId="ecf8-cf72-7d5b-1b5b"/>
+                <categoryLink name="Priority Assets" id="5a95-716e-9552-348f" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -21290,6 +21293,7 @@ When you use Experimental Augmentations, you can use this ability: if your army 
               </rules>
               <categoryLinks>
                 <categoryLink name="Take and Hold" id="17b5-6592-97d9-a131" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
+                <categoryLink name="Purge the Foe" id="9c56-60f0-5cc7-2cde" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

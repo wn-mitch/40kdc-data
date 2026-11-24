@@ -2108,23 +2108,40 @@ function projectFromRestApi(
               mirror = "vertical";
             }
 
-            // BM transforms part-local points around (0, 0):
-            // mirror → rotate → translate by part.origin. The part template
-            // keeps that origin at (0, 0) while flipping y, but the resolver
-            // rotates around the footprint centroid. Add the oriented local
-            // centroid to the translation pivot so both transforms agree.
+            // BM transforms part-local points mirror → rotate → translate by
+            // part.origin, and mirrors within the part's bounds (x → width - x,
+            // y → height - y), so a mirrored part keeps covering the same
+            // box. The part template keeps the local origin at (0, 0) while
+            // flipping y, but the resolver mirrors and rotates around the
+            // footprint centroid. Add the oriented local centroid, plus the
+            // rotated bounds shift a mirror leaves behind, to the translation
+            // pivot so both transforms agree.
             const orientedPartCentroid = orient(
               partCentroid,
               rotation,
               mirror ?? "none",
             );
+            const mirrorShift = orient(
+              {
+                x: part.mirroredX ? part.boundsWidthIn : 0,
+                y: part.mirroredY ? -part.boundsHeightIn : 0,
+              },
+              norm360(-part.rotationDeg),
+              "none",
+            );
             const position: Vec2 = {
-              x: round6(part.origin.x - centroid.x + orientedPartCentroid.x),
+              x: round6(
+                part.origin.x -
+                  centroid.x +
+                  orientedPartCentroid.x +
+                  mirrorShift.x,
+              ),
               y: round6(
                 fp.heightIn -
                   part.origin.y -
                   centroid.y +
-                  orientedPartCentroid.y,
+                  orientedPartCentroid.y +
+                  mirrorShift.y,
               ),
             };
 

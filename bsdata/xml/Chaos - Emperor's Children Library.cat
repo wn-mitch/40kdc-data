@@ -7195,6 +7195,7 @@ You can re-roll the Advance roll.</characteristic>
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="9f43-495f-4350-3d77" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Disruption" id="490b-da0e-9e41-eeba" hidden="false" primary="false" targetId="ecf8-cf72-7d5b-1b5b"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -7302,6 +7303,7 @@ Friendly EMPEROR'S CHILDREN units gain the following rules:
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="6c37-7d48-b504-89e3" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Purge the Foe" id="6b37-6525-7735-d07a" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

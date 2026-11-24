@@ -76689,6 +76689,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "ecf8-cf72-7d5b-1b5b"
+                  },
+                  {
+                    "name": "Purge the Foe",
+                    "id": "54b9-2ac6-bf5b-9145",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "6fe0-3dbe-f7e0-10bb"
                   }
                 ],
                 "constraints": [
@@ -76783,6 +76790,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Reconnaissance",
+                    "id": "7621-c05e-0bf1-3863",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "b4a7-5083-fe94-4d24"
                   }
                 ],
                 "constraints": [
@@ -77213,6 +77227,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "ecf8-cf72-7d5b-1b5b"
+                  },
+                  {
+                    "name": "Priority Assets",
+                    "id": "5a95-716e-9552-348f",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "0936-9767-1cc7-52ae"
                   }
                 ],
                 "constraints": [
@@ -77260,6 +77281,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "1cc1-f11a-4e8f-1bcc"
+                  },
+                  {
+                    "name": "Purge the Foe",
+                    "id": "9c56-60f0-5cc7-2cde",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "6fe0-3dbe-f7e0-10bb"
                   }
                 ],
                 "constraints": [

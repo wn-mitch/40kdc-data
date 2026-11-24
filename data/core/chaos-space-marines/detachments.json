@@ -24,7 +24,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "disruption"
+      "disruption",
+      "purge-the-foe"
     ],
     "external_refs": [
       {
@@ -93,7 +94,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "priority-assets"
+      "priority-assets",
+      "reconnaissance"
     ],
     "external_refs": [
       {
@@ -429,7 +431,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "disruption"
+      "disruption",
+      "priority-assets"
     ],
     "external_refs": [
       {
@@ -466,7 +469,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "take-and-hold"
+      "take-and-hold",
+      "purge-the-foe"
     ],
     "external_refs": [
       {

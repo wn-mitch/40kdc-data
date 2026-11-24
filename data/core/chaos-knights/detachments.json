@@ -95,7 +95,8 @@
     },
     "detachment_points": 3,
     "force_dispositions": [
-      "purge-the-foe"
+      "purge-the-foe",
+      "priority-assets"
     ],
     "external_refs": [
       {

@@ -9672,6 +9672,7 @@ Friendly THOUSAND SONS units gain the Mortal Sorcery ability:
               </rules>
               <categoryLinks>
                 <categoryLink name="Take and Hold" id="1de0-d975-ffec-a36f" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
+                <categoryLink name="Reconnaissance" id="0fb7-dffd-f9af-0641" hidden="false" primary="false" targetId="b4a7-5083-fe94-4d24"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -9694,6 +9695,7 @@ Friendly THOUSAND SONS units gain the Mortal Sorcery ability:
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="2ce5-12ac-896b-d9c6" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Disruption" id="c42d-c772-44e9-d9af" hidden="false" primary="false" targetId="ecf8-cf72-7d5b-1b5b"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -9735,6 +9737,7 @@ Friendly THOUSAND SONS units gain the Mortal Sorcery ability:
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="e377-84ee-1b36-51a1" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Take and Hold" id="8883-a14c-9ab7-c017" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

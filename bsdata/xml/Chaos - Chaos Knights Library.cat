@@ -5538,6 +5538,7 @@ Applies to: CHAOS KNIGHTS CHARACTER units.</description>
               </rules>
               <categoryLinks>
                 <categoryLink name="Purge the Foe" id="4406-e4df-79df-bb83" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
+                <categoryLink name="Priority Assets" id="d2d7-24b3-6a03-eb04" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

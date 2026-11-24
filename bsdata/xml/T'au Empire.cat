@@ -14385,6 +14385,7 @@ This model loses the SMOKE keyword.</characteristic>
               </rules>
               <categoryLinks>
                 <categoryLink name="Purge the Foe" id="084d-20e8-c71f-3bac" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
+                <categoryLink name="Reconnaissance" id="2927-5b13-47e1-7a44" hidden="false" primary="false" targetId="b4a7-5083-fe94-4d24"/>
                 <categoryLink name="Detachment Tag: battlesuit" id="d1ad-230b-0b39-139b" hidden="false" primary="false" targetId="e380-a2d5-a1c0-eed2"/>
               </categoryLinks>
               <costs>
@@ -14405,6 +14406,7 @@ This model loses the SMOKE keyword.</characteristic>
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="94d5-06a4-e796-cf94" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Take and Hold" id="c5bb-6aaa-4aaa-cb2c" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

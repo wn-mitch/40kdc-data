@@ -50815,6 +50815,13 @@
                     "targetId": "6fe0-3dbe-f7e0-10bb"
                   },
                   {
+                    "name": "Reconnaissance",
+                    "id": "2927-5b13-47e1-7a44",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "b4a7-5083-fe94-4d24"
+                  },
+                  {
                     "name": "Detachment Tag: battlesuit",
                     "id": "d1ad-230b-0b39-139b",
                     "hidden": false,
@@ -50867,6 +50874,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Take and Hold",
+                    "id": "c5bb-6aaa-4aaa-cb2c",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "1cc1-f11a-4e8f-1bcc"
                   }
                 ],
                 "constraints": [

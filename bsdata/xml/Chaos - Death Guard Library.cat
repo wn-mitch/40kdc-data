@@ -9757,6 +9757,7 @@ This model is eligible to declare a charge in a turn in which it Fell Back.</cha
               </rules>
               <categoryLinks>
                 <categoryLink name="Purge the Foe" id="6f40-9419-40c1-8b25" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
+                <categoryLink name="Take and Hold" id="e9f0-34cf-c959-7a3e" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

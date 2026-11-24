@@ -28541,6 +28541,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "1cc1-f11a-4e8f-1bcc"
+                  },
+                  {
+                    "name": "Reconnaissance",
+                    "id": "bff4-228b-6148-5280",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "b4a7-5083-fe94-4d24"
                   }
                 ],
                 "constraints": [
@@ -28695,6 +28702,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Purge the Foe",
+                    "id": "6538-8f78-4111-d417",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "6fe0-3dbe-f7e0-10bb"
                   }
                 ],
                 "constraints": [

@@ -98520,6 +98520,13 @@
                     "targetId": "6fe0-3dbe-f7e0-10bb"
                   },
                   {
+                    "name": "Priority Assets",
+                    "id": "3040-23f1-6893-0036",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
                     "name": "Detachment Tag: abhuman",
                     "id": "bf13-2bf8-415f-3764",
                     "hidden": false,

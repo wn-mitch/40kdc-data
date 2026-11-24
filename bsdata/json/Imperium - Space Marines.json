@@ -218211,6 +218211,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Take and Hold",
+                    "id": "8128-41d2-9f23-65b7",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "1cc1-f11a-4e8f-1bcc"
                   }
                 ],
                 "constraints": [
@@ -219334,6 +219341,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Purge the Foe",
+                    "id": "367f-be5e-0688-9260",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "6fe0-3dbe-f7e0-10bb"
                   }
                 ],
                 "constraints": [
@@ -219725,6 +219739,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "6fe0-3dbe-f7e0-10bb"
+                  },
+                  {
+                    "name": "Priority Assets",
+                    "id": "37a4-bb3c-edb6-2fb2",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "0936-9767-1cc7-52ae"
                   }
                 ],
                 "constraints": [
@@ -220258,6 +220279,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Take and Hold",
+                    "id": "7808-2a21-63f8-76c8",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "1cc1-f11a-4e8f-1bcc"
                   }
                 ],
                 "constraints": [

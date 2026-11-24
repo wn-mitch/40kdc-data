@@ -11245,6 +11245,7 @@ While the triggering unit is Below Half-strength, add 1 to friendly ADEPTA SOROR
               </rules>
               <categoryLinks>
                 <categoryLink name="Take and Hold" id="19a6-61c4-db32-81ed" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
+                <categoryLink name="Priority Assets" id="febc-cb5f-82c4-8919" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

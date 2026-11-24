@@ -232,6 +232,27 @@ describe("Battlemaster read-only projector", () => {
                 },
               ],
             },
+            {
+              name: "Short Barrier",
+              material: "light",
+              hasRoof: false,
+              origin: { x: 1, y: 3.5 },
+              rotationDeg: 0,
+              mirroredX: true,
+              mirroredY: false,
+              boundsWidthIn: 4,
+              boundsHeightIn: 0.5,
+              outline: null,
+              walls: [
+                {
+                  points: [
+                    { x: 0, y: 0 },
+                    { x: 1, y: 0 },
+                  ],
+                  thicknessIn: 0.5,
+                },
+              ],
+            },
           ],
         },
       ],
@@ -291,10 +312,10 @@ describe("Battlemaster read-only projector", () => {
       source_kind: "rest-api",
       layouts: 1,
       layout_instances: 1,
-      feature_instances: 2,
-      feature_templates: 1,
+      feature_instances: 3,
+      feature_templates: 2,
       composite_templates: 1,
-      resolved_pieces: 2,
+      resolved_pieces: 3,
     });
     const featureTemplate = projection.terrain_templates.find(
       (template) => template.kind === "feature",
@@ -335,7 +356,10 @@ describe("Battlemaster read-only projector", () => {
       id: expect.stringMatching(
         /^bm-composite-smallrect-generator-[a-f0-9]{10}$/,
       ),
-      features: [expect.objectContaining({ template: featureTemplate.id })],
+      features: [
+        expect.objectContaining({ template: featureTemplate.id }),
+        expect.objectContaining({ mirror: "horizontal" }),
+      ],
     });
 
     const resolved = resolveLayout(
@@ -363,6 +387,18 @@ describe("Battlemaster read-only projector", () => {
         },
       ],
     });
+    // BM mirrors a part within its bounds, so the mirrored 4" barrier part at
+    // part-local origin (1, 3.5) still covers x [31, 35]; its 1" wall stub
+    // moves from the part's left end to its right end.
+    expect(resolved[2]!.walls).toEqual([
+      {
+        points: [
+          { x: 35, y: 18.5 },
+          { x: 34, y: 18.5 },
+        ],
+        thickness: 0.5,
+      },
+    ]);
     expect(projection.terrain_layouts[0]).toMatchObject({
       id: "bm-take-vs-take-01",
       mission_matchup_id: "take-and-hold-vs-take-and-hold",

@@ -8559,6 +8559,7 @@ While the attacking unit is designated as Losing the Wager, you can re-roll Woun
               </rules>
               <categoryLinks>
                 <categoryLink name="Purge the Foe" id="148e-b240-6ade-3394" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
+                <categoryLink name="Priority Assets" id="f16f-1a76-c747-81b2" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

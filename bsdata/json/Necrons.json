@@ -33656,6 +33656,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Purge the Foe",
+                    "id": "6ab0-f79b-9f7c-1f5b",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "6fe0-3dbe-f7e0-10bb"
                   }
                 ],
                 "constraints": [
@@ -33992,6 +33999,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "1cc1-f11a-4e8f-1bcc"
+                  },
+                  {
+                    "name": "Priority Assets",
+                    "id": "11ca-c9b8-30e2-3e50",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "0936-9767-1cc7-52ae"
                   },
                   {
                     "name": "Detachment Tag: dynasty",

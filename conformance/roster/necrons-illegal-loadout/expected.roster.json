@@ -17,7 +17,7 @@
     }
   ],
   "battle_size": null,
-  "force_disposition": "take-and-hold",
+  "force_disposition": null,
   "points": {
     "declared_limit": 170,
     "detachment_cap": null,

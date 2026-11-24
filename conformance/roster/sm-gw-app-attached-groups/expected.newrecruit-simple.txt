@@ -5,7 +5,6 @@ Adeptus Astartes - Attached Groups Test - [395 pts]
 List Name: Attached Groups Test
 Faction: Adeptus Astartes
 Detachment: Gladius Task Force
-Force Disposition: Priority Assets
 
 ## Battleline [395 pts]
 Captain [90 pts]: Attachment: leader -> Intercessor Squad, Warlord, Heavy Bolt Pistol, Master-crafted bolter, Master-crafted power weapon

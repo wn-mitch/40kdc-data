@@ -22677,6 +22677,7 @@ Each time a friendly unit performs an Agile Manoeuvre, if the triggering unit is
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="2edd-d32e-a50d-c904" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Reconnaissance" id="c56c-8053-aa60-3bec" hidden="false" primary="false" targetId="b4a7-5083-fe94-4d24"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

@@ -7383,6 +7383,7 @@ For this unit, on completion of additional Code Chivalric deeds, regardless of h
               </rules>
               <categoryLinks>
                 <categoryLink name="Take and Hold" id="d806-1eab-7426-29e2" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
+                <categoryLink name="Reconnaissance" id="bff4-228b-6148-5280" hidden="false" primary="false" targetId="b4a7-5083-fe94-4d24"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -7439,6 +7440,7 @@ Applies to: IMPERIAL KNIGHTS units.</description>
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="bd22-e78d-8a87-96bb" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Purge the Foe" id="6538-8f78-4111-d417" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

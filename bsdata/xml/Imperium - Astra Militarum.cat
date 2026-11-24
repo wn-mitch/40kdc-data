@@ -27538,6 +27538,7 @@ You can re-roll Hit rolls of 1 for attacks made by friendly ASTRA MILITARUM unit
               </rules>
               <categoryLinks>
                 <categoryLink name="Purge the Foe" id="dcf1-a043-c68b-93b7" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
+                <categoryLink name="Priority Assets" id="3040-23f1-6893-0036" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
                 <categoryLink name="Detachment Tag: abhuman" id="bf13-2bf8-415f-3764" hidden="false" primary="false" targetId="325a-6e1d-52f7-a005"/>
               </categoryLinks>
               <costs>

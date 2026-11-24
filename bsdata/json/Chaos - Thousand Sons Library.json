@@ -34895,6 +34895,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "1cc1-f11a-4e8f-1bcc"
+                  },
+                  {
+                    "name": "Reconnaissance",
+                    "id": "0fb7-dffd-f9af-0641",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "b4a7-5083-fe94-4d24"
                   }
                 ],
                 "constraints": [
@@ -34942,6 +34949,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Disruption",
+                    "id": "c42d-c772-44e9-d9af",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "ecf8-cf72-7d5b-1b5b"
                   }
                 ],
                 "constraints": [
@@ -35043,6 +35057,13 @@
                     "hidden": false,
                     "primary": false,
                     "targetId": "0936-9767-1cc7-52ae"
+                  },
+                  {
+                    "name": "Take and Hold",
+                    "id": "8883-a14c-9ab7-c017",
+                    "hidden": false,
+                    "primary": false,
+                    "targetId": "1cc1-f11a-4e8f-1bcc"
                   }
                 ],
                 "constraints": [

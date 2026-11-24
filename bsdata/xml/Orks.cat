@@ -13219,6 +13219,7 @@ When a friendly BOYZ, KOMMANDOS or STORMBOYZ unit is selected to make a Fall Bac
               </rules>
               <categoryLinks>
                 <categoryLink name="Take and Hold" id="e2f6-262e-fb58-15a3" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
+                <categoryLink name="Purge the Foe" id="2623-d92a-db49-bdac" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

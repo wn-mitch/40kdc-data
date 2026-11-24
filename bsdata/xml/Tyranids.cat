@@ -9938,6 +9938,7 @@ Each time an enemy model (excluding AIRCRAFT models) ends a move, while the trig
               </rules>
               <categoryLinks>
                 <categoryLink name="Reconnaissance" id="f39d-be52-21e4-ac31" hidden="false" primary="false" targetId="b4a7-5083-fe94-4d24"/>
+                <categoryLink name="Disruption" id="d816-6772-c0ce-a5fb" hidden="false" primary="false" targetId="ecf8-cf72-7d5b-1b5b"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -10035,6 +10036,7 @@ While a friendly MONSTER TYRANIDS unit is not Battle-shocked, unless that unit i
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="8ebe-2084-58f4-011a" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Take and Hold" id="8a97-9c00-36ac-95c9" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

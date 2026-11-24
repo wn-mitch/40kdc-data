@@ -8524,6 +8524,7 @@ Against melee attacks, subtract 1 from the attacking unit's Hit rolls.</characte
               </rules>
               <categoryLinks>
                 <categoryLink name="Take and Hold" id="9f89-947a-bc9e-0d9f" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
+                <categoryLink name="Purge the Foe" id="b08a-88cc-d841-8e25" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>

@@ -5,7 +5,6 @@ Adeptus Astartes - Imported roster - [310 pts]
 List Name: Imported roster
 Faction: Adeptus Astartes
 Detachment: Gladius Task Force
-Force Disposition: Priority Assets
 
 ## Battleline [310 pts]
 Marneus Calgar in Armour of Antilochus [180 pts]: Warlord, Gauntlets of Ultramar

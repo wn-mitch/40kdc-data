@@ -64740,6 +64740,7 @@ When this unit is selected to fight, you can use this ability, once per battle p
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="1a44-2884-aef4-fcb4" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Take and Hold" id="8128-41d2-9f23-65b7" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -65149,6 +65150,7 @@ Your army can include units from only one Chapter.</description>
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="9799-c6c9-b792-87d0" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Purge the Foe" id="367f-be5e-0688-9260" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -65307,6 +65309,7 @@ Friendly OUTRIDER SQUAD units gain the BATTLELINE keyword.</description>
               </rules>
               <categoryLinks>
                 <categoryLink name="Purge the Foe" id="8a07-6a99-81f6-d091" hidden="false" primary="false" targetId="6fe0-3dbe-f7e0-10bb"/>
+                <categoryLink name="Priority Assets" id="37a4-bb3c-edb6-2fb2" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
@@ -65528,6 +65531,7 @@ Your army can include units from only one Chapter.</description>
               </rules>
               <categoryLinks>
                 <categoryLink name="Priority Assets" id="edf8-5487-8a5b-6140" hidden="false" primary="false" targetId="0936-9767-1cc7-52ae"/>
+                <categoryLink name="Take and Hold" id="7808-2a21-63f8-76c8" hidden="false" primary="false" targetId="1cc1-f11a-4e8f-1bcc"/>
               </categoryLinks>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
