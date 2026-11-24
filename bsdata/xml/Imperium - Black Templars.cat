@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Astartes - Black Templars" id="36d3-36bc-68dd-40ac" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Astartes - Black Templars" id="36d3-36bc-68dd-40ac" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <categoryEntries>
     <categoryEntry name="Allies: Adeptus Titanicus" id="65d6-b472-6564-1752" hidden="false"/>
     <categoryEntry name="Allies: Adeptus Titanicus: Reaver Titan" id="f917-2e30-5b92-bd64" hidden="true">

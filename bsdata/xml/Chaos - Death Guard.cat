@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Death Guard" id="5108-f98-63c2-53cb" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Death Guard" id="5108-f98-63c2-53cb" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <entryLinks>
     <entryLink name="Lord of Poxes" id="ce37-30ed-6eb1-bca6" hidden="false" import="true" targetId="c5a7-5f07-2b1a-8f98" type="selectionEntry"/>
     <entryLink name="Defiler" id="cd2f-34bc-3a90-f0fa" hidden="false" import="true" targetId="bc88-0833-743e-0146" type="selectionEntry"/>

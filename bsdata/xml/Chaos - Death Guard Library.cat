@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Death Guard Library" id="fb4a-fea9-2e89-6fb0" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="true" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Death Guard Library" id="fb4a-fea9-2e89-6fb0" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="true" revision="10503">
   <categoryEntries>
     <categoryEntry name="Beasts of Nurgle" id="8e0c-3cee-40c0-d9b2" hidden="false"/>
     <categoryEntry name="Biologus Putrifier" id="a376-7f02-1fc8-6be0" hidden="false"/>

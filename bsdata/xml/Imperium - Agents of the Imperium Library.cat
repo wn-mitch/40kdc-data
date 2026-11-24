@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Agents of the Imperium Library" id="f3d4-14d4-99b2-bd9e" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="true" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Agents of the Imperium Library" id="f3d4-14d4-99b2-bd9e" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="true" revision="10503">
   <categoryEntries>
     <categoryEntry name="Adeptus Arbites" id="1fe2-9841-c085-291c" hidden="false"/>
     <categoryEntry name="Aquila Kill Team" id="6596-ebf9-88dc-59dc" hidden="false"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Custodes" id="1f19-6509-d906-ca10" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Custodes" id="1f19-6509-d906-ca10" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <categoryEntries>
     <categoryEntry name="Aircraft" id="e32a-105f-a3b7-52c9" hidden="false"/>
     <categoryEntry name="Allarus Custodians" id="5386-42fc-f4d0-7d64" hidden="false"/>

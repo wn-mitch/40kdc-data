@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Astartes - White Scars" id="67c1-fc13-f9a1-cbbf" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Astartes - White Scars" id="67c1-fc13-f9a1-cbbf" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <categoryEntries>
     <categoryEntry name="Allies: Adeptus Titanicus" id="012a-485f-4283-3a87" hidden="false"/>
     <categoryEntry name="Allies: Adeptus Titanicus: Reaver Titan" id="3037-fcf2-284c-291b" hidden="true">

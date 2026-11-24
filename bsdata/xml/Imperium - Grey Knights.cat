@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Grey Knights" id="50c4-3e83-fe54-97c4" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Grey Knights" id="50c4-3e83-fe54-97c4" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <categoryEntries>
     <categoryEntry name="Aircraft" id="ceaf-5d1b-dfeb-1e3a" hidden="false"/>
     <categoryEntry name="Brother-Captain" id="71ac-a100-1ec8-14e9" hidden="false"/>

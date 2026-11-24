@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - World Eaters" id="df9a-59b2-f464-59ad" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - World Eaters" id="df9a-59b2-f464-59ad" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <entryLinks>
     <entryLink name="Forgefiend" id="f61a-6440-9dda-3c3e" hidden="false" import="true" targetId="81e1-b212-69c1-308f" type="selectionEntry"/>
     <entryLink name="Khârn the Betrayer" id="4173-64c0-11b4-2df2" hidden="false" import="true" targetId="3449-7dac-6ac8-5d51" type="selectionEntry"/>

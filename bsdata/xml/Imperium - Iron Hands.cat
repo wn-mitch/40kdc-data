@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Astartes - Iron Hands" id="f27e-18c0-b73e-748e" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Astartes - Iron Hands" id="f27e-18c0-b73e-748e" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <categoryEntries>
     <categoryEntry name="Allies: Adeptus Titanicus" id="e41d-b7a7-42fa-ff4d" hidden="false"/>
     <categoryEntry name="Allies: Adeptus Titanicus: Reaver Titan" id="b54d-83b2-5e17-2b8c" hidden="true">

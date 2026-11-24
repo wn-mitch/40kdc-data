@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Xenos - Leagues of Votann" id="f616-3f08-ee8e-3349" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Xenos - Leagues of Votann" id="f616-3f08-ee8e-3349" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <categoryEntries>
     <categoryEntry name="Arkanyst Evaluator" id="7fd8-0a60-f46f-e16e" hidden="false"/>
     <categoryEntry name="Artillery" id="515e-6ef8-4425-cf94" hidden="false"/>
