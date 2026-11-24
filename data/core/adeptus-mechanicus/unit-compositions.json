@@ -1744,8 +1744,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "disruptor-missile-launcher",
@@ -1754,7 +1753,8 @@
           "cognis-heavy-stubber",
           "armoured-hull",
           "belleros-energy-cannon"
-        ]
+        ],
+        "hull_shape_id": "skorpius"
       }
     ],
     "game_version": {
@@ -4729,13 +4729,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "cognis-heavy-stubber-array",
           "armoured-hull"
-        ]
+        ],
+        "hull_shape_id": "skorpius"
       }
     ],
     "game_version": {

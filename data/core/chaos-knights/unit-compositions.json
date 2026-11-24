@@ -1741,8 +1741,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "titanic-feet-chaos-acastus-knight-porphyrion",
@@ -1751,7 +1750,8 @@
           "acastus-autocannon",
           "acastus-autocannon",
           "acastus-ironstorm-missile-pod"
-        ]
+        ],
+        "hull_shape_id": "acastus"
       }
     ],
     "game_version": {
@@ -2050,8 +2050,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "karacnos-mortar-battery",
@@ -2060,7 +2059,8 @@
           "titanic-feet-chaos-acastus-knight-asterius",
           "asterius-volkite-culverin",
           "asterius-volkite-culverin"
-        ]
+        ],
+        "hull_shape_id": "acastus"
       }
     ],
     "game_version": {

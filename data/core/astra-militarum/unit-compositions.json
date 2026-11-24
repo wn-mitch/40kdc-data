@@ -3177,14 +3177,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "lascannon",
           "armoured-tracks",
           "leman-russ-battle-cannon"
-        ]
+        ],
+        "hull_shape_id": "leman-russ"
       }
     ],
     "game_version": {
@@ -3524,8 +3524,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "lascannon",
@@ -3535,7 +3534,8 @@
           "twin-heavy-bolter",
           "armoured-tracks-stormsword",
           "stormsword-siege-cannon"
-        ]
+        ],
+        "hull_shape_id": "shadowsword"
       }
     ],
     "game_version": {
@@ -3769,14 +3769,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks-taurox-prime",
           "twin-taurox-hot-shot-volley-gun",
           "taurox-battle-cannon"
-        ]
+        ],
+        "hull_shape_id": "taurox"
       }
     ],
     "game_version": {
@@ -4189,10 +4189,10 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
-        "default_weapon_ids": []
+        "default_weapon_ids": [],
+        "hull_shape_id": "cyclops"
       }
     ],
     "game_version": {
@@ -4245,15 +4245,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "castigator-gatling-cannon",
           "twin-battle-cannon",
           "heavy-stubber",
           "armoured-tracks"
-        ]
+        ],
+        "hull_shape_id": "rogal-dorn"
       }
     ],
     "game_version": {
@@ -4512,14 +4512,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "exterminator-autocannon",
           "armoured-tracks",
           "lascannon"
-        ]
+        ],
+        "hull_shape_id": "leman-russ"
       }
     ],
     "game_version": {
@@ -5726,8 +5726,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "twin-heavy-flamer-hellhammer",
@@ -5740,7 +5739,8 @@
           "hellhammer-cannon",
           "lascannon",
           "lascannon"
-        ]
+        ],
+        "hull_shape_id": "baneblade"
       }
     ],
     "game_version": {
@@ -6447,14 +6447,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "deathstrike-missile",
           "armoured-tracks-deathstrike",
           "heavy-bolter"
-        ]
+        ],
+        "hull_shape_id": "deathstrike"
       }
     ],
     "game_version": {
@@ -7054,14 +7054,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "executioner-plasma-cannon",
           "armoured-tracks",
           "lascannon"
-        ]
+        ],
+        "hull_shape_id": "leman-russ"
       }
     ],
     "game_version": {
@@ -7894,8 +7894,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "twin-heavy-bolter",
@@ -7907,7 +7906,8 @@
           "twin-heavy-flamer-stormlord",
           "heavy-stubber",
           "heavy-stubber"
-        ]
+        ],
+        "hull_shape_id": "shadowsword"
       }
     ],
     "game_version": {
@@ -10076,8 +10076,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "twin-heavy-flamer-doomhammer",
@@ -10087,7 +10086,8 @@
           "magma-cannon",
           "lascannon",
           "lascannon"
-        ]
+        ],
+        "hull_shape_id": "baneblade"
       }
     ],
     "game_version": {
@@ -10321,15 +10321,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "castigator-gatling-cannon",
           "heavy-stubber",
           "armoured-tracks",
           "twin-battle-cannon"
-        ]
+        ],
+        "hull_shape_id": "rogal-dorn"
       }
     ],
     "game_version": {
@@ -11284,8 +11284,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks-banesword",
@@ -11295,7 +11294,8 @@
           "lascannon",
           "twin-heavy-flamer-banesword",
           "twin-heavy-flamer-banesword"
-        ]
+        ],
+        "hull_shape_id": "baneblade"
       }
     ],
     "game_version": {
@@ -11529,14 +11529,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks-wyvern",
           "heavy-bolter",
           "wyvern-quad-stormshard-mortar"
-        ]
+        ],
+        "hull_shape_id": "wyvern"
       }
     ],
     "game_version": {
@@ -12087,14 +12087,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "heavy-flamer",
           "inferno-cannon",
           "armoured-tracks-hellhound"
-        ]
+        ],
+        "hull_shape_id": "hellhound"
       }
     ],
     "game_version": {
@@ -12299,14 +12299,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "lascannon",
           "punisher-gatling-cannon",
           "armoured-tracks"
-        ]
+        ],
+        "hull_shape_id": "leman-russ"
       }
     ],
     "game_version": {
@@ -13436,14 +13436,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "lascannon",
           "armoured-tracks",
           "demolisher-battle-cannon"
-        ]
+        ],
+        "hull_shape_id": "leman-russ"
       }
     ],
     "game_version": {
@@ -13783,13 +13783,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "twin-autocannon-taurox",
           "armoured-tracks-taurox"
-        ]
+        ],
+        "hull_shape_id": "taurox"
       }
     ],
     "game_version": {
@@ -14312,8 +14312,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "twin-heavy-flamer-banehammer",
@@ -14323,7 +14322,8 @@
           "lascannon",
           "lascannon",
           "armoured-tracks-banehammer"
-        ]
+        ],
+        "hull_shape_id": "baneblade"
       }
     ],
     "game_version": {
@@ -14898,14 +14898,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks",
           "leman-russ-battle-cannon",
           "lascannon"
-        ]
+        ],
+        "hull_shape_id": "leman-russ"
       }
     ],
     "game_version": {
@@ -15620,8 +15620,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "twin-heavy-bolter",
@@ -15631,7 +15630,8 @@
           "lascannon",
           "lascannon",
           "armoured-tracks-shadowsword"
-        ]
+        ],
+        "hull_shape_id": "shadowsword"
       }
     ],
     "game_version": {
@@ -15865,14 +15865,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "storm-eagle-rockets",
           "heavy-bolter",
           "armoured-tracks-manticore"
-        ]
+        ],
+        "hull_shape_id": "manticore"
       }
     ],
     "game_version": {
@@ -16031,15 +16031,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "heavy-bolter",
           "multi-laser",
           "armoured-tracks-chimera",
           "lasgun-array"
-        ]
+        ],
+        "hull_shape_id": "chimera"
       }
     ],
     "game_version": {
@@ -16431,14 +16431,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks",
           "vanquisher-battle-cannon",
           "lascannon"
-        ]
+        ],
+        "hull_shape_id": "leman-russ"
       }
     ],
     "game_version": {
@@ -16778,14 +16778,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "earthshaker-cannon",
           "heavy-bolter",
           "armoured-tracks-basilisk"
-        ]
+        ],
+        "hull_shape_id": "basilisk"
       }
     ],
     "game_version": {
@@ -16944,8 +16944,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "lascannon",
@@ -16958,7 +16957,8 @@
           "demolisher-cannon",
           "coaxial-autocannon",
           "armoured-tracks-baneblade"
-        ]
+        ],
+        "hull_shape_id": "baneblade"
       }
     ],
     "game_version": {
@@ -17761,14 +17761,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "hydra-autocannon",
           "armoured-tracks-hydra",
           "heavy-bolter"
-        ]
+        ],
+        "hull_shape_id": "hydra"
       }
     ],
     "game_version": {
@@ -17927,14 +17927,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks",
           "eradicator-nova-cannon",
           "lascannon"
-        ]
+        ],
+        "hull_shape_id": "leman-russ"
       }
     ],
     "game_version": {

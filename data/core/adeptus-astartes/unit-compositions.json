@@ -1875,15 +1875,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks",
           "hurricane-bolter-land-raider-crusader",
           "hurricane-bolter-land-raider-crusader",
           "twin-assault-cannon-land-raider-crusader"
-        ]
+        ],
+        "hull_shape_id": "land-raider-crusader"
       }
     ],
     "game_version": {
@@ -5121,13 +5121,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks-baal-predator",
           "twin-assault-cannon-baal-predator"
-        ]
+        ],
+        "hull_shape_id": "baal-predator"
       }
     ],
     "game_version": {
@@ -15899,10 +15899,10 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
-        "default_weapon_ids": []
+        "default_weapon_ids": [],
+        "hull_shape_id": "drop-pod"
       }
     ],
     "game_version": {
@@ -18171,15 +18171,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks",
           "godhammer-lascannon",
           "godhammer-lascannon",
           "twin-heavy-bolter-land-raider"
-        ]
+        ],
+        "hull_shape_id": "land-raider"
       }
     ],
     "game_version": {
@@ -24102,8 +24102,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-hull-astraeus",
@@ -24113,7 +24112,8 @@
           "storm-bolter-astraeus",
           "twin-heavy-bolter-astraeus",
           "twin-macro-accelerator-cannon"
-        ]
+        ],
+        "hull_shape_id": "astraeus"
       }
     ],
     "game_version": {
@@ -24351,15 +24351,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks",
           "flamestorm-cannon",
           "flamestorm-cannon",
           "twin-assault-cannon-land-raider-redeemer"
-        ]
+        ],
+        "hull_shape_id": "land-raider-redeemer"
       }
     ],
     "game_version": {
@@ -24725,13 +24725,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks-rhino",
           "storm-bolter-rhino"
-        ]
+        ],
+        "hull_shape_id": "rhino"
       }
     ],
     "game_version": {

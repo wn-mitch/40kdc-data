@@ -45,8 +45,7 @@
       "Imperial Knights"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,
@@ -341,8 +340,7 @@
       "Imperial Knights"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,

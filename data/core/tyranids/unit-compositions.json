@@ -1128,8 +1128,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "titanic-scything-talons",
@@ -1137,7 +1136,8 @@
           "dire-bio-cannon",
           "bio-plasma-torrent",
           "lashwhip-pods"
-        ]
+        ],
+        "hull_shape_id": "hierophant"
       }
     ],
     "game_version": {
@@ -2531,13 +2531,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "sporocyst-bio-weapons",
           "flensing-whips"
-        ]
+        ],
+        "hull_shape_id": "sporocyst"
       }
     ],
     "game_version": {

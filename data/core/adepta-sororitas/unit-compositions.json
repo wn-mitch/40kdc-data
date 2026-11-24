@@ -2588,14 +2588,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks",
           "heavy-bolter",
           "immolation-flamers"
-        ]
+        ],
+        "hull_shape_id": "immolator"
       }
     ],
     "game_version": {
@@ -3974,13 +3974,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks",
           "storm-bolter"
-        ]
+        ],
+        "hull_shape_id": "rhino"
       }
     ],
     "game_version": {
@@ -4512,8 +4512,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "castigator-autocannons",
@@ -4521,7 +4520,8 @@
           "heavy-bolter",
           "heavy-bolter",
           "heavy-bolter"
-        ]
+        ],
+        "hull_shape_id": "castigator"
       }
     ],
     "game_version": {
@@ -4701,14 +4701,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "exorcist-missile-launcher",
           "armoured-tracks",
           "heavy-bolter"
-        ]
+        ],
+        "hull_shape_id": "exorcist"
       }
     ],
     "game_version": {

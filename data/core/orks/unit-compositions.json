@@ -9,13 +9,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "huge-tusks",
           "kannon-gargantuan-squiggoth"
-        ]
+        ],
+        "hull_shape_id": "gargantuan-squiggoth"
       }
     ],
     "game_version": {
@@ -1514,12 +1514,12 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "crushin-bulk"
-        ]
+        ],
+        "hull_shape_id": "battlewagon"
       }
     ],
     "game_version": {
@@ -2315,8 +2315,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "big-shoota",
@@ -2328,7 +2327,8 @@
           "mega-choppa",
           "skorcha-stompa",
           "supa-gatler"
-        ]
+        ],
+        "hull_shape_id": "stompa"
       }
     ],
     "game_version": {
@@ -2480,13 +2480,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "gaze-of-gork",
           "big-shoota"
-        ]
+        ],
+        "hull_shape_id": "bossbunka"
       }
     ],
     "game_version": {
@@ -3586,13 +3586,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "dual-big-shoota",
           "spiked-ram"
-        ]
+        ],
+        "hull_shape_id": "trukk"
       }
     ],
     "game_version": {
@@ -3994,13 +3994,13 @@
         "max": 3,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "scavenged-shivs-mek-gunz",
           "smasha-gun-mek-gunz"
-        ]
+        ],
+        "hull_shape_id": "mek-gun"
       }
     ],
     "game_version": {

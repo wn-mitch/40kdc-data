@@ -106,7 +106,8 @@
     "typecheck:test": "tsc -p tsconfig.test.json",
     "semantic-authoring": "tsx src/semantic-authoring/cli.ts",
     "damage:stack": "tsx src/stack-damage.ts",
-    "derive:keystones": "tsx src/derive-keystones.ts"
+    "derive:keystones": "tsx src/derive-keystones.ts",
+    "tts-hulls": "tsx src/tts-hulls.ts"
   },
   "dependencies": {
     "ajv": "^8.17.0",

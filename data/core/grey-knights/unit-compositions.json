@@ -9,15 +9,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "twin-assault-cannon",
           "armoured-tracks",
           "flamestorm-cannon",
           "flamestorm-cannon"
-        ]
+        ],
+        "hull_shape_id": "land-raider-redeemer"
       }
     ],
     "game_version": {
@@ -468,15 +468,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "hurricane-bolter",
           "hurricane-bolter",
           "twin-assault-cannon",
           "armoured-tracks"
-        ]
+        ],
+        "hull_shape_id": "land-raider-crusader"
       }
     ],
     "game_version": {
@@ -805,13 +805,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "twin-heavy-bolter",
           "armoured-tracks-razorback"
-        ]
+        ],
+        "hull_shape_id": "razorback"
       }
     ],
     "game_version": {
@@ -1723,13 +1723,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "storm-bolter-rhino",
           "armoured-tracks-rhino"
-        ]
+        ],
+        "hull_shape_id": "rhino"
       }
     ],
     "game_version": {
@@ -4629,15 +4629,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "twin-heavy-bolter",
           "armoured-tracks",
           "godhammer-lascannon",
           "godhammer-lascannon"
-        ]
+        ],
+        "hull_shape_id": "land-raider"
       }
     ],
     "game_version": {

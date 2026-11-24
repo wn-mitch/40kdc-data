@@ -2437,15 +2437,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "soulshatter-lascannon",
           "soulshatter-lascannon",
           "twin-heavy-bolter",
           "armoured-tracks"
-        ]
+        ],
+        "hull_shape_id": "land-raider"
       }
     ],
     "game_version": {
@@ -3238,13 +3238,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "predator-twin-lascannon",
           "armoured-tracks-chaos-predator-annihilator"
-        ]
+        ],
+        "hull_shape_id": "predator"
       }
     ],
     "game_version": {
@@ -3951,12 +3951,12 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "lashing-warp-energies"
-        ]
+        ],
+        "hull_shape_id": "noctilith-crown"
       }
     ],
     "game_version": {
@@ -4641,13 +4641,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks-chaos-predator-destructor",
           "predator-autocannon"
-        ]
+        ],
+        "hull_shape_id": "predator"
       }
     ],
     "game_version": {
@@ -5988,13 +5988,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "demolisher-cannon",
           "armoured-tracks-chaos-vindicator"
-        ]
+        ],
+        "hull_shape_id": "vindicator"
       }
     ],
     "game_version": {
@@ -9550,13 +9550,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks-chaos-rhino",
           "combi-bolter"
-        ]
+        ],
+        "hull_shape_id": "chaos-rhino"
       }
     ],
     "game_version": {
@@ -11945,14 +11945,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "gorestorm-cannon",
           "hades-gatling-cannon",
           "great-cleaver-of-khorne"
-        ]
+        ],
+        "hull_shape_id": "lord-of-skulls"
       }
     ],
     "game_version": {

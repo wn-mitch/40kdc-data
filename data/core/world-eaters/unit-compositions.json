@@ -1397,15 +1397,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "twin-heavy-bolter",
           "soulshatter-lascannon",
           "soulshatter-lascannon",
           "armoured-tracks"
-        ]
+        ],
+        "hull_shape_id": "land-raider"
       }
     ],
     "game_version": {
@@ -2800,13 +2800,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "combi-bolter",
           "armoured-tracks-chaos-rhino"
-        ]
+        ],
+        "hull_shape_id": "chaos-rhino"
       }
     ],
     "game_version": {
@@ -3701,13 +3701,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks-chaos-predator-destructor",
           "predator-autocannon"
-        ]
+        ],
+        "hull_shape_id": "predator"
       }
     ],
     "game_version": {
@@ -3978,13 +3978,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "predator-twin-lascannon",
           "armoured-tracks-chaos-predator-annihilator"
-        ]
+        ],
+        "hull_shape_id": "predator"
       }
     ],
     "game_version": {
@@ -4685,14 +4685,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "hades-gatling-cannon",
           "great-cleaver-of-khorne",
           "gorestorm-cannon"
-        ]
+        ],
+        "hull_shape_id": "lord-of-skulls"
       }
     ],
     "game_version": {
