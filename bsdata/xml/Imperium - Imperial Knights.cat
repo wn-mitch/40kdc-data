@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Imperial Knights" id="25dd-7aa0-6bf4-f2d5" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Imperial Knights" id="25dd-7aa0-6bf4-f2d5" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <entryLinks>
     <entryLink name="Acastus Knight Asterius" id="b3d6-2848-dc97-9400" hidden="false" import="true" targetId="f8d0-fdf2-2e5e-3b74" type="selectionEntry"/>
     <entryLink name="Knight Defender" id="559c-bf44-e97e-720d" hidden="false" import="true" targetId="f12b-ca2a-9c87-79bb" type="selectionEntry"/>

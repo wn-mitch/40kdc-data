@@ -933,8 +933,7 @@
       "Adeptus Astartes"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,
@@ -3389,8 +3388,7 @@
       "Blood Angels"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,
@@ -7903,8 +7901,7 @@
       "Adeptus Astartes"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,
@@ -9032,8 +9029,7 @@
       "Adeptus Astartes"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,
@@ -11223,8 +11219,7 @@
       "Adeptus Astartes"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,
@@ -11316,8 +11311,7 @@
       "Adeptus Astartes"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,
@@ -11510,8 +11504,7 @@
       "Adeptus Astartes"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,

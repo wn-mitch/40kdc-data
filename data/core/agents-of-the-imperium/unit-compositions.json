@@ -584,15 +584,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "multi-laser",
           "heavy-bolter",
           "lasgun-array",
           "armoured-tracks"
-        ]
+        ],
+        "hull_shape_id": "chimera"
       }
     ],
     "game_version": {
@@ -1177,14 +1177,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "heavy-bolter-sisters-of-battle-immolator",
           "immolation-flamers",
           "armoured-tracks"
-        ]
+        ],
+        "hull_shape_id": "immolator"
       }
     ],
     "game_version": {
@@ -3347,13 +3347,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "storm-bolter-imperial-rhino",
           "armoured-tracks"
-        ]
+        ],
+        "hull_shape_id": "rhino"
       }
     ],
     "game_version": {

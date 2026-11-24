@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Agents of the Imperium" id="b00-cd86-4b4c-97ba" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Agents of the Imperium" id="b00-cd86-4b4c-97ba" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <entryLinks>
     <entryLink name="Sanctifiers" id="c13d-c2ec-2c1f-7e0c" hidden="false" import="true" targetId="4e74-3710-7a66-9d6c" type="selectionEntry"/>
     <entryLink name="Watch Captain Artemis" id="8cd4-0d51-c141-6ca3" hidden="false" import="true" targetId="f158-1e0b-585b-bf40" type="selectionEntry"/>

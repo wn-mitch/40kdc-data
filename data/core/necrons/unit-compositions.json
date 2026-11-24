@@ -117,14 +117,14 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "singularity-generator",
           "singularity-generator",
           "titanic-forelimbs"
-        ]
+        ],
+        "hull_shape_id": "seraptek"
       }
     ],
     "game_version": {
@@ -2388,12 +2388,12 @@
         "max": 3,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "transdimensional-abductor"
-        ]
+        ],
+        "hull_shape_id": "convergence-of-dominion"
       }
     ],
     "game_version": {
@@ -2727,13 +2727,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "heat-ray",
           "stalkers-forelimbs"
-        ]
+        ],
+        "hull_shape_id": "triarch-stalker"
       }
     ],
     "game_version": {

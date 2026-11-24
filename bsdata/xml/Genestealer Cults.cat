@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Xenos - Genestealer Cults" id="3bdf-a114-5035-c6ac" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Xenos - Genestealer Cults" id="3bdf-a114-5035-c6ac" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <categoryEntries>
     <categoryEntry name="Aberrants" id="e919-694c-97ac-c174" hidden="false"/>
     <categoryEntry name="Abominant" id="7cc8-a037-cc71-6377" hidden="false"/>

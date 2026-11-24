@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<gameSystem xmlns="http://www.battlescribe.net/schema/gameSystemSchema" name="Warhammer 40,000 11th Edition" id="sys-352e-adc2-7639-d610" battleScribeVersion="2.03" revision="10502">
-  <readme>Generated from @alpaca-software/40kdc-data 1.5.2. Stat lines and points are numerical facts; ability descriptions are 40kdc's own plain-English summaries, not rules text.</readme>
+<gameSystem xmlns="http://www.battlescribe.net/schema/gameSystemSchema" name="Warhammer 40,000 11th Edition" id="sys-352e-adc2-7639-d610" battleScribeVersion="2.03" revision="10503">
+  <readme>Generated from @alpaca-software/40kdc-data 1.5.3. Stat lines and points are numerical facts; ability descriptions are 40kdc's own plain-English summaries, not rules text.</readme>
   <publications>
     <publication name="40kdc-data" id="8d11-51b0-f376-c893" publisherUrl="https://40kdc.alpacasoft.dev"/>
   </publications>

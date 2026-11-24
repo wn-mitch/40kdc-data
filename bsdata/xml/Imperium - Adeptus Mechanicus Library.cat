@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Mechanicus Library" id="cc02-17c0-408c-a028" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="true" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Mechanicus Library" id="cc02-17c0-408c-a028" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="true" revision="10503">
   <categoryEntries>
     <categoryEntry name="Aircraft" id="8086-c30f-a208-7346" hidden="false"/>
     <categoryEntry name="Archaeopter Fusilave" id="f826-1ad1-a542-2058" hidden="false"/>

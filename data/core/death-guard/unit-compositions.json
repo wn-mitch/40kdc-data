@@ -472,13 +472,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks",
           "predator-twin-lascannon"
-        ]
+        ],
+        "hull_shape_id": "predator"
       }
     ],
     "game_version": {
@@ -663,13 +663,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "predator-autocannon",
           "armoured-tracks"
-        ]
+        ],
+        "hull_shape_id": "predator"
       }
     ],
     "game_version": {
@@ -968,8 +968,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks",
@@ -977,7 +976,8 @@
           "entropy-cannon",
           "entropy-cannon",
           "heavy-slugger"
-        ]
+        ],
+        "hull_shape_id": "plagueburst-crawler"
       }
     ],
     "game_version": {
@@ -2810,12 +2810,12 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "miasmic-gouts"
-        ]
+        ],
+        "hull_shape_id": "miasmic-malignifier"
       }
     ],
     "game_version": {
@@ -4010,13 +4010,13 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "combi-bolter",
           "armoured-tracks"
-        ]
+        ],
+        "hull_shape_id": "chaos-rhino"
       }
     ],
     "game_version": {
@@ -4208,15 +4208,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "armoured-tracks-chaos-land-raider",
           "soulshatter-lascannon",
           "soulshatter-lascannon",
           "twin-heavy-bolter"
-        ]
+        ],
+        "hull_shape_id": "land-raider"
       }
     ],
     "game_version": {

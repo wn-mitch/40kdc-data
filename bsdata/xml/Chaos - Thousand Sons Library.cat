@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Thousand Sons Library" id="de7c-a30b-44f3-5d5c" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="true" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Thousand Sons Library" id="de7c-a30b-44f3-5d5c" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="true" revision="10503">
   <categoryEntries>
     <categoryEntry name="Ahriman" id="1b57-d2d1-a0ab-019e" hidden="false"/>
     <categoryEntry name="Blue" id="ebde-2682-6142-07b7" hidden="false"/>

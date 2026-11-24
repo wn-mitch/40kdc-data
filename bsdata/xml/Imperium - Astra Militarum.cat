@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Astra Militarum" id="b0ae-12a5-c84-ea45" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Astra Militarum" id="b0ae-12a5-c84-ea45" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <categoryEntries>
     <categoryEntry name="Aegis Defence Line" id="a56a-23f-9ea1-d8ee" hidden="false"/>
     <categoryEntry name="Aircraft" id="4e9f-6f7d-bcc4-1ab3" hidden="false"/>

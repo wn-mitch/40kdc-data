@@ -2975,9 +2975,9 @@
         "is_leader_model": false,
         "default_weapon_ids": [],
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
-        }
+          "shape": "hull"
+        },
+        "hull_shape_id": "feculent-gnarlmaw"
       }
     ],
     "game_version": {
@@ -5646,9 +5646,9 @@
         "is_leader_model": false,
         "default_weapon_ids": [],
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
-        }
+          "shape": "hull"
+        },
+        "hull_shape_id": "skull-altar"
       }
     ],
     "game_version": {

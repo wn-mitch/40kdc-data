@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Chaos Knights Library" id="4d13-39bb-3d9b-fd5e" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="true" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Chaos Knights Library" id="4d13-39bb-3d9b-fd5e" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="true" revision="10503">
   <categoryEntries>
     <categoryEntry name="Abhorrent" id="f2d9-b5e8-4183-cb0b" hidden="false"/>
     <categoryEntry name="Acastus" id="4ba6-5e16-28e6-835a" hidden="false"/>

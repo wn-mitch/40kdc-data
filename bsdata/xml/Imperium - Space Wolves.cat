@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Astartes - Space Wolves" id="94bb-3284-ee14-57a1" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Imperium - Adeptus Astartes - Space Wolves" id="94bb-3284-ee14-57a1" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <categoryEntries>
     <categoryEntry name="Allies: Adeptus Titanicus" id="58d6-2ec4-7450-4519" hidden="false"/>
     <categoryEntry name="Allies: Adeptus Titanicus: Reaver Titan" id="b0d9-b402-2eca-25a0" hidden="true">

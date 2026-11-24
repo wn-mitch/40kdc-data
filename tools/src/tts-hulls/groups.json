@@ -1,0 +1,498 @@
+[
+  {
+    "id": "rhino",
+    "name": "Rhino",
+    "match": "^(blood angels |black templars |space wolves |dark angels |ultramarines )?rhino$",
+    "units": [
+      "adeptus-astartes/rhino",
+      "grey-knights/rhino",
+      "agents-of-the-imperium/imperial-rhino",
+      "adeptus-custodes/anathema-psykana-rhino",
+      "adepta-sororitas/sororitas-rhino"
+    ]
+  },
+  {
+    "id": "chaos-rhino",
+    "name": "Chaos Rhino",
+    "match": "^chaos rhino$",
+    "units": [
+      "chaos-space-marines/chaos-rhino",
+      "death-guard/chaos-rhino",
+      "emperors-children/chaos-rhino",
+      "thousand-sons/chaos-rhino",
+      "world-eaters/chaos-rhino"
+    ]
+  },
+  {
+    "id": "razorback",
+    "name": "Razorback",
+    "match": "^razorback",
+    "units": [
+      "grey-knights/razorback"
+    ]
+  },
+  {
+    "id": "predator",
+    "name": "Predator",
+    "match": "^(chaos )?predator( (annihilator|destructor))?$|^predator 3/3",
+    "units": [
+      "chaos-space-marines/chaos-predator-annihilator",
+      "chaos-space-marines/chaos-predator-destructor",
+      "death-guard/chaos-predator-annihilator",
+      "death-guard/chaos-predator-destructor",
+      "thousand-sons/chaos-predator-annihilator",
+      "thousand-sons/chaos-predator-destructor",
+      "world-eaters/chaos-predator-annihilator",
+      "world-eaters/chaos-predator-destructor"
+    ]
+  },
+  {
+    "id": "baal-predator",
+    "name": "Baal Predator",
+    "match": "^baal predator",
+    "units": [
+      "adeptus-astartes/baal-predator"
+    ]
+  },
+  {
+    "id": "vindicator",
+    "name": "Vindicator",
+    "match": "^(chaos |[a-z ]+ )?vindicator$",
+    "units": [
+      "chaos-space-marines/chaos-vindicator",
+      "thousand-sons/chaos-vindicator"
+    ]
+  },
+  {
+    "id": "immolator",
+    "name": "Immolator",
+    "match": "^(10/10 )?immolator",
+    "units": [
+      "adepta-sororitas/immolator",
+      "agents-of-the-imperium/sisters-of-battle-immolator"
+    ]
+  },
+  {
+    "id": "exorcist",
+    "name": "Exorcist",
+    "match": "^(12/12 )?exorcist( -|$)",
+    "units": [
+      "adepta-sororitas/exorcist"
+    ]
+  },
+  {
+    "id": "castigator",
+    "name": "Castigator",
+    "match": "^castigator$",
+    "units": [
+      "adepta-sororitas/castigator"
+    ]
+  },
+  {
+    "id": "land-raider",
+    "name": "Land Raider",
+    "match": "^(blood angels |chaos )?land raider$",
+    "units": [
+      "adeptus-astartes/land-raider",
+      "grey-knights/land-raider",
+      "chaos-space-marines/chaos-land-raider",
+      "death-guard/chaos-land-raider",
+      "emperors-children/chaos-land-raider",
+      "thousand-sons/chaos-land-raider",
+      "world-eaters/chaos-land-raider"
+    ]
+  },
+  {
+    "id": "land-raider-crusader",
+    "name": "Land Raider Crusader",
+    "match": "land raider crusader",
+    "units": [
+      "adeptus-astartes/land-raider-crusader",
+      "grey-knights/land-raider-crusader"
+    ]
+  },
+  {
+    "id": "land-raider-redeemer",
+    "name": "Land Raider Redeemer",
+    "match": "land raider redeemer",
+    "units": [
+      "adeptus-astartes/land-raider-redeemer",
+      "grey-knights/land-raider-redeemer"
+    ]
+  },
+  {
+    "id": "drop-pod",
+    "name": "Drop Pod",
+    "match": "^drop pod$",
+    "units": [
+      "adeptus-astartes/drop-pod"
+    ]
+  },
+  {
+    "id": "astraeus",
+    "name": "Astraeus",
+    "match": "^astraeus super ?heavy tank$",
+    "units": [
+      "adeptus-astartes/astraeus"
+    ]
+  },
+  {
+    "id": "skorpius",
+    "name": "Skorpius",
+    "match": "^(skorpius )?dunerider$|^skorpius disintegrator$",
+    "units": [
+      "adeptus-mechanicus/skorpius-dunerider",
+      "adeptus-mechanicus/skorpius-disintegrator"
+    ]
+  },
+  {
+    "id": "leman-russ",
+    "name": "Leman Russ",
+    "match": "^leman russ( battle tank)?$|^leman russ (demolisher|eradicator|executioner|exterminator|punisher|vanquisher|commander)$",
+    "units": [
+      "astra-militarum/leman-russ-battle-tank",
+      "astra-militarum/leman-russ-commander",
+      "astra-militarum/leman-russ-demolisher",
+      "astra-militarum/leman-russ-eradicator",
+      "astra-militarum/leman-russ-executioner",
+      "astra-militarum/leman-russ-exterminator",
+      "astra-militarum/leman-russ-punisher",
+      "astra-militarum/leman-russ-vanquisher"
+    ]
+  },
+  {
+    "id": "rogal-dorn",
+    "name": "Rogal Dorn",
+    "match": "^rogal dorn( battle tank)?( w/.*)?$",
+    "units": [
+      "astra-militarum/rogal-dorn-battle-tank",
+      "astra-militarum/rogal-dorn-commander"
+    ]
+  },
+  {
+    "id": "chimera",
+    "name": "Chimera",
+    "match": "^chimera$|^chimera hbolter",
+    "units": [
+      "astra-militarum/chimera",
+      "agents-of-the-imperium/inquisitorial-chimera"
+    ]
+  },
+  {
+    "id": "basilisk",
+    "name": "Basilisk",
+    "match": "^basilisk$",
+    "units": [
+      "astra-militarum/basilisk"
+    ]
+  },
+  {
+    "id": "hydra",
+    "name": "Hydra",
+    "match": "^hydra$",
+    "units": [
+      "astra-militarum/hydra"
+    ]
+  },
+  {
+    "id": "wyvern",
+    "name": "Wyvern",
+    "match": "^wyverns?$",
+    "units": [
+      "astra-militarum/wyvern"
+    ]
+  },
+  {
+    "id": "manticore",
+    "name": "Manticore",
+    "match": "^manticore( missile battery)?$",
+    "units": [
+      "astra-militarum/manticore"
+    ]
+  },
+  {
+    "id": "deathstrike",
+    "name": "Deathstrike",
+    "match": "^deathstrike$",
+    "units": [
+      "astra-militarum/deathstrike"
+    ]
+  },
+  {
+    "id": "hellhound",
+    "name": "Hellhound",
+    "match": "^hellhound$",
+    "units": [
+      "astra-militarum/hellhound"
+    ]
+  },
+  {
+    "id": "taurox",
+    "name": "Taurox",
+    "match": "^taurox( prime)?$",
+    "units": [
+      "astra-militarum/taurox",
+      "astra-militarum/taurox-prime"
+    ]
+  },
+  {
+    "id": "cyclops",
+    "name": "Cyclops Demolition Vehicle",
+    "match": "^cyclops( demolition vehicle)?$",
+    "units": [
+      "astra-militarum/cyclops-demolition-vehicle"
+    ]
+  },
+  {
+    "id": "baneblade",
+    "name": "Baneblade",
+    "match": "^(baneblade|banehammer|banesword|doomhammer|hellhammer)$",
+    "units": [
+      "astra-militarum/baneblade",
+      "astra-militarum/banehammer",
+      "astra-militarum/banesword",
+      "astra-militarum/doomhammer",
+      "astra-militarum/hellhammer"
+    ]
+  },
+  {
+    "id": "shadowsword",
+    "name": "Shadowsword",
+    "match": "^(shadowsword|stormsword)$",
+    "units": [
+      "astra-militarum/shadowsword",
+      "astra-militarum/stormlord",
+      "astra-militarum/stormsword"
+    ]
+  },
+  {
+    "id": "aegis-defence-line",
+    "name": "Aegis Defence Line",
+    "match": "(?!)",
+    "units": [
+      "astra-militarum/aegis-defence-line"
+    ],
+    "note": "A set of separate wall sections the player arranges, not one footprint."
+  },
+  {
+    "id": "phantom-titan",
+    "name": "Phantom Titan",
+    "match": "^phantom titan",
+    "units": [
+      "aeldari/phantom-titan"
+    ]
+  },
+  {
+    "id": "revenant-titan",
+    "name": "Revenant Titan",
+    "match": "^revenant titan$",
+    "units": [
+      "aeldari/revenant-titan"
+    ]
+  },
+  {
+    "id": "acastus",
+    "name": "Acastus Knight",
+    "match": "^acastus knight( asterius| porphyrion)?$",
+    "units": [
+      "imperial-knights/acastus-knight-asterius",
+      "imperial-knights/acastus-knight-porphyrion",
+      "chaos-knights/chaos-acastus-knight-asterius",
+      "chaos-knights/chaos-acastus-knight-porphyrion"
+    ]
+  },
+  {
+    "id": "lord-of-skulls",
+    "name": "Khorne Lord of Skulls",
+    "match": "^(khorne )?lord of skulls$",
+    "units": [
+      "chaos-space-marines/khorne-lord-of-skulls",
+      "world-eaters/khorne-lord-of-skulls"
+    ]
+  },
+  {
+    "id": "noctilith-crown",
+    "name": "Noctilith Crown",
+    "match": "^noctilith crown$",
+    "units": [
+      "chaos-space-marines/noctilith-crown"
+    ]
+  },
+  {
+    "id": "feculent-gnarlmaw",
+    "name": "Feculent Gnarlmaw",
+    "match": "^feculent gnarlmaw$",
+    "units": [
+      "chaos-daemons/feculent-gnarlmaw"
+    ]
+  },
+  {
+    "id": "skull-altar",
+    "name": "Skull Altar",
+    "match": "^skull altar$",
+    "units": [
+      "chaos-daemons/skull-altar"
+    ]
+  },
+  {
+    "id": "miasmic-malignifier",
+    "name": "Miasmic Malignifier",
+    "match": "(?!)",
+    "units": [
+      "death-guard/miasmic-malignifier"
+    ],
+    "note": "The only TTS mesh is split into separate chimney and furnace parts."
+  },
+  {
+    "id": "plagueburst-crawler",
+    "name": "Plagueburst Crawler",
+    "match": "^plagueburst crawler$",
+    "units": [
+      "death-guard/plagueburst-crawler"
+    ]
+  },
+  {
+    "id": "goliath-truck",
+    "name": "Goliath Truck",
+    "match": "^goliath truck$",
+    "units": [
+      "genestealer-cults/goliath-truck"
+    ]
+  },
+  {
+    "id": "goliath-rockgrinder",
+    "name": "Goliath Rockgrinder",
+    "match": "^goliath rockgrinder( w/.*)?$",
+    "units": [
+      "genestealer-cults/goliath-rockgrinder"
+    ]
+  },
+  {
+    "id": "hekaton",
+    "name": "Hekaton Land Fortress",
+    "match": "^hekaton land fortress( - .*)?$",
+    "units": [
+      "leagues-of-votann/hekaton-land-fortress"
+    ]
+  },
+  {
+    "id": "sagitaur",
+    "name": "Sagitaur",
+    "match": "^sagitaur",
+    "units": [
+      "leagues-of-votann/sagitaur"
+    ]
+  },
+  {
+    "id": "triarch-stalker",
+    "name": "Triarch Stalker",
+    "match": "^(10/10 )?triarch stalker",
+    "units": [
+      "necrons/triarch-stalker"
+    ]
+  },
+  {
+    "id": "seraptek",
+    "name": "Seraptek Heavy Construct",
+    "match": "seraptek (heavy )?construct",
+    "units": [
+      "necrons/seraptek-heavy-construct"
+    ]
+  },
+  {
+    "id": "convergence-of-dominion",
+    "name": "Starstele",
+    "match": "^convergence of dominion( - starstele( [abc])?)?$",
+    "units": [
+      "necrons/convergence-of-dominion"
+    ]
+  },
+  {
+    "id": "battlewagon",
+    "name": "Battlewagon",
+    "match": "^battlewagon( \\(16/16\\))?$",
+    "units": [
+      "orks/battlewagon"
+    ]
+  },
+  {
+    "id": "bossbunka",
+    "name": "Big'ed Bossbunka",
+    "match": "^big.ed bossbunka$",
+    "units": [
+      "orks/biged-bossbunka"
+    ]
+  },
+  {
+    "id": "gargantuan-squiggoth",
+    "name": "Gargantuan Squiggoth",
+    "match": "^gargantuan squiggoth$",
+    "units": [
+      "orks/gargantuan-squiggoth"
+    ]
+  },
+  {
+    "id": "mek-gun",
+    "name": "Mek Gun",
+    "match": "^mek gun w/",
+    "units": [
+      "orks/mek-gunz"
+    ]
+  },
+  {
+    "id": "stompa",
+    "name": "Stompa",
+    "match": "^stompa( \\(40/40\\))?$",
+    "units": [
+      "orks/stompa"
+    ]
+  },
+  {
+    "id": "trukk",
+    "name": "Trukk",
+    "match": "^(looted )?trukk$|^ork trukk",
+    "units": [
+      "orks/trukk"
+    ]
+  },
+  {
+    "id": "tidewall-droneport",
+    "name": "Tidewall Droneport",
+    "match": "^tidewall droneport$",
+    "units": [
+      "tau-empire/tidewall-droneport"
+    ]
+  },
+  {
+    "id": "tidewall-gunrig",
+    "name": "Tidewall Gunrig",
+    "match": "^tidewall gunrig$",
+    "units": [
+      "tau-empire/tidewall-gunrig"
+    ]
+  },
+  {
+    "id": "tidewall-shieldline",
+    "name": "Tidewall Shieldline",
+    "match": "^tidewall shieldline$",
+    "units": [
+      "tau-empire/tidewall-shieldline"
+    ]
+  },
+  {
+    "id": "hierophant",
+    "name": "Hierophant",
+    "match": "^hierophant( bio-titan)?$",
+    "units": [
+      "tyranids/hierophant"
+    ]
+  },
+  {
+    "id": "sporocyst",
+    "name": "Sporocyst",
+    "match": "^(12/12 )?sporocyst$",
+    "units": [
+      "tyranids/sporocyst"
+    ]
+  }
+]

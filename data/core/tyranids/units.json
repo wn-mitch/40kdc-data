@@ -719,8 +719,7 @@
       "Tyranids"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,
@@ -1698,8 +1697,7 @@
       "Tyranids"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,

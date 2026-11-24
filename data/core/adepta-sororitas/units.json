@@ -1185,8 +1185,7 @@
       "Adepta Sororitas"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,
@@ -1742,8 +1741,7 @@
       "Adepta Sororitas"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,
@@ -1923,8 +1921,7 @@
       "Adepta Sororitas"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,
@@ -2012,8 +2009,7 @@
       "Adepta Sororitas"
     ],
     "base_size_mm": {
-      "shape": "hull",
-      "draft": true
+      "shape": "hull"
     },
     "model_count": {
       "min": 1,

@@ -1,0 +1,1855 @@
+{
+  "game_version": {
+    "edition": "11th",
+    "dataslate": "2026-10-14"
+  },
+  "hulls": [
+    {
+      "id": "acastus",
+      "name": "Acastus Knight",
+      "tts_nickname": "Acastus Knight Asterius",
+      "mesh_sha256": "c1443420d941e8d129ef3784917b2c494079eb950395e0afc6c9f1f5396f6544",
+      "scale": 1.2,
+      "rot_x_deg": 360,
+      "rot_z_deg": 0,
+      "units": [
+        "imperial-knights/acastus-knight-asterius",
+        "imperial-knights/acastus-knight-porphyrion",
+        "chaos-knights/chaos-acastus-knight-asterius",
+        "chaos-knights/chaos-acastus-knight-porphyrion"
+      ],
+      "note": "The other well-agreed mesh carries its display base as a child part."
+    },
+    {
+      "id": "astraeus",
+      "name": "Astraeus",
+      "tts_nickname": "Astraeus Super Heavy Tank",
+      "mesh_sha256": "010df673a3420cfa231b90d5265f7143834ba6a1ea05b00d6c9d3e54a561772b",
+      "scale": 0.65,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "adeptus-astartes/astraeus"
+      ]
+    },
+    {
+      "id": "baal-predator",
+      "name": "Baal Predator",
+      "tts_nickname": "Baal Predator Bolter",
+      "mesh_sha256": "28911d2e91016b70cb3498ecb834f55d93ebd224687f0b92efce25de69fd9fcd",
+      "scale": 1.1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "adeptus-astartes/baal-predator"
+      ]
+    },
+    {
+      "id": "baneblade",
+      "name": "Baneblade",
+      "tts_nickname": "Baneblade",
+      "mesh_sha256": "62ad2ad87f27a098e52b97bf150e0ddcd37251516a8cc08989e6b8c444e74f78",
+      "parts": [
+        {
+          "mesh_sha256": "aa34005de1eec7c02003e951e8b21fa2a6e6d41967c972756bd4e2acc421d633",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "1bacb5ec522fa44246deb75e155007395ce8d5f7f8312e701497ca5fd0f001b6",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/baneblade",
+        "astra-militarum/banehammer",
+        "astra-militarum/banesword",
+        "astra-militarum/doomhammer",
+        "astra-militarum/hellhammer"
+      ]
+    },
+    {
+      "id": "basilisk",
+      "name": "Basilisk",
+      "tts_nickname": "Basilisk",
+      "mesh_sha256": "e5c1eab63b7135a6bff5e70a2c867a4d367e768551ea6439aab623ec1359c845",
+      "parts": [
+        {
+          "mesh_sha256": "f2479423172c986f3992f670e82fb3dfd483b8faafe90482c018ce410c79f54d",
+          "position": [
+            -1.00554439e-06,
+            1.255791,
+            0.000333123375
+          ],
+          "rotation": [
+            359.053925,
+            -0.0011075153,
+            1.01609248e-05
+          ],
+          "scale": [
+            1,
+            1,
+            0.99999994
+          ]
+        }
+      ],
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/basilisk"
+      ]
+    },
+    {
+      "id": "battlewagon",
+      "name": "Battlewagon",
+      "tts_nickname": "Battlewagon",
+      "mesh_sha256": "a714a6819caa2a73da5e9306f0db6975a4933486e6540399608d85907850f9c4",
+      "scale": 1.35,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "orks/battlewagon"
+      ],
+      "note": "The consensus mesh has an open deck that projects as a U."
+    },
+    {
+      "id": "bossbunka",
+      "name": "Big'ed Bossbunka",
+      "tts_nickname": "Big'ed Bossbunka",
+      "mesh_sha256": "d8dfdb484e3388fc2bcfc084a03708aa0847eb0308a445a6595fbac56717915a",
+      "parts": [
+        {
+          "mesh_sha256": "e8f3d3f2799b311364d8849e79583036d576d1129fd422b6b13d4302d4ae0d23",
+          "position": [
+            0,
+            8.106232e-06,
+            -1.66893e-06
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "orks/biged-bossbunka"
+      ]
+    },
+    {
+      "id": "castigator",
+      "name": "Castigator",
+      "tts_nickname": "Castigator",
+      "mesh_sha256": "7aa12409b8bdc549d2d10ee75430ae24f05313f0c2e4c73c1e3cdff892768195",
+      "scale": 2,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "adepta-sororitas/castigator"
+      ]
+    },
+    {
+      "id": "chaos-rhino",
+      "name": "Chaos Rhino",
+      "tts_nickname": "Chaos Rhino",
+      "mesh_sha256": "01ff6920f5bc39527993712653f24553c2e20d3ffcff28a92e01ce80b6447331",
+      "scale": 0.95,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "chaos-space-marines/chaos-rhino",
+        "death-guard/chaos-rhino",
+        "emperors-children/chaos-rhino",
+        "thousand-sons/chaos-rhino",
+        "world-eaters/chaos-rhino"
+      ]
+    },
+    {
+      "id": "chimera",
+      "name": "Chimera",
+      "tts_nickname": "Chimera",
+      "mesh_sha256": "108c74855b1c3e5c9b7b6f6d3c8c3e9270d4304642b7b8c8c68b0fd27ef34528",
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/chimera",
+        "agents-of-the-imperium/inquisitorial-chimera"
+      ]
+    },
+    {
+      "id": "convergence-of-dominion",
+      "name": "Starstele",
+      "tts_nickname": "Convergence of dominion",
+      "mesh_sha256": "0bee32c7d8027423edc7e717dba99e26c0b214ce09eb4adc337f6da1ce389586",
+      "scale": 1.8,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "necrons/convergence-of-dominion"
+      ]
+    },
+    {
+      "id": "cyclops",
+      "name": "Cyclops Demolition Vehicle",
+      "tts_nickname": "Cyclops Demolition Vehicle",
+      "mesh_sha256": "6779010595db6bcbb0c8d8e6ea27c963af059c1433b8cc1f13cb9180075cf3f1",
+      "scale": 1.05,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/cyclops-demolition-vehicle"
+      ]
+    },
+    {
+      "id": "deathstrike",
+      "name": "Deathstrike",
+      "tts_nickname": "Deathstrike",
+      "mesh_sha256": "e2ce540b290b64a1ddd25b0c1bf9e636b8b38dd438cfc9e58c3f44ebe8b5f97f",
+      "scale": 1.05,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/deathstrike"
+      ]
+    },
+    {
+      "id": "drop-pod",
+      "name": "Drop Pod",
+      "tts_nickname": "Drop Pod",
+      "mesh_sha256": "39b53cca0645702ff50f873f1e2aac538bcf958403197ce1c713e94271b73d7c",
+      "scale": 0.975,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "adeptus-astartes/drop-pod"
+      ]
+    },
+    {
+      "id": "exorcist",
+      "name": "Exorcist",
+      "tts_nickname": "Exorcist - Conflagration Rockets + Heavy Bolter",
+      "mesh_sha256": "c9f1e28da711e3178771eb9735c7a17045806f16c294579fe1b4d846dec87e45",
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "adepta-sororitas/exorcist"
+      ]
+    },
+    {
+      "id": "feculent-gnarlmaw",
+      "name": "Feculent Gnarlmaw",
+      "tts_nickname": "Feculent Gnarlmaw",
+      "mesh_sha256": "46c50e7b59aca54fb7cda867a289707c1d02ac7754baf431870055e608afc314",
+      "scale": 1.7,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "drop_below_in": 0.36,
+      "units": [
+        "chaos-daemons/feculent-gnarlmaw"
+      ],
+      "note": "The mesh includes a 0.35 in display base, dropped."
+    },
+    {
+      "id": "gargantuan-squiggoth",
+      "name": "Gargantuan Squiggoth",
+      "tts_nickname": "Gargantuan Squiggoth",
+      "mesh_sha256": "e91cf9bcf2a4342a2ace0904292baa63b4e0b31232d25a6079fc2dd6b1ddc615",
+      "scale": 0.75,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "orks/gargantuan-squiggoth"
+      ]
+    },
+    {
+      "id": "goliath-rockgrinder",
+      "name": "Goliath Rockgrinder",
+      "tts_nickname": "Goliath Rockgrinder w/ Clearance incinerator",
+      "mesh_sha256": "16e6e17d182c690c893845a3b53abf958fa4c82ea1d613388a85c19622ba36ce",
+      "parts": [
+        {
+          "mesh_sha256": "2699e21226fe794301c39139ec2ce52016e9c269eb2dfda670edae202c91b690",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            -1.70754731e-06,
+            6.83018834e-06,
+            3.41509417e-06
+          ],
+          "scale": [
+            1.00000012,
+            1,
+            0.9999999
+          ]
+        },
+        {
+          "mesh_sha256": "189e1b91c04803cc433ea83958d6d6417fa3e07fe9e653ff139ea9a942712e53",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            0.99999994,
+            1
+          ]
+        }
+      ],
+      "scale": 1.25,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "genestealer-cults/goliath-rockgrinder"
+      ]
+    },
+    {
+      "id": "goliath-truck",
+      "name": "Goliath Truck",
+      "tts_nickname": "Goliath Truck",
+      "mesh_sha256": "b5821febe84b088e28b02fcea0e43dce5ef18685ab067df4714c83de9cccf0d8",
+      "parts": [
+        {
+          "mesh_sha256": "4d774da5201a7493db6e34d54506a60eeafff7088e3cbf5ff559488204be0af2",
+          "position": [
+            1.26032209,
+            -0.8999996,
+            -1.85424328
+          ],
+          "rotation": [
+            6.53491838e-07,
+            179.998138,
+            4.48089531e-06
+          ],
+          "scale": [
+            2.00000167,
+            2.6,
+            2.40000319
+          ]
+        },
+        {
+          "mesh_sha256": "1e904ed616f36c4e76e1e246044a0909c4bc758d7117e825b9edf337310cdc20",
+          "position": [
+            0.100191049,
+            0.400000244,
+            -1.09998322
+          ],
+          "rotation": [
+            354.713684,
+            164.813263,
+            7.955089
+          ],
+          "scale": [
+            1.00000012,
+            1,
+            1.00000012
+          ]
+        },
+        {
+          "mesh_sha256": "93f2e73f5b0e516c090ea40f4817ffbca0ee892315a900bd12bf7e3cea393074",
+          "position": [
+            0.250151217,
+            0.5000009,
+            -1.02847731
+          ],
+          "rotation": [
+            2.02813226e-05,
+            90.95734,
+            180
+          ],
+          "scale": [
+            2.000001,
+            2.00000286,
+            2.00000167
+          ]
+        },
+        {
+          "mesh_sha256": "18fa6d809c7a0f304d6da3abb7a312ff03088fbba45ba7a562740657e43b7739",
+          "position": [
+            0.0201792158,
+            0.49999848,
+            -1.22851145
+          ],
+          "rotation": [
+            329.999939,
+            179.991638,
+            180
+          ],
+          "scale": [
+            2.7,
+            1.50000083,
+            2.00000167
+          ]
+        },
+        {
+          "mesh_sha256": "93f2e73f5b0e516c090ea40f4817ffbca0ee892315a900bd12bf7e3cea393074",
+          "position": [
+            -0.1998496,
+            0.5500006,
+            -1.02854347
+          ],
+          "rotation": [
+            -2.099407e-05,
+            270.110321,
+            180
+          ],
+          "scale": [
+            2.00000262,
+            2.00000572,
+            2.00000262
+          ]
+        },
+        {
+          "mesh_sha256": "20a0f9d95d2348b68684601e3924b8248e1a95dda459b0db0dbe11fdaa2bdef6",
+          "position": [
+            0.7999474,
+            1.05000031,
+            0.300138652
+          ],
+          "rotation": [
+            -9.52658e-06,
+            359.990021,
+            90.00004
+          ],
+          "scale": [
+            2.00000072,
+            2.40000176,
+            2.00000048
+          ]
+        },
+        {
+          "mesh_sha256": "e0a88ad96e3e2a1f6263bc63d203d5fa449c722f4dfe02b6067f734333fbc668",
+          "position": [
+            0.349945962,
+            0.7000001,
+            0.298392981
+          ],
+          "rotation": [
+            -4.09161e-05,
+            359.9742,
+            270
+          ],
+          "scale": [
+            2.00000215,
+            2.000002,
+            2
+          ]
+        },
+        {
+          "mesh_sha256": "f712517cbbcd15fe06e5eaf730fac9472691cf403848492ad18781f652324808",
+          "position": [
+            0.41996488,
+            0.80000025,
+            0.200072408
+          ],
+          "rotation": [
+            -2.772973e-06,
+            149.990021,
+            -3.17758213e-06
+          ],
+          "scale": [
+            1.35000074,
+            1.5,
+            1.35000074
+          ]
+        },
+        {
+          "mesh_sha256": "4d774da5201a7493db6e34d54506a60eeafff7088e3cbf5ff559488204be0af2",
+          "position": [
+            0.09997343,
+            1.05,
+            0.15001668
+          ],
+          "rotation": [
+            -3.671904e-05,
+            179.999054,
+            90
+          ],
+          "scale": [
+            2.00000167,
+            2.60000181,
+            2.200004
+          ]
+        },
+        {
+          "mesh_sha256": "410d1a1712e0ba87f1904595a79ab6a40c7e83a62ac1459aead3d5f9ea0b7c5a",
+          "position": [
+            0.3203561,
+            0.5999997,
+            -2.04994464
+          ],
+          "rotation": [
+            319.999939,
+            179.981232,
+            -3.74573438e-06
+          ],
+          "scale": [
+            1.00000119,
+            0.500000238,
+            1.00000167
+          ]
+        },
+        {
+          "mesh_sha256": "410d1a1712e0ba87f1904595a79ab6a40c7e83a62ac1459aead3d5f9ea0b7c5a",
+          "position": [
+            -0.299644828,
+            0.599999964,
+            -2.050053
+          ],
+          "rotation": [
+            319.999939,
+            180.091156,
+            359.965118
+          ],
+          "scale": [
+            1.000002,
+            0.5000003,
+            1.00000143
+          ]
+        },
+        {
+          "mesh_sha256": "410d1a1712e0ba87f1904595a79ab6a40c7e83a62ac1459aead3d5f9ea0b7c5a",
+          "position": [
+            0.1403674,
+            0.6300002,
+            -2.119976
+          ],
+          "rotation": [
+            319.999939,
+            179.980011,
+            4.195081e-05
+          ],
+          "scale": [
+            1.00000155,
+            0.500000358,
+            1.00000226
+          ]
+        },
+        {
+          "mesh_sha256": "410d1a1712e0ba87f1904595a79ab6a40c7e83a62ac1459aead3d5f9ea0b7c5a",
+          "position": [
+            -0.07963026,
+            0.6300002,
+            -2.13001466
+          ],
+          "rotation": [
+            319.999939,
+            179.988281,
+            359.98288
+          ],
+          "scale": [
+            1.00000155,
+            0.500000238,
+            1.00000226
+          ]
+        },
+        {
+          "mesh_sha256": "4d774da5201a7493db6e34d54506a60eeafff7088e3cbf5ff559488204be0af2",
+          "position": [
+            -1.01215386,
+            -0.800001144,
+            0.5215754
+          ],
+          "rotation": [
+            3.81696873e-06,
+            179.991333,
+            339.999939
+          ],
+          "scale": [
+            2.00000119,
+            2.599999,
+            2.20000219
+          ]
+        },
+        {
+          "mesh_sha256": "4d774da5201a7493db6e34d54506a60eeafff7088e3cbf5ff559488204be0af2",
+          "position": [
+            -0.0497909673,
+            -0.09999942,
+            -1.428521
+          ],
+          "rotation": [
+            -3.41509462e-06,
+            269.991669,
+            59.9999962
+          ],
+          "scale": [
+            2.000001,
+            2.00000143,
+            2.00000167
+          ]
+        },
+        {
+          "mesh_sha256": "444ed65a04134dd72ac4bba6f545c3c612d5d53289f7c543837360395bc747c5",
+          "position": [
+            -0.021156203,
+            0.100000054,
+            -1.25000465
+          ],
+          "rotation": [
+            356.249969,
+            179.980042,
+            0.0017019849
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "3e2de10e170d5282dc0caddf139b06efb0ee2162841e4c61ea105f699eed550d",
+          "position": [
+            -0.021156203,
+            0.100000054,
+            -1.25000465
+          ],
+          "rotation": [
+            356.249969,
+            179.980042,
+            0.0017019849
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "945766153e2ef7291ecd975688cc1ac772df35601588a127fe06fbf12a226e98",
+          "position": [
+            -1.37389171,
+            0.419998437,
+            1.89718771
+          ],
+          "rotation": [
+            3.00001431,
+            348.435516,
+            353.999969
+          ],
+          "scale": [
+            1.04999948,
+            1.05000007,
+            1.04999983
+          ]
+        },
+        {
+          "mesh_sha256": "4d774da5201a7493db6e34d54506a60eeafff7088e3cbf5ff559488204be0af2",
+          "position": [
+            -1.01182079,
+            -0.800001264,
+            -0.6084248
+          ],
+          "rotation": [
+            -6.912836e-06,
+            179.991669,
+            339.9999
+          ],
+          "scale": [
+            2.00000143,
+            2.599999,
+            2.20000219
+          ]
+        },
+        {
+          "mesh_sha256": "ee507817f2bbe322d3239cfa4ab9303daac2b70f61e67a5be1a990f2c74cfa7e",
+          "position": [
+            -0.199774861,
+            -0.499999881,
+            -1.30003548
+          ],
+          "rotation": [
+            9.722846e-06,
+            179.992569,
+            1.5915135e-05
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "4d774da5201a7493db6e34d54506a60eeafff7088e3cbf5ff559488204be0af2",
+          "position": [
+            -1.0124675,
+            -0.8000013,
+            1.58157492
+          ],
+          "rotation": [
+            -5.73222724e-06,
+            179.991165,
+            339.9999
+          ],
+          "scale": [
+            2.00000167,
+            2.59999871,
+            2.20000148
+          ]
+        },
+        {
+          "mesh_sha256": "4d774da5201a7493db6e34d54506a60eeafff7088e3cbf5ff559488204be0af2",
+          "position": [
+            -1.25149977,
+            -0.9000001,
+            -1.71155727
+          ],
+          "rotation": [
+            4.065221e-06,
+            359.973419,
+            -1.19065608e-05
+          ],
+          "scale": [
+            2,
+            2.6,
+            2.4
+          ]
+        },
+        {
+          "mesh_sha256": "4d774da5201a7493db6e34d54506a60eeafff7088e3cbf5ff559488204be0af2",
+          "position": [
+            0.9375334,
+            -0.8000012,
+            1.58215117
+          ],
+          "rotation": [
+            -1.08487329e-05,
+            179.999084,
+            20.0000134
+          ],
+          "scale": [
+            2.00000119,
+            2.60000062,
+            2.20000243
+          ]
+        },
+        {
+          "mesh_sha256": "1ad381d28e0ed64424d26d35c6179fcaa1c8086a91c153d87d8f628310c092df",
+          "position": [
+            -1.71617867e-05,
+            -1.04000187,
+            0.121485926
+          ],
+          "rotation": [
+            -7.631374e-08,
+            179.991653,
+            -3.314215e-08
+          ],
+          "scale": [
+            1.1000011,
+            1,
+            1.150001
+          ]
+        },
+        {
+          "mesh_sha256": "ee507817f2bbe322d3239cfa4ab9303daac2b70f61e67a5be1a990f2c74cfa7e",
+          "position": [
+            0.2002248,
+            -0.49999994,
+            -1.299966
+          ],
+          "rotation": [
+            9.722839e-06,
+            179.992569,
+            1.591513e-05
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "4d774da5201a7493db6e34d54506a60eeafff7088e3cbf5ff559488204be0af2",
+          "position": [
+            1.037843,
+            -0.8000012,
+            0.5321807
+          ],
+          "rotation": [
+            0.000113420647,
+            179.999115,
+            20.0000134
+          ],
+          "scale": [
+            2.00000167,
+            2.59999967,
+            2.200002
+          ]
+        },
+        {
+          "mesh_sha256": "4d774da5201a7493db6e34d54506a60eeafff7088e3cbf5ff559488204be0af2",
+          "position": [
+            0.9881767,
+            -0.8500011,
+            -0.597834051
+          ],
+          "rotation": [
+            6.72805345e-06,
+            179.972183,
+            20.0000057
+          ],
+          "scale": [
+            2.00000143,
+            2.6,
+            2.20000267
+          ]
+        },
+        {
+          "mesh_sha256": "173b8267a484e572d7bef0da1c84cf36634d67da4a1e1cc88877c7ccf5d19e70",
+          "position": [
+            0.0199996158,
+            -1.04000175,
+            1.3569833
+          ],
+          "rotation": [
+            -4.6957507e-06,
+            180,
+            1.00051639e-05
+          ],
+          "scale": [
+            1.14000094,
+            1,
+            1.15000093
+          ]
+        },
+        {
+          "mesh_sha256": "ec59151057a5000069272c27069e99999f3337b9e55290ae27ba90f47905c4e3",
+          "position": [
+            -0.355026126,
+            -0.4100005,
+            1.01154745
+          ],
+          "rotation": [
+            -1.32383786e-06,
+            118.698296,
+            1.25464794e-05
+          ],
+          "scale": [
+            0.5,
+            0.5,
+            0.7
+          ]
+        },
+        {
+          "mesh_sha256": "ccf740b21c6b2f751bda99c71e49190cdeb12d5ead582ca12d601a779934834b",
+          "position": [
+            -0.0542189255,
+            -0.460000634,
+            1.6891259
+          ],
+          "rotation": [
+            7.999987,
+            180.059586,
+            30.0000019
+          ],
+          "scale": [
+            0.6,
+            0.599999964,
+            0.6000001
+          ]
+        },
+        {
+          "mesh_sha256": "02eed86f464a0a45dbb1624ebea4a5aa2632797b0f5e5e311d947d18df22b814",
+          "position": [
+            -0.916382551,
+            0.699998558,
+            1.12507653
+          ],
+          "rotation": [
+            9.006733e-06,
+            202.968521,
+            -1.5765283e-05
+          ],
+          "scale": [
+            0.3499999,
+            0.3,
+            0.299999952
+          ]
+        }
+      ],
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "genestealer-cults/goliath-truck"
+      ]
+    },
+    {
+      "id": "hekaton",
+      "name": "Hekaton Land Fortress",
+      "tts_nickname": "Hekaton Land Fortress - Cyclic Ion Cannon",
+      "mesh_sha256": "1377b43a9eddebad05b5e91d939415c15303a0ad6eea73be7ceb6d9f6bb84e00",
+      "parts": [
+        {
+          "mesh_sha256": "1b9a333e39111c1d376cd0876fd4f1a3a7d7f9cdbb674f55ae7378f2b417dff4",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            -4.99280928e-09,
+            5.812395e-19,
+            -1.33402134e-08
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "aee91672d4feec4c517438693759bf49127799b1e300e367fa1e584fcb7b9a7e",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "bae5ba4d9b559f08025554fa3589128d7e8f27b30f1a5c4a31cec915c0dd63cd",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "leagues-of-votann/hekaton-land-fortress"
+      ]
+    },
+    {
+      "id": "hellhound",
+      "name": "Hellhound",
+      "tts_nickname": "Hellhound",
+      "mesh_sha256": "446940cb08b84f2ef872a98c58e6ba3e11a46c12ea5333eedc2a0229aca889e0",
+      "scale": 1.05,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/hellhound"
+      ]
+    },
+    {
+      "id": "hierophant",
+      "name": "Hierophant",
+      "tts_nickname": "Hierophant",
+      "mesh_sha256": "cd6b012938262e856de225f30795a70fcdf7156a85f26c996a6d62f5a1ec5581",
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "tyranids/hierophant"
+      ]
+    },
+    {
+      "id": "hydra",
+      "name": "Hydra",
+      "tts_nickname": "Hydra",
+      "mesh_sha256": "00a9e0fb785b37b85808c81112930767d4482bb0f4900d46868ee22203000d78",
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/hydra"
+      ]
+    },
+    {
+      "id": "immolator",
+      "name": "Immolator",
+      "tts_nickname": "Immolator - Twin Heavy Bolter + Heavy Bolter",
+      "mesh_sha256": "0d82a4ad2370f43391ad1fa4a2666b6039c3a75d14504130e00c5b8ff3699c1c",
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "adepta-sororitas/immolator",
+        "agents-of-the-imperium/sisters-of-battle-immolator"
+      ]
+    },
+    {
+      "id": "land-raider",
+      "name": "Land Raider",
+      "tts_nickname": "Blood Angels Land Raider",
+      "mesh_sha256": "009edff0e695cb0c9a44206f34bb4269a7b965c60313bb1c239bac29ab9804be",
+      "parts": [
+        {
+          "mesh_sha256": "598f994bdf632bbb30fb8538920d3e4ae995f2ce642e49f8ddc90d41c66c082d",
+          "position": [
+            -1.1139077e-14,
+            -1.08372092e-07,
+            -1.19904832e-14
+          ],
+          "rotation": [
+            -8.18732744e-08,
+            359.93457,
+            -3.74927026e-07
+          ],
+          "scale": [
+            1.00000024,
+            1,
+            1.00000024
+          ]
+        }
+      ],
+      "scale": 1.1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "adeptus-astartes/land-raider",
+        "grey-knights/land-raider",
+        "chaos-space-marines/chaos-land-raider",
+        "death-guard/chaos-land-raider",
+        "emperors-children/chaos-land-raider",
+        "thousand-sons/chaos-land-raider",
+        "world-eaters/chaos-land-raider"
+      ]
+    },
+    {
+      "id": "land-raider-crusader",
+      "name": "Land Raider Crusader",
+      "tts_nickname": "Land Raider Crusader",
+      "mesh_sha256": "fd6e7ac3afcdba40be7e6e34325a78868cc86f56f0aaf88a48b20a8d4482f6a6",
+      "parts": [
+        {
+          "mesh_sha256": "d77b0787efd5e63638752cd1d1b1cfdf7f29a163af1ab0f2384b8db23976c07e",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "scale": 1.1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "adeptus-astartes/land-raider-crusader",
+        "grey-knights/land-raider-crusader"
+      ]
+    },
+    {
+      "id": "land-raider-redeemer",
+      "name": "Land Raider Redeemer",
+      "tts_nickname": "Dark Angels Land Raider Redeemer",
+      "mesh_sha256": "b4ba751230647a3c81ebe15585da4d0e50d56fa6f1684749d1d2ebaca3161141",
+      "parts": [
+        {
+          "mesh_sha256": "9a4abaef6804d66e10cf2ced850a7dfb551879b0c09727ef057a012aa2ca3a66",
+          "position": [
+            -1.56825087e-13,
+            -1.07288361e-06,
+            7.585011e-14
+          ],
+          "rotation": [
+            3.32261925e-06,
+            0.006686875,
+            4.003111e-06
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "scale": 1.1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "adeptus-astartes/land-raider-redeemer",
+        "grey-knights/land-raider-redeemer"
+      ]
+    },
+    {
+      "id": "leman-russ",
+      "name": "Leman Russ",
+      "tts_nickname": "Leman Russ Battle Tank",
+      "mesh_sha256": "8ce9f284133e13ed3a818ca263802832d6da8e98ee9ea9e07af3b309e05cb444",
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/leman-russ-battle-tank",
+        "astra-militarum/leman-russ-commander",
+        "astra-militarum/leman-russ-demolisher",
+        "astra-militarum/leman-russ-eradicator",
+        "astra-militarum/leman-russ-executioner",
+        "astra-militarum/leman-russ-exterminator",
+        "astra-militarum/leman-russ-punisher",
+        "astra-militarum/leman-russ-vanquisher"
+      ]
+    },
+    {
+      "id": "lord-of-skulls",
+      "name": "Khorne Lord of Skulls",
+      "tts_nickname": "Khorne Lord of Skulls",
+      "mesh_sha256": "b494ce3c9175a7a7d5af063c0aabe49bf656a3ea60bfb2960be8c2010a6cbeb1",
+      "parts": [
+        {
+          "mesh_sha256": "49634fc9646f2e965ddfac4ad5f1b89f16c684bc8ee8d827af53c54e9735016f",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.00000036,
+            1.00000024,
+            1.00000024
+          ]
+        },
+        {
+          "mesh_sha256": "501f1241dd7aac5454d0ff3285bbd392929351138350b0ad994362d8fddb33ef",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.00000036,
+            1.00000024,
+            1.00000024
+          ]
+        }
+      ],
+      "scale": 0.825,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "chaos-space-marines/khorne-lord-of-skulls",
+        "world-eaters/khorne-lord-of-skulls"
+      ]
+    },
+    {
+      "id": "manticore",
+      "name": "Manticore",
+      "tts_nickname": "Manticore",
+      "mesh_sha256": "9eba3f0215972eadceaa50833cf67cd148a785c7d6881cac2a6ed198eceeb7aa",
+      "scale": 0.45,
+      "rot_x_deg": 360,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/manticore"
+      ]
+    },
+    {
+      "id": "mek-gun",
+      "name": "Mek Gun",
+      "tts_nickname": "Mek Gun w/ Bubblechukka",
+      "mesh_sha256": "b98326e3067a71aee7e4cff09f82ad68498002b26f2abefa0e435a6b8161ae39",
+      "parts": [
+        {
+          "mesh_sha256": "3dca537599395d244f812e5ce4f0aeefa3e0bacf2b2144d1af6e50135944682c",
+          "position": [
+            -2.92691129e-06,
+            -0.00242076,
+            -0.00114369765
+          ],
+          "rotation": [
+            0.000270116463,
+            -3.764278e-07,
+            0.000183761411
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "41285f2085c0dd529d3547f36d176a62e4c4700141d1c08157fbd2fb93f84a95",
+          "position": [
+            -9.63206e-07,
+            -0.0006906979,
+            2.03041893e-07
+          ],
+          "rotation": [
+            3.67004714e-06,
+            359.974121,
+            1.05312683e-05
+          ],
+          "scale": [
+            1.00000012,
+            1,
+            1.00000024
+          ]
+        }
+      ],
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "orks/mek-gunz"
+      ]
+    },
+    {
+      "id": "miasmic-malignifier",
+      "name": "Miasmic Malignifier",
+      "tts_nickname": "Miasmic Malignifier Furnace",
+      "mesh_sha256": "310e8430b0fc19a1f5d9f35f4eee76245b17ad430a0ef979c6ae1a294920a2fc",
+      "parts": [
+        {
+          "mesh_sha256": "bb22d30d8b120982408ec733b79e896e6c6aaa14af0709b3fe3230398103f1bc",
+          "position": [
+            -2.849,
+            0,
+            -1.96
+          ],
+          "rotation": [
+            0,
+            14.997,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "death-guard/miasmic-malignifier"
+      ],
+      "note": "Furnace and chimney are separate TTS objects; the chimney is joined where the mod places it next to the furnace."
+    },
+    {
+      "id": "noctilith-crown",
+      "name": "Noctilith Crown",
+      "tts_nickname": "Noctilith Crown",
+      "mesh_sha256": "1ba0d49fcf14276baf8369c9d958c09dd208b9b00b38d1df2f07c68cbbdadfe6",
+      "parts": [
+        {
+          "mesh_sha256": "7b4582b538e67c0912f69ff34d406c2ee082dfcbc9c8c33fe1ff73c7b8e4a200",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "b1510f6f63adb078944ba9141e2cc6220510f936aed0338b6ca77d2a643a607c",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "126e34162d28d4f09c9ee01524e446959ef547c265e5219d93b56f69213bf301",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "chaos-space-marines/noctilith-crown"
+      ]
+    },
+    {
+      "id": "phantom-titan",
+      "name": "Phantom Titan",
+      "tts_nickname": "Phantom Titan / Pulsar + Glaive",
+      "mesh_sha256": "c9531ee1ceada3b345bf9227ab3250e89d8295eb5cce80bd5b171909f5cf9527",
+      "scale": 1.75,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "drop_below_in": 0.21,
+      "units": [
+        "aeldari/phantom-titan"
+      ],
+      "note": "The mesh includes a 0.2 in display base, dropped."
+    },
+    {
+      "id": "plagueburst-crawler",
+      "name": "Plagueburst Crawler",
+      "tts_nickname": "Plagueburst Crawler",
+      "mesh_sha256": "438cf8b5f2e19364e1d31d3ee055d786101ac03df2d2a76fc3e5058d4ff6aa2c",
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "death-guard/plagueburst-crawler"
+      ]
+    },
+    {
+      "id": "predator",
+      "name": "Predator",
+      "tts_nickname": "Predator 3/3 Las-HvyBolter",
+      "mesh_sha256": "91b8d0c52994eec49682f60f5dc943b2ed1625271a16c90e7439187814da6625",
+      "scale": 1.1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "chaos-space-marines/chaos-predator-annihilator",
+        "chaos-space-marines/chaos-predator-destructor",
+        "death-guard/chaos-predator-annihilator",
+        "death-guard/chaos-predator-destructor",
+        "thousand-sons/chaos-predator-annihilator",
+        "thousand-sons/chaos-predator-destructor",
+        "world-eaters/chaos-predator-annihilator",
+        "world-eaters/chaos-predator-destructor"
+      ]
+    },
+    {
+      "id": "razorback",
+      "name": "Razorback",
+      "tts_nickname": "Razorback",
+      "mesh_sha256": "1b519a166dc247299dfdc8cedf36ee93dff5083db50fbc3a6fe3a7fa753ac01f",
+      "scale": 1.1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "grey-knights/razorback"
+      ]
+    },
+    {
+      "id": "revenant-titan",
+      "name": "Revenant Titan",
+      "tts_nickname": "Revenant Titan",
+      "mesh_sha256": "a5e77c6fe86e11fb229fd3f31f0f7383acbb6a2988fa25a615aaab3186c53d39",
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "aeldari/revenant-titan"
+      ]
+    },
+    {
+      "id": "rhino",
+      "name": "Rhino",
+      "tts_nickname": "Rhino",
+      "mesh_sha256": "b379616703fb944b0be1ed75ea75b49ecb782d859d651b7494a1901fa8174c85",
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "adeptus-astartes/rhino",
+        "grey-knights/rhino",
+        "agents-of-the-imperium/imperial-rhino",
+        "adeptus-custodes/anathema-psykana-rhino",
+        "adepta-sororitas/sororitas-rhino"
+      ]
+    },
+    {
+      "id": "rogal-dorn",
+      "name": "Rogal Dorn",
+      "tts_nickname": "Rogal Dorn",
+      "mesh_sha256": "b2bbdbb6c05d1b2c9ee140df18249c95ac0b0e806e06069b62e14e1255fdf4db",
+      "parts": [
+        {
+          "mesh_sha256": "79c5bdcef9040f96292c85beac457b2a55118437ea8ec0151f45b76f9635c0ca",
+          "position": [
+            1.09908462,
+            0.110112235,
+            0.264553815
+          ],
+          "rotation": [
+            0.0421617143,
+            336.753174,
+            359.989655
+          ],
+          "scale": [
+            1.00000024,
+            1,
+            1.00000012
+          ]
+        },
+        {
+          "mesh_sha256": "93b80869b87dc7e3efa8ade18fd66aa4df2f183f044e1b93d8ebad4df3eeb437",
+          "position": [
+            -1.31404686,
+            0.114179976,
+            0.2421015
+          ],
+          "rotation": [
+            -0.003299588,
+            25.08155,
+            359.9893
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "scale": 0.95,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/rogal-dorn-battle-tank",
+        "astra-militarum/rogal-dorn-commander"
+      ]
+    },
+    {
+      "id": "sagitaur",
+      "name": "Sagitaur",
+      "tts_nickname": "Sagitaur ATV with L7/Sagitaur Missile Launcher",
+      "mesh_sha256": "1778375a57fd7a01a3bb875d0b2f8c6894c2a1d06f9336de62fc4afaeeb64223",
+      "parts": [
+        {
+          "mesh_sha256": "173b8267a484e572d7bef0da1c84cf36634d67da4a1e1cc88877c7ccf5d19e70",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            -3.33505334e-09,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "505ab5a6a51869b07690dd0479506717afeadcd02dc3aba2653449f2b0c60461",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "f220bf2f8a52835f36b309c65e77bc6549bcdb2e51e8d899275d6aa7566f0c4b",
+          "position": [
+            0.340446651,
+            2.04634142,
+            -0.686949134
+          ],
+          "rotation": [
+            -0.000237515807,
+            15.0021744,
+            0.0006526349
+          ],
+          "scale": [
+            0.3000005,
+            0.300000519,
+            0.300000429
+          ]
+        }
+      ],
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "leagues-of-votann/sagitaur"
+      ]
+    },
+    {
+      "id": "seraptek",
+      "name": "Seraptek Heavy Construct",
+      "tts_nickname": "28/28 Seraptek Construct (2x Oblit 2x Projector))",
+      "mesh_sha256": "32b2e8f3d5f4be81ed70b59d16191c219059dd14004becbd1a5aa7210eea5fac",
+      "scale": 0.725,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "necrons/seraptek-heavy-construct"
+      ]
+    },
+    {
+      "id": "shadowsword",
+      "name": "Shadowsword",
+      "tts_nickname": "Stormsword",
+      "mesh_sha256": "7d7dd4e23de92a48161daab5ab0a3e98707a5fe2e51c5801fa7046a458d9cc10",
+      "parts": [
+        {
+          "mesh_sha256": "56fc2bc13c91847ef4e6df6a943b676922cec9572d9cd9fa14c52d5dc075a868",
+          "position": [
+            -1.37610623e-20,
+            -6.834347e-14,
+            -6.854534e-07
+          ],
+          "rotation": [
+            -4.74880744e-06,
+            9.561796e-13,
+            -1.88895024e-06
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "51a2f68b3db430363597a9fc8d4be8e486ffad5ad9108d851c28c38ff02e823c",
+          "position": [
+            -1.37610623e-20,
+            -6.834347e-14,
+            -6.854534e-07
+          ],
+          "rotation": [
+            1.21665907e-05,
+            -2.44976153e-12,
+            -2.26231332e-05
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/shadowsword",
+        "astra-militarum/stormlord",
+        "astra-militarum/stormsword"
+      ]
+    },
+    {
+      "id": "skorpius",
+      "name": "Skorpius",
+      "tts_nickname": "Dunerider",
+      "mesh_sha256": "3b9e0d14ec6c6f9aa63c2008af440055e1109af1109db1e608fff071ffcd95b7",
+      "scale": 1.0,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "adeptus-mechanicus/skorpius-dunerider",
+        "adeptus-mechanicus/skorpius-disintegrator"
+      ],
+      "note": "Photoscan. The other meshes are scaled to the bare hull; this one matches the calibrated overhead photo (3.4 × 5.6 in bare hull) once the skirt tubes and rear pods are added."
+    },
+    {
+      "id": "skull-altar",
+      "name": "Skull Altar",
+      "tts_nickname": "Skull Altar",
+      "mesh_sha256": "ecd45e74f6b7347dbf3a0d3780623cae89df7ac587fd392dd50b1debde738f68",
+      "scale": 4.05,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "chaos-daemons/skull-altar"
+      ],
+      "note": "A TTS asset bundle, not an OBJ: extract it with tools/src/tts-hulls/bundle-to-obj.py into _private/tts-meshes/<sha256>.obj."
+    },
+    {
+      "id": "sporocyst",
+      "name": "Sporocyst",
+      "tts_nickname": "12/12 Sporocyst",
+      "mesh_sha256": "05b0dceec912ef658faa98e32046c22e3f70ec4fd5d9e951ae1e60f0a2337553",
+      "scale": 1,
+      "rot_x_deg": 360,
+      "rot_z_deg": 360,
+      "units": [
+        "tyranids/sporocyst"
+      ]
+    },
+    {
+      "id": "stompa",
+      "name": "Stompa",
+      "tts_nickname": "Stompa",
+      "mesh_sha256": "71948b4e8d707d17a4b0655c11bba03434f900e8e149671fa3c47cdeee8615c5",
+      "scale": 1.15,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "drop_below_in": 0.76,
+      "units": [
+        "orks/stompa"
+      ],
+      "note": "The mesh includes a 0.75 in display base, dropped. The other Stompa mesh is under half the height."
+    },
+    {
+      "id": "taurox",
+      "name": "Taurox",
+      "tts_nickname": "Taurox Prime",
+      "mesh_sha256": "06dd410859e79c7f6b0ff4a359f15d1112876bbff16151b29996f26f8b1c8259",
+      "scale": 0.8,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/taurox",
+        "astra-militarum/taurox-prime"
+      ]
+    },
+    {
+      "id": "tidewall-droneport",
+      "name": "Tidewall Droneport",
+      "tts_nickname": "Tidewall Droneport",
+      "mesh_sha256": "416801efa115b99a3686d471912ae3989ea8de27b5b54b3bc525e5bd6d758426",
+      "scale": 0.65,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "tau-empire/tidewall-droneport"
+      ]
+    },
+    {
+      "id": "tidewall-shieldline",
+      "name": "Tidewall Shieldline",
+      "tts_nickname": "Tidewall Shieldline",
+      "mesh_sha256": "f9d8d4fff2da71dd96b99f9658cb3d0becf7bcd6b81821d604c280dd371658dc",
+      "scale": 0.65,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "tau-empire/tidewall-shieldline"
+      ]
+    },
+    {
+      "id": "triarch-stalker",
+      "name": "Triarch Stalker",
+      "tts_nickname": "Triarch Stalker 10/10 /w Heavy Gauss",
+      "mesh_sha256": "4941303830c0b6cecdf95483b0034dcaa170df52351dc722a2a37a408f098a07",
+      "scale": 0.7,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "necrons/triarch-stalker"
+      ]
+    },
+    {
+      "id": "trukk",
+      "name": "Trukk",
+      "tts_nickname": "Ork Trukk black (goffs)",
+      "mesh_sha256": "405c41085526fc40adf7f0ac8bdcdab55fa228a5fc41628d4005bcf16d7b0733",
+      "parts": [
+        {
+          "mesh_sha256": "6cb3620c63608cbb9998a07aeaf35a6bb6cf87b44a2aad374f8affb6f74972dc",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "091e3193d07b5c301d6a0c16e8e7fa6722e8e1d34ca60f82834f230cad52425d",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "mesh_sha256": "ea986edbbecc89806bb5c72cdabe5a81f3903aba633736476dda4c206d0a5f55",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      ],
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "orks/trukk"
+      ]
+    },
+    {
+      "id": "vindicator",
+      "name": "Vindicator",
+      "tts_nickname": "Vindicator",
+      "mesh_sha256": "389f4876db4013be7fcab20423002ea1ea03b9d4429ca6c219b3b480fadb6fcd",
+      "scale": 1.1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "chaos-space-marines/chaos-vindicator",
+        "thousand-sons/chaos-vindicator"
+      ]
+    },
+    {
+      "id": "wyvern",
+      "name": "Wyvern",
+      "tts_nickname": "Wyvern",
+      "mesh_sha256": "0a499c85da05cb20674e25b1a1e5089a37a91fe4979367b0fe7f666baca5e7a2",
+      "scale": 1,
+      "rot_x_deg": 0,
+      "rot_z_deg": 0,
+      "units": [
+        "astra-militarum/wyvern"
+      ]
+    }
+  ],
+  "no_mesh": [
+    {
+      "unit": "astra-militarum/aegis-defence-line",
+      "reason": "A set of separate wall sections the player arranges, not one footprint; the only TTS mesh is a single small wall at another scale."
+    },
+    {
+      "unit": "tau-empire/tidewall-gunrig",
+      "reason": "No Tabletop Simulator model in the scanned mods, only a datasheet image."
+    }
+  ]
+}

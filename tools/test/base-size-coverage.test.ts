@@ -40,10 +40,25 @@ describe("base_size_mm coverage", () => {
 
   it("carries provisional flying/hull/unique bases as draft for later authoring", () => {
     const draft = populated.filter((u) => u.base_size_mm?.draft);
-    expect(draft.length).toBeGreaterThanOrEqual(100);
+    // Current: 47, after traced hull shapes cleared draft on 55 hull units.
+    expect(draft.length).toBeGreaterThanOrEqual(42);
     // Every draft unit is a category, never a plain round/oval authoritative value.
     for (const u of draft) {
       expect(["flying-base", "hull", "unique", "round", "oval"]).toContain(u.base_size_mm!.shape);
+    }
+  });
+
+  it("clears draft on a hull base only when its hull models link to a hull shape", () => {
+    const settled = populated.filter((u) => u.base_size_mm?.shape === "hull" && !u.base_size_mm.draft);
+    // Current: 100 units across 54 shapes (tools/src/tts-hulls/hulls.json).
+    expect(settled.length).toBeGreaterThanOrEqual(95);
+    for (const u of settled) {
+      const hullModels = ds.unitCompositions
+        .filter((c) => c.unit_id === u.id && c.faction_id === u.faction_id)
+        .flatMap((c) => c.models)
+        .filter((m) => m.base_size_mm?.shape === "hull");
+      expect(hullModels.length, u.id).toBeGreaterThan(0);
+      for (const m of hullModels) expect(m.hull_shape_id && ds.hullShapes.has(m.hull_shape_id), `${u.id}/${m.name}`).toBe(true);
     }
   });
 

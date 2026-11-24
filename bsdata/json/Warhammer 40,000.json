@@ -3,8 +3,8 @@
     "name": "Warhammer 40,000 11th Edition",
     "id": "sys-352e-adc2-7639-d610",
     "battleScribeVersion": 2.03,
-    "readme": "Generated from @alpaca-software/40kdc-data 1.5.2. Stat lines and points are numerical facts; ability descriptions are 40kdc's own plain-English summaries, not rules text.",
-    "revision": 10502,
+    "readme": "Generated from @alpaca-software/40kdc-data 1.5.3. Stat lines and points are numerical facts; ability descriptions are 40kdc's own plain-English summaries, not rules text.",
+    "revision": 10503,
     "type": "gameSystem",
     "xmlns": "http://www.battlescribe.net/schema/gameSystemSchema",
     "categoryEntries": [

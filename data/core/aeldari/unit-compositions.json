@@ -9,15 +9,15 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "cloudburst-missile-launcher",
           "revenant-feet",
           "revenant-pulsar",
           "sonic-lance"
-        ]
+        ],
+        "hull_shape_id": "revenant-titan"
       }
     ],
     "game_version": {
@@ -5338,8 +5338,7 @@
         "max": 1,
         "is_leader_model": false,
         "base_size_mm": {
-          "shape": "hull",
-          "draft": true
+          "shape": "hull"
         },
         "default_weapon_ids": [
           "voidstorm-missile-launcher",
@@ -5347,7 +5346,8 @@
           "d-bombard",
           "phantom-feet",
           "phantom-starcannon"
-        ]
+        ],
+        "hull_shape_id": "phantom-titan"
       }
     ],
     "game_version": {

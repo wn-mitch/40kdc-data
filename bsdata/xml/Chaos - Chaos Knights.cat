@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Chaos Knights" id="46d8-abc8-ef3a-9f85" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10502" library="false" revision="10502">
+<catalogue xmlns="http://www.battlescribe.net/schema/catalogueSchema" name="Chaos - Chaos Knights" id="46d8-abc8-ef3a-9f85" battleScribeVersion="2.03" gameSystemId="sys-352e-adc2-7639-d610" gameSystemRevision="10503" library="false" revision="10503">
   <entryLinks>
     <entryLink name="War Dog Huntsman" id="1065-c8fa-9d05-26e3" hidden="false" import="true" targetId="6e6d-7950-ce6d-4cd4" type="selectionEntry"/>
     <entryLink name="War Dog Brigand" id="2a94-4a3e-c509-c53b" hidden="false" import="true" targetId="753d-4e02-eda3-4809" type="selectionEntry"/>
