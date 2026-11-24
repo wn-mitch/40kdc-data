@@ -152,7 +152,8 @@
 
 <style>
   .proj-cards { display: none; }
-  @media (max-width: 640px) {
+  /* The projection card's width, not the viewport's: the table needs ~800px (see output-pane). */
+  @container projection (max-width: 800px) {
     .proj-cards {
       display: flex;
       flex-direction: column;

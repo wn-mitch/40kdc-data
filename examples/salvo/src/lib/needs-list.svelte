@@ -4,6 +4,9 @@
 
   let { toggles }: { toggles: NeedToggle[] } = $props();
 
+  // Name the side only when attacker and defender needs are listed together.
+  const mixed = $derived(new Set(toggles.map((toggle) => toggle.side)).size > 1);
+
   /** "" unset, "yes" or "no": the declared answer under the toggle's key. */
   function answer(key: string): string {
     const value = salvo.scenario.conditionFacts?.[key];
@@ -34,7 +37,7 @@
           <option value="yes">Yes</option>
           <option value="no">No</option>
         </select>
-        <span class="chip manual">{toggle.side === "target" ? "defender" : "attacker"}</span>
+        {#if mixed}<span class="chip manual">{toggle.side === "target" ? "defender" : "attacker"}</span>{/if}
       </div>
     {/each}
   </div>

@@ -6,7 +6,9 @@
  * damage matrix uses.
  */
 import {
+  clampWeaponCount,
   groupsWithGrantedWeapons,
+  isMeleeProfile,
   unitLoadoutDamage,
   validateCandidateLoadout,
   withGrantedWeapons,
@@ -78,9 +80,11 @@ export function lineId(memberId: string, weaponId: string, profileIndex: number)
   return `${memberId}:${weaponId}:${profileIndex}`;
 }
 
-/** A member's wargear loadout at its minimum model count. */
-export function memberLoadout(ds: Dataset, unit: Unit): MemberLoadout {
-  const modelCount = unit.model_count?.min ?? 1;
+/** A member's wargear loadout at `models` models, held to its datasheet's range; its minimum when unset. */
+export function memberLoadout(ds: Dataset, unit: Unit, models?: number): MemberLoadout {
+  const min = unit.model_count?.min ?? 1;
+  const max = unit.model_count?.max ?? min;
+  const modelCount = Math.min(max, Math.max(min, Math.floor(models ?? min)));
   const rules = ds.loadoutOf(unit);
   return {
     unit,
@@ -119,7 +123,70 @@ export function memberCounts(
   return counts;
 }
 
-/** One line per profile of every weapon of `type` across the members, labelled by unit when there are several. */
+/** Legal loadouts searched for an edit; past this many the nearest may be missed. */
+const CANDIDATE_LIMIT = 2048;
+
+/**
+ * The member's counts after the player sets `weaponId` to `n` copies: the legal loadout carrying
+ * exactly that many (clamped to the weapon's bounds) that moves the fewest copies from `current`,
+ * so taking axes hands back the spears they replace. With no such loadout, `current` with the one
+ * count changed, which the legality check then reports.
+ */
+export function editedCounts(
+  loadout: MemberLoadout,
+  current: ReadonlyMap<string, number>,
+  weaponId: string,
+  n: number,
+): Map<string, number> {
+  const count = loadout.bounds.has(weaponId)
+    ? clampWeaponCount(loadout.bounds, weaponId, n)
+    : Math.max(0, Math.floor(n) || 0);
+  let best: Map<string, number> | null = null;
+  let bestDistance = Infinity;
+  for (const candidate of loadout.rules.candidates(loadout.modelCount, CANDIDATE_LIMIT)) {
+    // `"<witness> => <id>:<n>,…"`; the truncation marker has no counts.
+    const arrow = candidate.lastIndexOf(" => ");
+    if (arrow < 0) continue;
+    const counts = new Map<string, number>();
+    for (const item of candidate.slice(arrow + 4).split(",")) {
+      const colon = item.lastIndexOf(":");
+      if (colon > 0) counts.set(item.slice(0, colon), Number(item.slice(colon + 1)));
+    }
+    if ((counts.get(weaponId) ?? 0) !== count) continue;
+    let distance = 0;
+    for (const id of new Set([...counts.keys(), ...current.keys()])) {
+      distance += Math.abs((counts.get(id) ?? 0) - (current.get(id) ?? 0));
+    }
+    if (distance < bestDistance) {
+      best = counts;
+      bestDistance = distance;
+    }
+  }
+  if (best) return best;
+  const next = new Map(current);
+  if (count > 0) next.set(weaponId, count);
+  else next.delete(weaponId);
+  return next;
+}
+
+const sameName = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
+
+/**
+ * A line's weapon label: the weapon name, with the profile name after it only when it tells the
+ * line apart. A profile named like its weapon (the Castellan axe's "Castellan Axe" melee profile)
+ * adds nothing, unless another profile of the same phase shares that name, when its position does.
+ */
+function profileLabel(weapon: Weapon, profileIndex: number, type: "ranged" | "melee"): string {
+  const profile = weapon.profiles[profileIndex]!;
+  const inPhase = weapon.profiles.filter((p) => (isMeleeProfile(p) ? "melee" : "ranged") === type);
+  if (inPhase.length <= 1) return weapon.name;
+  if (!sameName(profile.name, weapon.name) && inPhase.filter((p) => sameName(p.name, profile.name)).length === 1) {
+    return `${weapon.name} — ${profile.name}`;
+  }
+  return `${weapon.name} (profile ${inPhase.indexOf(profile) + 1})`;
+}
+
+/** One line per profile of `type` of every weapon across the members, labelled by unit when there are several. */
 export function weaponLines(
   members: readonly { memberId: string; name: string; weapons: readonly Weapon[] }[],
   type: "ranged" | "melee",
@@ -127,9 +194,10 @@ export function weaponLines(
   const lines: WeaponLine[] = [];
   for (const member of members) {
     for (const weapon of member.weapons) {
-      if (weapon.type !== type) continue;
       weapon.profiles.forEach((profile, profileIndex) => {
-        const weaponPart = weapon.profiles.length > 1 ? `${weapon.name} — ${profile.name}` : weapon.name;
+        // A weapon can carry both ranged and melee profiles: the profile decides its phase.
+        if ((isMeleeProfile(profile) ? "melee" : "ranged") !== type) return;
+        const weaponPart = profileLabel(weapon, profileIndex, type);
         lines.push({
           id: lineId(member.memberId, weapon.id, profileIndex),
           weaponId: weapon.id,

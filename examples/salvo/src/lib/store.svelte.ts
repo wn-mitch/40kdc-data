@@ -67,12 +67,12 @@ export const MANUAL_BUFF_TOGGLES: ManualBuffToggle[] = [
   { id: "cover", label: "Target in cover", build: () => manualBuff("Cover", { type: "cover" }) },
   {
     id: "plus-one-hit",
-    label: "+1 to hit (manual)",
+    label: "+1 to hit",
     build: () => manualBuff("+1 to hit", { type: "hit-mod", value: 1 }),
   },
   {
     id: "plus-one-wound",
-    label: "+1 to wound (manual)",
+    label: "+1 to wound",
     build: () => manualBuff("+1 to wound", { type: "wound-mod", value: 1 }),
   },
   {
@@ -103,9 +103,9 @@ export const MANUAL_BUFF_TOGGLES: ManualBuffToggle[] = [
 ];
 
 export const CONTEXT_FLAG_TOGGLES: { id: keyof ContextFlags; label: string }[] = [
-  { id: "attackerStationary", label: "Attacker stationary (Heavy +1)" },
-  { id: "withinHalfRange", label: "Within half range (Melta / Rapid Fire)" },
-  { id: "attackerCharged", label: "Charged this turn (Relentless Rage)" },
+  { id: "attackerStationary", label: "Remained stationary" },
+  { id: "withinHalfRange", label: "Within half range" },
+  { id: "attackerCharged", label: "Charged this turn" },
 ];
 
 class SalvoState {
@@ -117,19 +117,25 @@ class SalvoState {
   attackerRoster = $state<Roster | null>(null);
   targetRoster = $state<Roster | null>(null);
 
-  // Attacker. Defaults boot into a representative "gold standard" melee comp:
-  // a Khorne Berzerkers squad led by Khârn (Berzerker Warband) charging the
-  // Nightbringer, with Sustained Hits 1 / Lethal Hits / +1 AP toggled on.
-  selectedUnitId = $state<string | null>("khorne-berzerkers");
-  selectedFactionId = $state<string | null>("world-eaters");
-  selectedDetachmentId = $state<string | null>("berzerker-warband");
+  // Attacker. Defaults boot into a representative melee comp: Trajann Valoris leading
+  // an Allarus Custodians brick (Guardians of the Throne) charging the Nightbringer.
+  selectedUnitId = $state<string | null>("allarus-custodians");
+  selectedFactionId = $state<string | null>("adeptus-custodes");
+  selectedDetachmentId = $state<string | null>("guardians-of-the-throne");
   /**
    * Other members of the combined unit attached to {@link selectedUnitId} — a
    * leader joined to a bodyguard, or the bodyguard a selected leader joins.
    * A list so 11th's multi-member attachments need no shape change; the UI
    * writes 0 or 1 today.
    */
-  attachedUnitIds = $state<string[]>(["kharn-the-betrayer"]);
+  attachedUnitIds = $state<string[]>(["trajann-valoris"]);
+  /** Models in each member of the combined unit, by unit id; a member absent here has its minimum. */
+  memberModelCounts = $state<Record<string, number>>({ "allarus-custodians": 3 });
+  /**
+   * Bumped whenever the attacker's faction or unit changes, so panes holding
+   * per-unit edits (weapon counts, line toggles) drop them.
+   */
+  attackerEpoch = $state(0);
   phase = $state<PhaseChoice>("fight");
   selectedWeaponId = $state<string | null>(null);
   selectedProfileIndex = $state<number>(0);
@@ -144,9 +150,7 @@ class SalvoState {
    * opt-in-stratagem / opt-out-ability sets.
    */
   buffOverrides = $state<Record<string, boolean>>({});
-  manualBuffsActive = $state<Set<string>>(
-    new Set(["sustained-hits", "lethal-hits", "plus-one-ap"]),
-  );
+  manualBuffsActive = $state<Set<string>>(new Set());
   contextFlags = $state<ContextFlags>({
     attackerStationary: false,
     withinHalfRange: false,
@@ -170,6 +174,41 @@ class SalvoState {
    * total; off by default, since each needs its moment to happen.
    */
   mortalSourcesActive = $state<string[]>([]);
+
+  /**
+   * Pick the attacking faction. Everything chosen for the previous faction's
+   * army goes with it: detachment, unit, attachment, sizes, support, lever
+   * overrides, mortal-wound sources and weapon edits.
+   */
+  selectFaction(factionId: string | null): void {
+    if (factionId === this.selectedFactionId) return;
+    this.selectedFactionId = factionId;
+    this.selectedDetachmentId = null;
+    this.buffOverrides = {};
+    this.selectUnit(null);
+  }
+
+  /**
+   * Pick the attacking unit within the current faction. The attachment, sizes,
+   * support units, mortal-wound sources and weapon edits belong to the old unit
+   * and are cleared; the detachment and its lever choices stay.
+   */
+  selectUnit(unitId: string | null): void {
+    this.selectedUnitId = unitId;
+    this.attachedUnitIds = [];
+    this.memberModelCounts = {};
+    this.supportUnitIds = [];
+    this.mortalSourcesActive = [];
+    this.selectedWeaponId = null;
+    this.selectedProfileIndex = 0;
+    this.attackerEpoch++;
+  }
+
+  /** Set one member's model count (the loadout clamps it to the datasheet range). */
+  setMemberModels(unitId: string, models: number): void {
+    this.memberModelCounts = { ...this.memberModelCounts, [unitId]: models };
+    this.attackerEpoch++;
+  }
 
   /** Effective on/off for a lever, honouring any user override of its default. */
   isBuffEnabled(id: string, defaultEnabled: boolean): boolean {

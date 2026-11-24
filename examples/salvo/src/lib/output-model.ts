@@ -74,6 +74,8 @@ export type AttackerChoice = {
   detachmentId: string | null;
   attachedUnitIds: readonly string[];
   supportUnitIds: readonly string[];
+  /** Models in each member, by unit id; a member absent here has its minimum. */
+  modelCounts?: Readonly<Record<string, number>>;
 };
 
 /** One member's levers, read as that member, and the context its lines crunch under. */
@@ -140,7 +142,7 @@ export function memberLevers(
   weaponProfiles: { weaponId: string; profileIndex: number }[] = [],
 ): MemberLevers[] {
   if (!attacker.unitId) return [];
-  const members = memberUnits(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds]);
+  const members = memberUnits(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds], attacker.modelCounts);
   const ids = members.map((member) => member.memberId);
   const roles = memberRoles(ds, attacker.unitId, attacker.attachedUnitIds);
   const wargear = unitWargear(ds, members);
@@ -208,13 +210,19 @@ export function targetDefences(
 
 /**
  * The selected unit and its attached members, each resolved within the selected faction so a
- * shared chassis (e.g. `chaos-land-raider`) uses that faction's copy. Unknown ids are skipped.
+ * shared chassis (e.g. `chaos-land-raider`) uses that faction's copy, at its `modelCounts` size.
+ * Unknown ids are skipped.
  */
-export function memberUnits(ds: Dataset, factionId: string | null, memberIds: readonly (string | null)[]): MemberUnit[] {
+export function memberUnits(
+  ds: Dataset,
+  factionId: string | null,
+  memberIds: readonly (string | null)[],
+  modelCounts: Readonly<Record<string, number>> = {},
+): MemberUnit[] {
   return memberIds.flatMap((memberId) => {
     if (!memberId) return [];
     const unit = (factionId && ds.units.getInFaction(memberId, factionId)) || ds.units.getAny(memberId);
-    return unit ? [{ memberId, unit, loadout: memberLoadout(ds, unit.raw) }] : [];
+    return unit ? [{ memberId, unit, loadout: memberLoadout(ds, unit.raw, modelCounts[memberId]) }] : [];
   });
 }
 
@@ -277,7 +285,7 @@ export function memberMortalSources(
   context: EngineContext,
 ): { sources: MortalSourceChoice[]; needs: AbilityNeed[]; unverified: string[]; error?: string } {
   if (!attacker.unitId) return { sources: [], needs: [], unverified: [] };
-  const members = memberUnits(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds]);
+  const members = memberUnits(ds, attacker.factionId, [attacker.unitId, ...attacker.attachedUnitIds], attacker.modelCounts);
   const ids = members.map((member) => member.memberId);
   const roles = memberRoles(ds, attacker.unitId, attacker.attachedUnitIds);
   const models = members.reduce((sum, member) => sum + member.loadout.modelCount, 0);

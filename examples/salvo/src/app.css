@@ -150,6 +150,8 @@ footer.app-footer { grid-area: footer; }
   background: var(--bg);
   padding: var(--space-4);
 }
+/* The projection switches between its table and weapon cards on its own width. */
+.pane.projection { container: projection / inline-size; }
 
 .pane {
   background: var(--panel);

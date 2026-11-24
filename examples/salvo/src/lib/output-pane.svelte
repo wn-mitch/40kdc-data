@@ -6,6 +6,7 @@
     weaponTypeForPhase,
   } from "./store.svelte.js";
   import { SvelteMap } from "svelte/reactivity";
+  import { untrack } from "svelte";
   import {
     crunch,
     resolveBuffs,
@@ -16,13 +17,13 @@
     type StackableBuff,
     type EngineContext,
     type EngineInput,
-    clampWeaponCount,
   } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
   import WeaponCards from "./weapon-cards.svelte";
   import ResultDock from "./result-dock.svelte";
   import {
     defaultWeaponCount,
+    editedCounts,
     memberCounts,
     selectLines,
     weaponLines as buildWeaponLines,
@@ -67,6 +68,7 @@
     detachmentId: salvo.selectedDetachmentId,
     attachedUnitIds: salvo.attachedUnitIds,
     supportUnitIds: salvo.supportUnitIds,
+    modelCounts: salvo.memberModelCounts,
   }, context));
   const leverSelection = $derived(unionLevers(perMember));
 
@@ -99,6 +101,7 @@
     detachmentId: salvo.selectedDetachmentId,
     attachedUnitIds: salvo.attachedUnitIds,
     supportUnitIds: salvo.supportUnitIds,
+    modelCounts: salvo.memberModelCounts,
   }, { ...context, targetModelCount: salvo.manualTarget.modelCount }));
   const mortalLine = $derived(mortalSourceLine(mortalSources.sources, new Set(salvo.mortalSourcesActive), defensive.buffs, context));
 
@@ -115,17 +118,16 @@
   const allBuffs = $derived<Buff[]>(salvo.selectedUnitId ? buffsOf(salvo.selectedUnitId) : [...manualBuffs, ...defensive.buffs]);
 
   // The selected unit and its attached members.
-  const memberUnits = $derived(resolveMembers(ds, salvo.selectedFactionId, [salvo.selectedUnitId, ...salvo.attachedUnitIds]));
+  const memberUnits = $derived(resolveMembers(ds, salvo.selectedFactionId, [salvo.selectedUnitId, ...salvo.attachedUnitIds], salvo.memberModelCounts));
 
-  // Per-weapon model count (how many of a member's models carry it), read with
-  // a default from an override map — no $effect seeds it, so lines appearing
-  // after a unit/phase change fall through to the loadout default without a
-  // fresh-ref write that would trip Svelte's update-depth guard.
-  const countOverrides = $state(new SvelteMap<string, number>());
-  const weaponKey = (memberId: string, weaponId: string) => `${memberId}:${weaponId}`;
+  // Each member's equipment counts once the player edits one, by member id; a member absent here
+  // carries its base loadout. Read with a fallback rather than seeded by an $effect, so members
+  // appearing after a unit change fall through to their loadout without a write that would trip
+  // Svelte's update-depth guard.
+  const countOverrides = $state(new SvelteMap<string, Map<string, number>>());
   function carriedBy(memberId: string, weaponId: string): number {
-    const override = countOverrides.get(weaponKey(memberId, weaponId));
-    if (override !== undefined) return override;
+    const override = countOverrides.get(memberId);
+    if (override) return override.get(weaponId) ?? 0;
     const loadout = memberUnits.find((member) => member.memberId === memberId)?.loadout;
     return loadout ? defaultWeaponCount(loadout, weaponId) : 0;
   }
@@ -134,7 +136,8 @@
   // drone's carbine) and the printed rules of wargear the loadout leaves out, as the matrix
   // scores them.
   const counts = $derived(memberUnits.map(({ memberId, unit, loadout }) =>
-    memberCounts(loadout, unit.weapons.map((w) => w.id), (weaponId) => carriedBy(memberId, weaponId))));
+    countOverrides.get(memberId) ??
+      memberCounts(loadout, unit.weapons.map((w) => w.id), (weaponId) => defaultWeaponCount(loadout, weaponId))));
   const wargear = $derived(memberUnits.map((member, index) =>
     memberWargear({ ds, factionId: salvo.selectedFactionId, member, counts: counts[index], buffs: buffsOf(member.memberId), context: contextOf(member.memberId) })));
   const wargearOf = (memberId: string) => {
@@ -165,17 +168,13 @@
     return carriedBy(memberId, weaponId);
   }
   const carried = (line: WeaponLine) => shownCount(line.ownerMemberId, line.weaponId);
-  // Clamp the requested count into this weapon's valid range so an invalid
-  // wargear config is unreachable (e.g. plasma pistols can't exceed 3 on a
-  // 10-model Berzerker squad). Weapons with no bound keep a "≥0" floor.
-  // A granted weapon's count follows its wargear, so it is not edited.
+  // Setting one weapon's count moves the member to the nearest legal loadout carrying that many
+  // (see editedCounts), so swapping spears for axes is one edit. A granted weapon's count follows
+  // its wargear, so it is not edited.
   function setCarried(line: WeaponLine, n: number): void {
-    if (wargearOf(line.ownerMemberId)?.wargear.granted.some((weapon) => weapon.id === line.weaponId)) return;
-    const bounds = memberUnits.find((member) => member.memberId === line.ownerMemberId)?.loadout.bounds;
-    const count = bounds?.has(line.weaponId)
-      ? clampWeaponCount(bounds, line.weaponId, n)
-      : Math.max(0, Math.floor(n) || 0);
-    countOverrides.set(weaponKey(line.ownerMemberId, line.weaponId), count);
+    const index = memberUnits.findIndex((member) => member.memberId === line.ownerMemberId);
+    if (index < 0 || wargear[index].granted.some((weapon) => weapon.id === line.weaponId)) return;
+    countOverrides.set(line.ownerMemberId, editedCounts(memberUnits[index].loadout, counts[index], line.weaponId, n));
   }
 
   // Which lines the models actually use, and with how many models: the
@@ -209,6 +208,14 @@
   // Manual include/exclude per line; without one, a line is in play exactly
   // when the loadout scoring uses it.
   const inclusion = $state(new SvelteMap<string, boolean>());
+  // A new faction, unit or size starts from the loadout defaults again.
+  $effect(() => {
+    void salvo.attackerEpoch;
+    untrack(() => {
+      countOverrides.clear();
+      inclusion.clear();
+    });
+  });
   function included(id: string): boolean {
     return inclusion.get(id) ?? (selection.value?.firing.has(id) ?? false);
   }
@@ -488,7 +495,8 @@
     font-size: var(--text-xs);
   }
 
-  @media (max-width: 640px) {
+  /* Below the width its nine stage columns need, the table gives way to the weapon cards. */
+  @container projection (max-width: 800px) {
     .proj-table-wrap { display: none; }
   }
 
@@ -500,7 +508,8 @@
   .proj th.r,
   .proj td.numcell { text-align: right; }
   .proj th.r { cursor: help; }
-  .proj .wname { white-space: nowrap; }
+  /* Names wrap so a long combined-unit label can't push the stage columns past the card. */
+  .proj .wname { min-width: 10em; overflow-wrap: anywhere; }
   .proj tr.excluded td { opacity: 0.45; }
   .proj input[type="checkbox"] { cursor: pointer; }
   .proj tr.total td { font-weight: 600; }
@@ -513,7 +522,6 @@
   .usage {
     display: block;
     font-size: var(--text-xs);
-    white-space: nowrap;
   }
 
   /* Per-cell buff-lift popover. The cell is the positioning context; the

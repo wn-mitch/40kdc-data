@@ -22,8 +22,9 @@
       // Auto-pick the first resolved unit if nothing's selected yet.
       const firstResolved = roster.units.find((u) => u.ref.resolved && u.ref.id);
       if (firstResolved) {
-        salvo.selectedUnitId = firstResolved.ref.id;
-        salvo.selectedFactionId = roster.faction_id;
+        salvo.selectFaction(roster.faction_id);
+        salvo.selectUnit(firstResolved.ref.id);
+        salvo.setMemberModels(firstResolved.ref.id!, firstResolved.model_count);
         salvo.selectedDetachmentId = roster.detachments[0]?.ref.id ?? null;
       }
     }

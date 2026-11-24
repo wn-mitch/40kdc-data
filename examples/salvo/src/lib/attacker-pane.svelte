@@ -1,9 +1,10 @@
 <script lang="ts">
   import { salvo, ds, PHASE_CHOICES, weaponTypeForPhase } from "./store.svelte.js";
-  import { resolveRosterUnit, resolveAttachmentPartners } from "@alpaca-software/40kdc-data";
+  import { isMeleeProfile, resolveRosterUnit, resolveAttachmentPartners } from "@alpaca-software/40kdc-data";
   import type { UnitView } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
   import { supportProviders } from "./defender.js";
+  import { memberLevers } from "./output-model.js";
 
   type AttachmentPartner = { unit: UnitView; role: "leader" | "bodyguard" };
 
@@ -141,11 +142,34 @@
   });
 
   // Units whose abilities could reach the combined unit if the player places them nearby.
-  const providers = $derived(
-    selectedUnit
-      ? supportProviders(ds, selectedUnit.factionId, [selectedUnit.id, ...salvo.attachedUnitIds])
-      : [],
-  );
+  // Units whose abilities reach the combined unit when the player places them nearby: every
+  // provider is offered to the resolver at once, in each phase, and only those it returns a
+  // support lever for are listed. A provider whose auras never touch this unit is left out.
+  const providers = $derived.by(() => {
+    if (!selectedUnit) return [];
+    const memberIds = [selectedUnit.id, ...salvo.attachedUnitIds];
+    const candidates = supportProviders(ds, selectedUnit.factionId, memberIds);
+    if (candidates.length === 0) return [];
+    const attacker = {
+      unitId: selectedUnit.id,
+      factionId: salvo.selectedFactionId,
+      detachmentId: salvo.selectedDetachmentId,
+      attachedUnitIds: salvo.attachedUnitIds,
+      supportUnitIds: candidates.map((u) => u.id),
+      modelCounts: salvo.memberModelCounts,
+    };
+    const contributing = new Set<string>();
+    for (const phase of PHASE_CHOICES) {
+      for (const member of memberLevers(ds, attacker, { ...salvo.projectionContext, phase })) {
+        for (const lever of member.levers.buffs) {
+          if (lever.source.kind === "ability" && lever.source.abilityKind === "support" && lever.source.sourceUnitId) {
+            contributing.add(lever.source.sourceUnitId);
+          }
+        }
+      }
+    }
+    return candidates.filter((u) => contributing.has(u.id));
+  });
   function toggleSupport(id: string, on: boolean): void {
     const rest = salvo.supportUnitIds.filter((item) => item !== id);
     salvo.supportUnitIds = on ? [...rest, id] : rest;
@@ -153,8 +177,8 @@
 
   // Only weapons usable in the current phase: ranged in shooting, melee in fight.
   const weapons = $derived(
-    (selectedUnit?.weapons ?? []).filter(
-      (w) => w.raw.type === weaponTypeForPhase(salvo.phase),
+    (selectedUnit?.weapons ?? []).filter((w) =>
+      w.raw.profiles.some((p) => (isMeleeProfile(p) ? "melee" : "ranged") === weaponTypeForPhase(salvo.phase)),
     ),
   );
 
@@ -167,22 +191,30 @@
   });
 
   function pickUnit(unitId: string, factionId?: string) {
-    salvo.selectedUnitId = unitId;
-    if (factionId) {
-      salvo.selectedFactionId = factionId;
-      return;
+    const id = unitId || null;
+    // Keep the current faction when it owns this unit id — a shared chassis
+    // (e.g. `chaos-land-raider`) exists under several factions, and resolving
+    // it faction-blind would yank the faction over to whichever copy happens
+    // to be registered first.
+    let faction = factionId ?? salvo.selectedFactionId;
+    if (id && !(faction && ds.units.getInFaction(id, faction))) {
+      faction = ds.units.getAny(id)?.raw.faction_id ?? faction;
     }
-    // Keep the current faction when it actually owns this unit id — a shared
-    // chassis (e.g. `chaos-land-raider`) exists under several factions, and
-    // resolving it faction-blind would yank the faction over to whichever copy
-    // happens to be registered first. Only re-derive the faction when the
-    // current one has no such unit.
-    if (salvo.selectedFactionId && ds.units.getInFaction(unitId, salvo.selectedFactionId)) {
-      return;
-    }
-    const u = ds.units.getAny(unitId);
-    if (u) salvo.selectedFactionId = u.raw.faction_id;
+    if (faction !== salvo.selectedFactionId) salvo.selectFaction(faction);
+    salvo.selectUnit(id);
   }
+
+  // Each member of the combined unit whose datasheet allows more than one size.
+  const sizedMembers = $derived(
+    [salvo.selectedUnitId, ...salvo.attachedUnitIds].flatMap((id) => {
+      if (!id) return [];
+      const unit =
+        (salvo.selectedFactionId && ds.units.getInFaction(id, salvo.selectedFactionId)) || ds.units.getAny(id);
+      const min = unit?.raw.model_count?.min ?? 1;
+      const max = unit?.raw.model_count?.max ?? min;
+      return unit && max > min ? [{ id, name: unit.name, min, max }] : [];
+    }),
+  );
 </script>
 
 {#if rosterUnits.length > 0}
@@ -192,7 +224,12 @@
       id="atk-roster-unit"
       class="grow"
       value={salvo.selectedUnitId ?? ""}
-      onchange={(e) => pickUnit((e.currentTarget as HTMLSelectElement).value)}
+      onchange={(e) => {
+        const id = (e.currentTarget as HTMLSelectElement).value;
+        pickUnit(id);
+        const entry = rosterUnits.find((x) => x.view!.id === id);
+        if (entry) salvo.setMemberModels(id, entry.ru.model_count);
+      }}
     >
       <option value="">Pick a unit</option>
       {#each rosterUnits as { ru, view, index } (index)}
@@ -213,8 +250,7 @@
     class="grow"
     value={salvo.selectedFactionId ?? ""}
     onchange={(e) => {
-      salvo.selectedFactionId = (e.currentTarget as HTMLSelectElement).value || null;
-      salvo.selectedDetachmentId = null;
+      salvo.selectFaction((e.currentTarget as HTMLSelectElement).value || null);
     }}
   >
     <option value="">— any —</option>
@@ -300,6 +336,32 @@
     </select>
   </div>
 {/if}
+
+{#each sizedMembers as m (m.id)}
+  {@const label = salvo.attachedUnitIds.length > 0 ? `${m.name} models` : "Models"}
+  {@const current = Math.min(m.max, Math.max(m.min, salvo.memberModelCounts[m.id] ?? m.min))}
+  <div class="row">
+    {#if m.max - m.min < 6}
+      <span class="label" id={`atk-size-${m.id}`}>{label}</span>
+      <div class="tabs grow" role="group" aria-labelledby={`atk-size-${m.id}`}>
+        {#each Array.from({ length: m.max - m.min + 1 }, (_, i) => m.min + i) as n (n)}
+          <button class:active={current === n} aria-pressed={current === n} onclick={() => salvo.setMemberModels(m.id, n)}>{n}</button>
+        {/each}
+      </div>
+    {:else}
+      <label for={`atk-size-${m.id}`}>{label}</label>
+      <input
+        id={`atk-size-${m.id}`}
+        type="number"
+        min={m.min}
+        max={m.max}
+        value={current}
+        onchange={(e) => salvo.setMemberModels(m.id, Number((e.currentTarget as HTMLInputElement).value))}
+      />
+      <span class="dim">{m.min}–{m.max}</span>
+    {/if}
+  </div>
+{/each}
 
 {#if providers.length > 0}
   <details class="support">

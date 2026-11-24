@@ -14,7 +14,7 @@ import {
   type EngineContext,
 } from "@alpaca-software/40kdc-data";
 
-import { defaultWeaponCount, lineId, memberCounts, memberLoadout, selectLines, weaponLines } from "./weapon-lines.js";
+import { defaultWeaponCount, editedCounts, lineId, memberCounts, memberLoadout, selectLines, weaponLines } from "./weapon-lines.js";
 
 const ds = Dataset.embedded();
 const target = { unit: ds.units.getAny("intercessor-squad")!.raw, modelCount: 5 };
@@ -114,6 +114,41 @@ describe("selectLines", () => {
   });
 });
 
+describe("weapon lines", () => {
+  it("bucket each profile of a weapon with ranged and melee profiles into its own phase", () => {
+    // The Castellan axe is a ranged weapon with a melee profile; the Allarus spear the reverse.
+    const weapons = ["castellan-axe", "guardian-spear-allarus-custodians"].map((id) => ds.weapons.getInFaction(id, "adeptus-custodes")!.raw);
+    const members = [{ memberId: "allarus-custodians", name: "Allarus Custodians", weapons }];
+    const ids = (type: "ranged" | "melee") => weaponLines(members, type).map((line) => `${line.weaponId}:${line.profileIndex}`);
+    expect(ids("melee")).toEqual(["castellan-axe:1", "guardian-spear-allarus-custodians:0"]);
+    expect(ids("ranged")).toEqual(["castellan-axe:0", "guardian-spear-allarus-custodians:1"]);
+  });
+
+  it("name a line by its profile only when the profile name tells it apart", () => {
+    const axe = ds.weapons.getInFaction("castellan-axe", "adeptus-custodes")!.raw;
+    const pistol = ds.weapons.all.find((w) => w.raw.profiles.filter((p) => p.range !== "Melee").length > 1 && new Set(w.raw.profiles.map((p) => p.name.toLowerCase())).size === w.raw.profiles.length && !w.raw.profiles.some((p) => p.name.toLowerCase() === w.raw.name.toLowerCase()))!.raw;
+    const labels = (weapons: typeof axe[], type: "ranged" | "melee") => weaponLines([{ memberId: "m", name: "M", weapons }], type).map((line) => line.label);
+    // Each phase sees one Castellan Axe profile, named like the weapon.
+    expect(labels([axe], "melee")).toEqual(["Castellan axe"]);
+    expect(labels([axe], "ranged")).toEqual(["Castellan axe"]);
+    // Two ranged profiles with their own names keep them.
+    expect(labels([pistol], "ranged")).toEqual(pistol.profiles.filter((p) => p.range !== "Melee").map((p) => `${pistol.name} — ${p.name}`));
+  });
+});
+
+describe("editing a weapon count", () => {
+  it("moves to the nearest legal loadout, handing back the weapons a swap replaces", () => {
+    const loadout = memberLoadout(ds, ds.units.getInFaction("allarus-custodians", "adeptus-custodes")!.raw, 3);
+    const axes = editedCounts(loadout, loadout.counts, "castellan-axe", 3);
+    expect(axes.get("castellan-axe")).toBe(3);
+    expect(axes.get("guardian-spear-allarus-custodians") ?? 0).toBe(0);
+    expect(axes.get("balistus-grenade-launcher")).toBe(3);
+    expect(loadout.rules.check(3, axes)).toEqual([]);
+    // Back to spears restores the base loadout.
+    expect([...editedCounts(loadout, axes, "castellan-axe", 0)].sort()).toEqual([...loadout.counts].sort());
+  });
+});
+
 describe("default weapon counts", () => {
   it("seed five Legionaries with a legal loadout", () => {
     // Taking every option at full cap would hand out four special weapons against an allowance of one.
@@ -121,6 +156,14 @@ describe("default weapon counts", () => {
     expect(loadout.modelCount).toBe(5);
     const selection = selectLines({ ds, members: [{ memberId: "legionaries", loadout, counts }], target, buffs: [], context: { phase: "shooting" } });
     expect(selection.violations.get("legionaries")).toBeUndefined();
+  });
+
+  it("size a unit inside its datasheet range, with the base loadout for that size", () => {
+    const allarus = ds.units.getInFaction("allarus-custodians", "adeptus-custodes")!.raw;
+    expect(memberLoadout(ds, allarus, 3).modelCount).toBe(3);
+    expect(memberLoadout(ds, allarus, 3).counts.get("guardian-spear-allarus-custodians")).toBe(3);
+    expect(memberLoadout(ds, allarus, 10).modelCount).toBe(3);
+    expect(memberLoadout(ds, allarus, 0).modelCount).toBe(2);
   });
 
   it("keep wargear that has no weapon line, so the default is legal wherever the base loadout is", () => {

@@ -55,6 +55,7 @@
     detachmentId: salvo.selectedDetachmentId,
     attachedUnitIds: salvo.attachedUnitIds,
     supportUnitIds: salvo.supportUnitIds,
+    modelCounts: salvo.memberModelCounts,
   });
   const weapons = $derived(salvo.selectedWeaponId ? [{ weaponId: salvo.selectedWeaponId, profileIndex: salvo.selectedProfileIndex }] : []);
 
@@ -260,7 +261,6 @@
         {t.label}
         {#if cover}<small>· already from {cover.label}</small>{/if}
       </span>
-      <span class="chip manual">manual</span>
     </label>
   {/each}
   {#each CONTEXT_FLAG_TOGGLES as t (t.id)}
@@ -275,11 +275,10 @@
           })}
       />
       <span class="name">{t.label}</span>
-      <span class="chip manual">context</span>
     </label>
   {/each}
   <label class="ability-row" class:active={salvo.targetDistance !== null}>
-    <span class="name">Distance to target (")</span>
+    <span class="name">Distance to target (inches)</span>
     <input
       type="number"
       min="0"
@@ -292,6 +291,5 @@
         salvo.targetDistance = v === "" ? null : Number(v);
       }}
     />
-    <span class="chip manual">gates range abilities</span>
   </label>
 </div>
