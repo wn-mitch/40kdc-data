@@ -53,6 +53,7 @@
   import {
     STAGE_COLUMNS,
     aggregateStages,
+    withExactKills,
     fmt,
     fmtSigned,
     labelForSource as labelForSourceIn,
@@ -246,21 +247,26 @@
     return labelForSourceIn(ds, s);
   }
 
+  // The Combined row's lines as one exact distribution of kills.
+  const odds = $derived(killOdds(ds, lineResults.filter((r) => included(r.id) && !r.error)));
+
   // The "Combined" row, decomposed the same way per-line cells are (see
-  // aggregateStages for the additive vs models-killed math).
-  const aggregate = $derived.by<AttributedStage[]>(() =>
-    aggregateStages(
+  // aggregateStages for the additive vs models-killed math). Its damage dealt and kills are the
+  // exact volley's when the allocation takes every source: it leaves out mortal wounds from
+  // outside the attacks.
+  const aggregate = $derived.by<AttributedStage[]>(() => {
+    const stages = aggregateStages(
       [
         ...lineResults.filter((r) => included(r.id) && !r.error),
         ...(mortalLine.damage > 0 ? [{ attributed: mortalSourceStages(mortalLine) }] : []),
       ],
       salvo.manualTarget.W,
       salvo.manualTarget.modelCount,
-    ),
-  );
-
-  // The Combined row's lines as one exact distribution of kills.
-  const odds = $derived(killOdds(ds, lineResults.filter((r) => included(r.id) && !r.error)));
+    );
+    return odds && !("error" in odds) && mortalLine.damage === 0
+      ? withExactKills(stages, { damageDealt: odds.expectedDealt, modelsKilled: odds.expectedKilled })
+      : stages;
+  });
 
   const projection = $derived.by(() => {
     if (!selectionValid) return { error: "Selected abilities exceed an allowance or lack a required provider." };

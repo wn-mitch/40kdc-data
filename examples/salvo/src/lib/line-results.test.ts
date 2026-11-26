@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   DAMAGE_DEALT,
+  allocateSequence,
   attributeSelectedProfile,
   Dataset,
   profileApplicableBuffs,
@@ -150,6 +151,20 @@ describe("re-roll-one permissions across a unit's lines", () => {
     expect(used.length).toBeGreaterThan(1);
     expect(shared.selected.filter((row) => row.rerollOne)).toHaveLength(1);
     expect(used.reduce((sum, result) => sum + dealt(result.attributed).expected, 0)).toBeCloseTo(shared.total, 9);
+  });
+});
+
+describe("a line's kills", () => {
+  it("are the exact allocation's, not damage dealt over Wounds", () => {
+    // Intercessors have 2 Wounds: one damage on a model is half of the linear estimate's kill.
+    const { selection, results } = salvoNobz("fight", MIXED);
+    const used = results.filter((result) => selection.firing.has(result.id) && !result.error);
+    expect(used.length).toBeGreaterThan(0);
+    for (const result of used) {
+      const killed = stageOf(result.attributed, "models-killed")!;
+      expect(killed.expected).toBeCloseTo(allocateSequence(result.inputs!, ds).modelsDestroyed, 12);
+      expect(killed.expected).toBeLessThan(Math.min(target.modelCount, dealt(result.attributed).expected / 2));
+    }
   });
 });
 

@@ -8,6 +8,7 @@ import {
   labelForSource,
   srcKey,
   stageOf,
+  withExactKills,
 } from "./projection-model.js";
 
 const manual = (label: string): BuffSource => ({ kind: "manual", label });
@@ -113,6 +114,24 @@ describe("fmt / fmtSigned", () => {
     expect(fmtSigned(1.2)).toBe("+1.20");
     expect(fmtSigned(-0.5)).toBe("-0.50");
     expect(fmtSigned(Infinity)).toBe("—");
+  });
+});
+
+describe("withExactKills", () => {
+  it("shows the exact value and keeps baseline, lifts and overlap summing to it", () => {
+    const src = manual("Lethal volley");
+    const agg = aggregateStages([lineWith({ expected: 6, baseline: 4, lifts: [{ source: src, delta: 2 }] })], 2, 10);
+    const exact = withExactKills(agg, { damageDealt: 5, modelsKilled: 2.2 });
+    for (const [name, value] of [[DAMAGE_DEALT, 5], ["models-killed", 2.2]] as const) {
+      const before = stageOf(agg, name)!;
+      const after = stageOf(exact, name)!;
+      expect(after.expected).toBe(value);
+      expect(after.baseline).toBe(before.baseline);
+      expect(after.lifts).toEqual(before.lifts);
+      expect(after.baseline + after.lifts.reduce((sum, lift) => sum + lift.delta, 0) + after.residual).toBeCloseTo(value, 12);
+    }
+    // Without a damage dealt only the kills change.
+    expect(stageOf(withExactKills(agg, { modelsKilled: 2.2 }), DAMAGE_DEALT)).toEqual(stageOf(agg, DAMAGE_DEALT));
   });
 });
 

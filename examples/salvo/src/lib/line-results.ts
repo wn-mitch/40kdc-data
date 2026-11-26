@@ -17,7 +17,7 @@ import {
   type Unit,
 } from "@alpaca-software/40kdc-data";
 
-import { aggregateStages, stageOf } from "./projection-model.js";
+import { aggregateStages, stageOf, withExactKills } from "./projection-model.js";
 import { lineRows, type LineRow, type LineSelection, type WeaponLine } from "./weapon-lines.js";
 
 /**
@@ -83,6 +83,20 @@ export function lineGroupLabel(ds: Dataset, group: Pick<LineGroup, "bearer" | "r
   return parts.length > 0 ? parts.join(", ") : "others";
 }
 
+/**
+ * A line's models killed from the exact allocation of its groups in turn: the expected-value
+ * stages count a damaged model as part of a kill. Its damage dealt stays the expected value the
+ * loadout scoring ranks lines by. Kept as they are when the allocation refuses the line (too many
+ * attacks, or a rule it does not model).
+ */
+function exactKills(ds: Dataset, stages: AttributedStage[], inputs: readonly EngineInput[]): AttributedStage[] {
+  try {
+    return withExactKills(stages, { modelsKilled: allocateSequence(inputs, ds).modelsDestroyed });
+  } catch {
+    return stages;
+  }
+}
+
 /** Several groups' stages as one line's: their sum, with each group's engine detail kept. */
 function sumGroups(ds: Dataset, groups: readonly LineGroup[], target: { unit: Unit; modelCount: number }): AttributedStage[] {
   const W = target.unit.profiles?.[0]?.W ?? 0;
@@ -134,7 +148,7 @@ export function crunchLine(input: {
     const groups = input.rows ? buffGroups(input.buffs, input.rows) : [{ models, buffs: [...input.buffs] }];
     if (groups.length === 1) {
       const attributed = crunchModels(models, groups[0]!.buffs);
-      return { ...line, models, attributed, inputs };
+      return { ...line, models, attributed: exactKills(ds, attributed, inputs), inputs };
     }
     const crunched: LineGroup[] = groups.map((group) => ({
       models: group.models,
@@ -142,7 +156,7 @@ export function crunchLine(input: {
       ...(group.rerollOne ? { rerollOne: group.rerollOne } : {}),
       attributed: crunchModels(group.models, group.buffs),
     }));
-    return { ...line, models, attributed: sumGroups(ds, crunched, input.target), groups: crunched, inputs };
+    return { ...line, models, attributed: exactKills(ds, sumGroups(ds, crunched, input.target), inputs), groups: crunched, inputs };
   } catch (err) {
     return { ...line, models, attributed: [], error: (err as Error).message };
   }
@@ -186,6 +200,8 @@ export type KillOdds = {
   woundsDealt: number[];
   /** Expected models destroyed, which counts damage lost past a model's last wound. */
   expectedKilled: number;
+  /** Expected wounds dealt. */
+  expectedDealt: number;
 };
 
 /**
@@ -199,7 +215,7 @@ export function killOdds(ds: Dataset, lines: readonly LineResult[]): KillOdds | 
   if (inputs.length === 0) return null;
   try {
     const out = allocateSequence(inputs, ds);
-    return { modelsDestroyed: out.modelsDestroyedDistribution, woundsDealt: out.woundsDealtDistribution, expectedKilled: out.modelsDestroyed };
+    return { modelsDestroyed: out.modelsDestroyedDistribution, woundsDealt: out.woundsDealtDistribution, expectedKilled: out.modelsDestroyed, expectedDealt: out.damageDealt };
   } catch (err) {
     return { error: (err as Error).message };
   }
