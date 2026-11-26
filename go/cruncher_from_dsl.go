@@ -413,7 +413,7 @@ func dslWalk(node any, source map[string]any, opts dslOpts, out *effectTranslati
 		if filter["owner"] == "enemy" {
 			owner = "enemy"
 		}
-		verdict := matchesUnitFilter(withoutOwnHolding(filter, source), opts.context, side, owner)
+		verdict := matchesUnitFilter(withoutOwnHolding(filter, source, opts.context), opts.context, side, owner)
 		// A printed grant's holders emit its auras: a unit that is not a holder can still be a
 		// recipient.
 		if grant, _ := getMap(n, "modifier"); verdict == false && n["type"] == "ability-grant" && grant != nil {
@@ -3432,23 +3432,30 @@ func evaluateCondition(condition, ctx map[string]any, rest ...any) any {
 // holdsOwnAbility reports whether a filter only asks that the unit have the ability being
 // resolved ("a unit with this ability"): the ability is resolved for its holder, so the holder
 // has it.
-// withoutOwnHolding is a friendly unit filter without its has_ability clause when that clause
-// names only the ability being resolved ("units with this ability"): the ability is resolved for
-// its holder, so the holder has it. An ability another unit provides is not the crunched unit's
-// own, so its clause stays.
-func withoutOwnHolding(filter, source map[string]any) map[string]any {
-	if getStr(source, "kind") != "ability" || isProvidedByAnotherUnit(source) || filter["owner"] != "friendly" {
+// withoutOwnHolding is a friendly unit filter without the clauses its holder always meets: a
+// has_ability naming only the ability being resolved ("units with this ability"), and a within
+// (not wholly) of this model or this unit, since the ability is resolved for the holder's own
+// unit, which holds it and is within range of itself. An ability another unit provides is not the
+// crunched unit's own, so its has_ability clause stays, and its range holds only when the context
+// declares providersInRange.
+func withoutOwnHolding(filter, source, ctx map[string]any) map[string]any {
+	if getStr(source, "kind") != "ability" || filter["owner"] != "friendly" {
 		return filter
 	}
+	own := !isProvidedByAnotherUnit(source)
 	ids, ok := asList(filter["has_ability"])
-	if !ok || len(ids) != 1 || ids[0] != source["abilityId"] {
+	held := own && ok && len(ids) == 1 && ids[0] == source["abilityId"]
+	within, isMap := filter["within"].(map[string]any)
+	inRange := (own || ctx["providersInRange"] == true) && isMap && within["wholly"] != true && (within["of"] == "this-model" || within["of"] == "this-unit")
+	if !held && !inRange {
 		return filter
 	}
-	out := make(map[string]any, len(filter)-1)
+	out := make(map[string]any, len(filter))
 	for key, value := range filter {
-		if key != "has_ability" {
-			out[key] = value
+		if (key == "has_ability" && held) || (key == "within" && inRange) {
+			continue
 		}
+		out[key] = value
 	}
 	return out
 }

@@ -269,10 +269,12 @@ fn alternatives_match(node: &Obj, opts: &WalkOpts) -> Option<bool> {
     )
 }
 
-/// A friendly unit filter without its `has_ability` clause when that clause names only the
-/// ability being resolved ("units with this ability"): the ability is resolved for its holder, so
-/// the holder has it. An ability another unit provides is not the crunched unit's own, so its
-/// clause stays.
+/// A friendly unit filter without the clauses its holder always meets: a `has_ability` naming
+/// only the ability being resolved ("units with this ability"), and a `within` (not wholly) of
+/// this model or this unit, since the ability is resolved for the holder's own unit, which holds
+/// it and is within range of itself. An ability another unit provides is not the crunched unit's
+/// own, so its `has_ability` clause stays, and its range holds only when the context declares
+/// `providers_in_range`.
 fn without_own_holding(filter: &Value, opts: &WalkOpts) -> Value {
     let BuffSource::Ability {
         ability_id,
@@ -285,17 +287,36 @@ fn without_own_holding(filter: &Value, opts: &WalkOpts) -> Value {
     let Some(object) = filter.as_object() else {
         return filter.clone();
     };
-    let own = *ability_kind != AbilityKind::Support
-        && object.get("owner").and_then(Value::as_str) == Some("friendly")
+    if object.get("owner").and_then(Value::as_str) != Some("friendly") {
+        return filter.clone();
+    }
+    let own = *ability_kind != AbilityKind::Support;
+    let held = own
         && object
             .get("has_ability")
             .and_then(Value::as_array)
             .is_some_and(|ids| ids.len() == 1 && ids[0].as_str() == Some(ability_id.as_str()));
-    if !own {
+    let in_range = (own || opts.context.providers_in_range == Some(true))
+        && object
+            .get("within")
+            .and_then(Value::as_object)
+            .is_some_and(|within| {
+                within.get("wholly").and_then(Value::as_bool) != Some(true)
+                    && matches!(
+                        within.get("of").and_then(Value::as_str),
+                        Some("this-model" | "this-unit")
+                    )
+            });
+    if !held && !in_range {
         return filter.clone();
     }
     let mut rest = object.clone();
-    rest.remove("has_ability");
+    if held {
+        rest.remove("has_ability");
+    }
+    if in_range {
+        rest.remove("within");
+    }
     Value::Object(rest)
 }
 
