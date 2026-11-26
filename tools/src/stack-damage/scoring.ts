@@ -93,6 +93,8 @@ export class DamageScoringSession {
     readonly config: MatrixConfig,
     factionUnits: readonly UnitView[],
     invariants: DamageScoringInvariants = { loadoutLegality: new Map() },
+    /** Model counts to score units at, by unit id; others score at their full strength. */
+    private readonly modelCounts: ReadonlyMap<string, number> = new Map(),
   ) {
     this.loadoutLegalityCache = invariants.loadoutLegality;
     this.scoreCache = new DamageCellCache(state.factionId, state.target.profileId, state.phase);
@@ -132,7 +134,7 @@ export class DamageScoringSession {
     if (cached) return cached;
     const composition = this.dataset.unitCompositionOf(unit.raw) as ({ models?: LoadoutModel[] } & Partial<MfmComposition>) | undefined;
     const models = composition?.models ?? [];
-    const modelCount = fullModelCount(this.dataset, unit.raw);
+    const modelCount = this.modelCounts.get(unit.id) ?? fullModelCount(this.dataset, unit.raw);
     const view = this.dataset.loadoutOf(unit.raw);
     let scaffold: LoadoutScaffold;
     if (view.source === "mfm") {

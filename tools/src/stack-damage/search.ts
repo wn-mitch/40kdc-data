@@ -117,7 +117,7 @@ export function cellScenario(dataset: Dataset, faction: FactionContext, config: 
  * target it can see, in the attacker's own turn, so those facts are stated (Indirect Fire's
  * penalties for an unseen target are never applied); the scenario declares the rest.
  */
-function contextForCell(dataset: Dataset, factionId: string, target: ResolvedTarget, phase: ComparePhase, scenario: Scenario, targetWargear: Record<string, number>) {
+function contextForCell(dataset: Dataset, factionId: string, target: ResolvedTarget, phase: ComparePhase, scenario: Scenario, targetWargear: Record<string, number>, modelCounts: ReadonlyMap<string, number> = new Map()) {
   const targetKeywords = [...(target.unitRaw.keywords ?? []), ...(target.unitRaw.faction_keywords ?? [])].map((keyword) => keyword.toLowerCase());
   const targetWounds = freshWounds(target.unitRaw);
   return (spec: StackSpec, member?: StackMember): EngineContext => ({
@@ -137,7 +137,7 @@ function contextForCell(dataset: Dataset, factionId: string, target: ResolvedTar
     armyFaction: factionId,
     attackerAttached: spec.members.length > 1,
     // Every member at full strength, as the crunch fires them.
-    ...(spec.members.length > 0 ? { attackerModelCount: spec.members.reduce((sum, candidate) => sum + fullModelCount(dataset, candidate.unit.raw), 0) } : {}),
+    ...(spec.members.length > 0 ? { attackerModelCount: spec.members.reduce((sum, candidate) => sum + (modelCounts.get(candidate.unit.id) ?? fullModelCount(dataset, candidate.unit.raw)), 0) } : {}),
     attackerKeywords: unitKeywords(spec.members),
     // The member's own models make its attacks; without a member, only keywords every member shares.
     attackerModelKeywords: member ? unitKeywords([member]) : sharedKeywords(spec.members),
@@ -321,15 +321,17 @@ export function damageScoringSession(input: {
   invariants?: DamageScoringInvariants;
   /** The target's wargear; its out-of-the-box loadout's when omitted. */
   targetWargear?: Record<string, number>;
+  /** Model counts to score units at, by unit id; others score at their full strength. */
+  modelCounts?: ReadonlyMap<string, number>;
 }): DamageScoringSession {
   const state: DamageCellState = {
     factionId: input.faction.id,
     target: input.target,
     phase: input.phase,
     contextFor: contextForCell(input.dataset, input.faction.id, input.target, input.phase, cellScenario(input.dataset, input.faction, input.config),
-      input.targetWargear ?? baseWargear(input.dataset, input.target.unitRaw, input.target.modelCount)),
+      input.targetWargear ?? baseWargear(input.dataset, input.target.unitRaw, input.target.modelCount), input.modelCounts),
   };
-  return new DamageScoringSession(input.dataset, state, input.config, input.faction.units, input.invariants);
+  return new DamageScoringSession(input.dataset, state, input.config, input.faction.units, input.invariants, input.modelCounts);
 }
 
 /** Orders results best first; ties go to the members' ids in order. */

@@ -71,10 +71,15 @@ export function unitInFaction(context: FactionContext, unitId: string): UnitView
   return context.units.find((unit) => unit.id === unitId);
 }
 
-/** A unit's full-strength model count: its largest composition tier, else its printed maximum. */
+/**
+ * A unit's full-strength model count: its largest composition tier, else its printed maximum. A
+ * tier's rows can each allow more models than the unit may field together (Corsair Voidscarred's
+ * optional specialists replace ordinary models), so the printed maximum caps it when there is one.
+ */
 export function fullModelCount(dataset: Dataset, unit: Unit): number {
   const composition = dataset.unitCompositionOf(unit) as { tiers?: { models: { min: number; max?: number }[] }[] } | undefined;
   let count = unit.model_count?.max ?? unit.model_count?.min ?? 1;
   for (const tier of composition?.tiers ?? []) count = Math.max(count, tier.models.reduce((sum, model) => sum + (model.max ?? model.min), 0));
-  return count;
+  const printedMax = unit.model_count?.max;
+  return typeof printedMax === "number" ? Math.min(count, printedMax) : count;
 }

@@ -25,11 +25,14 @@ import {
   type WeaponGrant,
 } from "@alpaca-software/40kdc-data";
 
+import { startingLoadout } from "../../../_shared/best-loadout.js";
+
 export type MemberLoadout = {
   unit: Unit;
   /**
-   * The base loadout: every model in its out-of-the-box configuration, the legal default a unit
-   * ships with. It includes wargear that has no weapon line (e.g. a medikit or a totem).
+   * The starting loadout: the best legal loadout the points-value audit found for the unit at this
+   * size, else every model in its out-of-the-box configuration. It includes wargear that has no
+   * weapon line (e.g. a medikit or a totem).
    */
   counts: Map<string, number>;
   bounds: Map<string, WeaponBound>;
@@ -88,7 +91,7 @@ export function memberLoadout(ds: Dataset, unit: Unit, models?: number): MemberL
   const rules = ds.loadoutOf(unit);
   return {
     unit,
-    counts: rules.base(modelCount) ?? new Map(),
+    counts: startingLoadout(ds, unit, modelCount) ?? new Map(),
     bounds: rules.bounds(modelCount) ?? new Map(),
     modelCount,
     rules,
