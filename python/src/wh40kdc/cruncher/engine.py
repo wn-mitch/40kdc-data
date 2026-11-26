@@ -750,12 +750,12 @@ def crunch_model(
     stages.append({"name": "damage", "expected": damage, "detail": damage_detail})
 
     # 6. FNP — an all-FNP fires on every unsaved wound; a mortal-FNP only on
-    # the mortal-wound stream. Both against mortals: independent Bernoulli
-    # trials, so the surviving fractions multiply.
+    # the mortal-wound stream. A wound gets one Feel No Pain roll, so a target
+    # carrying both uses the better one against mortals.
     p_survive_all = _fnp_survival_fraction(resolved["feelNoPain"])
-    p_survive_mortal = _fnp_survival_fraction(resolved["feelNoPainMortal"])
+    mortal_survive = min(p_survive_all, _fnp_survival_fraction(resolved["feelNoPainMortal"]))
     after_main = damage_main * p_survive_all
-    after_mortal = damage_mortal * p_survive_all * p_survive_mortal
+    after_mortal = damage_mortal * mortal_survive
     after_fnp = after_main + after_mortal
     stages.append(
         {
@@ -785,7 +785,6 @@ def crunch_model(
             per_attack["distribution"], p_survive_all, wounds_stat
         )
         main_raw = unsaved * damage_per_hit * p_survive_all
-    mortal_survive = p_survive_all * p_survive_mortal
     devastating_raw = mortal_wounds_stream * per_critical["expected"] * mortal_survive
     devastating_capped = mortal_wounds_stream * capped_damage(
         per_critical["distribution"], mortal_survive, wounds_stat
@@ -835,7 +834,7 @@ def crunch_model(
         "unsaved": 1 - p_saved,
         "damage": per_attack["distribution"],
         "woundLost": p_survive_all,
-        "mortalWoundLost": p_survive_all * p_survive_mortal,
+        "mortalWoundLost": mortal_survive,
         "wounds": wounds_stat,
         "modelCount": target_model_count,
         "rollMortals": {

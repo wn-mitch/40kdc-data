@@ -348,7 +348,8 @@ export function mortalSourceBlocked(source: MortalSourceChoice, sources: readonl
 
 /**
  * The enabled sources' mortal wounds on the target: their expected total, and what is left after
- * the target's Feel No Pain (one on every wound and one on mortal wounds roll independently).
+ * the target's Feel No Pain (a wound gets one roll, so the better of its all-wounds and
+ * mortal-wounds Feel No Pain).
  * Only the sources {@link countedMortalSources} counts contribute.
  */
 export function mortalSourceLine(
@@ -361,7 +362,7 @@ export function mortalSourceLine(
   if (damage === 0) return { damage, afterFnp: 0 };
   const resolved = resolveBuffs([...targetBuffs], context);
   const survive = (fnp: { threshold: number } | null) => (fnp ? Math.min(1, Math.max(0, (fnp.threshold - 1) / 6)) : 1);
-  return { damage, afterFnp: damage * survive(resolved.feelNoPain) * survive(resolved.feelNoPainMortal) };
+  return { damage, afterFnp: damage * Math.min(survive(resolved.feelNoPain), survive(resolved.feelNoPainMortal)) };
 }
 
 /**

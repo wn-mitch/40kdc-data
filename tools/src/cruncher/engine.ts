@@ -473,14 +473,13 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   });
 
   // 6. FNP
-  // Two scopes compose: an all-FNP fires on every unsaved wound; a mortal-FNP
-  // fires only on the mortal-wound stream (e.g. Death Guard 5+ FNP vs mortals).
-  // A target carrying both rolls both against mortals — independent Bernoulli
-  // trials, so the surviving fractions multiply.
+  // An all-FNP fires on every unsaved wound; a mortal-FNP only on the mortal-wound stream (e.g.
+  // Death Guard 5+ FNP vs mortals). A wound gets one Feel No Pain roll, so a target carrying both
+  // uses the better one against mortals.
   const pSurviveAll = fnpSurvivalFraction(resolved.feelNoPain);
-  const pSurviveMortal = fnpSurvivalFraction(resolved.feelNoPainMortal);
+  const mortalSurvive = Math.min(pSurviveAll, fnpSurvivalFraction(resolved.feelNoPainMortal));
   const afterMain = damageMain * pSurviveAll;
-  const afterMortal = damageMortal * pSurviveAll * pSurviveMortal;
+  const afterMortal = damageMortal * mortalSurvive;
   const afterFnp = afterMain + afterMortal;
   const fnpDetail = describeFnp(resolved.feelNoPain, resolved.feelNoPainMortal);
   stages.push({ name: "after-fnp", expected: afterFnp, detail: fnpDetail });
@@ -495,7 +494,6 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     ? unsavedRegular * cappedDamage(perAttack.distribution, pSurviveAll, W) + unsavedCritical * cappedDamage(perCritical.distribution, pSurviveAll, W)
     : unsaved * cappedDamage(perAttack.distribution, pSurviveAll, W);
   const mainRaw = (critical ? unsavedRegular * damagePerHit + unsavedCritical * perCritical.expected : unsaved * damagePerHit) * pSurviveAll;
-  const mortalSurvive = pSurviveAll * pSurviveMortal;
   const devastatingRaw = mortalWoundsStream * perCritical.expected * mortalSurvive;
   const devastatingCapped = mortalWoundsStream * cappedDamage(perCritical.distribution, mortalSurvive, W);
   const abilityMortals = rollMortals * mortalSurvive;
@@ -526,7 +524,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     unsaved: 1 - pSaved,
     damage: perAttack.distribution,
     woundLost: pSurviveAll,
-    mortalWoundLost: pSurviveAll * pSurviveMortal,
+    mortalWoundLost: mortalSurvive,
     wounds: W,
     modelCount: targetModelCount,
     ...(critical ? { criticalWound: { unsaved: 1 - pSavedCritical, damage: perCritical.distribution } } : {}),

@@ -656,9 +656,10 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 
 	// 6. FNP
 	pSurviveAll := fnpSurvivalFraction(res.feelNoPain)
-	pSurviveMortal := fnpSurvivalFraction(res.feelNoPainMortal)
+	// A wound gets one Feel No Pain roll: a target with both scopes uses the better one vs mortals.
+	mortalSurvive := math.Min(pSurviveAll, fnpSurvivalFraction(res.feelNoPainMortal))
 	afterMain := damageMain * pSurviveAll
-	afterMortal := damageMortal * pSurviveAll * pSurviveMortal
+	afterMortal := damageMortal * mortalSurvive
 	afterFnp := afterMain + afterMortal
 	stages = append(stages, stage("after-fnp", afterFnp))
 
@@ -675,7 +676,6 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 			unsavedCritical*cappedDamage(perCritical.distribution, pSurviveAll, woundsStat)
 		mainRaw = (unsavedRegular*damagePerHit + unsavedCritical*perCritical.expected) * pSurviveAll
 	}
-	mortalSurvive := pSurviveAll * pSurviveMortal
 	devastatingRaw := mortalWoundsStream * perCritical.expected * mortalSurvive
 	devastatingCapped := mortalWoundsStream * cappedDamage(perCritical.distribution, mortalSurvive, woundsStat)
 	abilityMortals := rollMortals * mortalSurvive
@@ -720,7 +720,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		Unsaved:         1 - pSaved,
 		Damage:          perAttack.distribution,
 		WoundLost:       pSurviveAll,
-		MortalWoundLost: pSurviveAll * pSurviveMortal,
+		MortalWoundLost: mortalSurvive,
 		Wounds:          woundsStat,
 		ModelCount:      tmc,
 		DamageDealt:     damageDealt,

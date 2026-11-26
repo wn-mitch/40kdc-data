@@ -73,11 +73,11 @@
     "name": "devastating-wounds lascannon vs cultists with 5+ FNP all + 4+ FNP vs mortals",
     "cruncher_case": "10-fnp-vs-mortal-devastating-lascannon-vs-cultists.json",
     "expected": {
-      "damageDealt": 0.5374688817761519,
-      "modelsDestroyed": 0.5374688817761519,
+      "damageDealt": 0.5488627559315145,
+      "modelsDestroyed": 0.5488627559315145,
       "modelsDestroyedDistribution": [
-        0.46253111822384807,
-        0.5374688817761519,
+        0.4511372440684856,
+        0.5488627559315145,
         0,
         0,
         0,
@@ -338,11 +338,11 @@
       "per": "unit"
     },
     "expected": {
-      "damageDealt": 0.09566631102982269,
-      "modelsDestroyed": 0.09566631102982269,
+      "damageDealt": 0.10706018518518516,
+      "modelsDestroyed": 0.10706018518518516,
       "modelsDestroyedDistribution": [
-        0.9043336889701774,
-        0.09566631102982269,
+        0.8929398148148149,
+        0.10706018518518516,
         0,
         0,
         0,

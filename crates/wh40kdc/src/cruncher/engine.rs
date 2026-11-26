@@ -1126,14 +1126,14 @@ pub fn crunch_model(
     });
 
     // 6. FNP
-    // Two scopes compose: an all-FNP fires on every unsaved wound; a
-    // mortal-FNP fires only on the mortal-wound stream. A target carrying
-    // both rolls both against mortals — independent Bernoulli trials, so
-    // the surviving fractions multiply.
+    // An all-FNP fires on every unsaved wound; a mortal-FNP only on the
+    // mortal-wound stream. A wound gets one Feel No Pain roll, so a target
+    // carrying both uses the better one against mortals.
     let p_survive_all = fnp_survival_fraction(resolved.feel_no_pain.as_ref());
-    let p_survive_mortal = fnp_survival_fraction(resolved.feel_no_pain_mortal.as_ref());
+    let mortal_survive =
+        p_survive_all.min(fnp_survival_fraction(resolved.feel_no_pain_mortal.as_ref()));
     let after_main = damage_main * p_survive_all;
-    let after_mortal = damage_mortal * p_survive_all * p_survive_mortal;
+    let after_mortal = damage_mortal * mortal_survive;
     let after_fnp = after_main + after_mortal;
     let fnp_detail = describe_fnp(
         resolved.feel_no_pain.as_ref(),
@@ -1162,7 +1162,6 @@ pub fn crunch_model(
     } else {
         unsaved * damage_per_hit
     } * p_survive_all;
-    let mortal_survive = p_survive_all * p_survive_mortal;
     let devastating_raw = mortal_wounds_stream * per_critical.expected * mortal_survive;
     let devastating_capped =
         mortal_wounds_stream * capped_damage(&per_critical.distribution, mortal_survive, w);
@@ -1215,7 +1214,7 @@ pub fn crunch_model(
         unsaved: 1.0 - p_saved,
         damage: per_attack.distribution,
         wound_lost: p_survive_all,
-        mortal_wound_lost: p_survive_all * p_survive_mortal,
+        mortal_wound_lost: mortal_survive,
         wounds: unit_profile.w.get(),
         model_count: target_model_count,
         critical_wound: critical.map(|_| CriticalWound {
