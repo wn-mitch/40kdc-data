@@ -937,7 +937,9 @@
     "source_id": "triarch-abilities-necrons",
     "source_type": "ability",
     "phases": [
-      "command"
+      "command",
+      "shooting",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",

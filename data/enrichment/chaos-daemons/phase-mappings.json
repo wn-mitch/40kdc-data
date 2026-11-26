@@ -591,7 +591,9 @@
     "source_id": "shadow-form-abilities-chaos-daemons",
     "source_type": "ability",
     "phases": [
-      "command"
+      "command",
+      "shooting",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",

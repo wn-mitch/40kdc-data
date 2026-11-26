@@ -239,7 +239,9 @@
     "source_id": "unearthly-power-thousand-sons",
     "source_type": "ability",
     "phases": [
-      "command"
+      "command",
+      "shooting",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",

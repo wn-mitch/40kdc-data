@@ -331,7 +331,8 @@
     "source_id": "vanguard-of-the-dark-city-drukhari",
     "source_type": "ability",
     "phases": [
-      "command"
+      "command",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",

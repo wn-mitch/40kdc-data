@@ -919,6 +919,7 @@
     "phases": [
       "command",
       "movement",
+      "shooting",
       "charge",
       "fight"
     ],

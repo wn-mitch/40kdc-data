@@ -441,7 +441,8 @@
     "source_id": "wrathful-presence-world-eaters",
     "source_type": "ability",
     "phases": [
-      "command"
+      "command",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",

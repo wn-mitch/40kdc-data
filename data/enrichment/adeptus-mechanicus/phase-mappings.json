@@ -180,7 +180,9 @@
     "source_id": "canticles-of-the-omnissiah-adeptus-mechanicus",
     "source_type": "ability",
     "phases": [
-      "command"
+      "command",
+      "shooting",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",
@@ -610,7 +612,9 @@
     "phases": [
       "command",
       "movement",
-      "charge"
+      "shooting",
+      "charge",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",

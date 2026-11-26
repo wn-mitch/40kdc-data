@@ -956,7 +956,9 @@
     "source_id": "warmaster-chaos-space-marines",
     "source_type": "ability",
     "phases": [
-      "command"
+      "command",
+      "shooting",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",
