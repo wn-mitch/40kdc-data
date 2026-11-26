@@ -554,7 +554,7 @@ def _walk(node: Any, source: BuffSource, opts: dict[str, Any], out: EffectTransl
         else:
             side = "attacker" if opts["perspective"] == "attacker" else "target"
         verdict = _matches_unit_filter(
-            _without_own_holding(target, source),
+            _without_own_holding(target, source, opts["context"]),
             opts["context"],
             side,
             "enemy" if target.get("owner") == "enemy" else "friendly",
@@ -4298,21 +4298,35 @@ def _undecided_needs(
     return [need for need in needs if need["condition"].get("type") != "timing-is"]
 
 
-def _without_own_holding(filter_: dict[str, Any], source: BuffSource) -> dict[str, Any]:
-    """A friendly unit filter without its ``has_ability`` clause when that clause names only the
-    ability being resolved ("units with this ability"): the ability is resolved for its holder, so
-    the holder has it. An ability another unit provides is not the crunched unit's own, so its
-    clause stays."""
-    if (
-        source.get("kind") != "ability"
-        or source.get("abilityKind") == "support"
-        or filter_.get("owner") != "friendly"
-    ):
+def _without_own_holding(
+    filter_: dict[str, Any], source: BuffSource, ctx: dict[str, Any]
+) -> dict[str, Any]:
+    """A friendly unit filter without the clauses its holder always meets: a ``has_ability`` naming
+    only the ability being resolved ("units with this ability"), and a ``within`` (not wholly) of
+    this model or this unit, since the ability is resolved for the holder's own unit, which holds
+    it and is within range of itself. An ability another unit provides is not the crunched unit's
+    own, so its ``has_ability`` clause stays, and its range holds only when the context declares
+    ``providersInRange``."""
+    if source.get("kind") != "ability" or filter_.get("owner") != "friendly":
         return filter_
+    own = source.get("abilityKind") != "support"
     ids = filter_.get("has_ability")
-    if not isinstance(ids, list) or len(ids) != 1 or ids[0] != source.get("abilityId"):
+    held = (
+        own and isinstance(ids, list) and len(ids) == 1 and ids[0] == source.get("abilityId")
+    )
+    within = filter_.get("within")
+    in_range = (
+        (own or ctx.get("providersInRange") is True)
+        and isinstance(within, dict)
+        and within.get("wholly") is not True
+        and within.get("of") in ("this-model", "this-unit")
+    )
+    if not held and not in_range:
         return filter_
-    return {key: value for key, value in filter_.items() if key != "has_ability"}
+    dropped = {"has_ability"} if held else set()
+    if in_range:
+        dropped.add("within")
+    return {key: value for key, value in filter_.items() if key not in dropped}
 
 
 def _holds_own_ability(filter_: Any, source: BuffSource | None) -> bool:

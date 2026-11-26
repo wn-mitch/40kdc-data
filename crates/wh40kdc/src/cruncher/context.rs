@@ -45,6 +45,11 @@ pub struct EngineContext {
     /// `visible: {to: "attacker"}` on the attack's target; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub target_visible: Option<bool>,
+    /// Every unit providing a rule to the crunched unit (a Support provider) is within range of
+    /// it: that rule's friendly target `within` (not wholly) of this model or this unit holds.
+    /// `None` leaves the range unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub providers_in_range: Option<bool>,
     /// Each unit against its Starting Strength. Drives `strength`; `None` leaves it unknown.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attacker_strength: Option<UnitStrength>,
@@ -305,6 +310,7 @@ impl EngineContext {
             battle_round: None,
             attacker_turn: None,
             target_visible: None,
+            providers_in_range: None,
             attacker_strength: None,
             target_strength: None,
             attacker_wounds: None,

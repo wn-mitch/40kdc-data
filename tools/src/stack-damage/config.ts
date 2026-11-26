@@ -48,7 +48,7 @@ export type Scenario = Pick<EngineContext,
   | "targetObjectives" | "attackerGuided" | "attackerNeighbours" | "targetNeighbours" | "activeRules"
   | "attackerRegions" | "targetRegions" | "objectivesControlled" | "attackerWounds" | "targetWounds"
   | "objectives" | "attackerDesignationsApplied" | "targetDesignationsApplied" | "attackerMoves" | "targetMoves"
-  | "testResults" | "attackerKeywordModels" | "targetKeywordModels">;
+  | "testResults" | "attackerKeywordModels" | "targetKeywordModels" | "providersInRange">;
 
 const STRENGTHS = ["full", "below-starting", "below-half"];
 const STATES = ["engaged", "battle-shocked", "hidden"];
@@ -101,6 +101,7 @@ const SCENARIO_FIELDS: Record<keyof Scenario, (value: unknown) => boolean> = {
   battleRound: (value) => Number.isInteger(value) && (value as number) >= 1,
   attackerTurn: (value) => typeof value === "boolean",
   targetVisible: (value) => typeof value === "boolean",
+  providersInRange: (value) => typeof value === "boolean",
   attackerStrength: (value) => STRENGTHS.includes(value as string),
   targetStrength: (value) => STRENGTHS.includes(value as string),
   attackerDesignations: strings,

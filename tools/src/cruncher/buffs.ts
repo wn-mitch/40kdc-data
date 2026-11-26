@@ -342,6 +342,12 @@ export type EngineContext = {
    * `visible: {to: "attacker"}` on the attack's target; undefined leaves it "unknown".
    */
   targetVisible?: boolean;
+  /**
+   * Every unit providing a rule to the crunched unit (a Support provider) is within range of it:
+   * that rule's friendly target `within` (not wholly) of this model or this unit holds.
+   * Undefined leaves the range "unknown".
+   */
+  providersInRange?: boolean;
   /** Each unit against its Starting Strength. Drives `strength`; undefined leaves it "unknown". */
   attackerStrength?: UnitStrength;
   targetStrength?: UnitStrength;

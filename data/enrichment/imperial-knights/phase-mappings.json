@@ -421,7 +421,9 @@
     "source_id": "knights-of-legend-imperial-knights",
     "source_type": "ability",
     "phases": [
-      "command"
+      "command",
+      "shooting",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",

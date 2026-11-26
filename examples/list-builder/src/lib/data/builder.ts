@@ -29,6 +29,7 @@ import {
 	type WargearOption,
 	type WeaponBound,
 } from '@alpaca-software/40kdc-data';
+import { startingLoadout } from '../../../../_shared/best-loadout';
 
 // Re-exported so the builder UI keeps a single import surface; the ordinal-aware
 // pricing now lives in the package (see `unitOrdinals` for the army-copy index).
@@ -154,7 +155,7 @@ export function createBuilderUnit(
 		loadout: reconcileLoadout(
 			datasheetId,
 			modelCount,
-			defaultLoadout(raw, modelCount),
+			startingLoadout(ds, raw, modelCount) ?? new Map(),
 			factionId ?? armyFactionId,
 		),
 		enhancementId: null,

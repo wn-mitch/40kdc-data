@@ -229,7 +229,9 @@
     "source_id": "relics-of-the-matriarchs-adepta-sororitas",
     "source_type": "ability",
     "phases": [
-      "command"
+      "command",
+      "shooting",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",

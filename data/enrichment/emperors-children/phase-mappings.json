@@ -470,7 +470,9 @@
     "source_id": "pledges-to-the-dark-prince-emperors-children",
     "source_type": "detachment-rule",
     "phases": [
-      "command"
+      "command",
+      "shooting",
+      "fight"
     ],
     "game_version": {
       "edition": "11th",

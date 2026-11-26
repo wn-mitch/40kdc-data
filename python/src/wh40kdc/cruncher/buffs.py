@@ -43,7 +43,9 @@ ResolvedModifiers = dict[str, Any]
 #: ``battleRound`` (``battle-round``, per-round range tables); ``attackerTurn`` (it is the
 #: attacking unit's player's turn, for ``player-turn-is`` read from the ability's side);
 #: ``targetVisible`` (the attack's target is visible to the attacking model, for a unit-filter's
-#: ``visible: {to: "attacker"}`` on the attack's target);
+#: ``visible: {to: "attacker"}`` on the attack's target); ``providersInRange`` (every unit
+#: providing a rule to the crunched unit is within range of it, for that rule's friendly target
+#: ``within`` of this model or this unit);
 #: ``attackerStrength`` / ``targetStrength`` (``full`` / ``below-starting`` / ``below-half``,
 #: for ``strength``); ``attackerWounds`` / ``targetWounds`` (``{remaining, starting}`` of the
 #: damaged or only model, for ``wounds``); ``attackerDesignations`` / ``targetDesignations``

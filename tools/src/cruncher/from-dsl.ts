@@ -446,7 +446,7 @@ function walk(
     const side = currentNode.target.member_of === "attacker" ? "attacker" :
       currentNode.target.member_of === "defender" || currentNode.target.owner === "enemy" ? "target" :
         opts.perspective === "attacker" ? "attacker" : "target";
-    const verdict = matchesUnitFilter(withoutOwnHolding(currentNode.target, source), opts.context, side, currentNode.target.owner === "enemy" ? "enemy" : "friendly");
+    const verdict = matchesUnitFilter(withoutOwnHolding(currentNode.target, source, opts.context), opts.context, side, currentNode.target.owner === "enemy" ? "enemy" : "friendly");
     // A printed grant's holders emit its auras: a unit that is not a holder can still be a recipient.
     if (verdict === false && currentNode.type === "ability-grant" && isObject(currentNode.modifier) &&
       isObject(currentNode.modifier.definition) && containsAura(currentNode.modifier.definition)) {
@@ -2974,14 +2974,24 @@ function holdsOwnAbility(filter: unknown, source: BuffSource | undefined): boole
 }
 
 /**
- * A friendly unit filter without its `has_ability` clause when that clause names only the ability
- * being resolved ("units with this ability"): the ability is resolved for its holder, so the holder
- * has it. An ability another unit provides is not the crunched unit's own, so its clause stays.
+ * A friendly unit filter without the clauses its holder always meets: a `has_ability` naming only
+ * the ability being resolved ("units with this ability"), and a `within` (not wholly) of this
+ * model or this unit ("a friendly unit within 6" of this model"), since the ability is resolved for
+ * the holder's own unit, which holds it and is within range of itself. An ability another unit
+ * provides is not the crunched unit's own, so its `has_ability` clause stays, and its range holds
+ * only when the context declares {@link EngineContext.providersInRange}.
  */
-function withoutOwnHolding(filter: Record<string, unknown>, source: BuffSource): Record<string, unknown> {
-  if (source.kind !== "ability" || isProvidedByAnotherUnit(source) || filter.owner !== "friendly") return filter;
-  if (!Array.isArray(filter.has_ability) || filter.has_ability.length !== 1 || filter.has_ability[0] !== source.abilityId) return filter;
-  const { has_ability: _held, ...rest } = filter;
+function withoutOwnHolding(filter: Record<string, unknown>, source: BuffSource, context: EngineContext): Record<string, unknown> {
+  if (source.kind !== "ability" || filter.owner !== "friendly") return filter;
+  const own = !isProvidedByAnotherUnit(source);
+  const held = own && Array.isArray(filter.has_ability) && filter.has_ability.length === 1 && filter.has_ability[0] === source.abilityId;
+  const within = filter.within;
+  const inRange = (own || context.providersInRange === true) &&
+    isObject(within) && within.wholly !== true && (within.of === "this-model" || within.of === "this-unit");
+  if (!held && !inRange) return filter;
+  const rest = { ...filter };
+  if (held) delete rest.has_ability;
+  if (inRange) delete rest.within;
   return rest;
 }
 

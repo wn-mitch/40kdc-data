@@ -431,6 +431,11 @@ export function canonicalScenarioCases() {
   const fabricatedId = "fabricated-scenario";
   const readyHolders = { type: "designate", target: { owner: "friendly", has_ability: [fabricatedId] }, modifier: { tag: "readied" } };
   const readied = { type: "matches", parameters: { subject: "this-unit", filter: { designated: "readied" } } };
+  const nearSelf = (of: string, wholly = false) => ({
+    type: "roll-modifier",
+    target: { owner: "friendly", all_of: ["EXAMPLE SQUAD"], within: { range: { inches: 6 }, of, ...(wholly ? { wholly: true } : {}) } },
+    modifier: { roll: "hit", operation: "add", value: 1 },
+  });
   // No subject: the schema's default, this unit.
   const riledUp = { type: "matches", parameters: { filter: { designated: "riled-up" } } };
   const atOrBelowHalf = { type: "strength", parameters: { subject: "this-unit", below: "half", at_or_below: true } };
@@ -530,6 +535,18 @@ export function canonicalScenarioCases() {
     // A designation another of the player's rules applies (Waaagh! riles a unit up) is the player's toggle too.
     { id: "own-designation-other-rule", effect: { type: "sequence", steps: [readyHolders, gated({ ...readied, parameters: { ...readied.parameters, filter: { designated: "marked" } } })] }, context: {} },
     { id: "self-designation-declared", effect: { type: "sequence", steps: [readyHolders, gated(readied)] }, context: { attackerDesignations: [] } },
+    // "A friendly unit within 6" of this model": the holder's own unit is within range of itself, so
+    // only the keywords gate it. Another unit providing the rule leaves the range undecided unless
+    // the context declares it in range; "wholly within" stays undecided.
+    { id: "own-range-unit", effect: nearSelf("this-model"), context: { attackerKeywords: ["example squad"] } },
+    { id: "own-range-attached", effect: nearSelf("this-unit"), context: { attackerKeywords: ["example squad"] }, source: attached },
+    { id: "own-range-keyword-miss", effect: nearSelf("this-model"), context: { attackerKeywords: ["other"] } },
+    { id: "own-range-support", effect: nearSelf("this-model"), context: { attackerKeywords: ["example squad"] }, source: { ...attached, abilityKind: "support" as const } },
+    { id: "own-range-wholly", effect: nearSelf("this-model", true), context: { attackerKeywords: ["example squad"] } },
+    // A provider declared in range (providersInRange) meets its own range; "wholly within" still does not.
+    { id: "provider-in-range", effect: nearSelf("this-model"), context: { attackerKeywords: ["example squad"], providersInRange: true }, source: { ...attached, abilityKind: "support" as const } },
+    { id: "provider-in-range-keyword-miss", effect: nearSelf("this-model"), context: { attackerKeywords: ["other"], providersInRange: true }, source: { ...attached, abilityKind: "support" as const } },
+    { id: "provider-in-range-wholly", effect: nearSelf("this-model", true), context: { attackerKeywords: ["example squad"], providersInRange: true }, source: { ...attached, abilityKind: "support" as const } },
     { id: "own-designation-default-subject", effect: gated(riledUp), context: {} },
     { id: "own-designation-declared-other", effect: gated(riledUp), context: { attackerDesignations: ["spotted"] } },
     { id: "own-designation-target-lever", effect: defensive(riledUp), context: { attackerDesignations: [] }, perspective: "target" },
