@@ -4,6 +4,7 @@
  */
 import {
   DAMAGE_DEALT_MEASURES,
+  allocateSequence,
   attributeStages,
   loadoutHitModifier,
   profileApplicableBuffs,
@@ -12,6 +13,7 @@ import {
   type Buff,
   type Dataset,
   type EngineContext,
+  type EngineInput,
   type Unit,
 } from "@alpaca-software/40kdc-data";
 
@@ -29,7 +31,14 @@ export type LineGroup = { models: number; bearer: string[]; rerollOne?: true; at
  * A line's crunch. `groups` is present when its models attack with different buffs; `attributed`
  * is then their sum, as the combined row sums lines.
  */
-export type LineResult = WeaponLine & { models: number; attributed: AttributedStage[]; groups?: LineGroup[]; error?: string };
+export type LineResult = WeaponLine & {
+  models: number;
+  attributed: AttributedStage[];
+  groups?: LineGroup[];
+  /** The engine inputs the line was crunched from, one per group, for the exact allocation. */
+  inputs?: EngineInput[];
+  error?: string;
+};
 
 /**
  * The buffs one row of models attacks with, as the damage matrix attributes the row: a bearer-only
@@ -106,32 +115,34 @@ export function crunchLine(input: {
 }): LineResult {
   const { ds, line, owner, models, context } = input;
   if (models <= 0) return { ...line, models, attributed: [], error: "no models carry this weapon" };
+  const inputs: EngineInput[] = [];
   const crunchModels = (modelsFiring: number, buffs: readonly Buff[]) => {
     const profile = line.weaponRaw.profiles[line.profileIndex];
-    return attributeStages(
-      profileEngineInput({
-        weapon: line.weaponRaw,
-        profileIndex: line.profileIndex,
-        target: input.target,
-        modelsFiring,
-        buffs: [...buffs],
-        context,
-        hitModifier: owner && profile ? loadoutHitModifier(owner, profile, context) : 0,
-      }),
-      ds,
-      { measures: DAMAGE_DEALT_MEASURES },
-    );
+    const engineInput = profileEngineInput({
+      weapon: line.weaponRaw,
+      profileIndex: line.profileIndex,
+      target: input.target,
+      modelsFiring,
+      buffs: [...buffs],
+      context,
+      hitModifier: owner && profile ? loadoutHitModifier(owner, profile, context) : 0,
+    });
+    inputs.push(engineInput);
+    return attributeStages(engineInput, ds, { measures: DAMAGE_DEALT_MEASURES });
   };
   try {
     const groups = input.rows ? buffGroups(input.buffs, input.rows) : [{ models, buffs: [...input.buffs] }];
-    if (groups.length === 1) return { ...line, models, attributed: crunchModels(models, groups[0]!.buffs) };
+    if (groups.length === 1) {
+      const attributed = crunchModels(models, groups[0]!.buffs);
+      return { ...line, models, attributed, inputs };
+    }
     const crunched: LineGroup[] = groups.map((group) => ({
       models: group.models,
       bearer: bearerWargear(group.buffs),
       ...(group.rerollOne ? { rerollOne: group.rerollOne } : {}),
       attributed: crunchModels(group.models, group.buffs),
     }));
-    return { ...line, models, attributed: sumGroups(ds, crunched, input.target), groups: crunched };
+    return { ...line, models, attributed: sumGroups(ds, crunched, input.target), groups: crunched, inputs };
   } catch (err) {
     return { ...line, models, attributed: [], error: (err as Error).message };
   }
@@ -165,4 +176,52 @@ export function crunchLines(input: {
       rows: lineRows(input.selection, line, models),
     });
   });
+}
+
+/** The exact spread of one combined volley: models destroyed and wounds dealt, each by count. */
+export type KillOdds = {
+  /** Probability of exactly each number of models destroyed, from 0 to the unit's size. */
+  modelsDestroyed: number[];
+  /** Probability of exactly each number of wounds dealt, from 0 to the unit's total. */
+  woundsDealt: number[];
+  /** Expected models destroyed, which counts damage lost past a model's last wound. */
+  expectedKilled: number;
+};
+
+/**
+ * The combined volley of `lines` as an exact distribution: every group of every line fires in the
+ * order given, each into what the earlier ones left, so damage carried over to a damaged model and
+ * damage lost to overkill both count. `error` explains a volley the exact allocation refuses
+ * (too many attacks, or a rule it does not model).
+ */
+export function killOdds(ds: Dataset, lines: readonly LineResult[]): KillOdds | { error: string } | null {
+  const inputs = lines.flatMap((line) => line.inputs ?? []);
+  if (inputs.length === 0) return null;
+  try {
+    const out = allocateSequence(inputs, ds);
+    return { modelsDestroyed: out.modelsDestroyedDistribution, woundsDealt: out.woundsDealtDistribution, expectedKilled: out.modelsDestroyed };
+  } catch (err) {
+    return { error: (err as Error).message };
+  }
+}
+
+/** A probability as a whole percentage; float sums leave certain and impossible outcomes a hair off. */
+export function fmtChance(p: number): string {
+  if (p <= 1e-9) return "0%";
+  if (p >= 1 - 1e-9) return "100%";
+  const v = p * 100;
+  if (v < 1) return "<1%";
+  if (v > 99) return ">99%";
+  return `${Math.round(v)}%`;
+}
+
+/** The chance of destroying at least each number of models, from 1 up: `atLeast[k - 1]` is P(≥ k). */
+export function atLeast(distribution: readonly number[]): number[] {
+  const out: number[] = [];
+  let tail = 0;
+  for (let k = distribution.length - 1; k >= 1; k -= 1) {
+    tail += distribution[k] ?? 0;
+    out[k - 1] = Math.min(1, tail);
+  }
+  return out;
 }

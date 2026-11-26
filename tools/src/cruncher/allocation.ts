@@ -215,12 +215,77 @@ function zeroingOf(defences: AllocationDefences): DamageZeroing {
 }
 
 export function allocateModel(model: AttackModel, defences: AllocationDefences = {}): AllocationOutput {
+  const { damageDealt, modelsDestroyed, modelsDestroyedDistribution } = summarize(allocateFrom(model, zeroingOf(defences)));
+  return { damageDealt, modelsDestroyed, modelsDestroyedDistribution };
+}
+
+/** {@link allocate} over several attack lines in turn, with the wounds dealt as a distribution too. */
+export type AllocationSequenceOutput = AllocationOutput & {
+  /** Probability of each number of wounds removed from the target unit, from 0 to all of them. */
+  woundsDealtDistribution: number[];
+};
+
+/**
+ * Exact allocation of several attack lines into one target unit, fired in the order given: each
+ * line's attacks land on what the earlier lines left (models alive, wounds left on the damaged
+ * model and damage-zeroing uses left), so damage carried over and damage lost to overkill both
+ * count. Every input must describe the same target. Without an explicit `defences.zeroing`, the
+ * first input's `damage-zeroing` buffs supply it.
+ */
+export function allocateSequence(inputs: readonly EngineInput[], dataset?: Dataset, defences: AllocationDefences = {}): AllocationSequenceOutput {
+  const crunched = inputs.map((input) => crunchModel(input, dataset));
+  let zeroing = defences.zeroing;
+  if (zeroing === undefined && crunched.length > 0) {
+    const { unit, model: perModel } = crunched[0]!.output.resolved.damageZeroing;
+    if (unit > 0 && perModel > 0) throw new Error("allocate: unit-wide and per-model damage zeroing together are not modelled");
+    if (unit > 0) zeroing = { uses: unit, per: "unit" };
+    else if (perModel > 0) zeroing = { uses: perModel, per: "model" };
+  }
+  const resolvedZeroing = zeroingOf(zeroing === undefined ? {} : { zeroing });
+  const first = crunched[0]?.model;
+  if (first === undefined) return { damageDealt: 0, modelsDestroyed: 0, modelsDestroyedDistribution: [1], woundsDealtDistribution: [1] };
+  let result: Allocated | undefined;
+  for (const { model } of crunched) {
+    if (model.modelCount !== first.modelCount || model.wounds !== first.wounds) {
+      throw new Error("allocateSequence: every line must target the same unit");
+    }
+    result = allocateFrom(model, resolvedZeroing, result?.final);
+  }
+  return summarize(result!);
+}
+
+/** The target's state distribution after an allocation, with the geometry to read it. */
+type Allocated = { final: number[]; models: number; wounds: number; uses: number };
+
+/** States by (models alive, wounds left, zeroing uses left); see {@link allocateFrom}. */
+function summarize({ final, models, wounds, uses }: Allocated): AllocationSequenceOutput {
+  const cells = models * wounds;
+  const dead = cells * uses;
+  const destroyed = new Array<number>(models + 1).fill(0);
+  const dealt = new Array<number>(cells + 1).fill(0);
+  let damageDealt = 0;
+  final.forEach((p, id) => {
+    const cell = Math.floor(id / uses);
+    const alive = id === dead ? 0 : Math.floor(cell / wounds) + 1;
+    const remaining = id === dead ? 0 : (alive - 1) * wounds + (cell % wounds) + 1;
+    destroyed[models - alive]! += p;
+    dealt[cells - remaining]! += p;
+    damageDealt += p * (cells - remaining);
+  });
+  const modelsDestroyed = destroyed.reduce((sum, p, count) => sum + p * count, 0);
+  return { damageDealt, modelsDestroyed, modelsDestroyedDistribution: destroyed, woundsDealtDistribution: dealt };
+}
+
+/**
+ * One line's attacks allocated into the target, starting from `start` (a state distribution from
+ * an earlier line), else from the unit at full strength with every zeroing use left.
+ */
+function allocateFrom(model: AttackModel, zeroing: DamageZeroing, start?: readonly number[]): Allocated {
   if (model.unmodelled.length > 0) throw new Error(`allocate: ${model.unmodelled.join(", ")} not modelled by exact allocation`);
   const models = integral(model.modelCount, "target models");
   const wounds = integral(model.wounds, "target Wounds");
-  const zeroing = zeroingOf(defences);
-  if (models === 0 || wounds === 0) return { damageDealt: 0, modelsDestroyed: 0, modelsDestroyedDistribution: [1] };
   const uses = zeroing.uses + 1;
+  if (models === 0 || wounds === 0) return { final: [1], models: 0, wounds: 1, uses };
   const cells = models * wounds;
   const dead = cells * uses;
   // Alive state (m, w, u) is ((m - 1) * wounds + (w - 1)) * uses + u; `dead` absorbs.
@@ -260,8 +325,8 @@ export function allocateModel(model: AttackModel, defences: AllocationDefences =
   const zeros = (): number[] => new Array<number>(dead + 1).fill(0);
   // States by the ability mortal wounds still to inflict: layer k waits on k of them.
   type Layers = number[][];
-  let state: Layers = [zeros()];
-  state[0]![dead - 1] = 1;
+  let state: Layers = [start ? [...start] : zeros()];
+  if (!start) state[0]![dead - 1] = 1;
   const pending: Layers = [];
   const gather = (into: Layers, layers: Layers, weight: number): void => layers.forEach((layer, k) => {
     const target = into[k] ??= zeros();
@@ -369,15 +434,5 @@ export function allocateModel(model: AttackModel, defences: AllocationDefences =
     (pending[k] ?? []).forEach((q, id) => { final[id]! += q; });
   }
 
-  const destroyed = new Array<number>(models + 1).fill(0);
-  let damageDealt = 0;
-  final.forEach((p, id) => {
-    const cell = Math.floor(id / uses);
-    const alive = id === dead ? 0 : Math.floor(cell / wounds) + 1;
-    const remaining = id === dead ? 0 : (alive - 1) * wounds + (cell % wounds) + 1;
-    destroyed[models - alive]! += p;
-    damageDealt += p * (cells - remaining);
-  });
-  const modelsDestroyed = destroyed.reduce((sum, p, count) => sum + p * count, 0);
-  return { damageDealt, modelsDestroyed, modelsDestroyedDistribution: destroyed };
+  return { final, models, wounds, uses };
 }

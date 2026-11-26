@@ -42,8 +42,10 @@ export { resolveGrantedRecords, type GrantedRecord, type GrantedRecordLookup } f
 export {
   allocate,
   allocateModel,
+  allocateSequence,
   MAX_EVENT_WORK,
   type AllocationDefences,
   type AllocationOutput,
+  type AllocationSequenceOutput,
   type DamageZeroing,
 } from "./allocation.js";

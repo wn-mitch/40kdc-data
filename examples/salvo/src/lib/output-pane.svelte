@@ -21,6 +21,8 @@
   import EmptyState from "./EmptyState.svelte";
   import WeaponCards from "./weapon-cards.svelte";
   import ResultDock from "./result-dock.svelte";
+  import KillOddsPanel from "./kill-odds.svelte";
+  import { killOdds } from "./line-results.js";
   import {
     defaultWeaponCount,
     editedCounts,
@@ -257,6 +259,9 @@
     ),
   );
 
+  // The Combined row's lines as one exact distribution of kills.
+  const odds = $derived(killOdds(ds, lineResults.filter((r) => included(r.id) && !r.error)));
+
   const projection = $derived.by(() => {
     if (!selectionValid) return { error: "Selected abilities exceed an allowance or lack a required provider." };
     if (!salvo.selectedUnitId || !salvo.selectedWeaponId) return null;
@@ -469,6 +474,8 @@
   </table>
   </div>
 
+  <KillOddsPanel {odds} modelCount={salvo.manualTarget.modelCount} mortalsLeftOut={mortalLine.damage > 0} />
+
   <div class="row debug-row">
     <button aria-expanded={showDebug} onclick={() => (showDebug = !showDebug)}>
       {showDebug ? "Hide" : "Show"} resolved modifiers
@@ -480,7 +487,7 @@
     <span class="dim">{allBuffs.length} {allBuffs.length === 1 ? "modifier" : "modifiers"} in play</span>
   </div>
 
-  <ResultDock {aggregate} modelCount={salvo.manualTarget.modelCount} />
+  <ResultDock {aggregate} modelCount={salvo.manualTarget.modelCount} {odds} />
 
   {#if showDebug && resolved.error}
     <p class="error" role="alert">Resolving modifiers failed: {resolved.error}</p>

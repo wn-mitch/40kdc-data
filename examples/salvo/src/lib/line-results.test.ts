@@ -10,7 +10,7 @@ import {
   type EngineContext,
 } from "@alpaca-software/40kdc-data";
 
-import { crunchLines } from "./line-results.js";
+import { atLeast, crunchLines, killOdds } from "./line-results.js";
 import { enabledLeverBuffs, memberLevers, memberUnits, memberWargear } from "./output-model.js";
 import { stageOf } from "./projection-model.js";
 import { defaultWeaponCount, lineId, lineRows, memberCounts, selectLines, weaponLines } from "./weapon-lines.js";
@@ -150,5 +150,30 @@ describe("re-roll-one permissions across a unit's lines", () => {
     expect(used.length).toBeGreaterThan(1);
     expect(shared.selected.filter((row) => row.rerollOne)).toHaveLength(1);
     expect(used.reduce((sum, result) => sum + dealt(result.attributed).expected, 0)).toBeCloseTo(shared.total, 9);
+  });
+});
+
+describe("kill odds of the combined volley", () => {
+  it("chains every included group into one exact distribution", () => {
+    const { selection, results } = salvoNobz("fight", MIXED);
+    const used = results.filter((result) => selection.firing.has(result.id) && !result.error);
+    const odds = killOdds(ds, used);
+    if (odds === null || "error" in odds) throw new Error(`no odds: ${JSON.stringify(odds)}`);
+    expect(odds.modelsDestroyed).toHaveLength(target.modelCount + 1);
+    expect(odds.modelsDestroyed.reduce((sum, p) => sum + p, 0)).toBeCloseTo(1, 9);
+    expect(odds.woundsDealt.reduce((sum, p) => sum + p, 0)).toBeCloseTo(1, 9);
+    expect(odds.modelsDestroyed.reduce((sum, p, k) => sum + p * k, 0)).toBeCloseTo(odds.expectedKilled, 9);
+    // Exact wounds dealt sit at or under the expected-value total, which never loses overkill.
+    const meanWounds = odds.woundsDealt.reduce((sum, p, w) => sum + p * w, 0);
+    const expected = used.reduce((sum, result) => sum + dealt(result.attributed).expected, 0);
+    expect(meanWounds).toBeLessThanOrEqual(expected + 1e-9);
+    // P(at least k) falls as k rises and starts at the chance of any kill.
+    const tail = atLeast(odds.modelsDestroyed);
+    expect(tail[0]).toBeCloseTo(1 - odds.modelsDestroyed[0]!, 9);
+    tail.forEach((p, i) => { if (i > 0) expect(p).toBeLessThanOrEqual(tail[i - 1]! + 1e-12); });
+  });
+
+  it("reports nothing to allocate when no line fires", () => {
+    expect(killOdds(ds, [])).toBeNull();
   });
 });
