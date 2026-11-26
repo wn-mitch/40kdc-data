@@ -265,87 +265,79 @@ fn roll_parsed(
     })
 }
 
-/// Expected damage a "re-roll one Damage roll" adds over `rolls` Damage rolls of `distribution`
-/// (a fresh roll's final damage, ascending by value): the player re-rolls the lowest roll when it
-/// is below a fresh roll's mean. Over a whole number of rolls the lowest is `v` with probability
-/// S(v)^rolls - S(next)^rolls, where S(v) is the chance a roll is at least `v`; a count the engine
-/// carries as an expectation is read between the whole counts either side
-/// (`engine::between_whole_pools`).
-pub(crate) fn one_damage_reroll_gain(distribution: &[(f64, f64)], rolls: f64) -> f64 {
-    if rolls <= 0.0 {
-        return 0.0;
-    }
+/// Expected damage a "re-roll one Damage roll" adds over a pool of Damage rolls of `distribution`
+/// (a fresh roll's final damage, ascending by value): the player re-rolls the lowest roll when it is
+/// below a fresh roll's mean. Over N rolls the lowest is `v` with probability
+/// E[S(v)^N - S(next)^N], S(v) being the chance a roll is at least `v`; `rolls` is the pool's
+/// generating function, E[z^N] as a function of z.
+pub(crate) fn one_damage_reroll_gain(
+    distribution: &[(f64, f64)],
+    rolls: impl Fn(f64) -> f64,
+) -> f64 {
     let mean: f64 = distribution
         .iter()
         .map(|(value, probability)| value * probability)
         .sum();
-    let at_whole = |count: f64| -> f64 {
-        let mut gain = 0.0;
-        let mut at_least = 1.0_f64;
-        for &(value, probability) in distribution {
-            let above = (at_least - probability).max(0.0);
-            if value < mean {
-                gain += (at_least.powf(count) - above.powf(count)) * (mean - value);
-            }
-            at_least = above;
+    let mut gain = 0.0;
+    let mut at_least = 1.0_f64;
+    for &(value, probability) in distribution {
+        let above = (at_least - probability).max(0.0);
+        if value < mean {
+            gain += (rolls(at_least) - rolls(above)) * (mean - value);
         }
-        gain
-    };
-    let low = rolls.floor();
-    let below = at_whole(low);
-    if rolls == low {
-        below
-    } else {
-        below + (rolls - low) * (at_whole(low + 1.0) - below)
+        at_least = above;
     }
+    gain
 }
 
-/// `one_damage_reroll_gain` over rolls of several kinds, each `(weight, distribution)` with its own
-/// Damage distribution (normal and critical wounds): a roll gains its kind's mean less its value,
-/// so a kind with a fixed Damage never gains, and the player re-rolls the roll that gains most.
-/// Over a whole number of rolls the largest gain is `g` with probability
-/// F(g)^rolls - F(below g)^rolls, F being the chance one roll gains at most `g`; a fractional count
-/// is read between the whole counts either side.
-pub(crate) fn one_reroll_gain_across(branches: &[(f64, &[(f64, f64)])], rolls: f64) -> f64 {
-    let total: f64 = branches.iter().map(|(weight, _)| weight).sum();
-    if rolls <= 0.0 || total <= 0.0 {
-        return 0.0;
-    }
-    let mut gains: Vec<(f64, f64)> = Vec::new();
-    for (weight, distribution) in branches {
-        let mean: f64 = distribution
+/// `one_damage_reroll_gain` over rolls of several kinds, each with its own Damage distribution
+/// (normal and critical wounds): a roll gains its kind's mean less its value, so a kind with a
+/// fixed Damage never gains, and the player re-rolls the roll that gains most. The largest gain is
+/// at most `g` with probability E[Π F_k(g)^(N_k)], F_k being the chance one roll of kind k gains
+/// at most `g`; `rolls` is the pool's generating function over the kinds, E[Π z_k^(N_k)] as a
+/// function of z.
+pub(crate) fn one_reroll_gain_across(
+    kinds: &[&[(f64, f64)]],
+    rolls: impl Fn(&[f64]) -> f64,
+) -> f64 {
+    let gains_of: Vec<Vec<(f64, f64)>> = kinds
+        .iter()
+        .map(|distribution| {
+            let mean: f64 = distribution
+                .iter()
+                .map(|(value, probability)| value * probability)
+                .sum();
+            distribution
+                .iter()
+                .map(|&(value, probability)| ((mean - value).max(0.0), probability))
+                .collect()
+        })
+        .collect();
+    let at_most = |g: f64| -> Vec<f64> {
+        gains_of
             .iter()
-            .map(|(value, probability)| value * probability)
-            .sum();
-        for &(value, probability) in *distribution {
-            let gain = (mean - value).max(0.0);
-            let share = probability * weight / total;
-            match gains.iter_mut().find(|(g, _)| *g == gain) {
-                Some(entry) => entry.1 += share,
-                None => gains.push((gain, share)),
-            }
-        }
-    }
-    gains.sort_by(|a, b| a.0.total_cmp(&b.0));
-    let at_whole = |count: f64| -> f64 {
-        let mut expected = 0.0;
-        let mut at_most = 0.0_f64;
-        for &(gain, probability) in &gains {
-            let below = at_most;
-            at_most += probability;
-            if gain > 0.0 {
-                expected += gain * (at_most.powf(count) - below.powf(count));
-            }
-        }
-        expected
+            .map(|gains| {
+                gains
+                    .iter()
+                    .filter(|(gain, _)| *gain <= g)
+                    .map(|(_, p)| p)
+                    .sum()
+            })
+            .collect()
     };
-    let low = rolls.floor();
-    let below = at_whole(low);
-    if rolls == low {
-        below
-    } else {
-        below + (rolls - low) * (at_whole(low + 1.0) - below)
+    let mut gains: Vec<f64> = gains_of.iter().flatten().map(|(gain, _)| *gain).collect();
+    gains.sort_by(|a, b| a.total_cmp(b));
+    gains.dedup();
+    let mut expected = 0.0;
+    let mut below = rolls(&at_most(-1.0));
+    for gain in gains {
+        let up_to = rolls(&at_most(gain));
+        if gain > 0.0 {
+            expected += gain * (up_to - below);
+        }
+        below = up_to;
     }
+    expected
 }
 
 #[cfg(test)]

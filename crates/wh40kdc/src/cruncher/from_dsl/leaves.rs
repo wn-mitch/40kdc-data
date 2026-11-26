@@ -84,7 +84,7 @@ pub(super) fn reroll(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         }
         return;
     }
-    // "Re-roll one Hit roll": one die across the pool, which the engine prices (`one_reroll_dice`).
+    // "Re-roll one Hit roll": one die across the pool, which the engine prices.
     // A larger finite permission is non-linear in a way the engine does not model; applying it as
     // an uncapped reroll would silently overstate the effect.
     if m.contains_key("count") && damage_path {

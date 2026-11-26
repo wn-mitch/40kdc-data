@@ -43,21 +43,12 @@ pub(crate) struct SaveStream {
 /// The expected unsaved wounds of streams that take the same save at different targets, with a
 /// "re-roll one saving throw" spent on the stream a failed save is likelier to come from. Returns
 /// the unsaved wounds and the re-rolled dice.
-pub(crate) fn split_unsaved(
-    streams: &[SaveStream],
-    reroll_one_dice: impl Fn(f64, f64) -> f64,
-    reroll_one: bool,
-) -> (f64, f64) {
+pub(crate) fn split_unsaved(streams: &[SaveStream], dice: f64) -> (f64, f64) {
     let mut unsaved: f64 = streams.iter().map(|s| s.wounds * (1.0 - s.saved)).sum();
-    if !reroll_one {
-        return (unsaved, 0.0);
-    }
-    let pool: f64 = streams.iter().map(|s| s.wounds).sum();
     let failing: f64 = streams.iter().map(|s| s.wounds * s.open).sum();
-    if pool <= 0.0 || failing <= 0.0 {
+    if dice <= 0.0 || failing <= 0.0 {
         return (unsaved, 0.0);
     }
-    let dice = reroll_one_dice(pool, failing / pool);
     // The re-rolled save comes from each stream in proportion to its re-rollable failures.
     unsaved -= dice
         * streams

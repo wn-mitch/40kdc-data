@@ -1775,8 +1775,8 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 		}
 		return
 	}
-	// "Re-roll one Hit roll": one die across the pool, which the engine prices
-	// (oneRerollDice). A larger finite permission is non-linear in a way the
+	// "Re-roll one Hit roll": one die across the pool, which the engine prices.
+	// A larger finite permission is non-linear in a way the
 	// engine does not model; applying it as an uncapped reroll would silently
 	// overstate the effect.
 	if _, capped := modifier["count"]; capped && damagePath {

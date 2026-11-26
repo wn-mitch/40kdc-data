@@ -23,19 +23,16 @@ export function attackAp(resolved: ResolvedModifiers, printedAp: number): number
 /**
  * The expected unsaved wounds of two streams that take the same save at different targets, with a
  * "re-roll one saving throw" spent on the stream a failed save is likelier to come from.
- * `stream` gives each stream's wounds, save chance and re-rollable failure chance.
+ * `stream` gives each stream's wounds, save chance and re-rollable failure chance; `dice` is the
+ * chance the re-roll is spent, that at least one save of the two streams is left failed.
  */
 export function splitUnsaved(
   streams: ReadonlyArray<{ wounds: number; saved: number; open: number; fresh: number }>,
-  rerollOneDice: (pool: number, open: number) => number,
-  rerollOne: boolean,
+  dice: number,
 ): { unsaved: number; dice: number } {
   let unsaved = streams.reduce((sum, stream) => sum + stream.wounds * (1 - stream.saved), 0);
-  if (!rerollOne) return { unsaved, dice: 0 };
-  const pool = streams.reduce((sum, stream) => sum + stream.wounds, 0);
   const failing = streams.reduce((sum, stream) => sum + stream.wounds * stream.open, 0);
-  if (pool <= 0 || failing <= 0) return { unsaved, dice: 0 };
-  const dice = rerollOneDice(pool, failing / pool);
+  if (dice <= 0 || failing <= 0) return { unsaved, dice: 0 };
   // The re-rolled save comes from each stream in proportion to its re-rollable failures.
   unsaved -= dice * streams.reduce((sum, stream) => sum + stream.wounds * stream.open * stream.fresh, 0) / failing;
   return { unsaved, dice };

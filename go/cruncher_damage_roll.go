@@ -193,94 +193,73 @@ func damageRoll(in damageRollInput) (damageRollResult, error) {
 }
 
 // oneDamageRerollGain is the expected damage a "re-roll one Damage roll" adds
-// over `rolls` Damage rolls of `distribution` (ascending by value): the player
-// re-rolls the lowest roll when it is below a fresh roll's mean. Over a whole
-// number of rolls the lowest is v with probability S(v)^rolls - S(next)^rolls,
-// where S(v) is the chance a roll is at least v; a fractional count is read
-// between the whole counts either side.
-func oneDamageRerollGain(distribution []DamageOutcome, rolls float64) float64 {
-	if rolls <= 0 {
-		return 0
-	}
+// over a pool of Damage rolls of `distribution` (ascending by value): the
+// player re-rolls the lowest roll when it is below a fresh roll's mean. Over N
+// rolls the lowest is v with probability E[S(v)^N - S(next)^N], S(v) being the
+// chance a roll is at least v; rolls is the pool's generating function, E[z^N]
+// as a function of z.
+func oneDamageRerollGain(distribution []DamageOutcome, rolls func(float64) float64) float64 {
 	mean := 0.0
 	for _, o := range distribution {
 		mean += o.Value * o.Probability
 	}
-	atWhole := func(count float64) float64 {
-		gain := 0.0
-		atLeast := 1.0
-		for _, o := range distribution {
-			above := math.Max(0, atLeast-o.Probability)
-			if o.Value < mean {
-				gain += (math.Pow(atLeast, count) - math.Pow(above, count)) * (mean - o.Value)
-			}
-			atLeast = above
+	gain := 0.0
+	atLeast := 1.0
+	for _, o := range distribution {
+		above := math.Max(0, atLeast-o.Probability)
+		if o.Value < mean {
+			gain += (rolls(atLeast) - rolls(above)) * (mean - o.Value)
 		}
-		return gain
+		atLeast = above
 	}
-	low := math.Floor(rolls)
-	below := atWhole(low)
-	if rolls == low {
-		return below
-	}
-	return below + (rolls-low)*(atWhole(low+1)-below)
+	return gain
 }
 
 // oneRerollGainAcross is oneDamageRerollGain over rolls of several kinds, each
-// with its own weight and Damage distribution (normal and critical wounds): a
-// roll gains its kind's mean less its value, so a kind with a fixed Damage
-// never gains, and the player re-rolls the roll that gains most. Over a whole
-// number of rolls the largest gain is g with probability
-// F(g)^rolls - F(below g)^rolls, F being the chance one roll gains at most g; a
-// fractional count is read between the whole counts either side.
-func oneRerollGainAcross(weights []float64, distributions [][]DamageOutcome, rolls float64) float64 {
-	total := 0.0
-	for _, weight := range weights {
-		total += weight
-	}
-	if rolls <= 0 || total <= 0 {
-		return 0
-	}
+// with its own Damage distribution (normal and critical wounds): a roll gains
+// its kind's mean less its value, so a kind with a fixed Damage never gains, and
+// the player re-rolls the roll that gains most. The largest gain is at most g
+// with probability E[Π F_k(g)^(N_k)], F_k being the chance one roll of kind k
+// gains at most g; rolls is the pool's generating function over the kinds,
+// E[Π z_k^(N_k)] as a function of z.
+func oneRerollGainAcross(kinds [][]DamageOutcome, rolls func([]float64) float64) float64 {
 	type share struct{ gain, probability float64 }
-	var gains []share
-	for i, distribution := range distributions {
+	gainsOf := make([][]share, len(kinds))
+	var gains []float64
+	for i, distribution := range kinds {
 		mean := 0.0
 		for _, o := range distribution {
 			mean += o.Value * o.Probability
 		}
 		for _, o := range distribution {
 			gain := math.Max(0, mean-o.Value)
-			p := o.Probability * weights[i] / total
-			found := false
-			for k := range gains {
-				if gains[k].gain == gain {
-					gains[k].probability += p
-					found = true
-					break
+			gainsOf[i] = append(gainsOf[i], share{gain, o.Probability})
+			gains = append(gains, gain)
+		}
+	}
+	atMost := func(g float64) []float64 {
+		out := make([]float64, len(gainsOf))
+		for i, each := range gainsOf {
+			for _, s := range each {
+				if s.gain <= g {
+					out[i] += s.probability
 				}
 			}
-			if !found {
-				gains = append(gains, share{gain, p})
-			}
 		}
+		return out
 	}
-	sort.SliceStable(gains, func(i, j int) bool { return gains[i].gain < gains[j].gain })
-	atWhole := func(count float64) float64 {
-		expected := 0.0
-		atMost := 0.0
-		for _, g := range gains {
-			below := atMost
-			atMost += g.probability
-			if g.gain > 0 {
-				expected += g.gain * (math.Pow(atMost, count) - math.Pow(below, count))
-			}
+	sort.Float64s(gains)
+	expected := 0.0
+	below := rolls(atMost(-1))
+	for i, gain := range gains {
+		if i > 0 && gain == gains[i-1] {
+			continue
 		}
-		return expected
+		upTo := rolls(atMost(gain))
+		if gain > 0 {
+			expected += gain * (upTo - below)
+		}
+		below = upTo
 	}
-	low := math.Floor(rolls)
-	below := atWhole(low)
-	if rolls == low {
-		return below
-	}
-	return below + (rolls-low)*(atWhole(low+1)-below)
+	return expected
 }

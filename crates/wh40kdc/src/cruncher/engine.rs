@@ -25,7 +25,8 @@ use super::critical_wounds::{
     attack_ap, has_critical_wound_buffs, resolve_critical_wound, split_unsaved, SaveStream,
 };
 use super::damage_roll::{
-    damage_roll, one_damage_reroll_gain, one_reroll_gain_across, DamageRollInput,
+    damage_roll, one_damage_reroll_gain, one_reroll_gain_across, quantity_distribution,
+    DamageRollInput,
 };
 use super::from_keyword::buffs_from_keyword;
 use crate::data::Dataset;
@@ -478,6 +479,42 @@ pub fn crunch_model(
             detail
         },
     });
+    // A "re-roll one" die is spent when its pool holds at least one die left failed, and the pools
+    // after the Hit roll hold a random number of dice. The pools are carried as generating
+    // functions (E[u^dice] as a function of u), composed stage by stage from each attack's own
+    // outcomes, so P(at least one open die) = 1 - pool(1 - open) is exact rather than read off the
+    // mean pool.
+    let per_model_attacks: Vec<(f64, f64)> = match &resolved.stat_set.a {
+        Some(set) => vec![(set.value, 1.0)],
+        None => {
+            damage_roll(&DamageRollInput {
+                stat: &weapon_profile.stats.a,
+                bonus: 0.0,
+                modifier: 0.0,
+                reduction: 0.0,
+                halve: false,
+                reroll: attacks_reroll,
+            })?
+            .distribution
+        }
+    };
+    let rapid_fire_counts: Vec<(f64, f64)> = match (rapid_fire, rapid_fire_extra_per_model != 0.0) {
+        (Some(kw), true) => match parameter(kw, "value") {
+            Some(value) => quantity_distribution(value)?,
+            None => vec![(rapid_fire_extra_per_model, 1.0)],
+        },
+        _ => vec![(0.0, 1.0)],
+    };
+    let fixed_extra_per_model =
+        resolved.attacks_mod.value + blast_extra_per_model + cleave_extra_per_model;
+    let attack_count = |u: f64| -> f64 {
+        sum_over(&per_model_attacks, |a| {
+            sum_over(&rapid_fire_counts, |r| {
+                u.powf((a + r + fixed_extra_per_model).max(0.0))
+            })
+        })
+        .powf(models_firing)
+    };
 
     // 2. Hits
     // Cover (11e): the benefit of cover is -1 to the attacker's hit roll, not a
@@ -520,6 +557,8 @@ pub fn crunch_model(
         crit: 0.0,
     };
     let mut hit_reroll_one_dice = 0.0;
+    let mut hit_open = 0.0;
+    let mut hit_fresh: Option<(f64, f64)> = None;
     let (hits_raw, crit_hits, mut hits_detail) = if torrent {
         (attacks, 0.0, format!("Torrent: auto-hits ({attacks:.4})"))
     } else {
@@ -551,6 +590,7 @@ pub fn crunch_model(
             pass: probs.pass,
             crit: probs.crit,
         };
+        hit_open = probs.open;
         let mut hits = attacks * probs.pass;
         let mut crits = attacks * probs.crit;
         let mut detail = format!(
@@ -578,7 +618,12 @@ pub fn crunch_model(
                 reroll: RerollKind::None,
                 ..hit_check
             });
-            let dice = one_reroll_dice(attacks, probs.open);
+            hit_fresh = Some((fresh.pass, fresh.crit));
+            let dice = if probs.open > 0.0 {
+                1.0 - attack_count(1.0 - probs.open)
+            } else {
+                0.0
+            };
             hit_reroll_one_dice = dice;
             hits += dice * fresh.pass;
             crits += dice * fresh.crit;
@@ -649,6 +694,35 @@ pub fn crunch_model(
     let has_lethal = find_extra_keyword(&resolved, "lethal-hits").is_some();
     let hits_for_wound_roll = if has_lethal { hits - crit_hits } else { hits };
     let lethal_auto_wounds = if has_lethal { crit_hits } else { 0.0 };
+    // E[w^(Wound rolls) l^(Lethal Hits wounds)] over the volley. A re-rolled Hit die replaces one
+    // failed die, which led to no Wound roll, with a fresh attack's outcome.
+    let sustained_counts: Vec<(f64, f64)> = match sustained.and_then(|kw| parameter(kw, "value")) {
+        Some(value) => quantity_distribution(value)?,
+        None => vec![(0.0, 1.0)],
+    };
+    let per_attack_hit = |pass: f64, crit: f64, w: f64, lethal: f64| -> f64 {
+        if torrent {
+            return w;
+        }
+        1.0 - pass
+            + (pass - crit) * w
+            + crit
+                * sum_over(&sustained_counts, |extra| {
+                    w.powf(extra + if has_lethal { 0.0 } else { 1.0 })
+                        * if has_lethal { lethal } else { 1.0 }
+                })
+    };
+    let hit_pool = |w: f64, lethal: f64| -> f64 {
+        let each = per_attack_hit(hit_probs.pass, hit_probs.crit, w, lethal);
+        let every = attack_count(each);
+        match hit_fresh {
+            None => every,
+            Some((pass, crit)) => {
+                let closed = attack_count(each - hit_open);
+                closed + (every - closed) * per_attack_hit(pass, crit, w, lethal)
+            }
+        }
+    };
 
     let wound_check = CheckArgs {
         unmodified_needed: std_wound_needed,
@@ -667,17 +741,40 @@ pub fn crunch_model(
     let mut regular_wounds_from_roll = hits_for_wound_roll * (wound_probs.pass - wound_probs.crit);
     let mut crit_wounds_from_roll = hits_for_wound_roll * wound_probs.crit;
     let mut wound_reroll_one_dice = 0.0;
+    let mut wound_fresh: Option<(f64, f64)> = None;
     if resolved.reroll_one.wound.is_some() {
         let fresh = check_probabilities(CheckArgs {
             reroll: RerollKind::None,
             ..wound_check
         });
-        wound_reroll_one_dice = one_reroll_dice(hits_for_wound_roll, wound_probs.open);
+        wound_fresh = Some((fresh.pass, fresh.crit));
+        wound_reroll_one_dice = if wound_probs.open > 0.0 {
+            1.0 - hit_pool(1.0 - wound_probs.open, 1.0)
+        } else {
+            0.0
+        };
         regular_wounds_from_roll += wound_reroll_one_dice * (fresh.pass - fresh.crit);
         crit_wounds_from_roll += wound_reroll_one_dice * fresh.crit;
     }
     let total_regular_wounds = regular_wounds_from_roll + lethal_auto_wounds;
     let has_devastating = find_extra_keyword(&resolved, "devastating-wounds").is_some();
+    // E[r^(normal saves) k^(critical-wound saves) m^(Devastating Wounds mortal wounds)] over the
+    // volley; a Lethal Hits wound takes a normal save. A re-rolled Wound die replaces one failed
+    // die.
+    let per_wound = |pass: f64, crit: f64, r: f64, k: f64, m: f64| -> f64 {
+        1.0 - pass + (pass - crit) * r + crit * if has_devastating { m } else { k }
+    };
+    let wound_pool = |r: f64, k: f64, m: f64| -> f64 {
+        let each = per_wound(wound_probs.pass, wound_probs.crit, r, k, m);
+        let every = hit_pool(each, r);
+        match wound_fresh {
+            None => every,
+            Some((pass, crit)) => {
+                let closed = hit_pool(each - wound_probs.open, r);
+                closed + (every - closed) * per_wound(pass, crit, r, k, m)
+            }
+        }
+    };
     let mortal_wounds_stream = if has_devastating {
         crit_wounds_from_roll
     } else {
@@ -788,12 +885,14 @@ pub fn crunch_model(
     };
     let mut unsaved = regular_wounds_for_saves * (1.0 - p_saved);
     // "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
-    let mut save_reroll_one_dice =
-        if resolved.reroll_one.save.is_some() && effective_save_target < 7.0 {
-            one_reroll_dice(regular_wounds_for_saves, save_probs.open)
-        } else {
-            0.0
-        };
+    let mut save_reroll_one_dice = if resolved.reroll_one.save.is_some()
+        && effective_save_target < 7.0
+        && save_probs.open > 0.0
+    {
+        1.0 - wound_pool(1.0 - save_probs.open, 1.0 - save_probs.open, 1.0)
+    } else {
+        0.0
+    };
     if save_reroll_one_dice > 0.0 {
         let fresh = check_probabilities(CheckArgs {
             unmodified_needed: effective_save_target as i64,
@@ -868,11 +967,12 @@ pub fn crunch_model(
         p_saved_critical = crits.saved;
         let share_regular = regular.wounds * (1.0 - regular.saved);
         let share_critical = crits.wounds * (1.0 - crits.saved);
-        (unsaved, save_reroll_one_dice) = split_unsaved(
-            &[regular, crits],
-            one_reroll_dice,
-            resolved.reroll_one.save.is_some(),
-        );
+        let split_dice = if resolved.reroll_one.save.is_some() {
+            1.0 - wound_pool(1.0 - regular.open, 1.0 - crits.open, 1.0)
+        } else {
+            0.0
+        };
+        (unsaved, save_reroll_one_dice) = split_unsaved(&[regular, crits], split_dice);
         unsaved_regular = if share_regular + share_critical > 0.0 {
             unsaved * share_regular / (share_regular + share_critical)
         } else {
@@ -984,6 +1084,17 @@ pub fn crunch_model(
     // proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled,
     // so beside one the single die is not priced. With critical-wound Damage a roll gains against
     // its own kind's mean: the two kinds are separate rolls, not one die with both distributions.
+    // The Damage rolls' pool is E[n^(normal rolls) c^(critical-wound and mortal-wound rolls)]: a
+    // failed save leads to a roll. It leaves out the one save a "re-roll one saving throw" re-rolls.
+    let damage_pool = |n: f64, c: f64| -> f64 {
+        let regular_roll = p_saved + (1.0 - p_saved) * n;
+        let critical_roll = if critical.is_some() && !has_devastating {
+            p_saved_critical + (1.0 - p_saved_critical) * c
+        } else {
+            regular_roll
+        };
+        wound_pool(regular_roll, critical_roll, c)
+    };
     let damage_rolls = unsaved + mortal_wounds_stream;
     let damage_reroll_one = if resolved.reroll_one.damage.is_some()
         && damage_reroll.is_none()
@@ -992,17 +1103,11 @@ pub fn crunch_model(
     {
         if critical.is_some() {
             one_reroll_gain_across(
-                &[
-                    (unsaved_regular, &per_attack.distribution),
-                    (
-                        unsaved_critical + mortal_wounds_stream,
-                        &per_critical.distribution,
-                    ),
-                ],
-                damage_rolls,
+                &[&per_attack.distribution, &per_critical.distribution],
+                |z| damage_pool(z[0], z[1]),
             )
         } else {
-            one_damage_reroll_gain(&per_attack.distribution, damage_rolls)
+            one_damage_reroll_gain(&per_attack.distribution, |z| damage_pool(z, z))
         }
     } else {
         0.0
@@ -1612,28 +1717,12 @@ fn check_probabilities(args: CheckArgs) -> CheckProbs {
     CheckProbs { pass, crit, open }
 }
 
-/// Expected dice a "re-roll one" re-rolls over a pool of `pool` dice that each end failed and
-/// un-rerolled with probability `open`: for a whole pool, the chance at least one does,
-/// 1 - (1 - open)^pool. A pool the engine carries as an expectation is read between the whole
-/// pools either side of it, which is exact when it is one of the two and never overstates a
-/// concave gain.
-pub(crate) fn one_reroll_dice(pool: f64, open: f64) -> f64 {
-    if pool > 0.0 && open > 0.0 {
-        between_whole_pools(pool, |dice| 1.0 - (1.0 - open).powf(dice))
-    } else {
-        0.0
-    }
-}
-
-/// `at_whole` at a fractional `pool`, read linearly between the whole pools either side.
-pub(crate) fn between_whole_pools(pool: f64, at_whole: impl Fn(f64) -> f64) -> f64 {
-    let low = pool.floor();
-    let below = at_whole(low);
-    if pool == low {
-        below
-    } else {
-        below + (pool - low) * (at_whole(low + 1.0) - below)
-    }
+/// Σ p·f(value) over a (value, probability) distribution.
+fn sum_over(distribution: &[(f64, f64)], f: impl Fn(f64) -> f64) -> f64 {
+    distribution
+        .iter()
+        .map(|&(value, probability)| probability * f(value))
+        .sum()
 }
 
 fn clamp(n: f64, lo: f64, hi: f64) -> f64 {

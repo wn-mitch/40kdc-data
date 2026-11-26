@@ -194,7 +194,7 @@ pub enum BuffContribution {
     },
     /// "Re-roll one Hit roll": one die of the roll, at the player's pick, across the attack pool —
     /// a failed die no other re-roll already took, or for Damage the lowest roll when it is below
-    /// the mean of a fresh roll. The engine prices one such die per crunch (`one_reroll_dice`).
+    /// the mean of a fresh roll. The engine prices one such die per crunch (over each pool's generating function).
     RerollOne {
         roll: RollKind,
     },
@@ -210,8 +210,8 @@ pub enum BuffContribution {
     /// Feel-no-pain: roll one D6 per unsaved wound at `threshold`+, ignoring
     /// the wound on a pass. `scope` controls which wound stream it applies to:
     /// `All` (default) fires on every unsaved wound; `Mortal` fires only on
-    /// the mortal-wound stream (e.g. Death Guard 5+ FNP vs mortals). A target
-    /// carrying both rolls both against mortals.
+    /// the mortal-wound stream (e.g. Death Guard 5+ FNP vs mortals). A wound gets
+    /// one roll, so a target carrying both uses the better one against mortals.
     FeelNoPain {
         threshold: f64,
         #[serde(default, skip_serializing_if = "FnpScope::is_default")]

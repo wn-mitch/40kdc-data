@@ -67,7 +67,7 @@ export type BuffContribution =
   /**
    * "Re-roll one Hit roll": one die of the roll, at the player's pick, across the attack pool —
    * a failed die no other re-roll already took, or for Damage the lowest roll when it is below the
-   * mean of a fresh roll. The engine prices one such die per crunch (engine.ts `oneRerollDice`).
+   * mean of a fresh roll. The engine prices one such die per crunch (engine.ts, over each pool's generating function).
    */
   | { type: "reroll-one"; roll: "hit" | "wound" | "save" | "damage" }
   | { type: "extra-keyword"; keywordRef: WeaponKeywordRef }
@@ -78,8 +78,8 @@ export type BuffContribution =
    * wound on a pass. `scope` controls which wound stream it applies to:
    *  - `"all"` (default): every unsaved wound (main + mortal).
    *  - `"mortal"`: mortal-wound stream only (e.g. Death Guard 5+ FNP vs
-   *    mortals). A target may carry both an all-FNP and a mortal-FNP; the
-   *    engine rolls both against mortals.
+   *    mortals). A target may carry both an all-FNP and a mortal-FNP; a
+   *    wound gets one roll, so the better one applies against mortals.
    */
   | { type: "feel-no-pain"; threshold: number; scope?: "all" | "mortal" }
   | { type: "damage-mod"; value: number }

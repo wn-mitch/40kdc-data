@@ -1011,7 +1011,7 @@ def _translate_reroll(
             )
         return
     # "Re-roll one Hit roll": one die across the pool, which the engine prices
-    # (engine.py one_reroll_dice). A larger finite permission is non-linear in a
+    # (engine.py). A larger finite permission is non-linear in a
     # way the engine does not model; applying it as an uncapped reroll would
     # silently overstate the effect.
     if modifier.get("count") is not None and damage_path:
