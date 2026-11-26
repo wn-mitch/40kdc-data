@@ -598,9 +598,11 @@ pub(super) fn damage_reduction(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             return;
         }
         Some("half") => {
-            out.unsupported(
-                "damage-reduction: halving Damage is not modelled by the buff layer",
-                node,
+            emit(
+                opts,
+                out,
+                &weapon_applicability(m),
+                json!({ "type": "damage-halving" }),
             );
             return;
         }

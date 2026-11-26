@@ -1791,8 +1791,9 @@ def _translate_damage_reduction(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
 ) -> None:
     """Defender-side damage-reduction. A number subtracts from each Damage
-    roll; ``"to-zero"`` is a damage-zeroing defence, counted from the usage
-    limit, for the allocation stage; halving Damage is unsupported."""
+    roll; ``"half"`` halves each Damage roll, rounding up; ``"to-zero"`` is a
+    damage-zeroing defence, counted from the usage limit, for the allocation stage;
+    setting Damage to 1 is unsupported."""
     if opts["perspective"] != "target":
         return
     if not _applies_to_buffed_unit(node, "target"):
@@ -1823,12 +1824,7 @@ def _translate_damage_reduction(
         )
         return
     if reduction == "half":
-        out["unsupported"].append(
-            {
-                "reason": "damage-reduction: halving Damage is not modelled by the buff layer",
-                "effectFragment": node,
-            }
-        )
+        out["applied"].append({"source": source, "contribution": {"type": "damage-halving"}})
         return
     if reduction == "to-one":
         out["unsupported"].append(
@@ -3889,6 +3885,8 @@ def _describe_contribution(c: dict[str, Any]) -> str:
         return f"feel no pain {_num_str(c['threshold'])}+"
     if ctype == "damage-reduction":
         return f"-{_num_str(c['value'])} damage"
+    if ctype == "damage-halving":
+        return "half damage"
     if ctype == "damage-zeroing":
         uses = c["uses"]
         per = " per model" if c["per"] == "model" else ""

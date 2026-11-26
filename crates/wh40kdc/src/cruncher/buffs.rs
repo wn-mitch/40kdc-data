@@ -248,10 +248,14 @@ pub enum BuffContribution {
     /// Defender-side: subtract `value` from each unsaved damage point (floored
     /// at 1 by the engine). Multiple sources do NOT stack in 10e — the largest
     /// reduction wins. A `"to-zero"` reduction is [`Self::DamageZeroing`]; a
-    /// halving one is not modelled.
+    /// halving one is [`Self::DamageHalving`].
     DamageReduction {
         value: f64,
     },
+    /// Defender-side: halve each incoming attack's Damage, rounding up. It applies to the rolled
+    /// Damage before any addition or subtraction (Melta, damage modifiers, damage reduction).
+    /// Halving twice is still halving once.
+    DamageHalving,
     /// Defender-side: `uses` unsaved attacks have their Damage changed to 0
     /// before it is rolled, from a pool the unit shares or `uses` for each
     /// model. Only the discrete allocation stage reads it; the
@@ -498,6 +502,18 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
                 if take {
                     out.damage_reduction = HighestMod {
                         value: *value,
+                        dominant_source: Some(b.source.clone()),
+                    };
+                }
+            }
+            BuffContribution::DamageHalving => {
+                let take = match &out.damage_halving.dominant_source {
+                    None => true,
+                    Some(prev) => rank(&b.source) < rank(prev),
+                };
+                if take {
+                    out.damage_halving = super::resolved::FlagMod {
+                        value: true,
                         dominant_source: Some(b.source.clone()),
                     };
                 }

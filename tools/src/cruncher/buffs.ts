@@ -104,9 +104,15 @@ export type BuffContribution =
    * Defender-side: subtract `value` from each unsaved damage point (floored at
    * 1 by the engine). Multiple sources do NOT stack in 10e — the largest
    * reduction wins. A `"to-zero"` reduction is `damage-zeroing` below; a
-   * halving one is not modelled.
+   * halving one is `damage-halving`.
    */
   | { type: "damage-reduction"; value: number }
+  /**
+   * Defender-side: halve each incoming attack's Damage, rounding up. It applies to the rolled
+   * Damage before any addition or subtraction (Melta, damage modifiers, `damage-reduction`).
+   * Halving twice is still halving once.
+   */
+  | { type: "damage-halving" }
   /**
    * Defender-side: `uses` unsaved attacks have their Damage changed to 0 before it is rolled, from
    * a pool the unit shares or `uses` for each model. Only the discrete allocation stage reads it;
@@ -564,6 +570,8 @@ export type ResolvedModifiers = {
    * surviving reduction.
    */
   damageReduction: { value: number; dominantSource: BuffSource | null };
+  /** Whether incoming Damage is halved; the dominant source is the best-ranked halving source. */
+  damageHalving: { value: boolean; dominantSource: BuffSource | null };
   /** Damage-zeroing uses, summed over sources: a pool the unit shares and uses for each model. */
   damageZeroing: { unit: number; model: number; sources: BuffSource[] };
   /**
@@ -761,6 +769,7 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     apMod: { value: 0, sources: [] },
     statSet: {},
     damageReduction: { value: 0, dominantSource: null },
+    damageHalving: { value: false, dominantSource: null },
     damageZeroing: { unit: 0, model: 0, sources: [] },
     invulnerable: null,
     critThresholds: {},
@@ -872,6 +881,11 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
             rank(b.source) < rank(out.damageReduction.dominantSource))
         ) {
           out.damageReduction = { value: c.value, dominantSource: b.source };
+        }
+        break;
+      case "damage-halving":
+        if (out.damageHalving.dominantSource === null || rank(b.source) < rank(out.damageHalving.dominantSource)) {
+          out.damageHalving = { value: true, dominantSource: b.source };
         }
         break;
       case "damage-zeroing":

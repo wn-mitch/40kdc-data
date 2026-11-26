@@ -411,6 +411,7 @@ pub fn crunch_model(
                 bonus: 0.0,
                 modifier: 0.0,
                 reduction: 0.0,
+                halve: false,
                 reroll: Some(reroll),
             })?
             .expected
@@ -941,6 +942,7 @@ pub fn crunch_model(
         bonus: melta_bonus,
         modifier: resolved.damage_mod.value,
         reduction: damage_reduction,
+        halve: resolved.damage_halving.value,
         reroll: damage_reroll,
     })?;
     let damage_per_hit = per_attack.expected;
@@ -961,6 +963,7 @@ pub fn crunch_model(
                 bonus: melta_bonus,
                 modifier: critical.damage_mod.value,
                 reduction: critical.damage_reduction.value,
+                halve: critical.damage_halving.value,
                 reroll: critical_damage_reroll,
             })?
         }
@@ -1075,7 +1078,12 @@ pub fn crunch_model(
         name: StageName::Damage,
         expected: damage,
         detail: format!(
-            "D {base_d}{}{}{}{} = {damage_per_hit} per hit{}; main {damage_main:.4}, mortal {damage_mortal:.4}{}",
+            "D {base_d}{}{}{}{}{} = {damage_per_hit} per hit{}; main {damage_main:.4}, mortal {damage_mortal:.4}{}",
+            if resolved.damage_halving.value {
+                " halved (defender, round up)"
+            } else {
+                ""
+            },
             if melta_bonus != 0.0 {
                 format!(" + Melta {melta_bonus} (half range)")
             } else {

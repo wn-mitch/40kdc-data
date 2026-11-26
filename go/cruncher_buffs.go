@@ -440,6 +440,8 @@ type resolved struct {
 	damageReduction              float64
 	damageReductionSet           bool
 	damageReductionRank          int
+	// damageHalving is whether incoming Damage is halved, rounding up.
+	damageHalving bool
 	// zeroingUnit and zeroingModel are the damage-zeroing uses, summed over
 	// sources: a pool the unit shares and uses for each model.
 	zeroingUnit, zeroingModel int
@@ -592,6 +594,8 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 				out.damageReductionSet = true
 				out.damageReductionRank = rankOf(source)
 			}
+		case "damage-halving":
+			out.damageHalving = true
 		case "damage-zeroing":
 			uses, _ := num(c["uses"])
 			if getStr(c, "per") == "model" {

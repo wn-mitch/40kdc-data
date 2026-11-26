@@ -2178,7 +2178,7 @@ func translateDamageReduction(node, source map[string]any, opts dslOpts, out *ef
 		return
 	}
 	if reduction == "half" {
-		out.unsupported = append(out.unsupported, unsup("damage-reduction: halving Damage is not modelled by the buff layer", node))
+		out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "damage-halving"}})
 		return
 	}
 	if reduction == "to-one" {
@@ -2927,6 +2927,8 @@ func describeContribution(c map[string]any) string {
 		return "feel no pain " + numStr(c["threshold"]) + "+"
 	case "damage-reduction":
 		return "-" + numStr(c["value"]) + " damage"
+	case "damage-halving":
+		return "half damage"
 	case "damage-zeroing":
 		uses, _ := num(c["uses"])
 		label := "zero the damage of " + numStr(c["uses"]) + " attack"

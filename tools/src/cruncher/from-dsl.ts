@@ -1567,8 +1567,8 @@ function zeroingUses(usage: unknown): { uses: number; per: "unit" | "model" } {
 /**
  * Defender-side damage-reduction (`{type: "damage-reduction", modifier:
  * {reduction: N | "half" | "to-zero" | "to-one"}}`). A number subtracts from each Damage
- * roll; `"to-zero"` is a damage-zeroing defence, counted from the usage limit,
- * for the allocation stage; halving Damage, or setting it to 1, is unsupported. Attacker-perspective
+ * roll; `"half"` halves each Damage roll, rounding up; `"to-zero"` is a damage-zeroing defence,
+ * counted from the usage limit, for the allocation stage; setting Damage to 1 is unsupported. Attacker-perspective
  * walks drop silently (this is a defender stat).
  */
 function translateDamageReduction(
@@ -1597,10 +1597,7 @@ function translateDamageReduction(
     return;
   }
   if (reduction === "half") {
-    out.unsupported.push({
-      reason: "damage-reduction: halving Damage is not modelled by the buff layer",
-      effectFragment: node,
-    });
+    out.applied.push({ source, contribution: { type: "damage-halving" } });
     return;
   }
   if (reduction === "to-one") {
@@ -2907,6 +2904,8 @@ function describeContribution(c: BuffContribution): string {
         : `feel no pain ${c.threshold}+`;
     case "damage-reduction":
       return `-${c.value} damage`;
+    case "damage-halving":
+      return "half damage";
     case "damage-zeroing":
       return `zero the damage of ${c.uses} attack${c.uses === 1 ? "" : "s"}${c.per === "model" ? " per model" : ""}`;
     case "invulnerable-save":

@@ -956,10 +956,10 @@ describe("effectToBuffs: target perspective", () => {
     expect(result.unsupported[0].reason).toContain("against");
   });
 
-  it('damage-reduction "half" routes to unsupported', () => {
+  it('damage-reduction "half" halves incoming Damage', () => {
     const result = effectToBuffs({ type: "damage-reduction", target: "this-unit", modifier: { reduction: "half" } }, unitRule, ctxT, "target");
-    expect(result.applied).toEqual([]);
-    expect(result.unsupported.map((u) => u.reason)).toEqual(["damage-reduction: halving Damage is not modelled by the buff layer"]);
+    expect(result.applied.map((b) => b.contribution)).toEqual([{ type: "damage-halving" }]);
+    expect(result.unsupported).toEqual([]);
   });
 
   it('damage-reduction "to-zero" zeroes as many attacks as its usage limit allows', () => {

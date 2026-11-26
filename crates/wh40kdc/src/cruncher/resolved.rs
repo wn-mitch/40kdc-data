@@ -38,6 +38,8 @@ pub struct ResolvedModifiers {
     /// stack in 10e); the dominant source is the one whose value matches the
     /// surviving reduction.
     pub damage_reduction: HighestMod,
+    /// Whether incoming Damage is halved; the dominant source is the best-ranked halving source.
+    pub damage_halving: FlagMod,
     /// Damage-zeroing uses, summed over sources: a pool the unit shares and
     /// uses for each model.
     pub damage_zeroing: ZeroingUses,
@@ -128,6 +130,13 @@ pub struct InvulnerableState {
 #[derive(Clone, Debug, Default)]
 pub struct HighestMod {
     pub value: f64,
+    pub dominant_source: Option<BuffSource>,
+}
+
+/// An on/off defence: `value` is whether any source grants it, `dominant_source` the best-ranked.
+#[derive(Clone, Debug, Default)]
+pub struct FlagMod {
+    pub value: bool,
     pub dominant_source: Option<BuffSource>,
 }
 

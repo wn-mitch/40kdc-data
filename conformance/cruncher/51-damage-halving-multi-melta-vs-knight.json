@@ -1,0 +1,38 @@
+{
+  "name": "multi-melta x1 vs questoris knight with damage halved (D6 rounds up to 1,1,2,2,3,3)",
+  "attacker": {
+    "weaponId": "multi-melta",
+    "profileIndex": 0
+  },
+  "modelsFiring": 1,
+  "target": {
+    "unitId": "questoris-knight-magaera",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "attackerStationary": false,
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "Halve Damage (test)"
+      },
+      "contribution": {
+        "type": "damage-halving"
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 2,
+      "hits": 1,
+      "wounds": 0.3333,
+      "unsaved": 0.2222,
+      "damage": 0.4444,
+      "after-fnp": 0.4444
+    }
+  }
+}

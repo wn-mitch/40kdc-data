@@ -25,6 +25,7 @@ type damageRollInput struct {
 	bonus     float64 // flat bonus added after the roll (Melta at half range)
 	modifier  float64 // summed damage modifier
 	reduction float64 // defender damage reduction; 0 when inactive
+	halve     bool    // the defender halves the rolled Damage, rounding up, before bonus, modifier and reduction
 	reroll    string  // damage-roll reroll permission, "" for none
 }
 
@@ -137,7 +138,11 @@ func diceTotals(count, die int) []diceTotal {
 // total.
 func damageRoll(in damageRollInput) (damageRollResult, error) {
 	final := func(rolled float64) float64 {
-		beforeReduction := math.Max(0, rolled+in.bonus+in.modifier)
+		base := rolled
+		if in.halve {
+			base = math.Ceil(rolled / 2)
+		}
+		beforeReduction := math.Max(0, base+in.bonus+in.modifier)
 		if in.reduction > 0 {
 			return math.Max(1, beforeReduction-in.reduction)
 		}

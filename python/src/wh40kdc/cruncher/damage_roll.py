@@ -91,12 +91,14 @@ def damage_roll(
     modifier: float,
     reduction: float,
     reroll: DamageReroll | None = None,
+    halve: bool = False,
 ) -> DamageRoll:
     """Exact per-attack damage.
 
     ``stat`` is the profile's printed D, ``bonus`` the flat post-roll bonus
     (Melta at half range), ``modifier`` the summed damage modifier, and
-    ``reduction`` the defender damage reduction (0 when inactive).
+    ``reduction`` the defender damage reduction (0 when inactive). ``halve`` halves the
+    rolled Damage, rounding up, before the bonus, modifier and reduction.
 
     A reroll replaces a roll only when the replacement's expected final damage
     exceeds the kept roll's, which is the optimal one-shot policy. ``ones``
@@ -105,7 +107,8 @@ def damage_roll(
     """
 
     def final(rolled: float) -> float:
-        before_reduction = max(0, rolled + bonus + modifier)
+        base = math.ceil(rolled / 2) if halve else rolled
+        before_reduction = max(0, base + bonus + modifier)
         return max(1, before_reduction - reduction) if reduction > 0 else before_reduction
 
     parsed = _parse_damage(stat)

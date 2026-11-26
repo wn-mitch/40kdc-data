@@ -20,6 +20,8 @@ export interface DamageRollInput {
   modifier: number;
   /** Defender damage reduction; 0 when inactive. */
   reduction: number;
+  /** The defender halves the rolled Damage, rounding up, before the bonus, modifier and reduction. */
+  halve?: boolean;
   /** Damage-roll reroll permission, if any. */
   reroll?: DamageReroll;
 }
@@ -87,7 +89,8 @@ function diceTotals(count: number, die: number): Array<[number, number]> {
  */
 export function damageRoll(input: DamageRollInput): DamageRoll {
   const final = (rolled: number) => {
-    const beforeReduction = Math.max(0, rolled + input.bonus + input.modifier);
+    const base = input.halve ? Math.ceil(rolled / 2) : rolled;
+    const beforeReduction = Math.max(0, base + input.bonus + input.modifier);
     return input.reduction > 0 ? Math.max(1, beforeReduction - input.reduction) : beforeReduction;
   };
   const parsed = parseDamage(input.stat);

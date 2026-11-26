@@ -326,6 +326,8 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         "apMod": {"value": 0, "sources": []},
         "statSet": {},
         "damageReduction": {"value": 0, "dominantSource": None},
+        # Whether incoming Damage is halved; the dominant source is the best-ranked halving source.
+        "damageHalving": {"value": False, "dominantSource": None},
         # Damage-zeroing uses, summed over sources: a pool the unit shares and uses per model.
         "damageZeroing": {"unit": 0, "model": 0, "sources": []},
         "invulnerable": None,
@@ -415,6 +417,10 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
                 or (c["value"] == dr["value"] and _rank(source) < _rank(dr["dominantSource"]))
             ):
                 out["damageReduction"] = {"value": c["value"], "dominantSource": source}
+        elif ctype == "damage-halving":
+            dh = out["damageHalving"]
+            if dh["dominantSource"] is None or _rank(source) < _rank(dh["dominantSource"]):
+                out["damageHalving"] = {"value": True, "dominantSource": source}
         elif ctype == "damage-zeroing":
             out["damageZeroing"][c["per"]] += c["uses"]
             out["damageZeroing"]["sources"].append(source)

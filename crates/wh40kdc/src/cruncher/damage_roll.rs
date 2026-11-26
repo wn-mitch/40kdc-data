@@ -25,6 +25,9 @@ pub(crate) struct DamageRollInput<'a> {
     pub modifier: f64,
     /// Defender damage reduction; 0 when inactive.
     pub reduction: f64,
+    /// The defender halves the rolled Damage, rounding up, before the bonus, modifier and
+    /// reduction.
+    pub halve: bool,
     /// Damage-roll reroll permission, if any.
     pub reroll: Option<RerollSubset>,
 }
@@ -183,6 +186,7 @@ pub(crate) fn quantity_roll(
         bonus: 0.0,
         modifier: 0.0,
         reduction: 0.0,
+        halve: false,
         reroll,
     };
     roll_parsed(parse_quantity(stat)?, &input)
@@ -193,7 +197,12 @@ fn roll_parsed(
     input: &DamageRollInput<'_>,
 ) -> Result<DamageRoll, CruncherError> {
     let final_value = |rolled: f64| {
-        let before_reduction = (rolled + input.bonus + input.modifier).max(0.0);
+        let base = if input.halve {
+            (rolled / 2.0).ceil()
+        } else {
+            rolled
+        };
+        let before_reduction = (base + input.bonus + input.modifier).max(0.0);
         if input.reduction > 0.0 {
             (before_reduction - input.reduction).max(1.0)
         } else {
@@ -354,6 +363,7 @@ mod tests {
             bonus: 0.0,
             modifier,
             reduction,
+            halve: false,
             reroll,
         })
         .expect("damage parses")

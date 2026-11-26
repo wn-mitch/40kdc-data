@@ -556,6 +556,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		bonus:     meltaBonus,
 		modifier:  res.damageMod,
 		reduction: res.damageReduction,
+		halve:     res.damageHalving,
 		reroll:    damageReroll,
 	})
 	if err != nil {
@@ -575,6 +576,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 			bonus:     meltaBonus,
 			modifier:  critical.damageMod,
 			reduction: critical.damageReduction,
+			halve:     critical.damageHalving,
 			reroll:    criticalDamageReroll,
 		})
 		if err != nil {

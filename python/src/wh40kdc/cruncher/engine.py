@@ -634,6 +634,7 @@ def crunch_model(
         modifier=resolved["damageMod"]["value"],
         reduction=damage_reduction,
         reroll=damage_reroll,
+        halve=resolved["damageHalving"]["value"],
     )
     damage_per_hit = per_attack["expected"]
     # A critical wound's Damage, for its unsaved wounds and, with Devastating Wounds, its mortal
@@ -650,6 +651,7 @@ def crunch_model(
             modifier=critical["damageMod"]["value"],
             reduction=critical["damageReduction"]["value"],
             reroll=critical_damage_reroll,
+            halve=critical["damageHalving"]["value"],
         )
         damage_main = (
             unsaved_regular * damage_per_hit + unsaved_critical * per_critical["expected"]
@@ -720,6 +722,8 @@ def crunch_model(
     damage_mortal += roll_mortals
     damage = damage_main + damage_mortal
     damage_detail = f"D {base_d}"
+    if resolved["damageHalving"]["value"]:
+        damage_detail += " halved (defender, round up)"
     if melta_bonus:
         damage_detail += f" + Melta {melta_bonus} (half range)"
     if resolved["damageMod"]["value"] != 0:

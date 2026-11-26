@@ -419,6 +419,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     bonus: meltaBonus,
     modifier: resolved.damageMod.value,
     reduction: damageReduction,
+    ...(resolved.damageHalving.value ? { halve: true } : {}),
     ...(damageReroll ? { reroll: damageReroll } : {}),
   });
   const damagePerHit = perAttack.expected;
@@ -430,6 +431,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
       bonus: meltaBonus,
       modifier: critical.damageMod.value,
       reduction: critical.damageReduction.value,
+      ...(critical.damageHalving.value ? { halve: true } : {}),
       ...(criticalDamageReroll ? { reroll: criticalDamageReroll } : {}),
     })
     : perAttack;
@@ -466,7 +468,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   stages.push({
     name: "damage",
     expected: damage,
-    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit${resolved.rerollOne.damage ? `; re-roll one Damage roll: +${damageRerollOne.toFixed(4)}` : ""}${critical ? `; critical wounds ${perCritical.expected} per hit` : ""}; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}${rollMortals > 0 ? ` (${rollMortals.toFixed(4)} from abilities)` : ""}`,
+    detail: `D ${baseD}${resolved.damageHalving.value ? " halved (defender, round up)" : ""}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit${resolved.rerollOne.damage ? `; re-roll one Damage roll: +${damageRerollOne.toFixed(4)}` : ""}${critical ? `; critical wounds ${perCritical.expected} per hit` : ""}; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}${rollMortals > 0 ? ` (${rollMortals.toFixed(4)} from abilities)` : ""}`,
   });
 
   // 6. FNP
