@@ -372,7 +372,11 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		if crit, ok := res.critThresholds["hit"]; ok {
 			critHitThreshold = math.Min(6, crit.value)
 		}
-		hitModifier := res.hitMod + coverHitPenalty
+		// Cover is a hit-roll modifier like any other: the ±1 cap takes the total.
+		hitModifier := res.hitMod
+		if covered {
+			hitModifier = math64Max(-1, math64Min(1, res.hitModRaw+coverHitPenalty))
+		}
 		passP, critP, openP := checkProbabilities(hitStatN, hitModifier, rerollSubset(res, "hit"), true, true, critHitThreshold)
 		hitPass, hitCrit = passP, critP
 		hits = attacks * passP

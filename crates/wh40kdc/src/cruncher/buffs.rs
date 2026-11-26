@@ -715,6 +715,7 @@ fn cap_modifier(contribs: &[Contribution]) -> CappedMod {
         return CappedMod {
             value: 0.0,
             dominant_source: None,
+            raw: sum,
         };
     }
     let sign = capped.signum();
@@ -726,6 +727,7 @@ fn cap_modifier(contribs: &[Contribution]) -> CappedMod {
     CappedMod {
         value: capped,
         dominant_source: matching.first().map(|c| c.source.clone()),
+        raw: sum,
     }
 }
 

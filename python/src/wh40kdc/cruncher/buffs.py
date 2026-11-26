@@ -309,8 +309,9 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
     live = _live_buffs(buffs, ctx)
 
     out: ResolvedModifiers = {
-        "hitMod": {"value": 0, "dominantSource": None},
-        "woundMod": {"value": 0, "dominantSource": None},
+        # Capped at ±1; ``raw`` is the uncapped sum, which cover shares the cap with.
+        "hitMod": {"value": 0, "dominantSource": None, "raw": 0},
+        "woundMod": {"value": 0, "dominantSource": None, "raw": 0},
         "saveMod": {"value": 0, "sources": []},
         "cover": {"active": False, "source": None},
         "rerolls": {},
@@ -515,11 +516,11 @@ def _sign(n: float) -> int:
 def _cap_modifier(contribs: list[dict[str, Any]]) -> dict[str, Any]:
     """Sum, clamp to ±1, then pick the dominant contributing source by rank."""
     if not contribs:
-        return {"value": 0, "dominantSource": None}
+        return {"value": 0, "dominantSource": None, "raw": 0}
     total = sum(c["value"] for c in contribs)
     capped = max(-1, min(1, total))
     if capped == 0:
-        return {"value": 0, "dominantSource": None}
+        return {"value": 0, "dominantSource": None, "raw": total}
     sign = _sign(capped)
     matching = sorted(
         (c for c in contribs if _sign(c["value"]) == sign),
@@ -528,4 +529,5 @@ def _cap_modifier(contribs: list[dict[str, Any]]) -> dict[str, Any]:
     return {
         "value": capped,
         "dominantSource": matching[0]["source"] if matching else None,
+        "raw": total,
     }

@@ -246,7 +246,8 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     }
     const hitCheck = {
       unmodifiedNeeded: hitStat,
-      modifier: resolved.hitMod.value + coverHitPenalty,
+      // Cover is a hit-roll modifier like any other: the ±1 cap takes the total.
+      modifier: covered ? Math.max(-1, Math.min(1, resolved.hitMod.raw + coverHitPenalty)) : resolved.hitMod.value,
       autoFailOnOne: true,
       autoPassOnSix: true,
       critThreshold: critHitThreshold,

@@ -540,8 +540,12 @@ export type ResolveContext = EngineContext;
 
 /** Read-out of a resolved buff stack, with provenance per field. */
 export type ResolvedModifiers = {
-  hitMod: { value: number; dominantSource: BuffSource | null };
-  woundMod: { value: number; dominantSource: BuffSource | null };
+  /**
+   * Hit and wound roll modifiers, capped at ±1. `raw` is the uncapped sum, for a penalty the engine
+   * adds later (cover) to share the cap rather than stack past it.
+   */
+  hitMod: { value: number; dominantSource: BuffSource | null; raw: number };
+  woundMod: { value: number; dominantSource: BuffSource | null; raw: number };
   saveMod: { value: number; sources: BuffSource[] };
   cover: { active: boolean; source: BuffSource | null };
   rerolls: Partial<
@@ -753,8 +757,8 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
   const live = liveBuffs(buffs, ctx);
 
   const out: ResolvedModifiers = {
-    hitMod: { value: 0, dominantSource: null },
-    woundMod: { value: 0, dominantSource: null },
+    hitMod: { value: 0, dominantSource: null, raw: 0 },
+    woundMod: { value: 0, dominantSource: null, raw: 0 },
     saveMod: { value: 0, sources: [] },
     cover: { active: false, source: null },
     rerolls: {},
@@ -962,13 +966,13 @@ function keyOf(ref: WeaponKeywordRef): string {
 /** Sum, clamp to ±1, then pick the dominant contributing source by rank. */
 function capModifier(
   contribs: { value: number; source: BuffSource }[],
-): { value: number; dominantSource: BuffSource | null } {
-  if (contribs.length === 0) return { value: 0, dominantSource: null };
+): { value: number; dominantSource: BuffSource | null; raw: number } {
+  if (contribs.length === 0) return { value: 0, dominantSource: null, raw: 0 };
   const sum = contribs.reduce((a, c) => a + c.value, 0);
   const capped = Math.max(-1, Math.min(1, sum));
-  if (capped === 0) return { value: 0, dominantSource: null };
+  if (capped === 0) return { value: 0, dominantSource: null, raw: sum };
   const sign = Math.sign(capped);
   const matching = contribs.filter((c) => Math.sign(c.value) === sign);
   matching.sort((a, b) => rank(a.source) - rank(b.source));
-  return { value: capped, dominantSource: matching[0]?.source ?? null };
+  return { value: capped, dominantSource: matching[0]?.source ?? null, raw: sum };
 }

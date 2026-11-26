@@ -146,6 +146,8 @@ pub struct FlagMod {
 pub struct CappedMod {
     pub value: f64,
     pub dominant_source: Option<BuffSource>,
+    /// The uncapped sum, for a penalty the engine adds later (cover) to share the cap.
+    pub raw: f64,
 }
 
 /// Save/AP/damage/A/S/T: monotone additive across contributors.

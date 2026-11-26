@@ -1,0 +1,58 @@
+{
+  "name": "bolter x10 vs cultist mob in cover with two +1 to hit: the uncapped +2 and cover's -1 make +1, not 0",
+  "attacker": {
+    "weaponId": "bolt-rifle",
+    "profileIndex": 1
+  },
+  "modelsFiring": 10,
+  "target": {
+    "unitId": "cultist-mob",
+    "profileIndex": 0
+  },
+  "context": {
+    "phase": "shooting",
+    "withinHalfRange": false
+  },
+  "buffs": [
+    {
+      "source": {
+        "kind": "manual",
+        "label": "cover"
+      },
+      "applicableWhen": {},
+      "contribution": {
+        "type": "cover"
+      }
+    },
+    {
+      "source": {
+        "kind": "manual",
+        "label": "+1 to hit (test)"
+      },
+      "contribution": {
+        "type": "hit-mod",
+        "value": 1
+      }
+    },
+    {
+      "source": {
+        "kind": "manual",
+        "label": "+1 to hit, second source (test)"
+      },
+      "contribution": {
+        "type": "hit-mod",
+        "value": 1
+      }
+    }
+  ],
+  "expected": {
+    "stages": {
+      "attacks": 20,
+      "hits": 16.6667,
+      "wounds": 11.1111,
+      "unsaved": 11.1111,
+      "damage": 11.1111,
+      "after-fnp": 11.1111
+    }
+  }
+}

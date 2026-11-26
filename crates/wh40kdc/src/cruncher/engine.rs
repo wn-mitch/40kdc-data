@@ -530,7 +530,12 @@ pub fn crunch_model(
         })?;
         let hit_check = CheckArgs {
             unmodified_needed: hit_stat,
-            modifier: resolved.hit_mod.value + cover_hit_penalty,
+            // Cover is a hit-roll modifier like any other: the ±1 cap takes the total.
+            modifier: if covered {
+                (resolved.hit_mod.raw + cover_hit_penalty).clamp(-1.0, 1.0)
+            } else {
+                resolved.hit_mod.value
+            },
             reroll: resolved
                 .rerolls
                 .hit

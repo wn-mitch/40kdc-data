@@ -426,7 +426,9 @@ type rankedValue struct {
 type invState struct{ threshold float64 }
 
 type resolved struct {
-	hitMod, woundMod                            float64
+	hitMod, woundMod float64
+	// hitModRaw is the uncapped hit modifier sum, which cover shares the ±1 cap with.
+	hitModRaw                                   float64
 	saveMod, damageMod, attacksMod, strengthMod float64
 	toughnessMod, apMod                         float64
 	coverActive                                 bool
@@ -659,6 +661,7 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 	_, ignoreHit := out.ignoreModifiers["hit"]
 	_, ignoreWound := out.ignoreModifiers["wound"]
 	out.hitMod = capModifier(keptContribs(hitContribs, ignoreHit))
+	out.hitModRaw = sumContribs(keptContribs(hitContribs, ignoreHit))
 	out.woundMod = capModifier(keptContribs(woundContribs, ignoreWound))
 	return out
 }
@@ -681,12 +684,16 @@ func capModifier(contribs []contribAcc) float64 {
 	if len(contribs) == 0 {
 		return 0
 	}
+	return math64Max(-1, math64Min(1, sumContribs(contribs)))
+}
+
+// sumContribs is the uncapped sum of contributions.
+func sumContribs(contribs []contribAcc) float64 {
 	total := 0.0
 	for _, c := range contribs {
 		total += c.value
 	}
-	capped := math64Max(-1, math64Min(1, total))
-	return capped
+	return total
 }
 
 func math64Max(a, b float64) float64 {

@@ -349,7 +349,12 @@ def crunch_model(
                 f"crunch: weapon {weapon['id']} profile {profile_index} missing "
                 f"{'WS' if is_melee else 'BS'}"
             )
-        hit_modifier = resolved["hitMod"]["value"] + cover_hit_penalty
+        # Cover is a hit-roll modifier like any other: the ±1 cap takes the total.
+        hit_modifier = (
+            max(-1, min(1, resolved["hitMod"]["raw"] + cover_hit_penalty))
+            if cover_hit_penalty
+            else resolved["hitMod"]["value"]
+        )
         hit_check: dict[str, Any] = {
             "unmodified_needed": hit_stat,
             "modifier": hit_modifier,
