@@ -695,6 +695,12 @@ describe("effectToBuffs: target perspective", () => {
     expect(result.applied[0].contribution).toEqual({ type: "toughness-mod", value: 1 });
   });
 
+  it("stat-modifier W applies to the target, not the attacker", () => {
+    const effect = { type: "stat-modifier", target: "this-unit", modifier: { stat: "W", operation: "subtract", value: 1 } } as const;
+    expect(effectToBuffs(effect, unitRule, ctxT, "target").applied.map((buff) => buff.contribution)).toEqual([{ type: "wounds-mod", value: -1 }]);
+    expect(effectToBuffs(effect, unitRule, ctxT, "attacker").applied).toEqual([]);
+  });
+
   it("stat-modifier Sv translates to save-mod with sign inversion", () => {
     // "+1 Sv" improves the save → makes the needed roll *lower* → save-mod -1.
     const improve = effectToBuffs(

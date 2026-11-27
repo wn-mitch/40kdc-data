@@ -430,7 +430,7 @@ type resolved struct {
 	// hitModRaw is the uncapped hit modifier sum, which cover shares the ±1 cap with.
 	hitModRaw                                   float64
 	saveMod, damageMod, attacksMod, strengthMod float64
-	toughnessMod, apMod                         float64
+	toughnessMod, woundsMod, apMod              float64
 	coverActive                                 bool
 	coverRank                                   int
 	rerolls                                     map[string]rerollEntry
@@ -579,6 +579,8 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 			out.strengthMod += val
 		case "toughness-mod":
 			out.toughnessMod += val
+		case "wounds-mod":
+			out.woundsMod += val
 		case "ap-mod":
 			out.apMod += val
 		case "stat-set":

@@ -1123,6 +1123,15 @@ function translateStatModifier(
       if (!isOnBuffedUnit && !debuffsTarget) return;
       emit({ type: "toughness-mod", value });
       return;
+    case "W":
+      // Defender stat: the buffed unit's own Wounds, under target perspective.
+      if (opts.perspective !== "target") {
+        out.unsupported.push({ reason: "stat-modifier W: defender-side stat; applies when the buffed unit is the target", effectFragment: node });
+        return;
+      }
+      if (!isOnBuffedUnit) return;
+      emit({ type: "wounds-mod", value });
+      return;
     case "D":
       // The Damage of attacks against the buffed unit is defender-side: a reduction (Necrodermis)
       // under target perspective. On the buffed unit it changes the Damage of its own attacks.
@@ -2892,6 +2901,8 @@ function describeContribution(c: BuffContribution): string {
       return `${signed(c.value)} strength`;
     case "toughness-mod":
       return `${signed(c.value)} toughness`;
+    case "wounds-mod":
+      return `${signed(c.value)} wounds`;
     case "ap-mod":
       return `AP ${c.value}`;
     case "reroll":

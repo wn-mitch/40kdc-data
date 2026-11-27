@@ -345,6 +345,22 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 );
             }
         }
+        // Defender stat: the buffed unit's own Wounds, under target perspective.
+        Some("W") => {
+            if opts.perspective != Target {
+                out.unsupported(
+                    "stat-modifier W: defender-side stat; applies when the buffed unit is the target",
+                    node,
+                );
+            } else if on_buffed {
+                emit(
+                    opts,
+                    out,
+                    &gate,
+                    json!({ "type": "wounds-mod", "value": value }),
+                );
+            }
+        }
         // The Damage of attacks against the buffed unit is defender-side: a reduction (Necrodermis)
         // under target perspective. On the buffed unit it changes the Damage of its own attacks.
         Some("D") => {

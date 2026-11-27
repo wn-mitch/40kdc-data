@@ -1338,6 +1338,22 @@ def _translate_stat_modifier(
         if not is_on_buffed_unit and not debuffs_target:
             return
         emit({"type": "toughness-mod", "value": value})
+    elif stat == "W":
+        # Defender stat: the buffed unit's own Wounds, under target perspective.
+        if opts["perspective"] != "target":
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        "stat-modifier W: defender-side stat; applies when the "
+                        "buffed unit is the target"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+            return
+        if not is_on_buffed_unit:
+            return
+        emit({"type": "wounds-mod", "value": value})
     elif stat == "D":
         # The Damage of attacks against the buffed unit is defender-side: a reduction (Necrodermis)
         # under target perspective. On the buffed unit it changes the Damage of its own attacks.
@@ -3872,6 +3888,8 @@ def _describe_contribution(c: dict[str, Any]) -> str:
         return f"{_signed(c['value'])} strength"
     if ctype == "toughness-mod":
         return f"{_signed(c['value'])} toughness"
+    if ctype == "wounds-mod":
+        return f"{_signed(c['value'])} wounds"
     if ctype == "ap-mod":
         return f"AP {_num_str(c['value'])}"
     if ctype == "reroll":

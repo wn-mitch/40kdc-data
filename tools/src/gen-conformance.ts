@@ -1296,6 +1296,10 @@ const ALLOCATION_BUFF_CASES: Array<{ cruncher_case: string; label: string; buffs
   { cruncher_case: "canonical-critical-wound-devastating-damage.json", label: "1 mortal wound on each critical wound", buffs: [
     { source: { kind: "ability", abilityId: "fabricated-critical-wound", abilityKind: "unit" }, contribution: { type: "mortal-wounds-on-roll", roll: "wound", outcome: "success", count: 1 }, applicableWhen: { onCritical: "wound" } },
   ] },
+  // +1 Wounds on the target: the same D2 events against 3-wound models.
+  { cruncher_case: "canonical-critical-wound-devastating-damage.json", label: "+1 Wounds on the target", buffs: [
+    { source: { kind: "ability", abilityId: "fabricated-wounds", abilityKind: "unit" }, contribution: { type: "wounds-mod", value: 1 } },
+  ] },
 ];
 
 function genAllocation(): void {
@@ -1361,6 +1365,12 @@ const ALLOCATION_ATTACHED_CASES: Array<{ name: string; groups: AttachedGroupCase
     name: "frag missile x2 [BLAST] into intercessors x9 led by a captain, ten models for Blast",
     groups: [squad("intercessor-squad", 9), leader("captain")],
     lines: [line("missile-launcher", 1, 2, { ...shooting, targetModelCount: 10 } as EngineInput["context"])],
+  },
+  {
+    // A Wounds modifier on the CHARACTER group only: two D3 hits no longer kill its model.
+    name: "eliminator bolt sniper rifle x3 [PRECISION] into intercessors x5 led by a captain with +2 Wounds",
+    groups: [squad("intercessor-squad", 5), leader("captain", [{ source: { kind: "ability", abilityId: "fabricated-wounds", abilityKind: "unit" }, contribution: { type: "wounds-mod", value: 2 } }])],
+    lines: [line("bolt-sniper-rifle-eliminator-squad", 0, 3, stationary)],
   },
 ];
 

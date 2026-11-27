@@ -89,6 +89,8 @@ export type BuffContribution =
   | { type: "strength-mod"; value: number }
   /** Additive modifier to the defender's Toughness stat. */
   | { type: "toughness-mod"; value: number }
+  /** Additive modifier to the defender's Wounds stat; a model keeps at least 1 Wound. */
+  | { type: "wounds-mod"; value: number }
   /**
    * Additive modifier to the attacker's weapon AP. AP is signed against the
    * defender's save (negative = more piercing), so a value of `-1` here makes
@@ -565,6 +567,7 @@ export type ResolvedModifiers = {
   attacksMod: { value: number; sources: BuffSource[] };
   strengthMod: { value: number; sources: BuffSource[] };
   toughnessMod: { value: number; sources: BuffSource[] };
+  woundsMod: { value: number; sources: BuffSource[] };
   apMod: { value: number; sources: BuffSource[] };
   /** Ability-set weapon characteristics; an absent stat keeps the profile's value. */
   statSet: Partial<Record<SetStat, { value: number; dominantSource: BuffSource }>>;
@@ -770,6 +773,7 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     attacksMod: { value: 0, sources: [] },
     strengthMod: { value: 0, sources: [] },
     toughnessMod: { value: 0, sources: [] },
+    woundsMod: { value: 0, sources: [] },
     apMod: { value: 0, sources: [] },
     statSet: {},
     damageReduction: { value: 0, dominantSource: null },
@@ -860,6 +864,10 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
       case "toughness-mod":
         out.toughnessMod.value += c.value;
         out.toughnessMod.sources.push(b.source);
+        break;
+      case "wounds-mod":
+        out.woundsMod.value += c.value;
+        out.woundsMod.sources.push(b.source);
         break;
       case "ap-mod":
         out.apMod.value += c.value;

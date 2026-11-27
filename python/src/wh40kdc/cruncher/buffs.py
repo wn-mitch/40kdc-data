@@ -324,6 +324,7 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         "attacksMod": {"value": 0, "sources": []},
         "strengthMod": {"value": 0, "sources": []},
         "toughnessMod": {"value": 0, "sources": []},
+        "woundsMod": {"value": 0, "sources": []},
         "apMod": {"value": 0, "sources": []},
         "statSet": {},
         "damageReduction": {"value": 0, "dominantSource": None},
@@ -405,6 +406,9 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         elif ctype == "toughness-mod":
             out["toughnessMod"]["value"] += c["value"]
             out["toughnessMod"]["sources"].append(source)
+        elif ctype == "wounds-mod":
+            out["woundsMod"]["value"] += c["value"]
+            out["woundsMod"]["sources"].append(source)
         elif ctype == "ap-mod":
             out["apMod"]["value"] += c["value"]
             out["apMod"]["sources"].append(source)

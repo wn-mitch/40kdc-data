@@ -31,6 +31,7 @@ pub struct ResolvedModifiers {
     pub attacks_mod: SummedMod,
     pub strength_mod: SummedMod,
     pub toughness_mod: SummedMod,
+    pub wounds_mod: SummedMod,
     pub ap_mod: SummedMod,
     /// Ability-set weapon characteristics; an absent stat keeps the profile's value.
     pub stat_set: StatSets,

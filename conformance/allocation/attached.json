@@ -480,5 +480,102 @@
         }
       ]
     }
+  },
+  {
+    "name": "eliminator bolt sniper rifle x3 [PRECISION] into intercessors x5 led by a captain with +2 Wounds",
+    "groups": [
+      {
+        "character": false,
+        "unitId": "intercessor-squad",
+        "profileIndex": 0,
+        "modelCount": 5,
+        "buffs": []
+      },
+      {
+        "character": true,
+        "unitId": "captain",
+        "profileIndex": 0,
+        "modelCount": 1,
+        "buffs": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "fabricated-wounds",
+              "abilityKind": "unit"
+            },
+            "contribution": {
+              "type": "wounds-mod",
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "lines": [
+      {
+        "attacker": {
+          "weaponId": "bolt-sniper-rifle-eliminator-squad",
+          "profileIndex": 0
+        },
+        "modelsFiring": 3,
+        "context": {
+          "phase": "shooting",
+          "attackerStationary": true,
+          "withinHalfRange": false
+        },
+        "buffs": []
+      }
+    ],
+    "expected": {
+      "damageDealt": 2.457133058984912,
+      "modelsDestroyed": 0.021433470507544586,
+      "modelsDestroyedDistribution": [
+        0.9785665294924558,
+        0.021433470507544586,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "woundsDealtDistribution": [
+        0.37671467764060373,
+        0,
+        0,
+        0.4346707818930043,
+        0,
+        0,
+        0.1671810699588478,
+        0.021433470507544586,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "groups": [
+        {
+          "modelsDestroyedDistribution": [
+            1.0000000000000004,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "modelsDestroyedDistribution": [
+            0.9785665294924558,
+            0.021433470507544586
+          ]
+        }
+      ]
+    }
   }
 ]

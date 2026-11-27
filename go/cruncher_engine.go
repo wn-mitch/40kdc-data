@@ -774,7 +774,11 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	// rolls for each wound before that. Devastating Wounds' mortal wounds are capped the same
 	// way; mortal wounds an ability inflicts on a roll carry over. Each stream keeps its share of
 	// the expected damage above (re-roll-one gains included), scaled by what the cap leaves of it.
+	// The Wounds characteristic, modified; a model keeps at least 1.
 	woundsStat := numOr0(unitProfile["W"])
+	if woundsStat > 0 {
+		woundsStat = math.Max(1, woundsStat+res.woundsMod)
+	}
 	mainCapped := unsaved * cappedDamage(perAttack.distribution, pSurviveAll, woundsStat)
 	mainRaw := unsaved * damagePerHit * pSurviveAll
 	if critical != nil {

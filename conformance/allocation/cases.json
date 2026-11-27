@@ -430,5 +430,34 @@
         0.20793101449973955
       ]
     }
+  },
+  {
+    "name": "Canonical critical wound: devastating-damage + +1 Wounds on the target",
+    "cruncher_case": "canonical-critical-wound-devastating-damage.json",
+    "buffs": [
+      {
+        "source": {
+          "kind": "ability",
+          "abilityId": "fabricated-wounds",
+          "abilityKind": "unit"
+        },
+        "contribution": {
+          "type": "wounds-mod",
+          "value": 1
+        }
+      }
+    ],
+    "expected": {
+      "damageDealt": 5.398088522993654,
+      "modelsDestroyed": 1.6976477097444913,
+      "modelsDestroyedDistribution": [
+        0.12771254967383008,
+        0.33224243175777596,
+        0.32161059490910304,
+        0.16125876352446164,
+        0.0474705030790215,
+        0.009705157055807677
+      ]
+    }
   }
 ]

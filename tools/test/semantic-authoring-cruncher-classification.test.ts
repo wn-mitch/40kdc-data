@@ -198,9 +198,10 @@ describe("pipeline-8b cruncher unsupported classification", () => {
     expect(classifyUnsupported(grant)).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 1 });
   });
 
-  it("counts a Wounds stat-modifier as outside the damage path (A/S/T/Sv are the damage-path stats)", () => {
-    const { unsupported } = effectToBuffs({ type: "stat-modifier", target: "this-unit", modifier: { stat: "W", operation: "add", value: 1 } }, source, ctx);
-    expect(classifyUnsupported(unsupported)).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+  it("counts an OC stat-modifier as outside the damage path, and a Wounds one as a defender-side stat", () => {
+    const stat = (s: string) => effectToBuffs({ type: "stat-modifier", target: "this-unit", modifier: { stat: s, operation: "add", value: 1 } }, source, ctx).unsupported;
+    expect(classifyUnsupported(stat("OC"))).toEqual({ honestUnknown: 0, outsideDamagePath: 1, unrecognizedShape: 0 });
+    expect(classifyUnsupported(stat("W"))).toEqual({ honestUnknown: 0, outsideDamagePath: 0, unrecognizedShape: 0 });
   });
 
   it("counts a re-roll of a non-combat roll (charge) as outside the damage path", () => {

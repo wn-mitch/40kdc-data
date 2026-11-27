@@ -232,6 +232,10 @@ pub enum BuffContribution {
     ToughnessMod {
         value: f64,
     },
+    /// Additive modifier to the defender's Wounds stat; a model keeps at least 1 Wound.
+    WoundsMod {
+        value: f64,
+    },
     /// Additive modifier to the attacker's weapon AP. AP is signed against the
     /// defender's save (negative = more piercing), so a value of `-1` here
     /// makes the weapon one AP more piercing.
@@ -488,6 +492,9 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
             }
             BuffContribution::ToughnessMod { value } => {
                 sum_into(&mut out.toughness_mod, *value, &b.source)
+            }
+            BuffContribution::WoundsMod { value } => {
+                sum_into(&mut out.wounds_mod, *value, &b.source)
             }
             BuffContribution::ApMod { value } => sum_into(&mut out.ap_mod, *value, &b.source),
             BuffContribution::DamageReduction { value } => {

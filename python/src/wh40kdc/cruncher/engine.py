@@ -876,7 +876,12 @@ def crunch_model(
     # rolls for each wound before that. Devastating Wounds' mortal wounds are capped the same
     # way; mortal wounds an ability inflicts on a roll carry over. Each stream keeps its share of
     # the expected damage above (re-roll-one gains included), scaled by what the cap leaves of it.
-    wounds_stat = unit_profile["W"]
+    # The Wounds characteristic, modified; a model keeps at least 1.
+    wounds_stat = (
+        max(1, unit_profile["W"] + resolved["woundsMod"]["value"])
+        if unit_profile["W"] > 0
+        else unit_profile["W"]
+    )
     if critical is not None:
         main_capped = unsaved_regular * capped_damage(
             per_attack["distribution"], p_survive_all, wounds_stat
