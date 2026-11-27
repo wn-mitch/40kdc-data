@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { Dataset, type Buff } from "@alpaca-software/40kdc-data";
+import { Dataset, type Buff, type Roster } from "@alpaca-software/40kdc-data";
+import { readFileSync } from "node:fs";
 
 import {
   activeSupport,
@@ -10,6 +11,7 @@ import {
   defenderNeeds,
   defenderStratagems,
   leaderOwnDefences,
+  rosterDefenderBuild,
   supportProviders,
   targetWargearChoices,
 } from "./defender.js";
@@ -164,5 +166,28 @@ describe("the target's optional abilities", () => {
 
   it("keeps a unit's own optional ability off until ticked", () => {
     expect(defenderLevers(ds, psyker, none, rolled(true)).buffs.find((lever) => lever.id === barrier)?.enabled).toBe(false);
+  });
+});
+
+describe("an imported target's build", () => {
+  const load = (name: string) => JSON.parse(readFileSync(new URL(`../../../../conformance/roster/${name}/expected.roster.json`, import.meta.url), "utf8")) as Roster;
+
+  it("takes the detachment that offers the unit's Enhancement from a list of several", () => {
+    const roster = load("custodes-nr-app-reference-entry");
+    expect(roster.detachments.map((d) => d.ref.id)).toEqual(["emissaries-imperatus", "honoured-companions", "might-of-the-moritoi"]);
+    const entry = roster.units.find((unit) => unit.ref.id === "telemon-heavy-dreadnought")!;
+    const build = rosterDefenderBuild(ds, roster, entry, ds.units.getInFaction("telemon-heavy-dreadnought", "adeptus-custodes")!);
+    expect(build.detachmentId).toBe("might-of-the-moritoi");
+    expect(build.enhancementId).toBe("augury-uplink-one-per-army-upgrade-might-of-the-moritoi-adeptus-custodes");
+  });
+
+  it("takes the wargear records a unit lists, and its default loadout when it lists none", () => {
+    const roster = load("sororitas-combat-patrol");
+    const squad = roster.units.find((unit) => unit.ref.id === "sanctuary-guardians-battle-sisters-squad")!;
+    const build = rosterDefenderBuild(ds, roster, squad, ds.units.getAny(squad.ref.id!)!);
+    expect(build.detachmentId).toBe("sanctuary-guardians");
+    expect(build.wargear?.["simulacrum-imperialis"]).toBe(1);
+    const canoness = roster.units.find((unit) => unit.ref.id === "sanctuary-canoness-adalya")!;
+    expect(rosterDefenderBuild(ds, roster, canoness, ds.units.getAny(canoness.ref.id!)!).wargear).toBeNull();
   });
 });

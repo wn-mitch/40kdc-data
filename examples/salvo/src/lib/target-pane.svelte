@@ -3,6 +3,7 @@
   import { resolveRosterUnit } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
   import DefenderBuild from "./defender-build.svelte";
+  import { rosterDefenderBuild } from "./defender.js";
 
   const factions = $derived(
     ds.factions.all.slice().sort((a, b) => a.name.localeCompare(b.name)),
@@ -116,6 +117,11 @@
     const p = u.raw.profiles[0];
     if (!p) return;
     salvo.targetLeaderId = rosterLeaders[0]?.id ?? null;
+    // The list's detachment, Enhancement and wargear for this unit.
+    const build = rosterDefenderBuild(ds, salvo.targetRoster!, entry, u);
+    salvo.defenderDetachmentId = build.detachmentId;
+    salvo.defenderEnhancementId = build.enhancementId;
+    salvo.defenderWargear = build.wargear && entry.ref.id ? { unitId: entry.ref.id, wargear: build.wargear } : null;
     salvo.manualTarget = {
       T: typeof p.T === "number" ? p.T : 4,
       Sv: typeof p.Sv === "number" ? p.Sv : 3,

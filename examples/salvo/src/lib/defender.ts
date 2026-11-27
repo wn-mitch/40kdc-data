@@ -18,6 +18,8 @@ import {
   type EngineContext,
   type Enhancement,
   type Phase,
+  type Roster,
+  type RosterUnit,
   type StackableBuff,
   type StackableBuffGroup,
   type UnitView,
@@ -47,6 +49,24 @@ export type DefenderLevers = { buffs: StackableBuff[]; groups: StackableBuffGrou
 /** The wargear the target's out-of-the-box loadout carries, at its minimum model count. */
 export function defaultTargetWargear(ds: Dataset, unit: UnitView): Record<string, number> {
   return baseWargear(ds, unit.raw, unit.raw.model_count?.min ?? 1);
+}
+
+/**
+ * The defender build an imported list declares for one of its units: the list's detachment that
+ * offers the unit's Enhancement, else its first of the unit's faction, else its first; the unit's Enhancement, and the wargear records it lists, with
+ * its out-of-the-box loadout (null) when it lists none.
+ */
+export function rosterDefenderBuild(ds: Dataset, roster: Roster, entry: RosterUnit, unit: UnitView): { detachmentId: string | null; enhancementId: string | null; wargear: Record<string, number> | null } {
+  const detachments = roster.detachments.flatMap((detachment) => (detachment.ref.id ? [detachment.ref.id] : []));
+  // An 11e list fields several detachments: the unit's Enhancement says which one it is from.
+  const enhancement = entry.enhancement?.id ? ds.enhancements.get(entry.enhancement.id) : undefined;
+  const wargear = Object.fromEntries(entry.wargear.flatMap((item) => (item.ref.id && ds.wargear.has(item.ref.id) ? [[item.ref.id, item.count]] : [])));
+  return {
+    detachmentId: (enhancement && detachments.find((id) => id === enhancement.detachment_id))
+      ?? detachments.find((id) => ds.detachments.getInFaction(id, unit.factionId)) ?? detachments[0] ?? null,
+    enhancementId: entry.enhancement?.id ?? null,
+    wargear: Object.keys(wargear).length > 0 ? wargear : null,
+  };
 }
 
 /** Wargear records the target can carry: its out-of-the-box items and its options' replacements. */
