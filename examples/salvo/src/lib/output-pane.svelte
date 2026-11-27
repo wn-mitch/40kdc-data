@@ -98,7 +98,7 @@
     enhancementId: salvo.defenderEnhancementId,
     wargear: salvo.targetWargear,
     leverOverrides: salvo.targetLeverOverrides,
-    attachedUnitIds: salvo.targetMode === "dataset" && salvo.targetLeaderId ? [salvo.targetLeaderId] : [],
+    attachedUnitIds: salvo.targetMode !== "manual" && salvo.targetLeaderId ? [salvo.targetLeaderId] : [],
   }, context));
   // The target's defences: its build's, and the Feel No Pain entered on its profile.
   const defences = $derived<Buff[]>([...defensive.buffs, ...targetFeelNoPain(salvo.manualTarget)]);
@@ -190,9 +190,9 @@
   // package's loadout scoring (Pistols or other ranged weapons per model, one
   // ordinary melee weapon per model), the same the damage matrix applies.
   const target = $derived(synthTarget(salvo.manualTarget));
-  // A CHARACTER leading the dataset target is one more model: for the exact volley to destroy, and
+  // A CHARACTER leading the target is one more model: for the exact volley to destroy, and
   // for Blast and Cleave, which count the whole attached unit.
-  const leader = $derived(salvo.targetMode === "dataset" ? leaderTarget(ds, salvo.targetLeaderId, salvo.manualTarget) : null);
+  const leader = $derived(salvo.targetMode !== "manual" ? leaderTarget(ds, salvo.targetLeaderId, salvo.manualTarget) : null);
   const targetModels = $derived(salvo.manualTarget.modelCount + (leader ? 1 : 0));
   const lineContextOf = (memberId: string): EngineContext => (leader ? { ...contextOf(memberId), targetModelCount: targetModels } : contextOf(memberId));
   // The leader's personal defences (a -1 Damage, an invulnerable save of its own) only its group takes.

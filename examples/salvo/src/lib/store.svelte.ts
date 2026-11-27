@@ -229,7 +229,7 @@ class SalvoState {
   manualTarget = $state<ManualTarget>({ ...DEFAULT_TARGET });
   datasetTargetFactionId = $state<string | null>("necrons");
   datasetTargetUnitId = $state<string | null>("ctan-shard-of-the-nightbringer");
-  /** A CHARACTER unit leading the dataset target, by id; the target fights alone when null. */
+  /** A CHARACTER unit leading the dataset or roster target, by id; the target fights alone when null. */
   targetLeaderId = $state<string | null>(null);
   rosterTargetUnitIndex = $state<number | null>(null);
   /**
