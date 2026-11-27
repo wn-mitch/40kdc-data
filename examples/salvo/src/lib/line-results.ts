@@ -217,9 +217,10 @@ export type KillOdds = {
  * `leader` its CHARACTER model, which takes attacks once the Bodyguard is destroyed, or first from a
  * line with [PRECISION]. Both groups take each attack with the attached unit's keywords, so an
  * Anti or Hunter rule against the CHARACTER's keywords applies to the whole unit. The
- * distributions then count both, the CHARACTER as one model more.
+ * distributions then count both, the CHARACTER as one model more. `leaderBuffs` are the defensive
+ * rules the CHARACTER keeps on its own model, which only its attacks take.
  */
-export function killOdds(ds: Dataset, lines: readonly LineResult[], leader: Unit | null = null): KillOdds | { error: string } | null {
+export function killOdds(ds: Dataset, lines: readonly LineResult[], leader: Unit | null = null, leaderBuffs: readonly Buff[] = []): KillOdds | { error: string } | null {
   const inputs = lines.flatMap((line) => line.inputs ?? []);
   if (inputs.length === 0) return null;
   try {
@@ -228,7 +229,7 @@ export function killOdds(ds: Dataset, lines: readonly LineResult[], leader: Unit
         // One unit, so both groups take the attack with every keyword of the attached unit.
         inputs.map((input) => [
           { ...input, target: { ...input.target, unit: { ...input.target.unit, keywords: leader.keywords } } },
-          { ...input, target: { unit: leader, profileIndex: 0, modelCount: 1 } },
+          { ...input, target: { unit: leader, profileIndex: 0, modelCount: 1 }, buffs: [...input.buffs, ...leaderBuffs] },
         ]),
         [{ character: false }, { character: true }],
         ds,

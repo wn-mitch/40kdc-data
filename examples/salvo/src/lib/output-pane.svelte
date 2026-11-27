@@ -23,6 +23,7 @@
   import ResultDock from "./result-dock.svelte";
   import KillOddsPanel from "./kill-odds.svelte";
   import { killOdds } from "./line-results.js";
+  import { leaderOwnDefences } from "./defender.js";
   import {
     defaultWeaponCount,
     editedCounts,
@@ -258,7 +259,18 @@
   }
 
   // The Combined row's lines as one exact distribution of kills.
-  const odds = $derived(killOdds(ds, lineResults.filter((r) => included(r.id) && !r.error), leader));
+  // The leader's personal defences (a -1 Damage, an invulnerable save of its own) only its group takes.
+  const leaderBuffs = $derived.by<Buff[]>(() => {
+    const unit = salvo.targetUnitId ? ds.units.getAny(salvo.targetUnitId) : undefined;
+    const own = leader && salvo.targetLeaderId ? ds.units.getAny(salvo.targetLeaderId) : undefined;
+    if (!unit || !own) return [];
+    try {
+      return leaderOwnDefences(ds, unit, own, { detachmentId: salvo.defenderDetachmentId, stratagemIds: [], enhancementId: null }, context);
+    } catch {
+      return [];
+    }
+  });
+  const odds = $derived(killOdds(ds, lineResults.filter((r) => included(r.id) && !r.error), leader, leaderBuffs));
 
   // The "Combined" row, decomposed the same way per-line cells are (see
   // aggregateStages for the additive vs models-killed math). Its damage dealt and kills are the

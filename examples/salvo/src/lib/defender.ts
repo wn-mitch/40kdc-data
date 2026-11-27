@@ -97,6 +97,21 @@ export function defenderEnhancements(ds: Dataset, unit: UnitView, detachmentId: 
  * choice that no longer fits the unit (another detachment, an ineligible bearer, a lever no longer
  * offered) contributes nothing. Throws when the turned-on levers exceed a pool's allowance.
  */
+/**
+ * The defensive rules a CHARACTER leading `unit` keeps on its own model (rule 19.04): those it has
+ * alone that do not reach the attached unit, such as a personal invulnerable save or -1 Damage. They
+ * apply only to the leader's allocation group.
+ */
+export function leaderOwnDefences(ds: Dataset, unit: UnitView, leader: UnitView, build: DefenderBuild, context: EngineContext): Buff[] {
+  const detachmentId = defenderDetachmentId(ds, unit, build);
+  const shared = new Set(
+    ds.defensiveBuffsFor({ unitId: unit.id, factionId: unit.factionId, detachmentId, attachedUnitIds: [leader.id] }, context)
+      .map((buff) => JSON.stringify(buff.contribution)),
+  );
+  return ds.defensiveBuffsFor({ unitId: leader.id, factionId: leader.factionId, detachmentId }, context)
+    .filter((buff) => !shared.has(JSON.stringify(buff.contribution)));
+}
+
 export function defenderBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, baseContext: EngineContext): Buff[] {
   const targetWargear = build.wargear ?? defaultTargetWargear(ds, unit);
   const context: EngineContext = { ...baseContext, targetWargear };

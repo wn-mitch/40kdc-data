@@ -9,6 +9,7 @@ import {
   defenderLevers,
   defenderNeeds,
   defenderStratagems,
+  leaderOwnDefences,
   supportProviders,
   targetWargearChoices,
 } from "./defender.js";
@@ -58,6 +59,14 @@ describe("defender build", () => {
     const invuln = defenderBuffs(ds, squad, { ...none, attachedUnitIds: ["azrael"] }, context)
       .filter((buff) => buff.contribution.type === "invulnerable-save");
     expect(invuln.map((buff) => buff.contribution)).toEqual([{ type: "invulnerable-save", threshold: 4 }]);
+  });
+
+  it("keeps a leader's personal defences on its own model", () => {
+    const squad = ds.units.getInFaction("intercessor-squad", "adeptus-astartes")!;
+    const lieutenant = ds.units.getInFaction("lieutenant", "adeptus-astartes")!;
+    expect(leaderOwnDefences(ds, squad, lieutenant, none, context).map((buff) => buff.contribution))
+      .toEqual([{ type: "invulnerable-save", threshold: 4 }]);
+    expect(types(defenderBuffs(ds, squad, { ...none, attachedUnitIds: [lieutenant.id] }, context))).not.toContain("invulnerable-save");
   });
 });
 
