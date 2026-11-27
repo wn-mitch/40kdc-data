@@ -7530,13 +7530,8 @@ Select up to one friendly KROOT unit other than this unit:
         <cost name="pts" typeId="51b2-306e-1021-d207" value="50"/>
       </costs>
     </selectionEntry>
-    <selectionEntry name="Tidewall Shieldline" id="1d72-cdbd-796f-7c0d" hidden="false" import="true" type="unit">
+    <selectionEntry name="Tidewall Shieldline" id="1d72-cdbd-796f-7c0d" hidden="false" import="true" type="model">
       <modifiers>
-        <modifier field="51b2-306e-1021-d207" type="set" value="105">
-          <conditions>
-            <condition childId="model" field="selections" includeChildSelections="true" scope="1d72-cdbd-796f-7c0d" shared="true" type="atLeast" value="2"/>
-          </conditions>
-        </modifier>
         <modifier field="0531-4085-6d7e-d777" type="set" value="2">
           <conditions>
             <condition childId="d62d-db22-4893-4bc0" field="selections" includeChildForces="true" includeChildSelections="true" scope="roster" shared="true" type="atLeast" value="1"/>
@@ -7547,6 +7542,18 @@ Select up to one friendly KROOT unit other than this unit:
         <constraint id="0531-4085-6d7e-d777" field="selections" includeChildSelections="true" scope="force" shared="true" type="max" value="3"/>
       </constraints>
       <profiles>
+        <profile name="Tidewall Shieldline" id="89ca-bbe6-68ae-031f" hidden="false" typeId="c547-1836-d8a-ff4f" typeName="Unit">
+          <characteristics>
+            <characteristic name="M" typeId="e703-ecb6-5ce7-aec1">4"</characteristic>
+            <characteristic name="T" typeId="d29d-cf75-fc2d-34a4">8</characteristic>
+            <characteristic name="Sv" typeId="450-a17e-9d5e-29da">3+</characteristic>
+            <characteristic name="W" typeId="750a-a2ec-90d3-21fe">10</characteristic>
+            <characteristic name="LD" typeId="58d2-b879-49c7-43bc">7+</characteristic>
+            <characteristic name="OC" typeId="bef7-942a-1a23-59f8">0</characteristic>
+            <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc">5+</characteristic>
+            <characteristic name="Base" typeId="nr-base-size">Hull</characteristic>
+          </characteristics>
+        </profile>
         <profile name="Firing Deck" id="25be-1934-553a-49da" hidden="false" typeId="9cc3-6d83-4dd3-9b64" typeName="Abilities">
           <characteristics>
             <characteristic name="Description" typeId="9b8f-694b-e5e-b573">This unit gains the Firing Deck X ability, X being its rating.</characteristic>
@@ -7583,118 +7590,51 @@ Select up to one friendly KROOT unit other than this unit:
         <categoryLink name="Frame" id="e726-5a47-babc-2bb9" hidden="false" primary="false" targetId="8e88-9b30-061a-5fe4"/>
       </categoryLinks>
       <selectionEntryGroups>
-        <selectionEntryGroup name="Models" id="57a4-740f-8085-3d65" hidden="false">
-          <modifiers>
-            <modifier field="97b7-3a33-629f-1c10" type="set" value="0">
-              <conditionGroups>
-                <conditionGroup type="and">
-                  <conditions>
-                    <condition childId="10a2-8527-85fa-7c8c" field="selections" includeChildSelections="true" scope="unit" shared="true" type="atLeast" value="1"/>
-                  </conditions>
-                  <conditionGroups>
-                    <conditionGroup type="or">
-                      <conditions>
-                        <condition childId="10a2-8527-85fa-7c8c" field="selections" includeChildSelections="true" scope="unit" shared="true" type="lessThan" value="1"/>
-                        <condition childId="10a2-8527-85fa-7c8c" field="selections" includeChildSelections="true" scope="unit" shared="true" type="greaterThan" value="1"/>
-                        <condition childId="a0f0-94db-28c0-dcae" field="selections" includeChildSelections="true" scope="unit" shared="true" type="greaterThan" value="0"/>
-                      </conditions>
-                    </conditionGroup>
-                    <conditionGroup type="or">
-                      <conditions>
-                        <condition childId="10a2-8527-85fa-7c8c" field="selections" includeChildSelections="true" scope="unit" shared="true" type="lessThan" value="1"/>
-                        <condition childId="10a2-8527-85fa-7c8c" field="selections" includeChildSelections="true" scope="unit" shared="true" type="greaterThan" value="1"/>
-                        <condition childId="a0f0-94db-28c0-dcae" field="selections" includeChildSelections="true" scope="unit" shared="true" type="lessThan" value="1"/>
-                        <condition childId="a0f0-94db-28c0-dcae" field="selections" includeChildSelections="true" scope="unit" shared="true" type="greaterThan" value="1"/>
-                      </conditions>
-                    </conditionGroup>
-                  </conditionGroups>
-                </conditionGroup>
-              </conditionGroups>
-            </modifier>
-          </modifiers>
+        <selectionEntryGroup name="Wargear 1" id="7729-5d0e-c4c5-4a25" hidden="false" defaultSelectionEntryId="6f70-3201-b701-4e87">
           <constraints>
-            <constraint id="a39e-80fe-48d9-7ccc" field="selections" includeChildSelections="false" scope="parent" shared="true" type="min" value="1"/>
-            <constraint id="97b7-3a33-629f-1c10" field="selections" includeChildSelections="false" scope="parent" shared="true" type="max" value="2"/>
+            <constraint id="40ea-121b-9623-09e0" field="selections" scope="parent" shared="true" type="min" value="1"/>
+            <constraint id="52af-d0ab-73f5-52c4" field="selections" scope="parent" shared="true" type="max" value="1"/>
           </constraints>
           <selectionEntries>
-            <selectionEntry name="Tidewall Shieldline" id="10a2-8527-85fa-7c8c" hidden="false" import="true" type="model">
+            <selectionEntry name="None" id="6f70-3201-b701-4e87" hidden="false" collective="true" import="true" type="upgrade">
               <constraints>
-                <constraint id="3c43-1c39-cf22-c014" field="selections" scope="parent" shared="true" type="min" value="1"/>
-                <constraint id="8d5d-178e-4721-7cda" field="selections" scope="parent" shared="true" type="max" value="1"/>
+                <constraint id="bf97-a299-db55-96ef" field="selections" scope="parent" shared="true" type="max" value="1"/>
               </constraints>
-              <profiles>
-                <profile name="Tidewall Shieldline" id="e7d5-0d53-5171-2e90" hidden="false" typeId="c547-1836-d8a-ff4f" typeName="Unit">
-                  <characteristics>
-                    <characteristic name="M" typeId="e703-ecb6-5ce7-aec1">4"</characteristic>
-                    <characteristic name="T" typeId="d29d-cf75-fc2d-34a4">8</characteristic>
-                    <characteristic name="Sv" typeId="450-a17e-9d5e-29da">3+</characteristic>
-                    <characteristic name="W" typeId="750a-a2ec-90d3-21fe">10</characteristic>
-                    <characteristic name="LD" typeId="58d2-b879-49c7-43bc">7+</characteristic>
-                    <characteristic name="OC" typeId="bef7-942a-1a23-59f8">0</characteristic>
-                    <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc">5+</characteristic>
-                    <characteristic name="Base" typeId="nr-base-size">Hull</characteristic>
-                  </characteristics>
-                </profile>
-              </profiles>
-              <selectionEntryGroups>
-                <selectionEntryGroup name="Wargear 2" id="5391-c6c8-1af7-3bc4" hidden="false" defaultSelectionEntryId="186a-e58b-b257-4833">
-                  <constraints>
-                    <constraint id="10d4-9b49-3d0f-f6f3" field="selections" scope="parent" shared="true" type="min" value="1"/>
-                    <constraint id="9a99-7810-dc1f-e071" field="selections" scope="parent" shared="true" type="max" value="1"/>
-                  </constraints>
-                  <selectionEntries>
-                    <selectionEntry name="None" id="186a-e58b-b257-4833" hidden="false" collective="true" import="true" type="upgrade">
-                      <constraints>
-                        <constraint id="4952-632c-d333-ebb7" field="selections" scope="parent" shared="true" type="max" value="1"/>
-                      </constraints>
-                      <costs>
-                        <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
-                      </costs>
-                    </selectionEntry>
-                  </selectionEntries>
-                </selectionEntryGroup>
-              </selectionEntryGroups>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
               </costs>
             </selectionEntry>
-            <selectionEntry name="Tidewall Defence Platform" id="a0f0-94db-28c0-dcae" hidden="false" import="true" type="model">
+            <selectionEntry name="Tidewall defence platform" id="8510-64d5-fe2c-3234" hidden="false" collective="true" import="true" type="upgrade">
               <constraints>
-                <constraint id="34fb-f7ec-373a-4c42" field="selections" scope="parent" shared="true" type="min" value="0"/>
-                <constraint id="728d-f3bc-4564-193a" field="selections" scope="parent" shared="true" type="max" value="1"/>
+                <constraint id="2101-d6ab-0e15-d28b" field="selections" scope="parent" shared="true" type="max" value="1"/>
               </constraints>
-              <profiles>
-                <profile name="Tidewall Defence Platform" id="9b50-8840-db41-9827" hidden="false" typeId="c547-1836-d8a-ff4f" typeName="Unit">
-                  <characteristics>
-                    <characteristic name="M" typeId="e703-ecb6-5ce7-aec1">4"</characteristic>
-                    <characteristic name="T" typeId="d29d-cf75-fc2d-34a4">8</characteristic>
-                    <characteristic name="Sv" typeId="450-a17e-9d5e-29da">3+</characteristic>
-                    <characteristic name="W" typeId="750a-a2ec-90d3-21fe">10</characteristic>
-                    <characteristic name="LD" typeId="58d2-b879-49c7-43bc">7+</characteristic>
-                    <characteristic name="OC" typeId="bef7-942a-1a23-59f8">0</characteristic>
-                    <characteristic name="InSv" typeId="55a7-5b54-c60d-11dc">5+</characteristic>
-                    <characteristic name="Base" typeId="nr-base-size">Hull</characteristic>
-                  </characteristics>
-                </profile>
-              </profiles>
-              <selectionEntryGroups>
-                <selectionEntryGroup name="Wargear 1" id="0692-5406-9c8b-f265" hidden="false" defaultSelectionEntryId="dbd6-6c33-1dfd-685d">
+              <entryLinks>
+                <entryLink name="Tidewall defence platform" id="4569-927d-8bc3-a0b6" collective="true" hidden="false" import="true" targetId="5219-6b85-dd45-1d61" type="selectionEntry">
                   <constraints>
-                    <constraint id="11d3-32b0-74dd-1958" field="selections" scope="parent" shared="true" type="min" value="1"/>
-                    <constraint id="bc1b-7fba-4657-bcd5" field="selections" scope="parent" shared="true" type="max" value="1"/>
+                    <constraint id="b4e8-98ec-3843-ef35" field="selections" scope="parent" shared="true" type="min" value="1"/>
+                    <constraint id="fafc-7e6e-fe1b-917d" field="selections" scope="parent" shared="true" type="max" value="1"/>
                   </constraints>
-                  <selectionEntries>
-                    <selectionEntry name="None" id="dbd6-6c33-1dfd-685d" hidden="false" collective="true" import="true" type="upgrade">
-                      <constraints>
-                        <constraint id="b221-64f5-b01a-981e" field="selections" scope="parent" shared="true" type="max" value="1"/>
-                      </constraints>
-                      <costs>
-                        <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
-                      </costs>
-                    </selectionEntry>
-                  </selectionEntries>
-                </selectionEntryGroup>
-              </selectionEntryGroups>
+                  <costs>
+                    <cost name="pts" typeId="51b2-306e-1021-d207" value="20"/>
+                  </costs>
+                </entryLink>
+              </entryLinks>
+              <costs>
+                <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
+              </costs>
+            </selectionEntry>
+          </selectionEntries>
+        </selectionEntryGroup>
+        <selectionEntryGroup name="Wargear 2" id="5391-c6c8-1af7-3bc4" hidden="false" defaultSelectionEntryId="186a-e58b-b257-4833">
+          <constraints>
+            <constraint id="10d4-9b49-3d0f-f6f3" field="selections" scope="parent" shared="true" type="min" value="1"/>
+            <constraint id="9a99-7810-dc1f-e071" field="selections" scope="parent" shared="true" type="max" value="1"/>
+          </constraints>
+          <selectionEntries>
+            <selectionEntry name="None" id="186a-e58b-b257-4833" hidden="false" collective="true" import="true" type="upgrade">
+              <constraints>
+                <constraint id="4952-632c-d333-ebb7" field="selections" scope="parent" shared="true" type="max" value="1"/>
+              </constraints>
               <costs>
                 <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
               </costs>
@@ -13691,6 +13631,11 @@ This model loses the SMOKE keyword.</characteristic>
           </characteristics>
         </profile>
       </profiles>
+      <costs>
+        <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
+      </costs>
+    </selectionEntry>
+    <selectionEntry name="Tidewall defence platform" id="5219-6b85-dd45-1d61" hidden="false" import="true" type="upgrade">
       <costs>
         <cost name="pts" typeId="51b2-306e-1021-d207" value="0"/>
       </costs>

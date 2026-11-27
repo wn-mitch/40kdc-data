@@ -67644,7 +67644,6 @@
       "unitId": "tidewall-shieldline",
       "factionId": "tau-empire",
       "models": {
-        "Tidewall Defence Platform": 0,
         "Tidewall Shieldline": 1
       },
       "counts": {}

@@ -16867,7 +16867,6 @@
     },
     "expected": {
       "models": {
-        "Tidewall Defence Platform": 0,
         "Tidewall Shieldline": 1
       },
       "counts": {}

@@ -273,14 +273,10 @@ function buildModelCount(
 ): { min: number; max: number } {
   const comps =
     dump.groupBy("unit_composition", "datasheetId").get(datasheetId) ?? [];
-  const miniByComp = dump.groupBy(
-    "unit_composition_miniature",
-    "unitCompositionId",
-  );
   let min = Infinity;
   let max = 0;
   for (const c of comps) {
-    const rows = miniByComp.get(c.id!) ?? [];
+    const rows = dump.compositionMiniatures(c.id!);
     const cmin = rows.reduce((n, r) => n + r.min, 0);
     const cmax = rows.reduce((n, r) => n + r.max, 0);
     if (cmin > 0) min = Math.min(min, cmin);
