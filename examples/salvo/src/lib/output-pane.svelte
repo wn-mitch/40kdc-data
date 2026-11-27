@@ -48,6 +48,7 @@
     unionLevers,
     coveringLever,
     synthTarget,
+    targetFeelNoPain,
     targetDefences,
   } from "./output-model.js";
   import {
@@ -96,6 +97,8 @@
     wargear: salvo.targetWargear,
     leverOverrides: salvo.targetLeverOverrides,
   }, context));
+  // The target's defences: its build's, and the Feel No Pain entered on its profile.
+  const defences = $derived<Buff[]>([...defensive.buffs, ...targetFeelNoPain(salvo.manualTarget)]);
 
   // The ticked mortal-wound sources, after the target's Feel No Pain: a line of the combined total.
   const mortalSources = $derived(memberMortalSources(ds, {
@@ -106,7 +109,7 @@
     supportUnitIds: salvo.supportUnitIds,
     modelCounts: salvo.memberModelCounts,
   }, { ...context, targetModelCount: salvo.manualTarget.modelCount }));
-  const mortalLine = $derived(mortalSourceLine(mortalSources.sources, new Set(salvo.mortalSourcesActive), defensive.buffs, context));
+  const mortalLine = $derived(mortalSourceLine(mortalSources.sources, new Set(salvo.mortalSourcesActive), defences, context));
 
   /** The buffs one member attacks with: its enabled levers, the manual toggles and the target's defences. */
   function buffsOf(memberId: string): Buff[] {
@@ -114,11 +117,11 @@
     const isEnabled = (b: StackableBuff) => salvo.isBuffEnabled(b.id, b.enabled);
     // A manual toggle an enabled lever already grants would count the same effect twice.
     const manual = manualBuffs.filter((buff) => !coveringLever(buff, levers, isEnabled));
-    return [...enabledLeverBuffs(levers, isEnabled), ...manual, ...defensive.buffs];
+    return [...enabledLeverBuffs(levers, isEnabled), ...manual, ...defences];
   }
   const contextOf = (memberId: string) => perMember.find((member) => member.memberId === memberId)?.context ?? context;
   // The selected unit's buffs, for the single-weapon projection and the debug snapshot.
-  const allBuffs = $derived<Buff[]>(salvo.selectedUnitId ? buffsOf(salvo.selectedUnitId) : [...manualBuffs, ...defensive.buffs]);
+  const allBuffs = $derived<Buff[]>(salvo.selectedUnitId ? buffsOf(salvo.selectedUnitId) : [...manualBuffs, ...defences]);
 
   // The selected unit and its attached members.
   const memberUnits = $derived(resolveMembers(ds, salvo.selectedFactionId, [salvo.selectedUnitId, ...salvo.attachedUnitIds], salvo.memberModelCounts));

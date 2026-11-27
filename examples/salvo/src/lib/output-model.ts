@@ -68,6 +68,11 @@ export function synthTarget(t: ManualTarget): Unit {
   } as Unit;
 }
 
+/** The manual target's Feel No Pain as a buff on the defender, none without one. */
+export function targetFeelNoPain(t: ManualTarget): Buff[] {
+  return t.fnp === null ? [] : [{ source: { kind: "manual", label: "Target Feel No Pain" }, contribution: { type: "feel-no-pain", threshold: t.fnp } }];
+}
+
 export type AttackerChoice = {
   unitId: string | null;
   factionId: string | null;
