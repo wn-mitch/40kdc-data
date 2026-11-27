@@ -122,7 +122,8 @@ export function defenderEnhancements(ds: Dataset, unit: UnitView, detachmentId: 
 /**
  * The defensive rules a CHARACTER leading `unit` keeps on its own model (rule 19.04): those it and
  * its Enhancement (`build.leaderEnhancementId`) have alone that do not reach the attached unit, such
- * as a personal invulnerable save or -1 Damage. They apply only to the leader's allocation group.
+ * as a personal invulnerable save or -1 Damage, and those of its Enhancement's optional abilities
+ * the build turns on (`build.leverOverrides`). They apply only to the leader's allocation group.
  */
 export function leaderOwnDefences(ds: Dataset, unit: UnitView, leader: UnitView, build: DefenderBuild, context: EngineContext): Buff[] {
   const detachmentId = defenderDetachmentId(ds, unit, build);
@@ -130,10 +131,15 @@ export function leaderOwnDefences(ds: Dataset, unit: UnitView, leader: UnitView,
     ds.defensiveBuffsFor({ unitId: unit.id, factionId: unit.factionId, detachmentId, attachedUnitIds: [leader.id] }, context)
       .map((buff) => JSON.stringify(buff.contribution)),
   );
-  for (const buff of leaderEnhancementBuffs(ds, unit, { ...build, attachedUnitIds: [leader.id] }, context, "attached")) shared.add(JSON.stringify(buff.contribution));
+  const led = { ...build, attachedUnitIds: [leader.id] };
+  const levers = leaderEnhancementLevers(ds, unit, led, context).filter(({ lever }) => leverIsOn(lever, build.leverOverrides));
+  for (const buff of [...leaderEnhancementBuffs(ds, unit, led, context, "attached"), ...levers.flatMap(({ lever }) => lever.buffs)]) {
+    shared.add(JSON.stringify(buff.contribution));
+  }
   return [
     ...ds.defensiveBuffsFor({ unitId: leader.id, factionId: leader.factionId, detachmentId }, context),
-    ...leaderEnhancementBuffs(ds, unit, { ...build, attachedUnitIds: [leader.id] }, context, "own"),
+    ...leaderEnhancementBuffs(ds, unit, led, context, "own"),
+    ...levers.flatMap(({ own }) => own),
   ].filter((buff) => !shared.has(JSON.stringify(buff.contribution)));
 }
 
@@ -190,6 +196,10 @@ export function defenderLevers(ds: Dataset, unit: UnitView, build: DefenderBuild
       }
     }
   }
+  for (const { lever, pools: leaderPools } of leaderEnhancementLevers(ds, unit, build, context)) {
+    levers.push(lever);
+    for (const pool of leaderPools) if (!pools.some((other) => other.id === pool.id)) pools.push(pool);
+  }
   const carried = new Map(Object.entries(targetWargear));
   const equipped = levers
     .map((lever) => ({ ...lever, buffs: equippedBuffs(unit.raw, carried, lever.buffs) }))
@@ -241,16 +251,56 @@ function buildBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, context: 
  * unit, which rule 19.04 lets reach it; read as its own (`"own"`), every effect, its model's too.
  */
 function leaderEnhancementBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext, as: "attached" | "own"): Buff[] {
+  const read = leaderEnhancementRead(ds, unit, build, context, as);
+  return read ? read.ability.getBuffs(read.source, read.context, "target") : [];
+}
+
+/** The leader's Enhancement, with the source and context {@link leaderEnhancementBuffs} reads it under. */
+function leaderEnhancementRead(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext, as: "attached" | "own") {
   const leaderId = build.attachedUnitIds?.[0];
-  if (!leaderId || !build.leaderEnhancementId) return [];
+  if (!leaderId || !build.leaderEnhancementId) return undefined;
   const leader = ds.units.getInFaction(leaderId, unit.factionId) ?? ds.units.getAny(leaderId);
-  if (!leader) return [];
+  if (!leader) return undefined;
   const ability = enhancementAbility(ds, leader, defenderDetachmentId(ds, unit, build), build.leaderEnhancementId);
-  if (!ability) return [];
+  if (!ability) return undefined;
   const source: BuffSource = as === "attached"
     ? { kind: "ability", abilityId: ability.id, abilityKind: "attached", sourceUnitId: leader.id }
     : { kind: "ability", abilityId: ability.id, abilityKind: "unit" };
-  return ability.getBuffs(source, enhancementContext(as === "attached" ? unit : leader, context), "target");
+  return { leader, ability, source, context: enhancementContext(as === "attached" ? unit : leader, context) };
+}
+
+/** An id the leader's Enhancement levers take, apart from the unit's own levers of the same ability. */
+const LEADER_LEVER = "leader:";
+
+/**
+ * The optional abilities of the leader's Enhancement as levers on the attached unit: each lever's
+ * `buffs` are its effects on the whole unit, and `own` every effect it has, its bearer's too, which
+ * {@link leaderOwnDefences} gives the leader's model.
+ */
+function leaderEnhancementLevers(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext): Array<{ lever: StackableBuff; own: Buff[]; pools: StackableBuffGroup[] }> {
+  const shared = leaderEnhancementRead(ds, unit, build, context, "attached");
+  const own = leaderEnhancementRead(ds, unit, build, context, "own");
+  if (!shared || !own) return [];
+  const onUnit = shared.ability.describeBuffs(shared.source, shared.context, "target").activatable;
+  return own.ability.describeBuffs(own.source, own.context, "target").activatable
+    .filter((act) => !act.capRaise && !act.requiresOption && !act.excludesOption)
+    .map((act) => {
+      const groups = [...(act.group ? [act.group] : []), ...(act.groups ?? [])];
+      return {
+        lever: {
+          id: LEADER_LEVER + act.id,
+          label: `${own.leader.name}: ${own.ability.name} — ${act.label}`,
+          buffs: onUnit.find((other) => other.id === act.id)?.buffs ?? [],
+          enabled: false,
+          source: shared.source,
+          ...(act.group ? { group: LEADER_LEVER + act.group.id } : {}),
+          ...(act.groups?.length ? { groups: act.groups.map((group) => LEADER_LEVER + group.id) } : {}),
+          ...(act.requires ? { requires: act.requires } : {}),
+        },
+        own: act.buffs,
+        pools: groups.map((group) => ({ id: LEADER_LEVER + group.id, abilityId: own.ability.id, label: `${own.leader.name}: ${own.ability.name}`, maxActivations: group.maxActivations })),
+      };
+    });
 }
 
 /** The build's detachment, when it is one of the unit's faction: another faction's rules never reach the unit. */

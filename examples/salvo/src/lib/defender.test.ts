@@ -190,6 +190,29 @@ describe("the leader's Enhancement", () => {
   });
 });
 
+describe("the leader's Enhancement's optional abilities", () => {
+  it("offers them as levers whose unit-wide effects reach the unit when on", () => {
+    const squad = ds.units.getInFaction("celestian-sacresants", "adepta-sororitas")!;
+    const build = { ...none, detachmentId: "sanctified-orators", attachedUnitIds: ["canoness"], leaderEnhancementId: "hagiomnifex-upgrade-sanctified-orators-adepta-sororitas" };
+    const lever = defenderLevers(ds, squad, build, context).buffs.find((l) => l.id.startsWith("leader:") && l.buffs.some((b) => b.contribution.type === "wound-mod"))!;
+    expect(lever.enabled).toBe(false);
+    expect(types(defenderBuffs(ds, squad, build, context))).not.toContain("wound-mod");
+    expect(types(defenderBuffs(ds, squad, { ...build, leverOverrides: { [lever.id]: true } }, context))).toContain("wound-mod");
+  });
+
+  it("gives the bearer the effects on its own model when on", () => {
+    const squad = ds.units.getInFaction("custodian-guard-sodality", "adeptus-custodes")!;
+    const captain = ds.units.getInFaction("shield-captain", "adeptus-custodes")!;
+    const build = { ...none, detachmentId: "guardians-of-the-throne", attachedUnitIds: [captain.id], leaderEnhancementId: "eagles-eye-guardians-of-the-throne-adeptus-custodes" };
+    const lever = defenderLevers(ds, squad, build, context).buffs.find((l) => l.id.startsWith("leader:"))!;
+    const on = { ...build, leverOverrides: { [lever.id]: true } };
+    const invuln = (buffs: Buff[]) => buffs.filter((b) => b.contribution.type === "invulnerable-save").map((b) => b.contribution);
+    expect(invuln(leaderOwnDefences(ds, squad, captain, build, context))).toEqual([]);
+    expect(invuln(leaderOwnDefences(ds, squad, captain, on, context))).toEqual([{ type: "invulnerable-save", threshold: 3 }]);
+    expect(invuln(defenderBuffs(ds, squad, on, context))).toEqual([]);
+  });
+});
+
 describe("an imported target's build", () => {
   const load = (name: string) => JSON.parse(readFileSync(new URL(`../../../../conformance/roster/${name}/expected.roster.json`, import.meta.url), "utf8")) as Roster;
 

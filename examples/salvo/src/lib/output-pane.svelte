@@ -202,7 +202,7 @@
     const own = leader && salvo.targetLeaderId ? ds.units.getAny(salvo.targetLeaderId) : undefined;
     if (!unit || !own) return [];
     try {
-      return leaderOwnDefences(ds, unit, own, { detachmentId: salvo.defenderDetachmentId, stratagemIds: [], enhancementId: null, leaderEnhancementId: salvo.defenderLeaderEnhancementId }, context);
+      return leaderOwnDefences(ds, unit, own, { detachmentId: salvo.defenderDetachmentId, stratagemIds: [], enhancementId: null, leaderEnhancementId: salvo.defenderLeaderEnhancementId, leverOverrides: salvo.targetLeverOverrides }, context);
     } catch {
       return [];
     }
