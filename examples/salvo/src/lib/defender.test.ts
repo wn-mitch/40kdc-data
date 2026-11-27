@@ -169,6 +169,27 @@ describe("the target's optional abilities", () => {
   });
 });
 
+describe("the leader's Enhancement", () => {
+  const unit = (id: string) => ds.units.getInFaction(id, "adeptus-astartes")!;
+  const contributions = (buffs: Buff[]) => buffs.map((buff) => buff.contribution);
+
+  it("gives the attached unit the effects it has on the unit", () => {
+    const build = { ...none, detachmentId: "gravis-linebreaker-force", attachedUnitIds: ["captain-in-gravis-armour"] };
+    const enhancement = "indefatigable-fortitude-gravis-linebreaker-force-adeptus-astartes";
+    expect(contributions(defenderBuffs(ds, unit("indomitor-kill-team"), build, context))).not.toContainEqual({ type: "wound-mod", value: -1 });
+    expect(contributions(defenderBuffs(ds, unit("indomitor-kill-team"), { ...build, leaderEnhancementId: enhancement }, context)))
+      .toContainEqual({ type: "wound-mod", value: -1 });
+  });
+
+  it("keeps the effects on the bearer on the leader's model", () => {
+    const build = { ...none, detachmentId: "gladius-task-force", attachedUnitIds: ["captain"], leaderEnhancementId: "artificer-armour-gladius-task-force-adeptus-astartes" };
+    const squad = unit("sword-brethren-squad");
+    expect(contributions(leaderOwnDefences(ds, squad, unit("captain"), build, context)))
+      .toEqual(expect.arrayContaining([{ type: "save-characteristic", value: 2 }, { type: "feel-no-pain", threshold: 5 }]));
+    expect(types(defenderBuffs(ds, squad, build, context))).not.toContain("feel-no-pain");
+  });
+});
+
 describe("an imported target's build", () => {
   const load = (name: string) => JSON.parse(readFileSync(new URL(`../../../../conformance/roster/${name}/expected.roster.json`, import.meta.url), "utf8")) as Roster;
 

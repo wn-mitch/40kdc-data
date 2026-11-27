@@ -99,6 +99,7 @@
     wargear: salvo.targetWargear,
     leverOverrides: salvo.targetLeverOverrides,
     attachedUnitIds: salvo.targetMode !== "manual" && salvo.targetLeaderId ? [salvo.targetLeaderId] : [],
+    leaderEnhancementId: salvo.defenderLeaderEnhancementId,
   }, context));
   // The target's defences: its build's, and the Feel No Pain entered on its profile.
   const defences = $derived<Buff[]>([...defensive.buffs, ...targetFeelNoPain(salvo.manualTarget)]);
@@ -201,7 +202,7 @@
     const own = leader && salvo.targetLeaderId ? ds.units.getAny(salvo.targetLeaderId) : undefined;
     if (!unit || !own) return [];
     try {
-      return leaderOwnDefences(ds, unit, own, { detachmentId: salvo.defenderDetachmentId, stratagemIds: [], enhancementId: null }, context);
+      return leaderOwnDefences(ds, unit, own, { detachmentId: salvo.defenderDetachmentId, stratagemIds: [], enhancementId: null, leaderEnhancementId: salvo.defenderLeaderEnhancementId }, context);
     } catch {
       return [];
     }

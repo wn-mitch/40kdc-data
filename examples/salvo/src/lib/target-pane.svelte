@@ -117,6 +117,8 @@
     const p = u.raw.profiles[0];
     if (!p) return;
     salvo.targetLeaderId = rosterLeaders[0]?.id ?? null;
+    const leaderEntry = salvo.targetRoster?.units.find((ru) => ru.ref.id === salvo.targetLeaderId && ru.leader_attachment?.bodyguard_ref.id === entry.ref.id);
+    salvo.defenderLeaderEnhancementId = leaderEntry?.enhancement?.id ?? null;
     // The list's detachment, Enhancement and wargear for this unit.
     const build = rosterDefenderBuild(ds, salvo.targetRoster!, entry, u);
     salvo.defenderDetachmentId = build.detachmentId;
@@ -237,7 +239,10 @@
       id="tgt-leader"
       class="grow"
       value={salvo.targetLeaderId ?? ""}
-      onchange={(e) => (salvo.targetLeaderId = (e.currentTarget as HTMLSelectElement).value || null)}
+      onchange={(e) => {
+      salvo.targetLeaderId = (e.currentTarget as HTMLSelectElement).value || null;
+      salvo.defenderLeaderEnhancementId = null;
+    }}
     >
       <option value="">No attached leader</option>
       {#each targetLeaders as u (u.id)}

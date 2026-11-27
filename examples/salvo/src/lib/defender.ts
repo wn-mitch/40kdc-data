@@ -41,6 +41,8 @@ export type DefenderBuild = {
    * defences, and those on their own model stay off it (rule 19.04).
    */
   attachedUnitIds?: readonly string[];
+  /** The Enhancement of the first of `attachedUnitIds`, the CHARACTER leading the target. */
+  leaderEnhancementId?: string | null;
 };
 
 /** The defender's optional abilities as toggleable levers, with the pools that cap them. */
@@ -118,9 +120,9 @@ export function defenderEnhancements(ds: Dataset, unit: UnitView, detachmentId: 
  * offered) contributes nothing. Throws when the turned-on levers exceed a pool's allowance.
  */
 /**
- * The defensive rules a CHARACTER leading `unit` keeps on its own model (rule 19.04): those it has
- * alone that do not reach the attached unit, such as a personal invulnerable save or -1 Damage. They
- * apply only to the leader's allocation group.
+ * The defensive rules a CHARACTER leading `unit` keeps on its own model (rule 19.04): those it and
+ * its Enhancement (`build.leaderEnhancementId`) have alone that do not reach the attached unit, such
+ * as a personal invulnerable save or -1 Damage. They apply only to the leader's allocation group.
  */
 export function leaderOwnDefences(ds: Dataset, unit: UnitView, leader: UnitView, build: DefenderBuild, context: EngineContext): Buff[] {
   const detachmentId = defenderDetachmentId(ds, unit, build);
@@ -128,8 +130,11 @@ export function leaderOwnDefences(ds: Dataset, unit: UnitView, leader: UnitView,
     ds.defensiveBuffsFor({ unitId: unit.id, factionId: unit.factionId, detachmentId, attachedUnitIds: [leader.id] }, context)
       .map((buff) => JSON.stringify(buff.contribution)),
   );
-  return ds.defensiveBuffsFor({ unitId: leader.id, factionId: leader.factionId, detachmentId }, context)
-    .filter((buff) => !shared.has(JSON.stringify(buff.contribution)));
+  for (const buff of leaderEnhancementBuffs(ds, unit, { ...build, attachedUnitIds: [leader.id] }, context, "attached")) shared.add(JSON.stringify(buff.contribution));
+  return [
+    ...ds.defensiveBuffsFor({ unitId: leader.id, factionId: leader.factionId, detachmentId }, context),
+    ...leaderEnhancementBuffs(ds, unit, { ...build, attachedUnitIds: [leader.id] }, context, "own"),
+  ].filter((buff) => !shared.has(JSON.stringify(buff.contribution)));
 }
 
 export function defenderBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, baseContext: EngineContext): Buff[] {
@@ -224,9 +229,28 @@ function buildBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, context: 
     context,
   );
   const ability = enhancementAbility(ds, unit, detachmentId, build.enhancementId);
-  if (!ability) return buffs;
+  const leader = leaderEnhancementBuffs(ds, unit, build, context, "attached");
+  if (!ability) return [...buffs, ...leader];
   const source: BuffSource = { kind: "ability", abilityId: ability.id, abilityKind: "unit" };
-  return [...buffs, ...ability.getBuffs(source, enhancementContext(unit, context), "target")];
+  return [...buffs, ...ability.getBuffs(source, enhancementContext(unit, context), "target"), ...leader];
+}
+
+/**
+ * The buffs of the Enhancement the CHARACTER leading `unit` carries, when it can take it from the
+ * build's detachment: read as an attached member's (`"attached"`), only its effects on the whole
+ * unit, which rule 19.04 lets reach it; read as its own (`"own"`), every effect, its model's too.
+ */
+function leaderEnhancementBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext, as: "attached" | "own"): Buff[] {
+  const leaderId = build.attachedUnitIds?.[0];
+  if (!leaderId || !build.leaderEnhancementId) return [];
+  const leader = ds.units.getInFaction(leaderId, unit.factionId) ?? ds.units.getAny(leaderId);
+  if (!leader) return [];
+  const ability = enhancementAbility(ds, leader, defenderDetachmentId(ds, unit, build), build.leaderEnhancementId);
+  if (!ability) return [];
+  const source: BuffSource = as === "attached"
+    ? { kind: "ability", abilityId: ability.id, abilityKind: "attached", sourceUnitId: leader.id }
+    : { kind: "ability", abilityId: ability.id, abilityKind: "unit" };
+  return ability.getBuffs(source, enhancementContext(as === "attached" ? unit : leader, context), "target");
 }
 
 /** The build's detachment, when it is one of the unit's faction: another faction's rules never reach the unit. */

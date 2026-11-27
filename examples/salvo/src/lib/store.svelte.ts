@@ -244,6 +244,8 @@ class SalvoState {
   defenderDetachmentId = $state<string | null>(null);
   defenderStratagemIds = $state<string[]>([]);
   defenderEnhancementId = $state<string | null>(null);
+  /** The Enhancement of the CHARACTER leading the target. */
+  defenderLeaderEnhancementId = $state<string | null>(null);
   /** The target's wargear, with the unit it was chosen for. */
   defenderWargear = $state<{ unitId: string; wargear: Record<string, number> } | null>(null);
   /** The defender's on/off choices for the target's optional abilities (lever id → on), with the unit they were chosen for. */
