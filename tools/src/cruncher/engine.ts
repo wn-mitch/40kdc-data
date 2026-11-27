@@ -79,6 +79,8 @@ export type AttackModel = {
   lethal: boolean;
   wound: { pass: number; crit: number };
   devastating: boolean;
+  /** [PRECISION]: against an attached unit the attacks go to a CHARACTER group first (allocation.ts `allocateAttached`). */
+  precision: boolean;
   /** Probability a wound that reaches the save is not saved. */
   unsaved: number;
   /** Final per-attack damage. */
@@ -566,6 +568,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     lethal: hasLethal,
     wound: woundProbs,
     devastating: hasDevastating,
+    precision: !!findKeyword(resolved, "precision"),
     unsaved: 1 - pSaved,
     damage: perAttack.distribution,
     woundLost: pSurviveAll,

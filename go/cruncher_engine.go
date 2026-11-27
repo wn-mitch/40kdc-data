@@ -817,6 +817,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 		WoundPass:       woundPass,
 		WoundCrit:       woundCrit,
 		Devastating:     hasDevastating,
+		Precision:       res.findKeyword("precision") != nil,
 		Unsaved:         1 - pSaved,
 		Damage:          perAttack.distribution,
 		WoundLost:       pSurviveAll,

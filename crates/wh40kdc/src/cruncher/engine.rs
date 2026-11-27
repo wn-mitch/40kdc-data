@@ -162,6 +162,8 @@ pub struct AttackModel {
     pub lethal: bool,
     pub wound: RollProbabilities,
     pub devastating: bool,
+    /// [PRECISION]: against an attached unit the attacks go to a CHARACTER group first.
+    pub precision: bool,
     /// Probability a wound that reaches the save is not saved.
     pub unsaved: f64,
     /// Final per-attack damage as (value, probability), ascending by value.
@@ -1316,6 +1318,7 @@ pub fn crunch_model(
             crit: wound_probs.crit,
         },
         devastating: has_devastating,
+        precision: find_extra_keyword(&resolved, "precision").is_some(),
         unsaved: 1.0 - p_saved,
         damage: per_attack.distribution,
         wound_lost: p_survive_all,

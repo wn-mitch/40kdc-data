@@ -13,7 +13,7 @@
  * 2. **Id dispatch**, for rules whose catalog `effect` is null because the DSL
  *    has no primitive for them yet — `lethal-hits`, `sustained-hits`,
  *    `devastating-wounds`, `anti`, `melta`, `rapid-fire`, `torrent`, `blast`, `cleave`,
- *    and `ignores-cover`. These are surfaced as `extra-keyword` buffs
+ *    `ignores-cover` and `precision`. These are surfaced as `extra-keyword` buffs
  *    so the engine can read them out of `ResolvedModifiers.extraKeywords`
  *    and dispatch its math directly.
  *
@@ -35,6 +35,7 @@ const ENGINE_DISPATCH_KEYWORDS = new Set([
   "blast",
   "cleave",
   "ignores-cover",
+  "precision",
 ]);
 
 

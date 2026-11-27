@@ -54,8 +54,9 @@ pub mod unsupported_scope;
 mod weapon_bindings;
 
 pub use allocation::{
-    allocate, allocate_model, allocate_model_with, allocate_with, AllocationDefences,
-    AllocationError, AllocationOutput, DamageZeroing, ZeroingPer, MAX_EVENT_WORK,
+    allocate, allocate_attached, allocate_model, allocate_model_with, allocate_with,
+    AllocationDefences, AllocationError, AllocationOutput, AttachedAllocationOutput, DamageZeroing,
+    GroupAllocation, TargetGroup, ZeroingPer, MAX_ATTACHED_STATES, MAX_EVENT_WORK,
 };
 pub use attack_compare::attack_comparison_holds;
 pub use attribution::{attribute_stages, AttributedStage, StageLift};

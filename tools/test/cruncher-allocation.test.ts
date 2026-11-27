@@ -11,7 +11,7 @@ function model(overrides: Partial<AttackModel>): AttackModel {
   return {
     modelsFiring: 1, attacksStat: 1, attacksBonus: 0, rapidFireStat: null, torrent: false,
     hit: { pass: 1, crit: 0 }, sustainedStat: null, lethal: false, wound: { pass: 1, crit: 0 },
-    devastating: false, unsaved: 1, damage: [{ value: 1, probability: 1 }], woundLost: 1, mortalWoundLost: 1,
+    devastating: false, precision: false, unsaved: 1, damage: [{ value: 1, probability: 1 }], woundLost: 1, mortalWoundLost: 1,
     wounds: 1, modelCount: 1, rollMortals: { hit: 0, criticalHit: 0, wound: 0, criticalWound: 0, criticalWoundOfCriticalHit: 0 },
     unmodelled: [], ...overrides,
   };

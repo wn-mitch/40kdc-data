@@ -93,6 +93,7 @@ class AttackModel(TypedDict):
     lethal: bool
     wound: RollProbabilities
     devastating: bool
+    precision: bool
     #: Probability a wound that reaches the save is not saved.
     unsaved: float
     #: Final per-attack damage.
@@ -931,6 +932,7 @@ def crunch_model(
         "lethal": has_lethal,
         "wound": {"pass": wound_probs[0], "crit": wound_probs[1]},
         "devastating": has_devastating,
+        "precision": _find_keyword(resolved, "precision") is not None,
         "unsaved": 1 - p_saved,
         "damage": per_attack["distribution"],
         "woundLost": p_survive_all,

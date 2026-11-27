@@ -24,6 +24,7 @@ fn model() -> AttackModel {
             crit: 0.0,
         },
         devastating: false,
+        precision: false,
         unsaved: 1.0,
         damage: vec![(1.0, 1.0)],
         wound_lost: 1.0,

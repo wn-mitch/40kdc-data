@@ -14,8 +14,8 @@ use std::path::PathBuf;
 
 use serde::Deserialize;
 use wh40kdc::cruncher::{
-    allocate_with, AllocationDefences, AttackProfileRef, Buff, DamageZeroing, EngineContext,
-    EngineInput, TargetProfileRef,
+    allocate_attached, allocate_with, AllocationDefences, AttackProfileRef, Buff, DamageZeroing,
+    EngineContext, EngineInput, TargetGroup, TargetProfileRef,
 };
 use wh40kdc::Dataset;
 
@@ -200,5 +200,148 @@ fn allocation_refuses_what_it_does_not_model() {
             format!("allocate: {what} not modelled by exact allocation"),
             "{file}"
         );
+    }
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct AttachedGroupSpec {
+    character: bool,
+    unit_id: String,
+    profile_index: usize,
+    model_count: u64,
+    buffs: Vec<Buff>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct AttachedLineSpec {
+    attacker: AttackerSpec,
+    models_firing: u64,
+    context: EngineContext,
+    buffs: Vec<Buff>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct ExpectedGroup {
+    models_destroyed_distribution: Vec<f64>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct ExpectedAttached {
+    damage_dealt: f64,
+    models_destroyed: f64,
+    models_destroyed_distribution: Vec<f64>,
+    wounds_dealt_distribution: Vec<f64>,
+    groups: Vec<ExpectedGroup>,
+}
+
+#[derive(Debug, Deserialize)]
+struct AttachedCase {
+    name: String,
+    groups: Vec<AttachedGroupSpec>,
+    lines: Vec<AttachedLineSpec>,
+    expected: ExpectedAttached,
+}
+
+fn assert_distribution(case: &str, field: &str, got: &[f64], want: &[f64]) {
+    assert_eq!(
+        got.len(),
+        want.len(),
+        "allocation/{case}: {field} length diverged"
+    );
+    for (i, (got, want)) in got.iter().zip(want).enumerate() {
+        assert_close(case, &format!("{field}[{i}]"), *got, *want);
+    }
+}
+
+/// `conformance/allocation/attached.json`: attack lines in turn into an attached unit's groups.
+#[test]
+fn attached_allocation_corpus_matches_reference() {
+    let path = conformance_dir().join("allocation").join("attached.json");
+    let raw =
+        fs::read_to_string(&path).unwrap_or_else(|e| panic!("reading {}: {e}", path.display()));
+    let cases: Vec<AttachedCase> =
+        serde_json::from_str(&raw).expect("allocation/attached.json is a valid JSON array");
+    assert!(!cases.is_empty(), "attached allocation corpus is empty");
+
+    let ds = Dataset::embedded();
+
+    for case in &cases {
+        let lines: Vec<Vec<EngineInput>> = case
+            .lines
+            .iter()
+            .map(|line| {
+                let weapon = ds
+                    .weapons
+                    .get_any(&line.attacker.weapon_id)
+                    .unwrap_or_else(|| panic!("unknown weapon {}", line.attacker.weapon_id));
+                case.groups
+                    .iter()
+                    .map(|group| EngineInput {
+                        attacker: AttackProfileRef {
+                            weapon,
+                            profile_index: line.attacker.profile_index,
+                        },
+                        target: TargetProfileRef {
+                            unit: ds
+                                .units
+                                .get_any(&group.unit_id)
+                                .unwrap_or_else(|| panic!("unknown unit {}", group.unit_id)),
+                            profile_index: group.profile_index,
+                            model_count: Some(group.model_count),
+                        },
+                        models_firing: line.models_firing,
+                        buffs: line.buffs.iter().chain(&group.buffs).cloned().collect(),
+                        context: line.context.clone(),
+                    })
+                    .collect()
+            })
+            .collect();
+        let groups: Vec<TargetGroup> = case
+            .groups
+            .iter()
+            .map(|group| TargetGroup {
+                character: group.character,
+            })
+            .collect();
+        let actual = allocate_attached(&lines, &groups, Some(ds), &AllocationDefences::default())
+            .unwrap_or_else(|e| panic!("allocate_attached for {}: {e}", case.name));
+        let id = &case.name;
+        let want = &case.expected;
+        assert_close(id, "damageDealt", actual.damage_dealt, want.damage_dealt);
+        assert_close(
+            id,
+            "modelsDestroyed",
+            actual.models_destroyed,
+            want.models_destroyed,
+        );
+        assert_distribution(
+            id,
+            "modelsDestroyedDistribution",
+            &actual.models_destroyed_distribution,
+            &want.models_destroyed_distribution,
+        );
+        assert_distribution(
+            id,
+            "woundsDealtDistribution",
+            &actual.wounds_dealt_distribution,
+            &want.wounds_dealt_distribution,
+        );
+        assert_eq!(
+            actual.groups.len(),
+            want.groups.len(),
+            "allocation/{id}: group count diverged"
+        );
+        for (g, (got, want)) in actual.groups.iter().zip(&want.groups).enumerate() {
+            assert_distribution(
+                id,
+                &format!("groups[{g}].modelsDestroyedDistribution"),
+                &got.models_destroyed_distribution,
+                &want.models_destroyed_distribution,
+            );
+        }
     }
 }

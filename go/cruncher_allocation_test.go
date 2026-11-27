@@ -3,6 +3,7 @@ package wh40kdc
 import (
 	"encoding/json"
 	"math"
+	"strconv"
 	"testing"
 )
 
@@ -470,5 +471,80 @@ func TestAllocateInflictsAbilityMortalWoundsBeforeDevastatingWounds(t *testing.T
 	near(t, "damage dealt", shielded.DamageDealt, 2, 1e-12)
 	if _, err := AllocateModel(allocModel(func(m *AttackModel) { m.RollMortals.Wound = 0.5 })); err == nil {
 		t.Error("a fractional mortal-wound count allocated")
+	}
+}
+
+func TestAllocationAttachedCorpus(t *testing.T) {
+	var cases []struct {
+		Name   string `json:"name"`
+		Groups []struct {
+			Character    bool    `json:"character"`
+			UnitID       string  `json:"unitId"`
+			ProfileIndex float64 `json:"profileIndex"`
+			ModelCount   float64 `json:"modelCount"`
+			Buffs        []any   `json:"buffs"`
+		} `json:"groups"`
+		Lines []struct {
+			Attacker     map[string]any `json:"attacker"`
+			ModelsFiring float64        `json:"modelsFiring"`
+			Context      map[string]any `json:"context"`
+			Buffs        []any          `json:"buffs"`
+		} `json:"lines"`
+		Expected AttachedAllocationOutput `json:"expected"`
+	}
+	if err := json.Unmarshal(loadCorpus(t, "allocation", "attached.json"), &cases); err != nil {
+		t.Fatal(err)
+	}
+	if len(cases) == 0 {
+		t.Fatal("attached allocation corpus is empty")
+	}
+	state := NewRunnerState()
+	distribution := func(what string, got, want []float64) {
+		if len(got) != len(want) {
+			t.Errorf("%s length %d, want %d", what, len(got), len(want))
+			return
+		}
+		for i := range want {
+			near(t, what+"["+strconv.Itoa(i)+"]", got[i], want[i], 5e-4)
+		}
+	}
+	for _, c := range cases {
+		groups := make([]TargetGroup, len(c.Groups))
+		for g, group := range c.Groups {
+			groups[g] = TargetGroup{Character: group.Character}
+		}
+		lines := make([][]map[string]any, len(c.Lines))
+		for l, line := range c.Lines {
+			for _, group := range c.Groups {
+				// A group's input: the line's buffs, then the group's.
+				input, errR := state.buildEngineInput(map[string]any{
+					"attacker":     line.Attacker,
+					"modelsFiring": line.ModelsFiring,
+					"target":       map[string]any{"unitId": group.UnitID, "profileIndex": group.ProfileIndex, "modelCount": group.ModelCount},
+					"context":      line.Context,
+					"buffs":        append(append([]any{}, line.Buffs...), group.Buffs...),
+				}, "allocate")
+				if errR != nil {
+					t.Fatalf("%s: %v", c.Name, errR)
+				}
+				lines[l] = append(lines[l], input)
+			}
+		}
+		out, err := AllocateAttached(lines, groups, state.dataset(), AllocationDefences{})
+		if err != nil {
+			t.Errorf("%s: %v", c.Name, err)
+			continue
+		}
+		near(t, c.Name+" damageDealt", out.DamageDealt, c.Expected.DamageDealt, 5e-4)
+		near(t, c.Name+" modelsDestroyed", out.ModelsDestroyed, c.Expected.ModelsDestroyed, 5e-4)
+		distribution(c.Name+" modelsDestroyedDistribution", out.ModelsDestroyedDistribution, c.Expected.ModelsDestroyedDistribution)
+		distribution(c.Name+" woundsDealtDistribution", out.WoundsDealtDistribution, c.Expected.WoundsDealtDistribution)
+		if len(out.Groups) != len(c.Expected.Groups) {
+			t.Errorf("%s: %d groups, want %d", c.Name, len(out.Groups), len(c.Expected.Groups))
+			continue
+		}
+		for g, want := range c.Expected.Groups {
+			distribution(c.Name+" groups["+strconv.Itoa(g)+"].modelsDestroyedDistribution", out.Groups[g].ModelsDestroyedDistribution, want.ModelsDestroyedDistribution)
+		}
 	}
 }
