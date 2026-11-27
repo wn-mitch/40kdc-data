@@ -44,6 +44,7 @@
         stratagemIds: salvo.defenderStratagemIds,
         enhancementId: salvo.defenderEnhancementId,
         wargear: salvo.targetWargear,
+        attachedUnitIds: salvo.targetMode === "dataset" && salvo.targetLeaderId ? [salvo.targetLeaderId] : [],
       }, salvo.projectionContext);
     } catch (err) {
       return { buffs: [], groups: [], error: (err as Error).message };

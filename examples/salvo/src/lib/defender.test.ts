@@ -48,6 +48,17 @@ describe("defender build", () => {
     expect(types(defenderBuffs(ds, squad, build, context)))
       .toEqual(types(defenderBuffs(ds, squad, { ...build, enhancementId: null }, context)));
   });
+
+  it("gives the target the rules of a leader that reach its unit", () => {
+    const squad = ds.units.getInFaction("intercessor-squad", "adeptus-astartes")!;
+    expect(types(defenderBuffs(ds, squad, none, context))).not.toContain("feel-no-pain");
+    const fnp = defenderBuffs(ds, squad, { ...none, attachedUnitIds: ["captain-titus"] }, context)
+      .filter((buff) => buff.contribution.type === "feel-no-pain");
+    expect(fnp.map((buff) => buff.contribution)).toEqual([{ type: "feel-no-pain", threshold: 5 }]);
+    const invuln = defenderBuffs(ds, squad, { ...none, attachedUnitIds: ["azrael"] }, context)
+      .filter((buff) => buff.contribution.type === "invulnerable-save");
+    expect(invuln.map((buff) => buff.contribution)).toEqual([{ type: "invulnerable-save", threshold: 4 }]);
+  });
 });
 
 describe("support providers", () => {

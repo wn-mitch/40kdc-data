@@ -97,6 +97,7 @@
     enhancementId: salvo.defenderEnhancementId,
     wargear: salvo.targetWargear,
     leverOverrides: salvo.targetLeverOverrides,
+    attachedUnitIds: salvo.targetMode === "dataset" && salvo.targetLeaderId ? [salvo.targetLeaderId] : [],
   }, context));
   // The target's defences: its build's, and the Feel No Pain entered on its profile.
   const defences = $derived<Buff[]>([...defensive.buffs, ...targetFeelNoPain(salvo.manualTarget)]);

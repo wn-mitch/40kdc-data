@@ -34,6 +34,11 @@ export type DefenderBuild = {
    * takes its `enabled` default. An id no longer offered is ignored.
    */
   leverOverrides?: Readonly<Record<string, boolean>>;
+  /**
+   * CHARACTER units leading the target, by id: their rules that reach their unit join its
+   * defences, and those on their own model stay off it (rule 19.04).
+   */
+  attachedUnitIds?: readonly string[];
 };
 
 /** The defender's optional abilities as toggleable levers, with the pools that cap them. */
@@ -118,7 +123,7 @@ export function defenderLevers(ds: Dataset, unit: UnitView, build: DefenderBuild
   const context: EngineContext = { ...baseContext, targetWargear };
   const detachmentId = defenderDetachmentId(ds, unit, build);
   const { buffs, groups } = ds.defensiveLeversFor(
-    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds] },
+    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds], attachedUnitIds: [...(build.attachedUnitIds ?? [])] },
     context,
   );
   const levers = [...buffs];
@@ -168,7 +173,7 @@ export function defenderNeeds(ds: Dataset, unit: UnitView, build: DefenderBuild,
   const context: EngineContext = { ...baseContext, targetWargear: build.wargear ?? defaultTargetWargear(ds, unit) };
   const detachmentId = defenderDetachmentId(ds, unit, build);
   const needs = ds.defensiveNeedsFor(
-    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds] },
+    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds], attachedUnitIds: [...(build.attachedUnitIds ?? [])] },
     context,
   );
   const ability = enhancementAbility(ds, unit, detachmentId, build.enhancementId);
@@ -180,7 +185,7 @@ export function defenderNeeds(ds: Dataset, unit: UnitView, build: DefenderBuild,
 function buildBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext): Buff[] {
   const detachmentId = defenderDetachmentId(ds, unit, build);
   const buffs = ds.defensiveBuffsFor(
-    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds] },
+    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds], attachedUnitIds: [...(build.attachedUnitIds ?? [])] },
     context,
   );
   const ability = enhancementAbility(ds, unit, detachmentId, build.enhancementId);
