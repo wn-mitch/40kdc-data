@@ -1891,6 +1891,21 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 			translateSaveSet(node, modifier, isOnBuffedUnit, opts, out, emit)
 			return
 		}
+		if stat == "W" {
+			if opts.perspective != "target" {
+				out.unsupported = append(out.unsupported, unsup("stat-modifier W: defender-side stat; applies when the buffed unit is the target", node))
+				return
+			}
+			if !isOnBuffedUnit {
+				return
+			}
+			if woundsValue := numericValue(modifier); isIntIn(woundsValue, 1, math.Inf(1)) {
+				emit(map[string]any{"type": "wounds-characteristic", "value": woundsValue})
+			} else {
+				out.unsupported = append(out.unsupported, unsup("stat-modifier W: set value \""+jsStr(modifier["value"])+"\" is not a characteristic", node))
+			}
+			return
+		}
 		if stat != "A" && stat != "S" && stat != "T" && stat != "D" {
 			out.unsupported = append(out.unsupported, unsup("stat-modifier on \""+jsStr(modifier["stat"])+"\" is outside the damage path", node))
 			return
@@ -2925,6 +2940,8 @@ func describeContribution(c map[string]any) string {
 		return signedStr(c["value"]) + " toughness"
 	case "wounds-mod":
 		return signedStr(c["value"]) + " wounds"
+	case "wounds-characteristic":
+		return "Wounds " + numStr(c["value"])
 	case "ap-mod":
 		return "AP " + numStr(c["value"])
 	case "reroll":

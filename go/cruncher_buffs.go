@@ -457,6 +457,9 @@ type resolved struct {
 	skillMod map[string]float64
 	// saveCharacteristic is the ability-set Save; nil keeps the printed one.
 	saveCharacteristic *rankedValue
+	// woundsCharacteristic is the highest ability-set Wounds, applied before woundsMod; nil keeps
+	// the printed one.
+	woundsCharacteristic *rankedValue
 	// saveImprove sums capped Save improvements; best is the most restrictive (largest) cap.
 	// nil when none applies.
 	saveImprove *saveImproveState
@@ -632,6 +635,11 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 			sc := out.saveCharacteristic
 			if sc == nil || val < sc.value || (val == sc.value && rankOf(source) < sc.rank) {
 				out.saveCharacteristic = &rankedValue{val, rankOf(source)}
+			}
+		case "wounds-characteristic":
+			wc := out.woundsCharacteristic
+			if wc == nil || val > wc.value || (val == wc.value && rankOf(source) < wc.rank) {
+				out.woundsCharacteristic = &rankedValue{val, rankOf(source)}
 			}
 		case "mortal-wounds-on-roll":
 			count, _ := num(c["count"])

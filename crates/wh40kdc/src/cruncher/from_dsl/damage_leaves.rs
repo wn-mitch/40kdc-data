@@ -430,6 +430,33 @@ pub(super) fn set_modifier(
                 );
             }
         }
+        Some("W") => {
+            if opts.perspective != Target {
+                out.unsupported(
+                    "stat-modifier W: defender-side stat; applies when the buffed unit is the target",
+                    node,
+                );
+                return;
+            }
+            if !on_buffed {
+                return;
+            }
+            match m.get("value").and_then(Value::as_f64) {
+                Some(v) if v.fract() == 0.0 && v >= 1.0 => emit(
+                    opts,
+                    out,
+                    gate,
+                    json!({ "type": "wounds-characteristic", "value": v }),
+                ),
+                _ => out.unsupported(
+                    format!(
+                        "stat-modifier W: set value \"{}\" is not a characteristic",
+                        js_string(m.get("value"))
+                    ),
+                    node,
+                ),
+            }
+        }
         Some("T") => {
             out.unsupported(
                 "stat-modifier T: setting the Toughness characteristic is not modelled",

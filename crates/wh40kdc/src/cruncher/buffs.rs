@@ -236,6 +236,10 @@ pub enum BuffContribution {
     WoundsMod {
         value: f64,
     },
+    /// Sets the defender's Wounds characteristic; applies before any `wounds-mod`.
+    WoundsCharacteristic {
+        value: f64,
+    },
     /// Additive modifier to the attacker's weapon AP. AP is signed against the
     /// defender's save (negative = more piercing), so a value of `-1` here
     /// makes the weapon one AP more piercing.
@@ -495,6 +499,18 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
             }
             BuffContribution::WoundsMod { value } => {
                 sum_into(&mut out.wounds_mod, *value, &b.source)
+            }
+            BuffContribution::WoundsCharacteristic { value } => {
+                let take = out.wounds_characteristic.as_ref().is_none_or(|cur| {
+                    *value > cur.value
+                        || (*value == cur.value && rank(&b.source) < rank(&cur.dominant_source))
+                });
+                if take {
+                    out.wounds_characteristic = Some(ThresholdState {
+                        value: *value,
+                        dominant_source: b.source.clone(),
+                    });
+                }
             }
             BuffContribution::ApMod { value } => sum_into(&mut out.ap_mod, *value, &b.source),
             BuffContribution::DamageReduction { value } => {

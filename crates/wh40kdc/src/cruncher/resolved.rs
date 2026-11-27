@@ -32,6 +32,8 @@ pub struct ResolvedModifiers {
     pub strength_mod: SummedMod,
     pub toughness_mod: SummedMod,
     pub wounds_mod: SummedMod,
+    /// The highest set Wounds characteristic, replacing the profile's before `wounds_mod`.
+    pub wounds_characteristic: Option<ThresholdState>,
     pub ap_mod: SummedMod,
     /// Ability-set weapon characteristics; an absent stat keeps the profile's value.
     pub stat_set: StatSets,

@@ -1071,6 +1071,17 @@ function translateStatModifier(
       else out.unsupported.push({ reason: `stat-modifier Sv: set value "${saveValue}" is not a save characteristic`, effectFragment: node });
       return;
     }
+    if (stat === "W") {
+      if (opts.perspective !== "target") {
+        out.unsupported.push({ reason: "stat-modifier W: defender-side stat; applies when the buffed unit is the target", effectFragment: node });
+        return;
+      }
+      if (!isOnBuffedUnit) return;
+      const woundsValue = typeof modifier.value === "number" ? modifier.value : NaN;
+      if (Number.isInteger(woundsValue) && woundsValue >= 1) emit({ type: "wounds-characteristic", value: woundsValue });
+      else out.unsupported.push({ reason: `stat-modifier W: set value "${String(modifier.value)}" is not a characteristic`, effectFragment: node });
+      return;
+    }
     if (stat !== "A" && stat !== "S" && stat !== "T" && stat !== "D") {
       out.unsupported.push({ reason: `stat-modifier on "${String(stat)}" is outside the damage path`, effectFragment: node });
       return;
@@ -2903,6 +2914,8 @@ function describeContribution(c: BuffContribution): string {
       return `${signed(c.value)} toughness`;
     case "wounds-mod":
       return `${signed(c.value)} wounds`;
+    case "wounds-characteristic":
+      return `Wounds ${c.value}`;
     case "ap-mod":
       return `AP ${c.value}`;
     case "reroll":

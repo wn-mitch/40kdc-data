@@ -1252,6 +1252,40 @@ def _translate_stat_modifier(
                     }
                 )
             return
+        if stat == "W":
+            if opts["perspective"] != "target":
+                out["unsupported"].append(
+                    {
+                        "reason": (
+                            "stat-modifier W: defender-side stat; applies when the "
+                            "buffed unit is the target"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
+                return
+            if not is_on_buffed_unit:
+                return
+            raw_wounds = modifier.get("value")
+            if (
+                isinstance(raw_wounds, (int, float))
+                and not isinstance(raw_wounds, bool)
+                and math.isfinite(raw_wounds)
+                and float(raw_wounds).is_integer()
+                and raw_wounds >= 1
+            ):
+                emit({"type": "wounds-characteristic", "value": int(raw_wounds)})
+            else:
+                out["unsupported"].append(
+                    {
+                        "reason": (
+                            f'stat-modifier W: set value "{_js_str(raw_wounds)}" '
+                            "is not a characteristic"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
+            return
         if stat not in ("A", "S", "T", "D"):
             out["unsupported"].append(
                 {
@@ -3890,6 +3924,8 @@ def _describe_contribution(c: dict[str, Any]) -> str:
         return f"{_signed(c['value'])} toughness"
     if ctype == "wounds-mod":
         return f"{_signed(c['value'])} wounds"
+    if ctype == "wounds-characteristic":
+        return f"Wounds {_num_str(c['value'])}"
     if ctype == "ap-mod":
         return f"AP {_num_str(c['value'])}"
     if ctype == "reroll":

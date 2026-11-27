@@ -257,6 +257,7 @@ fn describe_contribution(c: &Value) -> String {
         "strength-mod" => format!("{} strength", signed(v)),
         "toughness-mod" => format!("{} toughness", signed(v)),
         "wounds-mod" => format!("{} wounds", signed(v)),
+        "wounds-characteristic" => format!("Wounds {}", fmt_num(js_number(Some(v)))),
         "ap-mod" => format!("AP {}", fmt_num(js_number(Some(v)))),
         "reroll" => format!(
             "re-roll {}{}",

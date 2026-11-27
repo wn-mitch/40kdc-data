@@ -325,6 +325,8 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         "strengthMod": {"value": 0, "sources": []},
         "toughnessMod": {"value": 0, "sources": []},
         "woundsMod": {"value": 0, "sources": []},
+        # The highest set Wounds characteristic, replacing the profile's before woundsMod.
+        "woundsCharacteristic": None,
         "apMod": {"value": 0, "sources": []},
         "statSet": {},
         "damageReduction": {"value": 0, "dominantSource": None},
@@ -409,6 +411,14 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         elif ctype == "wounds-mod":
             out["woundsMod"]["value"] += c["value"]
             out["woundsMod"]["sources"].append(source)
+        elif ctype == "wounds-characteristic":
+            wc = out["woundsCharacteristic"]
+            if (
+                wc is None
+                or c["value"] > wc["value"]
+                or (c["value"] == wc["value"] and _rank(source) < _rank(wc["dominantSource"]))
+            ):
+                out["woundsCharacteristic"] = {"value": c["value"], "dominantSource": source}
         elif ctype == "ap-mod":
             out["apMod"]["value"] += c["value"]
             out["apMod"]["sources"].append(source)

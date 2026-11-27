@@ -1300,6 +1300,13 @@ const ALLOCATION_BUFF_CASES: Array<{ cruncher_case: string; label: string; buffs
   { cruncher_case: "canonical-critical-wound-devastating-damage.json", label: "+1 Wounds on the target", buffs: [
     { source: { kind: "ability", abilityId: "fabricated-wounds", abilityKind: "unit" }, contribution: { type: "wounds-mod", value: 1 } },
   ] },
+  // Two set Wounds and a -1: the highest set (4) applies first, then the modifier, so 3-wound
+  // models. Modifying before setting gives 4; taking the lowest set gives 2.
+  { cruncher_case: "canonical-critical-wound-devastating-damage.json", label: "Wounds set to 4 and 3, then -1", buffs: [
+    { source: { kind: "ability", abilityId: "fabricated-wounds-three", abilityKind: "unit" }, contribution: { type: "wounds-characteristic", value: 3 } },
+    { source: { kind: "ability", abilityId: "fabricated-wounds-four", abilityKind: "unit" }, contribution: { type: "wounds-characteristic", value: 4 } },
+    { source: { kind: "ability", abilityId: "fabricated-wounds-minus", abilityKind: "unit" }, contribution: { type: "wounds-mod", value: -1 } },
+  ] },
 ];
 
 function genAllocation(): void {

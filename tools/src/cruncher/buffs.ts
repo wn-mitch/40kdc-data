@@ -91,6 +91,8 @@ export type BuffContribution =
   | { type: "toughness-mod"; value: number }
   /** Additive modifier to the defender's Wounds stat; a model keeps at least 1 Wound. */
   | { type: "wounds-mod"; value: number }
+  /** Sets the defender's Wounds characteristic; applies before any `wounds-mod`. */
+  | { type: "wounds-characteristic"; value: number }
   /**
    * Additive modifier to the attacker's weapon AP. AP is signed against the
    * defender's save (negative = more piercing), so a value of `-1` here makes
@@ -568,6 +570,8 @@ export type ResolvedModifiers = {
   strengthMod: { value: number; sources: BuffSource[] };
   toughnessMod: { value: number; sources: BuffSource[] };
   woundsMod: { value: number; sources: BuffSource[] };
+  /** The highest set Wounds characteristic, replacing the profile's before `woundsMod`. */
+  woundsCharacteristic: { value: number; dominantSource: BuffSource } | null;
   apMod: { value: number; sources: BuffSource[] };
   /** Ability-set weapon characteristics; an absent stat keeps the profile's value. */
   statSet: Partial<Record<SetStat, { value: number; dominantSource: BuffSource }>>;
@@ -774,6 +778,7 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     strengthMod: { value: 0, sources: [] },
     toughnessMod: { value: 0, sources: [] },
     woundsMod: { value: 0, sources: [] },
+    woundsCharacteristic: null,
     apMod: { value: 0, sources: [] },
     statSet: {},
     damageReduction: { value: 0, dominantSource: null },
@@ -868,6 +873,15 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
       case "wounds-mod":
         out.woundsMod.value += c.value;
         out.woundsMod.sources.push(b.source);
+        break;
+      case "wounds-characteristic":
+        if (
+          out.woundsCharacteristic === null ||
+          c.value > out.woundsCharacteristic.value ||
+          (c.value === out.woundsCharacteristic.value && rank(b.source) < rank(out.woundsCharacteristic.dominantSource))
+        ) {
+          out.woundsCharacteristic = { value: c.value, dominantSource: b.source };
+        }
         break;
       case "ap-mod":
         out.apMod.value += c.value;
