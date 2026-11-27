@@ -6,6 +6,8 @@ import {
   DAMAGE_DEALT_MEASURES,
   allocateAttached,
   allocateSequence,
+  type AllocationSequenceOutput,
+  type AttachedAllocationOutput,
   attributeStages,
   loadoutHitModifier,
   profileApplicableBuffs,
@@ -85,14 +87,40 @@ export function lineGroupLabel(ds: Dataset, group: Pick<LineGroup, "bearer" | "r
 }
 
 /**
- * A line's models killed from the exact allocation of its groups in turn: the expected-value
- * stages count a damaged model as part of a kill. Its damage dealt stays the expected value the
- * loadout scoring ranks lines by. Kept as they are when the allocation refuses the line (too many
- * attacks, or a rule it does not model).
+ * A CHARACTER leading the target: its unit (see `leaderTarget`) and the defensive rules it keeps on
+ * its own model, which only its attacks take.
  */
-function exactKills(ds: Dataset, stages: AttributedStage[], inputs: readonly EngineInput[]): AttributedStage[] {
+export type AttachedLeader = { unit: Unit; buffs: readonly Buff[] };
+
+/**
+ * Exact allocation of `inputs` in turn into the target, or with a `leader` into the attached unit:
+ * the inputs' targets are its Bodyguard models and the leader its CHARACTER model, which takes
+ * attacks once the Bodyguard is destroyed, or first from a line with [PRECISION]. Both groups take
+ * each attack with the attached unit's keywords, so an Anti or Hunter rule against the CHARACTER's
+ * keywords applies to the whole unit.
+ */
+function allocateVolley(ds: Dataset, inputs: readonly EngineInput[], leader: AttachedLeader | null): AllocationSequenceOutput | AttachedAllocationOutput {
+  if (!leader) return allocateSequence(inputs, ds);
+  const { unit, buffs } = leader;
+  return allocateAttached(
+    inputs.map((input) => [
+      { ...input, target: { ...input.target, unit: { ...input.target.unit, keywords: unit.keywords } } },
+      { ...input, target: { unit, profileIndex: 0, modelCount: 1 }, buffs: [...input.buffs, ...buffs] },
+    ]),
+    [{ character: false }, { character: true }],
+    ds,
+  );
+}
+
+/**
+ * A line's models killed from the exact allocation of its groups in turn, counting a leader the
+ * target has: the expected-value stages count a damaged model as part of a kill. Its damage dealt
+ * stays the expected value the loadout scoring ranks lines by. Kept as they are when the allocation
+ * refuses the line (too many attacks, or a rule it does not model).
+ */
+function exactKills(ds: Dataset, stages: AttributedStage[], inputs: readonly EngineInput[], leader: AttachedLeader | null): AttributedStage[] {
   try {
-    return withExactKills(stages, { modelsKilled: allocateSequence(inputs, ds).modelsDestroyed });
+    return withExactKills(stages, { modelsKilled: allocateVolley(ds, inputs, leader).modelsDestroyed });
   } catch {
     return stages;
   }
@@ -124,6 +152,8 @@ export function crunchLine(input: {
   owner: Unit | undefined;
   models: number;
   target: { unit: Unit; modelCount: number };
+  /** A CHARACTER leading the target, which the line's exact kills count. */
+  leader?: AttachedLeader | null;
   buffs: readonly Buff[];
   context: EngineContext;
   rows?: readonly LineRow[];
@@ -149,7 +179,7 @@ export function crunchLine(input: {
     const groups = input.rows ? buffGroups(input.buffs, input.rows) : [{ models, buffs: [...input.buffs] }];
     if (groups.length === 1) {
       const attributed = crunchModels(models, groups[0]!.buffs);
-      return { ...line, models, attributed: exactKills(ds, attributed, inputs), inputs };
+      return { ...line, models, attributed: exactKills(ds, attributed, inputs, input.leader ?? null), inputs };
     }
     const crunched: LineGroup[] = groups.map((group) => ({
       models: group.models,
@@ -157,7 +187,7 @@ export function crunchLine(input: {
       ...(group.rerollOne ? { rerollOne: group.rerollOne } : {}),
       attributed: crunchModels(group.models, group.buffs),
     }));
-    return { ...line, models, attributed: exactKills(ds, sumGroups(ds, crunched, input.target), inputs), groups: crunched, inputs };
+    return { ...line, models, attributed: exactKills(ds, sumGroups(ds, crunched, input.target), inputs, input.leader ?? null), groups: crunched, inputs };
   } catch (err) {
     return { ...line, models, attributed: [], error: (err as Error).message };
   }
@@ -175,6 +205,8 @@ export function crunchLines(input: {
   selection: LineSelection | null;
   carried: (line: WeaponLine) => number;
   target: { unit: Unit; modelCount: number };
+  /** A CHARACTER leading the target, which each line's exact kills count. */
+  leader?: AttachedLeader | null;
   buffsOf: (memberId: string) => readonly Buff[];
   contextOf: (memberId: string) => EngineContext;
 }): LineResult[] {
@@ -186,6 +218,7 @@ export function crunchLines(input: {
       owner: input.members.find((member) => member.memberId === line.ownerMemberId)?.unit.raw,
       models,
       target: input.target,
+      leader: input.leader ?? null,
       buffs: input.buffsOf(line.ownerMemberId),
       context: input.contextOf(line.ownerMemberId),
       rows: lineRows(input.selection, line, models),
@@ -213,31 +246,21 @@ export type KillOdds = {
  * damage lost to overkill both count. `error` explains a volley the exact allocation refuses
  * (too many attacks, or a rule it does not model).
  *
- * With a `leader`, the target is an attached unit: the lines' targets are its Bodyguard models and
- * `leader` its CHARACTER model, which takes attacks once the Bodyguard is destroyed, or first from a
- * line with [PRECISION]. Both groups take each attack with the attached unit's keywords, so an
- * Anti or Hunter rule against the CHARACTER's keywords applies to the whole unit. The
- * distributions then count both, the CHARACTER as one model more. `leaderBuffs` are the defensive
- * rules the CHARACTER keeps on its own model, which only its attacks take.
+ * With a `leader`, the target is an attached unit (see {@link allocateVolley}), and the
+ * distributions count the CHARACTER as one model more.
  */
-export function killOdds(ds: Dataset, lines: readonly LineResult[], leader: Unit | null = null, leaderBuffs: readonly Buff[] = []): KillOdds | { error: string } | null {
+export function killOdds(ds: Dataset, lines: readonly LineResult[], leader: AttachedLeader | null = null): KillOdds | { error: string } | null {
   const inputs = lines.flatMap((line) => line.inputs ?? []);
   if (inputs.length === 0) return null;
   try {
-    if (leader) {
-      const out = allocateAttached(
-        // One unit, so both groups take the attack with every keyword of the attached unit.
-        inputs.map((input) => [
-          { ...input, target: { ...input.target, unit: { ...input.target.unit, keywords: leader.keywords } } },
-          { ...input, target: { unit: leader, profileIndex: 0, modelCount: 1 }, buffs: [...input.buffs, ...leaderBuffs] },
-        ]),
-        [{ character: false }, { character: true }],
-        ds,
-      );
-      return { modelsDestroyed: out.modelsDestroyedDistribution, woundsDealt: out.woundsDealtDistribution, expectedKilled: out.modelsDestroyed, expectedDealt: out.damageDealt, leaderKilled: out.groups[1]!.modelsDestroyedDistribution[1] ?? 0 };
-    }
-    const out = allocateSequence(inputs, ds);
-    return { modelsDestroyed: out.modelsDestroyedDistribution, woundsDealt: out.woundsDealtDistribution, expectedKilled: out.modelsDestroyed, expectedDealt: out.damageDealt };
+    const out = allocateVolley(ds, inputs, leader);
+    return {
+      modelsDestroyed: out.modelsDestroyedDistribution,
+      woundsDealt: out.woundsDealtDistribution,
+      expectedKilled: out.modelsDestroyed,
+      expectedDealt: out.damageDealt,
+      ...("groups" in out ? { leaderKilled: out.groups[1]!.modelsDestroyedDistribution[1] ?? 0 } : {}),
+    };
   } catch (err) {
     return { error: (err as Error).message };
   }

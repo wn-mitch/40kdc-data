@@ -11,7 +11,7 @@ import {
   type EngineContext,
 } from "@alpaca-software/40kdc-data";
 
-import { atLeast, crunchLines, killOdds } from "./line-results.js";
+import { atLeast, crunchLines, killOdds, type AttachedLeader } from "./line-results.js";
 import { enabledLeverBuffs, leaderTarget, memberLevers, memberUnits, memberWargear } from "./output-model.js";
 import { stageOf } from "./projection-model.js";
 import { defaultWeaponCount, lineId, lineRows, memberCounts, selectLines, weaponLines } from "./weapon-lines.js";
@@ -29,7 +29,7 @@ const MIXED = new Map([["kustom-krumpa", 5], ["kustom-shoota-nobz", 4], ["paired
  * Salvo's output pane, from the attacker's default levers (plus `extra` buffs) to its line results,
  * for one unit with `counts` (its default loadout when omitted).
  */
-function salvoUnit(unitId: string, factionId: string, phase: EngineContext["phase"], counts?: ReadonlyMap<string, number>, extra: Buff[] = []) {
+function salvoUnit(unitId: string, factionId: string, phase: EngineContext["phase"], counts?: ReadonlyMap<string, number>, extra: Buff[] = [], leader: AttachedLeader | null = null) {
   const attacker = { unitId, factionId, detachmentId: null, attachedUnitIds: [], supportUnitIds: [] };
   const [levers] = memberLevers(ds, attacker, { phase });
   const [member] = memberUnits(ds, factionId, [unitId]);
@@ -55,6 +55,7 @@ function salvoUnit(unitId: string, factionId: string, phase: EngineContext["phas
     selection,
     carried: (line) => counts!.get(line.weaponId) ?? 0,
     target,
+    leader,
     buffsOf: () => wargear.buffs,
     contextOf: () => levers!.context,
   });
@@ -194,8 +195,9 @@ describe("kill odds of the combined volley", () => {
 
   it("reaches a leading CHARACTER after its Bodyguard, or first with [PRECISION]", () => {
     const bodyguard = { T: 5, Sv: 3, invuln: null, W: 2, modelCount: target.modelCount, fnp: null, keywords: ["Infantry", "Imperium"] };
-    const captain = leaderTarget(ds, "captain", bodyguard);
-    expect(captain?.profiles[0]).toMatchObject({ T: 5, W: 5, Sv: 3, invuln_sv: 4 });
+    const captainUnit = leaderTarget(ds, "captain", bodyguard);
+    expect(captainUnit?.profiles[0]).toMatchObject({ T: 5, W: 5, Sv: 3, invuln_sv: 4 });
+    const captain = { unit: captainUnit!, buffs: [] };
     const odds = (lines: ReturnType<typeof salvoNobz>) => {
       const out = killOdds(ds, lines.results.filter((result) => lines.selection.firing.has(result.id) && !result.error), captain);
       if (out === null || "error" in out || out.leaderKilled === undefined) throw new Error(`no odds: ${JSON.stringify(out)}`);
@@ -207,8 +209,17 @@ describe("kill odds of the combined volley", () => {
     const nobz = odds(salvoNobz("fight", MIXED));
     expect(nobz.leader).toBeLessThanOrEqual(nobz.bodyguardWiped + 1e-12);
     // Three Eliminators' bolt sniper rifles have [PRECISION]: the captain takes their wounds first.
-    const snipers = odds(salvoUnit("eliminator-squad", "adeptus-astartes", "shooting", new Map([["bolt-sniper-rifle-eliminator-squad", 3], ["bolt-pistol-eliminator-squad", 3]])));
+    const loadout = new Map([["bolt-sniper-rifle-eliminator-squad", 3], ["bolt-pistol-eliminator-squad", 3]]);
+    const snipers = odds(salvoUnit("eliminator-squad", "adeptus-astartes", "shooting", loadout));
     expect(snipers.leader).toBeGreaterThan(0.05);
     expect(snipers.leader).toBeGreaterThan(snipers.bodyguardWiped);
+    // A line's own kills count the leader too: alone, the sniper line's Kill is its volley's.
+    const led = salvoUnit("eliminator-squad", "adeptus-astartes", "shooting", loadout, [], captain);
+    const line = led.results.find((result) => result.weaponId === "bolt-sniper-rifle-eliminator-squad")!;
+    const alone = killOdds(ds, [line], captain);
+    if (alone === null || "error" in alone) throw new Error(`no odds: ${JSON.stringify(alone)}`);
+    expect(stageOf(line.attributed, "models-killed")!.expected).toBeCloseTo(alone.expectedKilled, 9);
+    const unled = salvoUnit("eliminator-squad", "adeptus-astartes", "shooting", loadout).results.find((result) => result.weaponId === line.weaponId)!;
+    expect(stageOf(unled.attributed, "models-killed")!.expected).not.toBeCloseTo(alone.expectedKilled, 3);
   });
 });

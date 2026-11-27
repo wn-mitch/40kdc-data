@@ -195,6 +195,18 @@
   const leader = $derived(salvo.targetMode === "dataset" ? leaderTarget(ds, salvo.targetLeaderId, salvo.manualTarget) : null);
   const targetModels = $derived(salvo.manualTarget.modelCount + (leader ? 1 : 0));
   const lineContextOf = (memberId: string): EngineContext => (leader ? { ...contextOf(memberId), targetModelCount: targetModels } : contextOf(memberId));
+  // The leader's personal defences (a -1 Damage, an invulnerable save of its own) only its group takes.
+  const leaderBuffs = $derived.by<Buff[]>(() => {
+    const unit = salvo.targetUnitId ? ds.units.getAny(salvo.targetUnitId) : undefined;
+    const own = leader && salvo.targetLeaderId ? ds.units.getAny(salvo.targetLeaderId) : undefined;
+    if (!unit || !own) return [];
+    try {
+      return leaderOwnDefences(ds, unit, own, { detachmentId: salvo.defenderDetachmentId, stratagemIds: [], enhancementId: null }, context);
+    } catch {
+      return [];
+    }
+  });
+  const attachedLeader = $derived(leader ? { unit: leader, buffs: leaderBuffs } : null);
   const selection = $derived.by<{ value: LineSelection | null; error?: string }>(() => {
     if (!selectionValid) return { value: null };
     try {
@@ -248,6 +260,7 @@
         selection: selection.value,
         carried,
         target: { unit: target, modelCount: salvo.manualTarget.modelCount },
+        leader: attachedLeader,
         buffsOf: (memberId) => wargearOf(memberId)?.wargear.buffs ?? buffsOf(memberId),
         contextOf: lineContextOf,
       })
@@ -259,18 +272,7 @@
   }
 
   // The Combined row's lines as one exact distribution of kills.
-  // The leader's personal defences (a -1 Damage, an invulnerable save of its own) only its group takes.
-  const leaderBuffs = $derived.by<Buff[]>(() => {
-    const unit = salvo.targetUnitId ? ds.units.getAny(salvo.targetUnitId) : undefined;
-    const own = leader && salvo.targetLeaderId ? ds.units.getAny(salvo.targetLeaderId) : undefined;
-    if (!unit || !own) return [];
-    try {
-      return leaderOwnDefences(ds, unit, own, { detachmentId: salvo.defenderDetachmentId, stratagemIds: [], enhancementId: null }, context);
-    } catch {
-      return [];
-    }
-  });
-  const odds = $derived(killOdds(ds, lineResults.filter((r) => included(r.id) && !r.error), leader, leaderBuffs));
+  const odds = $derived(killOdds(ds, lineResults.filter((r) => included(r.id) && !r.error), attachedLeader));
 
   // The "Combined" row, decomposed the same way per-line cells are (see
   // aggregateStages for the additive vs models-killed math). Its damage dealt and kills are the
