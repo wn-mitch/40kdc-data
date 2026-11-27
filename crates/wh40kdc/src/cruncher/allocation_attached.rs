@@ -71,7 +71,8 @@ fn shared_rolls(a: &AttackModel, b: &AttackModel) -> bool {
 /// same attacker and context, with the group's own profile, model count and
 /// defensive buffs. Each group must see the same Hit and Wound rolls, so give
 /// every group the attached unit's keywords and its Toughness, the highest
-/// among the Bodyguard models (05.02.01).
+/// among the Bodyguard models (05.02.01), and its models as the context's
+/// `target_model_count`, which Blast and Cleave count.
 ///
 /// `groups` is the defender's allocation order, CHARACTER groups after every
 /// other group. The current group is the first with a model left; an attack's
@@ -169,7 +170,7 @@ pub fn allocate_attached(
             }
             if !shared_rolls(model, &models[0]) {
                 return Err(AllocationError::Attached(
-                    "the groups disagree on the attack's Hit or Wound rolls; give each group the attached unit's keywords and Toughness".into(),
+                    "the groups disagree on the attack's Hit or Wound rolls; give each group the attached unit's keywords, Toughness and model count".into(),
                 ));
             }
         }

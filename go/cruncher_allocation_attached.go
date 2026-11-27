@@ -53,7 +53,8 @@ func sharedRolls(m *AttackModel) string {
 // against group g: the same attacker and context, with the group's own
 // profile, model count and defensive buffs. Each group must see the same Hit
 // and Wound rolls, so give every group the attached unit's keywords and its
-// Toughness, the highest among the Bodyguard models (05.02.01).
+// Toughness, the highest among the Bodyguard models (05.02.01), and its models
+// as context targetModelCount, which Blast and Cleave count.
 //
 // groups is the defender's allocation order, CHARACTER groups after every
 // other group. The current group is the first with a model left; an attack's
@@ -157,7 +158,7 @@ func AllocateAttached(lines [][]map[string]any, groups []TargetGroup, ds *Datase
 				return AttachedAllocationOutput{}, &crunchError{"allocateAttached: every line must target the same groups"}
 			}
 			if sharedRolls(model) != shared {
-				return AttachedAllocationOutput{}, &crunchError{"allocateAttached: the groups disagree on the attack's Hit or Wound rolls; give each group the attached unit's keywords and Toughness"}
+				return AttachedAllocationOutput{}, &crunchError{"allocateAttached: the groups disagree on the attack's Hit or Wound rolls; give each group the attached unit's keywords, Toughness and model count"}
 			}
 		}
 		state, err = allocateGroupsFrom(models, groups, geometry, zeroing, state)

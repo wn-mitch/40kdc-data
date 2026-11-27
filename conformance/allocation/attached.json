@@ -380,5 +380,105 @@
         }
       ]
     }
+  },
+  {
+    "name": "frag missile x2 [BLAST] into intercessors x9 led by a captain, ten models for Blast",
+    "groups": [
+      {
+        "character": false,
+        "unitId": "intercessor-squad",
+        "profileIndex": 0,
+        "modelCount": 9,
+        "buffs": []
+      },
+      {
+        "character": true,
+        "unitId": "captain",
+        "profileIndex": 0,
+        "modelCount": 1,
+        "buffs": []
+      }
+    ],
+    "lines": [
+      {
+        "attacker": {
+          "weaponId": "missile-launcher",
+          "profileIndex": 1
+        },
+        "modelsFiring": 2,
+        "context": {
+          "phase": "shooting",
+          "attackerStationary": false,
+          "withinHalfRange": false,
+          "targetModelCount": 10
+        },
+        "buffs": []
+      }
+    ],
+    "expected": {
+      "damageDealt": 0.8148148148148158,
+      "modelsDestroyed": 0.2035664434830944,
+      "modelsDestroyedDistribution": [
+        0.8047098006590236,
+        0.18713270262754167,
+        0.008039457577580638,
+        0.00011733265037291998,
+        7.046799575199851e-7,
+        1.803707508299679e-9,
+        1.816860298563564e-12,
+        5.611119224545109e-16,
+        2.282218404411047e-20,
+        0,
+        0
+      ],
+      "woundsDealtDistribution": [
+        0.4363426397052694,
+        0.36836716095375427,
+        0.14881248502454186,
+        0.038320217602999807,
+        0.007054390239199727,
+        0.000985067338380911,
+        0.00010788876885440926,
+        0.00000944388151851072,
+        6.666712170140955e-7,
+        3.800874050588962e-8,
+        1.7405120097356441e-9,
+        6.319549856403493e-11,
+        1.779380760805688e-12,
+        3.7479537757876036e-14,
+        5.559312866764979e-16,
+        5.180635778013076e-18,
+        2.282218404411047e-20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "groups": [
+        {
+          "modelsDestroyedDistribution": [
+            0.8047098006590236,
+            0.18713270262754167,
+            0.008039457577580638,
+            0.00011733265037291998,
+            7.046799575199851e-7,
+            1.803707508299679e-9,
+            1.816860298563564e-12,
+            5.611119224545109e-16,
+            2.282218404411047e-20,
+            0
+          ]
+        },
+        {
+          "modelsDestroyedDistribution": [
+            1.0000000000000013,
+            0
+          ]
+        }
+      ]
+    }
   }
 ]

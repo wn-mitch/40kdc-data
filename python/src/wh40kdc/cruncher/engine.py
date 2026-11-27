@@ -273,11 +273,16 @@ def crunch_model(
         target_model_count = (unit.get("model_count") or {}).get("min")
     if target_model_count is None:
         target_model_count = 1
+    # Blast and Cleave count the models in the whole target unit: the context's when it says, which
+    # for one group of an attached unit is more than the group's modelCount.
+    unit_model_count = ctx.get("targetModelCount")
+    if unit_model_count is None:
+        unit_model_count = target_model_count
     blast_params = (blast.get("parameters") or {}) if blast else {}
     # Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
     blast_value = blast_params.get("value") if "value" in blast_params else 1
     blast_extra = (
-        math.floor(target_model_count / 5) * eval_stat_value(blast_value)
+        math.floor(unit_model_count / 5) * eval_stat_value(blast_value)
         if blast
         else 0
     )
@@ -286,7 +291,7 @@ def crunch_model(
     cleave = _find_keyword(resolved, "cleave")
     cleave_params = (cleave.get("parameters") or {}) if cleave else {}
     cleave_extra = (
-        math.floor(target_model_count / 5) * eval_stat_value(cleave_params["value"])
+        math.floor(unit_model_count / 5) * eval_stat_value(cleave_params["value"])
         if "value" in cleave_params
         else 0
     )

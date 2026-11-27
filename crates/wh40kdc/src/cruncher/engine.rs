@@ -438,11 +438,14 @@ pub fn crunch_model(
             .map(|mc| mc.min.get())
             .unwrap_or(1)
     });
+    // Blast and Cleave count the models in the whole target unit: the context's when it says, which
+    // for one group of an attached unit is more than the group's `model_count`.
+    let unit_model_count = ctx.target_model_count.map_or(target_model_count, u64::from);
     // Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
     let blast_extra_per_model = match blast {
         Some(keyword) => match parameter(keyword, "value") {
-            Some(value) => (target_model_count / 5) as f64 * eval_param_value(Some(value))?,
-            None => (target_model_count / 5) as f64,
+            Some(value) => (unit_model_count / 5) as f64 * eval_param_value(Some(value))?,
+            None => (unit_model_count / 5) as f64,
         },
         None => 0.0,
     };
@@ -450,7 +453,7 @@ pub fn crunch_model(
     let cleave_extra_per_model = match find_extra_keyword(&resolved, "cleave")
         .and_then(|keyword| parameter(keyword, "value"))
     {
-        Some(value) => (target_model_count / 5) as f64 * eval_param_value(Some(value))?,
+        Some(value) => (unit_model_count / 5) as f64 * eval_param_value(Some(value))?,
         None => 0.0,
     };
     let models_firing = input.models_firing as f64;

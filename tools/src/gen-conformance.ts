@@ -1340,8 +1340,8 @@ const line = (weaponId: string, profileIndex: number, modelsFiring: number, cont
 /**
  * Attached-unit allocation corpus: lines into a Bodyguard group then CHARACTER groups, each with its
  * own save, Wounds and Feel No Pain, with and without [PRECISION], across lines, with Devastating
- * Wounds, with critical wounds of their own AP allocated hit by hit, and with a CHARACTER given the
- * Bodyguard's Toughness.
+ * Wounds, with critical wounds of their own AP allocated hit by hit, with a CHARACTER given the
+ * Bodyguard's Toughness, and with Blast counting the whole unit's models.
  */
 const ALLOCATION_ATTACHED_CASES: Array<{ name: string; groups: AttachedGroupCase[]; lines: AttachedLineCase[] }> = [
   { name: "bolt-rifle x10 into intercessors x5 led by a captain", groups: [squad("intercessor-squad", 5), leader("captain")], lines: [line("bolt-rifle", 1, 10)] },
@@ -1355,6 +1355,12 @@ const ALLOCATION_ATTACHED_CASES: Array<{ name: string; groups: AttachedGroupCase
     name: "stalker bolt rifle x5 [PRECISION] with critical AP into eliminators x3 led by a captain with FNP 5+ at the Bodyguard's T4",
     groups: [squad("eliminator-squad", 3), leader("captain", [fnp5, bodyguardToughness(-1)])],
     lines: [line("stalker-bolt-rifle", 0, 5, stationary, [precisionCritAp])],
+  },
+  {
+    // Blast counts the whole attached unit: ten models, so two more attacks a firer, not one.
+    name: "frag missile x2 [BLAST] into intercessors x9 led by a captain, ten models for Blast",
+    groups: [squad("intercessor-squad", 9), leader("captain")],
+    lines: [line("missile-launcher", 1, 2, { ...shooting, targetModelCount: 10 } as EngineInput["context"])],
   },
 ];
 

@@ -647,7 +647,8 @@ def allocate_attached(
     ``g``: the same attacker and context, with the group's own profile, model
     count and defensive buffs. Each group must see the same Hit and Wound
     rolls, so give every group the attached unit's keywords and its Toughness,
-    the highest among the Bodyguard models (05.02.01).
+    the highest among the Bodyguard models (05.02.01), and its models as
+    ``context["targetModelCount"]``, which Blast and Cleave count.
 
     ``groups`` is the defender's allocation order, CHARACTER groups after every
     other group. The current group is the first with a model left; an attack's
@@ -730,7 +731,7 @@ def allocate_attached(
             if _shared_rolls(model) != _shared_rolls(models[0]):
                 raise ValueError(
                     "allocate_attached: the groups disagree on the attack's Hit or Wound rolls; "
-                    "give each group the attached unit's keywords and Toughness"
+                    "give each group the attached unit's keywords, Toughness and model count"
                 )
         state = _allocate_groups_from(models, groups, geometry, resolved, state)
     assert state is not None

@@ -201,13 +201,16 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const rapidFireExtraPerModel = rapidFire && halfRange ? evalStatValue(rapidFire.parameters?.value) : 0;
   const blast = findKeyword(resolved, "blast");
   const targetModelCount = input.target.modelCount ?? input.target.unit.model_count?.min ?? 1;
+  // Blast and Cleave count the models in the whole target unit: the context's when it says, which
+  // for one group of an attached unit is more than the group's `modelCount`.
+  const unitModelCount = ctx.targetModelCount ?? targetModelCount;
   // Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
   const blastExtraPerModel = blast
-    ? Math.floor(targetModelCount / 5) * (blast.parameters?.value !== undefined ? evalStatValue(blast.parameters.value) : 1)
+    ? Math.floor(unitModelCount / 5) * (blast.parameters?.value !== undefined ? evalStatValue(blast.parameters.value) : 1)
     : 0;
   // [CLEAVE X] adds X attacks per five target models when the weapon picks one target, as every crunch does.
   const cleave = findKeyword(resolved, "cleave");
-  const cleaveExtraPerModel = cleave?.parameters?.value !== undefined ? Math.floor(targetModelCount / 5) * evalStatValue(cleave.parameters.value) : 0;
+  const cleaveExtraPerModel = cleave?.parameters?.value !== undefined ? Math.floor(unitModelCount / 5) * evalStatValue(cleave.parameters.value) : 0;
   const attacks = input.modelsFiring * (attacksPerModel + rapidFireExtraPerModel + blastExtraPerModel + cleaveExtraPerModel);
   stages.push({
     name: "attacks",

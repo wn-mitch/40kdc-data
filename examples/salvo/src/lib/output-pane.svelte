@@ -188,6 +188,11 @@
   // package's loadout scoring (Pistols or other ranged weapons per model, one
   // ordinary melee weapon per model), the same the damage matrix applies.
   const target = $derived(synthTarget(salvo.manualTarget));
+  // A CHARACTER leading the dataset target is one more model: for the exact volley to destroy, and
+  // for Blast and Cleave, which count the whole attached unit.
+  const leader = $derived(salvo.targetMode === "dataset" ? leaderTarget(ds, salvo.targetLeaderId, salvo.manualTarget) : null);
+  const targetModels = $derived(salvo.manualTarget.modelCount + (leader ? 1 : 0));
+  const lineContextOf = (memberId: string): EngineContext => (leader ? { ...contextOf(memberId), targetModelCount: targetModels } : contextOf(memberId));
   const selection = $derived.by<{ value: LineSelection | null; error?: string }>(() => {
     if (!selectionValid) return { value: null };
     try {
@@ -200,7 +205,7 @@
             counts: counts[index],
             grants: wargear[index].grants,
             buffs: wargear[index].buffs,
-            context: contextOf(memberId),
+            context: lineContextOf(memberId),
           })),
           target: { unit: target, modelCount: salvo.manualTarget.modelCount },
           buffs: allBuffs,
@@ -242,7 +247,7 @@
         carried,
         target: { unit: target, modelCount: salvo.manualTarget.modelCount },
         buffsOf: (memberId) => wargearOf(memberId)?.wargear.buffs ?? buffsOf(memberId),
-        contextOf,
+        contextOf: lineContextOf,
       })
     : []);
 
@@ -252,9 +257,6 @@
   }
 
   // The Combined row's lines as one exact distribution of kills.
-  // A CHARACTER leading the dataset target is one more model for the exact volley to destroy.
-  const leader = $derived(salvo.targetMode === "dataset" ? leaderTarget(ds, salvo.targetLeaderId, salvo.manualTarget) : null);
-  const targetModels = $derived(salvo.manualTarget.modelCount + (leader ? 1 : 0));
   const odds = $derived(killOdds(ds, lineResults.filter((r) => included(r.id) && !r.error), leader));
 
   // The "Combined" row, decomposed the same way per-line cells are (see

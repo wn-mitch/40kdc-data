@@ -462,8 +462,9 @@ function sharedRolls(model: AttackModel): string {
  * Exact allocation of several attack lines into an attached unit, fired in the order given.
  * `lines[l][g]` is line `l` crunched against group `g`: the same attacker and context, with the
  * group's own profile, model count and defensive buffs. Each group must see the same Hit and Wound
- * rolls, so give every group the attached unit's keywords and its Toughness, the highest among the
- * Bodyguard models (05.02.01).
+ * rolls, so give every group the attached unit's keywords, its Toughness, the highest among the
+ * Bodyguard models (05.02.01), and its models as `context.targetModelCount`, which Blast and Cleave
+ * count.
  *
  * `groups` is the defender's allocation order, CHARACTER groups after every other group. The
  * current group is the first with a model left; an attack's save, Damage and Feel No Pain are that
@@ -513,7 +514,7 @@ export function allocateAttached(
       if (model.unmodelled.length > 0) throw new Error(`allocate: ${model.unmodelled.join(", ")} not modelled by exact allocation`);
       if (model.modelCount !== geometry[g]!.models || model.wounds !== geometry[g]!.wounds) throw new Error("allocateAttached: every line must target the same groups");
       if (sharedRolls(model) !== sharedRolls(models[0]!)) {
-        throw new Error("allocateAttached: the groups disagree on the attack's Hit or Wound rolls; give each group the attached unit's keywords and Toughness");
+        throw new Error("allocateAttached: the groups disagree on the attack's Hit or Wound rolls; give each group the attached unit's keywords, Toughness and model count");
       }
     });
     state = allocateGroupsFrom(models, groups, geometry, resolvedZeroing, state);

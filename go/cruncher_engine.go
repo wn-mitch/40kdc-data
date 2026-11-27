@@ -301,6 +301,12 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 	if isNumber(targetModelCount) {
 		tmc, _ = num(targetModelCount)
 	}
+	// Blast and Cleave count the models in the whole target unit: the context's when it says, which
+	// for one group of an attached unit is more than the group's modelCount.
+	unitModels := tmc
+	if isNumber(ctx["targetModelCount"]) {
+		unitModels, _ = num(ctx["targetModelCount"])
+	}
 	blastExtra := 0.0
 	if blast != nil {
 		// Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
@@ -312,7 +318,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 			}
 			value = parsed
 		}
-		blastExtra = math.Floor(tmc/5) * value
+		blastExtra = math.Floor(unitModels/5) * value
 	}
 	// [CLEAVE X] adds X attacks per five target models when the weapon picks one target, as every crunch does.
 	cleaveExtra := 0.0
@@ -322,7 +328,7 @@ func crunchModel(input map[string]any, ds *Dataset) ([]map[string]any, *resolved
 			if err != nil {
 				return nil, nil, nil, err
 			}
-			cleaveExtra = math.Floor(tmc/5) * value
+			cleaveExtra = math.Floor(unitModels/5) * value
 		}
 	}
 	modelsFiring, _ := num(input["modelsFiring"])
