@@ -4,6 +4,7 @@
  */
 import {
   DAMAGE_DEALT_MEASURES,
+  allocateAttached,
   allocateSequence,
   attributeStages,
   loadoutHitModifier,
@@ -202,6 +203,8 @@ export type KillOdds = {
   expectedKilled: number;
   /** Expected wounds dealt. */
   expectedDealt: number;
+  /** With a CHARACTER leading the target, the chance the volley destroys it. */
+  leaderKilled?: number;
 };
 
 /**
@@ -209,11 +212,29 @@ export type KillOdds = {
  * order given, each into what the earlier ones left, so damage carried over to a damaged model and
  * damage lost to overkill both count. `error` explains a volley the exact allocation refuses
  * (too many attacks, or a rule it does not model).
+ *
+ * With a `leader`, the target is an attached unit: the lines' targets are its Bodyguard models and
+ * `leader` its CHARACTER model, which takes attacks once the Bodyguard is destroyed, or first from a
+ * line with [PRECISION]. Both groups take each attack with the attached unit's keywords, so an
+ * Anti or Hunter rule against the CHARACTER's keywords applies to the whole unit. The
+ * distributions then count both, the CHARACTER as one model more.
  */
-export function killOdds(ds: Dataset, lines: readonly LineResult[]): KillOdds | { error: string } | null {
+export function killOdds(ds: Dataset, lines: readonly LineResult[], leader: Unit | null = null): KillOdds | { error: string } | null {
   const inputs = lines.flatMap((line) => line.inputs ?? []);
   if (inputs.length === 0) return null;
   try {
+    if (leader) {
+      const out = allocateAttached(
+        // One unit, so both groups take the attack with every keyword of the attached unit.
+        inputs.map((input) => [
+          { ...input, target: { ...input.target, unit: { ...input.target.unit, keywords: leader.keywords } } },
+          { ...input, target: { unit: leader, profileIndex: 0, modelCount: 1 } },
+        ]),
+        [{ character: false }, { character: true }],
+        ds,
+      );
+      return { modelsDestroyed: out.modelsDestroyedDistribution, woundsDealt: out.woundsDealtDistribution, expectedKilled: out.modelsDestroyed, expectedDealt: out.damageDealt, leaderKilled: out.groups[1]!.modelsDestroyedDistribution[1] ?? 0 };
+    }
     const out = allocateSequence(inputs, ds);
     return { modelsDestroyed: out.modelsDestroyedDistribution, woundsDealt: out.woundsDealtDistribution, expectedKilled: out.modelsDestroyed, expectedDealt: out.damageDealt };
   } catch (err) {

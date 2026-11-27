@@ -3,9 +3,12 @@
   // Two volleys with the same expected kills can have very different odds of finishing a unit.
   import { atLeast, fmtChance as pct, type KillOdds } from "./line-results.js";
 
-  let { odds, modelCount, mortalsLeftOut }: {
+  let { odds, modelCount, leaderName = null, mortalsLeftOut }: {
     odds: KillOdds | { error: string } | null;
+    /** The target's models, counting a CHARACTER leading it. */
     modelCount: number;
+    /** The CHARACTER leading the target, when one does. */
+    leaderName?: string | null;
     mortalsLeftOut: boolean;
   } = $props();
 
@@ -25,7 +28,7 @@
       }
       return modelCount;
     };
-    return { rows, wipe: tail[modelCount - 1] ?? 0, none: odds.modelsDestroyed[0] ?? 0, low: quantile(0.1), median: quantile(0.5), high: quantile(0.9) };
+    return { rows, leader: odds.leaderKilled, wipe: tail[modelCount - 1] ?? 0, none: odds.modelsDestroyed[0] ?? 0, low: quantile(0.1), median: quantile(0.5), high: quantile(0.9) };
   });
 </script>
 
@@ -36,6 +39,9 @@
   {:else if shown}
     <p class="summary">
       <span><span class="label">Wipe</span> <span class="num strong">{pct(shown.wipe)}</span></span>
+      {#if leaderName && shown.leader !== undefined}
+        <span title={`Exact chance to destroy ${leaderName}`}><span class="label">{leaderName} killed</span> <span class="num strong">{pct(shown.leader)}</span></span>
+      {/if}
       <span><span class="label">No kills</span> <span class="num">{pct(shown.none)}</span></span>
       <span><span class="label">Median</span> <span class="num">{shown.median}</span></span>
       <span title="Kills between the 10th and 90th percentile">
@@ -56,7 +62,7 @@
       {/each}
     </ul>
     <p class="dim note">
-      Exact odds: the lines fire in the order listed, so damage lost past a model's last wound counts.{#if mortalsLeftOut}
+      Exact odds: the lines fire in the order listed, so damage lost past a model's last wound counts.{#if leaderName}{" "}{leaderName} takes attacks once the Bodyguard is destroyed, or first from a [PRECISION] weapon; each wound's save is its current model's.{/if}{#if mortalsLeftOut}
         Mortal wounds from abilities are left out.{/if}
     </p>
   {/if}

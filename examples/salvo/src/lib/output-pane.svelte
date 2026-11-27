@@ -48,6 +48,7 @@
     unionLevers,
     coveringLever,
     synthTarget,
+    leaderTarget,
     targetFeelNoPain,
     targetDefences,
   } from "./output-model.js";
@@ -251,7 +252,10 @@
   }
 
   // The Combined row's lines as one exact distribution of kills.
-  const odds = $derived(killOdds(ds, lineResults.filter((r) => included(r.id) && !r.error)));
+  // A CHARACTER leading the dataset target is one more model for the exact volley to destroy.
+  const leader = $derived(salvo.targetMode === "dataset" ? leaderTarget(ds, salvo.targetLeaderId, salvo.manualTarget) : null);
+  const targetModels = $derived(salvo.manualTarget.modelCount + (leader ? 1 : 0));
+  const odds = $derived(killOdds(ds, lineResults.filter((r) => included(r.id) && !r.error), leader));
 
   // The "Combined" row, decomposed the same way per-line cells are (see
   // aggregateStages for the additive vs models-killed math). Its damage dealt and kills are the
@@ -483,7 +487,7 @@
   </table>
   </div>
 
-  <KillOddsPanel {odds} modelCount={salvo.manualTarget.modelCount} mortalsLeftOut={mortalLine.damage > 0} />
+  <KillOddsPanel {odds} modelCount={targetModels} leaderName={leader?.name ?? null} mortalsLeftOut={mortalLine.damage > 0} />
 
   <div class="row debug-row">
     <button aria-expanded={showDebug} onclick={() => (showDebug = !showDebug)}>
@@ -496,7 +500,7 @@
     <span class="dim">{allBuffs.length} {allBuffs.length === 1 ? "modifier" : "modifiers"} in play</span>
   </div>
 
-  <ResultDock {aggregate} modelCount={salvo.manualTarget.modelCount} {odds} />
+  <ResultDock {aggregate} modelCount={targetModels} {odds} />
 
   {#if showDebug && resolved.error}
     <p class="error" role="alert">Resolving modifiers failed: {resolved.error}</p>

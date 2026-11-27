@@ -12,7 +12,7 @@ import {
 } from "@alpaca-software/40kdc-data";
 
 import { atLeast, crunchLines, killOdds } from "./line-results.js";
-import { enabledLeverBuffs, memberLevers, memberUnits, memberWargear } from "./output-model.js";
+import { enabledLeverBuffs, leaderTarget, memberLevers, memberUnits, memberWargear } from "./output-model.js";
 import { stageOf } from "./projection-model.js";
 import { defaultWeaponCount, lineId, lineRows, memberCounts, selectLines, weaponLines } from "./weapon-lines.js";
 
@@ -190,5 +190,25 @@ describe("kill odds of the combined volley", () => {
 
   it("reports nothing to allocate when no line fires", () => {
     expect(killOdds(ds, [])).toBeNull();
+  });
+
+  it("reaches a leading CHARACTER after its Bodyguard, or first with [PRECISION]", () => {
+    const bodyguard = { T: 5, Sv: 3, invuln: null, W: 2, modelCount: target.modelCount, fnp: null, keywords: ["Infantry", "Imperium"] };
+    const captain = leaderTarget(ds, "captain", bodyguard);
+    expect(captain?.profiles[0]).toMatchObject({ T: 5, W: 5, Sv: 3, invuln_sv: 4 });
+    const odds = (lines: ReturnType<typeof salvoNobz>) => {
+      const out = killOdds(ds, lines.results.filter((result) => lines.selection.firing.has(result.id) && !result.error), captain);
+      if (out === null || "error" in out || out.leaderKilled === undefined) throw new Error(`no odds: ${JSON.stringify(out)}`);
+      expect(out.modelsDestroyed).toHaveLength(target.modelCount + 2);
+      expect(out.modelsDestroyed.reduce((sum, p) => sum + p, 0)).toBeCloseTo(1, 9);
+      return { leader: out.leaderKilled, bodyguardWiped: atLeast(out.modelsDestroyed)[target.modelCount - 1]! };
+    };
+    // Without [PRECISION] the captain dies only in the outcomes that destroy all five Bodyguard first.
+    const nobz = odds(salvoNobz("fight", MIXED));
+    expect(nobz.leader).toBeLessThanOrEqual(nobz.bodyguardWiped + 1e-12);
+    // Three Eliminators' bolt sniper rifles have [PRECISION]: the captain takes their wounds first.
+    const snipers = odds(salvoUnit("eliminator-squad", "adeptus-astartes", "shooting", new Map([["bolt-sniper-rifle-eliminator-squad", 3], ["bolt-pistol-eliminator-squad", 3]])));
+    expect(snipers.leader).toBeGreaterThan(0.05);
+    expect(snipers.leader).toBeGreaterThan(snipers.bodyguardWiped);
   });
 });

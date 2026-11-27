@@ -45,6 +45,16 @@
     );
   });
 
+  // CHARACTER units that can lead the dataset target, for the attached-leader picker.
+  const targetLeaders = $derived(
+    salvo.targetMode === "dataset" && salvo.datasetTargetUnitId
+      ? ds.leadersAttachableTo(salvo.datasetTargetUnitId).slice().sort((a, b) => a.name.localeCompare(b.name))
+      : [],
+  );
+  $effect(() => {
+    if (salvo.targetLeaderId && !targetLeaders.some((u) => u.id === salvo.targetLeaderId)) salvo.targetLeaderId = null;
+  });
+
   const rosterPicks = $derived(
     (salvo.targetRoster?.units ?? [])
       .map((ru, i) => ({ ru, i, view: resolveRosterUnit(ru, ds) }))
@@ -174,6 +184,22 @@
       {/each}
     </select>
   </div>
+  {#if targetLeaders.length > 0}
+    <div class="row">
+      <label for="tgt-leader">Leader</label>
+      <select
+        id="tgt-leader"
+        class="grow"
+        value={salvo.targetLeaderId ?? ""}
+        onchange={(e) => (salvo.targetLeaderId = (e.currentTarget as HTMLSelectElement).value || null)}
+      >
+        <option value="">No attached leader</option>
+        {#each targetLeaders as u (u.id)}
+          <option value={u.id}>{u.name}</option>
+        {/each}
+      </select>
+    </div>
+  {/if}
 {:else if salvo.targetMode === "roster"}
   {#if rosterPicks.length === 0}
     <EmptyState>Paste the opponent's list under "Target" in Import roster.</EmptyState>
