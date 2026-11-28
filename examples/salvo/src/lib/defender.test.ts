@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 
 import {
   activeSupport,
+  bodyguardOnlyDefences,
   defenderBuffs,
   defenderDetachments,
   defenderEnhancements,
@@ -69,6 +70,16 @@ describe("defender build", () => {
     expect(leaderOwnDefences(ds, squad, lieutenant, none, context).map((buff) => buff.contribution))
       .toEqual([{ type: "invulnerable-save", threshold: 4 }]);
     expect(types(defenderBuffs(ds, squad, { ...none, attachedUnitIds: [lieutenant.id] }, context))).not.toContain("invulnerable-save");
+  });
+
+  it("keeps the Bodyguard's bearer-only wargear rules off its leader", () => {
+    // Five storm shields give every Terminator +1 Wounds; the Captain leading them carries none.
+    const terminators = ds.units.getAny("wolf-guard-terminators")!;
+    const captain = ds.units.getInFaction("captain-in-terminator-armour", "adeptus-astartes")!;
+    const build = { ...none, attachedUnitIds: [captain.id], wargear: { "storm-shield": 5 }, modelCount: 5 };
+    const buffs = defenderBuffs(ds, terminators, build, context);
+    expect(bodyguardOnlyDefences(ds, terminators, buffs).map((buff) => buff.contribution)).toEqual([{ type: "wounds-mod", value: 1 }]);
+    expect(types(leaderOwnDefences(ds, terminators, captain, build, context))).not.toContain("wounds-mod");
   });
 });
 

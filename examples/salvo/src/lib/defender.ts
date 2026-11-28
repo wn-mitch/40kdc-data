@@ -6,6 +6,7 @@
  */
 import {
   baseWargear,
+  bearerOnlyRules,
   canTakeEnhancement,
   isLegalLeverSelection,
   reachesOtherUnits,
@@ -131,10 +132,9 @@ export function defenderEnhancements(ds: Dataset, unit: UnitView, detachmentId: 
  */
 export function leaderOwnDefences(ds: Dataset, unit: UnitView, leader: UnitView, build: DefenderBuild, context: EngineContext): Buff[] {
   const detachmentId = defenderDetachmentId(ds, unit, build);
-  const shared = new Set(
-    ds.defensiveBuffsFor({ unitId: unit.id, factionId: unit.factionId, detachmentId, attachedUnitIds: [leader.id] }, context)
-      .map((buff) => JSON.stringify(buff.contribution)),
-  );
+  const unitWide = ds.defensiveBuffsFor({ unitId: unit.id, factionId: unit.factionId, detachmentId, attachedUnitIds: [leader.id] }, context);
+  const bodyguardOnly = new Set(bodyguardOnlyDefences(ds, unit, unitWide));
+  const shared = new Set(unitWide.filter((buff) => !bodyguardOnly.has(buff)).map((buff) => JSON.stringify(buff.contribution)));
   const led = { ...build, attachedUnitIds: [leader.id] };
   const levers = leaderEnhancementLevers(ds, unit, led, context).filter(({ lever }) => leverIsOn(lever, build.leverOverrides));
   for (const buff of [...leaderEnhancementBuffs(ds, unit, led, context, "attached"), ...levers.flatMap(({ lever }) => lever.buffs)]) {
@@ -145,6 +145,16 @@ export function leaderOwnDefences(ds: Dataset, unit: UnitView, leader: UnitView,
     ...leaderEnhancementBuffs(ds, unit, led, context, "own"),
     ...levers.flatMap(({ own }) => own),
   ].filter((buff) => !shared.has(JSON.stringify(buff.contribution)));
+}
+
+/**
+ * Those of the target's `buffs` that its CHARACTER leader does not share: the Bodyguard's printed
+ * wargear rules that reach only their bearer, since the leader carries none of the Bodyguard's items.
+ */
+export function bodyguardOnlyDefences(ds: Dataset, unit: UnitView, buffs: readonly Buff[]): Buff[] {
+  const rules = bearerOnlyRules(ds, unit.raw);
+  return buffs.filter(({ source }) => source.kind === "ability" && rules.has(source.abilityId)
+    && (source.abilityKind === "unit" || (source.abilityKind === "attached" && source.sourceUnitId === unit.id)));
 }
 
 export function defenderBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, baseContext: EngineContext): Buff[] {

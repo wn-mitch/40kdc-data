@@ -23,7 +23,7 @@
   import ResultDock from "./result-dock.svelte";
   import KillOddsPanel from "./kill-odds.svelte";
   import { killOdds } from "./line-results.js";
-  import { leaderOwnDefences } from "./defender.js";
+  import { bodyguardOnlyDefences, leaderOwnDefences } from "./defender.js";
   import {
     defaultWeaponCount,
     editedCounts,
@@ -209,7 +209,12 @@
       return [];
     }
   });
-  const attachedLeader = $derived(leader ? { unit: leader, buffs: leaderBuffs } : null);
+  // The Bodyguard's rules for its own wargear's bearers, which the leader's group leaves out.
+  const bodyguardOnly = $derived.by<Buff[]>(() => {
+    const unit = leader && salvo.targetUnitId ? ds.units.getAny(salvo.targetUnitId) : undefined;
+    return unit ? bodyguardOnlyDefences(ds, unit, defensive.buffs) : [];
+  });
+  const attachedLeader = $derived(leader ? { unit: leader, buffs: leaderBuffs, bodyguardOnly } : null);
   const selection = $derived.by<{ value: LineSelection | null; error?: string }>(() => {
     if (!selectionValid) return { value: null };
     try {

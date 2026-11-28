@@ -113,6 +113,7 @@ export {
 // the way the damage matrix scores them.
 export {
   baseWargear,
+  bearerOnlyRules,
   combinedWargear,
   equippedBuffs,
   groupsWithGrantedWeapons,

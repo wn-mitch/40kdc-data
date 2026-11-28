@@ -87,10 +87,11 @@ export function lineGroupLabel(ds: Dataset, group: Pick<LineGroup, "bearer" | "r
 }
 
 /**
- * A CHARACTER leading the target: its unit (see `leaderTarget`) and the defensive rules it keeps on
- * its own model, which only its attacks take.
+ * A CHARACTER leading the target: its unit (see `leaderTarget`), the defensive rules it keeps on
+ * its own model, which only its attacks take, and the target's defences it does not share (see
+ * `bodyguardOnlyDefences`), which its attacks leave out.
  */
-export type AttachedLeader = { unit: Unit; buffs: readonly Buff[] };
+export type AttachedLeader = { unit: Unit; buffs: readonly Buff[]; bodyguardOnly?: readonly Buff[] };
 
 /**
  * Exact allocation of `inputs` in turn into the target, or with a `leader` into the attached unit:
@@ -102,10 +103,11 @@ export type AttachedLeader = { unit: Unit; buffs: readonly Buff[] };
 function allocateVolley(ds: Dataset, inputs: readonly EngineInput[], leader: AttachedLeader | null): AllocationSequenceOutput | AttachedAllocationOutput {
   if (!leader) return allocateSequence(inputs, ds);
   const { unit, buffs } = leader;
+  const bodyguardOnly = new Set(leader.bodyguardOnly ?? []);
   return allocateAttached(
     inputs.map((input) => [
       { ...input, target: { ...input.target, unit: { ...input.target.unit, keywords: unit.keywords } } },
-      { ...input, target: { unit, profileIndex: 0, modelCount: 1 }, buffs: [...input.buffs, ...buffs] },
+      { ...input, target: { unit, profileIndex: 0, modelCount: 1 }, buffs: [...input.buffs.filter((buff) => !bodyguardOnly.has(buff)), ...buffs] },
     ]),
     [{ character: false }, { character: true }],
     ds,

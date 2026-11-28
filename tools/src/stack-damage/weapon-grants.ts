@@ -234,18 +234,26 @@ function effectTargets(node: unknown, out: string[] = []): string[] {
 }
 
 /**
- * {@link equippedBuffs} for a target of `modelCount` models: also without its printed wargear rules
- * that reach only the bearer (every effect on `this-model`, such as a shield's invulnerable save or
- * +1 Wounds) while fewer than every model carries the item, since the engine prices one profile
- * for the whole unit and the rest of the squad does not have them.
+ * The unit's printed wargear rules that reach only the bearer, by ability id, with their item:
+ * every effect on `this-model`, such as a shield's invulnerable save or +1 Wounds.
  */
-export function targetEquippedBuffs(dataset: Dataset, unit: Unit, counts: ReadonlyMap<string, number>, modelCount: number, buffs: readonly Buff[]): Buff[] {
-  const partial = new Set([...printedWargear(unit)].flatMap(([abilityId, wargear]) => {
-    const carried = counts.get(wargear) ?? 0;
-    if (carried === 0 || carried >= modelCount) return [];
+export function bearerOnlyRules(dataset: Dataset, unit: Unit): Map<string, string> {
+  return new Map([...printedWargear(unit)].filter(([abilityId]) => {
     const ability = dataset.abilities.getInFaction(abilityId, unit.faction_id) ?? dataset.abilities.getAny(abilityId);
     const targets = effectTargets(ability?.raw.effect);
-    return targets.length > 0 && targets.every((target) => target === "this-model") ? [abilityId] : [];
+    return targets.length > 0 && targets.every((target) => target === "this-model");
+  }));
+}
+
+/**
+ * {@link equippedBuffs} for a target of `modelCount` models: also without its {@link bearerOnlyRules}
+ * while fewer than every model carries the item, since the engine prices one profile for the
+ * whole unit and the rest of the squad does not have them.
+ */
+export function targetEquippedBuffs(dataset: Dataset, unit: Unit, counts: ReadonlyMap<string, number>, modelCount: number, buffs: readonly Buff[]): Buff[] {
+  const partial = new Set([...bearerOnlyRules(dataset, unit)].flatMap(([abilityId, wargear]) => {
+    const carried = counts.get(wargear) ?? 0;
+    return carried > 0 && carried < modelCount ? [abilityId] : [];
   }));
   return equippedBuffs(unit, counts, buffs).filter(({ source }) => !(source.kind === "ability" && partial.has(source.abilityId)
     && (source.abilityKind === "unit" || (source.abilityKind === "attached" && source.sourceUnitId === unit.id))));
