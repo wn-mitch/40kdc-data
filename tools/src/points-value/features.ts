@@ -17,7 +17,7 @@
  */
 import { resolveTarget, type ComparePhase, type ResolvedTarget } from "../compare.js";
 import { crunch, modifiedWounds, resolveBuffs, type Buff, type EngineContext } from "../cruncher/index.js";
-import { baseWargear, equippedBuffs } from "../stack-damage/weapon-grants.js";
+import { baseWargear, targetEquippedBuffs } from "../stack-damage/weapon-grants.js";
 import type { Dataset } from "../data/dataset.js";
 import type { UnitView } from "../data/entities.js";
 import type { Unit, Weapon } from "../generated.js";
@@ -271,7 +271,7 @@ export function durabilityOf(ds: Dataset, unit: Unit, modelCount: number, bare: 
   for (const attack of REFERENCE_ATTACKS) {
     const context: EngineContext = { phase: attack.phase, withinHalfRange: false, attackerTurn: true, targetVisible: true, targetWargear: Object.fromEntries(carried) };
     try {
-      const buffs = [...equippedBuffs(unit, carried, defensiveBuffs(ds, unit, context, bare)), ...extra];
+      const buffs = [...targetEquippedBuffs(ds, unit, carried, modelCount, defensiveBuffs(ds, unit, context, bare)), ...extra];
       const wounds = modifiedWounds(num(unit.profiles?.[0]?.W), resolveBuffs(buffs, context)) * modelCount;
       const dealt = crunch({
         attacker: { weapon: attack.weapon, profileIndex: 0 },

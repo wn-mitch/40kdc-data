@@ -117,6 +117,14 @@ describe("the target's wargear", () => {
       expect(fromAbility(bare, "guardian-drone-tau-empire")).toEqual([]);
     }
   });
+
+  it("gives a bearer's own wargear rule to the target only while every model carries the item", () => {
+    const terminators = ds.units.getAny("wolf-guard-terminators")!;
+    const shield = "storm-shield-wolf-guard-battle-leader-space-wolves";
+    const shields = (count: number) => defenderBuffs(ds, terminators, { ...none, wargear: { "storm-shield": count }, modelCount: 5 }, context);
+    expect(fromAbility(shields(5), shield)).toEqual([{ type: "wounds-mod", value: 1 }]);
+    expect(fromAbility(shields(2), shield)).toEqual([]);
+  });
 });
 
 describe("the target's optional abilities", () => {

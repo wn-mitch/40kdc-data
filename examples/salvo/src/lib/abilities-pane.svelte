@@ -78,6 +78,7 @@
         stratagemIds: salvo.defenderStratagemIds,
         enhancementId: salvo.defenderEnhancementId,
         wargear: salvo.targetWargear,
+        modelCount: salvo.manualTarget.modelCount,
       }, context);
     } catch {
       // The projection pane reports a defender build that fails; here it only hides its needs.

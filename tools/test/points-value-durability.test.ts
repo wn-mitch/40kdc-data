@@ -14,4 +14,10 @@ describe("points-value durability", () => {
     expect(durabilityOf(ds, pathfinders, 10, false).plasma).toBeCloseTo(10 / ((2 / 3) * (5 / 6) * (5 / 6)), 6);
   });
 
+  it("keeps a bearer's own wargear rule off the squad when not every model carries it", () => {
+    // One Breacher in ten carries the endurant shield, whose 4+ invulnerable save is its own, so
+    // the squad (W1, T3, Sv4+) saves plasma on 6+ as the Pathfinders do, not on 4+.
+    const breachers = ds.units.getAny("imperial-navy-breachers")!.raw;
+    expect(durabilityOf(ds, breachers, 10, false).plasma).toBeCloseTo(10 / ((2 / 3) * (5 / 6) * (5 / 6)), 6);
+  });
 });

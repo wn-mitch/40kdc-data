@@ -49,6 +49,7 @@
         stratagemIds: salvo.defenderStratagemIds,
         enhancementId: salvo.defenderEnhancementId,
         wargear: salvo.targetWargear,
+        modelCount: salvo.manualTarget.modelCount,
         attachedUnitIds: salvo.targetMode !== "manual" && salvo.targetLeaderId ? [salvo.targetLeaderId] : [],
         leaderEnhancementId: salvo.defenderLeaderEnhancementId,
       }, salvo.projectionContext);

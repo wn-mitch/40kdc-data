@@ -7,9 +7,9 @@
 import {
   baseWargear,
   canTakeEnhancement,
-  equippedBuffs,
   isLegalLeverSelection,
   reachesOtherUnits,
+  targetEquippedBuffs,
   type Buff,
   type BuffSource,
   type Dataset,
@@ -31,6 +31,8 @@ export type DefenderBuild = {
   enhancementId: string | null;
   /** The target's wargear by id, with how many models carry each; its out-of-the-box loadout's when null. */
   wargear?: Readonly<Record<string, number>> | null;
+  /** The target's models, every one of which must carry an item for its bearer-only rules to apply; its minimum when omitted. */
+  modelCount?: number;
   /**
    * The defender's on/off choices for {@link defenderLevers}, by lever id; a lever without one
    * takes its `enabled` default. An id no longer offered is ignored.
@@ -47,6 +49,8 @@ export type DefenderBuild = {
 
 /** The defender's optional abilities as toggleable levers, with the pools that cap them. */
 export type DefenderLevers = { buffs: StackableBuff[]; groups: StackableBuffGroup[] };
+
+const targetModels = (unit: UnitView, build: DefenderBuild): number => build.modelCount ?? unit.raw.model_count?.min ?? 1;
 
 /** The wargear the target's out-of-the-box loadout carries, at its minimum model count. */
 export function defaultTargetWargear(ds: Dataset, unit: UnitView): Record<string, number> {
@@ -146,7 +150,7 @@ export function leaderOwnDefences(ds: Dataset, unit: UnitView, leader: UnitView,
 export function defenderBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, baseContext: EngineContext): Buff[] {
   const targetWargear = build.wargear ?? defaultTargetWargear(ds, unit);
   const context: EngineContext = { ...baseContext, targetWargear };
-  const always = equippedBuffs(unit.raw, new Map(Object.entries(targetWargear)), buildBuffs(ds, unit, build, context));
+  const always = targetEquippedBuffs(ds, unit.raw, new Map(Object.entries(targetWargear)), targetModels(unit, build), buildBuffs(ds, unit, build, context));
   const levers = defenderLevers(ds, unit, build, baseContext);
   const on = new Set(levers.buffs.filter((lever) => leverIsOn(lever, build.leverOverrides)).map((lever) => lever.id));
   if (on.size === 0) return always;
@@ -202,7 +206,7 @@ export function defenderLevers(ds: Dataset, unit: UnitView, build: DefenderBuild
   }
   const carried = new Map(Object.entries(targetWargear));
   const equipped = levers
-    .map((lever) => ({ ...lever, buffs: equippedBuffs(unit.raw, carried, lever.buffs) }))
+    .map((lever) => ({ ...lever, buffs: targetEquippedBuffs(ds, unit.raw, carried, targetModels(unit, build), lever.buffs) }))
     .filter((lever, index) => lever.buffs.length > 0 || levers[index].buffs.length === 0);
   for (const lever of equipped) {
     if (lever.source.kind === "ability" && lever.source.abilityKind === "detachment-stratagem") lever.enabled = true;

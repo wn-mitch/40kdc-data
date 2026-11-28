@@ -116,6 +116,7 @@ export {
   combinedWargear,
   equippedBuffs,
   groupsWithGrantedWeapons,
+  targetEquippedBuffs,
   loadoutWargearScoring,
   wargearContext,
   withGrantedWeapons,
