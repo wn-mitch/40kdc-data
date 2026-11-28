@@ -189,7 +189,8 @@ jobs:
   examples:
     # The example apps gate too: svelte-check, unit tests (mission-matrix's
     # scoring/pairing logic, salvo's projection helpers, the shared
-    # matchup-grid module), and a production build per app.
+    # matchup-grid module, the list builder's data layer), and a production
+    # build per app.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -201,7 +202,7 @@ jobs:
       # so the package's dist must exist first.
       - run: cd tools && npm run build
       - run: npm run check --workspace @40kdc/salvo --workspace @40kdc/mission-matrix --workspace @40kdc/layout-editor --workspace @40kdc/mechanic-evidence
-      - run: npm test --workspace @40kdc/salvo --workspace @40kdc/mission-matrix --workspace @40kdc/mechanic-evidence
+      - run: npm test --workspace @40kdc/salvo --workspace @40kdc/mission-matrix --workspace @40kdc/mechanic-evidence --workspace @40kdc/list-builder
       - run: npm run build --workspace @40kdc/salvo --workspace @40kdc/mission-matrix --workspace @40kdc/layout-editor --workspace @40kdc/mechanic-evidence
 
   sync-worker:
