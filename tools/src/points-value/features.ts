@@ -16,7 +16,8 @@
  * @packageDocumentation
  */
 import { resolveTarget, type ComparePhase, type ResolvedTarget } from "../compare.js";
-import { crunch, type Buff, type EngineContext } from "../cruncher/index.js";
+import { crunch, modifiedWounds, resolveBuffs, type Buff, type EngineContext } from "../cruncher/index.js";
+import { baseWargear, equippedBuffs } from "../stack-damage/weapon-grants.js";
 import type { Dataset } from "../data/dataset.js";
 import type { UnitView } from "../data/entities.js";
 import type { Unit, Weapon } from "../generated.js";
@@ -264,16 +265,19 @@ function defensiveBuffs(ds: Dataset, unit: Unit, context: EngineContext, bare: b
 
 /** Reference attacks it takes to destroy `unit` at `modelCount` models, by reference attack id. */
 export function durabilityOf(ds: Dataset, unit: Unit, modelCount: number, bare: boolean, extra: readonly Buff[] = []): Record<string, number> {
-  const wounds = num(unit.profiles?.[0]?.W) * modelCount;
+  // The unit's printed rules for wargear its out-of-the-box loadout leaves out do not apply.
+  const carried = new Map(Object.entries(baseWargear(ds, unit, modelCount)));
   const out: Record<string, number> = {};
   for (const attack of REFERENCE_ATTACKS) {
-    const context: EngineContext = { phase: attack.phase, withinHalfRange: false, attackerTurn: true, targetVisible: true };
+    const context: EngineContext = { phase: attack.phase, withinHalfRange: false, attackerTurn: true, targetVisible: true, targetWargear: Object.fromEntries(carried) };
     try {
+      const buffs = [...equippedBuffs(unit, carried, defensiveBuffs(ds, unit, context, bare)), ...extra];
+      const wounds = modifiedWounds(num(unit.profiles?.[0]?.W), resolveBuffs(buffs, context)) * modelCount;
       const dealt = crunch({
         attacker: { weapon: attack.weapon, profileIndex: 0 },
         target: { unit, profileIndex: 0, modelCount },
         modelsFiring: 1,
-        buffs: [...defensiveBuffs(ds, unit, context, bare), ...extra],
+        buffs,
         context,
       }, ds).damageDealt;
       out[attack.id] = dealt > 0 ? wounds / dealt : 0;
