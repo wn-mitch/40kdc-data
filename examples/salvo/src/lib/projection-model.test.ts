@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DAMAGE_DEALT, type AttributedStage, type BuffSource, type Dataset, type StageLift } from "@alpaca-software/40kdc-data";
+import { DAMAGE_DEALT, type AttributedStage, type Buff, type BuffSource, type Dataset, type StageLift } from "@alpaca-software/40kdc-data";
 import {
   STAGE_COLUMNS,
   aggregateStages,
@@ -8,6 +8,7 @@ import {
   labelForSource,
   srcKey,
   stageOf,
+  targetWounds,
   withExactKills,
 } from "./projection-model.js";
 
@@ -219,5 +220,16 @@ describe("aggregateStages", () => {
     const agg = aggregateStages([], 2, 5);
     expect(stageOf(agg, "after-fnp")!.expected).toBe(0);
     expect(stageOf(agg, "models-killed")!.expected).toBe(0);
+  });
+});
+
+describe("targetWounds", () => {
+  const buff = (contribution: Buff["contribution"]): Buff => ({ source: manual("fabricated"), contribution });
+  it("sets the highest Wounds first, then applies the modifiers, keeping at least 1", () => {
+    const ctx = { phase: "shooting" } as const;
+    expect(targetWounds(10, [], ctx)).toBe(10);
+    // Set to 4 and 3, then -1: 3. Modifying before setting would give 4; the lower set, 2.
+    expect(targetWounds(10, [buff({ type: "wounds-characteristic", value: 3 }), buff({ type: "wounds-characteristic", value: 4 }), buff({ type: "wounds-mod", value: -1 })], ctx)).toBe(3);
+    expect(targetWounds(2, [buff({ type: "wounds-mod", value: -3 })], ctx)).toBe(1);
   });
 });

@@ -54,6 +54,7 @@
     targetDefences,
   } from "./output-model.js";
   import {
+    targetWounds,
     STAGE_COLUMNS,
     aggregateStages,
     withExactKills,
@@ -285,7 +286,7 @@
         ...lineResults.filter((r) => included(r.id) && !r.error),
         ...(mortalLine.damage > 0 ? [{ attributed: mortalSourceStages(mortalLine) }] : []),
       ],
-      salvo.manualTarget.W,
+      targetWounds(salvo.manualTarget.W, defences, context),
       salvo.manualTarget.modelCount,
     );
     return odds && !("error" in odds) && mortalLine.damage === 0

@@ -5,6 +5,7 @@
  * @packageDocumentation
  */
 export {
+  modifiedWounds,
   resolveBuffs,
   type Buff,
   type BuffApplicability,

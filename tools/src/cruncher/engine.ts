@@ -15,6 +15,7 @@ import {
   type Buff,
   type BuffApplicability,
   type EngineContext,
+  modifiedWounds,
   resolveBuffs,
   type ResolvedModifiers,
   type RerollSubset,
@@ -539,9 +540,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   // for each wound before that. Devastating Wounds' mortal wounds are capped the same way; mortal
   // wounds an ability inflicts on a roll carry over. Each stream keeps its share of the expected
   // damage above (re-roll-one gains included), scaled by what the cap leaves of it.
-  // The Wounds characteristic, set then modified; a model keeps at least 1.
-  const W0 = resolved.woundsCharacteristic?.value ?? unitProfile.W;
-  const W = W0 > 0 ? Math.max(1, W0 + resolved.woundsMod.value) : W0;
+  const W = modifiedWounds(unitProfile.W, resolved);
   const mainCapped = critical
     ? unsavedRegular * cappedDamage(perAttack.distribution, pSurviveAll, W) + unsavedCritical * cappedDamage(perCritical.distribution, pSurviveAll, W)
     : unsaved * cappedDamage(perAttack.distribution, pSurviveAll, W);

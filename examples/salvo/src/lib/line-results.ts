@@ -20,7 +20,7 @@ import {
   type Unit,
 } from "@alpaca-software/40kdc-data";
 
-import { aggregateStages, stageOf, withExactKills } from "./projection-model.js";
+import { aggregateStages, stageOf, targetWounds, withExactKills } from "./projection-model.js";
 import { lineRows, type LineRow, type LineSelection, type WeaponLine } from "./weapon-lines.js";
 
 /**
@@ -127,9 +127,10 @@ function exactKills(ds: Dataset, stages: AttributedStage[], inputs: readonly Eng
 }
 
 /** Several groups' stages as one line's: their sum, with each group's engine detail kept. */
-function sumGroups(ds: Dataset, groups: readonly LineGroup[], target: { unit: Unit; modelCount: number }): AttributedStage[] {
-  const W = target.unit.profiles?.[0]?.W ?? 0;
-  return aggregateStages(groups, typeof W === "number" ? W : 0, target.modelCount).map((stage) => stage.name === "models-killed"
+function sumGroups(ds: Dataset, groups: readonly LineGroup[], target: { unit: Unit; modelCount: number }, input: EngineInput | undefined): AttributedStage[] {
+  const profileW = target.unit.profiles?.[0]?.W;
+  const W = typeof profileW === "number" ? profileW : 0;
+  return aggregateStages(groups, input ? targetWounds(W, input.buffs, input.context) : W, target.modelCount).map((stage) => stage.name === "models-killed"
     ? stage
     : {
       ...stage,
@@ -187,7 +188,7 @@ export function crunchLine(input: {
       ...(group.rerollOne ? { rerollOne: group.rerollOne } : {}),
       attributed: crunchModels(group.models, group.buffs),
     }));
-    return { ...line, models, attributed: exactKills(ds, sumGroups(ds, crunched, input.target), inputs, input.leader ?? null), groups: crunched, inputs };
+    return { ...line, models, attributed: exactKills(ds, sumGroups(ds, crunched, input.target, inputs[0]), inputs, input.leader ?? null), groups: crunched, inputs };
   } catch (err) {
     return { ...line, models, attributed: [], error: (err as Error).message };
   }

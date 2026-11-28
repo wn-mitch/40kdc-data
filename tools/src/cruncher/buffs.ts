@@ -760,6 +760,15 @@ function liveBuffs(buffs: Buff[], ctx: ResolveContext): Buff[] {
  * function; the engine — and any UI that wants to render the resolved table
  * before crunching — both go through this.
  */
+/**
+ * A model's Wounds characteristic under its resolved rules: the highest set value replaces
+ * `profileW`, then the modifiers apply, and a model keeps at least 1.
+ */
+export function modifiedWounds(profileW: number, resolved: Pick<ResolvedModifiers, "woundsCharacteristic" | "woundsMod">): number {
+  const base = resolved.woundsCharacteristic?.value ?? profileW;
+  return base > 0 ? Math.max(1, base + resolved.woundsMod.value) : base;
+}
+
 export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifiers {
   const live = liveBuffs(buffs, ctx);
 
