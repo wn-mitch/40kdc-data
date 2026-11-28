@@ -186,8 +186,8 @@ describe('teamDispositionOptions', () => {
 		const opts = teamDispositionOptions(d);
 		const sideA = opts.filter((o) => o.side === 0);
 		const sideB = opts.filter((o) => o.side === 1);
-		// gladius grants priority-assets only.
-		expect(sideA.map((o) => o.id)).toEqual(['priority-assets']);
+		// gladius is a 3-DP detachment: it grants a choice of two.
+		expect(sideA.map((o) => o.id)).toEqual(['priority-assets', 'take-and-hold']);
 		expect(sideA[0].label).toContain('Army A');
 		expect(sideB.length).toBe(ds.forceDispositions.all.length);
 	});

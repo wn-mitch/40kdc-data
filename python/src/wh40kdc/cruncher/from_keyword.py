@@ -35,6 +35,7 @@ ENGINE_DISPATCH_KEYWORDS = frozenset(
         "blast",
         "cleave",
         "ignores-cover",
+        "precision",
     ]
 )
 

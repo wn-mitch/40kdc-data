@@ -56,7 +56,7 @@ import { selectAdapter } from "./import/adapter.js";
 import type { ParsedRoster, Roster } from "./import/types.js";
 import { encodeBase } from "./runner.js";
 import { attributeStages } from "./cruncher/attribution.js";
-import { allocate, type AllocationOutput, type DamageZeroing } from "./cruncher/allocation.js";
+import { allocate, allocateAttached, type AllocationOutput, type AttachedAllocationOutput, type DamageZeroing } from "./cruncher/allocation.js";
 import type { Buff } from "./cruncher/buffs.js";
 import type { EngineInput } from "./cruncher/index.js";
 import {
@@ -1296,6 +1296,17 @@ const ALLOCATION_BUFF_CASES: Array<{ cruncher_case: string; label: string; buffs
   { cruncher_case: "canonical-critical-wound-devastating-damage.json", label: "1 mortal wound on each critical wound", buffs: [
     { source: { kind: "ability", abilityId: "fabricated-critical-wound", abilityKind: "unit" }, contribution: { type: "mortal-wounds-on-roll", roll: "wound", outcome: "success", count: 1 }, applicableWhen: { onCritical: "wound" } },
   ] },
+  // +1 Wounds on the target: the same D2 events against 3-wound models.
+  { cruncher_case: "canonical-critical-wound-devastating-damage.json", label: "+1 Wounds on the target", buffs: [
+    { source: { kind: "ability", abilityId: "fabricated-wounds", abilityKind: "unit" }, contribution: { type: "wounds-mod", value: 1 } },
+  ] },
+  // Two set Wounds and a -1: the highest set (4) applies first, then the modifier, so 3-wound
+  // models. Modifying before setting gives 4; taking the lowest set gives 2.
+  { cruncher_case: "canonical-critical-wound-devastating-damage.json", label: "Wounds set to 4 and 3, then -1", buffs: [
+    { source: { kind: "ability", abilityId: "fabricated-wounds-three", abilityKind: "unit" }, contribution: { type: "wounds-characteristic", value: 3 } },
+    { source: { kind: "ability", abilityId: "fabricated-wounds-four", abilityKind: "unit" }, contribution: { type: "wounds-characteristic", value: 4 } },
+    { source: { kind: "ability", abilityId: "fabricated-wounds-minus", abilityKind: "unit" }, contribution: { type: "wounds-mod", value: -1 } },
+  ] },
 ];
 
 function genAllocation(): void {
@@ -1320,6 +1331,76 @@ function genAllocation(): void {
   }
   writeJson(join(CONFORMANCE, "allocation", "cases.json"), cases);
   console.log(`allocation/cases.json: ${cases.length} cases`);
+}
+
+/** One group of an attached target in `allocation/attached.json`: its unit, models and own buffs. */
+type AttachedGroupCase = { character: boolean; unitId: string; profileIndex: number; modelCount: number; buffs: Buff[] };
+/** One attack line in `allocation/attached.json`, crunched once against each group. */
+type AttachedLineCase = { attacker: { weaponId: string; profileIndex: number }; modelsFiring: number; context: EngineInput["context"]; buffs: Buff[] };
+
+const precisionCritAp: Buff = { source: { kind: "ability", abilityId: "fabricated-critical-ap", abilityKind: "unit" }, contribution: { type: "ap-mod", value: -2 }, applicableWhen: { onCritical: "wound" } };
+const fnp5: Buff = { source: { kind: "ability", abilityId: "fabricated-fnp", abilityKind: "unit" }, contribution: { type: "feel-no-pain", threshold: 5 } };
+// An attached unit uses the highest Toughness among its Bodyguard models (05.02.01).
+const bodyguardToughness = (value: number): Buff => ({ source: { kind: "manual", label: "Bodyguard Toughness" }, contribution: { type: "toughness-mod", value } });
+const shooting = { phase: "shooting", attackerStationary: false, withinHalfRange: false } as EngineInput["context"];
+const stationary = { phase: "shooting", attackerStationary: true, withinHalfRange: false } as EngineInput["context"];
+const squad = (unitId: string, modelCount: number): AttachedGroupCase => ({ character: false, unitId, profileIndex: 0, modelCount, buffs: [] });
+const leader = (unitId: string, buffs: Buff[] = []): AttachedGroupCase => ({ character: true, unitId, profileIndex: 0, modelCount: 1, buffs });
+const line = (weaponId: string, profileIndex: number, modelsFiring: number, context = shooting, buffs: Buff[] = []): AttachedLineCase => ({ attacker: { weaponId, profileIndex }, modelsFiring, context, buffs });
+
+/**
+ * Attached-unit allocation corpus: lines into a Bodyguard group then CHARACTER groups, each with its
+ * own save, Wounds and Feel No Pain, with and without [PRECISION], across lines, with Devastating
+ * Wounds, with critical wounds of their own AP allocated hit by hit, with a CHARACTER given the
+ * Bodyguard's Toughness, and with Blast counting the whole unit's models.
+ */
+const ALLOCATION_ATTACHED_CASES: Array<{ name: string; groups: AttachedGroupCase[]; lines: AttachedLineCase[] }> = [
+  { name: "bolt-rifle x10 into intercessors x5 led by a captain", groups: [squad("intercessor-squad", 5), leader("captain")], lines: [line("bolt-rifle", 1, 10)] },
+  { name: "eliminator bolt sniper rifle x3 [PRECISION] into intercessors x5 led by a captain", groups: [squad("intercessor-squad", 5), leader("captain")], lines: [line("bolt-sniper-rifle-eliminator-squad", 0, 3, stationary)] },
+  {
+    name: "executioner relic blade [PRECISION] then bolt-rifle x10 into intercessors x3, a captain and a lieutenant",
+    groups: [squad("intercessor-squad", 3), leader("captain"), leader("lieutenant")],
+    lines: [line("executioner-relic-blade", 0, 1, { phase: "fight" } as EngineInput["context"]), line("bolt-rifle", 1, 10)],
+  },
+  {
+    name: "stalker bolt rifle x5 [PRECISION] with critical AP into eliminators x3 led by a captain with FNP 5+ at the Bodyguard's T4",
+    groups: [squad("eliminator-squad", 3), leader("captain", [fnp5, bodyguardToughness(-1)])],
+    lines: [line("stalker-bolt-rifle", 0, 5, stationary, [precisionCritAp])],
+  },
+  {
+    // Blast counts the whole attached unit: ten models, so two more attacks a firer, not one.
+    name: "frag missile x2 [BLAST] into intercessors x9 led by a captain, ten models for Blast",
+    groups: [squad("intercessor-squad", 9), leader("captain")],
+    lines: [line("missile-launcher", 1, 2, { ...shooting, targetModelCount: 10 } as EngineInput["context"])],
+  },
+  {
+    // A Wounds modifier on the CHARACTER group only: two D3 hits no longer kill its model.
+    name: "eliminator bolt sniper rifle x3 [PRECISION] into intercessors x5 led by a captain with +2 Wounds",
+    groups: [squad("intercessor-squad", 5), leader("captain", [{ source: { kind: "ability", abilityId: "fabricated-wounds", abilityKind: "unit" }, contribution: { type: "wounds-mod", value: 2 } }])],
+    lines: [line("bolt-sniper-rifle-eliminator-squad", 0, 3, stationary)],
+  },
+];
+
+function genAllocationAttached(): void {
+  const ds = Dataset.embedded();
+  const inputOf = (l: AttachedLineCase, g: AttachedGroupCase): EngineInput => {
+    const weapon = ds.weapons.getAny(l.attacker.weaponId);
+    const unit = ds.units.getAny(g.unitId);
+    if (!weapon || !unit) throw new Error(`allocation/attached: unknown ${weapon ? g.unitId : l.attacker.weaponId}`);
+    return {
+      attacker: { weapon: weapon.raw, profileIndex: l.attacker.profileIndex },
+      target: { unit: unit.raw, profileIndex: g.profileIndex, modelCount: g.modelCount },
+      modelsFiring: l.modelsFiring,
+      buffs: [...l.buffs, ...g.buffs],
+      context: l.context,
+    };
+  };
+  const cases: Array<{ name: string; groups: AttachedGroupCase[]; lines: AttachedLineCase[]; expected: AttachedAllocationOutput }> = ALLOCATION_ATTACHED_CASES.map(({ name, groups, lines }) => ({
+    name, groups, lines,
+    expected: allocateAttached(lines.map((l) => groups.map((g) => inputOf(l, g))), groups, ds),
+  }));
+  writeJson(join(CONFORMANCE, "allocation", "attached.json"), cases);
+  console.log(`allocation/attached.json: ${cases.length} cases`);
 }
 
 /**
@@ -4830,6 +4911,7 @@ genResolverDslCases();
 genCanonicalCruncherCases();
 // After the canonical cruncher cases, some of which it allocates.
 genAllocation();
+genAllocationAttached();
 genMortalSourceCases();
 genDefensiveLeverCases();
 genUnitMortalSourceCases();

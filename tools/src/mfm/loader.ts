@@ -42,6 +42,7 @@ export class MfmDump {
   readonly tables: Partial<MfmTableMap>;
   private readonly idIndexes = new Map<MfmIdTableName, ReadonlyMap<string, unknown>>();
   private readonly groupIndexes = new Map<string, ReadonlyMap<string, readonly unknown[]>>();
+  private equipment: ReadonlySet<string> | undefined;
 
   constructor(payload: MfmDumpInit) {
     this.version = payload.metadata?.data_version;
@@ -95,6 +96,27 @@ export class MfmDump {
     // The cache key fixes N and K; values were built from table(name) above.
     const typedIndex = index as ReadonlyMap<string, readonly MfmRow<N>[]>;
     return typedIndex;
+  }
+
+  /**
+   * Miniatures with no Wounds characteristic. GW lists equipment a model is "equipped with" this
+   * way when the app shows it as a figure: the Tidewall Shieldline's Tidewall defence platform is a
+   * statline-less miniature its 105-point composition adds. It is wargear of the datasheet's model,
+   * not a model of its own, so composition, tier, point and loadout passes leave it out (see
+   * {@link compositionMiniatures}) and the wargear passes price and offer it as wargear.
+   */
+  equipmentMiniatureIds(): ReadonlySet<string> {
+    this.equipment ??= new Set((this.tables.miniature ?? [])
+      .filter((row) => typeof row.wounds === "string" && !/\d/.test(row.wounds))
+      .map((row) => row.id));
+    return this.equipment;
+  }
+
+  /** A unit composition's miniature rows, without {@link equipmentMiniatureIds} rows. */
+  compositionMiniatures(unitCompositionId: string): readonly MfmRow<"unit_composition_miniature">[] {
+    const equipment = this.equipmentMiniatureIds();
+    return (this.groupBy("unit_composition_miniature", "unitCompositionId").get(unitCompositionId) ?? [])
+      .filter((row) => !equipment.has(row.miniatureId));
   }
 
   /** Follow one verified relation from its source row to its optional parent. */

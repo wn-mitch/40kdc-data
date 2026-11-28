@@ -21,6 +21,9 @@
   import EmptyState from "./EmptyState.svelte";
   import WeaponCards from "./weapon-cards.svelte";
   import ResultDock from "./result-dock.svelte";
+  import KillOddsPanel from "./kill-odds.svelte";
+  import { killOdds } from "./line-results.js";
+  import { bodyguardOnlyDefences, leaderOwnDefences } from "./defender.js";
   import {
     defaultWeaponCount,
     editedCounts,
@@ -46,11 +49,15 @@
     unionLevers,
     coveringLever,
     synthTarget,
+    leaderTarget,
+    targetFeelNoPain,
     targetDefences,
   } from "./output-model.js";
   import {
+    targetWounds,
     STAGE_COLUMNS,
     aggregateStages,
+    withExactKills,
     fmt,
     fmtSigned,
     labelForSource as labelForSourceIn,
@@ -91,8 +98,13 @@
     stratagemIds: salvo.defenderStratagemIds,
     enhancementId: salvo.defenderEnhancementId,
     wargear: salvo.targetWargear,
+    modelCount: salvo.manualTarget.modelCount,
     leverOverrides: salvo.targetLeverOverrides,
+    attachedUnitIds: salvo.targetMode !== "manual" && salvo.targetLeaderId ? [salvo.targetLeaderId] : [],
+    leaderEnhancementId: salvo.defenderLeaderEnhancementId,
   }, context));
+  // The target's defences: its build's, and the Feel No Pain entered on its profile.
+  const defences = $derived<Buff[]>([...defensive.buffs, ...targetFeelNoPain(salvo.manualTarget)]);
 
   // The ticked mortal-wound sources, after the target's Feel No Pain: a line of the combined total.
   const mortalSources = $derived(memberMortalSources(ds, {
@@ -103,7 +115,7 @@
     supportUnitIds: salvo.supportUnitIds,
     modelCounts: salvo.memberModelCounts,
   }, { ...context, targetModelCount: salvo.manualTarget.modelCount }));
-  const mortalLine = $derived(mortalSourceLine(mortalSources.sources, new Set(salvo.mortalSourcesActive), defensive.buffs, context));
+  const mortalLine = $derived(mortalSourceLine(mortalSources.sources, new Set(salvo.mortalSourcesActive), defences, context));
 
   /** The buffs one member attacks with: its enabled levers, the manual toggles and the target's defences. */
   function buffsOf(memberId: string): Buff[] {
@@ -111,11 +123,11 @@
     const isEnabled = (b: StackableBuff) => salvo.isBuffEnabled(b.id, b.enabled);
     // A manual toggle an enabled lever already grants would count the same effect twice.
     const manual = manualBuffs.filter((buff) => !coveringLever(buff, levers, isEnabled));
-    return [...enabledLeverBuffs(levers, isEnabled), ...manual, ...defensive.buffs];
+    return [...enabledLeverBuffs(levers, isEnabled), ...manual, ...defences];
   }
   const contextOf = (memberId: string) => perMember.find((member) => member.memberId === memberId)?.context ?? context;
   // The selected unit's buffs, for the single-weapon projection and the debug snapshot.
-  const allBuffs = $derived<Buff[]>(salvo.selectedUnitId ? buffsOf(salvo.selectedUnitId) : [...manualBuffs, ...defensive.buffs]);
+  const allBuffs = $derived<Buff[]>(salvo.selectedUnitId ? buffsOf(salvo.selectedUnitId) : [...manualBuffs, ...defences]);
 
   // The selected unit and its attached members.
   const memberUnits = $derived(resolveMembers(ds, salvo.selectedFactionId, [salvo.selectedUnitId, ...salvo.attachedUnitIds], salvo.memberModelCounts));
@@ -181,6 +193,28 @@
   // package's loadout scoring (Pistols or other ranged weapons per model, one
   // ordinary melee weapon per model), the same the damage matrix applies.
   const target = $derived(synthTarget(salvo.manualTarget));
+  // A CHARACTER leading the target is one more model: for the exact volley to destroy, and
+  // for Blast and Cleave, which count the whole attached unit.
+  const leader = $derived(salvo.targetMode !== "manual" ? leaderTarget(ds, salvo.targetLeaderId, salvo.manualTarget) : null);
+  const targetModels = $derived(salvo.manualTarget.modelCount + (leader ? 1 : 0));
+  const lineContextOf = (memberId: string): EngineContext => (leader ? { ...contextOf(memberId), targetModelCount: targetModels } : contextOf(memberId));
+  // The leader's personal defences (a -1 Damage, an invulnerable save of its own) only its group takes.
+  const leaderBuffs = $derived.by<Buff[]>(() => {
+    const unit = salvo.targetUnitId ? ds.units.getAny(salvo.targetUnitId) : undefined;
+    const own = leader && salvo.targetLeaderId ? ds.units.getAny(salvo.targetLeaderId) : undefined;
+    if (!unit || !own) return [];
+    try {
+      return leaderOwnDefences(ds, unit, own, { detachmentId: salvo.defenderDetachmentId, stratagemIds: [], enhancementId: null, leaderEnhancementId: salvo.defenderLeaderEnhancementId, leverOverrides: salvo.targetLeverOverrides }, context);
+    } catch {
+      return [];
+    }
+  });
+  // The Bodyguard's rules for its own wargear's bearers, which the leader's group leaves out.
+  const bodyguardOnly = $derived.by<Buff[]>(() => {
+    const unit = leader && salvo.targetUnitId ? ds.units.getAny(salvo.targetUnitId) : undefined;
+    return unit ? bodyguardOnlyDefences(ds, unit, defensive.buffs) : [];
+  });
+  const attachedLeader = $derived(leader ? { unit: leader, buffs: leaderBuffs, bodyguardOnly } : null);
   const selection = $derived.by<{ value: LineSelection | null; error?: string }>(() => {
     if (!selectionValid) return { value: null };
     try {
@@ -193,7 +227,7 @@
             counts: counts[index],
             grants: wargear[index].grants,
             buffs: wargear[index].buffs,
-            context: contextOf(memberId),
+            context: lineContextOf(memberId),
           })),
           target: { unit: target, modelCount: salvo.manualTarget.modelCount },
           buffs: allBuffs,
@@ -234,8 +268,9 @@
         selection: selection.value,
         carried,
         target: { unit: target, modelCount: salvo.manualTarget.modelCount },
+        leader: attachedLeader,
         buffsOf: (memberId) => wargearOf(memberId)?.wargear.buffs ?? buffsOf(memberId),
-        contextOf,
+        contextOf: lineContextOf,
       })
     : []);
 
@@ -244,18 +279,26 @@
     return labelForSourceIn(ds, s);
   }
 
+  // The Combined row's lines as one exact distribution of kills.
+  const odds = $derived(killOdds(ds, lineResults.filter((r) => included(r.id) && !r.error), attachedLeader));
+
   // The "Combined" row, decomposed the same way per-line cells are (see
-  // aggregateStages for the additive vs models-killed math).
-  const aggregate = $derived.by<AttributedStage[]>(() =>
-    aggregateStages(
+  // aggregateStages for the additive vs models-killed math). Its damage dealt and kills are the
+  // exact volley's when the allocation takes every source: it leaves out mortal wounds from
+  // outside the attacks.
+  const aggregate = $derived.by<AttributedStage[]>(() => {
+    const stages = aggregateStages(
       [
         ...lineResults.filter((r) => included(r.id) && !r.error),
         ...(mortalLine.damage > 0 ? [{ attributed: mortalSourceStages(mortalLine) }] : []),
       ],
-      salvo.manualTarget.W,
+      targetWounds(salvo.manualTarget.W, defences, context),
       salvo.manualTarget.modelCount,
-    ),
-  );
+    );
+    return odds && !("error" in odds) && mortalLine.damage === 0
+      ? withExactKills(stages, { damageDealt: odds.expectedDealt, modelsKilled: odds.expectedKilled })
+      : stages;
+  });
 
   const projection = $derived.by(() => {
     if (!selectionValid) return { error: "Selected abilities exceed an allowance or lack a required provider." };
@@ -469,6 +512,8 @@
   </table>
   </div>
 
+  <KillOddsPanel {odds} modelCount={targetModels} leaderName={leader?.name ?? null} mortalsLeftOut={mortalLine.damage > 0} />
+
   <div class="row debug-row">
     <button aria-expanded={showDebug} onclick={() => (showDebug = !showDebug)}>
       {showDebug ? "Hide" : "Show"} resolved modifiers
@@ -480,7 +525,7 @@
     <span class="dim">{allBuffs.length} {allBuffs.length === 1 ? "modifier" : "modifiers"} in play</span>
   </div>
 
-  <ResultDock {aggregate} modelCount={salvo.manualTarget.modelCount} />
+  <ResultDock {aggregate} modelCount={targetModels} {odds} />
 
   {#if showDebug && resolved.error}
     <p class="error" role="alert">Resolving modifiers failed: {resolved.error}</p>

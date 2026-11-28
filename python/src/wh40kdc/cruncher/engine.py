@@ -37,6 +37,7 @@ from wh40kdc.cruncher.damage_roll import (
     damage_roll,
     one_damage_reroll_gain,
     one_reroll_gain_across,
+    quantity_distribution,
 )
 from wh40kdc.cruncher.scenario_conditions import (
     has_attack_comparison,
@@ -92,6 +93,7 @@ class AttackModel(TypedDict):
     lethal: bool
     wound: RollProbabilities
     devastating: bool
+    precision: bool
     #: Probability a wound that reaches the save is not saved.
     unsaved: float
     #: Final per-attack damage.
@@ -271,11 +273,16 @@ def crunch_model(
         target_model_count = (unit.get("model_count") or {}).get("min")
     if target_model_count is None:
         target_model_count = 1
+    # Blast and Cleave count the models in the whole target unit: the context's when it says, which
+    # for one group of an attached unit is more than the group's modelCount.
+    unit_model_count = ctx.get("targetModelCount")
+    if unit_model_count is None:
+        unit_model_count = target_model_count
     blast_params = (blast.get("parameters") or {}) if blast else {}
     # Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
     blast_value = blast_params.get("value") if "value" in blast_params else 1
     blast_extra = (
-        math.floor(target_model_count / 5) * eval_stat_value(blast_value)
+        math.floor(unit_model_count / 5) * eval_stat_value(blast_value)
         if blast
         else 0
     )
@@ -284,7 +291,7 @@ def crunch_model(
     cleave = _find_keyword(resolved, "cleave")
     cleave_params = (cleave.get("parameters") or {}) if cleave else {}
     cleave_extra = (
-        math.floor(target_model_count / 5) * eval_stat_value(cleave_params["value"])
+        math.floor(unit_model_count / 5) * eval_stat_value(cleave_params["value"])
         if "value" in cleave_params
         else 0
     )
@@ -311,6 +318,41 @@ def crunch_model(
             ),
         }
     )
+    # A "re-roll one" die is spent when its pool holds at least one die left failed, and the pools
+    # after the Hit roll hold a random number of dice. The pools are carried as generating
+    # functions (E[u^dice] as a function of u), composed stage by stage from each attack's own
+    # outcomes, so P(at least one open die) = 1 - pool(1 - open) is exact rather than read off the
+    # mean pool.
+    if "A" in resolved["statSet"]:
+        per_model_attacks: list[tuple[float, float]] = [(resolved["statSet"]["A"]["value"], 1.0)]
+    elif attacks_reroll:
+        per_model_attacks = [
+            (o["value"], o["probability"])
+            for o in damage_roll(
+                stat=stats.get("A"), bonus=0, modifier=0, reduction=0, reroll=attacks_reroll
+            )["distribution"]
+        ]
+    else:
+        per_model_attacks = quantity_distribution(stats.get("A"))
+    rapid_fire_counts: list[tuple[float, float]] = (
+        quantity_distribution((rapid_fire.get("parameters") or {}).get("value"))
+        if rapid_fire and rapid_fire_extra != 0
+        else [(0, 1.0)]
+    )
+    fixed_extra_per_model = resolved["attacksMod"]["value"] + blast_extra + cleave_extra
+    models_firing = input["modelsFiring"]
+
+    def attack_count(u: float) -> float:
+        return math.pow(
+            _sum_over(
+                per_model_attacks,
+                lambda a: _sum_over(
+                    rapid_fire_counts,
+                    lambda r: math.pow(u, max(0, a + r + fixed_extra_per_model)),
+                ),
+            ),
+            models_firing,
+        )
 
     # 2. Hits
     # Cover (11e): the benefit of cover is -1 to the attacker's hit roll, not a
@@ -338,6 +380,8 @@ def crunch_model(
     crit_hit_threshold = min(6, (resolved["critThresholds"].get("hit") or {}).get("value", 6))
     torrent = _find_keyword(resolved, "torrent") is not None
     hit_probs: RollProbabilities = {"pass": 1.0, "crit": 0.0}
+    hit_open = 0.0
+    hit_fresh: tuple[float, float, float] | None = None
     hit_reroll_one_dice = 0.0
     if torrent:
         hits = attacks
@@ -349,7 +393,12 @@ def crunch_model(
                 f"crunch: weapon {weapon['id']} profile {profile_index} missing "
                 f"{'WS' if is_melee else 'BS'}"
             )
-        hit_modifier = resolved["hitMod"]["value"] + cover_hit_penalty
+        # Cover is a hit-roll modifier like any other: the ±1 cap takes the total.
+        hit_modifier = (
+            max(-1, min(1, resolved["hitMod"]["raw"] + cover_hit_penalty))
+            if cover_hit_penalty
+            else resolved["hitMod"]["value"]
+        )
         hit_check: dict[str, Any] = {
             "unmodified_needed": hit_stat,
             "modifier": hit_modifier,
@@ -361,6 +410,7 @@ def crunch_model(
             **hit_check, reroll=(resolved["rerolls"].get("hit") or {}).get("subset", "none")
         )
         hit_probs = {"pass": probs[0], "crit": probs[1]}
+        hit_open = probs[2]
         hits = attacks * probs[0]
         crit_hits = attacks * probs[1]
         reroll_label = (resolved["rerolls"].get("hit") or {}).get("subset", "none")
@@ -374,7 +424,8 @@ def crunch_model(
         )
         if resolved["rerollOne"].get("hit"):
             fresh = _check_probabilities(**hit_check, reroll="none")
-            dice = one_reroll_dice(attacks, probs[2])
+            hit_fresh = fresh
+            dice = 1 - attack_count(1 - probs[2]) if probs[2] > 0 else 0.0
             hit_reroll_one_dice = dice
             hits += dice * fresh[0]
             crit_hits += dice * fresh[1]
@@ -430,6 +481,36 @@ def crunch_model(
     has_lethal = _find_keyword(resolved, "lethal-hits") is not None
     hits_for_wound_roll = hits - crit_hits if has_lethal else hits
     lethal_auto_wounds = crit_hits if has_lethal else 0.0
+    # E[w^(Wound rolls) l^(Lethal Hits wounds)] over the volley. A re-rolled Hit die replaces one
+    # failed die, which led to no Wound roll, with a fresh attack's outcome.
+    sustained_counts: list[tuple[float, float]] = (
+        quantity_distribution((sustained.get("parameters") or {}).get("value"))
+        if sustained
+        else [(0, 1.0)]
+    )
+
+    def per_attack_hit(p_pass: float, p_crit: float, w: float, lethal: float) -> float:
+        if torrent:
+            return w
+        return (
+            1
+            - p_pass
+            + (p_pass - p_crit) * w
+            + p_crit
+            * _sum_over(
+                sustained_counts,
+                lambda extra: math.pow(w, extra + (0 if has_lethal else 1))
+                * (lethal if has_lethal else 1),
+            )
+        )
+
+    def hit_pool(w: float, lethal: float) -> float:
+        each = per_attack_hit(hit_probs["pass"], hit_probs["crit"], w, lethal)
+        every = attack_count(each)
+        if hit_fresh is None:
+            return every
+        closed = attack_count(each - hit_open)
+        return closed + (every - closed) * per_attack_hit(hit_fresh[0], hit_fresh[1], w, lethal)
 
     wound_check: dict[str, Any] = {
         "unmodified_needed": std_wound_needed,
@@ -444,13 +525,32 @@ def crunch_model(
     regular_wounds_from_roll = hits_for_wound_roll * (wound_probs[0] - wound_probs[1])
     crit_wounds_from_roll = hits_for_wound_roll * wound_probs[1]
     wound_reroll_one_dice = 0.0
+    wound_fresh: tuple[float, float, float] | None = None
     if resolved["rerollOne"].get("wound"):
         fresh = _check_probabilities(**wound_check, reroll="none")
-        wound_reroll_one_dice = one_reroll_dice(hits_for_wound_roll, wound_probs[2])
+        wound_fresh = fresh
+        wound_reroll_one_dice = (
+            1 - hit_pool(1 - wound_probs[2], 1) if wound_probs[2] > 0 else 0.0
+        )
         regular_wounds_from_roll += wound_reroll_one_dice * (fresh[0] - fresh[1])
         crit_wounds_from_roll += wound_reroll_one_dice * fresh[1]
     total_regular_wounds = regular_wounds_from_roll + lethal_auto_wounds
     has_devastating = _find_keyword(resolved, "devastating-wounds") is not None
+
+    # E[r^(normal saves) k^(critical-wound saves) m^(Devastating Wounds mortal wounds)] over the
+    # volley; a Lethal Hits wound takes a normal save. A re-rolled Wound die replaces one failed
+    # die.
+    def per_wound(p_pass: float, p_crit: float, r: float, k: float, m: float) -> float:
+        return 1 - p_pass + (p_pass - p_crit) * r + p_crit * (m if has_devastating else k)
+
+    def wound_pool(r: float, k: float, m: float) -> float:
+        each = per_wound(wound_probs[0], wound_probs[1], r, k, m)
+        every = hit_pool(each, r)
+        if wound_fresh is None:
+            return every
+        closed = hit_pool(each - wound_probs[2], r)
+        return closed + (every - closed) * per_wound(wound_fresh[0], wound_fresh[1], r, k, m)
+
     mortal_wounds_stream = crit_wounds_from_roll if has_devastating else 0.0
     regular_wounds_for_saves = (
         total_regular_wounds if has_devastating else total_regular_wounds + crit_wounds_from_roll
@@ -527,8 +627,8 @@ def crunch_model(
     unsaved = regular_wounds_for_saves * (1 - p_saved)
     # "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
     save_reroll_one_dice = (
-        one_reroll_dice(regular_wounds_for_saves, save_probs[2])
-        if resolved["rerollOne"].get("save") and effective_save_target < 7
+        1 - wound_pool(1 - save_probs[2], 1 - save_probs[2], 1)
+        if resolved["rerollOne"].get("save") and effective_save_target < 7 and save_probs[2] > 0
         else 0.0
     )
     if save_reroll_one_dice > 0:
@@ -582,9 +682,12 @@ def crunch_model(
         regular = stream(effective_save_target, regular_wounds_for_saves - critical_to_saves)
         crits = stream(critical_save_target, critical_to_saves)
         p_saved_critical = crits["saved"]
-        unsaved, save_reroll_one_dice = split_unsaved(
-            [regular, crits], one_reroll_dice, bool(resolved["rerollOne"].get("save"))
+        split_dice = (
+            1 - wound_pool(1 - regular["open"], 1 - crits["open"], 1)
+            if resolved["rerollOne"].get("save")
+            else 0.0
         )
+        unsaved, save_reroll_one_dice = split_unsaved([regular, crits], split_dice)
         share_regular = regular["wounds"] * (1 - regular["saved"])
         share_critical = crits["wounds"] * (1 - crits["saved"])
         unsaved_regular = (
@@ -634,6 +737,7 @@ def crunch_model(
         modifier=resolved["damageMod"]["value"],
         reduction=damage_reduction,
         reroll=damage_reroll,
+        halve=resolved["damageHalving"]["value"],
     )
     damage_per_hit = per_attack["expected"]
     # A critical wound's Damage, for its unsaved wounds and, with Devastating Wounds, its mortal
@@ -650,6 +754,7 @@ def crunch_model(
             modifier=critical["damageMod"]["value"],
             reduction=critical["damageReduction"]["value"],
             reroll=critical_damage_reroll,
+            halve=critical["damageHalving"]["value"],
         )
         damage_main = (
             unsaved_regular * damage_per_hit + unsaved_critical * per_critical["expected"]
@@ -661,18 +766,26 @@ def crunch_model(
     # proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled,
     # so beside one the single die is not priced. With critical-wound Damage a roll gains against
     # its own kind's mean: the two kinds are separate rolls, not one die with both distributions.
+    # The Damage rolls' pool is E[n^(normal rolls) c^(critical-wound and mortal-wound rolls)]: a
+    # failed save leads to a roll. It leaves out the one save a "re-roll one saving throw" re-rolls.
+    def damage_pool(n: float, c: float) -> float:
+        regular_roll = p_saved + (1 - p_saved) * n
+        critical_roll = (
+            p_saved_critical + (1 - p_saved_critical) * c
+            if critical is not None and not has_devastating
+            else regular_roll
+        )
+        return wound_pool(regular_roll, critical_roll, c)
+
     damage_rolls = unsaved + mortal_wounds_stream
     damage_reroll_one = (
         (
             one_reroll_gain_across(
-                [
-                    (unsaved_regular, per_attack["distribution"]),
-                    (unsaved_critical + mortal_wounds_stream, per_critical["distribution"]),
-                ],
-                damage_rolls,
+                [per_attack["distribution"], per_critical["distribution"]],
+                lambda z: damage_pool(z[0], z[1]),
             )
             if critical is not None
-            else one_damage_reroll_gain(per_attack["distribution"], damage_rolls)
+            else one_damage_reroll_gain(per_attack["distribution"], lambda z: damage_pool(z, z))
         )
         if resolved["rerollOne"].get("damage")
         and not damage_reroll
@@ -720,6 +833,8 @@ def crunch_model(
     damage_mortal += roll_mortals
     damage = damage_main + damage_mortal
     damage_detail = f"D {base_d}"
+    if resolved["damageHalving"]["value"]:
+        damage_detail += " halved (defender, round up)"
     if melta_bonus:
         damage_detail += f" + Melta {melta_bonus} (half range)"
     if resolved["damageMod"]["value"] != 0:
@@ -741,12 +856,12 @@ def crunch_model(
     stages.append({"name": "damage", "expected": damage, "detail": damage_detail})
 
     # 6. FNP — an all-FNP fires on every unsaved wound; a mortal-FNP only on
-    # the mortal-wound stream. Both against mortals: independent Bernoulli
-    # trials, so the surviving fractions multiply.
+    # the mortal-wound stream. A wound gets one Feel No Pain roll, so a target
+    # carrying both uses the better one against mortals.
     p_survive_all = _fnp_survival_fraction(resolved["feelNoPain"])
-    p_survive_mortal = _fnp_survival_fraction(resolved["feelNoPainMortal"])
+    mortal_survive = min(p_survive_all, _fnp_survival_fraction(resolved["feelNoPainMortal"]))
     after_main = damage_main * p_survive_all
-    after_mortal = damage_mortal * p_survive_all * p_survive_mortal
+    after_mortal = damage_mortal * mortal_survive
     after_fnp = after_main + after_mortal
     stages.append(
         {
@@ -761,7 +876,12 @@ def crunch_model(
     # rolls for each wound before that. Devastating Wounds' mortal wounds are capped the same
     # way; mortal wounds an ability inflicts on a roll carry over. Each stream keeps its share of
     # the expected damage above (re-roll-one gains included), scaled by what the cap leaves of it.
-    wounds_stat = unit_profile["W"]
+    # The Wounds characteristic, set then modified; a model keeps at least 1.
+    wounds_set = resolved["woundsCharacteristic"]
+    wounds_base = wounds_set["value"] if wounds_set is not None else unit_profile["W"]
+    wounds_stat = (
+        max(1, wounds_base + resolved["woundsMod"]["value"]) if wounds_base > 0 else wounds_base
+    )
     if critical is not None:
         main_capped = unsaved_regular * capped_damage(
             per_attack["distribution"], p_survive_all, wounds_stat
@@ -776,7 +896,6 @@ def crunch_model(
             per_attack["distribution"], p_survive_all, wounds_stat
         )
         main_raw = unsaved * damage_per_hit * p_survive_all
-    mortal_survive = p_survive_all * p_survive_mortal
     devastating_raw = mortal_wounds_stream * per_critical["expected"] * mortal_survive
     devastating_capped = mortal_wounds_stream * capped_damage(
         per_critical["distribution"], mortal_survive, wounds_stat
@@ -823,10 +942,11 @@ def crunch_model(
         "lethal": has_lethal,
         "wound": {"pass": wound_probs[0], "crit": wound_probs[1]},
         "devastating": has_devastating,
+        "precision": _find_keyword(resolved, "precision") is not None,
         "unsaved": 1 - p_saved,
         "damage": per_attack["distribution"],
         "woundLost": p_survive_all,
-        "mortalWoundLost": p_survive_all * p_survive_mortal,
+        "mortalWoundLost": mortal_survive,
         "wounds": wounds_stat,
         "modelCount": target_model_count,
         "rollMortals": {
@@ -1001,24 +1121,11 @@ def _check_probabilities(
     return (pass_p, crit_p, open_p)
 
 
-def one_reroll_dice(pool: float, open_p: float) -> float:
-    """Expected dice a "re-roll one" re-rolls over a pool of ``pool`` dice that
-    each end failed and un-rerolled with probability ``open_p``: for a whole
-    pool, the chance at least one does, 1 - (1 - open)^pool. A pool the engine
-    carries as an expectation is read between the whole pools either side of
-    it, which is exact when it is one of the two and never overstates a
-    concave gain.
-    """
-    if pool > 0 and open_p > 0:
-        return between_whole_pools(pool, lambda dice: 1 - math.pow(1 - open_p, dice))
-    return 0.0
-
-
-def between_whole_pools(pool: float, at_whole: Callable[[int], float]) -> float:
-    """``at_whole`` at a fractional ``pool``, read linearly between the whole pools either side."""
-    low = math.floor(pool)
-    below = at_whole(low)
-    return below if pool == low else below + (pool - low) * (at_whole(low + 1) - below)
+def _sum_over(
+    distribution: list[tuple[float, float]], f: Callable[[float], float]
+) -> float:
+    """Σ p·f(value) over a (value, probability) distribution."""
+    return sum(probability * f(value) for value, probability in distribution)
 
 
 def _js_number(v: Any) -> float:

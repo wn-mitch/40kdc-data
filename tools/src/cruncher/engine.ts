@@ -15,6 +15,7 @@ import {
   type Buff,
   type BuffApplicability,
   type EngineContext,
+  modifiedWounds,
   resolveBuffs,
   type ResolvedModifiers,
   type RerollSubset,
@@ -22,7 +23,7 @@ import {
 } from "./buffs.js";
 import { Dataset } from "../data/dataset.js";
 import { isMeleeProfile } from "../data/weapon-profile.js";
-import { damageRoll, oneDamageRerollGain, oneRerollGainAcross } from "./damage-roll.js";
+import { damageRoll, oneDamageRerollGain, oneRerollGainAcross, quantityDistribution } from "./damage-roll.js";
 import { attackAp, hasCriticalWoundBuffs, resolveCriticalWound, splitUnsaved } from "./critical-wounds.js";
 
 export type AttackProfileRef = { weapon: Weapon; profileIndex: number };
@@ -79,6 +80,8 @@ export type AttackModel = {
   lethal: boolean;
   wound: { pass: number; crit: number };
   devastating: boolean;
+  /** [PRECISION]: against an attached unit the attacks go to a CHARACTER group first (allocation.ts `allocateAttached`). */
+  precision: boolean;
   /** Probability a wound that reaches the save is not saved. */
   unsaved: number;
   /** Final per-attack damage. */
@@ -199,13 +202,16 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const rapidFireExtraPerModel = rapidFire && halfRange ? evalStatValue(rapidFire.parameters?.value) : 0;
   const blast = findKeyword(resolved, "blast");
   const targetModelCount = input.target.modelCount ?? input.target.unit.model_count?.min ?? 1;
+  // Blast and Cleave count the models in the whole target unit: the context's when it says, which
+  // for one group of an attached unit is more than the group's `modelCount`.
+  const unitModelCount = ctx.targetModelCount ?? targetModelCount;
   // Bare [BLAST] adds one attack per five target models; [BLAST X] adds X.
   const blastExtraPerModel = blast
-    ? Math.floor(targetModelCount / 5) * (blast.parameters?.value !== undefined ? evalStatValue(blast.parameters.value) : 1)
+    ? Math.floor(unitModelCount / 5) * (blast.parameters?.value !== undefined ? evalStatValue(blast.parameters.value) : 1)
     : 0;
   // [CLEAVE X] adds X attacks per five target models when the weapon picks one target, as every crunch does.
   const cleave = findKeyword(resolved, "cleave");
-  const cleaveExtraPerModel = cleave?.parameters?.value !== undefined ? Math.floor(targetModelCount / 5) * evalStatValue(cleave.parameters.value) : 0;
+  const cleaveExtraPerModel = cleave?.parameters?.value !== undefined ? Math.floor(unitModelCount / 5) * evalStatValue(cleave.parameters.value) : 0;
   const attacks = input.modelsFiring * (attacksPerModel + rapidFireExtraPerModel + blastExtraPerModel + cleaveExtraPerModel);
   stages.push({
     name: "attacks",
@@ -213,6 +219,19 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     detail: attacksDetail(input.modelsFiring, attacksPerModel, rapidFireExtraPerModel, blastExtraPerModel, cleaveExtraPerModel)
       + (attacksReroll && resolved.statSet.A === undefined && typeof weaponProfile.stats.A === "string" ? `; reroll ${attacksReroll} of A ${weaponProfile.stats.A}` : ""),
   });
+  // A "re-roll one" die is spent when its pool holds at least one die left failed, and the pools
+  // after the Hit roll hold a random number of dice. The pools are carried as generating functions
+  // (E[u^dice] as a function of u), composed stage by stage from each attack's own outcomes, so
+  // P(at least one open die) = 1 - pool(1 - open) is exact rather than read off the mean pool.
+  const perModelAttacks: Array<[number, number]> = resolved.statSet.A !== undefined
+    ? [[resolved.statSet.A.value, 1]]
+    : attacksReroll
+      ? damageRoll({ stat: weaponProfile.stats.A, bonus: 0, modifier: 0, reduction: 0, reroll: attacksReroll }).distribution.map(({ value, probability }) => [value, probability])
+      : quantityDistribution(weaponProfile.stats.A);
+  const rapidFireCounts: Array<[number, number]> = rapidFireExtraPerModel !== 0 ? quantityDistribution(rapidFire!.parameters?.value) : [[0, 1]];
+  const fixedExtraPerModel = resolved.attacksMod.value + blastExtraPerModel + cleaveExtraPerModel;
+  const attackCount = (u: number): number =>
+    Math.pow(sumOver(perModelAttacks, (a) => sumOver(rapidFireCounts, (r) => Math.pow(u, Math.max(0, a + r + fixedExtraPerModel)))), input.modelsFiring);
 
   // 2. Hits
   // Cover (11e): the benefit of cover is -1 to the attacker's hit roll, not a
@@ -233,7 +252,8 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   let critHits: number;
   let hitsDetail: string;
   let hitRerollOneDice = 0;
-  let hitProbs = { pass: 1, crit: 0 };
+  let hitProbs = { pass: 1, crit: 0, open: 0 };
+  let hitFresh: { pass: number; crit: number } | undefined;
   if (torrent) {
     hits = attacks;
     critHits = 0;
@@ -246,7 +266,8 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     }
     const hitCheck = {
       unmodifiedNeeded: hitStat,
-      modifier: resolved.hitMod.value + coverHitPenalty,
+      // Cover is a hit-roll modifier like any other: the ±1 cap takes the total.
+      modifier: covered ? Math.max(-1, Math.min(1, resolved.hitMod.raw + coverHitPenalty)) : resolved.hitMod.value,
       autoFailOnOne: true,
       autoPassOnSix: true,
       critThreshold: critHitThreshold,
@@ -258,7 +279,8 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     hitsDetail = `${isMelee ? "WS" : "BS"}${hitStat}+ (mod ${signed(resolved.hitMod.value)}${covered ? ", cover -1" : ""}, reroll ${resolved.rerolls.hit?.subset ?? "none"}${critHitThreshold < 6 ? `, crit ${critHitThreshold}+` : ""}) → P(hit)=${probs.pass.toFixed(4)}, P(crit)=${probs.crit.toFixed(4)}`;
     if (resolved.rerollOne.hit) {
       const fresh = checkProbabilities({ ...hitCheck, reroll: "none" });
-      const dice = oneRerollDice(attacks, probs.open);
+      hitFresh = fresh;
+      const dice = probs.open > 0 ? 1 - attackCount(1 - probs.open) : 0;
       hitRerollOneDice = dice;
       hits += dice * fresh.pass;
       critHits += dice * fresh.crit;
@@ -296,6 +318,18 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const hasLethal = !!findKeyword(resolved, "lethal-hits");
   const hitsForWoundRoll = hasLethal ? hits - critHits : hits;
   const lethalAutoWounds = hasLethal ? critHits : 0;
+  // E[w^(Wound rolls) l^(Lethal Hits wounds)] over the volley. A re-rolled Hit die replaces one
+  // failed die, which led to no Wound roll, with a fresh attack's outcome.
+  const sustainedCounts: Array<[number, number]> = sustained ? quantityDistribution(sustained.parameters?.value) : [[0, 1]];
+  const perAttackHit = (p: { pass: number; crit: number }, w: number, l: number): number => torrent
+    ? w
+    : 1 - p.pass + (p.pass - p.crit) * w + p.crit * sumOver(sustainedCounts, (extra) => Math.pow(w, extra + (hasLethal ? 0 : 1)) * (hasLethal ? l : 1));
+  const hitPool = (w: number, l: number): number => {
+    const all = attackCount(perAttackHit(hitProbs, w, l));
+    if (!hitFresh) return all;
+    const closed = attackCount(perAttackHit(hitProbs, w, l) - hitProbs.open);
+    return closed + (all - closed) * perAttackHit(hitFresh, w, l);
+  };
 
   const woundCheck = {
     unmodifiedNeeded: stdWoundNeeded,
@@ -308,14 +342,26 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   let regularWoundsFromRoll = hitsForWoundRoll * (woundProbs.pass - woundProbs.crit);
   let critWoundsFromRoll = hitsForWoundRoll * woundProbs.crit;
   let woundRerollOneDice = 0;
+  let woundFresh: { pass: number; crit: number } | undefined;
   if (resolved.rerollOne.wound) {
     const fresh = checkProbabilities({ ...woundCheck, reroll: "none" });
-    woundRerollOneDice = oneRerollDice(hitsForWoundRoll, woundProbs.open);
+    woundFresh = fresh;
+    woundRerollOneDice = woundProbs.open > 0 ? 1 - hitPool(1 - woundProbs.open, 1) : 0;
     regularWoundsFromRoll += woundRerollOneDice * (fresh.pass - fresh.crit);
     critWoundsFromRoll += woundRerollOneDice * fresh.crit;
   }
   const totalRegularWounds = regularWoundsFromRoll + lethalAutoWounds;
   const hasDevastating = !!findKeyword(resolved, "devastating-wounds");
+  // E[r^(normal saves) k^(critical-wound saves) m^(Devastating Wounds mortal wounds)] over the
+  // volley; a Lethal Hits wound takes a normal save. A re-rolled Wound die replaces one failed die.
+  const perWound = (p: { pass: number; crit: number }, r: number, k: number, m: number): number =>
+    1 - p.pass + (p.pass - p.crit) * r + p.crit * (hasDevastating ? m : k);
+  const woundPool = (r: number, k: number, m: number): number => {
+    const all = hitPool(perWound(woundProbs, r, k, m), r);
+    if (!woundFresh) return all;
+    const closed = hitPool(perWound(woundProbs, r, k, m) - woundProbs.open, r);
+    return closed + (all - closed) * perWound(woundFresh, r, k, m);
+  };
   const mortalWoundsStream = hasDevastating ? critWoundsFromRoll : 0;
   const regularWoundsForSaves = hasDevastating ? totalRegularWounds : totalRegularWounds + critWoundsFromRoll;
   const totalWounds = regularWoundsForSaves + mortalWoundsStream;
@@ -365,7 +411,9 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   const pSaved = effectiveSaveTarget >= 7 ? 0 : saveProbs.pass;
   let unsaved = regularWoundsForSaves * (1 - pSaved);
   // "Re-roll one saving throw": one failed save no other permission re-rolled is rolled again.
-  let saveRerollOneDice = resolved.rerollOne.save && effectiveSaveTarget < 7 ? oneRerollDice(regularWoundsForSaves, saveProbs.open) : 0;
+  let saveRerollOneDice = resolved.rerollOne.save && effectiveSaveTarget < 7 && saveProbs.open > 0
+    ? 1 - woundPool(1 - saveProbs.open, 1 - saveProbs.open, 1)
+    : 0;
   if (saveRerollOneDice > 0) {
     const fresh = checkProbabilities({ unmodifiedNeeded: effectiveSaveTarget, modifier: 0, reroll: "none", autoFailOnOne: true, autoPassOnSix: false, critThreshold: 7 });
     unsaved -= saveRerollOneDice * fresh.pass;
@@ -388,7 +436,8 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     const regular = stream(effectiveSaveTarget, regularWoundsForSaves - criticalToSaves);
     const crits = stream(criticalSaveTarget, criticalToSaves);
     pSavedCritical = crits.saved;
-    const split = splitUnsaved([regular, crits], oneRerollDice, resolved.rerollOne.save !== undefined);
+    const splitDice = resolved.rerollOne.save ? 1 - woundPool(1 - regular.open, 1 - crits.open, 1) : 0;
+    const split = splitUnsaved([regular, crits], splitDice);
     unsaved = split.unsaved;
     saveRerollOneDice = split.dice;
     const shareRegular = regular.wounds * (1 - regular.saved);
@@ -419,6 +468,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     bonus: meltaBonus,
     modifier: resolved.damageMod.value,
     reduction: damageReduction,
+    ...(resolved.damageHalving.value ? { halve: true } : {}),
     ...(damageReroll ? { reroll: damageReroll } : {}),
   });
   const damagePerHit = perAttack.expected;
@@ -430,6 +480,7 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
       bonus: meltaBonus,
       modifier: critical.damageMod.value,
       reduction: critical.damageReduction.value,
+      ...(critical.damageHalving.value ? { halve: true } : {}),
       ...(criticalDamageReroll ? { reroll: criticalDamageReroll } : {}),
     })
     : perAttack;
@@ -439,13 +490,16 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   // proportion to their rolls. A roll another permission already re-rolled cannot be re-rolled, so
   // beside one the single die is not priced. With critical-wound Damage a roll gains against its
   // own kind's mean: the two kinds are separate rolls, not one die with both distributions.
+  // The Damage rolls' pool is E[n^(normal rolls) c^(critical-wound and mortal-wound rolls)]: a
+  // failed save leads to a roll. It leaves out the one save a "re-roll one saving throw" re-rolls.
+  const damagePool = (n: number, c: number): number => {
+    const regularRoll = pSaved + (1 - pSaved) * n;
+    return woundPool(regularRoll, critical && !hasDevastating ? pSavedCritical + (1 - pSavedCritical) * c : regularRoll, c);
+  };
   const damageRolls = unsaved + mortalWoundsStream;
   const damageRerollGain = (): number => critical
-    ? oneRerollGainAcross([
-      { weight: unsavedRegular, distribution: perAttack.distribution },
-      { weight: unsavedCritical + mortalWoundsStream, distribution: perCritical.distribution },
-    ], damageRolls)
-    : oneDamageRerollGain(perAttack.distribution, damageRolls);
+    ? oneRerollGainAcross([perAttack.distribution, perCritical.distribution], ([n, c]) => damagePool(n!, c!))
+    : oneDamageRerollGain(perAttack.distribution, (z) => damagePool(z, z));
   const damageRerollOne = resolved.rerollOne.damage && !damageReroll && !criticalDamageReroll && damageRolls > 0 ? damageRerollGain() : 0;
   if (damageRerollOne > 0) {
     damageMain += damageRerollOne * (unsaved / damageRolls);
@@ -466,18 +520,17 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   stages.push({
     name: "damage",
     expected: damage,
-    detail: `D ${baseD}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit${resolved.rerollOne.damage ? `; re-roll one Damage roll: +${damageRerollOne.toFixed(4)}` : ""}${critical ? `; critical wounds ${perCritical.expected} per hit` : ""}; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}${rollMortals > 0 ? ` (${rollMortals.toFixed(4)} from abilities)` : ""}`,
+    detail: `D ${baseD}${resolved.damageHalving.value ? " halved (defender, round up)" : ""}${meltaBonus ? ` + Melta ${meltaBonus} (half range)` : ""}${resolved.damageMod.value !== 0 ? ` ${signed(resolved.damageMod.value)} (mod)` : ""}${damageReduction > 0 ? ` -${damageReduction} (defender, min 1)` : ""}${damageReroll ? `, reroll ${damageReroll}${perAttack.rerollUsed ? "" : " (no effect)"}` : ""} = ${damagePerHit} per hit${resolved.rerollOne.damage ? `; re-roll one Damage roll: +${damageRerollOne.toFixed(4)}` : ""}${critical ? `; critical wounds ${perCritical.expected} per hit` : ""}; main ${damageMain.toFixed(4)}, mortal ${damageMortal.toFixed(4)}${rollMortals > 0 ? ` (${rollMortals.toFixed(4)} from abilities)` : ""}`,
   });
 
   // 6. FNP
-  // Two scopes compose: an all-FNP fires on every unsaved wound; a mortal-FNP
-  // fires only on the mortal-wound stream (e.g. Death Guard 5+ FNP vs mortals).
-  // A target carrying both rolls both against mortals — independent Bernoulli
-  // trials, so the surviving fractions multiply.
+  // An all-FNP fires on every unsaved wound; a mortal-FNP only on the mortal-wound stream (e.g.
+  // Death Guard 5+ FNP vs mortals). A wound gets one Feel No Pain roll, so a target carrying both
+  // uses the better one against mortals.
   const pSurviveAll = fnpSurvivalFraction(resolved.feelNoPain);
-  const pSurviveMortal = fnpSurvivalFraction(resolved.feelNoPainMortal);
+  const mortalSurvive = Math.min(pSurviveAll, fnpSurvivalFraction(resolved.feelNoPainMortal));
   const afterMain = damageMain * pSurviveAll;
-  const afterMortal = damageMortal * pSurviveAll * pSurviveMortal;
+  const afterMortal = damageMortal * mortalSurvive;
   const afterFnp = afterMain + afterMortal;
   const fnpDetail = describeFnp(resolved.feelNoPain, resolved.feelNoPainMortal);
   stages.push({ name: "after-fnp", expected: afterFnp, detail: fnpDetail });
@@ -487,12 +540,11 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
   // for each wound before that. Devastating Wounds' mortal wounds are capped the same way; mortal
   // wounds an ability inflicts on a roll carry over. Each stream keeps its share of the expected
   // damage above (re-roll-one gains included), scaled by what the cap leaves of it.
-  const W = unitProfile.W;
+  const W = modifiedWounds(unitProfile.W, resolved);
   const mainCapped = critical
     ? unsavedRegular * cappedDamage(perAttack.distribution, pSurviveAll, W) + unsavedCritical * cappedDamage(perCritical.distribution, pSurviveAll, W)
     : unsaved * cappedDamage(perAttack.distribution, pSurviveAll, W);
   const mainRaw = (critical ? unsavedRegular * damagePerHit + unsavedCritical * perCritical.expected : unsaved * damagePerHit) * pSurviveAll;
-  const mortalSurvive = pSurviveAll * pSurviveMortal;
   const devastatingRaw = mortalWoundsStream * perCritical.expected * mortalSurvive;
   const devastatingCapped = mortalWoundsStream * cappedDamage(perCritical.distribution, mortalSurvive, W);
   const abilityMortals = rollMortals * mortalSurvive;
@@ -520,10 +572,11 @@ export function crunchModel(input: EngineInput, dataset?: Dataset): { output: En
     lethal: hasLethal,
     wound: woundProbs,
     devastating: hasDevastating,
+    precision: !!findKeyword(resolved, "precision"),
     unsaved: 1 - pSaved,
     damage: perAttack.distribution,
     woundLost: pSurviveAll,
-    mortalWoundLost: pSurviveAll * pSurviveMortal,
+    mortalWoundLost: mortalSurvive,
     wounds: W,
     modelCount: targetModelCount,
     ...(critical ? { criticalWound: { unsaved: 1 - pSavedCritical, damage: perCritical.distribution } } : {}),
@@ -675,21 +728,9 @@ function checkProbabilities(args: {
   return { pass, crit, open };
 }
 
-/**
- * Expected dice a "re-roll one" re-rolls over a pool of `pool` dice that each end failed and
- * un-rerolled with probability `open`: for a whole pool, the chance at least one does,
- * 1 - (1 - open)^pool. A pool the engine carries as an expectation is read between the whole pools
- * either side of it, which is exact when it is one of the two and never overstates a concave gain.
- */
-export function oneRerollDice(pool: number, open: number): number {
-  return pool > 0 && open > 0 ? betweenWholePools(pool, (dice) => 1 - Math.pow(1 - open, dice)) : 0;
-}
-
-/** `atWhole` at a fractional `pool`, read linearly between the whole pools either side. */
-export function betweenWholePools(pool: number, atWhole: (dice: number) => number): number {
-  const low = Math.floor(pool);
-  const below = atWhole(low);
-  return pool === low ? below : below + (pool - low) * (atWhole(low + 1) - below);
+/** Σ p·f(value) over a (value, probability) distribution. */
+function sumOver(distribution: ReadonlyArray<[number, number]>, f: (value: number) => number): number {
+  return distribution.reduce((sum, [value, probability]) => sum + probability * f(value), 0);
 }
 
 /**

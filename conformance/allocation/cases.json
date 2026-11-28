@@ -73,11 +73,11 @@
     "name": "devastating-wounds lascannon vs cultists with 5+ FNP all + 4+ FNP vs mortals",
     "cruncher_case": "10-fnp-vs-mortal-devastating-lascannon-vs-cultists.json",
     "expected": {
-      "damageDealt": 0.5374688817761519,
-      "modelsDestroyed": 0.5374688817761519,
+      "damageDealt": 0.5488627559315145,
+      "modelsDestroyed": 0.5488627559315145,
       "modelsDestroyedDistribution": [
-        0.46253111822384807,
-        0.5374688817761519,
+        0.4511372440684856,
+        0.5488627559315145,
         0,
         0,
         0,
@@ -338,11 +338,11 @@
       "per": "unit"
     },
     "expected": {
-      "damageDealt": 0.09566631102982269,
-      "modelsDestroyed": 0.09566631102982269,
+      "damageDealt": 0.10706018518518516,
+      "modelsDestroyed": 0.10706018518518516,
       "modelsDestroyedDistribution": [
-        0.9043336889701774,
-        0.09566631102982269,
+        0.8929398148148149,
+        0.10706018518518516,
         0,
         0,
         0,
@@ -428,6 +428,86 @@
         0.21194624316311972,
         0.1771085426508503,
         0.20793101449973955
+      ]
+    }
+  },
+  {
+    "name": "Canonical critical wound: devastating-damage + +1 Wounds on the target",
+    "cruncher_case": "canonical-critical-wound-devastating-damage.json",
+    "buffs": [
+      {
+        "source": {
+          "kind": "ability",
+          "abilityId": "fabricated-wounds",
+          "abilityKind": "unit"
+        },
+        "contribution": {
+          "type": "wounds-mod",
+          "value": 1
+        }
+      }
+    ],
+    "expected": {
+      "damageDealt": 5.398088522993654,
+      "modelsDestroyed": 1.6976477097444913,
+      "modelsDestroyedDistribution": [
+        0.12771254967383008,
+        0.33224243175777596,
+        0.32161059490910304,
+        0.16125876352446164,
+        0.0474705030790215,
+        0.009705157055807677
+      ]
+    }
+  },
+  {
+    "name": "Canonical critical wound: devastating-damage + Wounds set to 4 and 3, then -1",
+    "cruncher_case": "canonical-critical-wound-devastating-damage.json",
+    "buffs": [
+      {
+        "source": {
+          "kind": "ability",
+          "abilityId": "fabricated-wounds-three",
+          "abilityKind": "unit"
+        },
+        "contribution": {
+          "type": "wounds-characteristic",
+          "value": 3
+        }
+      },
+      {
+        "source": {
+          "kind": "ability",
+          "abilityId": "fabricated-wounds-four",
+          "abilityKind": "unit"
+        },
+        "contribution": {
+          "type": "wounds-characteristic",
+          "value": 4
+        }
+      },
+      {
+        "source": {
+          "kind": "ability",
+          "abilityId": "fabricated-wounds-minus",
+          "abilityKind": "unit"
+        },
+        "contribution": {
+          "type": "wounds-mod",
+          "value": -1
+        }
+      }
+    ],
+    "expected": {
+      "damageDealt": 5.398088522993654,
+      "modelsDestroyed": 1.6976477097444913,
+      "modelsDestroyedDistribution": [
+        0.12771254967383008,
+        0.33224243175777596,
+        0.32161059490910304,
+        0.16125876352446164,
+        0.0474705030790215,
+        0.009705157055807677
       ]
     }
   }

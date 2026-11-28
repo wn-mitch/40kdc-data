@@ -194,7 +194,7 @@ pub enum BuffContribution {
     },
     /// "Re-roll one Hit roll": one die of the roll, at the player's pick, across the attack pool —
     /// a failed die no other re-roll already took, or for Damage the lowest roll when it is below
-    /// the mean of a fresh roll. The engine prices one such die per crunch (`one_reroll_dice`).
+    /// the mean of a fresh roll. The engine prices one such die per crunch (over each pool's generating function).
     RerollOne {
         roll: RollKind,
     },
@@ -210,8 +210,8 @@ pub enum BuffContribution {
     /// Feel-no-pain: roll one D6 per unsaved wound at `threshold`+, ignoring
     /// the wound on a pass. `scope` controls which wound stream it applies to:
     /// `All` (default) fires on every unsaved wound; `Mortal` fires only on
-    /// the mortal-wound stream (e.g. Death Guard 5+ FNP vs mortals). A target
-    /// carrying both rolls both against mortals.
+    /// the mortal-wound stream (e.g. Death Guard 5+ FNP vs mortals). A wound gets
+    /// one roll, so a target carrying both uses the better one against mortals.
     FeelNoPain {
         threshold: f64,
         #[serde(default, skip_serializing_if = "FnpScope::is_default")]
@@ -232,6 +232,14 @@ pub enum BuffContribution {
     ToughnessMod {
         value: f64,
     },
+    /// Additive modifier to the defender's Wounds stat; a model keeps at least 1 Wound.
+    WoundsMod {
+        value: f64,
+    },
+    /// Sets the defender's Wounds characteristic; applies before any `wounds-mod`.
+    WoundsCharacteristic {
+        value: f64,
+    },
     /// Additive modifier to the attacker's weapon AP. AP is signed against the
     /// defender's save (negative = more piercing), so a value of `-1` here
     /// makes the weapon one AP more piercing.
@@ -248,10 +256,14 @@ pub enum BuffContribution {
     /// Defender-side: subtract `value` from each unsaved damage point (floored
     /// at 1 by the engine). Multiple sources do NOT stack in 10e — the largest
     /// reduction wins. A `"to-zero"` reduction is [`Self::DamageZeroing`]; a
-    /// halving one is not modelled.
+    /// halving one is [`Self::DamageHalving`].
     DamageReduction {
         value: f64,
     },
+    /// Defender-side: halve each incoming attack's Damage, rounding up. It applies to the rolled
+    /// Damage before any addition or subtraction (Melta, damage modifiers, damage reduction).
+    /// Halving twice is still halving once.
+    DamageHalving,
     /// Defender-side: `uses` unsaved attacks have their Damage changed to 0
     /// before it is rolled, from a pool the unit shares or `uses` for each
     /// model. Only the discrete allocation stage reads it; the
@@ -485,6 +497,21 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
             BuffContribution::ToughnessMod { value } => {
                 sum_into(&mut out.toughness_mod, *value, &b.source)
             }
+            BuffContribution::WoundsMod { value } => {
+                sum_into(&mut out.wounds_mod, *value, &b.source)
+            }
+            BuffContribution::WoundsCharacteristic { value } => {
+                let take = out.wounds_characteristic.as_ref().is_none_or(|cur| {
+                    *value > cur.value
+                        || (*value == cur.value && rank(&b.source) < rank(&cur.dominant_source))
+                });
+                if take {
+                    out.wounds_characteristic = Some(ThresholdState {
+                        value: *value,
+                        dominant_source: b.source.clone(),
+                    });
+                }
+            }
             BuffContribution::ApMod { value } => sum_into(&mut out.ap_mod, *value, &b.source),
             BuffContribution::DamageReduction { value } => {
                 let take = match &out.damage_reduction.dominant_source {
@@ -498,6 +525,18 @@ pub fn resolve_buffs(buffs: &[Buff], ctx: &EngineContext) -> ResolvedModifiers {
                 if take {
                     out.damage_reduction = HighestMod {
                         value: *value,
+                        dominant_source: Some(b.source.clone()),
+                    };
+                }
+            }
+            BuffContribution::DamageHalving => {
+                let take = match &out.damage_halving.dominant_source {
+                    None => true,
+                    Some(prev) => rank(&b.source) < rank(prev),
+                };
+                if take {
+                    out.damage_halving = super::resolved::FlagMod {
+                        value: true,
                         dominant_source: Some(b.source.clone()),
                     };
                 }
@@ -699,6 +738,7 @@ fn cap_modifier(contribs: &[Contribution]) -> CappedMod {
         return CappedMod {
             value: 0.0,
             dominant_source: None,
+            raw: sum,
         };
     }
     let sign = capped.signum();
@@ -710,6 +750,7 @@ fn cap_modifier(contribs: &[Contribution]) -> CappedMod {
     CappedMod {
         value: capped,
         dominant_source: matching.first().map(|c| c.source.clone()),
+        raw: sum,
     }
 }
 

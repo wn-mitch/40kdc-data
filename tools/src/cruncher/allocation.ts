@@ -215,12 +215,77 @@ function zeroingOf(defences: AllocationDefences): DamageZeroing {
 }
 
 export function allocateModel(model: AttackModel, defences: AllocationDefences = {}): AllocationOutput {
+  const { damageDealt, modelsDestroyed, modelsDestroyedDistribution } = summarize(allocateFrom(model, zeroingOf(defences)));
+  return { damageDealt, modelsDestroyed, modelsDestroyedDistribution };
+}
+
+/** {@link allocate} over several attack lines in turn, with the wounds dealt as a distribution too. */
+export type AllocationSequenceOutput = AllocationOutput & {
+  /** Probability of each number of wounds removed from the target unit, from 0 to all of them. */
+  woundsDealtDistribution: number[];
+};
+
+/**
+ * Exact allocation of several attack lines into one target unit, fired in the order given: each
+ * line's attacks land on what the earlier lines left (models alive, wounds left on the damaged
+ * model and damage-zeroing uses left), so damage carried over and damage lost to overkill both
+ * count. Every input must describe the same target. Without an explicit `defences.zeroing`, the
+ * first input's `damage-zeroing` buffs supply it.
+ */
+export function allocateSequence(inputs: readonly EngineInput[], dataset?: Dataset, defences: AllocationDefences = {}): AllocationSequenceOutput {
+  const crunched = inputs.map((input) => crunchModel(input, dataset));
+  let zeroing = defences.zeroing;
+  if (zeroing === undefined && crunched.length > 0) {
+    const { unit, model: perModel } = crunched[0]!.output.resolved.damageZeroing;
+    if (unit > 0 && perModel > 0) throw new Error("allocate: unit-wide and per-model damage zeroing together are not modelled");
+    if (unit > 0) zeroing = { uses: unit, per: "unit" };
+    else if (perModel > 0) zeroing = { uses: perModel, per: "model" };
+  }
+  const resolvedZeroing = zeroingOf(zeroing === undefined ? {} : { zeroing });
+  const first = crunched[0]?.model;
+  if (first === undefined) return { damageDealt: 0, modelsDestroyed: 0, modelsDestroyedDistribution: [1], woundsDealtDistribution: [1] };
+  let result: Allocated | undefined;
+  for (const { model } of crunched) {
+    if (model.modelCount !== first.modelCount || model.wounds !== first.wounds) {
+      throw new Error("allocateSequence: every line must target the same unit");
+    }
+    result = allocateFrom(model, resolvedZeroing, result?.final);
+  }
+  return summarize(result!);
+}
+
+/** The target's state distribution after an allocation, with the geometry to read it. */
+type Allocated = { final: number[]; models: number; wounds: number; uses: number };
+
+/** States by (models alive, wounds left, zeroing uses left); see {@link allocateFrom}. */
+function summarize({ final, models, wounds, uses }: Allocated): AllocationSequenceOutput {
+  const cells = models * wounds;
+  const dead = cells * uses;
+  const destroyed = new Array<number>(models + 1).fill(0);
+  const dealt = new Array<number>(cells + 1).fill(0);
+  let damageDealt = 0;
+  final.forEach((p, id) => {
+    const cell = Math.floor(id / uses);
+    const alive = id === dead ? 0 : Math.floor(cell / wounds) + 1;
+    const remaining = id === dead ? 0 : (alive - 1) * wounds + (cell % wounds) + 1;
+    destroyed[models - alive]! += p;
+    dealt[cells - remaining]! += p;
+    damageDealt += p * (cells - remaining);
+  });
+  const modelsDestroyed = destroyed.reduce((sum, p, count) => sum + p * count, 0);
+  return { damageDealt, modelsDestroyed, modelsDestroyedDistribution: destroyed, woundsDealtDistribution: dealt };
+}
+
+/**
+ * One line's attacks allocated into the target, starting from `start` (a state distribution from
+ * an earlier line), else from the unit at full strength with every zeroing use left.
+ */
+function allocateFrom(model: AttackModel, zeroing: DamageZeroing, start?: readonly number[]): Allocated {
   if (model.unmodelled.length > 0) throw new Error(`allocate: ${model.unmodelled.join(", ")} not modelled by exact allocation`);
   const models = integral(model.modelCount, "target models");
   const wounds = integral(model.wounds, "target Wounds");
-  const zeroing = zeroingOf(defences);
-  if (models === 0 || wounds === 0) return { damageDealt: 0, modelsDestroyed: 0, modelsDestroyedDistribution: [1] };
   const uses = zeroing.uses + 1;
+  if (models === 0 || wounds === 0) return { final: [1], models: 0, wounds: 1, uses };
   const cells = models * wounds;
   const dead = cells * uses;
   // Alive state (m, w, u) is ((m - 1) * wounds + (w - 1)) * uses + u; `dead` absorbs.
@@ -260,8 +325,8 @@ export function allocateModel(model: AttackModel, defences: AllocationDefences =
   const zeros = (): number[] => new Array<number>(dead + 1).fill(0);
   // States by the ability mortal wounds still to inflict: layer k waits on k of them.
   type Layers = number[][];
-  let state: Layers = [zeros()];
-  state[0]![dead - 1] = 1;
+  let state: Layers = [start ? [...start] : zeros()];
+  if (!start) state[0]![dead - 1] = 1;
   const pending: Layers = [];
   const gather = (into: Layers, layers: Layers, weight: number): void => layers.forEach((layer, k) => {
     const target = into[k] ??= zeros();
@@ -369,15 +434,309 @@ export function allocateModel(model: AttackModel, defences: AllocationDefences =
     (pending[k] ?? []).forEach((q, id) => { final[id]! += q; });
   }
 
-  const destroyed = new Array<number>(models + 1).fill(0);
+  return { final, models, wounds, uses };
+}
+
+/**
+ * One allocation group of an attached target unit (rules 05.03 and 05.04): one for each CHARACTER
+ * model, and one for the other models with the same W, Sv and InSv.
+ */
+export type TargetGroup = { character: boolean };
+
+/** {@link allocateAttached}'s result: the unit's, and each group's models destroyed. */
+export type AttachedAllocationOutput = AllocationSequenceOutput & {
+  /** For each group in the order given, the probability of each number of its models destroyed. */
+  groups: Array<{ modelsDestroyedDistribution: number[] }>;
+};
+
+/** The largest number of target states {@link allocateAttached} tracks before it refuses. */
+export const MAX_ATTACHED_STATES = 200_000;
+
+/** The fields of an attack's model that every group of an attached target must share. */
+function sharedRolls(model: AttackModel): string {
+  const { modelsFiring, attacksStat, attacksReroll, attacksBonus, rapidFireStat, torrent, hit, sustainedStat, lethal, wound, devastating, precision, rollMortals } = model;
+  return JSON.stringify([modelsFiring, attacksStat, attacksReroll ?? null, attacksBonus, rapidFireStat, torrent, hit.pass, hit.crit, sustainedStat, lethal, wound.pass, wound.crit, devastating, precision, rollMortals]);
+}
+
+/**
+ * Exact allocation of several attack lines into an attached unit, fired in the order given.
+ * `lines[l][g]` is line `l` crunched against group `g`: the same attacker and context, with the
+ * group's own profile, model count and defensive buffs. Each group must see the same Hit and Wound
+ * rolls, so give every group the attached unit's keywords, its Toughness, the highest among the
+ * Bodyguard models (05.02.01), and its models as `context.targetModelCount`, which Blast and Cleave
+ * count.
+ *
+ * `groups` is the defender's allocation order, CHARACTER groups after every other group. The
+ * current group is the first with a model left; an attack's save, Damage and Feel No Pain are that
+ * group's, and the damaged model takes the next attack. A line with [PRECISION] starts on the first
+ * CHARACTER group with a model left and keeps it current until the line is resolved or the group is
+ * destroyed. Saves are made as each wound reaches the current group rather than all at once and
+ * sorted lowest first, which is exact while every group has the same save.
+ *
+ * With one group this is {@link allocateSequence}. Without an explicit `defences.zeroing`, the
+ * first line's first group supplies the damage-zeroing defence, shared across the groups.
+ */
+export function allocateAttached(
+  lines: ReadonlyArray<readonly EngineInput[]>,
+  groups: readonly TargetGroup[],
+  dataset?: Dataset,
+  defences: AllocationDefences = {},
+): AttachedAllocationOutput {
+  if (groups.length === 0) throw new Error("allocateAttached: the target needs at least one group");
+  const firstCharacter = groups.findIndex((group) => group.character);
+  if (firstCharacter >= 0 && groups.slice(firstCharacter).some((group) => !group.character)) {
+    throw new Error("allocateAttached: no CHARACTER group can come before a non-CHARACTER group");
+  }
+  for (const line of lines) {
+    if (line.length !== groups.length) throw new Error(`allocateAttached: every line needs one input per group (${groups.length}), got ${line.length}`);
+  }
+  const crunched = lines.map((line) => line.map((input) => crunchModel(input, dataset)));
+  let zeroing = defences.zeroing;
+  if (zeroing === undefined && crunched.length > 0) {
+    const { unit, model: perModel } = crunched[0]![0]!.output.resolved.damageZeroing;
+    if (unit > 0 && perModel > 0) throw new Error("allocate: unit-wide and per-model damage zeroing together are not modelled");
+    if (unit > 0) zeroing = { uses: unit, per: "unit" };
+    else if (perModel > 0) zeroing = { uses: perModel, per: "model" };
+  }
+  const resolvedZeroing = zeroingOf(zeroing === undefined ? {} : { zeroing });
+  if (groups.length === 1) {
+    const out = crunched.length === 0
+      ? { damageDealt: 0, modelsDestroyed: 0, modelsDestroyedDistribution: [1], woundsDealtDistribution: [1] }
+      : allocateSequence(lines.map((line) => line[0]!), dataset, { zeroing: resolvedZeroing });
+    return { ...out, groups: [{ modelsDestroyedDistribution: out.modelsDestroyedDistribution }] };
+  }
+  const geometry = crunched[0]?.map(({ model }) => ({ models: integral(model.modelCount, "target models"), wounds: integral(model.wounds, "target Wounds") }));
+  if (geometry === undefined) throw new Error("allocateAttached: give at least one line to read the target's groups from");
+  let state: number[] | undefined;
+  for (const line of crunched) {
+    const models = line.map(({ model }) => model);
+    models.forEach((model, g) => {
+      if (model.unmodelled.length > 0) throw new Error(`allocate: ${model.unmodelled.join(", ")} not modelled by exact allocation`);
+      if (model.modelCount !== geometry[g]!.models || model.wounds !== geometry[g]!.wounds) throw new Error("allocateAttached: every line must target the same groups");
+      if (sharedRolls(model) !== sharedRolls(models[0]!)) {
+        throw new Error("allocateAttached: the groups disagree on the attack's Hit or Wound rolls; give each group the attached unit's keywords, Toughness and model count");
+      }
+    });
+    state = allocateGroupsFrom(models, groups, geometry, resolvedZeroing, state);
+  }
+  return summarizeGroups(state!, geometry, resolvedZeroing.uses + 1);
+}
+
+type GroupGeometry = { models: number; wounds: number };
+
+/** Mixed-radix strides of the groups' remaining wounds, and the number of cells. */
+function groupStrides(geometry: readonly GroupGeometry[]): { strides: number[]; cells: number } {
+  const strides: number[] = [];
+  let cells = 1;
+  for (const { models, wounds } of geometry) {
+    strides.push(cells);
+    cells *= models * wounds + 1;
+  }
+  return { strides, cells };
+}
+
+/**
+ * One line's attacks into the groups, from `start` (an earlier line's states) or the unit at full
+ * strength. A state is the wounds each group has left, plus zeroing uses left: a group has at
+ * most one damaged model, so its wounds left say how many models it has and how hurt the damaged
+ * one is.
+ */
+function allocateGroupsFrom(
+  models: readonly AttackModel[],
+  groups: readonly TargetGroup[],
+  geometry: readonly GroupGeometry[],
+  zeroing: DamageZeroing,
+  start?: readonly number[],
+): number[] {
+  const model = models[0]!;
+  const uses = zeroing.uses + 1;
+  const { strides, cells } = groupStrides(geometry);
+  const size = cells * uses;
+  if (size > MAX_ATTACHED_STATES) throw new Error(`allocate: the attached unit's ${size} states exceed the exact allocation bound (${MAX_ATTACHED_STATES})`);
+  const left = (cell: number, g: number) => Math.floor(cell / strides[g]!) % (geometry[g]!.models * geometry[g]!.wounds + 1);
+  const full = geometry.reduce((sum, { models: m, wounds: w }, g) => sum + m * w * strides[g]!, 0);
+  const zeros = (): number[] => new Array<number>(size).fill(0);
+  const initial = start ? [...start] : zeros();
+  if (!start) initial[full * uses + uses - 1] = 1;
+
+  // What one wound, critical wound or mortal wound does to the current group.
+  const split = models.some((m) => m.criticalWound !== undefined) && !model.devastating;
+  const params = models.map((m) => {
+    const critical = m.criticalWound ?? { unsaved: m.unsaved, damage: m.damage };
+    return {
+      wound: { unsaved: m.unsaved, removed: woundsLost(m.damage, m.woundLost), zeroable: true },
+      critical: { unsaved: critical.unsaved, removed: woundsLost(critical.damage, m.woundLost), zeroable: true },
+      one: { unsaved: 1, removed: woundsLost([{ value: 1, probability: 1 }], m.mortalWoundLost), zeroable: false },
+      dev: { unsaved: 1, removed: woundsLost(m.criticalWound?.damage ?? m.damage, m.mortalWoundLost), zeroable: false },
+    };
+  });
+  type Kind = "wound" | "critical" | "one" | "dev";
+  const firstAlive = (cell: number, order: readonly number[]) => order.find((g) => left(cell, g) > 0) ?? -1;
+  const defaultOrder = groups.map((_, g) => g);
+  const characters = defaultOrder.filter((g) => groups[g]!.character);
+
+  // The line's attacks from one share of the start, `chosen` the group [PRECISION] keeps current.
+  const run = (from: number[], chosen: number): number[] => {
+    const current = Array.from({ length: cells }, (_, cell) => (chosen >= 0 && left(cell, chosen) > 0 ? chosen : firstAlive(cell, defaultOrder)));
+    const step = (state: readonly number[], kind: Kind): number[] => {
+      const out = zeros();
+      for (let id = 0; id < size; id += 1) {
+        const p = state[id]!;
+        if (p === 0) continue;
+        const cell = Math.floor(id / uses);
+        const g = current[cell]!;
+        if (g < 0) { out[id]! += p; continue; }
+        const { unsaved, removed, zeroable } = params[g]![kind];
+        if (unsaved < 1) out[id]! += p * (1 - unsaved);
+        const hit = p * unsaved;
+        if (hit === 0) continue;
+        const unused = id % uses;
+        if (zeroable && unused > 0) { out[id - 1]! += hit; continue; }
+        const { wounds } = geometry[g]!;
+        const remaining = left(cell, g);
+        const alive = Math.ceil(remaining / wounds);
+        const onModel = remaining - (alive - 1) * wounds;
+        removed.forEach((q, amount) => {
+          if (q === 0) return;
+          const kills = amount >= onModel;
+          const next = amount === 0 ? remaining : kills ? (alive - 1) * wounds : remaining - amount;
+          const refilled = kills && zeroing.per === "model" ? uses - 1 : unused;
+          out[(cell + (next - remaining) * strides[g]!) * uses + refilled]! += hit * q;
+        });
+      }
+      return out;
+    };
+    const tableModel: AttackModel = { ...model, unsaved: 1, ...(split ? { criticalWound: { unsaved: 1, damage: model.damage } } : {}) };
+    const per = trim(perAttack(tableModel));
+    const counts = attackCounts(model);
+    const most = Math.max(...counts.keys());
+    const work = most * (most * (per.length - 1) + 1) * (most * (per[0]!.length - 1) + 1) * (most * (per[0]![0]!.length - 1) + 1);
+    if (work > MAX_EVENT_WORK) throw new Error(`allocate: ${most} attacks exceed the exact allocation bound (work ${work} > ${MAX_EVENT_WORK})`);
+    const mortals = model.rollMortals;
+    type Layers = number[][];
+    const pending: Layers = [];
+    const gather = (into: Layers, layers: Layers, weight: number): void => layers.forEach((layer, k) => {
+      const target = into[k] ??= zeros();
+      layer.forEach((q, id) => { target[id]! += weight * q; });
+    });
+    const stepAll = (layers: Layers, kind: Kind): Layers => layers.map((layer) => step(layer, kind));
+    const shiftAll = (layers: Layers, by: number): Layers => by === 0 ? layers : [...Array.from({ length: by }, zeros), ...layers];
+    if (split) {
+      // Critical wounds with their own save or Damage land in the order their hits wound.
+      const normalHit = model.torrent ? 1 : model.hit.pass - model.hit.crit;
+      const critHit = model.torrent ? 0 : model.hit.crit;
+      const extras = model.sustainedStat == null ? [[0, 1] as [number, number]] : quantityDistribution(model.sustainedStat);
+      const blend = (parts: ReadonlyArray<readonly [number, Layers]>): Layers => {
+        const out: Layers = [zeros()];
+        for (const [weight, layers] of parts) if (weight > 0) gather(out, layers, weight);
+        return out;
+      };
+      const woundRoll = (layers: Layers, extra: number): Layers => blend([
+        [1 - model.wound.pass, layers],
+        [model.wound.pass - model.wound.crit, shiftAll(stepAll(layers, "wound"), mortals.wound)],
+        [model.wound.crit, shiftAll(stepAll(layers, "critical"), mortals.wound + mortals.criticalWound + extra)],
+      ]);
+      const firstWound = (layers: Layers): Layers => model.lethal
+        ? shiftAll(stepAll(layers, "wound"), mortals.wound)
+        : woundRoll(layers, mortals.criticalWoundOfCriticalHit);
+      const attack = (layers: Layers): Layers => {
+        const parts: Array<readonly [number, Layers]> = [[1 - normalHit - critHit, layers], [normalHit, shiftAll(woundRoll(layers, 0), mortals.hit)]];
+        if (critHit > 0) {
+          let after = firstWound(shiftAll(layers, mortals.hit + mortals.criticalHit));
+          let done = 0;
+          for (const [count, probability] of [...extras].sort((a, b) => a[0] - b[0])) {
+            for (; done < integral(count, "Sustained Hits"); done += 1) after = woundRoll(after, 0);
+            parts.push([critHit * probability, after]);
+          }
+        }
+        return blend(parts);
+      };
+      let layers: Layers = [from];
+      for (let attacks = 0; attacks <= most; attacks += 1) {
+        const weight = counts.get(attacks) ?? 0;
+        if (weight > 0) gather(pending, layers, weight);
+        if (attacks === most) break;
+        layers = attack(layers);
+      }
+    } else {
+      // Wounds, then the ability's mortal wounds, then Devastating Wounds' mortal wounds.
+      let events: Joint = [[[0]]];
+      let acc: Joint = [[[1]]];
+      for (let attacks = 0; attacks <= most; attacks += 1) {
+        const weight = counts.get(attacks) ?? 0;
+        if (weight > 0) events = add(events, acc, weight);
+        if (attacks < most) acc = convolve(acc, per);
+      }
+      const target = pending[0] ??= zeros();
+      let afterNormal = from;
+      events.forEach((row, normalEvents) => {
+        if (normalEvents > 0) afterNormal = step(afterNormal, "wound");
+        let afterOnes = afterNormal;
+        for (let ones = 0; ones < row[0]!.length; ones += 1) {
+          if (!row.some((cell) => cell.slice(ones).some((p) => p > 0))) break;
+          if (ones > 0) afterOnes = step(afterOnes, "one");
+          let after = afterOnes;
+          row.forEach((cell, devEvents) => {
+            if (devEvents > 0) after = step(after, "dev");
+            const p = cell[ones]!;
+            if (p > 0) after.forEach((q, id) => { target[id]! += p * q; });
+          });
+        }
+      });
+    }
+    let final = pending[pending.length - 1] ?? zeros();
+    for (let k = pending.length - 2; k >= 0; k -= 1) {
+      final = step(final, "one");
+      (pending[k] ?? []).forEach((q, id) => { final[id]! += q; });
+    }
+    return final;
+  };
+
+  if (!model.precision || characters.length === 0) return run(initial, -1);
+  // [PRECISION] picks a CHARACTER group at the start of the line: split the start by which one.
+  const out = zeros();
+  const shares = new Map<number, number[]>();
+  initial.forEach((p, id) => {
+    if (p === 0) return;
+    const chosen = firstAlive(Math.floor(id / uses), characters);
+    const share = shares.get(chosen) ?? zeros();
+    share[id]! += p;
+    shares.set(chosen, share);
+  });
+  for (const [chosen, share] of shares) run(share, chosen).forEach((q, id) => { out[id]! += q; });
+  return out;
+}
+
+function summarizeGroups(final: readonly number[], geometry: readonly GroupGeometry[], uses: number): AttachedAllocationOutput {
+  const { strides } = groupStrides(geometry);
+  const total = geometry.reduce((sum, { models }) => sum + models, 0);
+  const totalWounds = geometry.reduce((sum, { models, wounds }) => sum + models * wounds, 0);
+  const destroyed = new Array<number>(total + 1).fill(0);
+  const dealt = new Array<number>(totalWounds + 1).fill(0);
+  const byGroup = geometry.map(({ models }) => new Array<number>(models + 1).fill(0));
   let damageDealt = 0;
   final.forEach((p, id) => {
+    if (p === 0) return;
     const cell = Math.floor(id / uses);
-    const alive = id === dead ? 0 : Math.floor(cell / wounds) + 1;
-    const remaining = id === dead ? 0 : (alive - 1) * wounds + (cell % wounds) + 1;
-    destroyed[models - alive]! += p;
-    damageDealt += p * (cells - remaining);
+    let killed = 0;
+    let lost = 0;
+    geometry.forEach(({ models, wounds }, g) => {
+      const remaining = Math.floor(cell / strides[g]!) % (models * wounds + 1);
+      const dead = models - Math.ceil(remaining / wounds);
+      byGroup[g]![dead]! += p;
+      killed += dead;
+      lost += models * wounds - remaining;
+    });
+    destroyed[killed]! += p;
+    dealt[lost]! += p;
+    damageDealt += p * lost;
   });
   const modelsDestroyed = destroyed.reduce((sum, p, count) => sum + p * count, 0);
-  return { damageDealt, modelsDestroyed, modelsDestroyedDistribution: destroyed };
+  return {
+    damageDealt,
+    modelsDestroyed,
+    modelsDestroyedDistribution: destroyed,
+    woundsDealtDistribution: dealt,
+    groups: byGroup.map((distribution) => ({ modelsDestroyedDistribution: distribution })),
+  };
 }

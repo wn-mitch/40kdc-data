@@ -1,0 +1,581 @@
+[
+  {
+    "name": "bolt-rifle x10 into intercessors x5 led by a captain",
+    "groups": [
+      {
+        "character": false,
+        "unitId": "intercessor-squad",
+        "profileIndex": 0,
+        "modelCount": 5,
+        "buffs": []
+      },
+      {
+        "character": true,
+        "unitId": "captain",
+        "profileIndex": 0,
+        "modelCount": 1,
+        "buffs": []
+      }
+    ],
+    "lines": [
+      {
+        "attacker": {
+          "weaponId": "bolt-rifle",
+          "profileIndex": 1
+        },
+        "modelsFiring": 10,
+        "context": {
+          "phase": "shooting",
+          "attackerStationary": false,
+          "withinHalfRange": false
+        },
+        "buffs": []
+      }
+    ],
+    "expected": {
+      "damageDealt": 3.333333332423152,
+      "modelsDestroyed": 1.4167263874291762,
+      "modelsDestroyedDistribution": [
+        0.1304202665229443,
+        0.43612537125272577,
+        0.3316138731961634,
+        0.0905872043852934,
+        0.01065478070627022,
+        0.0005984898164621965,
+        1.4120141904766784e-8
+      ],
+      "woundsDealtDistribution": [
+        0.02608405330458887,
+        0.10433621321835544,
+        0.19823880511487535,
+        0.23788656613785045,
+        0.20220358121717283,
+        0.1294102919789906,
+        0.0647051459894953,
+        0.025882058395798106,
+        0.008411668978634386,
+        0.0022431117276358347,
+        0.0004934845800798838,
+        0.00008972446910543341,
+        0.000013458670365815009,
+        0.0000016564517373310775,
+        1.6564517373310775e-7,
+        1.4120141904766784e-8
+      ],
+      "groups": [
+        {
+          "modelsDestroyedDistribution": [
+            0.1304202665229443,
+            0.43612537125272577,
+            0.3316138731961634,
+            0.0905872043852934,
+            0.01065478070627022,
+            0.0005985039366041013
+          ]
+        },
+        {
+          "modelsDestroyedDistribution": [
+            0.9999999858798593,
+            1.4120141904766784e-8
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "eliminator bolt sniper rifle x3 [PRECISION] into intercessors x5 led by a captain",
+    "groups": [
+      {
+        "character": false,
+        "unitId": "intercessor-squad",
+        "profileIndex": 0,
+        "modelCount": 5,
+        "buffs": []
+      },
+      {
+        "character": true,
+        "unitId": "captain",
+        "profileIndex": 0,
+        "modelCount": 1,
+        "buffs": []
+      }
+    ],
+    "lines": [
+      {
+        "attacker": {
+          "weaponId": "bolt-sniper-rifle-eliminator-squad",
+          "profileIndex": 0
+        },
+        "modelsFiring": 3,
+        "context": {
+          "phase": "shooting",
+          "attackerStationary": true,
+          "withinHalfRange": false
+        },
+        "buffs": []
+      }
+    ],
+    "expected": {
+      "damageDealt": 2.304240969364427,
+      "modelsDestroyed": 0.21719250114311847,
+      "modelsDestroyedDistribution": [
+        0.8113854595336081,
+        0.16003657978966623,
+        0.02857796067672612,
+        0,
+        0,
+        0,
+        0
+      ],
+      "woundsDealtDistribution": [
+        0.37671467764060373,
+        0,
+        0,
+        0.4346707818930043,
+        0,
+        0.16003657978966623,
+        0,
+        0.02857796067672612,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "groups": [
+        {
+          "modelsDestroyedDistribution": [
+            0.9714220393232743,
+            0.02857796067672612,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "modelsDestroyedDistribution": [
+            0.8113854595336081,
+            0.18861454046639237
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "executioner relic blade [PRECISION] then bolt-rifle x10 into intercessors x3, a captain and a lieutenant",
+    "groups": [
+      {
+        "character": false,
+        "unitId": "intercessor-squad",
+        "profileIndex": 0,
+        "modelCount": 3,
+        "buffs": []
+      },
+      {
+        "character": true,
+        "unitId": "captain",
+        "profileIndex": 0,
+        "modelCount": 1,
+        "buffs": []
+      },
+      {
+        "character": true,
+        "unitId": "lieutenant",
+        "profileIndex": 0,
+        "modelCount": 1,
+        "buffs": []
+      }
+    ],
+    "lines": [
+      {
+        "attacker": {
+          "weaponId": "executioner-relic-blade",
+          "profileIndex": 0
+        },
+        "modelsFiring": 1,
+        "context": {
+          "phase": "fight"
+        },
+        "buffs": []
+      },
+      {
+        "attacker": {
+          "weaponId": "bolt-rifle",
+          "profileIndex": 1
+        },
+        "modelsFiring": 10,
+        "context": {
+          "phase": "shooting",
+          "attackerStationary": false,
+          "withinHalfRange": false
+        },
+        "buffs": []
+      }
+    ],
+    "expected": {
+      "damageDealt": 6.579676065840973,
+      "modelsDestroyed": 1.7026124820836952,
+      "modelsDestroyedDistribution": [
+        0.10030984865695194,
+        0.35843927146959786,
+        0.33832829138931325,
+        0.1454526897496429,
+        0.05619093508593499,
+        0.0012789636485604752
+      ],
+      "woundsDealtDistribution": [
+        0.0030917323243087333,
+        0.01236692929723493,
+        0.031719858016631304,
+        0.061087368205235346,
+        0.09520711590756345,
+        0.12992071172807396,
+        0.15629563845288075,
+        0.1598757212243785,
+        0.13624515213953847,
+        0.09729454812602792,
+        0.05942532584363258,
+        0.03180623224127442,
+        0.015223238322720503,
+        0.006586366912906543,
+        0.0025750976090335295,
+        0.0012789636485604752
+      ],
+      "groups": [
+        {
+          "modelsDestroyedDistribution": [
+            0.12331298621770255,
+            0.4187109867514698,
+            0.33553971839732394,
+            0.12243630863350508
+          ]
+        },
+        {
+          "modelsDestroyedDistribution": [
+            0.7557658310114994,
+            0.24423416898850198
+          ]
+        },
+        {
+          "modelsDestroyedDistribution": [
+            0.9987210363514412,
+            0.0012789636485604752
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "stalker bolt rifle x5 [PRECISION] with critical AP into eliminators x3 led by a captain with FNP 5+ at the Bodyguard's T4",
+    "groups": [
+      {
+        "character": false,
+        "unitId": "eliminator-squad",
+        "profileIndex": 0,
+        "modelCount": 3,
+        "buffs": []
+      },
+      {
+        "character": true,
+        "unitId": "captain",
+        "profileIndex": 0,
+        "modelCount": 1,
+        "buffs": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "fabricated-fnp",
+              "abilityKind": "unit"
+            },
+            "contribution": {
+              "type": "feel-no-pain",
+              "threshold": 5
+            }
+          },
+          {
+            "source": {
+              "kind": "manual",
+              "label": "Bodyguard Toughness"
+            },
+            "contribution": {
+              "type": "toughness-mod",
+              "value": -1
+            }
+          }
+        ]
+      }
+    ],
+    "lines": [
+      {
+        "attacker": {
+          "weaponId": "stalker-bolt-rifle",
+          "profileIndex": 0
+        },
+        "modelsFiring": 5,
+        "context": {
+          "phase": "shooting",
+          "attackerStationary": true,
+          "withinHalfRange": false
+        },
+        "buffs": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "fabricated-critical-ap",
+              "abilityKind": "unit"
+            },
+            "contribution": {
+              "type": "ap-mod",
+              "value": -2
+            },
+            "applicableWhen": {
+              "onCritical": "wound"
+            }
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "damageDealt": 4.395086854999525,
+      "modelsDestroyed": 0.8238007239516565,
+      "modelsDestroyedDistribution": [
+        0.6032886116406515,
+        0.15029426809386126,
+        0.1186984006109307,
+        0.0747652239822931,
+        0.05295349567226364
+      ],
+      "woundsDealtDistribution": [
+        0.04204069893368236,
+        0.07838096411364508,
+        0.1441412645140762,
+        0.16421498744062446,
+        0.17451069663862354,
+        0.15029426809386126,
+        0,
+        0.1186984006109307,
+        0,
+        0.0747652239822931,
+        0,
+        0.05295349567226364
+      ],
+      "groups": [
+        {
+          "modelsDestroyedDistribution": [
+            0.7535828797345128,
+            0.1186984006109307,
+            0.0747652239822931,
+            0.05295349567226364
+          ]
+        },
+        {
+          "modelsDestroyedDistribution": [
+            0.6032886116406515,
+            0.3967113883593487
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "frag missile x2 [BLAST] into intercessors x9 led by a captain, ten models for Blast",
+    "groups": [
+      {
+        "character": false,
+        "unitId": "intercessor-squad",
+        "profileIndex": 0,
+        "modelCount": 9,
+        "buffs": []
+      },
+      {
+        "character": true,
+        "unitId": "captain",
+        "profileIndex": 0,
+        "modelCount": 1,
+        "buffs": []
+      }
+    ],
+    "lines": [
+      {
+        "attacker": {
+          "weaponId": "missile-launcher",
+          "profileIndex": 1
+        },
+        "modelsFiring": 2,
+        "context": {
+          "phase": "shooting",
+          "attackerStationary": false,
+          "withinHalfRange": false,
+          "targetModelCount": 10
+        },
+        "buffs": []
+      }
+    ],
+    "expected": {
+      "damageDealt": 0.8148148148148158,
+      "modelsDestroyed": 0.2035664434830944,
+      "modelsDestroyedDistribution": [
+        0.8047098006590236,
+        0.18713270262754167,
+        0.008039457577580638,
+        0.00011733265037291998,
+        7.046799575199851e-7,
+        1.803707508299679e-9,
+        1.816860298563564e-12,
+        5.611119224545109e-16,
+        2.282218404411047e-20,
+        0,
+        0
+      ],
+      "woundsDealtDistribution": [
+        0.4363426397052694,
+        0.36836716095375427,
+        0.14881248502454186,
+        0.038320217602999807,
+        0.007054390239199727,
+        0.000985067338380911,
+        0.00010788876885440926,
+        0.00000944388151851072,
+        6.666712170140955e-7,
+        3.800874050588962e-8,
+        1.7405120097356441e-9,
+        6.319549856403493e-11,
+        1.779380760805688e-12,
+        3.7479537757876036e-14,
+        5.559312866764979e-16,
+        5.180635778013076e-18,
+        2.282218404411047e-20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "groups": [
+        {
+          "modelsDestroyedDistribution": [
+            0.8047098006590236,
+            0.18713270262754167,
+            0.008039457577580638,
+            0.00011733265037291998,
+            7.046799575199851e-7,
+            1.803707508299679e-9,
+            1.816860298563564e-12,
+            5.611119224545109e-16,
+            2.282218404411047e-20,
+            0
+          ]
+        },
+        {
+          "modelsDestroyedDistribution": [
+            1.0000000000000013,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "eliminator bolt sniper rifle x3 [PRECISION] into intercessors x5 led by a captain with +2 Wounds",
+    "groups": [
+      {
+        "character": false,
+        "unitId": "intercessor-squad",
+        "profileIndex": 0,
+        "modelCount": 5,
+        "buffs": []
+      },
+      {
+        "character": true,
+        "unitId": "captain",
+        "profileIndex": 0,
+        "modelCount": 1,
+        "buffs": [
+          {
+            "source": {
+              "kind": "ability",
+              "abilityId": "fabricated-wounds",
+              "abilityKind": "unit"
+            },
+            "contribution": {
+              "type": "wounds-mod",
+              "value": 2
+            }
+          }
+        ]
+      }
+    ],
+    "lines": [
+      {
+        "attacker": {
+          "weaponId": "bolt-sniper-rifle-eliminator-squad",
+          "profileIndex": 0
+        },
+        "modelsFiring": 3,
+        "context": {
+          "phase": "shooting",
+          "attackerStationary": true,
+          "withinHalfRange": false
+        },
+        "buffs": []
+      }
+    ],
+    "expected": {
+      "damageDealt": 2.457133058984912,
+      "modelsDestroyed": 0.021433470507544586,
+      "modelsDestroyedDistribution": [
+        0.9785665294924558,
+        0.021433470507544586,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "woundsDealtDistribution": [
+        0.37671467764060373,
+        0,
+        0,
+        0.4346707818930043,
+        0,
+        0,
+        0.1671810699588478,
+        0.021433470507544586,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "groups": [
+        {
+          "modelsDestroyedDistribution": [
+            1.0000000000000004,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "modelsDestroyedDistribution": [
+            0.9785665294924558,
+            0.021433470507544586
+          ]
+        }
+      ]
+    }
+  }
+]

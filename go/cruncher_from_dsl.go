@@ -1775,8 +1775,8 @@ func translateReroll(node, source map[string]any, opts dslOpts, out *effectTrans
 		}
 		return
 	}
-	// "Re-roll one Hit roll": one die across the pool, which the engine prices
-	// (oneRerollDice). A larger finite permission is non-linear in a way the
+	// "Re-roll one Hit roll": one die across the pool, which the engine prices.
+	// A larger finite permission is non-linear in a way the
 	// engine does not model; applying it as an uncapped reroll would silently
 	// overstate the effect.
 	if _, capped := modifier["count"]; capped && damagePath {
@@ -1891,6 +1891,21 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 			translateSaveSet(node, modifier, isOnBuffedUnit, opts, out, emit)
 			return
 		}
+		if stat == "W" {
+			if opts.perspective != "target" {
+				out.unsupported = append(out.unsupported, unsup("stat-modifier W: defender-side stat; applies when the buffed unit is the target", node))
+				return
+			}
+			if !isOnBuffedUnit {
+				return
+			}
+			if woundsValue := numericValue(modifier); isIntIn(woundsValue, 1, math.Inf(1)) {
+				emit(map[string]any{"type": "wounds-characteristic", "value": woundsValue})
+			} else {
+				out.unsupported = append(out.unsupported, unsup("stat-modifier W: set value \""+jsStr(modifier["value"])+"\" is not a characteristic", node))
+			}
+			return
+		}
 		if stat != "A" && stat != "S" && stat != "T" && stat != "D" {
 			out.unsupported = append(out.unsupported, unsup("stat-modifier on \""+jsStr(modifier["stat"])+"\" is outside the damage path", node))
 			return
@@ -1928,6 +1943,16 @@ func translateStatModifier(node, source map[string]any, opts dslOpts, out *effec
 			return
 		}
 		emit(map[string]any{"type": "toughness-mod", "value": value})
+	case "W":
+		// Defender stat: the buffed unit's own Wounds, under target perspective.
+		if opts.perspective != "target" {
+			out.unsupported = append(out.unsupported, unsup("stat-modifier W: defender-side stat; applies when the buffed unit is the target", node))
+			return
+		}
+		if !isOnBuffedUnit {
+			return
+		}
+		emit(map[string]any{"type": "wounds-mod", "value": value})
 	case "D":
 		// The Damage of attacks against the buffed unit is defender-side: a reduction (Necrodermis)
 		// under target perspective. On the buffed unit it changes the Damage of its own attacks.
@@ -2178,7 +2203,7 @@ func translateDamageReduction(node, source map[string]any, opts dslOpts, out *ef
 		return
 	}
 	if reduction == "half" {
-		out.unsupported = append(out.unsupported, unsup("damage-reduction: halving Damage is not modelled by the buff layer", node))
+		out.applied = append(out.applied, map[string]any{"source": source, "contribution": map[string]any{"type": "damage-halving"}})
 		return
 	}
 	if reduction == "to-one" {
@@ -2913,6 +2938,10 @@ func describeContribution(c map[string]any) string {
 		return signedStr(c["value"]) + " strength"
 	case "toughness-mod":
 		return signedStr(c["value"]) + " toughness"
+	case "wounds-mod":
+		return signedStr(c["value"]) + " wounds"
+	case "wounds-characteristic":
+		return "Wounds " + numStr(c["value"])
 	case "ap-mod":
 		return "AP " + numStr(c["value"])
 	case "reroll":
@@ -2927,6 +2956,8 @@ func describeContribution(c map[string]any) string {
 		return "feel no pain " + numStr(c["threshold"]) + "+"
 	case "damage-reduction":
 		return "-" + numStr(c["value"]) + " damage"
+	case "damage-halving":
+		return "half damage"
 	case "damage-zeroing":
 		uses, _ := num(c["uses"])
 		label := "zero the damage of " + numStr(c["uses"]) + " attack"

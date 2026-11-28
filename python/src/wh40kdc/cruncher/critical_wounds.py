@@ -8,7 +8,7 @@ Wounds their mortal wounds deal that Damage. Python mirror of
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable, Sequence
+from collections.abc import Iterable, Sequence
 from typing import Any
 
 from wh40kdc.cruncher.buffs import resolve_buffs
@@ -33,21 +33,17 @@ def attack_ap(resolved: dict[str, Any], printed_ap: float) -> float:
 
 def split_unsaved(
     streams: Sequence[dict[str, float]],
-    reroll_one_dice: Callable[[float, float], float],
-    reroll_one: bool,
+    dice: float,
 ) -> tuple[float, float]:
     """The expected unsaved wounds of streams that take the same save at different targets, with a
     "re-roll one saving throw" spent on the stream a failed save is likelier to come from. Each
     stream gives its ``wounds``, save chance ``saved``, re-rollable failure chance ``open`` and
-    re-rolled save chance ``fresh``. Returns the unsaved wounds and the re-rolled dice."""
+    re-rolled save chance ``fresh``; ``dice`` is the chance the re-roll is spent, that at least one
+    save of the streams is left failed. Returns the unsaved wounds and the re-rolled dice."""
     unsaved = sum(s["wounds"] * (1 - s["saved"]) for s in streams)
-    if not reroll_one:
-        return unsaved, 0.0
-    pool = sum(s["wounds"] for s in streams)
     failing = sum(s["wounds"] * s["open"] for s in streams)
-    if pool <= 0 or failing <= 0:
+    if dice <= 0 or failing <= 0:
         return unsaved, 0.0
-    dice = reroll_one_dice(pool, failing / pool)
     # The re-rolled save comes from each stream in proportion to its re-rollable failures.
     unsaved -= dice * sum(s["wounds"] * s["open"] * s["fresh"] for s in streams) / failing
     return unsaved, dice

@@ -6,10 +6,11 @@
  */
 import {
   baseWargear,
+  bearerOnlyRules,
   canTakeEnhancement,
-  equippedBuffs,
   isLegalLeverSelection,
   reachesOtherUnits,
+  targetEquippedBuffs,
   type Buff,
   type BuffSource,
   type Dataset,
@@ -18,6 +19,8 @@ import {
   type EngineContext,
   type Enhancement,
   type Phase,
+  type Roster,
+  type RosterUnit,
   type StackableBuff,
   type StackableBuffGroup,
   type UnitView,
@@ -29,19 +32,48 @@ export type DefenderBuild = {
   enhancementId: string | null;
   /** The target's wargear by id, with how many models carry each; its out-of-the-box loadout's when null. */
   wargear?: Readonly<Record<string, number>> | null;
+  /** The target's models, every one of which must carry an item for its bearer-only rules to apply; its minimum when omitted. */
+  modelCount?: number;
   /**
    * The defender's on/off choices for {@link defenderLevers}, by lever id; a lever without one
    * takes its `enabled` default. An id no longer offered is ignored.
    */
   leverOverrides?: Readonly<Record<string, boolean>>;
+  /**
+   * CHARACTER units leading the target, by id: their rules that reach their unit join its
+   * defences, and those on their own model stay off it (rule 19.04).
+   */
+  attachedUnitIds?: readonly string[];
+  /** The Enhancement of the first of `attachedUnitIds`, the CHARACTER leading the target. */
+  leaderEnhancementId?: string | null;
 };
 
 /** The defender's optional abilities as toggleable levers, with the pools that cap them. */
 export type DefenderLevers = { buffs: StackableBuff[]; groups: StackableBuffGroup[] };
 
+const targetModels = (unit: UnitView, build: DefenderBuild): number => build.modelCount ?? unit.raw.model_count?.min ?? 1;
+
 /** The wargear the target's out-of-the-box loadout carries, at its minimum model count. */
 export function defaultTargetWargear(ds: Dataset, unit: UnitView): Record<string, number> {
   return baseWargear(ds, unit.raw, unit.raw.model_count?.min ?? 1);
+}
+
+/**
+ * The defender build an imported list declares for one of its units: the list's detachment that
+ * offers the unit's Enhancement, else its first of the unit's faction, else its first; the unit's Enhancement, and the wargear records it lists, with
+ * its out-of-the-box loadout (null) when it lists none.
+ */
+export function rosterDefenderBuild(ds: Dataset, roster: Roster, entry: RosterUnit, unit: UnitView): { detachmentId: string | null; enhancementId: string | null; wargear: Record<string, number> | null } {
+  const detachments = roster.detachments.flatMap((detachment) => (detachment.ref.id ? [detachment.ref.id] : []));
+  // An 11e list fields several detachments: the unit's Enhancement says which one it is from.
+  const enhancement = entry.enhancement?.id ? ds.enhancements.get(entry.enhancement.id) : undefined;
+  const wargear = Object.fromEntries(entry.wargear.flatMap((item) => (item.ref.id && ds.wargear.has(item.ref.id) ? [[item.ref.id, item.count]] : [])));
+  return {
+    detachmentId: (enhancement && detachments.find((id) => id === enhancement.detachment_id))
+      ?? detachments.find((id) => ds.detachments.getInFaction(id, unit.factionId)) ?? detachments[0] ?? null,
+    enhancementId: entry.enhancement?.id ?? null,
+    wargear: Object.keys(wargear).length > 0 ? wargear : null,
+  };
 }
 
 /** Wargear records the target can carry: its out-of-the-box items and its options' replacements. */
@@ -92,10 +124,43 @@ export function defenderEnhancements(ds: Dataset, unit: UnitView, detachmentId: 
  * choice that no longer fits the unit (another detachment, an ineligible bearer, a lever no longer
  * offered) contributes nothing. Throws when the turned-on levers exceed a pool's allowance.
  */
+/**
+ * The defensive rules a CHARACTER leading `unit` keeps on its own model (rule 19.04): those it and
+ * its Enhancement (`build.leaderEnhancementId`) have alone that do not reach the attached unit, such
+ * as a personal invulnerable save or -1 Damage, and those of its Enhancement's optional abilities
+ * the build turns on (`build.leverOverrides`). They apply only to the leader's allocation group.
+ */
+export function leaderOwnDefences(ds: Dataset, unit: UnitView, leader: UnitView, build: DefenderBuild, context: EngineContext): Buff[] {
+  const detachmentId = defenderDetachmentId(ds, unit, build);
+  const unitWide = ds.defensiveBuffsFor({ unitId: unit.id, factionId: unit.factionId, detachmentId, attachedUnitIds: [leader.id] }, context);
+  const bodyguardOnly = new Set(bodyguardOnlyDefences(ds, unit, unitWide));
+  const shared = new Set(unitWide.filter((buff) => !bodyguardOnly.has(buff)).map((buff) => JSON.stringify(buff.contribution)));
+  const led = { ...build, attachedUnitIds: [leader.id] };
+  const levers = leaderEnhancementLevers(ds, unit, led, context).filter(({ lever }) => leverIsOn(lever, build.leverOverrides));
+  for (const buff of [...leaderEnhancementBuffs(ds, unit, led, context, "attached"), ...levers.flatMap(({ lever }) => lever.buffs)]) {
+    shared.add(JSON.stringify(buff.contribution));
+  }
+  return [
+    ...ds.defensiveBuffsFor({ unitId: leader.id, factionId: leader.factionId, detachmentId }, context),
+    ...leaderEnhancementBuffs(ds, unit, led, context, "own"),
+    ...levers.flatMap(({ own }) => own),
+  ].filter((buff) => !shared.has(JSON.stringify(buff.contribution)));
+}
+
+/**
+ * Those of the target's `buffs` that its CHARACTER leader does not share: the Bodyguard's printed
+ * wargear rules that reach only their bearer, since the leader carries none of the Bodyguard's items.
+ */
+export function bodyguardOnlyDefences(ds: Dataset, unit: UnitView, buffs: readonly Buff[]): Buff[] {
+  const rules = bearerOnlyRules(ds, unit.raw);
+  return buffs.filter(({ source }) => source.kind === "ability" && rules.has(source.abilityId)
+    && (source.abilityKind === "unit" || (source.abilityKind === "attached" && source.sourceUnitId === unit.id)));
+}
+
 export function defenderBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, baseContext: EngineContext): Buff[] {
   const targetWargear = build.wargear ?? defaultTargetWargear(ds, unit);
   const context: EngineContext = { ...baseContext, targetWargear };
-  const always = equippedBuffs(unit.raw, new Map(Object.entries(targetWargear)), buildBuffs(ds, unit, build, context));
+  const always = targetEquippedBuffs(ds, unit.raw, new Map(Object.entries(targetWargear)), targetModels(unit, build), buildBuffs(ds, unit, build, context));
   const levers = defenderLevers(ds, unit, build, baseContext);
   const on = new Set(levers.buffs.filter((lever) => leverIsOn(lever, build.leverOverrides)).map((lever) => lever.id));
   if (on.size === 0) return always;
@@ -118,7 +183,7 @@ export function defenderLevers(ds: Dataset, unit: UnitView, build: DefenderBuild
   const context: EngineContext = { ...baseContext, targetWargear };
   const detachmentId = defenderDetachmentId(ds, unit, build);
   const { buffs, groups } = ds.defensiveLeversFor(
-    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds] },
+    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds], attachedUnitIds: [...(build.attachedUnitIds ?? [])] },
     context,
   );
   const levers = [...buffs];
@@ -145,9 +210,13 @@ export function defenderLevers(ds: Dataset, unit: UnitView, build: DefenderBuild
       }
     }
   }
+  for (const { lever, pools: leaderPools } of leaderEnhancementLevers(ds, unit, build, context)) {
+    levers.push(lever);
+    for (const pool of leaderPools) if (!pools.some((other) => other.id === pool.id)) pools.push(pool);
+  }
   const carried = new Map(Object.entries(targetWargear));
   const equipped = levers
-    .map((lever) => ({ ...lever, buffs: equippedBuffs(unit.raw, carried, lever.buffs) }))
+    .map((lever) => ({ ...lever, buffs: targetEquippedBuffs(ds, unit.raw, carried, targetModels(unit, build), lever.buffs) }))
     .filter((lever, index) => lever.buffs.length > 0 || levers[index].buffs.length === 0);
   for (const lever of equipped) {
     if (lever.source.kind === "ability" && lever.source.abilityKind === "detachment-stratagem") lever.enabled = true;
@@ -168,7 +237,7 @@ export function defenderNeeds(ds: Dataset, unit: UnitView, build: DefenderBuild,
   const context: EngineContext = { ...baseContext, targetWargear: build.wargear ?? defaultTargetWargear(ds, unit) };
   const detachmentId = defenderDetachmentId(ds, unit, build);
   const needs = ds.defensiveNeedsFor(
-    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds] },
+    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds], attachedUnitIds: [...(build.attachedUnitIds ?? [])] },
     context,
   );
   const ability = enhancementAbility(ds, unit, detachmentId, build.enhancementId);
@@ -180,13 +249,72 @@ export function defenderNeeds(ds: Dataset, unit: UnitView, build: DefenderBuild,
 function buildBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext): Buff[] {
   const detachmentId = defenderDetachmentId(ds, unit, build);
   const buffs = ds.defensiveBuffsFor(
-    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds] },
+    { unitId: unit.id, factionId: unit.factionId, detachmentId, optedInStratagemIds: [...build.stratagemIds], attachedUnitIds: [...(build.attachedUnitIds ?? [])] },
     context,
   );
   const ability = enhancementAbility(ds, unit, detachmentId, build.enhancementId);
-  if (!ability) return buffs;
+  const leader = leaderEnhancementBuffs(ds, unit, build, context, "attached");
+  if (!ability) return [...buffs, ...leader];
   const source: BuffSource = { kind: "ability", abilityId: ability.id, abilityKind: "unit" };
-  return [...buffs, ...ability.getBuffs(source, enhancementContext(unit, context), "target")];
+  return [...buffs, ...ability.getBuffs(source, enhancementContext(unit, context), "target"), ...leader];
+}
+
+/**
+ * The buffs of the Enhancement the CHARACTER leading `unit` carries, when it can take it from the
+ * build's detachment: read as an attached member's (`"attached"`), only its effects on the whole
+ * unit, which rule 19.04 lets reach it; read as its own (`"own"`), every effect, its model's too.
+ */
+function leaderEnhancementBuffs(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext, as: "attached" | "own"): Buff[] {
+  const read = leaderEnhancementRead(ds, unit, build, context, as);
+  return read ? read.ability.getBuffs(read.source, read.context, "target") : [];
+}
+
+/** The leader's Enhancement, with the source and context {@link leaderEnhancementBuffs} reads it under. */
+function leaderEnhancementRead(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext, as: "attached" | "own") {
+  const leaderId = build.attachedUnitIds?.[0];
+  if (!leaderId || !build.leaderEnhancementId) return undefined;
+  const leader = ds.units.getInFaction(leaderId, unit.factionId) ?? ds.units.getAny(leaderId);
+  if (!leader) return undefined;
+  const ability = enhancementAbility(ds, leader, defenderDetachmentId(ds, unit, build), build.leaderEnhancementId);
+  if (!ability) return undefined;
+  const source: BuffSource = as === "attached"
+    ? { kind: "ability", abilityId: ability.id, abilityKind: "attached", sourceUnitId: leader.id }
+    : { kind: "ability", abilityId: ability.id, abilityKind: "unit" };
+  return { leader, ability, source, context: enhancementContext(as === "attached" ? unit : leader, context) };
+}
+
+/** An id the leader's Enhancement levers take, apart from the unit's own levers of the same ability. */
+const LEADER_LEVER = "leader:";
+
+/**
+ * The optional abilities of the leader's Enhancement as levers on the attached unit: each lever's
+ * `buffs` are its effects on the whole unit, and `own` every effect it has, its bearer's too, which
+ * {@link leaderOwnDefences} gives the leader's model.
+ */
+function leaderEnhancementLevers(ds: Dataset, unit: UnitView, build: DefenderBuild, context: EngineContext): Array<{ lever: StackableBuff; own: Buff[]; pools: StackableBuffGroup[] }> {
+  const shared = leaderEnhancementRead(ds, unit, build, context, "attached");
+  const own = leaderEnhancementRead(ds, unit, build, context, "own");
+  if (!shared || !own) return [];
+  const onUnit = shared.ability.describeBuffs(shared.source, shared.context, "target").activatable;
+  return own.ability.describeBuffs(own.source, own.context, "target").activatable
+    .filter((act) => !act.capRaise && !act.requiresOption && !act.excludesOption)
+    .map((act) => {
+      const groups = [...(act.group ? [act.group] : []), ...(act.groups ?? [])];
+      return {
+        lever: {
+          id: LEADER_LEVER + act.id,
+          label: `${own.leader.name}: ${own.ability.name} — ${act.label}`,
+          buffs: onUnit.find((other) => other.id === act.id)?.buffs ?? [],
+          enabled: false,
+          source: shared.source,
+          ...(act.group ? { group: LEADER_LEVER + act.group.id } : {}),
+          ...(act.groups?.length ? { groups: act.groups.map((group) => LEADER_LEVER + group.id) } : {}),
+          ...(act.requires ? { requires: act.requires } : {}),
+        },
+        own: act.buffs,
+        pools: groups.map((group) => ({ id: LEADER_LEVER + group.id, abilityId: own.ability.id, label: `${own.leader.name}: ${own.ability.name}`, maxActivations: group.maxActivations })),
+      };
+    });
 }
 
 /** The build's detachment, when it is one of the unit's faction: another faction's rules never reach the unit. */

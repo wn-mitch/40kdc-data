@@ -15,6 +15,7 @@ import { CORE_DIR, readJsonArray } from "./repo-files.js";
 import { repoDirs } from "./faction-map.js";
 import type { StagedWrite } from "./apply.js";
 import { addedModels, type AddedModel } from "./added-models.js";
+import { datasheetEquipment } from "./equipment.js";
 import {
   makeResolver,
   unitScopedResolver,
@@ -98,12 +99,14 @@ export function liftLoadout(
   // list, so its wargear rows are not copied.
   const capsByMini = new Map<string, number[]>();
   for (const composition of dump.groupBy("unit_composition", "datasheetId").get(datasheetId) ?? []) {
-    for (const row of dump.groupBy("unit_composition_miniature", "unitCompositionId").get(composition.id) ?? []) {
+    for (const row of dump.compositionMiniatures(composition.id)) {
       capsByMini.set(row.miniatureId, [...(capsByMini.get(row.miniatureId) ?? []), row.max]);
     }
   }
+  // Equipment drawn as a miniature (the Tidewall defence platform) is wargear, not a model row.
+  const equipment = dump.equipmentMiniatureIds();
   const unlisted = (miniatureId: string | null | undefined): boolean =>
-    !!miniatureId && (capsByMini.get(miniatureId)?.every((max) => max === 0) ?? false);
+    !!miniatureId && (equipment.has(miniatureId) || (capsByMini.get(miniatureId)?.every((max) => max === 0) ?? false));
   const minis = [...miniature.values()]
     .filter((row) => row.datasheetId === datasheetId && !unlisted(row.id))
     .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0) || a.id.localeCompare(b.id));
@@ -148,7 +151,7 @@ export function liftLoadout(
   // The default unit's model count per row.
   const defaultComposition = (dump.groupBy("unit_composition", "datasheetId").get(datasheetId) ?? []).find((row) => row.isDefault);
   const defaultModels = new Map<string, number>();
-  for (const row of dump.groupBy("unit_composition_miniature", "unitCompositionId").get(defaultComposition?.id ?? "") ?? []) {
+  for (const row of dump.compositionMiniatures(defaultComposition?.id ?? "")) {
     if (unlisted(row.miniatureId)) continue;
     const model = modelName(row.miniatureId);
     if (model) defaultModels.set(model, (defaultModels.get(model) ?? 0) + row.min);
@@ -170,6 +173,24 @@ export function liftLoadout(
       const rows = stockRows.get(model) ?? [];
       rows.push({ id: itemId(option.wargearItemId), count: option.defaultValue });
       stockRows.set(model, rows);
+    }
+  }
+
+  // Equipment drawn as a miniature is wargear of the datasheet's one model: an unticked checkbox
+  // and a slot that takes it or leaves it off.
+  const equipmentSlots: LoadoutSlot[] = [];
+  const equipmentItems = datasheetEquipment(dump, datasheetId);
+  if (equipmentItems.length > 0) {
+    if (minis.length !== 1) throw new Error(`${datasheetId}: equipment miniatures on ${minis.length} models; its carrier is unverified`);
+    const carrier = modelName(minis[0].id);
+    for (const item of equipmentItems) {
+      const id = resolve(item.name);
+      if (!id) {
+        unresolvedItems.add(item.name);
+        continue;
+      }
+      options.push({ ...(carrier ? { model: carrier } : {}), id, input: item.max > 1 ? "stepper" : "checkbox", default: 0 });
+      equipmentSlots.push({ ...(carrier ? { model: carrier } : {}), picks: 1, repeats: false, alternate: false, choices: [[], [{ id, count: item.max }]] });
     }
   }
 
@@ -204,6 +225,7 @@ export function liftLoadout(
       choices: (loadoutChoices.get(set.id) ?? []).map((choice) => choiceItems(loadoutChoiceItems.get(choice.id) ?? [])),
     });
   }
+  slots.push(...equipmentSlots);
 
   const limitedChoices = dump.groupBy("limited_wargear_choice", "limitedWargearChoiceSetId");
   const limitedItems = dump.groupBy("limited_wargear_choice_wargear_item", "limitedWargearChoiceId");

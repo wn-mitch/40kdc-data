@@ -130,7 +130,12 @@ export function deriveDatasheet(dump: MfmDump, datasheetId: string): Derived {
   )
     .slice()
     .sort((a, b) => a.displayOrder - b.displayOrder);
-  const miniByComp = dump.groupBy("unit_composition_miniature", "unitCompositionId");
+  // A composition that adds equipment drawn as a miniature (the Tidewall defence platform) prices
+  // that wargear, not a size: the wargear-costs pass charges it, so it is no tier here.
+  const equipment = dump.equipmentMiniatureIds();
+  const addsEquipment = (compId: string) =>
+    (dump.groupBy("unit_composition_miniature", "unitCompositionId").get(compId) ?? [])
+      .some((row) => row.max > 0 && equipment.has(row.miniatureId));
   const step = dump.groupBy("datasheet_points_step", "datasheetId")
     .get(datasheetId)?.[0];
 
@@ -138,7 +143,7 @@ export function deriveDatasheet(dump: MfmDump, datasheetId: string): Derived {
   // rows (GW block pricing — e.g. Venatari's second build option is 4–6 models
   // for a flat 320). `models` is the range floor, `models_max` the ceiling.
   const rangeOf = (compId: string) => {
-    const rows = miniByComp.get(compId) ?? [];
+    const rows = dump.compositionMiniatures(compId);
     return {
       min: rows.reduce((n, m) => n + m.min, 0),
       max: rows.reduce((n, m) => n + m.max, 0),
@@ -164,7 +169,7 @@ export function deriveDatasheet(dump: MfmDump, datasheetId: string): Derived {
   const nativeSeen = new Set<string>();
   const nativeBase: BaseTier[] = [];
   for (const c of comps) {
-    if (c.referenceGroupingKeywordId || c.points == null || detachmentOfComp.has(c.id!)) continue;
+    if (c.referenceGroupingKeywordId || c.points == null || detachmentOfComp.has(c.id!) || addsEquipment(c.id!)) continue;
     const { min, max } = rangeOf(c.id!);
     if (max <= 0) continue; // no model rows (data-only / attachment-at-0) — no size
     const cost = c.points;
@@ -188,7 +193,7 @@ export function deriveDatasheet(dump: MfmDump, datasheetId: string): Derived {
   // Allied (grouped) tiers, keyed by host faction keyword.
   const alliedBaseByHost = new Map<string, BaseTier[]>();
   for (const c of comps) {
-    if (!c.referenceGroupingKeywordId || c.points == null) continue;
+    if (!c.referenceGroupingKeywordId || c.points == null || addsEquipment(c.id!)) continue;
     const kwName = dump.enName(dump.byId("keyword").get(c.referenceGroupingKeywordId));
     if (!kwName) continue;
     let host: string;
@@ -208,7 +213,7 @@ export function deriveDatasheet(dump: MfmDump, datasheetId: string): Derived {
   const detBaseById = new Map<string, BaseTier[]>();
   for (const c of comps) {
     const det = detachmentOfComp.get(c.id!);
-    if (!det || c.points == null || c.referenceGroupingKeywordId) continue;
+    if (!det || c.points == null || c.referenceGroupingKeywordId || addsEquipment(c.id!)) continue;
     const { min, max } = rangeOf(c.id!);
     if (max <= 0) continue;
     const arr = detBaseById.get(det) ?? detBaseById.set(det, []).get(det)!;

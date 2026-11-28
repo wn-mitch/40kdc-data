@@ -3,6 +3,7 @@
   import { resolveRosterUnit } from "@alpaca-software/40kdc-data";
   import EmptyState from "./EmptyState.svelte";
   import DefenderBuild from "./defender-build.svelte";
+  import { rosterDefenderBuild } from "./defender.js";
 
   const factions = $derived(
     ds.factions.all.slice().sort((a, b) => a.name.localeCompare(b.name)),
@@ -43,6 +44,32 @@
         .filter(([, n]) => n > 1)
         .map(([name]) => name),
     );
+  });
+
+  // CHARACTER units that can lead the dataset target, for the attached-leader picker.
+  // The roster's leaders attached to the picked roster unit: units of the list whose attachment
+  // names its datasheet as their Bodyguard.
+  const rosterLeaders = $derived.by(() => {
+    if (salvo.targetMode !== "roster" || salvo.rosterTargetUnitIndex === null) return [];
+    const roster = salvo.targetRoster;
+    const bodyguardId = roster?.units[salvo.rosterTargetUnitIndex]?.ref.id;
+    if (!roster || !bodyguardId) return [];
+    const views = roster.units
+      .filter((ru) => ru.leader_attachment?.role === "leader" && ru.leader_attachment.bodyguard_ref.id === bodyguardId)
+      .map((ru) => resolveRosterUnit(ru, ds))
+      .filter((view) => view !== undefined);
+    return views.filter((view, i) => views.findIndex((other) => other.id === view.id) === i);
+  });
+
+  // CHARACTER units that can lead the target, for the attached-leader picker: any that can lead
+  // a dataset target, the list's own for a roster target.
+  const targetLeaders = $derived(
+    salvo.targetMode === "dataset" && salvo.datasetTargetUnitId
+      ? ds.leadersAttachableTo(salvo.datasetTargetUnitId).slice().sort((a, b) => a.name.localeCompare(b.name))
+      : rosterLeaders,
+  );
+  $effect(() => {
+    if (salvo.targetLeaderId && !targetLeaders.some((u) => u.id === salvo.targetLeaderId)) salvo.targetLeaderId = null;
   });
 
   const rosterPicks = $derived(
@@ -89,6 +116,14 @@
     if (!u) return;
     const p = u.raw.profiles[0];
     if (!p) return;
+    salvo.targetLeaderId = rosterLeaders[0]?.id ?? null;
+    const leaderEntry = salvo.targetRoster?.units.find((ru) => ru.ref.id === salvo.targetLeaderId && ru.leader_attachment?.bodyguard_ref.id === entry.ref.id);
+    salvo.defenderLeaderEnhancementId = leaderEntry?.enhancement?.id ?? null;
+    // The list's detachment, Enhancement and wargear for this unit.
+    const build = rosterDefenderBuild(ds, salvo.targetRoster!, entry, u);
+    salvo.defenderDetachmentId = build.detachmentId;
+    salvo.defenderEnhancementId = build.enhancementId;
+    salvo.defenderWargear = build.wargear && entry.ref.id ? { unitId: entry.ref.id, wargear: build.wargear } : null;
     salvo.manualTarget = {
       T: typeof p.T === "number" ? p.T : 4,
       Sv: typeof p.Sv === "number" ? p.Sv : 3,
@@ -196,6 +231,25 @@
       </select>
     </div>
   {/if}
+{/if}
+{#if targetLeaders.length > 0}
+  <div class="row">
+    <label for="tgt-leader">Leader</label>
+    <select
+      id="tgt-leader"
+      class="grow"
+      value={salvo.targetLeaderId ?? ""}
+      onchange={(e) => {
+      salvo.targetLeaderId = (e.currentTarget as HTMLSelectElement).value || null;
+      salvo.defenderLeaderEnhancementId = null;
+    }}
+    >
+      <option value="">No attached leader</option>
+      {#each targetLeaders as u (u.id)}
+        <option value={u.id}>{u.name}</option>
+      {/each}
+    </select>
+  </div>
 {/if}
 
 {#if salvo.targetMode === "manual"}

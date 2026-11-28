@@ -4,6 +4,10 @@
  */
 import {
   DAMAGE_DEALT_MEASURES,
+  allocateAttached,
+  allocateSequence,
+  type AllocationSequenceOutput,
+  type AttachedAllocationOutput,
   attributeStages,
   loadoutHitModifier,
   profileApplicableBuffs,
@@ -12,10 +16,11 @@ import {
   type Buff,
   type Dataset,
   type EngineContext,
+  type EngineInput,
   type Unit,
 } from "@alpaca-software/40kdc-data";
 
-import { aggregateStages, stageOf } from "./projection-model.js";
+import { aggregateStages, stageOf, targetWounds, withExactKills } from "./projection-model.js";
 import { lineRows, type LineRow, type LineSelection, type WeaponLine } from "./weapon-lines.js";
 
 /**
@@ -29,7 +34,14 @@ export type LineGroup = { models: number; bearer: string[]; rerollOne?: true; at
  * A line's crunch. `groups` is present when its models attack with different buffs; `attributed`
  * is then their sum, as the combined row sums lines.
  */
-export type LineResult = WeaponLine & { models: number; attributed: AttributedStage[]; groups?: LineGroup[]; error?: string };
+export type LineResult = WeaponLine & {
+  models: number;
+  attributed: AttributedStage[];
+  groups?: LineGroup[];
+  /** The engine inputs the line was crunched from, one per group, for the exact allocation. */
+  inputs?: EngineInput[];
+  error?: string;
+};
 
 /**
  * The buffs one row of models attacks with, as the damage matrix attributes the row: a bearer-only
@@ -74,10 +86,53 @@ export function lineGroupLabel(ds: Dataset, group: Pick<LineGroup, "bearer" | "r
   return parts.length > 0 ? parts.join(", ") : "others";
 }
 
+/**
+ * A CHARACTER leading the target: its unit (see `leaderTarget`), the defensive rules it keeps on
+ * its own model, which only its attacks take, and the target's defences it does not share (see
+ * `bodyguardOnlyDefences`), which its attacks leave out.
+ */
+export type AttachedLeader = { unit: Unit; buffs: readonly Buff[]; bodyguardOnly?: readonly Buff[] };
+
+/**
+ * Exact allocation of `inputs` in turn into the target, or with a `leader` into the attached unit:
+ * the inputs' targets are its Bodyguard models and the leader its CHARACTER model, which takes
+ * attacks once the Bodyguard is destroyed, or first from a line with [PRECISION]. Both groups take
+ * each attack with the attached unit's keywords, so an Anti or Hunter rule against the CHARACTER's
+ * keywords applies to the whole unit.
+ */
+function allocateVolley(ds: Dataset, inputs: readonly EngineInput[], leader: AttachedLeader | null): AllocationSequenceOutput | AttachedAllocationOutput {
+  if (!leader) return allocateSequence(inputs, ds);
+  const { unit, buffs } = leader;
+  const bodyguardOnly = new Set(leader.bodyguardOnly ?? []);
+  return allocateAttached(
+    inputs.map((input) => [
+      { ...input, target: { ...input.target, unit: { ...input.target.unit, keywords: unit.keywords } } },
+      { ...input, target: { unit, profileIndex: 0, modelCount: 1 }, buffs: [...input.buffs.filter((buff) => !bodyguardOnly.has(buff)), ...buffs] },
+    ]),
+    [{ character: false }, { character: true }],
+    ds,
+  );
+}
+
+/**
+ * A line's models killed from the exact allocation of its groups in turn, counting a leader the
+ * target has: the expected-value stages count a damaged model as part of a kill. Its damage dealt
+ * stays the expected value the loadout scoring ranks lines by. Kept as they are when the allocation
+ * refuses the line (too many attacks, or a rule it does not model).
+ */
+function exactKills(ds: Dataset, stages: AttributedStage[], inputs: readonly EngineInput[], leader: AttachedLeader | null): AttributedStage[] {
+  try {
+    return withExactKills(stages, { modelsKilled: allocateVolley(ds, inputs, leader).modelsDestroyed });
+  } catch {
+    return stages;
+  }
+}
+
 /** Several groups' stages as one line's: their sum, with each group's engine detail kept. */
-function sumGroups(ds: Dataset, groups: readonly LineGroup[], target: { unit: Unit; modelCount: number }): AttributedStage[] {
-  const W = target.unit.profiles?.[0]?.W ?? 0;
-  return aggregateStages(groups, typeof W === "number" ? W : 0, target.modelCount).map((stage) => stage.name === "models-killed"
+function sumGroups(ds: Dataset, groups: readonly LineGroup[], target: { unit: Unit; modelCount: number }, input: EngineInput | undefined): AttributedStage[] {
+  const profileW = target.unit.profiles?.[0]?.W;
+  const W = typeof profileW === "number" ? profileW : 0;
+  return aggregateStages(groups, input ? targetWounds(W, input.buffs, input.context) : W, target.modelCount).map((stage) => stage.name === "models-killed"
     ? stage
     : {
       ...stage,
@@ -100,38 +155,42 @@ export function crunchLine(input: {
   owner: Unit | undefined;
   models: number;
   target: { unit: Unit; modelCount: number };
+  /** A CHARACTER leading the target, which the line's exact kills count. */
+  leader?: AttachedLeader | null;
   buffs: readonly Buff[];
   context: EngineContext;
   rows?: readonly LineRow[];
 }): LineResult {
   const { ds, line, owner, models, context } = input;
   if (models <= 0) return { ...line, models, attributed: [], error: "no models carry this weapon" };
+  const inputs: EngineInput[] = [];
   const crunchModels = (modelsFiring: number, buffs: readonly Buff[]) => {
     const profile = line.weaponRaw.profiles[line.profileIndex];
-    return attributeStages(
-      profileEngineInput({
-        weapon: line.weaponRaw,
-        profileIndex: line.profileIndex,
-        target: input.target,
-        modelsFiring,
-        buffs: [...buffs],
-        context,
-        hitModifier: owner && profile ? loadoutHitModifier(owner, profile, context) : 0,
-      }),
-      ds,
-      { measures: DAMAGE_DEALT_MEASURES },
-    );
+    const engineInput = profileEngineInput({
+      weapon: line.weaponRaw,
+      profileIndex: line.profileIndex,
+      target: input.target,
+      modelsFiring,
+      buffs: [...buffs],
+      context,
+      hitModifier: owner && profile ? loadoutHitModifier(owner, profile, context) : 0,
+    });
+    inputs.push(engineInput);
+    return attributeStages(engineInput, ds, { measures: DAMAGE_DEALT_MEASURES });
   };
   try {
     const groups = input.rows ? buffGroups(input.buffs, input.rows) : [{ models, buffs: [...input.buffs] }];
-    if (groups.length === 1) return { ...line, models, attributed: crunchModels(models, groups[0]!.buffs) };
+    if (groups.length === 1) {
+      const attributed = crunchModels(models, groups[0]!.buffs);
+      return { ...line, models, attributed: exactKills(ds, attributed, inputs, input.leader ?? null), inputs };
+    }
     const crunched: LineGroup[] = groups.map((group) => ({
       models: group.models,
       bearer: bearerWargear(group.buffs),
       ...(group.rerollOne ? { rerollOne: group.rerollOne } : {}),
       attributed: crunchModels(group.models, group.buffs),
     }));
-    return { ...line, models, attributed: sumGroups(ds, crunched, input.target), groups: crunched };
+    return { ...line, models, attributed: exactKills(ds, sumGroups(ds, crunched, input.target, inputs[0]), inputs, input.leader ?? null), groups: crunched, inputs };
   } catch (err) {
     return { ...line, models, attributed: [], error: (err as Error).message };
   }
@@ -149,6 +208,8 @@ export function crunchLines(input: {
   selection: LineSelection | null;
   carried: (line: WeaponLine) => number;
   target: { unit: Unit; modelCount: number };
+  /** A CHARACTER leading the target, which each line's exact kills count. */
+  leader?: AttachedLeader | null;
   buffsOf: (memberId: string) => readonly Buff[];
   contextOf: (memberId: string) => EngineContext;
 }): LineResult[] {
@@ -160,9 +221,71 @@ export function crunchLines(input: {
       owner: input.members.find((member) => member.memberId === line.ownerMemberId)?.unit.raw,
       models,
       target: input.target,
+      leader: input.leader ?? null,
       buffs: input.buffsOf(line.ownerMemberId),
       context: input.contextOf(line.ownerMemberId),
       rows: lineRows(input.selection, line, models),
     });
   });
+}
+
+/** The exact spread of one combined volley: models destroyed and wounds dealt, each by count. */
+export type KillOdds = {
+  /** Probability of exactly each number of models destroyed, from 0 to the unit's size. */
+  modelsDestroyed: number[];
+  /** Probability of exactly each number of wounds dealt, from 0 to the unit's total. */
+  woundsDealt: number[];
+  /** Expected models destroyed, which counts damage lost past a model's last wound. */
+  expectedKilled: number;
+  /** Expected wounds dealt. */
+  expectedDealt: number;
+  /** With a CHARACTER leading the target, the chance the volley destroys it. */
+  leaderKilled?: number;
+};
+
+/**
+ * The combined volley of `lines` as an exact distribution: every group of every line fires in the
+ * order given, each into what the earlier ones left, so damage carried over to a damaged model and
+ * damage lost to overkill both count. `error` explains a volley the exact allocation refuses
+ * (too many attacks, or a rule it does not model).
+ *
+ * With a `leader`, the target is an attached unit (see {@link allocateVolley}), and the
+ * distributions count the CHARACTER as one model more.
+ */
+export function killOdds(ds: Dataset, lines: readonly LineResult[], leader: AttachedLeader | null = null): KillOdds | { error: string } | null {
+  const inputs = lines.flatMap((line) => line.inputs ?? []);
+  if (inputs.length === 0) return null;
+  try {
+    const out = allocateVolley(ds, inputs, leader);
+    return {
+      modelsDestroyed: out.modelsDestroyedDistribution,
+      woundsDealt: out.woundsDealtDistribution,
+      expectedKilled: out.modelsDestroyed,
+      expectedDealt: out.damageDealt,
+      ...("groups" in out ? { leaderKilled: out.groups[1]!.modelsDestroyedDistribution[1] ?? 0 } : {}),
+    };
+  } catch (err) {
+    return { error: (err as Error).message };
+  }
+}
+
+/** A probability as a whole percentage; float sums leave certain and impossible outcomes a hair off. */
+export function fmtChance(p: number): string {
+  if (p <= 1e-9) return "0%";
+  if (p >= 1 - 1e-9) return "100%";
+  const v = p * 100;
+  if (v < 1) return "<1%";
+  if (v > 99) return ">99%";
+  return `${Math.round(v)}%`;
+}
+
+/** The chance of destroying at least each number of models, from 1 up: `atLeast[k - 1]` is P(≥ k). */
+export function atLeast(distribution: readonly number[]): number[] {
+  const out: number[] = [];
+  let tail = 0;
+  for (let k = distribution.length - 1; k >= 1; k -= 1) {
+    tail += distribution[k] ?? 0;
+    out[k - 1] = Math.min(1, tail);
+  }
+  return out;
 }

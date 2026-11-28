@@ -229,6 +229,8 @@ class SalvoState {
   manualTarget = $state<ManualTarget>({ ...DEFAULT_TARGET });
   datasetTargetFactionId = $state<string | null>("necrons");
   datasetTargetUnitId = $state<string | null>("ctan-shard-of-the-nightbringer");
+  /** A CHARACTER unit leading the dataset or roster target, by id; the target fights alone when null. */
+  targetLeaderId = $state<string | null>(null);
   rosterTargetUnitIndex = $state<number | null>(null);
   /**
    * Selected target-profile preset, if any. A preset is just a named
@@ -242,6 +244,8 @@ class SalvoState {
   defenderDetachmentId = $state<string | null>(null);
   defenderStratagemIds = $state<string[]>([]);
   defenderEnhancementId = $state<string | null>(null);
+  /** The Enhancement of the CHARACTER leading the target. */
+  defenderLeaderEnhancementId = $state<string | null>(null);
   /** The target's wargear, with the unit it was chosen for. */
   defenderWargear = $state<{ unitId: string; wargear: Record<string, number> } | null>(null);
   /** The defender's on/off choices for the target's optional abilities (lever id → on), with the unit they were chosen for. */

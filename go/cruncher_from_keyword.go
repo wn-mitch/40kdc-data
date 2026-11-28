@@ -8,7 +8,7 @@ import "math"
 var engineDispatchKeywords = map[string]bool{
 	"lethal-hits": true, "sustained-hits": true, "devastating-wounds": true,
 	"anti": true, "melta": true, "rapid-fire": true, "torrent": true, "blast": true, "cleave": true,
-	"ignores-cover": true,
+	"ignores-cover": true, "precision": true,
 }
 
 func keywordAppliesToTarget(parameters map[string]any, ctx map[string]any) bool {

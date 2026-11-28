@@ -27142,7 +27142,7 @@
         "id": "1d72-cdbd-796f-7c0d",
         "hidden": false,
         "import": true,
-        "type": "unit",
+        "type": "model",
         "categoryLinks": [
           {
             "name": "Vehicle",
@@ -27214,22 +27214,6 @@
         ],
         "modifiers": [
           {
-            "field": "51b2-306e-1021-d207",
-            "type": "set",
-            "value": 105,
-            "conditions": [
-              {
-                "childId": "model",
-                "field": "selections",
-                "includeChildSelections": true,
-                "scope": "1d72-cdbd-796f-7c0d",
-                "shared": true,
-                "type": "atLeast",
-                "value": 2
-              }
-            ]
-          },
-          {
             "field": "0531-4085-6d7e-d777",
             "type": "set",
             "value": 2,
@@ -27248,6 +27232,55 @@
           }
         ],
         "profiles": [
+          {
+            "name": "Tidewall Shieldline",
+            "id": "89ca-bbe6-68ae-031f",
+            "hidden": false,
+            "typeId": "c547-1836-d8a-ff4f",
+            "typeName": "Unit",
+            "characteristics": [
+              {
+                "name": "M",
+                "$text": "4\"",
+                "typeId": "e703-ecb6-5ce7-aec1"
+              },
+              {
+                "name": "T",
+                "$text": "8",
+                "typeId": "d29d-cf75-fc2d-34a4"
+              },
+              {
+                "name": "Sv",
+                "$text": "3+",
+                "typeId": "450-a17e-9d5e-29da"
+              },
+              {
+                "name": "W",
+                "$text": "10",
+                "typeId": "750a-a2ec-90d3-21fe"
+              },
+              {
+                "name": "LD",
+                "$text": "7+",
+                "typeId": "58d2-b879-49c7-43bc"
+              },
+              {
+                "name": "OC",
+                "$text": "0",
+                "typeId": "bef7-942a-1a23-59f8"
+              },
+              {
+                "name": "InSv",
+                "$text": "5+",
+                "typeId": "55a7-5b54-c60d-11dc"
+              },
+              {
+                "name": "Base",
+                "$text": "Hull",
+                "typeId": "nr-base-size"
+              }
+            ]
+          },
           {
             "name": "Firing Deck",
             "id": "25be-1934-553a-49da",
@@ -27321,145 +27354,40 @@
         ],
         "selectionEntryGroups": [
           {
-            "name": "Models",
-            "id": "57a4-740f-8085-3d65",
+            "name": "Wargear 1",
+            "id": "7729-5d0e-c4c5-4a25",
+            "defaultSelectionEntryId": "6f70-3201-b701-4e87",
             "hidden": false,
             "constraints": [
               {
-                "id": "a39e-80fe-48d9-7ccc",
+                "id": "40ea-121b-9623-09e0",
                 "field": "selections",
-                "includeChildSelections": false,
                 "scope": "parent",
                 "shared": true,
                 "type": "min",
                 "value": 1
               },
               {
-                "id": "97b7-3a33-629f-1c10",
+                "id": "52af-d0ab-73f5-52c4",
                 "field": "selections",
-                "includeChildSelections": false,
                 "scope": "parent",
                 "shared": true,
                 "type": "max",
-                "value": 2
-              }
-            ],
-            "modifiers": [
-              {
-                "field": "97b7-3a33-629f-1c10",
-                "type": "set",
-                "value": 0,
-                "conditionGroups": [
-                  {
-                    "type": "and",
-                    "conditionGroups": [
-                      {
-                        "type": "or",
-                        "conditions": [
-                          {
-                            "childId": "10a2-8527-85fa-7c8c",
-                            "field": "selections",
-                            "includeChildSelections": true,
-                            "scope": "unit",
-                            "shared": true,
-                            "type": "lessThan",
-                            "value": 1
-                          },
-                          {
-                            "childId": "10a2-8527-85fa-7c8c",
-                            "field": "selections",
-                            "includeChildSelections": true,
-                            "scope": "unit",
-                            "shared": true,
-                            "type": "greaterThan",
-                            "value": 1
-                          },
-                          {
-                            "childId": "a0f0-94db-28c0-dcae",
-                            "field": "selections",
-                            "includeChildSelections": true,
-                            "scope": "unit",
-                            "shared": true,
-                            "type": "greaterThan",
-                            "value": 0
-                          }
-                        ]
-                      },
-                      {
-                        "type": "or",
-                        "conditions": [
-                          {
-                            "childId": "10a2-8527-85fa-7c8c",
-                            "field": "selections",
-                            "includeChildSelections": true,
-                            "scope": "unit",
-                            "shared": true,
-                            "type": "lessThan",
-                            "value": 1
-                          },
-                          {
-                            "childId": "10a2-8527-85fa-7c8c",
-                            "field": "selections",
-                            "includeChildSelections": true,
-                            "scope": "unit",
-                            "shared": true,
-                            "type": "greaterThan",
-                            "value": 1
-                          },
-                          {
-                            "childId": "a0f0-94db-28c0-dcae",
-                            "field": "selections",
-                            "includeChildSelections": true,
-                            "scope": "unit",
-                            "shared": true,
-                            "type": "lessThan",
-                            "value": 1
-                          },
-                          {
-                            "childId": "a0f0-94db-28c0-dcae",
-                            "field": "selections",
-                            "includeChildSelections": true,
-                            "scope": "unit",
-                            "shared": true,
-                            "type": "greaterThan",
-                            "value": 1
-                          }
-                        ]
-                      }
-                    ],
-                    "conditions": [
-                      {
-                        "childId": "10a2-8527-85fa-7c8c",
-                        "field": "selections",
-                        "includeChildSelections": true,
-                        "scope": "unit",
-                        "shared": true,
-                        "type": "atLeast",
-                        "value": 1
-                      }
-                    ]
-                  }
-                ]
+                "value": 1
               }
             ],
             "selectionEntries": [
               {
-                "name": "Tidewall Shieldline",
-                "id": "10a2-8527-85fa-7c8c",
+                "name": "None",
+                "id": "6f70-3201-b701-4e87",
+                "collective": true,
+                "defaultAmount": 1,
                 "hidden": false,
                 "import": true,
-                "type": "model",
+                "type": "upgrade",
                 "constraints": [
                   {
-                    "id": "3c43-1c39-cf22-c014",
-                    "field": "selections",
-                    "scope": "parent",
-                    "shared": true,
-                    "type": "min",
-                    "value": 1
-                  },
-                  {
-                    "id": "8d5d-178e-4721-7cda",
+                    "id": "bf97-a299-db55-96ef",
                     "field": "selections",
                     "scope": "parent",
                     "shared": true,
@@ -27472,131 +27400,19 @@
                     "name": "pts",
                     "typeId": "51b2-306e-1021-d207",
                     "value": 0
-                  }
-                ],
-                "profiles": [
-                  {
-                    "name": "Tidewall Shieldline",
-                    "id": "e7d5-0d53-5171-2e90",
-                    "hidden": false,
-                    "typeId": "c547-1836-d8a-ff4f",
-                    "typeName": "Unit",
-                    "characteristics": [
-                      {
-                        "name": "M",
-                        "$text": "4\"",
-                        "typeId": "e703-ecb6-5ce7-aec1"
-                      },
-                      {
-                        "name": "T",
-                        "$text": "8",
-                        "typeId": "d29d-cf75-fc2d-34a4"
-                      },
-                      {
-                        "name": "Sv",
-                        "$text": "3+",
-                        "typeId": "450-a17e-9d5e-29da"
-                      },
-                      {
-                        "name": "W",
-                        "$text": "10",
-                        "typeId": "750a-a2ec-90d3-21fe"
-                      },
-                      {
-                        "name": "LD",
-                        "$text": "7+",
-                        "typeId": "58d2-b879-49c7-43bc"
-                      },
-                      {
-                        "name": "OC",
-                        "$text": "0",
-                        "typeId": "bef7-942a-1a23-59f8"
-                      },
-                      {
-                        "name": "InSv",
-                        "$text": "5+",
-                        "typeId": "55a7-5b54-c60d-11dc"
-                      },
-                      {
-                        "name": "Base",
-                        "$text": "Hull",
-                        "typeId": "nr-base-size"
-                      }
-                    ]
-                  }
-                ],
-                "selectionEntryGroups": [
-                  {
-                    "name": "Wargear 2",
-                    "id": "5391-c6c8-1af7-3bc4",
-                    "defaultSelectionEntryId": "186a-e58b-b257-4833",
-                    "hidden": false,
-                    "constraints": [
-                      {
-                        "id": "10d4-9b49-3d0f-f6f3",
-                        "field": "selections",
-                        "scope": "parent",
-                        "shared": true,
-                        "type": "min",
-                        "value": 1
-                      },
-                      {
-                        "id": "9a99-7810-dc1f-e071",
-                        "field": "selections",
-                        "scope": "parent",
-                        "shared": true,
-                        "type": "max",
-                        "value": 1
-                      }
-                    ],
-                    "selectionEntries": [
-                      {
-                        "name": "None",
-                        "id": "186a-e58b-b257-4833",
-                        "collective": true,
-                        "defaultAmount": 1,
-                        "hidden": false,
-                        "import": true,
-                        "type": "upgrade",
-                        "constraints": [
-                          {
-                            "id": "4952-632c-d333-ebb7",
-                            "field": "selections",
-                            "scope": "parent",
-                            "shared": true,
-                            "type": "max",
-                            "value": 1
-                          }
-                        ],
-                        "costs": [
-                          {
-                            "name": "pts",
-                            "typeId": "51b2-306e-1021-d207",
-                            "value": 0
-                          }
-                        ]
-                      }
-                    ]
                   }
                 ]
               },
               {
-                "name": "Tidewall Defence Platform",
-                "id": "a0f0-94db-28c0-dcae",
+                "name": "Tidewall defence platform",
+                "id": "8510-64d5-fe2c-3234",
+                "collective": true,
                 "hidden": false,
                 "import": true,
-                "type": "model",
+                "type": "upgrade",
                 "constraints": [
                   {
-                    "id": "34fb-f7ec-373a-4c42",
-                    "field": "selections",
-                    "scope": "parent",
-                    "shared": true,
-                    "type": "min",
-                    "value": 0
-                  },
-                  {
-                    "id": "728d-f3bc-4564-193a",
+                    "id": "2101-d6ab-0e15-d28b",
                     "field": "selections",
                     "scope": "parent",
                     "shared": true,
@@ -27611,66 +27427,19 @@
                     "value": 0
                   }
                 ],
-                "profiles": [
+                "entryLinks": [
                   {
-                    "name": "Tidewall Defence Platform",
-                    "id": "9b50-8840-db41-9827",
+                    "name": "Tidewall defence platform",
+                    "id": "4569-927d-8bc3-a0b6",
+                    "collective": true,
+                    "defaultAmount": 1,
                     "hidden": false,
-                    "typeId": "c547-1836-d8a-ff4f",
-                    "typeName": "Unit",
-                    "characteristics": [
-                      {
-                        "name": "M",
-                        "$text": "4\"",
-                        "typeId": "e703-ecb6-5ce7-aec1"
-                      },
-                      {
-                        "name": "T",
-                        "$text": "8",
-                        "typeId": "d29d-cf75-fc2d-34a4"
-                      },
-                      {
-                        "name": "Sv",
-                        "$text": "3+",
-                        "typeId": "450-a17e-9d5e-29da"
-                      },
-                      {
-                        "name": "W",
-                        "$text": "10",
-                        "typeId": "750a-a2ec-90d3-21fe"
-                      },
-                      {
-                        "name": "LD",
-                        "$text": "7+",
-                        "typeId": "58d2-b879-49c7-43bc"
-                      },
-                      {
-                        "name": "OC",
-                        "$text": "0",
-                        "typeId": "bef7-942a-1a23-59f8"
-                      },
-                      {
-                        "name": "InSv",
-                        "$text": "5+",
-                        "typeId": "55a7-5b54-c60d-11dc"
-                      },
-                      {
-                        "name": "Base",
-                        "$text": "Hull",
-                        "typeId": "nr-base-size"
-                      }
-                    ]
-                  }
-                ],
-                "selectionEntryGroups": [
-                  {
-                    "name": "Wargear 1",
-                    "id": "0692-5406-9c8b-f265",
-                    "defaultSelectionEntryId": "dbd6-6c33-1dfd-685d",
-                    "hidden": false,
+                    "import": true,
+                    "targetId": "5219-6b85-dd45-1d61",
+                    "type": "selectionEntry",
                     "constraints": [
                       {
-                        "id": "11d3-32b0-74dd-1958",
+                        "id": "b4e8-98ec-3843-ef35",
                         "field": "selections",
                         "scope": "parent",
                         "shared": true,
@@ -27678,7 +27447,7 @@
                         "value": 1
                       },
                       {
-                        "id": "bc1b-7fba-4657-bcd5",
+                        "id": "fafc-7e6e-fe1b-917d",
                         "field": "selections",
                         "scope": "parent",
                         "shared": true,
@@ -27686,34 +27455,65 @@
                         "value": 1
                       }
                     ],
-                    "selectionEntries": [
+                    "costs": [
                       {
-                        "name": "None",
-                        "id": "dbd6-6c33-1dfd-685d",
-                        "collective": true,
-                        "defaultAmount": 1,
-                        "hidden": false,
-                        "import": true,
-                        "type": "upgrade",
-                        "constraints": [
-                          {
-                            "id": "b221-64f5-b01a-981e",
-                            "field": "selections",
-                            "scope": "parent",
-                            "shared": true,
-                            "type": "max",
-                            "value": 1
-                          }
-                        ],
-                        "costs": [
-                          {
-                            "name": "pts",
-                            "typeId": "51b2-306e-1021-d207",
-                            "value": 0
-                          }
-                        ]
+                        "name": "pts",
+                        "typeId": "51b2-306e-1021-d207",
+                        "value": 20
                       }
                     ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Wargear 2",
+            "id": "5391-c6c8-1af7-3bc4",
+            "defaultSelectionEntryId": "186a-e58b-b257-4833",
+            "hidden": false,
+            "constraints": [
+              {
+                "id": "10d4-9b49-3d0f-f6f3",
+                "field": "selections",
+                "scope": "parent",
+                "shared": true,
+                "type": "min",
+                "value": 1
+              },
+              {
+                "id": "9a99-7810-dc1f-e071",
+                "field": "selections",
+                "scope": "parent",
+                "shared": true,
+                "type": "max",
+                "value": 1
+              }
+            ],
+            "selectionEntries": [
+              {
+                "name": "None",
+                "id": "186a-e58b-b257-4833",
+                "collective": true,
+                "defaultAmount": 1,
+                "hidden": false,
+                "import": true,
+                "type": "upgrade",
+                "constraints": [
+                  {
+                    "id": "4952-632c-d333-ebb7",
+                    "field": "selections",
+                    "scope": "parent",
+                    "shared": true,
+                    "type": "max",
+                    "value": 1
+                  }
+                ],
+                "costs": [
+                  {
+                    "name": "pts",
+                    "typeId": "51b2-306e-1021-d207",
+                    "value": 0
                   }
                 ]
               }
@@ -48516,6 +48316,20 @@
                 "typeId": "893f-9000-ccf7-648e"
               }
             ]
+          }
+        ]
+      },
+      {
+        "name": "Tidewall defence platform",
+        "id": "5219-6b85-dd45-1d61",
+        "hidden": false,
+        "import": true,
+        "type": "upgrade",
+        "costs": [
+          {
+            "name": "pts",
+            "typeId": "51b2-306e-1021-d207",
+            "value": 0
           }
         ]
       },

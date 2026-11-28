@@ -133,12 +133,10 @@ describe("Re-roll one Wound roll", () => {
     const need = Number(/need (\d)\+/u.exec(detail)![1]);
     const fresh = (7 - need) / 6;
     // A failed Wound roll no other permission re-rolled is every failing face; one comes back as a fresh roll.
-    // The hits are an expectation (4/3), so the chance is read between the whole pools either side.
-    const atWhole = (dice: number) => 1 - Math.pow(fresh, dice);
-    const low = Math.floor(hits);
-    const between = atWhole(low) + (hits - low) * (atWhole(low + 1) - atWhole(low));
-    expect(hits % 1).not.toBe(0);
-    expect(stage([one("wound")], "wounds") - stage([], "wounds")).toBeCloseTo(between * fresh, 12);
+    // The two attacks each hit on a 3+, so the re-roll is spent unless neither leads to a failed Wound roll.
+    expect(hits).toBeCloseTo(4 / 3, 12);
+    const spent = 1 - Math.pow(1 - (4 / 6) * (1 - fresh), 2);
+    expect(stage([one("wound")], "wounds") - stage([], "wounds")).toBeCloseTo(spent * fresh, 12);
   });
 });
 
@@ -151,10 +149,10 @@ describe("Re-roll one Damage roll", () => {
         const low = Math.min(...faces);
         brute += Math.max(0, 3.5 - low) / 6 ** rolls;
       }
-      expect(oneDamageRerollGain(d6, rolls)).toBeCloseTo(brute, 12);
+      expect(oneDamageRerollGain(d6, (z) => z ** rolls)).toBeCloseTo(brute, 12);
     }
     // A fixed Damage has nothing to gain.
-    expect(oneDamageRerollGain([{ value: 2, probability: 1 }], 4)).toBe(0);
+    expect(oneDamageRerollGain([{ value: 2, probability: 1 }], (z) => z ** 4)).toBe(0);
   });
 
   it("finds nothing to re-roll when normal and critical wounds each have a fixed Damage", () => {
@@ -179,10 +177,12 @@ describe("Re-roll one Damage roll", () => {
         for (const item of each) walk(left - 1, Math.max(best, item.gain), p * item.probability);
       };
       walk(rolls, 0, 1);
-      expect(oneRerollGainAcross(branches, rolls)).toBeCloseTo(brute, 12);
+      // Each roll is of a kind with probability weight / 3.
+      const pool = (z: number[]) => ((z[0]! + 2 * z[1]!) / 3) ** rolls;
+      expect(oneRerollGainAcross(branches.map((branch) => branch.distribution), pool)).toBeCloseTo(brute, 12);
     }
-    // One branch alone is the single-distribution gain.
-    expect(oneRerollGainAcross([{ weight: 1, distribution: d3 }], 2.5)).toBeCloseTo(oneDamageRerollGain(d3, 2.5), 12);
+    // One kind alone is the single-distribution gain.
+    expect(oneRerollGainAcross([d3], (z) => z[0]! ** 3)).toBeCloseTo(oneDamageRerollGain(d3, (z) => z ** 3), 12);
   });
 
   it("adds to the damage of a variable-Damage weapon and not of a fixed one", () => {

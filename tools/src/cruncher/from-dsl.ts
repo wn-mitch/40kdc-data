@@ -888,7 +888,7 @@ function translateReroll(
     ));
     return;
   }
-  // "Re-roll one Hit roll": one die across the pool, which the engine prices (engine.ts oneRerollDice).
+  // "Re-roll one Hit roll": one die across the pool, which the engine prices (engine.ts).
   // A larger finite permission is non-linear in a way the engine does not model; applying it as an
   // uncapped reroll would silently overstate the effect.
   if (modifier.count !== undefined && damagePath) {
@@ -1071,6 +1071,17 @@ function translateStatModifier(
       else out.unsupported.push({ reason: `stat-modifier Sv: set value "${saveValue}" is not a save characteristic`, effectFragment: node });
       return;
     }
+    if (stat === "W") {
+      if (opts.perspective !== "target") {
+        out.unsupported.push({ reason: "stat-modifier W: defender-side stat; applies when the buffed unit is the target", effectFragment: node });
+        return;
+      }
+      if (!isOnBuffedUnit) return;
+      const woundsValue = typeof modifier.value === "number" ? modifier.value : NaN;
+      if (Number.isInteger(woundsValue) && woundsValue >= 1) emit({ type: "wounds-characteristic", value: woundsValue });
+      else out.unsupported.push({ reason: `stat-modifier W: set value "${String(modifier.value)}" is not a characteristic`, effectFragment: node });
+      return;
+    }
     if (stat !== "A" && stat !== "S" && stat !== "T" && stat !== "D") {
       out.unsupported.push({ reason: `stat-modifier on "${String(stat)}" is outside the damage path`, effectFragment: node });
       return;
@@ -1122,6 +1133,15 @@ function translateStatModifier(
       }
       if (!isOnBuffedUnit && !debuffsTarget) return;
       emit({ type: "toughness-mod", value });
+      return;
+    case "W":
+      // Defender stat: the buffed unit's own Wounds, under target perspective.
+      if (opts.perspective !== "target") {
+        out.unsupported.push({ reason: "stat-modifier W: defender-side stat; applies when the buffed unit is the target", effectFragment: node });
+        return;
+      }
+      if (!isOnBuffedUnit) return;
+      emit({ type: "wounds-mod", value });
       return;
     case "D":
       // The Damage of attacks against the buffed unit is defender-side: a reduction (Necrodermis)
@@ -1567,8 +1587,8 @@ function zeroingUses(usage: unknown): { uses: number; per: "unit" | "model" } {
 /**
  * Defender-side damage-reduction (`{type: "damage-reduction", modifier:
  * {reduction: N | "half" | "to-zero" | "to-one"}}`). A number subtracts from each Damage
- * roll; `"to-zero"` is a damage-zeroing defence, counted from the usage limit,
- * for the allocation stage; halving Damage, or setting it to 1, is unsupported. Attacker-perspective
+ * roll; `"half"` halves each Damage roll, rounding up; `"to-zero"` is a damage-zeroing defence,
+ * counted from the usage limit, for the allocation stage; setting Damage to 1 is unsupported. Attacker-perspective
  * walks drop silently (this is a defender stat).
  */
 function translateDamageReduction(
@@ -1597,10 +1617,7 @@ function translateDamageReduction(
     return;
   }
   if (reduction === "half") {
-    out.unsupported.push({
-      reason: "damage-reduction: halving Damage is not modelled by the buff layer",
-      effectFragment: node,
-    });
+    out.applied.push({ source, contribution: { type: "damage-halving" } });
     return;
   }
   if (reduction === "to-one") {
@@ -2895,6 +2912,10 @@ function describeContribution(c: BuffContribution): string {
       return `${signed(c.value)} strength`;
     case "toughness-mod":
       return `${signed(c.value)} toughness`;
+    case "wounds-mod":
+      return `${signed(c.value)} wounds`;
+    case "wounds-characteristic":
+      return `Wounds ${c.value}`;
     case "ap-mod":
       return `AP ${c.value}`;
     case "reroll":
@@ -2907,6 +2928,8 @@ function describeContribution(c: BuffContribution): string {
         : `feel no pain ${c.threshold}+`;
     case "damage-reduction":
       return `-${c.value} damage`;
+    case "damage-halving":
+      return "half damage";
     case "damage-zeroing":
       return `zero the damage of ${c.uses} attack${c.uses === 1 ? "" : "s"}${c.per === "model" ? " per model" : ""}`;
     case "invulnerable-save":

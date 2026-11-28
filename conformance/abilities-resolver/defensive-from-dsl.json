@@ -2244,13 +2244,13 @@
       },
       "perspective": "target",
       "expected": {
-        "applied": [],
-        "unsupportedReasons": [
-          "damage-reduction: halving Damage is not modelled by the buff layer"
+        "applied": [
+          {
+            "type": "damage-halving"
+          }
         ],
-        "unsupportedScopes": [
-          "unresolved"
-        ],
+        "unsupportedReasons": [],
+        "unsupportedScopes": [],
         "needKeys": [],
         "activatable": []
       }

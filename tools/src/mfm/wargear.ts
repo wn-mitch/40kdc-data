@@ -27,6 +27,7 @@
  * reconciled against the repo unit in its own faction dir, with Space Marine /
  * Chaos shared-roster fallback to the parent dir).
  */
+import { datasheetEquipment } from "./equipment.js";
 import * as fs from "fs";
 import * as path from "path";
 import { nameToId } from "../converters/id-generator.js";
@@ -525,8 +526,7 @@ function modelCountByMiniId(dump: MfmDump, datasheetId: string): Map<string, num
   const out = new Map<string, number>();
   const uc = defaultUnitComposition(dump, datasheetId);
   if (!uc) return out;
-  const minis = dump.groupBy("unit_composition_miniature", "unitCompositionId")
-    .get(uc.id!);
+  const minis = dump.compositionMiniatures(uc.id!);
   for (const m of minis ?? []) out.set(m.miniatureId, (out.get(m.miniatureId) ?? 0) + m.min);
   return out;
 }
@@ -1392,8 +1392,11 @@ export function deriveWargear(
   const wiName = dump.byId("wargear_item");
   const choicesBySet = dump.groupBy("loadout_choice", "loadoutChoiceSetId");
   const itemsByChoice = dump.groupBy("loadout_choice_wargear_item", "loadoutChoiceId");
+  // Equipment drawn as a miniature is offered below as wargear of its model, not a model's slot.
+  const equipmentMinis = dump.equipmentMiniatureIds();
   const sets = dump.groupBy("loadout_choice_set", "datasheetId")
-    .get(datasheetId);
+    .get(datasheetId)
+    ?.filter((set) => !set.miniatureId || !equipmentMinis.has(set.miniatureId));
 
   // Multi-model = the datasheet fields >1 miniature type in any buildable size (drives
   // whether an option is scoped with model_constraint.model_name). Read it from every dump
@@ -1676,6 +1679,12 @@ export function deriveWargear(
     }
   }
 
+  for (const item of datasheetEquipment(dump, datasheetId)) {
+    const id = resolve(item.name);
+    if (!id) unresolved.push({ name: item.name, context: "equipment miniature" });
+    else options.push({ replacement: [id], model_constraint: item.max > 1 ? { max_count: item.max } : null });
+  }
+
   return { defaultsByModel, defaultsSplitByModel, defaultsBySharedName, options, unresolved, notes };
 }
 
@@ -1699,7 +1708,7 @@ export function dumpComposition(dump: MfmDump, datasheetId: string): DumpMini[] 
   const uc = defaultUnitComposition(dump, datasheetId);
   if (!uc) return [];
   const minis = (
-    dump.groupBy("unit_composition_miniature", "unitCompositionId").get(uc.id!) ?? []
+    dump.compositionMiniatures(uc.id!)
   )
     .slice()
     .sort((a, b) => order(a.miniatureId) - order(b.miniatureId));
@@ -1752,12 +1761,16 @@ export function aggregateComposition(dump: MfmDump, datasheetId: string): Aggreg
     .slice()
     .sort((a, b) => a.displayOrder - b.displayOrder);
 
+  const equipment = dump.equipmentMiniatureIds();
+  const addsEquipment = (compId: string) =>
+    (dump.groupBy("unit_composition_miniature", "unitCompositionId").get(compId) ?? [])
+      .some((row) => row.max > 0 && equipment.has(row.miniatureId));
   const tiers: DumpTier[] = [];
   const envelope = new Map<string, { min: number; max: number }>();
   let skip: "duplicate-names" | undefined;
   for (const c of comps) {
     const minis = (
-      dump.groupBy("unit_composition_miniature", "unitCompositionId").get(c.id!) ?? []
+      dump.compositionMiniatures(c.id!)
     )
       .slice()
       .sort((a, b) => order(a.miniatureId) - order(b.miniatureId));
@@ -1771,6 +1784,8 @@ export function aggregateComposition(dump: MfmDump, datasheetId: string): Aggreg
       rows.push({ name, min: m.min, max: m.max });
     }
     if (!rows.length) continue;
+    // A composition that adds equipment (see `equipment.ts`) is a same-size build of another one.
+    if (addsEquipment(c.id!)) continue;
     tiers.push(rows);
   }
   // Aggregate envelope: a figure absent from a tier (listed at 0/0 there) counts as
@@ -2651,6 +2666,11 @@ export function pricedWargearItems(
       const prev = byItem.get(id);
       byItem.set(id, prev == null ? o.points : Math.max(prev, o.points));
     }
+  }
+  // Equipment drawn as a miniature is priced by the composition that adds it.
+  for (const item of datasheetEquipment(dump, datasheetId)) {
+    const id = resolve(item.name);
+    if (id && item.cost > 0) byItem.set(id, Math.max(byItem.get(id) ?? 0, item.cost));
   }
   return [...byItem.entries()]
     .sort(([a], [b]) => a.localeCompare(b))

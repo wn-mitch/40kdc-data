@@ -1,14 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { Dataset, type Buff } from "@alpaca-software/40kdc-data";
+import { Dataset, type Buff, type Roster } from "@alpaca-software/40kdc-data";
+import { readFileSync } from "node:fs";
 
 import {
   activeSupport,
+  bodyguardOnlyDefences,
   defenderBuffs,
   defenderDetachments,
   defenderEnhancements,
   defenderLevers,
   defenderNeeds,
   defenderStratagems,
+  leaderOwnDefences,
+  rosterDefenderBuild,
   supportProviders,
   targetWargearChoices,
 } from "./defender.js";
@@ -47,6 +51,35 @@ describe("defender build", () => {
     expect(defenderEnhancements(ds, squad, "gladius-task-force")).toEqual([]);
     expect(types(defenderBuffs(ds, squad, build, context)))
       .toEqual(types(defenderBuffs(ds, squad, { ...build, enhancementId: null }, context)));
+  });
+
+  it("gives the target the rules of a leader that reach its unit", () => {
+    const squad = ds.units.getInFaction("intercessor-squad", "adeptus-astartes")!;
+    expect(types(defenderBuffs(ds, squad, none, context))).not.toContain("feel-no-pain");
+    const fnp = defenderBuffs(ds, squad, { ...none, attachedUnitIds: ["captain-titus"] }, context)
+      .filter((buff) => buff.contribution.type === "feel-no-pain");
+    expect(fnp.map((buff) => buff.contribution)).toEqual([{ type: "feel-no-pain", threshold: 5 }]);
+    const invuln = defenderBuffs(ds, squad, { ...none, attachedUnitIds: ["azrael"] }, context)
+      .filter((buff) => buff.contribution.type === "invulnerable-save");
+    expect(invuln.map((buff) => buff.contribution)).toEqual([{ type: "invulnerable-save", threshold: 4 }]);
+  });
+
+  it("keeps a leader's personal defences on its own model", () => {
+    const squad = ds.units.getInFaction("intercessor-squad", "adeptus-astartes")!;
+    const lieutenant = ds.units.getInFaction("lieutenant", "adeptus-astartes")!;
+    expect(leaderOwnDefences(ds, squad, lieutenant, none, context).map((buff) => buff.contribution))
+      .toEqual([{ type: "invulnerable-save", threshold: 4 }]);
+    expect(types(defenderBuffs(ds, squad, { ...none, attachedUnitIds: [lieutenant.id] }, context))).not.toContain("invulnerable-save");
+  });
+
+  it("keeps the Bodyguard's bearer-only wargear rules off its leader", () => {
+    // Five storm shields give every Terminator +1 Wounds; the Captain leading them carries none.
+    const terminators = ds.units.getAny("wolf-guard-terminators")!;
+    const captain = ds.units.getInFaction("captain-in-terminator-armour", "adeptus-astartes")!;
+    const build = { ...none, attachedUnitIds: [captain.id], wargear: { "storm-shield": 5 }, modelCount: 5 };
+    const buffs = defenderBuffs(ds, terminators, build, context);
+    expect(bodyguardOnlyDefences(ds, terminators, buffs).map((buff) => buff.contribution)).toEqual([{ type: "wounds-mod", value: 1 }]);
+    expect(types(leaderOwnDefences(ds, terminators, captain, build, context))).not.toContain("wounds-mod");
   });
 });
 
@@ -94,6 +127,14 @@ describe("the target's wargear", () => {
       expect(fromAbility(bare, "drones-tau-empire")).toEqual([]);
       expect(fromAbility(bare, "guardian-drone-tau-empire")).toEqual([]);
     }
+  });
+
+  it("gives a bearer's own wargear rule to the target only while every model carries the item", () => {
+    const terminators = ds.units.getAny("wolf-guard-terminators")!;
+    const shield = "storm-shield-wolf-guard-battle-leader-space-wolves";
+    const shields = (count: number) => defenderBuffs(ds, terminators, { ...none, wargear: { "storm-shield": count }, modelCount: 5 }, context);
+    expect(fromAbility(shields(5), shield)).toEqual([{ type: "wounds-mod", value: 1 }]);
+    expect(fromAbility(shields(2), shield)).toEqual([]);
   });
 });
 
@@ -144,5 +185,72 @@ describe("the target's optional abilities", () => {
 
   it("keeps a unit's own optional ability off until ticked", () => {
     expect(defenderLevers(ds, psyker, none, rolled(true)).buffs.find((lever) => lever.id === barrier)?.enabled).toBe(false);
+  });
+});
+
+describe("the leader's Enhancement", () => {
+  const unit = (id: string) => ds.units.getInFaction(id, "adeptus-astartes")!;
+  const contributions = (buffs: Buff[]) => buffs.map((buff) => buff.contribution);
+
+  it("gives the attached unit the effects it has on the unit", () => {
+    const build = { ...none, detachmentId: "gravis-linebreaker-force", attachedUnitIds: ["captain-in-gravis-armour"] };
+    const enhancement = "indefatigable-fortitude-gravis-linebreaker-force-adeptus-astartes";
+    expect(contributions(defenderBuffs(ds, unit("indomitor-kill-team"), build, context))).not.toContainEqual({ type: "wound-mod", value: -1 });
+    expect(contributions(defenderBuffs(ds, unit("indomitor-kill-team"), { ...build, leaderEnhancementId: enhancement }, context)))
+      .toContainEqual({ type: "wound-mod", value: -1 });
+  });
+
+  it("keeps the effects on the bearer on the leader's model", () => {
+    const build = { ...none, detachmentId: "gladius-task-force", attachedUnitIds: ["captain"], leaderEnhancementId: "artificer-armour-gladius-task-force-adeptus-astartes" };
+    const squad = unit("sword-brethren-squad");
+    expect(contributions(leaderOwnDefences(ds, squad, unit("captain"), build, context)))
+      .toEqual(expect.arrayContaining([{ type: "save-characteristic", value: 2 }, { type: "feel-no-pain", threshold: 5 }]));
+    expect(types(defenderBuffs(ds, squad, build, context))).not.toContain("feel-no-pain");
+  });
+});
+
+describe("the leader's Enhancement's optional abilities", () => {
+  it("offers them as levers whose unit-wide effects reach the unit when on", () => {
+    const squad = ds.units.getInFaction("celestian-sacresants", "adepta-sororitas")!;
+    const build = { ...none, detachmentId: "sanctified-orators", attachedUnitIds: ["canoness"], leaderEnhancementId: "hagiomnifex-upgrade-sanctified-orators-adepta-sororitas" };
+    const lever = defenderLevers(ds, squad, build, context).buffs.find((l) => l.id.startsWith("leader:") && l.buffs.some((b) => b.contribution.type === "wound-mod"))!;
+    expect(lever.enabled).toBe(false);
+    expect(types(defenderBuffs(ds, squad, build, context))).not.toContain("wound-mod");
+    expect(types(defenderBuffs(ds, squad, { ...build, leverOverrides: { [lever.id]: true } }, context))).toContain("wound-mod");
+  });
+
+  it("gives the bearer the effects on its own model when on", () => {
+    const squad = ds.units.getInFaction("custodian-guard-sodality", "adeptus-custodes")!;
+    const captain = ds.units.getInFaction("shield-captain", "adeptus-custodes")!;
+    const build = { ...none, detachmentId: "guardians-of-the-throne", attachedUnitIds: [captain.id], leaderEnhancementId: "eagles-eye-guardians-of-the-throne-adeptus-custodes" };
+    const lever = defenderLevers(ds, squad, build, context).buffs.find((l) => l.id.startsWith("leader:"))!;
+    const on = { ...build, leverOverrides: { [lever.id]: true } };
+    const invuln = (buffs: Buff[]) => buffs.filter((b) => b.contribution.type === "invulnerable-save").map((b) => b.contribution);
+    expect(invuln(leaderOwnDefences(ds, squad, captain, build, context))).toEqual([]);
+    expect(invuln(leaderOwnDefences(ds, squad, captain, on, context))).toEqual([{ type: "invulnerable-save", threshold: 3 }]);
+    expect(invuln(defenderBuffs(ds, squad, on, context))).toEqual([]);
+  });
+});
+
+describe("an imported target's build", () => {
+  const load = (name: string) => JSON.parse(readFileSync(new URL(`../../../../conformance/roster/${name}/expected.roster.json`, import.meta.url), "utf8")) as Roster;
+
+  it("takes the detachment that offers the unit's Enhancement from a list of several", () => {
+    const roster = load("custodes-nr-app-reference-entry");
+    expect(roster.detachments.map((d) => d.ref.id)).toEqual(["emissaries-imperatus", "honoured-companions", "might-of-the-moritoi"]);
+    const entry = roster.units.find((unit) => unit.ref.id === "telemon-heavy-dreadnought")!;
+    const build = rosterDefenderBuild(ds, roster, entry, ds.units.getInFaction("telemon-heavy-dreadnought", "adeptus-custodes")!);
+    expect(build.detachmentId).toBe("might-of-the-moritoi");
+    expect(build.enhancementId).toBe("augury-uplink-one-per-army-upgrade-might-of-the-moritoi-adeptus-custodes");
+  });
+
+  it("takes the wargear records a unit lists, and its default loadout when it lists none", () => {
+    const roster = load("sororitas-combat-patrol");
+    const squad = roster.units.find((unit) => unit.ref.id === "sanctuary-guardians-battle-sisters-squad")!;
+    const build = rosterDefenderBuild(ds, roster, squad, ds.units.getAny(squad.ref.id!)!);
+    expect(build.detachmentId).toBe("sanctuary-guardians");
+    expect(build.wargear?.["simulacrum-imperialis"]).toBe(1);
+    const canoness = roster.units.find((unit) => unit.ref.id === "sanctuary-canoness-adalya")!;
+    expect(rosterDefenderBuild(ds, roster, canoness, ds.units.getAny(canoness.ref.id!)!).wargear).toBeNull();
   });
 });

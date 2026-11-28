@@ -1,11 +1,16 @@
 """The expected-value damage engine and its buff layer."""
 
 from wh40kdc.cruncher.allocation import (
+    MAX_ATTACHED_STATES,
     MAX_EVENT_WORK,
     AllocationDefences,
     AllocationOutput,
+    AttachedAllocationOutput,
+    AttachedGroupOutput,
     DamageZeroing,
+    TargetGroup,
     allocate,
+    allocate_attached,
     allocate_model,
 )
 from wh40kdc.cruncher.attribution import attribute_stages
@@ -37,9 +42,12 @@ from wh40kdc.cruncher.mortal_sources import mortal_wound_sources, within_choice_
 
 __all__ = [
     "ENGINE_DISPATCH_KEYWORDS",
+    "MAX_ATTACHED_STATES",
     "MAX_EVENT_WORK",
     "AllocationDefences",
     "AllocationOutput",
+    "AttachedAllocationOutput",
+    "AttachedGroupOutput",
     "AttackModel",
     "Buff",
     "BuffSource",
@@ -51,7 +59,9 @@ __all__ = [
     "EngineOutput",
     "GrantedRecordLookup",
     "ResolvedModifiers",
+    "TargetGroup",
     "allocate",
+    "allocate_attached",
     "allocate_model",
     "attribute_stages",
     "buffs_from_keyword",

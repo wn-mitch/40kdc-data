@@ -84,7 +84,7 @@ pub(super) fn reroll(node: &Obj, opts: &WalkOpts, out: &mut Out) {
         }
         return;
     }
-    // "Re-roll one Hit roll": one die across the pool, which the engine prices (`one_reroll_dice`).
+    // "Re-roll one Hit roll": one die across the pool, which the engine prices.
     // A larger finite permission is non-linear in a way the engine does not model; applying it as
     // an uncapped reroll would silently overstate the effect.
     if m.contains_key("count") && damage_path {
@@ -345,6 +345,22 @@ pub(super) fn stat_modifier(node: &Obj, opts: &WalkOpts, out: &mut Out) {
                 );
             }
         }
+        // Defender stat: the buffed unit's own Wounds, under target perspective.
+        Some("W") => {
+            if opts.perspective != Target {
+                out.unsupported(
+                    "stat-modifier W: defender-side stat; applies when the buffed unit is the target",
+                    node,
+                );
+            } else if on_buffed {
+                emit(
+                    opts,
+                    out,
+                    &gate,
+                    json!({ "type": "wounds-mod", "value": value }),
+                );
+            }
+        }
         // The Damage of attacks against the buffed unit is defender-side: a reduction (Necrodermis)
         // under target perspective. On the buffed unit it changes the Damage of its own attacks.
         Some("D") => {
@@ -598,9 +614,11 @@ pub(super) fn damage_reduction(node: &Obj, opts: &WalkOpts, out: &mut Out) {
             return;
         }
         Some("half") => {
-            out.unsupported(
-                "damage-reduction: halving Damage is not modelled by the buff layer",
-                node,
+            emit(
+                opts,
+                out,
+                &weapon_applicability(m),
+                json!({ "type": "damage-halving" }),
             );
             return;
         }

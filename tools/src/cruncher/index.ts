@@ -5,6 +5,7 @@
  * @packageDocumentation
  */
 export {
+  modifiedWounds,
   resolveBuffs,
   type Buff,
   type BuffApplicability,
@@ -42,8 +43,14 @@ export { resolveGrantedRecords, type GrantedRecord, type GrantedRecordLookup } f
 export {
   allocate,
   allocateModel,
+  allocateAttached,
+  allocateSequence,
+  MAX_ATTACHED_STATES,
   MAX_EVENT_WORK,
+  type AttachedAllocationOutput,
+  type TargetGroup,
   type AllocationDefences,
   type AllocationOutput,
+  type AllocationSequenceOutput,
   type DamageZeroing,
 } from "./allocation.js";

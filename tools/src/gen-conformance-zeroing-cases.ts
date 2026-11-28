@@ -5,7 +5,8 @@ export const DAMAGE_ZEROING_CASE_PREFIX = "canonical/damage-zeroing/";
 /**
  * Fabricated damage-reduction rows: a `to-zero` reduction becomes a damage-zeroing defence counted
  * from its usage limit (none, an n-per-battle count, per-model, the tightest of several), a halving
- * or set-to-1 one stays unsupported, and the attacker's own walk drops the defender stat.
+ * one becomes damage-halving, a set-to-1 one stays unsupported, and the attacker's own walk drops
+ * the defender stat.
  */
 export function canonicalDamageZeroingCases() {
   const source = { kind: "ability", abilityId: "fabricated-plating", abilityKind: "unit" } as const;

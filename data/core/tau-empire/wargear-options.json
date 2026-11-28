@@ -1491,6 +1491,19 @@
     }
   },
   {
+    "id": "tidewall-shieldline-wgo-mfm-1",
+    "unit_id": "tidewall-shieldline",
+    "faction_id": "tau-empire",
+    "game_version": {
+      "edition": "11th",
+      "dataslate": "2026-10-14"
+    },
+    "is_free": true,
+    "replacement": [
+      "tidewall-defence-platform"
+    ]
+  },
+  {
     "id": "broadside-battlesuits-wgo-mfm-1",
     "unit_id": "broadside-battlesuits",
     "faction_id": "tau-empire",

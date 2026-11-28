@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Dataset } from "../src/data/dataset.js";
-import { crunch, type EngineInput } from "../src/cruncher/index.js";
+import { crunch, crunchModel, type EngineInput } from "../src/cruncher/index.js";
 
 const ds = Dataset.embedded();
 
@@ -371,36 +371,37 @@ describe("end-to-end: defensive FNP buff plumbed through crunch", () => {
     expect(ratio).toBeCloseTo(0.9, 4);
   });
 
-  it("FNP-mortal stacks with FNP-all (independent rolls)", () => {
-    // Two FNP buffs at different scopes fire against the mortal stream
-    // independently: surviving fraction = (1 - pAll) * (1 - pMortal).
+  it("a mortal wound gets only the better of FNP-all and FNP-mortal", () => {
+    // A wound gets one Feel No Pain roll, so the two scopes never stack against mortals.
     const lascannon = ds.weapons.getAny("lascannon")!;
     const cultists = ds.units.find("Cultist Mob")!;
-    const out = crunch({
-      attacker: { weapon: lascannon.raw, profileIndex: 0 },
-      target: { unit: cultists.raw, profileIndex: 0, modelCount: 10 },
-      modelsFiring: 1,
-      buffs: [
-        {
-          source: { kind: "manual", label: "Devastating Wounds (test)" },
-          contribution: {
-            type: "extra-keyword",
-            keywordRef: { keyword_id: "devastating-wounds" },
+    const withFnp = (all: number, mortal: number) =>
+      crunchModel({
+        attacker: { weapon: lascannon.raw, profileIndex: 0 },
+        target: { unit: cultists.raw, profileIndex: 0, modelCount: 10 },
+        modelsFiring: 1,
+        buffs: [
+          {
+            source: { kind: "manual", label: "Devastating Wounds (test)" },
+            contribution: { type: "extra-keyword", keywordRef: { keyword_id: "devastating-wounds" } },
           },
-        },
-        {
-          source: { kind: "ability", abilityId: "fnp-all", abilityKind: "unit" },
-          contribution: { type: "feel-no-pain", threshold: 5 },
-        },
-        {
-          source: { kind: "ability", abilityId: "fnp-m", abilityKind: "unit" },
-          contribution: { type: "feel-no-pain", threshold: 4, scope: "mortal" },
-        },
-      ],
-      context: { phase: "shooting" },
-    });
-    // Detail line mentions both — sanity check the labelling.
-    const detail = out.stages.find((s) => s.name === "after-fnp")!.detail;
+          {
+            source: { kind: "ability", abilityId: "fnp-all", abilityKind: "unit" },
+            contribution: { type: "feel-no-pain", threshold: all },
+          },
+          {
+            source: { kind: "ability", abilityId: "fnp-m", abilityKind: "unit" },
+            contribution: { type: "feel-no-pain", threshold: mortal, scope: "mortal" },
+          },
+        ],
+        context: { phase: "shooting" },
+      });
+    const mortalBetter = withFnp(5, 4);
+    expect(mortalBetter.model.woundLost).toBeCloseTo(4 / 6, 10);
+    expect(mortalBetter.model.mortalWoundLost).toBeCloseTo(3 / 6, 10);
+    const allBetter = withFnp(4, 5);
+    expect(allBetter.model.mortalWoundLost).toBeCloseTo(3 / 6, 10);
+    const detail = mortalBetter.output.stages.find((s) => s.name === "after-fnp")!.detail;
     expect(detail).toContain("FNP 5+");
     expect(detail).toContain("FNP 4+ vs mortals");
   });

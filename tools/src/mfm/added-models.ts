@@ -25,7 +25,7 @@ export function addedModels(
 ): { models: AddedModel[] } | { unresolvedItems: string[] } {
   const caps = new Map<string, number[]>();
   for (const composition of dump.groupBy("unit_composition", "datasheetId").get(datasheetId) ?? []) {
-    for (const row of dump.groupBy("unit_composition_miniature", "unitCompositionId").get(composition.id) ?? []) {
+    for (const row of dump.compositionMiniatures(composition.id)) {
       caps.set(row.miniatureId, [...(caps.get(row.miniatureId) ?? []), row.max]);
     }
   }

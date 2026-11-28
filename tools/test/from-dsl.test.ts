@@ -695,6 +695,14 @@ describe("effectToBuffs: target perspective", () => {
     expect(result.applied[0].contribution).toEqual({ type: "toughness-mod", value: 1 });
   });
 
+  it("stat-modifier W applies to the target, not the attacker", () => {
+    const effect = { type: "stat-modifier", target: "this-unit", modifier: { stat: "W", operation: "subtract", value: 1 } } as const;
+    expect(effectToBuffs(effect, unitRule, ctxT, "target").applied.map((buff) => buff.contribution)).toEqual([{ type: "wounds-mod", value: -1 }]);
+    expect(effectToBuffs(effect, unitRule, ctxT, "attacker").applied).toEqual([]);
+    const set = { type: "stat-modifier", target: "this-model", modifier: { stat: "W", operation: "set", value: 15 } } as const;
+    expect(effectToBuffs(set, unitRule, ctxT, "target").applied.map((buff) => buff.contribution)).toEqual([{ type: "wounds-characteristic", value: 15 }]);
+  });
+
   it("stat-modifier Sv translates to save-mod with sign inversion", () => {
     // "+1 Sv" improves the save → makes the needed roll *lower* → save-mod -1.
     const improve = effectToBuffs(
@@ -956,10 +964,10 @@ describe("effectToBuffs: target perspective", () => {
     expect(result.unsupported[0].reason).toContain("against");
   });
 
-  it('damage-reduction "half" routes to unsupported', () => {
+  it('damage-reduction "half" halves incoming Damage', () => {
     const result = effectToBuffs({ type: "damage-reduction", target: "this-unit", modifier: { reduction: "half" } }, unitRule, ctxT, "target");
-    expect(result.applied).toEqual([]);
-    expect(result.unsupported.map((u) => u.reason)).toEqual(["damage-reduction: halving Damage is not modelled by the buff layer"]);
+    expect(result.applied.map((b) => b.contribution)).toEqual([{ type: "damage-halving" }]);
+    expect(result.unsupported).toEqual([]);
   });
 
   it('damage-reduction "to-zero" zeroes as many attacks as its usage limit allows', () => {

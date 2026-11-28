@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { allocate, allocateModel, type DamageZeroing } from "../src/cruncher/allocation.js";
+import { allocate, allocateModel, allocateSequence, type DamageZeroing } from "../src/cruncher/allocation.js";
 import { crunch, type Buff, type EngineInput } from "../src/cruncher/index.js";
 import { Dataset } from "../src/data/dataset.js";
 import { quantityDistribution } from "../src/cruncher/damage-roll.js";
@@ -11,7 +11,7 @@ function model(overrides: Partial<AttackModel>): AttackModel {
   return {
     modelsFiring: 1, attacksStat: 1, attacksBonus: 0, rapidFireStat: null, torrent: false,
     hit: { pass: 1, crit: 0 }, sustainedStat: null, lethal: false, wound: { pass: 1, crit: 0 },
-    devastating: false, unsaved: 1, damage: [{ value: 1, probability: 1 }], woundLost: 1, mortalWoundLost: 1,
+    devastating: false, precision: false, unsaved: 1, damage: [{ value: 1, probability: 1 }], woundLost: 1, mortalWoundLost: 1,
     wounds: 1, modelCount: 1, rollMortals: { hit: 0, criticalHit: 0, wound: 0, criticalWound: 0, criticalWoundOfCriticalHit: 0 },
     unmodelled: [], ...overrides,
   };
@@ -387,5 +387,39 @@ describe("models-killed loses damage past a model's last wound", () => {
     expect(stage("after-fnp")).toBeCloseTo(100 / 27, 10);
     expect(stage("models-killed")).toBeCloseTo(50 / 27, 10);
     expect(allocate(input, embedded).modelsDestroyed).toBeCloseTo(50 / 27, 10);
+  });
+});
+
+describe("allocateSequence", () => {
+  const ds = Dataset.embedded();
+  const meltas = (modelsFiring: number): EngineInput => ({
+    attacker: { weapon: ds.weapons.getAny("multi-melta")!.raw, profileIndex: 0 },
+    target: { unit: ds.units.getAny("questoris-knight-magaera")!.raw, profileIndex: 0 },
+    modelsFiring,
+    buffs: [],
+    context: { phase: "shooting", attackerStationary: true, withinHalfRange: true },
+  });
+
+  it("fires each line into what the earlier lines left", () => {
+    // Attacks allocate one at a time, so two volleys of a weapon are one volley from twice the models.
+    const twice = allocateSequence([meltas(3), meltas(3)], ds);
+    const once = allocate(meltas(6), ds);
+    expect(twice.damageDealt).toBeCloseTo(once.damageDealt, 10);
+    twice.modelsDestroyedDistribution.forEach((p, killed) => expect(p).toBeCloseTo(once.modelsDestroyedDistribution[killed]!, 10));
+    // Each volley alone rarely deals the Knight's wounds; scoring the volleys apart understates the kill.
+    expect(twice.modelsDestroyed).toBeGreaterThan(2 * allocate(meltas(3), ds).modelsDestroyed + 0.01);
+  });
+
+  it("reads one line as allocate does, with the wounds dealt as a distribution", () => {
+    const out = allocateSequence([meltas(4)], ds);
+    const { woundsDealtDistribution, ...rest } = out;
+    expect(rest).toEqual(allocate(meltas(4), ds));
+    expect(woundsDealtDistribution.reduce((sum, p) => sum + p, 0)).toBeCloseTo(1, 10);
+    expect(woundsDealtDistribution.reduce((sum, p, wounds) => sum + p * wounds, 0)).toBeCloseTo(out.damageDealt, 10);
+  });
+
+  it("refuses lines aimed at different units", () => {
+    const boyz: EngineInput = { ...meltas(1), target: { unit: ds.units.getAny("boyz")!.raw, profileIndex: 0, modelCount: 10 } };
+    expect(() => allocateSequence([meltas(1), boyz], ds)).toThrow(/same unit/);
   });
 });

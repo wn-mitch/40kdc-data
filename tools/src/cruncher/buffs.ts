@@ -67,7 +67,7 @@ export type BuffContribution =
   /**
    * "Re-roll one Hit roll": one die of the roll, at the player's pick, across the attack pool —
    * a failed die no other re-roll already took, or for Damage the lowest roll when it is below the
-   * mean of a fresh roll. The engine prices one such die per crunch (engine.ts `oneRerollDice`).
+   * mean of a fresh roll. The engine prices one such die per crunch (engine.ts, over each pool's generating function).
    */
   | { type: "reroll-one"; roll: "hit" | "wound" | "save" | "damage" }
   | { type: "extra-keyword"; keywordRef: WeaponKeywordRef }
@@ -78,8 +78,8 @@ export type BuffContribution =
    * wound on a pass. `scope` controls which wound stream it applies to:
    *  - `"all"` (default): every unsaved wound (main + mortal).
    *  - `"mortal"`: mortal-wound stream only (e.g. Death Guard 5+ FNP vs
-   *    mortals). A target may carry both an all-FNP and a mortal-FNP; the
-   *    engine rolls both against mortals.
+   *    mortals). A target may carry both an all-FNP and a mortal-FNP; a
+   *    wound gets one roll, so the better one applies against mortals.
    */
   | { type: "feel-no-pain"; threshold: number; scope?: "all" | "mortal" }
   | { type: "damage-mod"; value: number }
@@ -89,6 +89,10 @@ export type BuffContribution =
   | { type: "strength-mod"; value: number }
   /** Additive modifier to the defender's Toughness stat. */
   | { type: "toughness-mod"; value: number }
+  /** Additive modifier to the defender's Wounds stat; a model keeps at least 1 Wound. */
+  | { type: "wounds-mod"; value: number }
+  /** Sets the defender's Wounds characteristic; applies before any `wounds-mod`. */
+  | { type: "wounds-characteristic"; value: number }
   /**
    * Additive modifier to the attacker's weapon AP. AP is signed against the
    * defender's save (negative = more piercing), so a value of `-1` here makes
@@ -104,9 +108,15 @@ export type BuffContribution =
    * Defender-side: subtract `value` from each unsaved damage point (floored at
    * 1 by the engine). Multiple sources do NOT stack in 10e — the largest
    * reduction wins. A `"to-zero"` reduction is `damage-zeroing` below; a
-   * halving one is not modelled.
+   * halving one is `damage-halving`.
    */
   | { type: "damage-reduction"; value: number }
+  /**
+   * Defender-side: halve each incoming attack's Damage, rounding up. It applies to the rolled
+   * Damage before any addition or subtraction (Melta, damage modifiers, `damage-reduction`).
+   * Halving twice is still halving once.
+   */
+  | { type: "damage-halving" }
   /**
    * Defender-side: `uses` unsaved attacks have their Damage changed to 0 before it is rolled, from
    * a pool the unit shares or `uses` for each model. Only the discrete allocation stage reads it;
@@ -534,8 +544,12 @@ export type ResolveContext = EngineContext;
 
 /** Read-out of a resolved buff stack, with provenance per field. */
 export type ResolvedModifiers = {
-  hitMod: { value: number; dominantSource: BuffSource | null };
-  woundMod: { value: number; dominantSource: BuffSource | null };
+  /**
+   * Hit and wound roll modifiers, capped at ±1. `raw` is the uncapped sum, for a penalty the engine
+   * adds later (cover) to share the cap rather than stack past it.
+   */
+  hitMod: { value: number; dominantSource: BuffSource | null; raw: number };
+  woundMod: { value: number; dominantSource: BuffSource | null; raw: number };
   saveMod: { value: number; sources: BuffSource[] };
   cover: { active: boolean; source: BuffSource | null };
   rerolls: Partial<
@@ -555,6 +569,9 @@ export type ResolvedModifiers = {
   attacksMod: { value: number; sources: BuffSource[] };
   strengthMod: { value: number; sources: BuffSource[] };
   toughnessMod: { value: number; sources: BuffSource[] };
+  woundsMod: { value: number; sources: BuffSource[] };
+  /** The highest set Wounds characteristic, replacing the profile's before `woundsMod`. */
+  woundsCharacteristic: { value: number; dominantSource: BuffSource } | null;
   apMod: { value: number; sources: BuffSource[] };
   /** Ability-set weapon characteristics; an absent stat keeps the profile's value. */
   statSet: Partial<Record<SetStat, { value: number; dominantSource: BuffSource }>>;
@@ -564,6 +581,8 @@ export type ResolvedModifiers = {
    * surviving reduction.
    */
   damageReduction: { value: number; dominantSource: BuffSource | null };
+  /** Whether incoming Damage is halved; the dominant source is the best-ranked halving source. */
+  damageHalving: { value: boolean; dominantSource: BuffSource | null };
   /** Damage-zeroing uses, summed over sources: a pool the unit shares and uses for each model. */
   damageZeroing: { unit: number; model: number; sources: BuffSource[] };
   /**
@@ -741,12 +760,21 @@ function liveBuffs(buffs: Buff[], ctx: ResolveContext): Buff[] {
  * function; the engine — and any UI that wants to render the resolved table
  * before crunching — both go through this.
  */
+/**
+ * A model's Wounds characteristic under its resolved rules: the highest set value replaces
+ * `profileW`, then the modifiers apply, and a model keeps at least 1.
+ */
+export function modifiedWounds(profileW: number, resolved: Pick<ResolvedModifiers, "woundsCharacteristic" | "woundsMod">): number {
+  const base = resolved.woundsCharacteristic?.value ?? profileW;
+  return base > 0 ? Math.max(1, base + resolved.woundsMod.value) : base;
+}
+
 export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifiers {
   const live = liveBuffs(buffs, ctx);
 
   const out: ResolvedModifiers = {
-    hitMod: { value: 0, dominantSource: null },
-    woundMod: { value: 0, dominantSource: null },
+    hitMod: { value: 0, dominantSource: null, raw: 0 },
+    woundMod: { value: 0, dominantSource: null, raw: 0 },
     saveMod: { value: 0, sources: [] },
     cover: { active: false, source: null },
     rerolls: {},
@@ -758,9 +786,12 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
     attacksMod: { value: 0, sources: [] },
     strengthMod: { value: 0, sources: [] },
     toughnessMod: { value: 0, sources: [] },
+    woundsMod: { value: 0, sources: [] },
+    woundsCharacteristic: null,
     apMod: { value: 0, sources: [] },
     statSet: {},
     damageReduction: { value: 0, dominantSource: null },
+    damageHalving: { value: false, dominantSource: null },
     damageZeroing: { unit: 0, model: 0, sources: [] },
     invulnerable: null,
     critThresholds: {},
@@ -848,6 +879,19 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
         out.toughnessMod.value += c.value;
         out.toughnessMod.sources.push(b.source);
         break;
+      case "wounds-mod":
+        out.woundsMod.value += c.value;
+        out.woundsMod.sources.push(b.source);
+        break;
+      case "wounds-characteristic":
+        if (
+          out.woundsCharacteristic === null ||
+          c.value > out.woundsCharacteristic.value ||
+          (c.value === out.woundsCharacteristic.value && rank(b.source) < rank(out.woundsCharacteristic.dominantSource))
+        ) {
+          out.woundsCharacteristic = { value: c.value, dominantSource: b.source };
+        }
+        break;
       case "ap-mod":
         out.apMod.value += c.value;
         out.apMod.sources.push(b.source);
@@ -872,6 +916,11 @@ export function resolveBuffs(buffs: Buff[], ctx: ResolveContext): ResolvedModifi
             rank(b.source) < rank(out.damageReduction.dominantSource))
         ) {
           out.damageReduction = { value: c.value, dominantSource: b.source };
+        }
+        break;
+      case "damage-halving":
+        if (out.damageHalving.dominantSource === null || rank(b.source) < rank(out.damageHalving.dominantSource)) {
+          out.damageHalving = { value: true, dominantSource: b.source };
         }
         break;
       case "damage-zeroing":
@@ -948,13 +997,13 @@ function keyOf(ref: WeaponKeywordRef): string {
 /** Sum, clamp to ±1, then pick the dominant contributing source by rank. */
 function capModifier(
   contribs: { value: number; source: BuffSource }[],
-): { value: number; dominantSource: BuffSource | null } {
-  if (contribs.length === 0) return { value: 0, dominantSource: null };
+): { value: number; dominantSource: BuffSource | null; raw: number } {
+  if (contribs.length === 0) return { value: 0, dominantSource: null, raw: 0 };
   const sum = contribs.reduce((a, c) => a + c.value, 0);
   const capped = Math.max(-1, Math.min(1, sum));
-  if (capped === 0) return { value: 0, dominantSource: null };
+  if (capped === 0) return { value: 0, dominantSource: null, raw: sum };
   const sign = Math.sign(capped);
   const matching = contribs.filter((c) => Math.sign(c.value) === sign);
   matching.sort((a, b) => rank(a.source) - rank(b.source));
-  return { value: capped, dominantSource: matching[0]?.source ?? null };
+  return { value: capped, dominantSource: matching[0]?.source ?? null, raw: sum };
 }

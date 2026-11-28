@@ -17,6 +17,7 @@ const ENGINE_DISPATCH_KEYWORDS: &[&str] = &[
     "blast",
     "cleave",
     "ignores-cover",
+    "precision",
 ];
 
 /// Translate a catalog effect or retain an engine-native keyword reference.

@@ -31,6 +31,9 @@ pub struct ResolvedModifiers {
     pub attacks_mod: SummedMod,
     pub strength_mod: SummedMod,
     pub toughness_mod: SummedMod,
+    pub wounds_mod: SummedMod,
+    /// The highest set Wounds characteristic, replacing the profile's before `wounds_mod`.
+    pub wounds_characteristic: Option<ThresholdState>,
     pub ap_mod: SummedMod,
     /// Ability-set weapon characteristics; an absent stat keeps the profile's value.
     pub stat_set: StatSets,
@@ -38,6 +41,8 @@ pub struct ResolvedModifiers {
     /// stack in 10e); the dominant source is the one whose value matches the
     /// surviving reduction.
     pub damage_reduction: HighestMod,
+    /// Whether incoming Damage is halved; the dominant source is the best-ranked halving source.
+    pub damage_halving: FlagMod,
     /// Damage-zeroing uses, summed over sources: a pool the unit shares and
     /// uses for each model.
     pub damage_zeroing: ZeroingUses,
@@ -131,12 +136,21 @@ pub struct HighestMod {
     pub dominant_source: Option<BuffSource>,
 }
 
+/// An on/off defence: `value` is whether any source grants it, `dominant_source` the best-ranked.
+#[derive(Clone, Debug, Default)]
+pub struct FlagMod {
+    pub value: bool,
+    pub dominant_source: Option<BuffSource>,
+}
+
 /// Hit/wound mod: signed sum clamped to ±1, dominant source picked from the
 /// surviving-sign contributors by the resolver's internal source-rank table.
 #[derive(Clone, Debug, Default)]
 pub struct CappedMod {
     pub value: f64,
     pub dominant_source: Option<BuffSource>,
+    /// The uncapped sum, for a penalty the engine adds later (cover) to share the cap.
+    pub raw: f64,
 }
 
 /// Save/AP/damage/A/S/T: monotone additive across contributors.

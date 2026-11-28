@@ -6,9 +6,13 @@
  */
 import {
   DAMAGE_DEALT,
+  modifiedWounds,
+  resolveBuffs,
   type AttributedStage,
+  type Buff,
   type BuffSource,
   type Dataset,
+  type EngineContext,
   type StageLift,
 } from "@alpaca-software/40kdc-data";
 
@@ -63,6 +67,24 @@ export function fmtSigned(n: number): string {
 }
 
 const EPS = 1e-6;
+
+/**
+ * `stages` with models killed, and damage dealt when given, replaced by an exact allocation's (see
+ * the package's `allocateSequence`): what each source lifts stays the linear estimate, and the gap
+ * to the exact value, a damaged model counted as part of a kill and damage lost to overkill
+ * between attacks and lines, is the overlap residual.
+ */
+export function withExactKills(
+  stages: readonly AttributedStage[],
+  exact: { damageDealt?: number; modelsKilled: number },
+): AttributedStage[] {
+  return stages.map((stage) => {
+    const value = stage.name === DAMAGE_DEALT ? exact.damageDealt : stage.name === "models-killed" ? exact.modelsKilled : undefined;
+    if (value === undefined) return stage;
+    const residual = stage.residual + value - stage.expected;
+    return { ...stage, expected: value, residual: Math.abs(residual) > EPS ? residual : 0 };
+  });
+}
 
 /**
  * The "Combined" stages: one AttributedStage per pipeline stage, decomposed
@@ -152,4 +174,12 @@ export function aggregateStages(
     intrinsics: [],
   });
   return out;
+}
+
+/**
+ * The target's Wounds characteristic as its rules leave it, as the engine reads it (see
+ * `modifiedWounds`).
+ */
+export function targetWounds(W: number, targetBuffs: readonly Buff[], context: EngineContext): number {
+  return modifiedWounds(W, resolveBuffs([...targetBuffs], context));
 }

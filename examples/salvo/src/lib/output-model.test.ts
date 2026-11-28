@@ -54,13 +54,13 @@ describe("mortal wounds outside the attack", () => {
   const manual = (contribution: import("@alpaca-software/40kdc-data").Buff["contribution"]) => ({ source: { kind: "manual" as const, label: "t" }, contribution });
   const source = (key: string, expected: number) => ({ key, id: key, moment: null, expected, needs: [], abilityId: key, label: key });
 
-  it("totals only the ticked sources and applies both Feel No Pains to them", () => {
+  it("totals only the ticked sources and applies the better Feel No Pain to them", () => {
     const sources = [source("a", 2), source("b", 3)];
     const fnp = [manual({ type: "feel-no-pain", threshold: 5 }), manual({ type: "feel-no-pain", threshold: 4, scope: "mortal" })];
     const line = mortalSourceLine(sources, new Set(["b"]), fnp, shooting);
     expect(line.damage).toBe(3);
-    // Survives a 5+ (4/6) and then a 4+ against mortal wounds (3/6).
-    expect(line.afterFnp).toBeCloseTo(3 * (4 / 6) * (3 / 6), 12);
+    // One Feel No Pain roll per wound: the 4+ against mortal wounds (3/6 survive) beats the 5+.
+    expect(line.afterFnp).toBeCloseTo(3 * (3 / 6), 12);
     expect(mortalSourceLine(sources, new Set(), fnp, shooting)).toEqual({ damage: 0, afterFnp: 0 });
   });
 

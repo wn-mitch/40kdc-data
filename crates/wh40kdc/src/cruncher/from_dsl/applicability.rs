@@ -256,6 +256,8 @@ fn describe_contribution(c: &Value) -> String {
         "attacks-mod" => format!("{} attacks", signed(v)),
         "strength-mod" => format!("{} strength", signed(v)),
         "toughness-mod" => format!("{} toughness", signed(v)),
+        "wounds-mod" => format!("{} wounds", signed(v)),
+        "wounds-characteristic" => format!("Wounds {}", fmt_num(js_number(Some(v)))),
         "ap-mod" => format!("AP {}", fmt_num(js_number(Some(v)))),
         "reroll" => format!(
             "re-roll {}{}",
@@ -276,6 +278,7 @@ fn describe_contribution(c: &Value) -> String {
             }
         }
         "damage-reduction" => format!("-{} damage", fmt_num(js_number(Some(v)))),
+        "damage-halving" => "half damage".to_string(),
         "damage-zeroing" => {
             let uses = js_number(c.get("uses"));
             let per = if c.get("per").and_then(Value::as_str) == Some("model") {

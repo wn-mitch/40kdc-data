@@ -22,6 +22,11 @@
   );
   const stratagems = $derived(unit && detachmentId ? defenderStratagems(ds, unit, detachmentId, salvo.phase) : []);
   const enhancements = $derived(unit && detachmentId ? defenderEnhancements(ds, unit, detachmentId) : []);
+  // The CHARACTER leading the target, and the Enhancements it can take from the detachment.
+  const leader = $derived(salvo.targetMode !== "manual" && salvo.targetLeaderId
+    ? (unit && ds.units.getInFaction(salvo.targetLeaderId, unit.factionId)) || ds.units.getAny(salvo.targetLeaderId)
+    : undefined);
+  const leaderEnhancements = $derived(leader && detachmentId ? defenderEnhancements(ds, leader, detachmentId) : []);
 
   const wargearChoices = $derived(unit ? targetWargearChoices(ds, unit) : []);
   const wargear = $derived(unit ? salvo.targetWargear ?? defaultTargetWargear(ds, unit) : {});
@@ -44,6 +49,9 @@
         stratagemIds: salvo.defenderStratagemIds,
         enhancementId: salvo.defenderEnhancementId,
         wargear: salvo.targetWargear,
+        modelCount: salvo.manualTarget.modelCount,
+        attachedUnitIds: salvo.targetMode !== "manual" && salvo.targetLeaderId ? [salvo.targetLeaderId] : [],
+        leaderEnhancementId: salvo.defenderLeaderEnhancementId,
       }, salvo.projectionContext);
     } catch (err) {
       return { buffs: [], groups: [], error: (err as Error).message };
@@ -116,6 +124,7 @@
         salvo.defenderDetachmentId = (e.currentTarget as HTMLSelectElement).value || null;
         salvo.defenderStratagemIds = [];
         salvo.defenderEnhancementId = null;
+        salvo.defenderLeaderEnhancementId = null;
       }}
     >
       <option value="">— none —</option>
@@ -136,6 +145,22 @@
         {#each enhancements as enh (enh.id)}<option value={enh.id}>{enh.name}</option>{/each}
       </select>
     </div>
+    {#if leader}
+      <div class="row">
+        <label for="def-leader-enhancement">{leader.name}</label>
+        <select
+          id="def-leader-enhancement"
+          class="grow"
+          aria-label={`${leader.name}'s Enhancement`}
+          disabled={leaderEnhancements.length === 0}
+          value={salvo.defenderLeaderEnhancementId ?? ""}
+          onchange={(e) => (salvo.defenderLeaderEnhancementId = (e.currentTarget as HTMLSelectElement).value || null)}
+        >
+          <option value="">{leaderEnhancements.length === 0 ? "— cannot take one —" : "— no Enhancement —"}</option>
+          {#each leaderEnhancements as enh (enh.id)}<option value={enh.id}>{enh.name}</option>{/each}
+        </select>
+      </div>
+    {/if}
     <div class="ability-list">
       {#each stratagems as s (s.id)}
         <label class="ability-row" class:active={salvo.defenderStratagemIds.includes(s.id)}>

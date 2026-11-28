@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DAMAGE_DEALT, type AttributedStage, type BuffSource, type Dataset, type StageLift } from "@alpaca-software/40kdc-data";
+import { DAMAGE_DEALT, type AttributedStage, type Buff, type BuffSource, type Dataset, type StageLift } from "@alpaca-software/40kdc-data";
 import {
   STAGE_COLUMNS,
   aggregateStages,
@@ -8,6 +8,8 @@ import {
   labelForSource,
   srcKey,
   stageOf,
+  targetWounds,
+  withExactKills,
 } from "./projection-model.js";
 
 const manual = (label: string): BuffSource => ({ kind: "manual", label });
@@ -116,6 +118,24 @@ describe("fmt / fmtSigned", () => {
   });
 });
 
+describe("withExactKills", () => {
+  it("shows the exact value and keeps baseline, lifts and overlap summing to it", () => {
+    const src = manual("Lethal volley");
+    const agg = aggregateStages([lineWith({ expected: 6, baseline: 4, lifts: [{ source: src, delta: 2 }] })], 2, 10);
+    const exact = withExactKills(agg, { damageDealt: 5, modelsKilled: 2.2 });
+    for (const [name, value] of [[DAMAGE_DEALT, 5], ["models-killed", 2.2]] as const) {
+      const before = stageOf(agg, name)!;
+      const after = stageOf(exact, name)!;
+      expect(after.expected).toBe(value);
+      expect(after.baseline).toBe(before.baseline);
+      expect(after.lifts).toEqual(before.lifts);
+      expect(after.baseline + after.lifts.reduce((sum, lift) => sum + lift.delta, 0) + after.residual).toBeCloseTo(value, 12);
+    }
+    // Without a damage dealt only the kills change.
+    expect(stageOf(withExactKills(agg, { modelsKilled: 2.2 }), DAMAGE_DEALT)).toEqual(stageOf(agg, DAMAGE_DEALT));
+  });
+});
+
 describe("aggregateStages", () => {
   it("sums the additive stages across lines", () => {
     const agg = aggregateStages([lineWith({ expected: 4, baseline: 2 }), lineWith({ expected: 4, baseline: 2 })], 2, 10);
@@ -200,5 +220,16 @@ describe("aggregateStages", () => {
     const agg = aggregateStages([], 2, 5);
     expect(stageOf(agg, "after-fnp")!.expected).toBe(0);
     expect(stageOf(agg, "models-killed")!.expected).toBe(0);
+  });
+});
+
+describe("targetWounds", () => {
+  const buff = (contribution: Buff["contribution"]): Buff => ({ source: manual("fabricated"), contribution });
+  it("sets the highest Wounds first, then applies the modifiers, keeping at least 1", () => {
+    const ctx = { phase: "shooting" } as const;
+    expect(targetWounds(10, [], ctx)).toBe(10);
+    // Set to 4 and 3, then -1: 3. Modifying before setting would give 4; the lower set, 2.
+    expect(targetWounds(10, [buff({ type: "wounds-characteristic", value: 3 }), buff({ type: "wounds-characteristic", value: 4 }), buff({ type: "wounds-mod", value: -1 })], ctx)).toBe(3);
+    expect(targetWounds(2, [buff({ type: "wounds-mod", value: -3 })], ctx)).toBe(1);
   });
 });

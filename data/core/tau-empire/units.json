@@ -2761,10 +2761,6 @@
       {
         "models": 1,
         "cost": 85
-      },
-      {
-        "models": 2,
-        "cost": 105
       }
     ],
     "keywords": [
@@ -2783,7 +2779,7 @@
     },
     "model_count": {
       "min": 1,
-      "max": 2
+      "max": 1
     },
     "weapon_ids": [],
     "ability_ids": [
@@ -2820,6 +2816,12 @@
       {
         "namespace": "mfm",
         "id": "01267d6a-45bf-4723-8872-8849954e32e0"
+      }
+    ],
+    "wargear_costs": [
+      {
+        "item_id": "tidewall-defence-platform",
+        "cost": 20
       }
     ]
   },

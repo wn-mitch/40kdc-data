@@ -309,8 +309,9 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
     live = _live_buffs(buffs, ctx)
 
     out: ResolvedModifiers = {
-        "hitMod": {"value": 0, "dominantSource": None},
-        "woundMod": {"value": 0, "dominantSource": None},
+        # Capped at ±1; ``raw`` is the uncapped sum, which cover shares the cap with.
+        "hitMod": {"value": 0, "dominantSource": None, "raw": 0},
+        "woundMod": {"value": 0, "dominantSource": None, "raw": 0},
         "saveMod": {"value": 0, "sources": []},
         "cover": {"active": False, "source": None},
         "rerolls": {},
@@ -323,9 +324,14 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         "attacksMod": {"value": 0, "sources": []},
         "strengthMod": {"value": 0, "sources": []},
         "toughnessMod": {"value": 0, "sources": []},
+        "woundsMod": {"value": 0, "sources": []},
+        # The highest set Wounds characteristic, replacing the profile's before woundsMod.
+        "woundsCharacteristic": None,
         "apMod": {"value": 0, "sources": []},
         "statSet": {},
         "damageReduction": {"value": 0, "dominantSource": None},
+        # Whether incoming Damage is halved; the dominant source is the best-ranked halving source.
+        "damageHalving": {"value": False, "dominantSource": None},
         # Damage-zeroing uses, summed over sources: a pool the unit shares and uses per model.
         "damageZeroing": {"unit": 0, "model": 0, "sources": []},
         "invulnerable": None,
@@ -402,6 +408,17 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
         elif ctype == "toughness-mod":
             out["toughnessMod"]["value"] += c["value"]
             out["toughnessMod"]["sources"].append(source)
+        elif ctype == "wounds-mod":
+            out["woundsMod"]["value"] += c["value"]
+            out["woundsMod"]["sources"].append(source)
+        elif ctype == "wounds-characteristic":
+            wc = out["woundsCharacteristic"]
+            if (
+                wc is None
+                or c["value"] > wc["value"]
+                or (c["value"] == wc["value"] and _rank(source) < _rank(wc["dominantSource"]))
+            ):
+                out["woundsCharacteristic"] = {"value": c["value"], "dominantSource": source}
         elif ctype == "ap-mod":
             out["apMod"]["value"] += c["value"]
             out["apMod"]["sources"].append(source)
@@ -415,6 +432,10 @@ def resolve_buffs(buffs: list[Buff], ctx: EngineContext) -> ResolvedModifiers:
                 or (c["value"] == dr["value"] and _rank(source) < _rank(dr["dominantSource"]))
             ):
                 out["damageReduction"] = {"value": c["value"], "dominantSource": source}
+        elif ctype == "damage-halving":
+            dh = out["damageHalving"]
+            if dh["dominantSource"] is None or _rank(source) < _rank(dh["dominantSource"]):
+                out["damageHalving"] = {"value": True, "dominantSource": source}
         elif ctype == "damage-zeroing":
             out["damageZeroing"][c["per"]] += c["uses"]
             out["damageZeroing"]["sources"].append(source)
@@ -509,11 +530,11 @@ def _sign(n: float) -> int:
 def _cap_modifier(contribs: list[dict[str, Any]]) -> dict[str, Any]:
     """Sum, clamp to ±1, then pick the dominant contributing source by rank."""
     if not contribs:
-        return {"value": 0, "dominantSource": None}
+        return {"value": 0, "dominantSource": None, "raw": 0}
     total = sum(c["value"] for c in contribs)
     capped = max(-1, min(1, total))
     if capped == 0:
-        return {"value": 0, "dominantSource": None}
+        return {"value": 0, "dominantSource": None, "raw": total}
     sign = _sign(capped)
     matching = sorted(
         (c for c in contribs if _sign(c["value"]) == sign),
@@ -522,4 +543,5 @@ def _cap_modifier(contribs: list[dict[str, Any]]) -> dict[str, Any]:
     return {
         "value": capped,
         "dominantSource": matching[0]["source"] if matching else None,
+        "raw": total,
     }

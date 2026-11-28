@@ -1011,7 +1011,7 @@ def _translate_reroll(
             )
         return
     # "Re-roll one Hit roll": one die across the pool, which the engine prices
-    # (engine.py one_reroll_dice). A larger finite permission is non-linear in a
+    # (engine.py). A larger finite permission is non-linear in a
     # way the engine does not model; applying it as an uncapped reroll would
     # silently overstate the effect.
     if modifier.get("count") is not None and damage_path:
@@ -1252,6 +1252,40 @@ def _translate_stat_modifier(
                     }
                 )
             return
+        if stat == "W":
+            if opts["perspective"] != "target":
+                out["unsupported"].append(
+                    {
+                        "reason": (
+                            "stat-modifier W: defender-side stat; applies when the "
+                            "buffed unit is the target"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
+                return
+            if not is_on_buffed_unit:
+                return
+            raw_wounds = modifier.get("value")
+            if (
+                isinstance(raw_wounds, (int, float))
+                and not isinstance(raw_wounds, bool)
+                and math.isfinite(raw_wounds)
+                and float(raw_wounds).is_integer()
+                and raw_wounds >= 1
+            ):
+                emit({"type": "wounds-characteristic", "value": int(raw_wounds)})
+            else:
+                out["unsupported"].append(
+                    {
+                        "reason": (
+                            f'stat-modifier W: set value "{_js_str(raw_wounds)}" '
+                            "is not a characteristic"
+                        ),
+                        "effectFragment": node,
+                    }
+                )
+            return
         if stat not in ("A", "S", "T", "D"):
             out["unsupported"].append(
                 {
@@ -1338,6 +1372,22 @@ def _translate_stat_modifier(
         if not is_on_buffed_unit and not debuffs_target:
             return
         emit({"type": "toughness-mod", "value": value})
+    elif stat == "W":
+        # Defender stat: the buffed unit's own Wounds, under target perspective.
+        if opts["perspective"] != "target":
+            out["unsupported"].append(
+                {
+                    "reason": (
+                        "stat-modifier W: defender-side stat; applies when the "
+                        "buffed unit is the target"
+                    ),
+                    "effectFragment": node,
+                }
+            )
+            return
+        if not is_on_buffed_unit:
+            return
+        emit({"type": "wounds-mod", "value": value})
     elif stat == "D":
         # The Damage of attacks against the buffed unit is defender-side: a reduction (Necrodermis)
         # under target perspective. On the buffed unit it changes the Damage of its own attacks.
@@ -1791,8 +1841,9 @@ def _translate_damage_reduction(
     node: dict[str, Any], source: BuffSource, opts: dict[str, Any], out: EffectTranslation
 ) -> None:
     """Defender-side damage-reduction. A number subtracts from each Damage
-    roll; ``"to-zero"`` is a damage-zeroing defence, counted from the usage
-    limit, for the allocation stage; halving Damage is unsupported."""
+    roll; ``"half"`` halves each Damage roll, rounding up; ``"to-zero"`` is a
+    damage-zeroing defence, counted from the usage limit, for the allocation stage;
+    setting Damage to 1 is unsupported."""
     if opts["perspective"] != "target":
         return
     if not _applies_to_buffed_unit(node, "target"):
@@ -1823,12 +1874,7 @@ def _translate_damage_reduction(
         )
         return
     if reduction == "half":
-        out["unsupported"].append(
-            {
-                "reason": "damage-reduction: halving Damage is not modelled by the buff layer",
-                "effectFragment": node,
-            }
-        )
+        out["applied"].append({"source": source, "contribution": {"type": "damage-halving"}})
         return
     if reduction == "to-one":
         out["unsupported"].append(
@@ -3876,6 +3922,10 @@ def _describe_contribution(c: dict[str, Any]) -> str:
         return f"{_signed(c['value'])} strength"
     if ctype == "toughness-mod":
         return f"{_signed(c['value'])} toughness"
+    if ctype == "wounds-mod":
+        return f"{_signed(c['value'])} wounds"
+    if ctype == "wounds-characteristic":
+        return f"Wounds {_num_str(c['value'])}"
     if ctype == "ap-mod":
         return f"AP {_num_str(c['value'])}"
     if ctype == "reroll":
@@ -3889,6 +3939,8 @@ def _describe_contribution(c: dict[str, Any]) -> str:
         return f"feel no pain {_num_str(c['threshold'])}+"
     if ctype == "damage-reduction":
         return f"-{_num_str(c['value'])} damage"
+    if ctype == "damage-halving":
+        return "half damage"
     if ctype == "damage-zeroing":
         uses = c["uses"]
         per = " per model" if c["per"] == "model" else ""

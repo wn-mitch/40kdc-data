@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import math
 import re
+from collections.abc import Callable
 from typing import Any, Literal, TypedDict
 
 DamageReroll = Literal["ones", "ones-and-twos", "all-failures"]
@@ -91,12 +92,14 @@ def damage_roll(
     modifier: float,
     reduction: float,
     reroll: DamageReroll | None = None,
+    halve: bool = False,
 ) -> DamageRoll:
     """Exact per-attack damage.
 
     ``stat`` is the profile's printed D, ``bonus`` the flat post-roll bonus
     (Melta at half range), ``modifier`` the summed damage modifier, and
-    ``reduction`` the defender damage reduction (0 when inactive).
+    ``reduction`` the defender damage reduction (0 when inactive). ``halve`` halves the
+    rolled Damage, rounding up, before the bonus, modifier and reduction.
 
     A reroll replaces a roll only when the replacement's expected final damage
     exceeds the kept roll's, which is the optimal one-shot policy. ``ones``
@@ -105,7 +108,8 @@ def damage_roll(
     """
 
     def final(rolled: float) -> float:
-        before_reduction = max(0, rolled + bonus + modifier)
+        base = math.ceil(rolled / 2) if halve else rolled
+        before_reduction = max(0, base + bonus + modifier)
         return max(1, before_reduction - reduction) if reduction > 0 else before_reduction
 
     parsed = _parse_damage(stat)
@@ -147,73 +151,57 @@ def damage_roll(
     return {"distribution": distribution, "expected": expected, "rerollUsed": reroll_used}
 
 
-def one_damage_reroll_gain(distribution: list[DamageOutcome], rolls: float) -> float:
-    """Expected damage a "re-roll one Damage roll" adds over ``rolls`` Damage
+def one_damage_reroll_gain(
+    distribution: list[DamageOutcome], rolls: Callable[[float], float]
+) -> float:
+    """Expected damage a "re-roll one Damage roll" adds over a pool of Damage
     rolls of ``distribution`` (a fresh roll's final damage, ascending by value):
     the player re-rolls the lowest roll when it is below a fresh roll's mean.
-    Over a whole number of rolls the lowest is ``v`` with probability
-    S(v)^rolls - S(next)^rolls, where S(v) is the chance a roll is at least
-    ``v``; a count the engine carries as an expectation is read between the
-    whole counts either side (engine.py ``between_whole_pools``).
+    Over N rolls the lowest is ``v`` with probability E[S(v)^N - S(next)^N],
+    S(v) being the chance a roll is at least ``v``; ``rolls`` is the pool's
+    generating function, E[z^N] as a function of z.
     """
-    if rolls <= 0:
-        return 0.0
     mean = 0.0
     for outcome in distribution:
         mean += outcome["value"] * outcome["probability"]
-
-    def at_whole(count: int) -> float:
-        gain = 0.0
-        at_least = 1.0
-        for outcome in distribution:
-            value = outcome["value"]
-            above = max(0.0, at_least - outcome["probability"])
-            if value < mean:
-                gain += (math.pow(at_least, count) - math.pow(above, count)) * (mean - value)
-            at_least = above
-        return gain
-
-    low = math.floor(rolls)
-    below = at_whole(low)
-    return below if rolls == low else below + (rolls - low) * (at_whole(low + 1) - below)
+    gain = 0.0
+    at_least = 1.0
+    for outcome in distribution:
+        value = outcome["value"]
+        above = max(0.0, at_least - outcome["probability"])
+        if value < mean:
+            gain += (rolls(at_least) - rolls(above)) * (mean - value)
+        at_least = above
+    return gain
 
 
 def one_reroll_gain_across(
-    branches: list[tuple[float, list[DamageOutcome]]], rolls: float
+    kinds: list[list[DamageOutcome]], rolls: Callable[[list[float]], float]
 ) -> float:
-    """``one_damage_reroll_gain`` over rolls of several kinds, each ``(weight,
-    distribution)`` with its own Damage distribution (normal and critical
-    wounds): a roll gains its kind's mean less its value, so a kind with a fixed
-    Damage never gains, and the player re-rolls the roll that gains most. Over a
-    whole number of rolls the largest gain is ``g`` with probability
-    F(g)^rolls - F(below g)^rolls, F being the chance one roll gains at most
-    ``g``; a fractional count is read between the whole counts either side.
+    """``one_damage_reroll_gain`` over rolls of several kinds, each with its own
+    Damage distribution (normal and critical wounds): a roll gains its kind's
+    mean less its value, so a kind with a fixed Damage never gains, and the
+    player re-rolls the roll that gains most. The largest gain is at most ``g``
+    with probability E[Π F_k(g)^(N_k)], F_k being the chance one roll of kind k
+    gains at most ``g``; ``rolls`` is the pool's generating function over the
+    kinds, E[Π z_k^(N_k)] as a function of z.
     """
-    total = 0.0
-    for weight, _ in branches:
-        total += weight
-    if rolls <= 0 or total <= 0:
-        return 0.0
-    by_gain: dict[float, float] = {}
-    for weight, distribution in branches:
+    gains_of: list[list[tuple[float, float]]] = []
+    for distribution in kinds:
         mean = 0.0
         for outcome in distribution:
             mean += outcome["value"] * outcome["probability"]
-        for outcome in distribution:
-            gain = max(0.0, mean - outcome["value"])
-            by_gain[gain] = by_gain.get(gain, 0.0) + outcome["probability"] * weight / total
-    gains = sorted(by_gain.items())
+        gains_of.append([(max(0.0, mean - o["value"]), o["probability"]) for o in distribution])
 
-    def at_whole(count: int) -> float:
-        expected = 0.0
-        at_most = 0.0
-        for gain, probability in gains:
-            below = at_most
-            at_most += probability
-            if gain > 0:
-                expected += gain * (math.pow(at_most, count) - math.pow(below, count))
-        return expected
+    def at_most(g: float) -> list[float]:
+        return [sum(p for gain, p in gains if gain <= g) for gains in gains_of]
 
-    low = math.floor(rolls)
-    below = at_whole(low)
-    return below if rolls == low else below + (rolls - low) * (at_whole(low + 1) - below)
+    gains = sorted({gain for each in gains_of for gain, _ in each})
+    expected = 0.0
+    below = rolls(at_most(-1.0))
+    for gain in gains:
+        up_to = rolls(at_most(gain))
+        if gain > 0:
+            expected += gain * (up_to - below)
+        below = up_to
+    return expected

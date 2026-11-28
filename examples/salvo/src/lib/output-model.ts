@@ -68,6 +68,34 @@ export function synthTarget(t: ManualTarget): Unit {
   } as Unit;
 }
 
+/**
+ * The CHARACTER leading the target as a one-model unit of its own: its save, invulnerable save and
+ * Wounds, the Bodyguard's Toughness (an attached unit uses the highest among its Bodyguard models,
+ * 05.02.01) and the whole attached unit's keywords, so its attacks roll the same Hit and Wound rolls.
+ */
+export function leaderTarget(ds: Dataset, leaderId: string | null, bodyguard: ManualTarget): Unit | null {
+  const leader = leaderId ? ds.units.getAny(leaderId) : undefined;
+  const profile = leader?.raw.profiles[0];
+  if (!leader || !profile) return null;
+  const keywords = [...new Set([...bodyguard.keywords, ...((leader.raw.keywords ?? []) as string[]), ...((leader.raw.faction_keywords ?? []) as string[])])];
+  return {
+    ...synthTarget({ ...bodyguard, keywords, modelCount: 1 }),
+    id: "salvo-target-leader",
+    name: leader.name,
+    profiles: [{
+      name: leader.name, M: 6, T: bodyguard.T, Ld: 7, OC: 1,
+      W: typeof profile.W === "number" ? profile.W : 1,
+      Sv: typeof profile.Sv === "number" ? profile.Sv : 3,
+      ...(typeof profile.invuln_sv === "number" ? { invuln_sv: profile.invuln_sv } : {}),
+    }],
+  } as Unit;
+}
+
+/** The manual target's Feel No Pain as a buff on the defender, none without one. */
+export function targetFeelNoPain(t: ManualTarget): Buff[] {
+  return t.fnp === null ? [] : [{ source: { kind: "manual", label: "Target Feel No Pain" }, contribution: { type: "feel-no-pain", threshold: t.fnp } }];
+}
+
 export type AttackerChoice = {
   unitId: string | null;
   factionId: string | null;
@@ -348,7 +376,8 @@ export function mortalSourceBlocked(source: MortalSourceChoice, sources: readonl
 
 /**
  * The enabled sources' mortal wounds on the target: their expected total, and what is left after
- * the target's Feel No Pain (one on every wound and one on mortal wounds roll independently).
+ * the target's Feel No Pain (a wound gets one roll, so the better of its all-wounds and
+ * mortal-wounds Feel No Pain).
  * Only the sources {@link countedMortalSources} counts contribute.
  */
 export function mortalSourceLine(
@@ -361,7 +390,7 @@ export function mortalSourceLine(
   if (damage === 0) return { damage, afterFnp: 0 };
   const resolved = resolveBuffs([...targetBuffs], context);
   const survive = (fnp: { threshold: number } | null) => (fnp ? Math.min(1, Math.max(0, (fnp.threshold - 1) / 6)) : 1);
-  return { damage, afterFnp: damage * survive(resolved.feelNoPain) * survive(resolved.feelNoPainMortal) };
+  return { damage, afterFnp: damage * Math.min(survive(resolved.feelNoPain), survive(resolved.feelNoPainMortal)) };
 }
 
 /**

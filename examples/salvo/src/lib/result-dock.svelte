@@ -5,8 +5,19 @@
   // projection; it hides while the projection itself is on screen.
   import { DAMAGE_DEALT, type AttributedStage } from "@alpaca-software/40kdc-data";
   import { fmt, stageOf } from "./projection-model.js";
+  import { fmtChance, type KillOdds } from "./line-results.js";
 
-  let { aggregate, modelCount }: { aggregate: AttributedStage[]; modelCount: number } = $props();
+  let { aggregate, modelCount, odds }: {
+    aggregate: AttributedStage[];
+    modelCount: number;
+    odds: KillOdds | { error: string } | null;
+  } = $props();
+
+  // The exact chance the volley destroys the whole unit; none when the allocation refused it.
+  const wipe = $derived(odds && !("error" in odds) ? odds.modelsDestroyed[modelCount] ?? 0 : undefined);
+
+  // The chance to destroy a CHARACTER leading the target, when one does.
+  const leader = $derived(odds && !("error" in odds) ? odds.leaderKilled : undefined);
 
   const damage = $derived(stageOf(aggregate, DAMAGE_DEALT)?.expected);
   const killed = $derived(stageOf(aggregate, "models-killed")?.expected);
@@ -33,7 +44,7 @@
   }
 </script>
 
-<a class="dock" class:hidden={projectionVisible} href="#projection" onclick={jump} aria-hidden={projectionVisible} tabindex={projectionVisible ? -1 : 0}>
+<a class="dock" class:hidden={projectionVisible} class:four={leader !== undefined} href="#projection" onclick={jump} aria-hidden={projectionVisible} tabindex={projectionVisible ? -1 : 0}>
   <span class="metric">
     <span class="label">Damage</span>
     <span class="num">{damage === undefined ? "—" : fmt(damage)}</span>
@@ -43,7 +54,19 @@
     <span class="num">{killed === undefined ? "—" : fmt(killed)}</span>
     <span class="of">of {modelCount}</span>
   </span>
-  <span class="go">Full projection</span>
+  {#if wipe !== undefined}
+    <span class="metric" title="Exact chance to destroy the whole unit">
+      <span class="label">Wipe</span>
+      <span class="num">{fmtChance(wipe)}</span>
+    </span>
+  {/if}
+  {#if leader !== undefined}
+    <span class="metric" title="Exact chance to destroy the CHARACTER leading the target">
+      <span class="label">Leader</span>
+      <span class="num">{fmtChance(leader)}</span>
+    </span>
+  {/if}
+  <span class="go"><span class="go-text">Full projection</span></span>
 </a>
 
 <style>
@@ -83,6 +106,7 @@
     }
   }
   .metric {
+    white-space: nowrap;
     display: flex;
     align-items: baseline;
     gap: var(--space-1);
@@ -114,5 +138,25 @@
   }
   .go::after {
     content: " ↓";
+  }
+  /* Three metrics leave a phone no room for the label; the arrow stays, the label stays readable to screen readers. */
+  @media (max-width: 429px) {
+    .dock {
+      gap: var(--space-3);
+    }
+    /* A fourth metric fits only with each label over its number. */
+    .dock.four .metric {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+    }
+    .go-text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
   }
 </style>

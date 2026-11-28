@@ -29,12 +29,18 @@ use std::fmt;
 use serde::Serialize;
 
 use super::damage_roll::{quantity_distribution, quantity_roll};
-use super::engine::{crunch_model, AttackModel, CruncherError, EngineInput};
+use super::engine::{crunch_model, AttackModel, CruncherError, EngineInput, EngineOutput};
 use crate::data::Dataset;
 
 #[path = "allocation_joint.rs"]
 mod joint;
 use joint::{add, convolve, per_attack, roll_mortals_of, trim, Joint};
+
+#[path = "allocation_attached.rs"]
+mod attached;
+pub use attached::{
+    allocate_attached, AttachedAllocationOutput, GroupAllocation, TargetGroup, MAX_ATTACHED_STATES,
+};
 
 /// The allocation result. Serializes with the runner's camelCase keys.
 #[derive(Clone, Debug, PartialEq, Serialize)]
@@ -125,6 +131,12 @@ pub enum AllocationError {
     InvalidZeroing(String),
     /// What the model prices that exact allocation does not model (`AttackModel::unmodelled`).
     Unmodelled(Vec<String>),
+    /// [`allocate_attached`]'s groups or lines do not describe one attached target.
+    Attached(String),
+    /// [`allocate_attached`]'s target has more states than [`MAX_ATTACHED_STATES`].
+    TooManyStates {
+        size: usize,
+    },
 }
 
 impl fmt::Display for AllocationError {
@@ -135,6 +147,11 @@ impl fmt::Display for AllocationError {
                 write!(f, "allocate: {what} must be a whole number, got {value}")
             }
             Self::InvalidZeroing(detail) => write!(f, "allocate: {detail}"),
+            Self::Attached(detail) => write!(f, "allocateAttached: {detail}"),
+            Self::TooManyStates { size } => write!(
+                f,
+                "allocate: the attached unit's {size} states exceed the exact allocation bound ({MAX_ATTACHED_STATES})"
+            ),
             Self::Unmodelled(what) => write!(
                 f,
                 "allocate: {} not modelled by exact allocation",
@@ -263,8 +280,14 @@ pub fn allocate_with(
     if defences.zeroing.is_some() {
         return allocate_model_with(&model, defences);
     }
+    let derived = derived_zeroing(&output)?;
+    allocate_model_with(&model, &AllocationDefences { zeroing: derived })
+}
+
+/// The damage-zeroing defence an input's `damage-zeroing` buffs supply.
+fn derived_zeroing(output: &EngineOutput) -> Result<Option<DamageZeroing>, AllocationError> {
     let zeroing = &output.resolved.damage_zeroing;
-    let derived = match (zeroing.unit, zeroing.model) {
+    Ok(match (zeroing.unit, zeroing.model) {
         (0, 0) => None,
         (uses, 0) => Some(DamageZeroing {
             uses,
@@ -279,8 +302,7 @@ pub fn allocate_with(
                 "unit-wide and per-model damage zeroing together are not modelled".into(),
             ))
         }
-    };
-    allocate_model_with(&model, &AllocationDefences { zeroing: derived })
+    })
 }
 
 /// [`allocate`] from an already computed [`AttackModel`].

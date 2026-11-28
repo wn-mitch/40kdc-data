@@ -43,18 +43,18 @@ type saveStream struct {
 // splitUnsaved returns the expected unsaved wounds of streams that take the
 // same save at different targets, with a "re-roll one saving throw" spent on
 // the stream a failed save is likelier to come from, and the re-rolled dice.
-func splitUnsaved(streams []saveStream, rerollOne bool) (unsaved, dice float64) {
-	pool, failing, refunded := 0.0, 0.0, 0.0
+// dice is the chance the re-roll is spent, that at least one save of the
+// streams is left failed.
+func splitUnsaved(streams []saveStream, dice float64) (float64, float64) {
+	unsaved, failing, refunded := 0.0, 0.0, 0.0
 	for _, s := range streams {
 		unsaved += s.wounds * (1 - s.saved)
-		pool += s.wounds
 		failing += s.wounds * s.open
 		refunded += s.wounds * s.open * s.fresh
 	}
-	if !rerollOne || pool <= 0 || failing <= 0 {
+	if dice <= 0 || failing <= 0 {
 		return unsaved, 0
 	}
-	dice = oneRerollDice(pool, failing/pool)
 	// The re-rolled save comes from each stream in proportion to its re-rollable failures.
 	return unsaved - dice*refunded/failing, dice
 }

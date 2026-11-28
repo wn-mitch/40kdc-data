@@ -426,9 +426,11 @@ type rankedValue struct {
 type invState struct{ threshold float64 }
 
 type resolved struct {
-	hitMod, woundMod                            float64
+	hitMod, woundMod float64
+	// hitModRaw is the uncapped hit modifier sum, which cover shares the ±1 cap with.
+	hitModRaw                                   float64
 	saveMod, damageMod, attacksMod, strengthMod float64
-	toughnessMod, apMod                         float64
+	toughnessMod, woundsMod, apMod              float64
 	coverActive                                 bool
 	coverRank                                   int
 	rerolls                                     map[string]rerollEntry
@@ -440,6 +442,8 @@ type resolved struct {
 	damageReduction              float64
 	damageReductionSet           bool
 	damageReductionRank          int
+	// damageHalving is whether incoming Damage is halved, rounding up.
+	damageHalving bool
 	// zeroingUnit and zeroingModel are the damage-zeroing uses, summed over
 	// sources: a pool the unit shares and uses for each model.
 	zeroingUnit, zeroingModel int
@@ -453,6 +457,9 @@ type resolved struct {
 	skillMod map[string]float64
 	// saveCharacteristic is the ability-set Save; nil keeps the printed one.
 	saveCharacteristic *rankedValue
+	// woundsCharacteristic is the highest ability-set Wounds, applied before woundsMod; nil keeps
+	// the printed one.
+	woundsCharacteristic *rankedValue
 	// saveImprove sums capped Save improvements; best is the most restrictive (largest) cap.
 	// nil when none applies.
 	saveImprove *saveImproveState
@@ -575,6 +582,8 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 			out.strengthMod += val
 		case "toughness-mod":
 			out.toughnessMod += val
+		case "wounds-mod":
+			out.woundsMod += val
 		case "ap-mod":
 			out.apMod += val
 		case "stat-set":
@@ -592,6 +601,8 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 				out.damageReductionSet = true
 				out.damageReductionRank = rankOf(source)
 			}
+		case "damage-halving":
+			out.damageHalving = true
 		case "damage-zeroing":
 			uses, _ := num(c["uses"])
 			if getStr(c, "per") == "model" {
@@ -625,6 +636,11 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 			if sc == nil || val < sc.value || (val == sc.value && rankOf(source) < sc.rank) {
 				out.saveCharacteristic = &rankedValue{val, rankOf(source)}
 			}
+		case "wounds-characteristic":
+			wc := out.woundsCharacteristic
+			if wc == nil || val > wc.value || (val == wc.value && rankOf(source) < wc.rank) {
+				out.woundsCharacteristic = &rankedValue{val, rankOf(source)}
+			}
 		case "mortal-wounds-on-roll":
 			count, _ := num(c["count"])
 			out.rollMortals = append(out.rollMortals, rollMortal{getStr(c, "roll"), getStr(c, "outcome"), count, source})
@@ -655,6 +671,7 @@ func resolveBuffs(buffs []any, ctx map[string]any) *resolved {
 	_, ignoreHit := out.ignoreModifiers["hit"]
 	_, ignoreWound := out.ignoreModifiers["wound"]
 	out.hitMod = capModifier(keptContribs(hitContribs, ignoreHit))
+	out.hitModRaw = sumContribs(keptContribs(hitContribs, ignoreHit))
 	out.woundMod = capModifier(keptContribs(woundContribs, ignoreWound))
 	return out
 }
@@ -677,12 +694,16 @@ func capModifier(contribs []contribAcc) float64 {
 	if len(contribs) == 0 {
 		return 0
 	}
+	return math64Max(-1, math64Min(1, sumContribs(contribs)))
+}
+
+// sumContribs is the uncapped sum of contributions.
+func sumContribs(contribs []contribAcc) float64 {
 	total := 0.0
 	for _, c := range contribs {
 		total += c.value
 	}
-	capped := math64Max(-1, math64Min(1, total))
-	return capped
+	return total
 }
 
 func math64Max(a, b float64) float64 {

@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { MfmDump } from "../src/mfm/loader.js";
 import { deriveDatasheet, routeChapterTwin } from "../src/mfm/points.js";
+import { datasheetEquipment } from "../src/mfm/equipment.js";
 import { partialDump } from "./mfm-fixture.js";
 
 /**
@@ -264,5 +265,36 @@ describe("routeChapterTwin", () => {
       { models: 5, cost: 95, unit_count_min: 1, unit_count_max: 2, host_faction: "blood-angels" },
       { models: 5, cost: 105, unit_count_min: 3, unit_count_max: null, host_faction: "blood-angels" },
     ]);
+  });
+});
+
+describe("equipment drawn as a miniature", () => {
+  // Tidewall Shieldline shape: one statlined model at 85, and a 105 build that adds a
+  // statline-less platform miniature. The platform is the model's wargear, not a second model.
+  const d = partialDump({
+    data: {
+      miniature: [
+        { id: "model", datasheetId: "ds", displayOrder: 2, wounds: "10", localisations: { en: { name: "Fabricated Wall" } } },
+        { id: "gear", datasheetId: "ds", displayOrder: 1, wounds: "-", localisations: { en: { name: "Fabricated Platform" } } },
+      ],
+      unit_composition: [
+        { id: "bare", datasheetId: "ds", displayOrder: 1, isDefault: true, points: 85, referenceGroupingKeywordId: null },
+        { id: "equipped", datasheetId: "ds", displayOrder: 2, isDefault: false, points: 105, referenceGroupingKeywordId: null },
+      ],
+      unit_composition_miniature: [
+        { id: "a", min: 1, max: 1, unitCompositionId: "bare", miniatureId: "model" },
+        { id: "b", min: 0, max: 0, unitCompositionId: "bare", miniatureId: "gear" },
+        { id: "c", min: 1, max: 1, unitCompositionId: "equipped", miniatureId: "model" },
+        { id: "d", min: 1, max: 1, unitCompositionId: "equipped", miniatureId: "gear" },
+      ],
+      datasheet_points_step: [],
+    },
+  });
+
+  it("prices one model, and the platform as the builds' difference", () => {
+    const { native, ambiguous } = deriveDatasheet(d, "ds");
+    expect(native).toEqual([{ models: 1, models_max: 1, cost: 85 }]);
+    expect(ambiguous).toBe(false);
+    expect(datasheetEquipment(d, "ds")).toEqual([{ name: "Fabricated Platform", max: 1, cost: 20 }]);
   });
 });

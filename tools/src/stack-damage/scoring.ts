@@ -17,7 +17,7 @@ import type { ProfileDamage } from "./loadout-scoring.js";
 import { attributeSelectedProfile, crunchProfileScorer, profileApplicableBuffs, unitLoadoutDamage, type DamageAttribution, type UnscoreableProfile } from "./unit-damage.js";
 import { translationWarnings } from "./translation-warnings.js";
 import { loadoutLeverBuffs, namedLoadoutWargear, surfacedByLoadout, wargearRules, wargearTranslation, type WargearRules } from "./wargear-levers.js";
-import { combinedWargear, equippedBuffs, loadoutWargear, phaseScoredItem, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrant, type WeaponGrants } from "./weapon-grants.js";
+import { combinedWargear, equippedBuffs, loadoutWargear, targetEquippedBuffs, phaseScoredItem, unequippedRules, unitWeaponGrants, wargearContext, type WeaponGrant, type WeaponGrants } from "./weapon-grants.js";
 import { enhancementGrants, scoredByBearer, selectedBearerGrants, withEnhancementGrantLevers, type EnhancementGrant } from "./enhancement-grants.js";
 import { equippedLevers, othersEquippedBuffs, othersUnequippedKey, sameLoadoutCounts, settleMemberLoadouts, type MemberLoadouts } from "./member-loadouts.js";
 import { activationPossible, filterStackEligibleAbilities, filterStackableStratagems, unitLookup } from "./stratagem-eligibility.js";
@@ -115,7 +115,7 @@ export class DamageScoringSession {
     // The target's printed rules for wargear it does not carry do not apply.
     const defensive = dataset.defensiveBuffsFor({ unitId: state.target.unitRaw.id, factionId: state.target.unitRaw.faction_id }, targetContext);
     this.defensiveBuffs = targetContext.targetWargear
-      ? equippedBuffs(state.target.unitRaw, new Map(Object.entries(targetContext.targetWargear)), defensive)
+      ? targetEquippedBuffs(dataset, state.target.unitRaw, new Map(Object.entries(targetContext.targetWargear)), state.target.modelCount, defensive)
       : defensive;
     this.defensiveWarnings = this.translationWarnings(
       { unitId: state.target.unitRaw.id, factionId: state.target.unitRaw.faction_id },
